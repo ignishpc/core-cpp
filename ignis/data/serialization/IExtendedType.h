@@ -10,7 +10,7 @@ namespace ignis {
         namespace serialization {
 
             template<typename T=bool, template<typename, typename> typename C=IHandle>
-            class IType {
+            class IExtendedType {
 
                 template<typename T2>
                 std::shared_ptr<IHandle<>> new_instance(T2 *n) {

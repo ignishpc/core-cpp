@@ -4,7 +4,7 @@
 
 #include <memory>
 #include "IHandle.h"
-#include "IType.h"
+#include "IExtendedType.h"
 
 namespace ignis {
     namespace data {
@@ -13,7 +13,7 @@ namespace ignis {
             class IContainer {
             public:
 
-                virtual std::shared_ptr<IHandle<>> new_instance(IType<> *sc) {
+                virtual std::shared_ptr<IHandle<>> new_instance(IExtendedType<> *sc) {
                     if (sc != NULL) {
                         return sc->instance((T *) NULL);
                     }
