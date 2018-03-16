@@ -64,6 +64,18 @@ namespace ignis {
                     return std::hash<std::unordered_map<T, T2 >>()(*reinterpret_cast<std::unordered_map<T, T2> *>(vec));
                 }
 
+                virtual size_t hash(void *obj){
+                    return std::hash<T>()(*reinterpret_cast<T*>(obj));
+                }
+
+                virtual T* newT(){
+                    new T();
+                }
+
+                virtual T2* newT2(){
+                    new T2();
+                }
+
             };
         }
     }

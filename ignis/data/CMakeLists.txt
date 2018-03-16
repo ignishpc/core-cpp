@@ -1,15 +1,25 @@
 cmake_minimum_required(VERSION 3.6)
-project(igniscore)
-
-ADD_SUBDIRECTORY(data)
+project(ignisdatacore)
 
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-        tmp.cpp)
-
+        serialization/IHash.h
+        serialization/IHandle.h
+        serialization/IContainer.h
+        serialization/IExtendedType.h
+        serialization/IEnumTypes.h
+        serialization/IReader.h
+        serialization/IReader.cpp
+        serialization/IWriter.h
+        serialization/IWriter.cpp
+        ITypeInfo.h
+        RTTInfo.cpp
+        RTTInfo.h
+        IObjectProtocol.h
+        IObjectProtocol.cpp)
 set(CMAKE_CXX_FLAGS "-O0 -fPIC -rdynamic")
-add_library(igniscore SHARED ${SOURCE_FILES})
+add_library(ignisdatacore SHARED ${SOURCE_FILES})
 #TARGET_LINK_LIBRARIES(igniscore thrift boost_system boost_filesystem dl thriftz z)
 
 #install(TARGETS igniscore LIBRARY DESTINATION lib)

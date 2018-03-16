@@ -4,10 +4,13 @@
 
 #include <memory>
 #include "IHandle.h"
+#
 
 namespace ignis {
     namespace data {
         namespace serialization {
+
+            typedef char Any;
 
             template<typename T=bool, template<typename, typename> typename C=IHandle>
             class IExtendedType {
@@ -46,15 +49,23 @@ namespace ignis {
                     return new_instance<>(t);
                 }
 
-                virtual std::shared_ptr<IHandle<>> instance(std::vector<char> *t) {
+                virtual std::shared_ptr<IHandle<>> instance(std::vector<Any> *t) {
                     return new_instance<>(t);
                 }
 
-                virtual std::shared_ptr<IHandle<>> instance(std::unordered_set<char> *t) {
+                virtual std::shared_ptr<IHandle<>> instance(std::vector<__int8_t > *t) {//Binary data
                     return new_instance<>(t);
                 }
 
-                virtual std::shared_ptr<IHandle<>> instance(std::unordered_map<char, char> *t) {
+                virtual std::shared_ptr<IHandle<>> instance(std::unordered_set<Any> *t) {
+                    return new_instance<>(t);
+                }
+
+                virtual std::shared_ptr<IHandle<>> instance(std::unordered_map<Any, Any> *t) {
+                    return new_instance<>(t);
+                }
+
+                virtual std::shared_ptr<IHandle<>> instance(std::pair<Any, Any> *t) {
                     return new_instance<>(t);
                 }
 
