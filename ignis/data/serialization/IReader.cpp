@@ -3,47 +3,89 @@
 
 using namespace std;
 using namespace ignis::data::serialization;
+using ignis::data::ITypeInfo;
 using apache::thrift::protocol::TProtocol;
 
 
-void IReader::readVoid(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
+class ITypeInfoBuilder : public ITypeInfo {
+public:
 
+    ITypeInfoBuilder(size_t id, string &name) : ITypeInfo(id, name) {}
+
+    void putArg(ITypeInfo &arg) {
+        ITypeInfo::putArg(arg);
+    }
+
+    static void putArg(ITypeInfo &type, ITypeInfo &arg) {
+        ((ITypeInfoBuilder &) type).putArg(arg);
+    }
+};
+
+void IReader::readVoid(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
+    //Nothing
 }
 
 void IReader::readBool(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
-
+    tProtocol.readBool(*(bool *) obj);
 }
 
 void IReader::readI08(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
-
+    tProtocol.readByte(*(int8_t *) obj);
 }
 
 void IReader::readI16(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
-
+    tProtocol.readI16(*(int16_t *) obj);
 }
 
 void IReader::readI32(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
-
+    tProtocol.readI32(*(int32_t *) obj);
 }
 
 void IReader::readI64(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
-
+    tProtocol.readI64(*(int64_t *) obj);
 }
 
 void IReader::readDouble(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
-
+    tProtocol.readDouble(*(double *) obj);
 }
 
 void IReader::readString(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
-
+    tProtocol.readString(*(string *) obj);
 }
 
 void IReader::readList(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
+    auto type_size = readSize(tProtocol);
+    auto type_id = readType(tProtocol);
+    auto type_info = getInfo(type_id);
+    auto elem = type_info.handle->newT();
+    auto elem_type = ITypeInfoBuilder(type_info.class_id, type_info.class_name);
 
+    type_info.handle->resizeVector(obj, type_size);
+
+    for (decltype(type_size) i = 0; i < type_size; i++) {
+        (this->*type_info.function)(elem, elem_type, tProtocol);
+        type_info.handle->pushVector(obj, elem);
+    }
+
+    ITypeInfoBuilder::putArg(type, elem_type);
+
+    type_info.handle->deleteT(elem);
 }
 
 void IReader::readSet(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
+    auto type_size = readSize(tProtocol);
+    auto type_id = readType(tProtocol);
+    auto type_info = getInfo(type_id);
+    auto elem = type_info.handle->newT();
+    auto elem_type = ITypeInfoBuilder(type_info.class_id, type_info.class_name);
 
+    type_info.handle->resizeSet(obj, type_size);
+
+    //TODO
+
+    ITypeInfoBuilder::putArg(type, elem_type);
+
+    type_info.handle->deleteT(elem);
 }
 
 void IReader::readMap(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
@@ -58,73 +100,57 @@ void IReader::readTuple(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
 
 }
 
-void IReader::readCustom(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
+inline __uint8_t IReader::readType(apache::thrift::protocol::TProtocol &tProtocol) {
+    __int8_t type;
+    tProtocol.readByte(type);
+    auto entry = info_map.find(type);
+    if (entry == info_map.end()) {
+        //No exists exception
+    }
+    return type;
+}
 
+inline size_t IReader::readSize(apache::thrift::protocol::TProtocol &tProtocol) {
+    __int64_t size;
+    tProtocol.readI64(size);
+    return size;
 }
 
 IReader::IReader() {
-    //Types registration
-    addType<bool>(NULL);
-    addType<__int8_t>(NULL);
-    addType<__int16_t>(NULL);
-    addType<__int32_t>(NULL);
-    addType<__int64_t>(NULL);
-    addType<double>(NULL);
-    addType<string>(NULL);
-    addType<vector<Any>>(NULL);
-    addType<unordered_set<Any>>(NULL);
-    addType<unordered_map<Any, Any>>(NULL);
-    addType<pair<Any, Any>>(NULL);
-    addType<vector<__int8_t >>(NULL);
 
-    addExtendedType<bool>();
-    addExtendedType<__int8_t>();
-    addExtendedType<__int16_t>();
-    addExtendedType<__int32_t>();
-    addExtendedType<__int64_t>();
-    addExtendedType<double>();
-    addExtendedType<string>();
-    addExtendedType<vector<Any>>();
-    addExtendedType<unordered_set<Any>>();
-    addExtendedType<unordered_map<Any, Any>>();
-    addExtendedType<pair<Any, Any>>();
-    addExtendedType<vector<__int8_t >>();
+    F_Reader a;
 
-    //manual functions registration
-    readers[IEnumTypes::I_VOID] = IReader::readBool;
-    readers[IEnumTypes::I_BOOL] = IReader::readVoid;
-    readers[IEnumTypes::I_I08] = IReader::readI08;
-    readers[IEnumTypes::I_I16] = IReader::readI16;
-    readers[IEnumTypes::I_I32] = IReader::readI32;
-    readers[IEnumTypes::I_I64] = IReader::readI64;
-    readers[IEnumTypes::I_DOUBLE] = IReader::readDouble;
-    readers[IEnumTypes::I_STRING] = IReader::readString;
-    readers[IEnumTypes::I_LIST] = IReader::readList;
-    readers[IEnumTypes::I_SET] = IReader::readSet;
-    readers[IEnumTypes::I_MAP] = IReader::readMap;
-    readers[IEnumTypes::I_TUPLE] = IReader::readTuple;
-    readers[IEnumTypes::I_BINARY] = IReader::readBinary;
-    readers[IEnumTypes::I_CUSTOM] = IReader::readCustom;
+    newExtendedType<bool>(IEnumTypes::I_VOID, &IReader::readBool);
+    newExtendedType<bool>(IEnumTypes::I_BOOL, &IReader::readBool);
+    newExtendedType<__int8_t>(IEnumTypes::I_I08, &IReader::readI08);
+    newExtendedType<__int16_t>(IEnumTypes::I_I16, &IReader::readI16);
+    newExtendedType<__int32_t>(IEnumTypes::I_I32, &IReader::readI32);
+    newExtendedType<__int64_t>(IEnumTypes::I_I64, &IReader::readI64);
+    newExtendedType<double>(IEnumTypes::I_DOUBLE, &IReader::readDouble);
+    newExtendedType<string>(IEnumTypes::I_STRING, &IReader::readString);
+    newExtendedType<vector<Any>>(IEnumTypes::I_LIST, &IReader::readList);
+    newExtendedType<unordered_set<Any>>(IEnumTypes::I_SET, &IReader::readSet);
+    newExtendedType<unordered_map<Any, Any>>(IEnumTypes::I_MAP, &IReader::readMap);
+    newExtendedType<pair<Any, Any>>(IEnumTypes::I_TUPLE, &IReader::readTuple);
+    newExtendedType<vector<Any>>(IEnumTypes::I_BINARY, &IReader::readBinary);
 
-    updateHandles();
+    updateInfo();
 }
 
-void IReader::updateHandles() {
-    handles.resize(containers.size(), std::vector<std::shared_ptr<IHandle<>>>());
-    for (int i = 0; i < containers.size(); i++) {
-        for (int j = handles[i].size(); j < extended_types.size(); j++) {
-            handles[i][j] = containers[i].new_instance(&extended_types[j]);
+
+inline const IReader::IReaderInfo &IReader::getInfo(__uint8_t id) {
+    return info_map[id];
+}
+
+void IReader::updateInfo() {
+    for (auto it = info_map.begin(); it != info_map.end(); it++) {
+        if (it->second.extended_type) {
+            for (auto it2 = info_map.begin(); it2 != info_map.end(); it2++) {
+                info_map[it2->first].handles[it->first] =
+                        it2->second.container->new_instance(it->second.extended_type.get());
+            }
         }
     }
 }
-
-inline IHandle<> &IReader::getHandle(__uint8_t ti, __uint8_t tj) {
-    return *handles[ti - 1][tj - 1];
-}
-
-inline IReader::F_Reader &IReader::getReader(__uint8_t ti) {
-    return readers[ti];
-}
-
 
 

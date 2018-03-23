@@ -20,8 +20,6 @@ namespace ignis {
                 I_MAP       = 0xa,
                 I_TUPLE     = 0xb,
                 I_BINARY    = 0xc,
-                I_CUSTOM    = 0xd,
-                I_MAX_TYPE  = 0xd,
             };
 
         }

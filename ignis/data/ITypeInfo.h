@@ -22,12 +22,13 @@ namespace ignis {
             std::string name_id;
             std::vector<ITypeInfo> args_v;
 
+        protected:
+
             ITypeInfo(size_t id, std::string &name_id) : id(id),
                                                          name_id(name_id) {
                 args_v.shrink_to_fit();
             }
 
-        protected:
             ITypeInfo() {}
 
             template<template<typename...> typename T>
@@ -47,6 +48,10 @@ namespace ignis {
             static ITypeInfo arg(ITypeInfo &&i) {
                 i.args_v.push_back(info<>((T *) NULL));
                 return i;
+            }
+
+            void putArg(ITypeInfo &i) {
+                args_v.push_back(i);
             }
 
         public:
@@ -123,6 +128,14 @@ namespace ignis {
 
             bool operator!=(ITypeInfo &other) {
                 return !((*this) == other);
+            }
+
+            size_t getId(){
+                return id;
+            }
+
+            std::string nameId() {
+                return name_id;
             }
 
             std::string name() {

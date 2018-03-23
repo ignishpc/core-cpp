@@ -25,7 +25,7 @@ namespace ignis {
                     }
                 };
 
-                virtual void pushVector(void *vec, void *elem) {
+                virtual inline void pushVector(void *vec, void *elem) {
                     reinterpret_cast<std::vector<T> *>(vec)->push_back(*reinterpret_cast<T *>(elem));
                 }
 
@@ -68,12 +68,28 @@ namespace ignis {
                     return std::hash<T>()(*reinterpret_cast<T*>(obj));
                 }
 
-                virtual T* newT(){
+                virtual void* newT(){
                     new T();
                 }
 
-                virtual T2* newT2(){
+                virtual void deleteT(void *obj){
+                    delete ((T*)obj);
+                }
+
+                virtual size_t sizeT(){
+                    return sizeof(T);
+                }
+
+                virtual void* newT2(){
                     new T2();
+                }
+
+                virtual void deleteT2(void *obj){
+                    delete ((T2*)obj);
+                }
+
+                virtual size_t sizeT2(){
+                    return sizeof(T2);
                 }
 
             };

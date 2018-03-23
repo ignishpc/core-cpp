@@ -12,5 +12,6 @@ set(SOURCE_FILES
 #set(CMAKE_CXX_FLAGS "-O3 -fopenmp")
 add_executable(executorcpp ${SOURCE_FILES})
 
+TARGET_LINK_LIBRARIES(executorcpp igniscore)
 #TARGET_LINK_LIBRARIES(executorcpp thrift boost_system igniscore dl)
 

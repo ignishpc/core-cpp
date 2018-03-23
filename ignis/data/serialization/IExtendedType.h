@@ -53,10 +53,6 @@ namespace ignis {
                     return new_instance<>(t);
                 }
 
-                virtual std::shared_ptr<IHandle<>> instance(std::vector<__int8_t > *t) {//Binary data
-                    return new_instance<>(t);
-                }
-
                 virtual std::shared_ptr<IHandle<>> instance(std::unordered_set<Any> *t) {
                     return new_instance<>(t);
                 }

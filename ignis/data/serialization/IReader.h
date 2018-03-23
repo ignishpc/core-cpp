@@ -23,68 +23,87 @@ namespace ignis {
 
                 IReader();
 
-                virtual ~IReader(){};
+                virtual ~IReader() {};
 
             protected:
+
                 typedef char Any;
 
-                typedef void(*F_Reader)(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                typedef void(IReader::*F_Reader)(void *obj, ITypeInfo &type,
+                                                 apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readVoid(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                typedef struct {
+                    F_Reader function;
+                    size_t class_id;
+                    std::string class_name;
+                    std::shared_ptr<IContainer<>> container;
+                    std::shared_ptr<IExtendedType<>> extended_type;
+                    std::shared_ptr<IHandle<>> handle;
+                    std::unordered_map<__uint8_t, std::shared_ptr<IHandle<>>> handles;
+                } IReaderInfo;
 
-                static void readBool(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readI08(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readVoid(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readI16(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readBool(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readI32(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readI08(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readI64(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readI16(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readDouble(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readI32(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readString(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readI64(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readList(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readDouble(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readSet(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readString(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readMap(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readList(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readBinary(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readSet(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readTuple(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readMap(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                static void readCustom(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+                void readBinary(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                template<typename T>
-                __uint8_t addType(F_Reader reader) {
-                    IContainer<T> c;
-                    readers.push_back(reader);
-                    containers.push_back((IContainer<> &&) c);
-                    return readers.size() - 1;//id
+                void readTuple(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                __uint8_t readType(apache::thrift::protocol::TProtocol &tProtocol);
+
+                size_t readSize(apache::thrift::protocol::TProtocol &tProtocol);
+
+                template<typename C>
+                F_Reader castReader(C reader) {
+                    return static_cast<F_Reader>(reader);
                 }
 
-                template<typename T>
-                void addExtendedType() {
-                    IExtendedType<T> et;
-                    extended_types.push_back((IExtendedType<> &&) et);
+                template<typename T, typename I = ITypeInfo>
+                void newType(__uint8_t id, F_Reader function) {
+                    if (info_map.find(id) == info_map.end()) {
+                        //Error Already exists
+                    }
+                    auto &entry = info_map[id];
+                    entry.container = std::shared_ptr<IContainer<>>((IContainer<> *) new IContainer<T>());
+                    auto type = ITypeInfo::getInfo<T>();
+                    entry.class_id = type.getId();
+                    entry.class_name = type.nameId();
                 }
 
-                void updateHandles();
+                template<typename T, typename I = ITypeInfo, typename E = IExtendedType<T>>
+                void newExtendedType(__uint8_t id, F_Reader function) {
+                    newType<T, I>(id, function);
+                    info_map[id].extended_type = std::shared_ptr<IExtendedType<>>((IExtendedType<> *) new E());
+                }
 
-                IHandle<> &getHandle(__uint8_t ti, __uint8_t tj);
+                void updateInfo();
 
-                F_Reader &getReader(__uint8_t ti);
+                const IReaderInfo &getInfo(__uint8_t id);
 
             private:
+                ITypeInfo makeType(size_t class_id, std::string &&class_name);
 
-                std::vector<IContainer<>> containers;
-                std::vector<IExtendedType<>> extended_types;
-                std::vector<std::vector<std::shared_ptr<IHandle<>>>> handles;
-                std::vector<F_Reader> readers;
-
+                std::unordered_map<__uint8_t, IReaderInfo> info_map;
             };
         }
     }
