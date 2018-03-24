@@ -1,14 +1,123 @@
-//
-// Created by César on 10/03/2018.
-//
 
 #ifndef UNTITLED_IWRITER_H
 #define UNTITLED_IWRITER_H
 
+#include <memory>
+#include <unordered_map>
+#include <thrift/protocol/TProtocol.h>
+#include "../ITypeInfo.h"
+#include "IEnumTypes.h"
+#include "IHandle.h"
+#include "IContainer.h"
+#include "IExtendedType.h"
+#include <list>
+#include <forward_list>
+#include <set>
+#include <map>
 
-class IWriter {
+namespace ignis {
+    namespace data {
+        namespace serialization {
+            class IWriter {
+            public:
 
-};
+                IWriter();
 
+                void writeObject(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-#endif //UNTITLED_IWRITER_H
+                virtual ~IWriter() {};
+
+            protected:
+
+                typedef char Any;
+
+                typedef void(IWriter::*F_Writer)(void *obj, ITypeInfo &type,
+                                                 apache::thrift::protocol::TProtocol &tProtocol);
+
+                typedef void(IWriter::*F_Type)(__uint8_t id, ITypeInfo &type,
+                                               apache::thrift::protocol::TProtocol &tProtocol);
+
+                typedef struct {
+                    F_Writer function;
+                    F_Type type;
+                    size_t size;
+                    int8_t id;
+                } IWriterInfo;
+
+                //
+                void writeBool(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeI08(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeI16(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeI32(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeI64(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeDouble(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeString(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeList(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeTypeList(__uint8_t id, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeSet(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeMap(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeTuple(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeType(__uint8_t id, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeSize(size_t size, apache::thrift::protocol::TProtocol &tProtocol);
+
+                //Other C++ types
+                void writeUI08(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeUI16(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeUI32(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeUI64(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeFloat(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeCppList(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeForwardList(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeTreeSet(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeTreeMap(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writePointer(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                void writeSharedPointer(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
+
+                template<typename T, typename I = ITypeInfo>
+                void newType(int8_t id, F_Writer function, F_Type type = &IWriter::writeType) {
+                    auto type_info = ITypeInfo::getInfo<T>();
+                    if (info_map.find(type_info.getId()) == info_map.end()) {
+                        //Error Already exists
+                    }
+                    auto &entry = info_map[type_info.getId()];
+                    entry.type = type;
+                    entry.function = function;
+                    entry.size = sizeof(T);
+                    entry.id = id;
+                }
+
+                const IWriterInfo &getInfo(size_t id);
+
+            private:
+
+                std::unordered_map<size_t, IWriterInfo> info_map;
+            };
+
+        }
+    }
+}
+
+#endif

@@ -38,9 +38,8 @@ namespace ignis {
             }
 
             template<typename T>
-            static ITypeInfo registerC() {
+            static ITypeInfo registerC(std::string name = RTTInfo(typeid(T)).getStandardName()) {
                 auto p = &registerC<T>;
-                auto name = RTTInfo(typeid(T)).getStandardName();
                 return ITypeInfo((size_t) p, name);
             }
 
@@ -55,6 +54,18 @@ namespace ignis {
             }
 
         public:
+
+            static ITypeInfo voidType(){
+                auto p = &voidType;
+                std::string name = "void";
+                return ITypeInfo((size_t) p, name);
+            }
+
+            static ITypeInfo pointerType(){
+                auto p = &pointerType;
+                std::string name = "*";
+                return ITypeInfo((size_t) p, name);
+            }
 
             template<typename T>
             static ITypeInfo info(std::vector<T> *t) {
@@ -90,6 +101,11 @@ namespace ignis {
             static ITypeInfo info(std::unordered_map<K, V> *t) {
                 return arg<V>(arg<K>(registerT<std::unordered_map>("unordered_map")));
             };
+
+            template<typename T>
+            static ITypeInfo info(T **t) {
+                return arg<T>(pointerType());
+            }
 
             template<typename T>
             static ITypeInfo info(T *t) {

@@ -26,69 +26,69 @@ namespace ignis {
                 };
 
                 virtual inline void pushVector(void *vec, void *elem) {
-                    reinterpret_cast<std::vector<T> *>(vec)->push_back(*reinterpret_cast<T *>(elem));
+                    reinterpret_cast<std::vector<T> *>(vec)->push_back(std::move(*reinterpret_cast<T *>(elem)));
                 }
 
-                virtual void resizeVector(void *vec, size_t size) {
+                virtual inline void resizeVector(void *vec, size_t size) {
                     reinterpret_cast<std::vector<T> *>(vec)->reserve(size);
                 }
 
-                virtual size_t hashVector(void *vec) {
-                    return std::hash<std::vector<T >>()(*reinterpret_cast<std::vector<T> *>(vec));
-                }
-
-                virtual void insertSet(void *set, void *elem, size_t hash_Value) {
+                virtual inline void insertSet(void *set, void *elem, size_t hash_Value) {
                     fake_hash_value = hash_Value;
-                    reinterpret_cast<std::unordered_set<T, fakeHash> *>(set)->insert(*reinterpret_cast<T *>(elem));
+                    reinterpret_cast<std::unordered_set<T, fakeHash> *>(set)->insert(std::move(*reinterpret_cast<T *>(elem)));
                 }
 
-                virtual void resizeSet(void *set, size_t size) {
+                virtual inline void resizeSet(void *set, size_t size) {
                     reinterpret_cast<std::unordered_set<T> *>(set)->reserve(size);
                 }
 
-                virtual size_t hashSet(void *vec) {
-                    return std::hash<std::unordered_set<T >>()(*reinterpret_cast<std::unordered_set<T> *>(vec));
-                }
-
-                virtual void putMap(void *map, void *key, void *value, size_t hash_Value) {
+                virtual inline void putMap(void *map, void *key, void *value, size_t hash_Value) {
                     fake_hash_value = hash_Value;
                     (*reinterpret_cast<std::unordered_map<T, T2, fakeHash> *>(map))[(*reinterpret_cast<T *>(key))] =
-                            (*reinterpret_cast<T2 *>(value));
+                            std::move((*reinterpret_cast<T2 *>(value)));
                 }
 
-                virtual void resizeMap(void *map, size_t size) {
+                virtual inline void resizeMap(void *map, size_t size) {
                     reinterpret_cast<std::unordered_map<T, T2> *>(map)->reserve(size);
                 }
 
-                virtual size_t hashMap(void *vec) {
-                    return std::hash<std::unordered_map<T, T2 >>()(*reinterpret_cast<std::unordered_map<T, T2> *>(vec));
+                virtual inline void* firstPair(void *pair) {
+                    return &(*reinterpret_cast<std::pair<T, T2> *>(pair)).first;
                 }
 
-                virtual size_t hash(void *obj){
-                    return std::hash<T>()(*reinterpret_cast<T*>(obj));
+                virtual inline void* secondPair(void *pair) {
+                    return &(*reinterpret_cast<std::pair<T, T2> *>(pair)).second;
                 }
 
-                virtual void* newT(){
-                    new T();
+                virtual inline void move(T& source, T& target){
+                    target = std::move(source);
                 }
 
-                virtual void deleteT(void *obj){
+                virtual inline void move2(T& source, T& target){
+                    target = std::move(source);
+                }
+
+                virtual inline void* newT(){
+                    return new T();
+                }
+
+                virtual inline void deleteT(void *obj){
                     delete ((T*)obj);
                 }
 
-                virtual size_t sizeT(){
+                virtual inline size_t sizeT(){
                     return sizeof(T);
                 }
 
-                virtual void* newT2(){
-                    new T2();
+                virtual inline void* newT2(){
+                    return new T2();
                 }
 
-                virtual void deleteT2(void *obj){
+                virtual inline void deleteT2(void *obj){
                     delete ((T2*)obj);
                 }
 
-                virtual size_t sizeT2(){
+                virtual inline size_t sizeT2(){
                     return sizeof(T2);
                 }
 

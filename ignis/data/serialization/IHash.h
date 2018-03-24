@@ -13,6 +13,10 @@
 
 namespace std {
 
+    inline void hash_combine(size_t& seed, size_t value){
+        return boost::hash_detail::hash_combine_impl(seed, value);
+    }
+
     template<class K, class T, class C, class A>
     std::size_t hash_value(std::unordered_map<K, T, C, A> const &v) {
         return boost::hash_range(v.begin(), v.end());

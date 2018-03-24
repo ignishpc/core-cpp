@@ -1,14 +1,13 @@
-//
-// Created by César on 10/03/2018.
-//
 
 #ifndef UNTITLED_IOBJECTPROTOCOL_H
 #define UNTITLED_IOBJECTPROTOCOL_H
 
+namespace ignis {
+    namespace data {
+        class IObjectProtocol {
 
-class IObjectProtocol {
+        };
+    }
+}
 
-};
-
-
-#endif //UNTITLED_IOBJECTPROTOCOL_H
+#endif
