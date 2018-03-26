@@ -6,7 +6,8 @@ ADD_SUBDIRECTORY(data)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-        tmp.cpp)
+        driver/api/IgnisException.cpp
+        driver/api/IgnisException.h)
 
 set(CMAKE_CXX_FLAGS "-O0 -fPIC -rdynamic")
 add_library(igniscore SHARED ${SOURCE_FILES})
