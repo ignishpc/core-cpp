@@ -7,12 +7,16 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
         driver/api/IgnisException.cpp
-        driver/api/IgnisException.h)
+        driver/api/IgnisException.h
+        executor/api/IContext.cpp
+        executor/api/IContext.h
+        executor/api/IExecutorException.cpp
+        executor/api/IgnisExecutorException.h
+        executor/api/ILoadClass.h)
 
 set(CMAKE_CXX_FLAGS "-O0 -fPIC -rdynamic")
 add_library(igniscore SHARED ${SOURCE_FILES})
-TARGET_LINK_LIBRARIES(igniscore ignisdatacore)
-#TARGET_LINK_LIBRARIES(igniscore thrift boost_system boost_filesystem dl thriftz z)
+TARGET_LINK_LIBRARIES(igniscore ignisdatacore thrift boost_system boost_filesystem dl thriftz z)
 
 #install(TARGETS igniscore LIBRARY DESTINATION lib)
 #install(FILES Ignis.h DESTINATION include/ignis)

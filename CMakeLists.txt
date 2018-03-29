@@ -7,9 +7,18 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
         ignis/main.cpp
-        ignis/executor/api/IgnisExecutorException.cpp
-        ignis/executor/api/IgnisExecutorException.h
-        )
+        ignis/executor/core/IExecutorData.cpp
+        ignis/executor/core/IExecutorData.h
+        ignis/executor/core/modules/IModule.cpp
+        ignis/executor/core/modules/IModule.h
+        ignis/executor/core/modules/IServerModule.cpp
+        ignis/executor/core/modules/IServerModule.h
+        ignis/executor/core/modules/IMapperModule.cpp
+        ignis/executor/core/modules/IMapperModule.h
+        ignis/executor/core/modules/IReducerModule.cpp
+        ignis/executor/core/modules/IReducerModule.h
+        ignis/executor/core/modules/ISortModule.cpp
+        ignis/executor/core/modules/ISortModule.h)
 
 #set(CMAKE_CXX_FLAGS "-O3 -fopenmp")
 add_executable(executorcpp ${SOURCE_FILES})
