@@ -1,5 +1,6 @@
-#ifndef EXECUTORCPP_IGNISEXCEPTION_H
-#define EXECUTORCPP_IGNISEXCEPTION_H
+
+#ifndef IGNIS_IGNISEXCEPTION_H
+#define IGNIS_IGNISEXCEPTION_H
 
 #include <stdexcept>
 #include <ostream>

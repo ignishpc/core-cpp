@@ -12,7 +12,11 @@ set(SOURCE_FILES
         executor/api/IContext.h
         executor/api/IExecutorException.cpp
         executor/api/IgnisExecutorException.h
-        executor/api/ILoadClass.h)
+        executor/api/ILoadClass.h
+        executor/api/IMapper.h
+        executor/api/IReducer.h
+        executor/api/IReadIterator.h
+        executor/api/IWriteIterator.h)
 
 set(CMAKE_CXX_FLAGS "-O0 -fPIC -rdynamic")
 add_library(igniscore SHARED ${SOURCE_FILES})

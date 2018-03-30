@@ -11,27 +11,27 @@ namespace ignis {
         namespace core {
 
             template<typename T>
-            class DinamicObject;
+            class IDinamicObject;
 
             class ObjectLoader {
             private:
                 template<typename>
                 friend
-                class DinamicObject;
+                class IDinamicObject;
 
                 static void
-                open(DinamicObject<api::ILoadClass<void>> &obj, std::string &name, const std::type_info &info);
+                open(IDinamicObject<api::ILoadClass<void>> &obj, std::string &name, const std::type_info &info);
 
                 static void close(void *dl);
             };
 
             template<typename T>
-            class DinamicObject {
+            class IDinamicObject {
             public:
                 friend ObjectLoader;
 
-                DinamicObject(std::string &name) {
-                    ObjectLoader::open((DinamicObject<api::ILoadClass<void>> &) *this, name, typeid(T));
+                IDinamicObject(std::string &name) {
+                    ObjectLoader::open((IDinamicObject<api::ILoadClass<void>> &) *this, name, typeid(T));
                 }
 
                 T *operator->() const {

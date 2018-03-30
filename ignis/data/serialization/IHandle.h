@@ -1,6 +1,6 @@
 
-#ifndef UNTITLED_IHANDLE_H
-#define UNTITLED_IHANDLE_H
+#ifndef IGNIS_IHANDLE_H
+#define IGNIS_IHANDLE_H
 
 #include <memory>
 #include <vector>

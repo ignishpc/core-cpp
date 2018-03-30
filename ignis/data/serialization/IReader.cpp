@@ -220,19 +220,19 @@ inline size_t IReader::readSize(apache::thrift::protocol::TProtocol &tProtocol) 
 
 IReader::IReader() {
 
-    newExtendedType<bool>(IEnumTypes::I_VOID, &IReader::readVoid);
-    newExtendedType<bool>(IEnumTypes::I_BOOL, &IReader::readBool);
-    newExtendedType<__int8_t>(IEnumTypes::I_I08, &IReader::readI08);
-    newExtendedType<__int16_t>(IEnumTypes::I_I16, &IReader::readI16);
-    newExtendedType<__int32_t>(IEnumTypes::I_I32, &IReader::readI32);
-    newExtendedType<__int64_t>(IEnumTypes::I_I64, &IReader::readI64);
-    newExtendedType<double>(IEnumTypes::I_DOUBLE, &IReader::readDouble);
-    newExtendedType<string>(IEnumTypes::I_STRING, &IReader::readString);
-    newExtendedType<vector<Any>>(IEnumTypes::I_LIST, &IReader::readList, &IReader::hashList);
-    newExtendedType<unordered_set<Any>>(IEnumTypes::I_SET, &IReader::readSet, &IReader::hashSet);
-    newExtendedType<unordered_map<Any, Any>>(IEnumTypes::I_MAP, &IReader::readMap, &IReader::hashMap);
-    newExtendedType<pair<Any, Any>>(IEnumTypes::I_TUPLE, &IReader::readTuple, &IReader::hashTuple);
-    newExtendedType<vector<Any>>(IEnumTypes::I_BINARY, &IReader::readBinary);
+    newMultipleType<bool>(IEnumTypes::I_VOID, &IReader::readVoid);
+    newMultipleType<bool>(IEnumTypes::I_BOOL, &IReader::readBool);
+    newMultipleType<__int8_t>(IEnumTypes::I_I08, &IReader::readI08);
+    newMultipleType<__int16_t>(IEnumTypes::I_I16, &IReader::readI16);
+    newMultipleType<__int32_t>(IEnumTypes::I_I32, &IReader::readI32);
+    newMultipleType<__int64_t>(IEnumTypes::I_I64, &IReader::readI64);
+    newMultipleType<double>(IEnumTypes::I_DOUBLE, &IReader::readDouble);
+    newMultipleType<string>(IEnumTypes::I_STRING, &IReader::readString);
+    newMultipleType<vector<Any>>(IEnumTypes::I_LIST, &IReader::readList, &IReader::hashList);
+    newMultipleType<unordered_set<Any>>(IEnumTypes::I_SET, &IReader::readSet, &IReader::hashSet);
+    newMultipleType<unordered_map<Any, Any>>(IEnumTypes::I_MAP, &IReader::readMap, &IReader::hashMap);
+    newMultipleType<pair<Any, Any>>(IEnumTypes::I_TUPLE, &IReader::readTuple, &IReader::hashTuple);
+    newMultipleType<vector<Any>>(IEnumTypes::I_BINARY, &IReader::readBinary);
 
     updateInfo();
 
@@ -262,10 +262,10 @@ inline const IReader::IReaderInfo& IReader::getInfo(__uint8_t id) {
 
 void IReader::updateInfo() {
     for (auto it = info_map.begin(); it != info_map.end(); it++) {
-        if (it->second.extended_type) {
+        if (it->second.multiple_type) {
             for (auto it2 = info_map.begin(); it2 != info_map.end(); it2++) {
                 info_map[it2->first].handles[it->first] =
-                        it2->second.container->new_instance(it->second.extended_type.get());
+                        it2->second.container->newInstance(it->second.container.get());
             }
         }
     }

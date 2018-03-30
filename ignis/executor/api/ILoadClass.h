@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_ILOADCLASS_H
-#define EXECUTORCPP_ILOADCLASS_H
+#ifndef IGNIS_ILOADCLASS_H
+#define IGNIS_ILOADCLASS_H
 
 #include <typeinfo>
 

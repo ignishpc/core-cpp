@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_ITYPEINFO_H
-#define EXECUTORCPP_ITYPEINFO_H
+#ifndef IGNIS_ITYPEINFO_H
+#define IGNIS_ITYPEINFO_H
 
 #include <sstream>
 #include <string>
@@ -11,6 +11,7 @@
 #include <unordered_set>
 #include <map>
 #include <unordered_map>
+#include <utility>
 
 #include "RTTInfo.h"
 
@@ -100,6 +101,11 @@ namespace ignis {
             template<typename K, typename V>
             static ITypeInfo info(std::unordered_map<K, V> *t) {
                 return arg<V>(arg<K>(registerT<std::unordered_map>("unordered_map")));
+            };
+
+            template<typename T1, typename T2>
+            static ITypeInfo info(std::pair<T1, T2> *t) {
+                return arg<T2>(arg<T1>(registerT<std::pair>("pair")));
             };
 
             template<typename T>

@@ -9,6 +9,8 @@ set(SOURCE_FILES
         ignis/main.cpp
         ignis/executor/core/IExecutorData.cpp
         ignis/executor/core/IExecutorData.h
+        ignis/executor/core/IDinamicObject.cpp
+        ignis/executor/core/IDinamicObject.h
         ignis/executor/core/modules/IModule.cpp
         ignis/executor/core/modules/IModule.h
         ignis/executor/core/modules/IServerModule.cpp
@@ -18,7 +20,9 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IReducerModule.cpp
         ignis/executor/core/modules/IReducerModule.h
         ignis/executor/core/modules/ISortModule.cpp
-        ignis/executor/core/modules/ISortModule.h)
+        ignis/executor/core/modules/ISortModule.h
+        ignis/executor/core/storage/IObject.h
+        )
 
 #set(CMAKE_CXX_FLAGS "-O3 -fopenmp")
 add_executable(executorcpp ${SOURCE_FILES})

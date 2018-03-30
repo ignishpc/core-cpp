@@ -1,6 +1,6 @@
 
-#ifndef UNTITLED_IHASH_H
-#define UNTITLED_IHASH_H
+#ifndef IGNIS_IHASH_H
+#define IGNIS_IHASH_H
 
 #include <vector>
 #include <set>

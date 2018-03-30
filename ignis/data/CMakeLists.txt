@@ -7,7 +7,6 @@ set(SOURCE_FILES
         serialization/IHash.h
         serialization/IHandle.h
         serialization/IContainer.h
-        serialization/IExtendedType.h
         serialization/IEnumTypes.h
         serialization/IReader.h
         serialization/IReader.cpp
@@ -17,7 +16,7 @@ set(SOURCE_FILES
         RTTInfo.cpp
         RTTInfo.h
         IObjectProtocol.h
-        IObjectProtocol.cpp ../executor/core/DinamicObject.cpp ../executor/core/DinamicObject.h)
+        IObjectProtocol.cpp ../executor/core/IDinamicObject.cpp ../executor/core/IDinamicObject.h ../executor/api/IWriteIterator.h)
 set(CMAKE_CXX_FLAGS "-O0 -fPIC -rdynamic")
 add_library(ignisdatacore SHARED ${SOURCE_FILES})
 #TARGET_LINK_LIBRARIES(igniscore thrift boost_system boost_filesystem dl thriftz z)

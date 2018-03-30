@@ -1,5 +1,5 @@
 
-#include "DinamicObject.h"
+#include "IDinamicObject.h"
 #include <dlfcn.h>
 #include <stdexcept>
 #include "../../data/RTTInfo.h"
@@ -7,7 +7,7 @@
 using namespace std;
 using namespace ignis::executor::core;
 
-void ObjectLoader::open(DinamicObject<api::ILoadClass<void>> &obj, std::string &name, const std::type_info &info) {
+void ObjectLoader::open(IDinamicObject<api::ILoadClass<void>> &obj, std::string &name, const std::type_info &info) {
     int sep = name.find(':');
 
     if (sep < -1) {
@@ -41,7 +41,7 @@ void ObjectLoader::open(DinamicObject<api::ILoadClass<void>> &obj, std::string &
                                ") found (" + id_name + ")");
     }
 
-    obj.handle = make_shared<DinamicObject<api::ILoadClass<void>>::Handle>(object, destructor, library);
+    obj.handle = make_shared<IDinamicObject<api::ILoadClass<void>>::Handle>(object, destructor, library);
 }
 
 void ObjectLoader::close(void *dl) {

@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_IGNISCONTEXT_H
-#define EXECUTORCPP_IGNISCONTEXT_H
+#ifndef IGNIS_IGNISCONTEXT_H
+#define IGNIS_IGNISCONTEXT_H
 
 #include <memory>
 #include "../../data/serialization/IReader.h"

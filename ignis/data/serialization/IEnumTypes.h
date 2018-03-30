@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_ITYPES_H
-#define EXECUTORCPP_ITYPES_H
+#ifndef IGNIS_ITYPES_H
+#define IGNIS_ITYPES_H
 
 namespace ignis {
     namespace data {

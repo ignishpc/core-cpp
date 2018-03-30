@@ -1,15 +1,13 @@
 
-#ifndef UNTITLED_IWRITER_H
-#define UNTITLED_IWRITER_H
+#ifndef IGNIS_IWRITER_H
+#define IGNIS_IWRITER_H
 
 #include <memory>
 #include <unordered_map>
 #include <thrift/protocol/TProtocol.h>
 #include "../ITypeInfo.h"
 #include "IEnumTypes.h"
-#include "IHandle.h"
 #include "IContainer.h"
-#include "IExtendedType.h"
 #include <list>
 #include <forward_list>
 #include <set>
@@ -28,8 +26,6 @@ namespace ignis {
                 virtual ~IWriter() {};
 
             protected:
-
-                typedef char Any;
 
                 typedef void(IWriter::*F_Writer)(void *obj, ITypeInfo &type,
                                                  apache::thrift::protocol::TProtocol &tProtocol);

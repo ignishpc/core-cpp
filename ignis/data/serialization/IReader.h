@@ -1,6 +1,6 @@
 
-#ifndef UNTITLED_IREADER_H
-#define UNTITLED_IREADER_H
+#ifndef IGNIS_IREADER_H
+#define IGNIS_IREADER_H
 
 #include <memory>
 #include <unordered_map>
@@ -9,7 +9,6 @@
 #include "IEnumTypes.h"
 #include "IHandle.h"
 #include "IContainer.h"
-#include "IExtendedType.h"
 
 
 namespace ignis {
@@ -28,8 +27,6 @@ namespace ignis {
 
             protected:
 
-                typedef char Any;
-
                 typedef void(IReader::*F_Reader)(void *obj, ITypeInfo &type,
                                                  apache::thrift::protocol::TProtocol &tProtocol);
                 typedef size_t(IReader::*F_Hash)(void* obj, ITypeInfo &type);
@@ -40,7 +37,7 @@ namespace ignis {
                     size_t class_id;
                     std::string class_name;
                     std::shared_ptr<IContainer<>> container;
-                    std::shared_ptr<IExtendedType<>> extended_type;
+                    bool multiple_type;
                     std::shared_ptr<IHandle<>> handle;
                     std::unordered_map<__uint8_t, std::shared_ptr<IHandle<>>> handles;
                 } IReaderInfo;
@@ -98,23 +95,23 @@ namespace ignis {
                     return static_cast<F_Hash>(f_hash);
                 }
 
-                template<typename T, typename I = ITypeInfo>
+                template<typename T, typename IT = ITypeInfo, typename CT = ISimpleContainer<T>>
                 void newType(__uint8_t id, F_Reader function) {
                     if (info_map.find(id) == info_map.end()) {
                         //Error Already exists
                     }
                     auto &entry = info_map[id];
-                    entry.container = std::shared_ptr<IContainer<>>((IContainer<> *) new IContainer<T>());
+                    entry.container = std::shared_ptr<IContainer<>>((IContainer<> *) new CT());
                     auto type = ITypeInfo::getInfo<T>();
                     entry.class_id = type.getId();
                     entry.class_name = type.nameId();
                 }
 
-                template<typename T, typename I = ITypeInfo, typename E = IExtendedType<T>>
-                void newExtendedType(__uint8_t id, F_Reader function, F_Hash hash = &IReader::defaultHash<T>) {
-                    newType<T, I>(id, function);
+                template<typename T, typename IT = ITypeInfo, typename CT = IContainer<T>>
+                void newMultipleType(__uint8_t id, F_Reader function, F_Hash hash = &IReader::defaultHash<T>) {
+                    newType<T, IT, CT>(id, function);
                     info_map[id].hash = hash;
-                    info_map[id].extended_type = std::shared_ptr<IExtendedType<>>((IExtendedType<> *) new E());
+                    info_map[id].multiple_type = true;
                 }
 
                 void updateInfo();

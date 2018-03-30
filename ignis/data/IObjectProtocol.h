@@ -1,6 +1,6 @@
 
-#ifndef UNTITLED_IOBJECTPROTOCOL_H
-#define UNTITLED_IOBJECTPROTOCOL_H
+#ifndef IGNIS_IOBJECTPROTOCOL_H
+#define IGNIS_IOBJECTPROTOCOL_H
 
 namespace ignis {
     namespace data {

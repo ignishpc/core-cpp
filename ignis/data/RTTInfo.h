@@ -1,6 +1,6 @@
 
-#ifndef TEST1_RTTINFO_H
-#define TEST1_RTTINFO_H
+#ifndef IGNIS_RTTINFO_H
+#define IGNIS_RTTINFO_H
 
 #include <string>
 #include <typeinfo>
