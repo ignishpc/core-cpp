@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <thrift/protocol/TProtocol.h>
 #include "../ITypeInfo.h"
+#include "../ITuple.h"
 #include "IEnumTypes.h"
 #include "IHandle.h"
 #include "IContainer.h"
@@ -21,7 +22,7 @@ namespace ignis {
 
                 IReader();
 
-                std::pair<std::shared_ptr<void>,ITypeInfo> readObject(apache::thrift::protocol::TProtocol &tProtocol);
+                std::pair<std::shared_ptr<void>, ITypeInfo> readObject(apache::thrift::protocol::TProtocol &tProtocol);
 
                 virtual ~IReader() {};
 
@@ -29,7 +30,8 @@ namespace ignis {
 
                 typedef void(IReader::*F_Reader)(void *obj, ITypeInfo &type,
                                                  apache::thrift::protocol::TProtocol &tProtocol);
-                typedef size_t(IReader::*F_Hash)(void* obj, ITypeInfo &type);
+
+                typedef size_t(IReader::*F_Hash)(void *obj, ITypeInfo &type);
 
                 typedef struct {
                     F_Reader function;
@@ -60,29 +62,29 @@ namespace ignis {
 
                 void readList(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                size_t hashList(void* obj, ITypeInfo &type);
+                size_t hashList(void *obj, ITypeInfo &type);
 
                 void readSet(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                size_t hashSet(void* obj, ITypeInfo &type);
+                size_t hashSet(void *obj, ITypeInfo &type);
 
                 void readMap(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                size_t hashMap(void* obj, ITypeInfo &type);
+                size_t hashMap(void *obj, ITypeInfo &type);
 
                 void readBinary(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
                 void readTuple(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
-                size_t hashTuple(void* obj, ITypeInfo &type);
+                size_t hashTuple(void *obj, ITypeInfo &type);
 
                 __uint8_t readType(apache::thrift::protocol::TProtocol &tProtocol);
 
                 size_t readSize(apache::thrift::protocol::TProtocol &tProtocol);
 
-                template <typename T>
-                size_t defaultHash(void *obj, ITypeInfo &type){
-                    return std::hash<T>()(*(T*)obj);
+                template<typename T>
+                size_t defaultHash(void *obj, ITypeInfo &type) {
+                    return std::hash<T>()(*(T *) obj);
                 }
 
                 template<typename C>
@@ -101,6 +103,7 @@ namespace ignis {
                         //Error Already exists
                     }
                     auto &entry = info_map[id];
+                    entry.function = function;
                     entry.container = std::shared_ptr<IContainer<>>((IContainer<> *) new CT());
                     auto type = ITypeInfo::getInfo<T>();
                     entry.class_id = type.getId();
@@ -116,7 +119,7 @@ namespace ignis {
 
                 void updateInfo();
 
-                const IReaderInfo &getInfo(__uint8_t id);
+                IReaderInfo &getInfo(__uint8_t id);
 
             private:
                 ITypeInfo makeType(size_t class_id, std::string &&class_name);

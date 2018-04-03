@@ -25,8 +25,8 @@ namespace ignis {
 
         protected:
 
-            ITypeInfo(size_t id, std::string &name_id) : id(id),
-                                                         name_id(name_id) {
+            ITypeInfo(size_t id, const std::string &name_id) : id(id),
+                                                               name_id(name_id) {
                 args_v.shrink_to_fit();
             }
 
@@ -50,19 +50,19 @@ namespace ignis {
                 return i;
             }
 
-            void putArg(ITypeInfo &i) {
-                args_v.push_back(i);
+            std::vector<ITypeInfo> &args() {
+                return args_v;
             }
 
         public:
 
-            static ITypeInfo voidType(){
+            static ITypeInfo voidType() {
                 auto p = &voidType;
                 std::string name = "void";
                 return ITypeInfo((size_t) p, name);
             }
 
-            static ITypeInfo pointerType(){
+            static ITypeInfo pointerType() {
                 auto p = &pointerType;
                 std::string name = "*";
                 return ITypeInfo((size_t) p, name);
@@ -127,7 +127,7 @@ namespace ignis {
                 return args_v[i];
             };
 
-            size_t templates() {
+            inline size_t types() {
                 return args_v.size();
             }
 
@@ -136,7 +136,7 @@ namespace ignis {
                 return id == registerT<T>("").id;
             }
 
-            bool operator==(ITypeInfo &other) {
+            inline bool operator==(ITypeInfo &other) {
                 if (other.id != id || other.args_v.size() != args_v.size()) {
                     return false;
                 }
@@ -152,7 +152,7 @@ namespace ignis {
                 return !((*this) == other);
             }
 
-            size_t getId(){
+            size_t getId() {
                 return id;
             }
 

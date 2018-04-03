@@ -39,7 +39,8 @@ inline void IWriter::writeList(void *obj, ITypeInfo &type, apache::thrift::proto
     auto elem_type = type[0];
     auto elem_type_info = getInfo(elem_type.getId());
 
-    size_t size = v.size() / elem_type_info.size;
+    size_t elem_size = (this->*getInfo(elem_type.getId()).size)(elem_type);
+    size_t size = v.size() / elem_size;
     auto data = v.data();
 
     writeSize(size, tProtocol);
@@ -47,7 +48,7 @@ inline void IWriter::writeList(void *obj, ITypeInfo &type, apache::thrift::proto
         writeType(elem_type_info.id, elem_type, tProtocol);
     }
     for (size_t i = 0; i < size; i++) {
-        (this->*elem_type_info.function)(data + i * size, elem_type, tProtocol);
+        (this->*elem_type_info.function)(data + i * elem_size, elem_type, tProtocol);
     }
 }
 
@@ -95,7 +96,14 @@ inline void IWriter::writeTuple(void *obj, ITypeInfo &type, apache::thrift::prot
     writeType(first_type_info.id, first_type, tProtocol);
     writeType(second_type_info.id, second_type, tProtocol);
     (this->*first_type_info.function)((void *) &(t.first), first_type, tProtocol);
-    (this->*second_type_info.function)((void *) (&(t.first) + first_type_info.size), second_type, tProtocol);
+    (this->*second_type_info.function)((void *) (&(t.first) + (this->*getInfo(first_type.getId()).size)(first_type)), second_type, tProtocol);
+}
+
+inline size_t IWriter::getSizeTuple(ITypeInfo &type) {
+    auto first_type = type[0];
+    auto second_type = type[1];
+    return (this->*getInfo(first_type.getId()).size)(first_type) +
+           (this->*getInfo(second_type.getId()).size)(second_type);
 }
 
 void IWriter::writeUI08(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol) {
@@ -187,7 +195,7 @@ void IWriter::writePointer(void *obj, ITypeInfo &type, apache::thrift::protocol:
 }
 
 void IWriter::writeSharedPointer(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol) {
-    shared_ptr<void> &sp = *(shared_ptr<void>*)obj;
+    shared_ptr<void> &sp = *(shared_ptr<void> *) obj;
     auto elem_type = type[0];
     auto elem_type_info = getInfo(elem_type.getId());
     (this->*elem_type_info.function)(sp.get(), elem_type, tProtocol);
@@ -213,7 +221,7 @@ IWriter::IWriter() {
     newType<vector<Any>>(IEnumTypes::I_LIST, &IWriter::writeList, &IWriter::writeTypeList);
     newType<unordered_set<Any>>(IEnumTypes::I_SET, &IWriter::writeSet);
     newType<unordered_map<Any, Any>>(IEnumTypes::I_MAP, &IWriter::writeMap);
-    newType<pair<Any, Any>>(IEnumTypes::I_TUPLE, &IWriter::writeTuple);
+    newType<pair<Any, Any>>(IEnumTypes::I_TUPLE, &IWriter::writeTuple, &IWriter::writeType, &IWriter::getSizeTuple);
     //Other C++ types
     newType<__uint8_t>(IEnumTypes::I_I16, &IWriter::writeUI08);
     newType<__uint16_t>(IEnumTypes::I_I32, &IWriter::writeUI16);
@@ -230,10 +238,9 @@ IWriter::IWriter() {
 }
 
 void IWriter::writeObject(void *obj, ignis::data::ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol) {
-    auto elem_type = type[0];
-    auto elem_type_info = getInfo(elem_type.getId());
-    writeType(elem_type_info.id, elem_type, tProtocol);
-    (this->*elem_type_info.function)(obj, elem_type, tProtocol);
+    auto elem_type_info = getInfo(type.getId());
+    writeType(elem_type_info.id, type, tProtocol);
+    (this->*elem_type_info.function)(obj, type, tProtocol);
 }
 
 inline const IWriter::IWriterInfo &IWriter::getInfo(size_t id) {

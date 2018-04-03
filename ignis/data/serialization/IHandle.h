@@ -6,8 +6,9 @@
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
-
+#include <iostream>
 #include "IHash.h"
+#include "../ITuple.h"
 
 namespace ignis {
     namespace data {
@@ -53,22 +54,14 @@ namespace ignis {
                 }
 
                 virtual inline void* firstPair(void *pair) {
-                    return &(*reinterpret_cast<std::pair<T, T2> *>(pair)).first;
+                    return &(*reinterpret_cast<data::ITuple<T, T2> *>(pair)).first();
                 }
 
                 virtual inline void* secondPair(void *pair) {
-                    return &(*reinterpret_cast<std::pair<T, T2> *>(pair)).second;
+                    return &(*reinterpret_cast<data::ITuple<T, T2> *>(pair)).second();
                 }
 
-                virtual inline void move(T& source, T& target){
-                    target = std::move(source);
-                }
-
-                virtual inline void move2(T& source, T& target){
-                    target = std::move(source);
-                }
-
-                virtual inline void* newT(){
+                 virtual inline void* newT(){
                     return new T();
                 }
 

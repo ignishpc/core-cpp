@@ -33,10 +33,12 @@ namespace ignis {
                 typedef void(IWriter::*F_Type)(__uint8_t id, ITypeInfo &type,
                                                apache::thrift::protocol::TProtocol &tProtocol);
 
+                typedef size_t(IWriter::*F_Size)(ITypeInfo &type);
+
                 typedef struct {
                     F_Writer function;
                     F_Type type;
-                    size_t size;
+                    F_Size size;
                     int8_t id;
                 } IWriterInfo;
 
@@ -65,9 +67,16 @@ namespace ignis {
 
                 void writeTuple(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
+                size_t getSizeTuple(ITypeInfo &type);
+
                 void writeType(__uint8_t id, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
                 void writeSize(size_t size, apache::thrift::protocol::TProtocol &tProtocol);
+
+                template <typename T>
+                size_t getSize(ITypeInfo &type){
+                    return sizeof(T);
+                }
 
                 //Other C++ types
                 void writeUI08(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
@@ -93,7 +102,7 @@ namespace ignis {
                 void writeSharedPointer(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
 
                 template<typename T, typename I = ITypeInfo>
-                void newType(int8_t id, F_Writer function, F_Type type = &IWriter::writeType) {
+                void newType(int8_t id, F_Writer function, F_Type type = &IWriter::writeType, F_Size size = &IWriter::getSize<T>) {
                     auto type_info = ITypeInfo::getInfo<T>();
                     if (info_map.find(type_info.getId()) == info_map.end()) {
                         //Error Already exists
@@ -101,7 +110,7 @@ namespace ignis {
                     auto &entry = info_map[type_info.getId()];
                     entry.type = type;
                     entry.function = function;
-                    entry.size = sizeof(T);
+                    entry.size = size;
                     entry.id = id;
                 }
 

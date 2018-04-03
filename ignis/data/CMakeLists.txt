@@ -16,7 +16,7 @@ set(SOURCE_FILES
         RTTInfo.cpp
         RTTInfo.h
         IObjectProtocol.h
-        IObjectProtocol.cpp ../executor/core/IDinamicObject.cpp ../executor/core/IDinamicObject.h ../executor/api/IWriteIterator.h)
+        IObjectProtocol.cpp ../executor/core/IDinamicObject.cpp ../executor/core/IDinamicObject.h ../executor/api/IWriteIterator.h ITuple.h)
 set(CMAKE_CXX_FLAGS "-O0 -fPIC -rdynamic")
 add_library(ignisdatacore SHARED ${SOURCE_FILES})
 #TARGET_LINK_LIBRARIES(igniscore thrift boost_system boost_filesystem dl thriftz z)

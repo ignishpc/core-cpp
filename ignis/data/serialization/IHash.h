@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <map>
 #include <unordered_map>
+#include "../ITuple.h"
 
 #include <functional>
 #include <boost/functional/hash/extensions.hpp>
@@ -45,6 +46,13 @@ namespace std {
     struct hash<std::pair<A, B>> {
         std::size_t operator()(std::pair<A, B> const &v) const noexcept {
             return boost::hash_value(v);
+        }
+    };
+
+    template<class A, class B>
+    struct hash<ignis::data::ITuple<A, B>> {
+        std::size_t operator()(ignis::data::ITuple<A, B> const &v) const noexcept {
+            return boost::hash_value(v.asPair());
         }
     };
 
