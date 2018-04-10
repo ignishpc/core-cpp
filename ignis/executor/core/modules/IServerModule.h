@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_ISERVERMODULE_H
-#define EXECUTORCPP_ISERVERMODULE_H
+#ifndef IGNIS_ISERVERMODULE_H
+#define IGNIS_ISERVERMODULE_H
 
 #include <thrift/TProcessor.h>
 #include <thrift/server/TServer.h>

@@ -16,6 +16,8 @@ namespace ignis {
              */
             RTTInfo(const std::type_info &info);
 
+            const std::type_info &getInfo();
+
             /*
              * Get a name with c++ standard. Ex: std::string or int*
              */

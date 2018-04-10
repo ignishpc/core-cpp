@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_IMAPPERMODULE_H
-#define EXECUTORCPP_IMAPPERMODULE_H
+#ifndef IGNIS_IMAPPERMODULE_H
+#define IGNIS_IMAPPERMODULE_H
 
 namespace ignis {
     namespace executor {

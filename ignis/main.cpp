@@ -1,8 +1,9 @@
 #include <cstdlib>
 #include <iostream>
-#include "data/serialization/IReader.h"
-#include "data/serialization/IWriter.h"
-#include "executor/api/IgnisExecutorException.h"
+/*
+#include "data/serialization_old/IReader.h"
+#include "data/serialization_old/IWriter.h"
+#include "executor/api/IException.h"
 #include "driver/api/IgnisException.h"
 #include "executor/core/IDinamicObject.h"
 #include <thrift/transport/TFDTransport.h>
@@ -21,8 +22,8 @@ public:
     virtual ~Any() { cout << "no" << endl; }
 };
 
-ignis::data::serialization::IReader r;
-ignis::data::serialization::IWriter w;
+ignis::data::serialization_old::IReader r;
+ignis::data::serialization_old::IWriter w;
 
 void read() {
     int file = open("/mnt/d/test.raw", O_CREAT | O_RDWR);
@@ -67,30 +68,63 @@ public:
     }
 };
 
+*/
+
+#include "data/serialization/ITypeHandle.h"
+#include <thrift/protocol/TProtocol.h>
+#include <jsoncpp/json/json.h>
+#include <iostream>
+
 class Test {
-public:
-    std::shared_ptr<Muerte> a = make_shared<Muerte>();
 
-    /*~Test(){
-        cout << "mori" << endl;
-    }*/
 };
-
-template<typename T>
-void destructor(T *obj) {
-    delete obj;
-}
-
 
 int main(int argc, char *argv[]) {
     //write();
-    read();
+    //read();
+    std::vector<bool> v;
+    v.push_back(true);
+    v.push_back(false);
+    v.push_back(true);
+    v.push_back(false);
+    ignis::data::serialization::ITypeHandle<std::vector<Test>> a;
+    ignis::data::serialization::ITypeHandle<std::vector<uint8_t >> test;
 
-    void *t = new Test();
-    void (*des)(void *obj) = (void (*)(void *)) &destructor<Test>;
+    Json::Value root;
+    std::vector<Test> t;
+    t.push_back(Test());
+    a.printer().printJson(t, root);
+/*
+    std::cout << root << std::endl;
 
-    des(t);
+    a.printer()(v,std::cout);
+*/
+
+    //
+
+
+
+    //void *t = new Test();
+    //void (*des)(void *obj) = (void (*)(void *)) &destructor<Test>;
+
+    //des(t);
 
     return EXIT_SUCCESS;
 }
 
+namespace ignis {
+    namespace data {
+        namespace serialization {
+
+
+            template<>
+            struct IPrinter<Test> {
+                void operator()(const Test &b, std::ostream &out, size_t level = 0){
+
+                }
+
+                void printJson(const Test &b, Json::Value &json) {}
+            };
+        }
+    }
+}

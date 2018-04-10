@@ -4,7 +4,7 @@
 
 #include <memory>
 #include "IHandle.h"
-#include "../ITuple.h"
+#include "ITupleBase.h"
 
 namespace ignis {
     namespace data {
@@ -63,7 +63,7 @@ namespace ignis {
                     return getInstance<>(t);
                 }
 
-                virtual std::shared_ptr<IHandle<>> instance(data::ITuple<Any, Any> *t) {
+                virtual std::shared_ptr<IHandle<>> instance(data::ITupleBase<Any, Any> *t) {
                     return getInstance<>(t);
                 }
             };

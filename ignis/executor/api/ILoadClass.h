@@ -6,11 +6,11 @@
 
 #define ignis_register_class(name)\
 extern "C"{\
-    name* name##_constructor(){\
+    inline name* name##_constructor(){\
         return new name();\
     }\
     \
-    void name##_destructor(name* obj){\
+    inline void name##_destructor(name* obj){\
         delete obj;\
     }\
 }
@@ -22,7 +22,7 @@ namespace ignis {
             template <typename T>
             class ILoadClass {
             public:
-                    const std::type_info& id = typeid(T);
+                    const std::type_info& info = typeid(T);
             };
         }
     }

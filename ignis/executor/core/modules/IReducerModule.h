@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_IREDUCERMODULE_H
-#define EXECUTORCPP_IREDUCERMODULE_H
+#ifndef IGNIS_IREDUCERMODULE_H
+#define IGNIS_IREDUCERMODULE_H
 
 namespace ignis {
     namespace executor {

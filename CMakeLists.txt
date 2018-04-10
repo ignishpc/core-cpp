@@ -22,11 +22,10 @@ set(SOURCE_FILES
         ignis/executor/core/modules/ISortModule.cpp
         ignis/executor/core/modules/ISortModule.h
         ignis/executor/core/storage/IObject.h
-        )
+        ignis/executor/core/modules/IPostman.cpp ignis/executor/core/modules/IPostman.h)
 
 #set(CMAKE_CXX_FLAGS "-O3 -fopenmp")
 add_executable(executorcpp ${SOURCE_FILES})
 
-TARGET_LINK_LIBRARIES(executorcpp igniscore dl)
-#TARGET_LINK_LIBRARIES(executorcpp thrift boost_system igniscore dl)
+TARGET_LINK_LIBRARIES(executorcpp igniscore)
 

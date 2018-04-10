@@ -7,14 +7,13 @@
 #include <unordered_set>
 #include <map>
 #include <unordered_map>
-#include "../ITuple.h"
 
 #include <functional>
 #include <boost/functional/hash/extensions.hpp>
 
 namespace std {
 
-    inline void hash_combine(size_t& seed, size_t value){
+    inline void hash_combine(size_t &seed, size_t value) {
         return boost::hash_detail::hash_combine_impl(seed, value);
     }
 
@@ -50,9 +49,9 @@ namespace std {
     };
 
     template<class A, class B>
-    struct hash<ignis::data::ITuple<A, B>> {
-        std::size_t operator()(ignis::data::ITuple<A, B> const &v) const noexcept {
-            return boost::hash_value(v.asPair());
+    struct hash<ignis::data::ITupleBase<A, B>> {
+        std::size_t operator()(ignis::data::ITupleBase<A, B> const &v) const noexcept {
+            return boost::hash_value(((ignis::data::ITuple<A, B> &) v).asPair());
         }
     };
 

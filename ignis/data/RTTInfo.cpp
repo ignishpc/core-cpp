@@ -6,6 +6,10 @@ using namespace ignis::data;
 
 RTTInfo::RTTInfo(const std::type_info &info) : info(info) {}
 
+const std::type_info &RTTInfo::getInfo(){
+    return info;
+}
+
 std::string RTTInfo::getStandardName() {
     int status;
     char *name = abi::__cxa_demangle(this->info.name(), 0, 0, &status);

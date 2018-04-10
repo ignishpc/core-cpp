@@ -7,8 +7,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <iostream>
-#include "IHash.h"
-#include "../ITuple.h"
+#include "../serialization/IHash.h"
+#include "ITuple.h"
 
 namespace ignis {
     namespace data {
@@ -27,7 +27,7 @@ namespace ignis {
                 };
 
                 virtual inline void pushVector(void *vec, void *elem) {
-                    reinterpret_cast<std::vector<T> *>(vec)->push_back(std::move(*reinterpret_cast<T *>(elem)));
+                    //reinterpret_cast<std::vector<T> *>(vec)->push_back(std::move(*reinterpret_cast<T *>(elem)));
                 }
 
                 virtual inline void resizeVector(void *vec, size_t size) {

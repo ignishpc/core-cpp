@@ -2,130 +2,389 @@
 #ifndef IGNIS_IREADER_H
 #define IGNIS_IREADER_H
 
-#include <memory>
+#include <string>
+#include <utility>
+#include <list>
+#include <forward_list>
+#include <vector>
+#include <set>
+#include <unordered_set>
+#include <map>
 #include <unordered_map>
+#include <memory>
 #include <thrift/protocol/TProtocol.h>
-#include "../ITypeInfo.h"
-#include "../ITuple.h"
 #include "IEnumTypes.h"
-#include "IHandle.h"
-#include "IContainer.h"
-
+#include "../../exception/ILogicError.h"
+#include "../RTTInfo.h"
 
 namespace ignis {
     namespace data {
         namespace serialization {
 
-            class IReader {
+            typedef apache::thrift::protocol::TProtocol IProtocol;
 
-            public:
+            inline int8_t readType(IProtocol &protocol) {
+                int8_t type;
+                protocol.readByte(type);
+                return type;
+            }
 
-                IReader();
+            inline int64_t readSize(IProtocol &protocol) {
+                int64_t size;
+                protocol.readI64(size);
+                return size;
+            }
 
-                std::pair<std::shared_ptr<void>, ITypeInfo> readObject(apache::thrift::protocol::TProtocol &tProtocol);
-
-                virtual ~IReader() {};
-
-            protected:
-
-                typedef void(IReader::*F_Reader)(void *obj, ITypeInfo &type,
-                                                 apache::thrift::protocol::TProtocol &tProtocol);
-
-                typedef size_t(IReader::*F_Hash)(void *obj, ITypeInfo &type);
-
-                typedef struct {
-                    F_Reader function;
-                    F_Hash hash;
-                    size_t class_id;
-                    std::string class_name;
-                    std::shared_ptr<IContainer<>> container;
-                    bool multiple_type;
-                    std::shared_ptr<IHandle<>> handle;
-                    std::unordered_map<__uint8_t, std::shared_ptr<IHandle<>>> handles;
-                } IReaderInfo;
-
-                void readVoid(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readBool(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readI08(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readI16(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readI32(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readI64(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readDouble(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readString(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readList(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                size_t hashList(void *obj, ITypeInfo &type);
-
-                void readSet(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                size_t hashSet(void *obj, ITypeInfo &type);
-
-                void readMap(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                size_t hashMap(void *obj, ITypeInfo &type);
-
-                void readBinary(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                void readTuple(void *obj, ITypeInfo &type, apache::thrift::protocol::TProtocol &tProtocol);
-
-                size_t hashTuple(void *obj, ITypeInfo &type);
-
-                __uint8_t readType(apache::thrift::protocol::TProtocol &tProtocol);
-
-                size_t readSize(apache::thrift::protocol::TProtocol &tProtocol);
-
-                template<typename T>
-                size_t defaultHash(void *obj, ITypeInfo &type) {
-                    return std::hash<T>()(*(T *) obj);
-                }
-
-                template<typename C>
-                F_Reader castReader(C reader) {
-                    return static_cast<F_Reader>(reader);
-                }
-
-                template<typename C>
-                F_Hash castHash(C f_hash) {
-                    return static_cast<F_Hash>(f_hash);
-                }
-
-                template<typename T, typename IT = ITypeInfo, typename CT = ISimpleContainer<T>>
-                void newType(__uint8_t id, F_Reader function) {
-                    if (info_map.find(id) == info_map.end()) {
-                        //Error Already exists
+            template<typename T>
+            struct IReader {
+                inline void checkType(IProtocol &protocol) {
+                    if (readType(protocol)) {
+                        throw exception::ILogicError(
+                                "IReader type error for" + RTTInfo(typeid(T)).getStandardName());
                     }
-                    auto &entry = info_map[id];
-                    entry.function = function;
-                    entry.container = std::shared_ptr<IContainer<>>((IContainer<> *) new CT());
-                    auto type = ITypeInfo::getInfo<T>();
-                    entry.class_id = type.getId();
-                    entry.class_name = type.nameId();
                 }
 
-                template<typename T, typename IT = ITypeInfo, typename CT = IContainer<T>>
-                void newMultipleType(__uint8_t id, F_Reader function, F_Hash hash = &IReader::defaultHash<T>) {
-                    newType<T, IT, CT>(id, function);
-                    info_map[id].hash = hash;
-                    info_map[id].multiple_type = true;
+                bool readType(IProtocol &protocol) {
+                    throw exception::ILogicError(
+                            "IReader not implemented for " + RTTInfo(typeid(T)).getStandardName());
                 }
 
-                void updateInfo();
-
-                IReaderInfo &getInfo(__uint8_t id);
-
-            private:
-                ITypeInfo makeType(size_t class_id, std::string &&class_name);
-
-                std::unordered_map<__uint8_t, IReaderInfo> info_map;
+                T operator()(IProtocol &protocol) {
+                    throw exception::ILogicError(
+                            "IReader not implemented for " + RTTInfo(typeid(T)).getStandardName());
+                }
             };
+
+            template<>
+            struct IReader<bool> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_BOOL == readType(protocol);
+                }
+
+                inline bool operator()(IProtocol &protocol) {
+                    bool obj;
+                    protocol.readBool(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<int8_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_I08 == readType(protocol);
+                }
+
+                inline int8_t operator()(IProtocol &protocol) {
+                    int8_t obj;
+                    protocol.readByte(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<uint8_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_I16 == readType(protocol);
+                }
+
+                inline uint8_t operator()(IProtocol &protocol) {
+                    int16_t obj;
+                    protocol.readI16(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<int16_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_I16 == readType(protocol);
+                }
+
+                inline int16_t operator()(IProtocol &protocol) {
+                    int16_t obj;
+                    protocol.readI16(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<uint16_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_I32 == readType(protocol);
+                }
+
+                inline uint16_t operator()(IProtocol &protocol) {
+                    int32_t obj;
+                    protocol.readI32(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<int32_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_I32 == readType(protocol);
+                }
+
+                inline int32_t operator()(IProtocol &protocol) {
+                    int32_t obj;
+                    protocol.readI32(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<uint32_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_I64 == readType(protocol);
+                }
+
+                inline uint32_t operator()(IProtocol &protocol) {
+                    int64_t obj;
+                    protocol.readI64(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<int64_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_I64 == readType(protocol);
+                }
+
+                inline int64_t operator()(IProtocol &protocol) {
+                    int64_t obj;
+                    protocol.readI64(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<uint64_t> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_PAIR == readType(protocol) &&
+                           IEnumTypes::I_I64 == readType(protocol) &&
+                           IEnumTypes::I_I64 == readType(protocol);
+                }
+
+                inline uint64_t operator()(IProtocol &protocol) {
+                    uint64_t obj;
+                    protocol.readI64((int64_t &) obj);
+                    int64_t aux;
+                    protocol.readI64(aux);
+                    return (obj << 32) & aux;
+                }
+            };
+
+            template<>
+            struct IReader<float> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_DOUBLE == readType(protocol);
+                }
+
+                inline float operator()(IProtocol &protocol) {
+                    double obj;
+                    protocol.readDouble(obj);
+                    return (float) obj;
+                }
+            };
+
+            template<>
+            struct IReader<double> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_DOUBLE == readType(protocol);
+                }
+
+                inline double operator()(IProtocol &protocol) {
+                    double obj;
+                    protocol.readDouble(obj);
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<std::string> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_STRING == readType(protocol);
+                }
+
+                inline std::string operator()(IProtocol &protocol) {
+                    std::string obj;
+                    protocol.readString(obj);
+                    return obj;
+                }
+            };
+
+            template<typename T>
+            struct IReader<std::vector<T>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_LIST == readType(protocol);
+                }
+
+                inline std::vector<T> operator()(IProtocol &protocol) {
+                    std::vector<T> obj;
+                    auto size = readSize(protocol);
+                    auto reader = IReader<T>();
+                    reader.checkType(protocol);
+                    obj.reserve(size);
+                    for (decltype(size) i = 0; i < size; i++) {
+                        obj.push_back(std::move(reader(protocol)));
+                    }
+                    return obj;
+                }
+            };
+
+            template<>
+            struct IReader<std::vector<uint8_t >> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_BINARY == readType(protocol);
+                }
+
+                inline std::vector<uint8_t> operator()(IProtocol &protocol) {
+                    std::vector<uint8_t> obj;
+                    auto size = readSize(protocol);
+                    obj.resize(size);
+                    auto data = obj.data();
+                    for (decltype(size) i = 0; i < size; i++) {
+                        protocol.readByte(*(int8_t *) data);
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename T>
+            struct IReader<std::list<T>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_LIST == readType(protocol);
+                }
+
+                inline std::list<T> operator()(IProtocol &protocol) {
+                    std::list<T> obj;
+                    auto size = readSize(protocol);
+                    auto reader = IReader<T>();
+                    reader.checkType(protocol);
+                    for (decltype(size) i = 0; i < size; i++) {
+                        obj.push_back(std::move(reader(protocol)));
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename T>
+            struct IReader<std::forward_list<T>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_LIST == readType(protocol);
+                }
+
+                inline std::forward_list<T> operator()(IProtocol &protocol) {
+                    std::forward_list<T> obj;
+                    auto size = readSize(protocol);
+                    auto reader = IReader<T>();
+                    reader.checkType(protocol);
+                    auto it = obj.before_begin();
+                    for (decltype(size) i = 0; i < size; i++) {
+                        it = obj.insert_after(it, std::move(reader(protocol)));
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename T>
+            struct IReader<std::set<T>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_SET == readType(protocol);
+                }
+
+                inline std::set<T> operator()(IProtocol &protocol) {
+                    std::set<T> obj;
+                    auto size = readSize(protocol);
+                    auto reader = IReader<T>();
+                    reader.readType(protocol);
+                    for (decltype(size) i = 0; i < size; i++) {
+                        obj.insert(std::move(reader(protocol)));
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename T>
+            struct IReader<std::unordered_set<T>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_SET == readType(protocol);
+                }
+
+                inline std::unordered_set<T> operator()(IProtocol &protocol) {
+                    std::unordered_set<T> obj;
+                    auto size = readSize(protocol);
+                    auto reader = IReader<T>();
+                    reader.readType(protocol);
+                    obj.reserve(size);
+                    for (decltype(size) i = 0; i < size; i++) {
+                        obj.insert(std::move(reader(protocol)));
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename K, typename V>
+            struct IReader<std::map<K, V>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_MAP == readType(protocol);
+                }
+
+                inline std::map<K, V> operator()(IProtocol &protocol) {
+                    std::map<K, V> obj;
+                    auto size = readSize(protocol);
+                    auto r_key = IReader<K>();
+                    auto r_value = IReader<V>();
+                    r_key.readType(protocol);
+                    r_value.readType(protocol);
+                    for (decltype(size) i = 0; i < size; i++) {
+                        obj[std::move(IReader<K>()(protocol))] = std::move(IReader<V>()(protocol));
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename K, typename V>
+            struct IReader<std::unordered_map<K, V>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_MAP == readType(protocol);
+                }
+
+                inline std::unordered_map<K, V> operator()(IProtocol &protocol) {
+                    std::unordered_map<K, V> obj;
+                    auto size = readSize(protocol);
+                    auto r_key = IReader<K>();
+                    auto r_value = IReader<V>();
+                    r_key.readType(protocol);
+                    r_value.readType(protocol);
+                    obj.reserve(size);
+                    for (decltype(size) i = 0; i < size; i++) {
+                        obj[std::move(IReader<K>()(protocol))] = std::move(IReader<V>()(protocol));
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename T1, typename T2>
+            struct IReader<std::pair<T1, T2>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_PAIR == readType(protocol);
+                }
+
+                inline std::pair<T1, T2> operator()(IProtocol &protocol) {
+                    std::pair<T1, T2> obj;
+                    auto r_first = IReader<T1>();
+                    auto r_second = IReader<T1>();
+                    r_first.readType(protocol);
+                    r_second.readType(protocol);
+                    obj.first = std::move(r_first(protocol));
+                    obj.second = std::move(r_second(protocol));
+                    return obj;
+                }
+            };
+
         }
     }
 }

@@ -4,14 +4,14 @@
 using namespace std;
 using namespace ignis::data::serialization;
 using ignis::data::ITypeInfo;
-using ignis::data::ITuple;
+using ignis::data::ITupleBase;
 using apache::thrift::protocol::TProtocol;
 
 
 class ITypeInfoBuilder : public ITypeInfo {
 public:
 
-    ITypeInfoBuilder(size_t id,const string &name) : ITypeInfo(id, name) {}
+    ITypeInfoBuilder(size_t id, const string &name) : ITypeInfo(id, name) {}
 
     inline void putArg(ITypeInfo &arg) {
         ITypeInfo::args().push_back(arg);
@@ -26,7 +26,7 @@ public:
             return tnew;
         }
         for (size_t i = 0; i < torg.types() && i < tnew.types(); i++) {
-            ((ITypeInfoBuilder &) torg).getArg(i) = ITypeInfoBuilder::complete(torg[i],tnew[i]);
+            ((ITypeInfoBuilder &) torg).getArg(i) = ITypeInfoBuilder::complete(torg[i], tnew[i]);
         }
         return torg;
     }
@@ -41,17 +41,15 @@ public:
 };
 
 template<class T1=Any, class T2=Any>
-class IReadTuple : public ITuple<T1,T2>{
+class ITupleReader : public ITupleBase<T1, T2> {
 public:
-    IReadTuple() : ITuple<T1,T2>::ITuple(NULL, NULL) {}
+    ITupleReader() : ITupleBase<T1, T2>(NULL, NULL) {}
 
-    void setFirst(T1 *first_ptr){
-        this->first_ptr = first_ptr;
-    }
+    T1 *&pFirst() { return this->first_ptr; }
 
-    void setSecond(T1 *second_ptr){
-        this->second_ptr = second_ptr;
-    }
+    T2 *&pSecond() { return this->second_ptr; }
+
+    bool &rHandlePtr() { return this->handle_ptr; }
 
 };
 
@@ -91,7 +89,7 @@ void IReader::readList(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
     auto size = readSize(tProtocol);
 
     auto elem_type_id = readType(tProtocol);
-    auto& elem_type_info = getInfo(elem_type_id);
+    auto &elem_type_info = getInfo(elem_type_id);
     auto elem_type = ITypeInfoBuilder(elem_type_info.class_id, elem_type_info.class_name);
     auto elem = elem_type_info.handle->newT();
 
@@ -126,7 +124,7 @@ void IReader::readSet(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
     auto size = readSize(tProtocol);
 
     auto elem_type_id = readType(tProtocol);
-    auto& elem_type_info = getInfo(elem_type_id);
+    auto &elem_type_info = getInfo(elem_type_id);
     auto elem_type = ITypeInfoBuilder(elem_type_info.class_id, elem_type_info.class_name);
     auto elem = elem_type_info.handle->newT();
 
@@ -162,8 +160,8 @@ void IReader::readMap(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
 
     auto key_type_id = readType(tProtocol);
     auto value_type_id = readType(tProtocol);
-    auto& key_type_info = getInfo(key_type_id);
-    auto& value_type_info = getInfo(value_type_id);
+    auto &key_type_info = getInfo(key_type_id);
+    auto &value_type_info = getInfo(value_type_id);
     auto key_type = ITypeInfoBuilder(key_type_info.class_id, key_type_info.class_name);
     auto value_type = ITypeInfoBuilder(value_type_info.class_id, value_type_info.class_name);
     auto handle = key_type_info.handles[key_type_id];
@@ -195,8 +193,8 @@ size_t IReader::hashMap(void *obj, ignis::data::ITypeInfo &type) {
     unordered_map<Any, Any> &m = *(unordered_map<Any, Any> *) obj;
     auto key_type = type[0];
     auto value_type = type[1];
-    auto& key_hash = getInfo(key_type.getId()).hash;
-    auto& value_hash = getInfo(value_type.getId()).hash;
+    auto &key_hash = getInfo(key_type.getId()).hash;
+    auto &value_hash = getInfo(value_type.getId()).hash;
     size_t hash = 0;
     for (auto it = m.begin(); it != m.end(); it++) {
         hash_combine(hash, (this->*key_hash)((void *) &(it->first), key_type));
@@ -208,7 +206,7 @@ size_t IReader::hashMap(void *obj, ignis::data::ITypeInfo &type) {
 void IReader::readBinary(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
     auto size = readSize(tProtocol);
 
-    auto& elem_type_info = getInfo(IEnumTypes::I_I08);
+    auto &elem_type_info = getInfo(IEnumTypes::I_I08);
     auto elem_type = ITypeInfoBuilder(elem_type_info.class_id, elem_type_info.class_name);
 
     vector<__int8_t> &binary = *(vector<__int8_t> *) obj;
@@ -226,14 +224,14 @@ void IReader::readBinary(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
 void IReader::readTuple(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
     auto first_type_id = readType(tProtocol);
     auto second_type_id = readType(tProtocol);
-    auto& first_type_info = getInfo(first_type_id);
-    auto& second_type_info = getInfo(second_type_id);
+    auto &first_type_info = getInfo(first_type_id);
+    auto &second_type_info = getInfo(second_type_id);
     auto first_type = ITypeInfoBuilder(first_type_info.class_id, first_type_info.class_name);
     auto second_type = ITypeInfoBuilder(second_type_info.class_id, second_type_info.class_name);
     auto handle = first_type_info.handles[second_type_id];
 
-    ((IReadTuple<>*)obj)->setFirst((Any*)handle->newT());
-    ((IReadTuple<>*)obj)->setSecond((Any*)handle->newT2());
+    ((ITupleReader<> *) obj)->pFirst() = (Any *) handle->newT();
+    ((ITupleReader<> *) obj)->pSecond() = (Any *) handle->newT2();
 
     (this->*first_type_info.function)(handle->firstPair(obj), first_type, tProtocol);
     (this->*second_type_info.function)(handle->secondPair(obj), second_type, tProtocol);
@@ -248,11 +246,11 @@ void IReader::readTuple(void *obj, ITypeInfo &type, TProtocol &tProtocol) {
 }
 
 size_t IReader::hashTuple(void *obj, ignis::data::ITypeInfo &type) {
-    ITuple<Any, Any> &t = *(ITuple<Any, Any> *) obj;
+    ITuple <Any, Any> &t = *(ITuple <Any, Any> *) obj;
     auto first_type = type[0];
     auto second_type = type[1];
-    auto& first_hash = getInfo(first_type.getId()).hash;
-    auto& second_hash = getInfo(second_type.getId()).hash;
+    auto &first_hash = getInfo(first_type.getId()).hash;
+    auto &second_hash = getInfo(second_type.getId()).hash;
     size_t hash = 0;
 
     hash_combine(hash, (this->*first_hash)((void *) &(t.first()), first_type));
@@ -286,7 +284,7 @@ IReader::IReader() {
     newMultipleType<vector<Any>>(IEnumTypes::I_LIST, &IReader::readList, &IReader::hashList);
     newMultipleType<unordered_set<Any>>(IEnumTypes::I_SET, &IReader::readSet, &IReader::hashSet);
     newMultipleType<unordered_map<Any, Any>>(IEnumTypes::I_MAP, &IReader::readMap, &IReader::hashMap);
-    newMultipleType<ITuple<Any, Any>>(IEnumTypes::I_TUPLE, &IReader::readTuple, &IReader::hashTuple);
+    newMultipleType<ITupleBase<Any, Any>>(IEnumTypes::I_TUPLE, &IReader::readTuple, &IReader::hashTuple);
     newMultipleType<vector<Any>>(IEnumTypes::I_BINARY, &IReader::readBinary);
 
     updateInfo();
@@ -298,7 +296,7 @@ IReader::IReader() {
 
 std::pair<std::shared_ptr<void>, ITypeInfo> IReader::readObject(apache::thrift::protocol::TProtocol &tProtocol) {
     auto elem_type_id = readType(tProtocol);
-    auto& elem_type_info = getInfo(elem_type_id);
+    auto &elem_type_info = getInfo(elem_type_id);
     auto elem_type = ITypeInfoBuilder(elem_type_info.class_id, elem_type_info.class_name);
     auto result = pair<std::shared_ptr<void>, ITypeInfo>(shared_ptr<Any>(), ITypeInfo::voidType());
 

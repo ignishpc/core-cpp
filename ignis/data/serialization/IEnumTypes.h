@@ -18,7 +18,7 @@ namespace ignis {
                 I_LIST      = 0x8,
                 I_SET       = 0x9,
                 I_MAP       = 0xa,
-                I_TUPLE     = 0xb,
+                I_PAIR      = 0xb,
                 I_BINARY    = 0xc,
             };
 

@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_IGNISMODULE_H
-#define EXECUTORCPP_IGNISMODULE_H
+#ifndef IGNIS_IGNISMODULE_H
+#define IGNIS_IGNISMODULE_H
 
 #include <memory>
 #include "../IExecutorData.h"
