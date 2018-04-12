@@ -70,61 +70,51 @@ public:
 
 */
 
-#include "data/serialization/ITypeHandle.h"
-#include <thrift/protocol/TProtocol.h>
-#include <jsoncpp/json/json.h>
+#include "executor/core/modules/IPostman.h"
+#include "executor/core/IExecutorData.h"
 #include <iostream>
+#include <thrift/transport/TSocket.h>
+#include <thrift/protocol/TCompactProtocol.h>
+#include <boost/filesystem.hpp>
 
-class Test {
+using namespace ignis::executor::core;
+using namespace ignis::executor::core::modules;
+using namespace apache::thrift::transport;
+using namespace apache::thrift::protocol;
 
-};
+
+
+
 
 int main(int argc, char *argv[]) {
-    //write();
-    //read();
-    std::vector<bool> v;
-    v.push_back(true);
-    v.push_back(false);
-    v.push_back(true);
-    v.push_back(false);
-    ignis::data::serialization::ITypeHandle<std::vector<Test>> a;
-    ignis::data::serialization::ITypeHandle<std::vector<uint8_t >> test;
+    std::ofstream out("/mnt/d/text.t");
 
-    Json::Value root;
-    std::vector<Test> t;
-    t.push_back(Test());
-    a.printer().printJson(t, root);
+    out << "hola";
+    out.flush();
+    out.seekp(0);
+    boost::filesystem::resize_file(boost::filesystem::path("/mnt/d/text.t"),0);
+    out << "mundo";
+
+
 /*
-    std::cout << root << std::endl;
-
-    a.printer()(v,std::cout);
-*/
-
-    //
-
-
-
-    //void *t = new Test();
-    //void (*des)(void *obj) = (void (*)(void *)) &destructor<Test>;
-
-    //des(t);
-
-    return EXIT_SUCCESS;
-}
-
-namespace ignis {
-    namespace data {
-        namespace serialization {
-
-
-            template<>
-            struct IPrinter<Test> {
-                void operator()(const Test &b, std::ostream &out, size_t level = 0){
-
-                }
-
-                void printJson(const Test &b, Json::Value &json) {}
-            };
+    auto data = std::make_shared<IExecutorData>();
+    IPostman postman(data);
+    postman.start();
+    std::shared_ptr<TSocket> socket;
+    for (int i = 0; i < 1; i++) {
+        socket = std::make_shared<TSocket>("localhost", 1963);
+        socket->open();
+        auto proto = std::make_shared<TCompactProtocol>(socket);
+        proto->writeI64(i);
+        for (int b = 1; b < 100; b += 1) {
+            uint8_t bb = b * b;
+            socket->write(&bb, 1);
         }
+        socket->close();
     }
+    sleep(6);
+    postman.stop();
+    auto m0 = data->post_box.popMessage(0)->writeEnd();
+    std::cout << m0 << std::endl;*/
+    return EXIT_SUCCESS;
 }

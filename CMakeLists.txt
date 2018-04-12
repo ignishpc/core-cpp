@@ -21,10 +21,18 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IReducerModule.h
         ignis/executor/core/modules/ISortModule.cpp
         ignis/executor/core/modules/ISortModule.h
+        ignis/executor/core/modules/IPostman.h
+        ignis/executor/core/modules/IPostman.cpp
+        ignis/executor/core/modules/IFilesModule.h
+        ignis/executor/core/modules/IFilesModule.cpp
         ignis/executor/core/storage/IObject.h
-        ignis/executor/core/modules/IPostman.cpp ignis/executor/core/modules/IPostman.h)
+        ignis/executor/core/storage/IPostBox.h
+        ignis/executor/core/storage/IMessage.h
+        ignis/executor/core/storage/IPostBox.cpp
+        )
 
-#set(CMAKE_CXX_FLAGS "-O3 -fopenmp")
+#set(CMAKE_CXX_FLAGS "-O3 -fopenmp -pthread")
+set(CMAKE_CXX_FLAGS "-pthread")
 add_executable(executorcpp ${SOURCE_FILES})
 
 TARGET_LINK_LIBRARIES(executorcpp igniscore)

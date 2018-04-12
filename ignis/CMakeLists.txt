@@ -9,6 +9,8 @@ set(SOURCE_FILES
         data/RTTInfo.h
         data/RTTInfo.cpp
         data/IObjectProtocol.h
+        data/IFileTransport.h
+        data/IFileTransport.cpp
         data/serialization/IEnumTypes.h
         data/serialization/IPrinter.h
         data/serialization/IDeleter.h
