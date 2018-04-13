@@ -1,5 +1,6 @@
-//
-// Created by César on 29/03/2018.
-//
 
 #include "IExecutorData.h"
+
+using namespace ignis::executor::core;
+
+IExecutorData::IExecutorData() : Properties_parser(IPropertiesParser(context.getProperties())) {}

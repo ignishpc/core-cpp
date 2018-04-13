@@ -3,6 +3,7 @@
 #define IGNIS_ITYPEHANDLE_H
 
 #include <memory>
+#include <vector>
 #include "IPrinter.h"
 #include "IReader.h"
 #include "IWriter.h"
@@ -14,20 +15,26 @@ namespace ignis {
         namespace serialization {
 
             template<typename T>
-            class ITypeHandle {
+            class ITypeHandleBase {
+            public:
+                virtual std::shared_ptr<IPrinter<T>> printer() { return std::make_shared<IPrinter<T>>(); }
+
+                virtual std::shared_ptr<IReader<T>> reader() { return std::make_shared<IReader<T>>(); }
+
+                virtual std::shared_ptr<IWriter<T>> writer() { return std::make_shared<IWriter<T>>(); }
+
+                virtual std::shared_ptr<IDeleter<T>> deleter() { return std::make_shared<IDeleter<T>>(); }
+
+                virtual const std::type_info &info() { return typeid(T); }
+            };
+
+            template<typename T>
+            class ITypeHandle : public ITypeHandleBase<T>{
             public:
 
-                std::shared_ptr<ITypeHandle<T>> handle() { return std::make_shared<ITypeHandle<T>>(); }
-
-                std::shared_ptr<IPrinter<T>> printer() { return std::make_shared<IPrinter<T>>(); }
-
-                std::shared_ptr<IReader<T>> reader() { return std::make_shared<IReader<T>>(); }
-
-                std::shared_ptr<IWriter<T>> writer() { return std::make_shared<IWriter<T>>(); }
-
-                std::shared_ptr<IDeleter<T>> deleter() { return std::make_shared<IDeleter<T>>(); }
-
-                const std::type_info &info() { return typeid(T); }
+                virtual std::shared_ptr<ITypeHandleBase<std::vector<T>>> collectionHandle(){
+                   return std::shared_ptr<ITypeHandleBase<std::vector<T>>>();
+               }
             };
         }
     }

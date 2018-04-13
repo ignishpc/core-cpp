@@ -5,7 +5,7 @@
 #include "IException.h"
 
 namespace ignis {
-    namespace exception {
+    namespace exceptions {
         class IInvalidArgument : public IException {
         public:
             IInvalidArgument(const std::string &message) : IException(message) {setExceptionName(this);}

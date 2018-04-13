@@ -14,7 +14,7 @@
 #include <memory>
 #include <ostream>
 #include <jsoncpp/json/json.h>
-#include "../../exception/ILogicError.h"
+#include "../../exceptions/ILogicError.h"
 #include "../RTTInfo.h"
 
 namespace ignis {
@@ -24,21 +24,21 @@ namespace ignis {
             std::string inline tab(size_t n) { return std::string(n, '\t'); }
 
             template<typename T>
-            struct IPrinter {
-                void operator()(const T &b, std::ostream &out, size_t level = 0) {
-                    throw exception::ILogicError(
-                            "IPrinter not implemented for " + RTTInfo(typeid(T)).getStandardName());
+            struct IPrinterType {
+                virtual void operator()(const T &b, std::ostream &out, size_t level) {
+                    throw exceptions::ILogicError(
+                            "IPrinterType not implemented for " + RTTInfo(typeid(T)).getStandardName());
                 }
 
-                void printJson(const T &b, Json::Value &json) {
-                    throw exception::ILogicError(
-                            "IPrinter json not implemented for " + RTTInfo(typeid(T)).getStandardName());
+                virtual void printJson(const T &b, Json::Value &json) {
+                    throw exceptions::ILogicError(
+                            "IPrinterType json not implemented for " + RTTInfo(typeid(T)).getStandardName());
                 }
             };
 
             template<>
-            struct IPrinter<bool> {
-                inline void operator()(const bool &b, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<bool> {
+                inline void operator()(const bool &b, std::ostream &out, size_t level) {
                     out << b;
                 }
 
@@ -48,8 +48,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<int8_t> {
-                inline void operator()(const int8_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<int8_t> {
+                inline void operator()(const int8_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -59,8 +59,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<uint8_t> {
-                inline void operator()(const uint8_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<uint8_t> {
+                inline void operator()(const uint8_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -70,8 +70,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<int16_t> {
-                inline void operator()(const int16_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<int16_t> {
+                inline void operator()(const int16_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -81,8 +81,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<uint16_t> {
-                inline void operator()(const uint16_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<uint16_t> {
+                inline void operator()(const uint16_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -92,8 +92,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<int32_t> {
-                inline void operator()(const int32_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<int32_t> {
+                inline void operator()(const int32_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -103,8 +103,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<uint32_t> {
-                inline void operator()(const uint32_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<uint32_t> {
+                inline void operator()(const uint32_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -114,8 +114,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<int64_t> {
-                inline void operator()(const int64_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<int64_t> {
+                inline void operator()(const int64_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -125,8 +125,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<uint64_t> {
-                inline void operator()(const uint64_t &i, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<uint64_t> {
+                inline void operator()(const uint64_t &i, std::ostream &out, size_t level) {
                     out << i;
                 }
 
@@ -136,8 +136,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<float> {
-                inline void operator()(const float &d, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<float> {
+                inline void operator()(const float &d, std::ostream &out, size_t level) {
                     out << d;
                 }
 
@@ -147,8 +147,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<double> {
-                inline void operator()(const double &d, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<double> {
+                inline void operator()(const double &d, std::ostream &out, size_t level) {
                     out << d;
                 }
 
@@ -158,8 +158,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<long double> {
-                inline void operator()(const long double &d, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<long double> {
+                inline void operator()(const long double &d, std::ostream &out, size_t level) {
                     out << d;
                 }
 
@@ -169,8 +169,8 @@ namespace ignis {
             };
 
             template<>
-            struct IPrinter<std::string> {
-                inline void operator()(const std::string &s, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::string> {
+                inline void operator()(const std::string &s, std::ostream &out, size_t level) {
                     out << s;
                 }
 
@@ -180,11 +180,11 @@ namespace ignis {
             };
 
             template<typename T>
-            struct IPrinter<std::vector<T>> {
-                inline void operator()(const std::vector<T> &v, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::vector<T>> {
+                inline void operator()(const std::vector<T> &v, std::ostream &out, size_t level) {
                     for (const auto &elem:v) {
                         out << tab(level);
-                        IPrinter<T>()(elem, out, level + 1);
+                        IPrinterType<T>()(elem, out, level + 1);
                         out << std::endl;
                     }
                 }
@@ -195,7 +195,7 @@ namespace ignis {
                     Json::ArrayIndex i = 0;
                     for (const auto &elem:v) {
                         Json::Value child;
-                        IPrinter<T>().printJson(elem, child);
+                        IPrinterType<T>().printJson(elem, child);
                         json[i++] = child;
                     }
 
@@ -203,11 +203,11 @@ namespace ignis {
             };
 
             template<typename T>
-            struct IPrinter<std::list<T>> {
-                inline void operator()(const std::list<T> &l, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::list<T>> {
+                inline void operator()(const std::list<T> &l, std::ostream &out, size_t level) {
                     for (const auto &elem:l) {
                         out << tab(level);
-                        IPrinter<T>()(elem, out, level + 1);
+                        IPrinterType<T>()(elem, out, level + 1);
                         out << std::endl;
                     }
                 }
@@ -218,7 +218,7 @@ namespace ignis {
                     Json::ArrayIndex i = 0;
                     for (const auto &elem:l) {
                         Json::Value child;
-                        IPrinter<T>().printJson(elem, child);
+                        IPrinterType<T>().printJson(elem, child);
                         json[i++] = child;
                     }
 
@@ -226,11 +226,11 @@ namespace ignis {
             };
 
             template<typename T>
-            struct IPrinter<std::forward_list<T>> {
-                inline void operator()(const std::forward_list<T> &fl, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::forward_list<T>> {
+                inline void operator()(const std::forward_list<T> &fl, std::ostream &out, size_t level) {
                     for (const auto &elem:fl) {
                         out << tab(level);
-                        IPrinter<T>()(elem, out, level + 1);
+                        IPrinterType<T>()(elem, out, level + 1);
                         out << std::endl;
                     }
                 }
@@ -239,7 +239,7 @@ namespace ignis {
                     json = Json::Value(Json::arrayValue);
                     for (const auto &elem:fl) {
                         Json::Value child;
-                        IPrinter<T>().printJson(elem, child);
+                        IPrinterType<T>().printJson(elem, child);
                         json.append(child);
                     }
 
@@ -247,11 +247,11 @@ namespace ignis {
             };
 
             template<typename T>
-            struct IPrinter<std::set<T>> {
-                inline void operator()(const std::set<T> &s, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::set<T>> {
+                inline void operator()(const std::set<T> &s, std::ostream &out, size_t level) {
                     for (const auto &elem:s) {
                         out << tab(level);
-                        IPrinter<T>()(elem, out, level + 1);
+                        IPrinterType<T>()(elem, out, level + 1);
                         out << std::endl;
                     }
                 }
@@ -262,7 +262,7 @@ namespace ignis {
                     Json::ArrayIndex i = 0;
                     for (const auto &elem:s) {
                         Json::Value child;
-                        IPrinter<T>().printJson(elem, child);
+                        IPrinterType<T>().printJson(elem, child);
                         json[i++] = child;
                     }
 
@@ -270,11 +270,11 @@ namespace ignis {
             };
 
             template<typename T>
-            struct IPrinter<std::unordered_set<T>> {
-                inline void operator()(const std::set<T> &us, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::unordered_set<T>> {
+                inline void operator()(const std::unordered_set<T> &us, std::ostream &out, size_t level) {
                     for (const auto &elem:us) {
                         out << tab(level);
-                        IPrinter<T>()(elem, out, level + 1);
+                        IPrinterType<T>()(elem, out, level + 1);
                         out << std::endl;
                     }
                 }
@@ -285,7 +285,7 @@ namespace ignis {
                     Json::ArrayIndex i = 0;
                     for (const auto &elem:us) {
                         Json::Value child;
-                        IPrinter<T>().printJson(elem, child);
+                        IPrinterType<T>().printJson(elem, child);
                         json[i++] = child;
                     }
 
@@ -293,33 +293,31 @@ namespace ignis {
             };
 
             template<typename K, typename V>
-            struct IPrinter<std::map<K, V>> {
-                inline void operator()(const std::map<K, V> &m, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::map<K, V>> {
+                inline void operator()(const std::map<K, V> &m, std::ostream &out, size_t level) {
                     for (const auto &elem:m) {
                         out << tab(level) << "(";
-                        IPrinter<K>()(elem.first, out, level + 1);
+                        IPrinterType<K>()(elem.first, out, level + 1);
                         out << ", ";
-                        IPrinter<K>()(elem.second, out, level + 1);
+                        IPrinterType<K>()(elem.second, out, level + 1);
                         out << ")" << std::endl;
                     }
                 }
 
                 inline void printJson(const std::map<K, V> &m, Json::Value &json) {
                     json = Json::Value(Json::objectValue);
-                    if (std::is_convertible<Json::UInt64, K>() ||
-                        std::is_convertible<double, K>() ||
-                        std::is_convertible<std::string, K>()) {
+                    if(std::is_convertible<K, std::string>()){
                         for (const auto &elem:m) {
                             Json::Value child;
-                            IPrinter<V>().printJson(elem.second, child);
-                            json[elem.first] = child;
+                            IPrinterType<V>().printJson(elem.second, child);
+                            json[(std::string&)elem.first] = child;
                         }
-                    } else {
+                    }else{
                         for (const auto &elem:m) {
                             Json::Value key;
                             Json::Value value;
-                            IPrinter<K>().printJson(elem.first, key);
-                            IPrinter<V>().printJson(elem.second, value);
+                            IPrinterType<K>().printJson(elem.first, key);
+                            IPrinterType<V>().printJson(elem.second, value);
                             json["key"] = key;
                             json["value"] = value;
                         }
@@ -328,33 +326,31 @@ namespace ignis {
             };
 
             template<typename K, typename V>
-            struct IPrinter<std::unordered_map<K, V>> {
-                inline void operator()(const std::unordered_map<K, V> &m, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::unordered_map<K, V>> {
+                inline void operator()(const std::unordered_map<K, V> &m, std::ostream &out, size_t level) {
                     for (const auto &elem:m) {
                         out << tab(level) << "(";
-                        IPrinter<K>()(elem.first, out, level + 1);
+                        IPrinterType<K>()(elem.first, out, level + 1);
                         out << ", ";
-                        IPrinter<K>()(elem.second, out, level + 1);
+                        IPrinterType<K>()(elem.second, out, level + 1);
                         out << ")" << std::endl;
                     }
                 }
 
                 inline void printJson(const std::unordered_map<K, V> &m, Json::Value &json) {
                     json = Json::Value(Json::objectValue);
-                    if (std::is_convertible<Json::UInt64, K>() ||
-                        std::is_convertible<double, K>() ||
-                        std::is_convertible<std::string, K>()) {
+                    if(std::is_convertible<K, std::string>()){
                         for (const auto &elem:m) {
                             Json::Value child;
-                            IPrinter<V>().printJson(elem.second, child);
-                            json[elem.first] = child;
+                            IPrinterType<V>().printJson(elem.second, child);
+                            json[(std::string&)elem.first] = child;
                         }
-                    } else {
+                    }else{
                         for (const auto &elem:m) {
                             Json::Value key;
                             Json::Value value;
-                            IPrinter<K>().printJson(elem.first, key);
-                            IPrinter<V>().printJson(elem.second, value);
+                            IPrinterType<K>().printJson(elem.first, key);
+                            IPrinterType<V>().printJson(elem.second, value);
                             json["key"] = key;
                             json["value"] = value;
                         }
@@ -362,29 +358,26 @@ namespace ignis {
                 }
             };
 
+
             template<typename T1, typename T2>
-            struct IPrinter<std::pair<T1, T2>> {
-                inline void operator()(const std::pair<T1, T2> &p, std::ostream &out, size_t level = 0) {
+            struct IPrinterType<std::pair<T1, T2>> {
+                inline void operator()(const std::pair<T1, T2> &p, std::ostream &out, size_t level) {
                     out << tab(level) << "(";
-                    IPrinter<T1>()(p.first, out, level + 1);
+                    IPrinterType<T1>()(p.first, out, level + 1);
                     out << ", ";
-                    IPrinter<T2>()(p.second, out, level + 1);
+                    IPrinterType<T2>()(p.second, out, level + 1);
                     out << ")" << std::endl;
                 }
 
-                inline void printJson(std::pair<T1, T2> &p, Json::Value &json) {
+                inline void printJson(const std::pair<T1, T2> &p, Json::Value &json) {
                     json = Json::Value(Json::objectValue);
-                    if (std::is_convertible<Json::UInt64, T1>() ||
-                        std::is_convertible<double, T1>() ||
-                        std::is_convertible<std::string, T1>()) {
-                        Json::Value child;
-                        IPrinter<T2>().printJson(p.second, child);
-                        json[p.first] = child;
-                    } else {
+                    Json::Value second;
+                    IPrinterType<T2>().printJson(p.second, second);
+                    if(std::is_convertible<T1,std::string>()){
+                        json[(std::string&)p.first] = second;
+                    }else{
                         Json::Value first;
-                        Json::Value second;
-                        IPrinter<T1>().printJson(p.first, first);
-                        IPrinter<T2>().printJson(p.second, second);
+                        IPrinterType<T1>().printJson(p.first, first);
                         json["first"] = first;
                         json["second"] = second;
                     }
@@ -392,25 +385,40 @@ namespace ignis {
             };
 
             template<typename T>
-            struct IPrinter<T*> {
-                inline void operator()(const T* &v, std::ostream &out, size_t level = 0) {
-                   IPrinter<T*>()(*v,out);
+            struct IPrinterType<T *> {
+                inline void operator()(const T *&v, std::ostream &out, size_t level) {
+                    IPrinterType<T *>()(*v, out, level);
                 }
 
-                inline void printJson(const T* &v, Json::Value &json) {
-                    IPrinter<T*>().printJson(*v,json);
+                inline void printJson(const T *&v, Json::Value &json) {
+                    IPrinterType<T *>().printJson(*v, json);
                 }
             };
 
             template<typename T>
-            struct IPrinter<std::shared_ptr<T>> {
-                inline void operator()(const std::shared_ptr<T> &v, std::ostream &out, size_t level = 0) {
-                    IPrinter<T*>()(*v,out);
+            struct IPrinterType<std::shared_ptr<T>> {
+                inline void operator()(const std::shared_ptr<T> &v, std::ostream &out, size_t level) {
+                    IPrinterType<T *>()(*v, out, level);
                 }
 
                 inline void printJson(const std::shared_ptr<T> &v, Json::Value &json) {
-                    IPrinter<T*>().printJson(*v,json);
+                    IPrinterType<T *>().printJson(*v, json);
                 }
+            };
+
+            template<typename T>
+            class IPrinter {
+            public:
+                virtual void operator()(const T &b, std::ostream &out) {
+                    printer(b, out, 0);
+                }
+
+                virtual void printJson(const T &b, Json::Value &json) {
+                    printer.printJson(b, json);
+                }
+
+            private:
+                IPrinterType<T> printer;
             };
         }
     }

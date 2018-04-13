@@ -3,14 +3,23 @@
 #define IGNIS_IGNISCONTEXT_H
 
 #include <memory>
+#include <string>
+#include <unordered_map>
 
 namespace ignis {
     namespace executor {
         namespace api {
             class IContext {
             public:
-            private:
 
+                std::string &operator[](const std::string &key);
+
+                std::string &operator[](const std::string key);
+
+                std::unordered_map<std::string, std::string> &getProperties();
+
+            private:
+                std::unordered_map<std::string, std::string> properties;
             };
         }
     }

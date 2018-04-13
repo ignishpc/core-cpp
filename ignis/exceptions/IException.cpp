@@ -2,7 +2,7 @@
 #include <sstream>
 
 using namespace std;
-using namespace ignis::exception;
+using namespace ignis::exceptions;
 
 IException::IException(const string &message)
         : runtime_error(message),

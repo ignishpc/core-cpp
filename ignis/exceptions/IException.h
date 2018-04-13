@@ -9,7 +9,7 @@
 #include "../data/RTTInfo.h"
 
 namespace ignis {
-    namespace exception {
+    namespace exceptions {
 
         class IException : public std::runtime_error {
 

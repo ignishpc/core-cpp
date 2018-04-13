@@ -308,7 +308,7 @@ std::pair<std::shared_ptr<void>, ITypeInfo> IReader::readObject(apache::thrift::
 inline IReader::IReaderInfo &IReader::getInfo(__uint8_t id) {
     auto entry = info_map.find(id);
     if (entry == info_map.end()) {
-        //No exists exception
+        //No exists exceptions
     }
     return entry->second;
 }

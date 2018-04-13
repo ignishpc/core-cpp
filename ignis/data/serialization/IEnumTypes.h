@@ -26,4 +26,4 @@ namespace ignis {
     }
 }
 
-#endif //EXECUTORCPP_ITYPES_H
+#endif

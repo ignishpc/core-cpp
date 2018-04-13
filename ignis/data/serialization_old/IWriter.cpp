@@ -246,7 +246,7 @@ void IWriter::writeObject(void *obj, ignis::data::ITypeInfo &type, apache::thrif
 inline const IWriter::IWriterInfo &IWriter::getInfo(size_t id) {
     auto entry = info_map.find(id);
     if (entry == info_map.end()) {
-        //No exists exception
+        //No exists exceptions
     }
     return entry->second;
 }

@@ -33,7 +33,7 @@ void IPostman::threadAccept(shared_ptr<TTransport> transport) {
     //executor_data->post_box.newMessage(id, memory);
     int bytes;
     uint8_t buffer[256];
-    while ((bytes = transport->read(buffer, 256)) > -1) {
+    while ((bytes = transport->read(buffer, 256)) > 0) {
         memory->write(buffer, bytes);
     }
     transport->close();

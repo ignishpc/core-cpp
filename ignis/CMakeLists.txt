@@ -33,19 +33,16 @@ set(SOURCE_FILES
         driver/api/IgnisException.cpp
 
         #Exception
-        exception/IException.h
-        exception/IException.cpp
-        exception/ILogicError.h
-        exception/IInvalidArgument.h
+        exceptions/IException.h
+        exceptions/IException.cpp
+        exceptions/ILogicError.h
+        exceptions/IInvalidArgument.h
         )
 
-set(CMAKE_CXX_FLAGS "-O0 -fPIC -rdynamic")
+set(CMAKE_CXX_FLAGS "-fPIC -rdynamic")#-O3
 add_library(igniscore SHARED ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(igniscore jsoncpp thrift boost_system boost_filesystem dl thriftz z)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
-install(DIRECTORY data driver exception DESTINATION include/ignis FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")
+install(DIRECTORY data driver exceptions DESTINATION include/ignis FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")
 install(DIRECTORY executor/api DESTINATION include/ignis/executor FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")
-#install(FILES Ignis.h DESTINATION include/ignis)
-
-

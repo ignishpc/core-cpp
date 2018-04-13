@@ -1,6 +1,6 @@
 
-#ifndef EXECUTORCPP_DINAMICOBJECT_H
-#define EXECUTORCPP_DINAMICOBJECT_H
+#ifndef INGIS_DINAMICOBJECT_H
+#define IGNIS_DINAMICOBJECT_H
 
 #include <string>
 #include <memory>

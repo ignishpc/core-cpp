@@ -9,19 +9,9 @@ namespace ignis {
             class IWriteIterator {
             public:
 
-                IWriteIterator(void (*write_f)(T &&)) : write_f(write_f) {}
+                virtual void write(T &obj) = 0;
 
-                void write(T &obj) {
-                    (*write_f)(T(obj));
-                }
-
-                void write(T &&obj) {
-                    (*write_f)(obj);
-                }
-
-            private:
-
-                void (*write_f)(T &&);
+                virtual void write(T &&obj) = 0;
             };
         }
     }
