@@ -1,5 +1,5 @@
 
-#include "IPostman.h"
+#include "IPostmanModule.h"
 #include <thread>
 #include <thrift/transport/TBufferTransports.h>
 #include <thrift/transport/TSocket.h>
@@ -14,9 +14,9 @@ using namespace apache::thrift::transport;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::modules;
 
-IPostman::IPostman(shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}
+IPostmanModule::IPostmanModule(shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
-void IPostman::threadAccept(shared_ptr<TTransport> transport) {
+void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
     try {
         auto protocol = make_shared<data::IObjectProtocol>(transport);
         bool use_shared_memory;
@@ -42,7 +42,7 @@ void IPostman::threadAccept(shared_ptr<TTransport> transport) {
                 storage = "raw memory";
                 object = make_shared<storage::IRawMemoryObject>(compression);
             }
-            IGNIS_LOG(info) << "IPostman id " << id << " receiving"
+            IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
                             << " mode: " << (use_shared_memory ? "shared memory" : "socket")
                             << " storage: " << storage
                             << " compression: " << compression;
@@ -50,54 +50,54 @@ void IPostman::threadAccept(shared_ptr<TTransport> transport) {
             IMessage msg(object);
             executor_data->getPostBox().newMessage(id, msg);
             object->read(buffer);
-            IGNIS_LOG(info) << "IPostman id " << id << " received OK";
+            IGNIS_LOG(info) << "IPostmanModule id " << id << " received OK";
         } catch (std::exception &ex) {
-            IGNIS_LOG(warning) << "IPostman id " << id << " received FAILS";
+            IGNIS_LOG(warning) << "IPostmanModule id " << id << " received FAILS";
         }
     } catch (std::exception &ex) {
-        IGNIS_LOG(warning) << "IPostman connection exception " << ex.what();
+        IGNIS_LOG(warning) << "IPostmanModule connection exception " << ex.what();
     }
     transport->close();
 }
 
-void IPostman::threadServer() {
-    IGNIS_LOG(info) << "IPostman started";
+void IPostmanModule::threadServer() {
+    IGNIS_LOG(info) << "IPostmanModule started";
     std::vector<std::shared_ptr<TTransport>> connections;
     server->listen();
-    IGNIS_LOG(info) << "IPostman listening on port " << server->getPort();
+    IGNIS_LOG(info) << "IPostmanModule listening on port " << server->getPort();
     while (started) {
         try {
             auto connection = server->accept();
-            IGNIS_LOG(info) << "IPostman connection accepted";
+            IGNIS_LOG(info) << "IPostmanModule connection accepted";
             connections.push_back(connection);
-            std::thread(&IPostman::threadAccept, this, connection).detach();
+            std::thread(&IPostmanModule::threadAccept, this, connection).detach();
         } catch (std::exception &ex) {
             if (started) {
-                IGNIS_LOG(warning) << "IPostman accept exception" << ex.what();
+                IGNIS_LOG(warning) << "IPostmanModule accept exception" << ex.what();
             }
         }
     }
     for (auto trans:connections) {
         trans->close();
     }
-    IGNIS_LOG(info) << "IPostman stopped, " << connections.size() <<" connections accepted";
+    IGNIS_LOG(info) << "IPostmanModule stopped, " << connections.size() <<" connections accepted";
 }
 
-void IPostman::start() {
-    IGNIS_LOG(info) << "IPostman starting";
+void IPostmanModule::start() {
+    IGNIS_LOG(info) << "IPostmanModule starting";
     started = true;
     auto port = executor_data->getParser().getNumber("ignis.executor.rpc.port");
     server = std::make_shared<TServerSocket>(port);
-    std::thread(&IPostman::threadServer, this).detach();
+    std::thread(&IPostmanModule::threadServer, this).detach();
 }
 
-void IPostman::stop() {
-    IGNIS_LOG(info) << "IPostman stopping";
+void IPostmanModule::stop() {
+    IGNIS_LOG(info) << "IPostmanModule stopping";
     started = false;
     server->close();
 }
 
-void IPostman::sendAll() {
+void IPostmanModule::sendAll() {
 
 
 }

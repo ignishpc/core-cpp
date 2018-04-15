@@ -17,7 +17,9 @@ IRawObject::~IRawObject(){}
 void IRawObject::readHeader(shared_ptr<TTransport> transport) {
     auto data_type = ((ITypeHandle<Any> &) type_handle).collectionHandle();
     auto data_reader = data_type->reader();
+    bool native;
     data::IObjectProtocol data_proto(transport);
+    data_proto.readBool(native);
     data_reader->readType(data_proto);
     elems = readSizeAux(data_proto);
     type_handle->reader()->readType(data_proto);
@@ -27,7 +29,9 @@ void IRawObject::readHeader(shared_ptr<TTransport> transport) {
 void IRawObject::writeHeader(shared_ptr<TTransport> transport) {
     auto data_type = ((ITypeHandle<Any> &) type_handle).collectionHandle();
     auto data_writer = data_type->writer();
+    bool native = false;
     data::IObjectProtocol data_proto(transport);
+    data_proto.writeBool(native);
     data_writer->writeType(data_proto);
     writeSizeAux(data_proto, elems);
     type_handle->writer()->writeType(data_proto);

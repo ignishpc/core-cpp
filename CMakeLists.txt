@@ -28,8 +28,8 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IReducerModule.cpp
         ignis/executor/core/modules/ISortModule.h
         ignis/executor/core/modules/ISortModule.cpp
-        ignis/executor/core/modules/IPostman.h
-        ignis/executor/core/modules/IPostman.cpp
+        ignis/executor/core/modules/IPostmanModule.h
+        ignis/executor/core/modules/IPostmanModule.cpp
         ignis/executor/core/modules/IFilesModule.h
         ignis/executor/core/modules/IFilesModule.cpp
         ignis/executor/core/modules/IStorageModule.h

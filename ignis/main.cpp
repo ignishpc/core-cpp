@@ -1,26 +1,49 @@
-#include <cstdlib>
-#include <iostream>
-#include <ctime>
 #include "executor/core/ILog.h"
-#include "data/RTTInfo.h"
 
-using namespace ignis::executor::core;
+#include <thrift/processor/TMultiplexedProcessor.h>
+#include "executor/core/IExecutorData.h"
+#include "executor/core/modules/IFilesModule.h"
+#include "executor/core/modules/IMapperModule.h"
+#include "executor/core/modules/IPostmanModule.h"
+#include "executor/core/modules/IReducerModule.h"
+#include "executor/core/modules/IServerModule.h"
+#include "executor/core/modules/ISortModule.h"
+#include "executor/core/modules/IStorageModule.h"
+
+using namespace ignis::executor::core::modules;
+using namespace ignis::rpc::executor;
 
 int main(int argc, char *argv[]) {
-
-
-
     IGNIS_LOG_INIT();
-    IGNIS_LOG(trace) << "TEST";
 
-    IGNIS_LOG(trace) << "A trace severity message";
-    IGNIS_LOG(debug) << "A debug severity message";
-    IGNIS_LOG(info) << "An informational severity message";
-    IGNIS_LOG(warning) << "A warning severity message";
-    IGNIS_LOG(error) << "An error severity message";
-    IGNIS_LOG(fatal) << "A fatal severity message";
+    auto processor = std::make_shared<apache::thrift::TMultiplexedProcessor>();
+    auto executor_data = std::make_shared<ignis::executor::core::IExecutorData>();
 
-    std::cout << ignis::data::RTTInfo(typeid("hola")).getStandardName() << std::endl;
+    auto files = std::make_shared<IFilesModule>(executor_data);
+    processor->registerProcessor("files", std::make_shared<IFilesModuleProcessor>(files));
+    auto mapper = std::make_shared<IMapperModule>(executor_data);
+    processor->registerProcessor("mapper", std::make_shared<IMapperModuleProcessor>(mapper));
+    auto postman = std::make_shared<IPostmanModule>(executor_data);
+    processor->registerProcessor("postman", std::make_shared<IPostmanModuleProcessor>(postman));
+    auto reducer = std::make_shared<IReducerModule>(executor_data);
+    processor->registerProcessor("reducer", std::make_shared<IReducerModuleProcessor>(reducer));
+    auto server = std::make_shared<IServerModule>(executor_data);
+    processor->registerProcessor("server", std::make_shared<IServerModuleProcessor>(server));
+    auto sort = std::make_shared<ISortModule>(executor_data);
+    processor->registerProcessor("sort", std::make_shared<ISortModuleProcessor>(sort));
+    auto storage = std::make_shared<IStorageModule>(executor_data);
+    processor->registerProcessor("storage", std::make_shared<IStorageModuleProcessor>(storage));
+
+    if (argc == 1) {
+        IGNIS_LOG(error) << "Executor need a server port as argument";
+    }
+
+    int port = atoi(argv[0]);
+    if (port == 0) {
+        IGNIS_LOG(error) << "Executor need a valid server port as argument";
+    }
+
+    server->start(processor, port);
 
     return EXIT_SUCCESS;
 }

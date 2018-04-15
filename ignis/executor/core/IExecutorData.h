@@ -1,5 +1,5 @@
 
-#ifndef INGIS_EXECUTORDATA_H
+#ifndef IGNIS_EXECUTORDATA_H
 #define IGNIS_EXECUTORDATA_H
 
 #include <memory>

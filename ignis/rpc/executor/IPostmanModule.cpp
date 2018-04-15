@@ -4,11 +4,11 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#include "IPostman.h"
+#include "IPostmanModule.h"
 
 namespace ignis { namespace rpc { namespace executor {
 
-bool IPostmanProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
+bool IPostmanModuleProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
   ProcessMap::iterator pfn;
   pfn = processMap_.find(fname);
   if (pfn == processMap_.end()) {
@@ -27,10 +27,10 @@ bool IPostmanProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* ipro
   return true;
 }
 
-::apache::thrift::stdcxx::shared_ptr< ::apache::thrift::TProcessor > IPostmanProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
-  ::apache::thrift::ReleaseHandler< IPostmanIfFactory > cleanup(handlerFactory_);
-  ::apache::thrift::stdcxx::shared_ptr< IPostmanIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
-  ::apache::thrift::stdcxx::shared_ptr< ::apache::thrift::TProcessor > processor(new IPostmanProcessor(handler));
+::apache::thrift::stdcxx::shared_ptr< ::apache::thrift::TProcessor > IPostmanModuleProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
+  ::apache::thrift::ReleaseHandler< IPostmanModuleIfFactory > cleanup(handlerFactory_);
+  ::apache::thrift::stdcxx::shared_ptr< IPostmanModuleIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
+  ::apache::thrift::stdcxx::shared_ptr< ::apache::thrift::TProcessor > processor(new IPostmanModuleProcessor(handler));
   return processor;
 }
 

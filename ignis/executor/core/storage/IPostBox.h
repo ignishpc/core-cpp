@@ -11,7 +11,7 @@ namespace ignis {
     namespace executor {
         namespace core {
             namespace modules {
-                class IPostman;
+                class IPostmanModule;
             }
 
             namespace storage {
@@ -25,7 +25,7 @@ namespace ignis {
                     void newMessage(size_t id, IMessage &msg);
 
                 private:
-                    friend modules::IPostman;
+                    friend modules::IPostmanModule;
 
                     std::unordered_map<size_t, IMessage> getOutMessages();
 

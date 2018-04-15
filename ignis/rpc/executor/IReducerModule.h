@@ -4,12 +4,12 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#ifndef IPostman_H
-#define IPostman_H
+#ifndef IReducerModule_H
+#define IReducerModule_H
 
 #include <thrift/TDispatchProcessor.h>
 #include <thrift/async/TConcurrentClientSyncInfo.h>
-#include "IPostmanModule_types.h"
+#include "IReducerModule_types.h"
 
 namespace ignis { namespace rpc { namespace executor {
 
@@ -18,46 +18,46 @@ namespace ignis { namespace rpc { namespace executor {
   #pragma warning (disable : 4250 ) //inheriting methods via dominance 
 #endif
 
-class IPostmanIf {
+class IReducerModuleIf {
  public:
-  virtual ~IPostmanIf() {}
+  virtual ~IReducerModuleIf() {}
 };
 
-class IPostmanIfFactory {
+class IReducerModuleIfFactory {
  public:
-  typedef IPostmanIf Handler;
+  typedef IReducerModuleIf Handler;
 
-  virtual ~IPostmanIfFactory() {}
+  virtual ~IReducerModuleIfFactory() {}
 
-  virtual IPostmanIf* getHandler(const ::apache::thrift::TConnectionInfo& connInfo) = 0;
-  virtual void releaseHandler(IPostmanIf* /* handler */) = 0;
+  virtual IReducerModuleIf* getHandler(const ::apache::thrift::TConnectionInfo& connInfo) = 0;
+  virtual void releaseHandler(IReducerModuleIf* /* handler */) = 0;
 };
 
-class IPostmanIfSingletonFactory : virtual public IPostmanIfFactory {
+class IReducerModuleIfSingletonFactory : virtual public IReducerModuleIfFactory {
  public:
-  IPostmanIfSingletonFactory(const ::apache::thrift::stdcxx::shared_ptr<IPostmanIf>& iface) : iface_(iface) {}
-  virtual ~IPostmanIfSingletonFactory() {}
+  IReducerModuleIfSingletonFactory(const ::apache::thrift::stdcxx::shared_ptr<IReducerModuleIf>& iface) : iface_(iface) {}
+  virtual ~IReducerModuleIfSingletonFactory() {}
 
-  virtual IPostmanIf* getHandler(const ::apache::thrift::TConnectionInfo&) {
+  virtual IReducerModuleIf* getHandler(const ::apache::thrift::TConnectionInfo&) {
     return iface_.get();
   }
-  virtual void releaseHandler(IPostmanIf* /* handler */) {}
+  virtual void releaseHandler(IReducerModuleIf* /* handler */) {}
 
  protected:
-  ::apache::thrift::stdcxx::shared_ptr<IPostmanIf> iface_;
+  ::apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> iface_;
 };
 
-class IPostmanNull : virtual public IPostmanIf {
+class IReducerModuleNull : virtual public IReducerModuleIf {
  public:
-  virtual ~IPostmanNull() {}
+  virtual ~IReducerModuleNull() {}
 };
 
-class IPostmanClient : virtual public IPostmanIf {
+class IReducerModuleClient : virtual public IReducerModuleIf {
  public:
-  IPostmanClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
+  IReducerModuleClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
     setProtocol(prot);
   }
-  IPostmanClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
+  IReducerModuleClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
     setProtocol(iprot,oprot);
   }
  private:
@@ -84,42 +84,42 @@ class IPostmanClient : virtual public IPostmanIf {
   ::apache::thrift::protocol::TProtocol* oprot_;
 };
 
-class IPostmanProcessor : public ::apache::thrift::TDispatchProcessor {
+class IReducerModuleProcessor : public ::apache::thrift::TDispatchProcessor {
  protected:
-  ::apache::thrift::stdcxx::shared_ptr<IPostmanIf> iface_;
+  ::apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> iface_;
   virtual bool dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext);
  private:
-  typedef  void (IPostmanProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
+  typedef  void (IReducerModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
  public:
-  IPostmanProcessor(::apache::thrift::stdcxx::shared_ptr<IPostmanIf> iface) :
+  IReducerModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> iface) :
     iface_(iface) {
   }
 
-  virtual ~IPostmanProcessor() {}
+  virtual ~IReducerModuleProcessor() {}
 };
 
-class IPostmanProcessorFactory : public ::apache::thrift::TProcessorFactory {
+class IReducerModuleProcessorFactory : public ::apache::thrift::TProcessorFactory {
  public:
-  IPostmanProcessorFactory(const ::apache::thrift::stdcxx::shared_ptr< IPostmanIfFactory >& handlerFactory) :
+  IReducerModuleProcessorFactory(const ::apache::thrift::stdcxx::shared_ptr< IReducerModuleIfFactory >& handlerFactory) :
       handlerFactory_(handlerFactory) {}
 
   ::apache::thrift::stdcxx::shared_ptr< ::apache::thrift::TProcessor > getProcessor(const ::apache::thrift::TConnectionInfo& connInfo);
 
  protected:
-  ::apache::thrift::stdcxx::shared_ptr< IPostmanIfFactory > handlerFactory_;
+  ::apache::thrift::stdcxx::shared_ptr< IReducerModuleIfFactory > handlerFactory_;
 };
 
-class IPostmanMultiface : virtual public IPostmanIf {
+class IReducerModuleMultiface : virtual public IReducerModuleIf {
  public:
-  IPostmanMultiface(std::vector<apache::thrift::stdcxx::shared_ptr<IPostmanIf> >& ifaces) : ifaces_(ifaces) {
+  IReducerModuleMultiface(std::vector<apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> >& ifaces) : ifaces_(ifaces) {
   }
-  virtual ~IPostmanMultiface() {}
+  virtual ~IReducerModuleMultiface() {}
  protected:
-  std::vector<apache::thrift::stdcxx::shared_ptr<IPostmanIf> > ifaces_;
-  IPostmanMultiface() {}
-  void add(::apache::thrift::stdcxx::shared_ptr<IPostmanIf> iface) {
+  std::vector<apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> > ifaces_;
+  IReducerModuleMultiface() {}
+  void add(::apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> iface) {
     ifaces_.push_back(iface);
   }
  public:
@@ -128,12 +128,12 @@ class IPostmanMultiface : virtual public IPostmanIf {
 // The 'concurrent' client is a thread safe client that correctly handles
 // out of order responses.  It is slower than the regular client, so should
 // only be used when you need to share a connection among multiple threads
-class IPostmanConcurrentClient : virtual public IPostmanIf {
+class IReducerModuleConcurrentClient : virtual public IReducerModuleIf {
  public:
-  IPostmanConcurrentClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
+  IReducerModuleConcurrentClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
     setProtocol(prot);
   }
-  IPostmanConcurrentClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
+  IReducerModuleConcurrentClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> iprot, apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> oprot) {
     setProtocol(iprot,oprot);
   }
  private:

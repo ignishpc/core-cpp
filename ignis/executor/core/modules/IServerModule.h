@@ -13,9 +13,9 @@ namespace ignis {
             namespace modules {
                 class IServerModule : public IgnisModule, public ignis::rpc::executor::IServerModuleIf{
                 public:
-                    IServerModule(std::shared_ptr<IExecutorData> &executor_data, int port);
+                    IServerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void start(std::shared_ptr<apache::thrift::TProcessor> &processor);
+                    void start(std::shared_ptr<apache::thrift::TProcessor> processor, int port);
 
                     void stop();
 
@@ -24,7 +24,6 @@ namespace ignis {
                     void setProperties(const std::map<std::string, std::string> & properties);
 
                 private:
-                    int port;
                     apache::thrift::server::TServer* server_ptr;
                 };
             }

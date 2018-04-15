@@ -13,11 +13,11 @@ using namespace apache::thrift::transport;
 using namespace apache::thrift::concurrency;
 using namespace apache::thrift::protocol;
 
-IServerModule::IServerModule(shared_ptr<IExecutorData> &executor_data, int port) : IgnisModule(executor_data),
-                                                                                   port(port), server_ptr(NULL) {}
+IServerModule::IServerModule(shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data),
+                                                                                   server_ptr(NULL) {}
 
 
-void IServerModule::start(shared_ptr<apache::thrift::TProcessor> &processor) {
+void IServerModule::start(shared_ptr<apache::thrift::TProcessor> processor, int port) {
     auto threadManager = ThreadManager::newSimpleThreadManager(1);
 
     threadManager->threadFactory(make_shared<PlatformThreadFactory>());

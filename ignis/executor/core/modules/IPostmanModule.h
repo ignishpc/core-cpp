@@ -5,14 +5,15 @@
 #include <vector>
 #include <thrift/transport/TServerSocket.h>
 #include "IModule.h"
+#include "../../../rpc/executor/IPostmanModule.h"
 
 namespace ignis {
     namespace executor {
         namespace core {
             namespace modules {
-                class IPostman : public IgnisModule {
+                class IPostmanModule : public IgnisModule, public ignis::rpc::executor::IPostmanModuleIf {
                 public:
-                    IPostman(std::shared_ptr<IExecutorData> &executor_data);
+                    IPostmanModule(std::shared_ptr<IExecutorData> &executor_data);
 
                     void start();
 
