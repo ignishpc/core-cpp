@@ -29,13 +29,17 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IPostman.cpp
         ignis/executor/core/modules/IFilesModule.h
         ignis/executor/core/modules/IFilesModule.cpp
-        ignis/executor/core/storage/IObject.h
-        ignis/executor/core/storage/IObject.cpp
         ignis/executor/core/storage/IPostBox.h
         ignis/executor/core/storage/IMessage.h
         ignis/executor/core/storage/IPostBox.cpp
+        ignis/executor/core/storage/IObject.h
+        ignis/executor/core/storage/IRawObject.h
+        ignis/executor/core/storage/IRawObject.cpp
         ignis/executor/core/storage/IRawMemoryObject.h
-        ignis/executor/core/storage/IRawMemoryObject.cpp)
+        ignis/executor/core/storage/IRawMemoryObject.cpp
+        ignis/executor/core/storage/ITransportIterator.h
+        ignis/executor/core/storage/ITransportIterator.cpp
+        )
 
 set(CMAKE_CXX_FLAGS "-pthread -DBOOST_ALL_DYN_LINK")#-O3 -fopenmp
 add_executable(igniscpp ${SOURCE_FILES})

@@ -20,6 +20,7 @@ namespace ignis {
 
                     void sendAll();
 
+                private:
                     void threadServer();
 
                     void threadAccept(std::shared_ptr<apache::thrift::transport::TTransport> trans);

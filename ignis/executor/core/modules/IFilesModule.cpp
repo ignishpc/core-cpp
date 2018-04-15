@@ -1,5 +1,5 @@
-//
-// Created by César on 12/04/2018.
-//
 
 #include "IFilesModule.h"
+
+ignis::executor::core::modules::IFilesModule::IFilesModule(
+        std::shared_ptr<ignis::executor::core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}

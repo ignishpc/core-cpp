@@ -20,17 +20,15 @@ namespace ignis {
             }
 
             template<typename T>
-            T readObject(serialization::IReader<T> &reader) {
+            std::shared_ptr<T> readObject(serialization::IReader<T> &reader) {
                 bool native;
                 this->readBool(native);
-                reader.readType(*this);
-                return reader(*this);
+                return reader.readShared(*this);
             }
 
             template<typename T>
             void writeObject(const T &obj, serialization::IWriter<T> &writer) {
                 this->writeBool(false);
-                writer.writeType(*this);
                 writer(obj, *this);
             }
 

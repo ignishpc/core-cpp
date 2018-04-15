@@ -9,7 +9,7 @@ namespace ignis {
             class IReadIterator {
             public:
 
-                virtual T *next() = 0;
+                virtual T &next() = 0;
 
                 virtual bool hashNext() = 0;
             };

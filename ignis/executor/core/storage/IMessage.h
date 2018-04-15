@@ -19,6 +19,22 @@ namespace ignis {
                                                                                                        port(port),
                                                                                                        obj(obj) {}
 
+                    IMessage(const std::shared_ptr<IObject> &obj) : host(""),
+                                                                    port(0),
+                                                                    obj(obj) {}
+
+                    std::string &getHost() {
+                        return host;
+                    }
+
+                    int getPort() {
+                        return port;
+                    }
+
+                    std::shared_ptr<IObject> &getObj() {
+                        return obj;
+                    }
+
                 private:
                     std::string host;
                     int port;

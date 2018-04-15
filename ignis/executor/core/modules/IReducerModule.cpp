@@ -1,5 +1,5 @@
-//
-// Created by César on 29/03/2018.
-//
 
 #include "IReducerModule.h"
+
+ignis::executor::core::modules::IReducerModule::IReducerModule(
+        std::shared_ptr<ignis::executor::core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}

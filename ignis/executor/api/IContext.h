@@ -16,6 +16,8 @@ namespace ignis {
 
                 std::string &operator[](const std::string key);
 
+                std::string &operator[](const char * key);
+
                 std::unordered_map<std::string, std::string> &getProperties();
 
             private:

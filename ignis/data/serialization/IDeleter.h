@@ -8,7 +8,7 @@ namespace ignis {
 
             template<typename T>
             struct IDeleterType {
-                void deleteObject(T *obj) {
+                void operator()(T *obj) {
                     delete obj;
                 }
             };
@@ -16,8 +16,8 @@ namespace ignis {
             template<typename T>
             class IDeleter {
             public:
-                virtual void deleteObject(T *obj) {
-                    deleter.deleteObject(obj);
+                virtual void operator()(T *obj) {
+                    deleter(obj);
                 }
 
             private:
