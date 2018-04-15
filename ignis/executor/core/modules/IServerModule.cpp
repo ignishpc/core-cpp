@@ -41,3 +41,11 @@ void IServerModule::stop() {
         server_ptr->stop();
     }
 }
+
+bool IServerModule::test(){
+    return true;
+}
+
+void IServerModule::setProperties(const std::map<std::string, std::string> & properties){
+    executor_data->getContext().getProperties().insert(properties.begin(), properties.end());
+}

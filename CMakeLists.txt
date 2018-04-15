@@ -5,6 +5,9 @@ ADD_SUBDIRECTORY(ignis)
 
 set(CMAKE_CXX_STANDARD 11)
 
+
+FILE(GLOB rpc ignis/rpc/executor/*.hpp ignis/rpc/executor/*.cpp)
+
 set(SOURCE_FILES
         ignis/main.cpp
         ignis/executor/core/ILog.h
@@ -29,6 +32,8 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IPostman.cpp
         ignis/executor/core/modules/IFilesModule.h
         ignis/executor/core/modules/IFilesModule.cpp
+        ignis/executor/core/modules/IStorageModule.h
+        ignis/executor/core/modules/IStorageModule.cpp
         ignis/executor/core/storage/IPostBox.h
         ignis/executor/core/storage/IMessage.h
         ignis/executor/core/storage/IPostBox.cpp
@@ -39,6 +44,7 @@ set(SOURCE_FILES
         ignis/executor/core/storage/IRawMemoryObject.cpp
         ignis/executor/core/storage/ITransportIterator.h
         ignis/executor/core/storage/ITransportIterator.cpp
+        ${rpc}
         )
 
 set(CMAKE_CXX_FLAGS "-pthread -DBOOST_ALL_DYN_LINK")#-O3 -fopenmp
