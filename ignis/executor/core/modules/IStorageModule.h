@@ -12,6 +12,8 @@ namespace ignis {
                 class IStorageModule : public IgnisModule, public ignis::rpc::executor::IStorageModuleIf{
                 public:
                     IStorageModule(std::shared_ptr<IExecutorData> &executor_data);
+
+                    virtual ~IStorageModule();
                 };
             }
         }

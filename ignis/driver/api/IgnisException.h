@@ -16,13 +16,19 @@ namespace ignis {
 
                 void print(std::ostream &stream);
 
-                friend std::ostream &operator<<(std::ostream &stream, IgnisException &ex) {
-                    ex.print(stream);
+                std::ostream &operator<<(std::ostream &stream) {
+                    print(stream);
                 }
+
+                virtual ~IgnisException();
 
             private:
                 std::string stacktrace;
             };
+
+            inline std::ostream &operator<<(std::ostream &stream, IgnisException &ex) {
+                ex.print(stream);
+            }
         }
     }
 }

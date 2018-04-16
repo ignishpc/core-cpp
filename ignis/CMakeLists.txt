@@ -3,7 +3,7 @@ project(igniscore)
 
 set(CMAKE_CXX_STANDARD 11)
 
-FILE(GLOB rpc ignis/rpc/driver/*.hpp ignis/rpc/driver/*.cpp ignis/rpc/*.hpp ignis/rpc/*.cpp)
+FILE(GLOB rpc rpc/driver/*.hpp rpc/driver/*.cpp rpc/*.hpp rpc/*.cpp)
 
 set(SOURCE_FILES
         #Data
@@ -40,8 +40,7 @@ set(SOURCE_FILES
         exceptions/ILogicError.h
         exceptions/IInvalidArgument.h
         #RPC
-        ${rpc}
-        )
+        ${rpc})
 
 set(CMAKE_CXX_FLAGS "-fPIC -rdynamic")#-O3
 add_library(igniscore SHARED ${SOURCE_FILES})

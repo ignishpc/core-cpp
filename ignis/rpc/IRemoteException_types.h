@@ -20,18 +20,18 @@
 
 namespace ignis { namespace rpc {
 
-class IExecutorException;
+class IRemoteException;
 
 
-class IExecutorException : public ::apache::thrift::TException {
+class IRemoteException : public ::apache::thrift::TException {
  public:
 
-  IExecutorException(const IExecutorException&);
-  IExecutorException& operator=(const IExecutorException&);
-  IExecutorException() : name(), stack() {
+  IRemoteException(const IRemoteException&);
+  IRemoteException& operator=(const IRemoteException&);
+  IRemoteException() : name(), stack() {
   }
 
-  virtual ~IExecutorException() throw();
+  virtual ~IRemoteException() throw();
   std::string name;
   std::string stack;
 
@@ -39,7 +39,7 @@ class IExecutorException : public ::apache::thrift::TException {
 
   void __set_stack(const std::string& val);
 
-  bool operator == (const IExecutorException & rhs) const
+  bool operator == (const IRemoteException & rhs) const
   {
     if (!(name == rhs.name))
       return false;
@@ -47,11 +47,11 @@ class IExecutorException : public ::apache::thrift::TException {
       return false;
     return true;
   }
-  bool operator != (const IExecutorException &rhs) const {
+  bool operator != (const IRemoteException &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IExecutorException & ) const;
+  bool operator < (const IRemoteException & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -61,9 +61,9 @@ class IExecutorException : public ::apache::thrift::TException {
   const char* what() const throw();
 };
 
-void swap(IExecutorException &a, IExecutorException &b);
+void swap(IRemoteException &a, IRemoteException &b);
 
-std::ostream& operator<<(std::ostream& out, const IExecutorException& obj);
+std::ostream& operator<<(std::ostream& out, const IRemoteException& obj);
 
 }} // namespace
 

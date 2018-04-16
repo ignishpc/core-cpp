@@ -21,6 +21,9 @@ namespace ignis { namespace rpc { namespace executor {
 class IFilesModuleIf {
  public:
   virtual ~IFilesModuleIf() {}
+  virtual void readFile(const int64_t data_id, const std::string& path, const int64_t offset, const int64_t len, const int64_t lines) = 0;
+  virtual void saveFile(const int64_t data_id, const std::string& path, const bool joined) = 0;
+  virtual void saveJson(const int64_t data_id, const std::string& path) = 0;
 };
 
 class IFilesModuleIfFactory {
@@ -50,6 +53,376 @@ class IFilesModuleIfSingletonFactory : virtual public IFilesModuleIfFactory {
 class IFilesModuleNull : virtual public IFilesModuleIf {
  public:
   virtual ~IFilesModuleNull() {}
+  void readFile(const int64_t /* data_id */, const std::string& /* path */, const int64_t /* offset */, const int64_t /* len */, const int64_t /* lines */) {
+    return;
+  }
+  void saveFile(const int64_t /* data_id */, const std::string& /* path */, const bool /* joined */) {
+    return;
+  }
+  void saveJson(const int64_t /* data_id */, const std::string& /* path */) {
+    return;
+  }
+};
+
+typedef struct _IFilesModule_readFile_args__isset {
+  _IFilesModule_readFile_args__isset() : data_id(false), path(false), offset(false), len(false), lines(false) {}
+  bool data_id :1;
+  bool path :1;
+  bool offset :1;
+  bool len :1;
+  bool lines :1;
+} _IFilesModule_readFile_args__isset;
+
+class IFilesModule_readFile_args {
+ public:
+
+  IFilesModule_readFile_args(const IFilesModule_readFile_args&);
+  IFilesModule_readFile_args& operator=(const IFilesModule_readFile_args&);
+  IFilesModule_readFile_args() : data_id(0), path(), offset(0), len(0), lines(0) {
+  }
+
+  virtual ~IFilesModule_readFile_args() throw();
+  int64_t data_id;
+  std::string path;
+  int64_t offset;
+  int64_t len;
+  int64_t lines;
+
+  _IFilesModule_readFile_args__isset __isset;
+
+  void __set_data_id(const int64_t val);
+
+  void __set_path(const std::string& val);
+
+  void __set_offset(const int64_t val);
+
+  void __set_len(const int64_t val);
+
+  void __set_lines(const int64_t val);
+
+  bool operator == (const IFilesModule_readFile_args & rhs) const
+  {
+    if (!(data_id == rhs.data_id))
+      return false;
+    if (!(path == rhs.path))
+      return false;
+    if (!(offset == rhs.offset))
+      return false;
+    if (!(len == rhs.len))
+      return false;
+    if (!(lines == rhs.lines))
+      return false;
+    return true;
+  }
+  bool operator != (const IFilesModule_readFile_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFilesModule_readFile_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IFilesModule_readFile_pargs {
+ public:
+
+
+  virtual ~IFilesModule_readFile_pargs() throw();
+  const int64_t* data_id;
+  const std::string* path;
+  const int64_t* offset;
+  const int64_t* len;
+  const int64_t* lines;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IFilesModule_readFile_result__isset {
+  _IFilesModule_readFile_result__isset() : ex(false) {}
+  bool ex :1;
+} _IFilesModule_readFile_result__isset;
+
+class IFilesModule_readFile_result {
+ public:
+
+  IFilesModule_readFile_result(const IFilesModule_readFile_result&);
+  IFilesModule_readFile_result& operator=(const IFilesModule_readFile_result&);
+  IFilesModule_readFile_result() {
+  }
+
+  virtual ~IFilesModule_readFile_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IFilesModule_readFile_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IFilesModule_readFile_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IFilesModule_readFile_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFilesModule_readFile_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IFilesModule_readFile_presult__isset {
+  _IFilesModule_readFile_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IFilesModule_readFile_presult__isset;
+
+class IFilesModule_readFile_presult {
+ public:
+
+
+  virtual ~IFilesModule_readFile_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IFilesModule_readFile_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IFilesModule_saveFile_args__isset {
+  _IFilesModule_saveFile_args__isset() : data_id(false), path(false), joined(false) {}
+  bool data_id :1;
+  bool path :1;
+  bool joined :1;
+} _IFilesModule_saveFile_args__isset;
+
+class IFilesModule_saveFile_args {
+ public:
+
+  IFilesModule_saveFile_args(const IFilesModule_saveFile_args&);
+  IFilesModule_saveFile_args& operator=(const IFilesModule_saveFile_args&);
+  IFilesModule_saveFile_args() : data_id(0), path(), joined(0) {
+  }
+
+  virtual ~IFilesModule_saveFile_args() throw();
+  int64_t data_id;
+  std::string path;
+  bool joined;
+
+  _IFilesModule_saveFile_args__isset __isset;
+
+  void __set_data_id(const int64_t val);
+
+  void __set_path(const std::string& val);
+
+  void __set_joined(const bool val);
+
+  bool operator == (const IFilesModule_saveFile_args & rhs) const
+  {
+    if (!(data_id == rhs.data_id))
+      return false;
+    if (!(path == rhs.path))
+      return false;
+    if (!(joined == rhs.joined))
+      return false;
+    return true;
+  }
+  bool operator != (const IFilesModule_saveFile_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFilesModule_saveFile_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IFilesModule_saveFile_pargs {
+ public:
+
+
+  virtual ~IFilesModule_saveFile_pargs() throw();
+  const int64_t* data_id;
+  const std::string* path;
+  const bool* joined;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IFilesModule_saveFile_result__isset {
+  _IFilesModule_saveFile_result__isset() : ex(false) {}
+  bool ex :1;
+} _IFilesModule_saveFile_result__isset;
+
+class IFilesModule_saveFile_result {
+ public:
+
+  IFilesModule_saveFile_result(const IFilesModule_saveFile_result&);
+  IFilesModule_saveFile_result& operator=(const IFilesModule_saveFile_result&);
+  IFilesModule_saveFile_result() {
+  }
+
+  virtual ~IFilesModule_saveFile_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IFilesModule_saveFile_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IFilesModule_saveFile_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IFilesModule_saveFile_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFilesModule_saveFile_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IFilesModule_saveFile_presult__isset {
+  _IFilesModule_saveFile_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IFilesModule_saveFile_presult__isset;
+
+class IFilesModule_saveFile_presult {
+ public:
+
+
+  virtual ~IFilesModule_saveFile_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IFilesModule_saveFile_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IFilesModule_saveJson_args__isset {
+  _IFilesModule_saveJson_args__isset() : data_id(false), path(false) {}
+  bool data_id :1;
+  bool path :1;
+} _IFilesModule_saveJson_args__isset;
+
+class IFilesModule_saveJson_args {
+ public:
+
+  IFilesModule_saveJson_args(const IFilesModule_saveJson_args&);
+  IFilesModule_saveJson_args& operator=(const IFilesModule_saveJson_args&);
+  IFilesModule_saveJson_args() : data_id(0), path() {
+  }
+
+  virtual ~IFilesModule_saveJson_args() throw();
+  int64_t data_id;
+  std::string path;
+
+  _IFilesModule_saveJson_args__isset __isset;
+
+  void __set_data_id(const int64_t val);
+
+  void __set_path(const std::string& val);
+
+  bool operator == (const IFilesModule_saveJson_args & rhs) const
+  {
+    if (!(data_id == rhs.data_id))
+      return false;
+    if (!(path == rhs.path))
+      return false;
+    return true;
+  }
+  bool operator != (const IFilesModule_saveJson_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFilesModule_saveJson_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IFilesModule_saveJson_pargs {
+ public:
+
+
+  virtual ~IFilesModule_saveJson_pargs() throw();
+  const int64_t* data_id;
+  const std::string* path;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IFilesModule_saveJson_result__isset {
+  _IFilesModule_saveJson_result__isset() : ex(false) {}
+  bool ex :1;
+} _IFilesModule_saveJson_result__isset;
+
+class IFilesModule_saveJson_result {
+ public:
+
+  IFilesModule_saveJson_result(const IFilesModule_saveJson_result&);
+  IFilesModule_saveJson_result& operator=(const IFilesModule_saveJson_result&);
+  IFilesModule_saveJson_result() {
+  }
+
+  virtual ~IFilesModule_saveJson_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IFilesModule_saveJson_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IFilesModule_saveJson_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IFilesModule_saveJson_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IFilesModule_saveJson_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IFilesModule_saveJson_presult__isset {
+  _IFilesModule_saveJson_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IFilesModule_saveJson_presult__isset;
+
+class IFilesModule_saveJson_presult {
+ public:
+
+
+  virtual ~IFilesModule_saveJson_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IFilesModule_saveJson_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 class IFilesModuleClient : virtual public IFilesModuleIf {
@@ -77,6 +450,15 @@ class IFilesModuleClient : virtual public IFilesModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void readFile(const int64_t data_id, const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
+  void send_readFile(const int64_t data_id, const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
+  void recv_readFile();
+  void saveFile(const int64_t data_id, const std::string& path, const bool joined);
+  void send_saveFile(const int64_t data_id, const std::string& path, const bool joined);
+  void recv_saveFile();
+  void saveJson(const int64_t data_id, const std::string& path);
+  void send_saveJson(const int64_t data_id, const std::string& path);
+  void recv_saveJson();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -92,9 +474,15 @@ class IFilesModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IFilesModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_readFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_saveFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_saveJson(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IFilesModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IFilesModuleIf> iface) :
     iface_(iface) {
+    processMap_["readFile"] = &IFilesModuleProcessor::process_readFile;
+    processMap_["saveFile"] = &IFilesModuleProcessor::process_saveFile;
+    processMap_["saveJson"] = &IFilesModuleProcessor::process_saveJson;
   }
 
   virtual ~IFilesModuleProcessor() {}
@@ -123,6 +511,33 @@ class IFilesModuleMultiface : virtual public IFilesModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void readFile(const int64_t data_id, const std::string& path, const int64_t offset, const int64_t len, const int64_t lines) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->readFile(data_id, path, offset, len, lines);
+    }
+    ifaces_[i]->readFile(data_id, path, offset, len, lines);
+  }
+
+  void saveFile(const int64_t data_id, const std::string& path, const bool joined) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->saveFile(data_id, path, joined);
+    }
+    ifaces_[i]->saveFile(data_id, path, joined);
+  }
+
+  void saveJson(const int64_t data_id, const std::string& path) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->saveJson(data_id, path);
+    }
+    ifaces_[i]->saveJson(data_id, path);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -153,6 +568,15 @@ class IFilesModuleConcurrentClient : virtual public IFilesModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void readFile(const int64_t data_id, const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
+  int32_t send_readFile(const int64_t data_id, const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
+  void recv_readFile(const int32_t seqid);
+  void saveFile(const int64_t data_id, const std::string& path, const bool joined);
+  int32_t send_saveFile(const int64_t data_id, const std::string& path, const bool joined);
+  void recv_saveFile(const int32_t seqid);
+  void saveJson(const int64_t data_id, const std::string& path);
+  int32_t send_saveJson(const int64_t data_id, const std::string& path);
+  void recv_saveJson(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

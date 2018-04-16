@@ -21,7 +21,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IServerModuleIf {
  public:
   virtual ~IServerModuleIf() {}
-  virtual void setProperties(const std::map<std::string, std::string> & properties) = 0;
+  virtual void setContext(const int64_t id, const std::map<std::string, std::string> & properties) = 0;
   virtual void stop() = 0;
   virtual bool test() = 0;
 };
@@ -53,7 +53,7 @@ class IServerModuleIfSingletonFactory : virtual public IServerModuleIfFactory {
 class IServerModuleNull : virtual public IServerModuleIf {
  public:
   virtual ~IServerModuleNull() {}
-  void setProperties(const std::map<std::string, std::string> & /* properties */) {
+  void setContext(const int64_t /* id */, const std::map<std::string, std::string> & /* properties */) {
     return;
   }
   void stop() {
@@ -65,37 +65,43 @@ class IServerModuleNull : virtual public IServerModuleIf {
   }
 };
 
-typedef struct _IServerModule_setProperties_args__isset {
-  _IServerModule_setProperties_args__isset() : properties(false) {}
+typedef struct _IServerModule_setContext_args__isset {
+  _IServerModule_setContext_args__isset() : id(false), properties(false) {}
+  bool id :1;
   bool properties :1;
-} _IServerModule_setProperties_args__isset;
+} _IServerModule_setContext_args__isset;
 
-class IServerModule_setProperties_args {
+class IServerModule_setContext_args {
  public:
 
-  IServerModule_setProperties_args(const IServerModule_setProperties_args&);
-  IServerModule_setProperties_args& operator=(const IServerModule_setProperties_args&);
-  IServerModule_setProperties_args() {
+  IServerModule_setContext_args(const IServerModule_setContext_args&);
+  IServerModule_setContext_args& operator=(const IServerModule_setContext_args&);
+  IServerModule_setContext_args() : id(0) {
   }
 
-  virtual ~IServerModule_setProperties_args() throw();
+  virtual ~IServerModule_setContext_args() throw();
+  int64_t id;
   std::map<std::string, std::string>  properties;
 
-  _IServerModule_setProperties_args__isset __isset;
+  _IServerModule_setContext_args__isset __isset;
+
+  void __set_id(const int64_t val);
 
   void __set_properties(const std::map<std::string, std::string> & val);
 
-  bool operator == (const IServerModule_setProperties_args & rhs) const
+  bool operator == (const IServerModule_setContext_args & rhs) const
   {
+    if (!(id == rhs.id))
+      return false;
     if (!(properties == rhs.properties))
       return false;
     return true;
   }
-  bool operator != (const IServerModule_setProperties_args &rhs) const {
+  bool operator != (const IServerModule_setContext_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IServerModule_setProperties_args & ) const;
+  bool operator < (const IServerModule_setContext_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -103,49 +109,68 @@ class IServerModule_setProperties_args {
 };
 
 
-class IServerModule_setProperties_pargs {
+class IServerModule_setContext_pargs {
  public:
 
 
-  virtual ~IServerModule_setProperties_pargs() throw();
+  virtual ~IServerModule_setContext_pargs() throw();
+  const int64_t* id;
   const std::map<std::string, std::string> * properties;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
+typedef struct _IServerModule_setContext_result__isset {
+  _IServerModule_setContext_result__isset() : ex(false) {}
+  bool ex :1;
+} _IServerModule_setContext_result__isset;
 
-class IServerModule_setProperties_result {
+class IServerModule_setContext_result {
  public:
 
-  IServerModule_setProperties_result(const IServerModule_setProperties_result&);
-  IServerModule_setProperties_result& operator=(const IServerModule_setProperties_result&);
-  IServerModule_setProperties_result() {
+  IServerModule_setContext_result(const IServerModule_setContext_result&);
+  IServerModule_setContext_result& operator=(const IServerModule_setContext_result&);
+  IServerModule_setContext_result() {
   }
 
-  virtual ~IServerModule_setProperties_result() throw();
+  virtual ~IServerModule_setContext_result() throw();
+   ::ignis::rpc::IRemoteException ex;
 
-  bool operator == (const IServerModule_setProperties_result & /* rhs */) const
+  _IServerModule_setContext_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IServerModule_setContext_result & rhs) const
   {
+    if (!(ex == rhs.ex))
+      return false;
     return true;
   }
-  bool operator != (const IServerModule_setProperties_result &rhs) const {
+  bool operator != (const IServerModule_setContext_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IServerModule_setProperties_result & ) const;
+  bool operator < (const IServerModule_setContext_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
+typedef struct _IServerModule_setContext_presult__isset {
+  _IServerModule_setContext_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IServerModule_setContext_presult__isset;
 
-class IServerModule_setProperties_presult {
+class IServerModule_setContext_presult {
  public:
 
 
-  virtual ~IServerModule_setProperties_presult() throw();
+  virtual ~IServerModule_setContext_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IServerModule_setContext_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -188,6 +213,10 @@ class IServerModule_stop_pargs {
 
 };
 
+typedef struct _IServerModule_stop_result__isset {
+  _IServerModule_stop_result__isset() : ex(false) {}
+  bool ex :1;
+} _IServerModule_stop_result__isset;
 
 class IServerModule_stop_result {
  public:
@@ -198,9 +227,16 @@ class IServerModule_stop_result {
   }
 
   virtual ~IServerModule_stop_result() throw();
+   ::ignis::rpc::IRemoteException ex;
 
-  bool operator == (const IServerModule_stop_result & /* rhs */) const
+  _IServerModule_stop_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IServerModule_stop_result & rhs) const
   {
+    if (!(ex == rhs.ex))
+      return false;
     return true;
   }
   bool operator != (const IServerModule_stop_result &rhs) const {
@@ -214,12 +250,19 @@ class IServerModule_stop_result {
 
 };
 
+typedef struct _IServerModule_stop_presult__isset {
+  _IServerModule_stop_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IServerModule_stop_presult__isset;
 
 class IServerModule_stop_presult {
  public:
 
 
   virtual ~IServerModule_stop_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IServerModule_stop_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -263,8 +306,9 @@ class IServerModule_test_pargs {
 };
 
 typedef struct _IServerModule_test_result__isset {
-  _IServerModule_test_result__isset() : success(false) {}
+  _IServerModule_test_result__isset() : success(false), ex(false) {}
   bool success :1;
+  bool ex :1;
 } _IServerModule_test_result__isset;
 
 class IServerModule_test_result {
@@ -277,14 +321,19 @@ class IServerModule_test_result {
 
   virtual ~IServerModule_test_result() throw();
   bool success;
+   ::ignis::rpc::IRemoteException ex;
 
   _IServerModule_test_result__isset __isset;
 
   void __set_success(const bool val);
 
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
   bool operator == (const IServerModule_test_result & rhs) const
   {
     if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
       return false;
     return true;
   }
@@ -300,8 +349,9 @@ class IServerModule_test_result {
 };
 
 typedef struct _IServerModule_test_presult__isset {
-  _IServerModule_test_presult__isset() : success(false) {}
+  _IServerModule_test_presult__isset() : success(false), ex(false) {}
   bool success :1;
+  bool ex :1;
 } _IServerModule_test_presult__isset;
 
 class IServerModule_test_presult {
@@ -310,6 +360,7 @@ class IServerModule_test_presult {
 
   virtual ~IServerModule_test_presult() throw();
   bool* success;
+   ::ignis::rpc::IRemoteException ex;
 
   _IServerModule_test_presult__isset __isset;
 
@@ -342,9 +393,9 @@ class IServerModuleClient : virtual public IServerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void setProperties(const std::map<std::string, std::string> & properties);
-  void send_setProperties(const std::map<std::string, std::string> & properties);
-  void recv_setProperties();
+  void setContext(const int64_t id, const std::map<std::string, std::string> & properties);
+  void send_setContext(const int64_t id, const std::map<std::string, std::string> & properties);
+  void recv_setContext();
   void stop();
   void send_stop();
   void recv_stop();
@@ -366,13 +417,13 @@ class IServerModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IServerModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_setProperties(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_setContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_stop(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_test(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IServerModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IServerModuleIf> iface) :
     iface_(iface) {
-    processMap_["setProperties"] = &IServerModuleProcessor::process_setProperties;
+    processMap_["setContext"] = &IServerModuleProcessor::process_setContext;
     processMap_["stop"] = &IServerModuleProcessor::process_stop;
     processMap_["test"] = &IServerModuleProcessor::process_test;
   }
@@ -403,13 +454,13 @@ class IServerModuleMultiface : virtual public IServerModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void setProperties(const std::map<std::string, std::string> & properties) {
+  void setContext(const int64_t id, const std::map<std::string, std::string> & properties) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->setProperties(properties);
+      ifaces_[i]->setContext(id, properties);
     }
-    ifaces_[i]->setProperties(properties);
+    ifaces_[i]->setContext(id, properties);
   }
 
   void stop() {
@@ -460,9 +511,9 @@ class IServerModuleConcurrentClient : virtual public IServerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void setProperties(const std::map<std::string, std::string> & properties);
-  int32_t send_setProperties(const std::map<std::string, std::string> & properties);
-  void recv_setProperties(const int32_t seqid);
+  void setContext(const int64_t id, const std::map<std::string, std::string> & properties);
+  int32_t send_setContext(const int64_t id, const std::map<std::string, std::string> & properties);
+  void recv_setContext(const int32_t seqid);
   void stop();
   int32_t send_stop();
   void recv_stop(const int32_t seqid);

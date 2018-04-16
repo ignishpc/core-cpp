@@ -21,26 +21,14 @@ namespace ignis {
 
                     bool hashNext() override;
 
+                    virtual ~IReadTransportIterator();
+
                 private:
-
-                    class Handle {
-                    public:
-                        Handle(IObject::Any *ptr,
-                               const std::shared_ptr<data::serialization::ITypeHandleBase<IObject::Any>> &type_handle);
-
-                        virtual ~Handle();
-
-                    protected:
-                        IObject::Any *ptr;
-                        std::shared_ptr<data::serialization::ITypeHandleBase<IObject::Any>> type_handle;
-                    };
-
-
                     std::shared_ptr<apache::thrift::transport::TTransport> transport;
                     std::shared_ptr<ignis::data::IObjectProtocol> protocol;
                     std::shared_ptr<ignis::data::serialization::ITypeHandleBase<IObject::Any>> type_handle;
                     std::shared_ptr<ignis::data::serialization::IReader<IObject::Any>> reader;
-                    std::shared_ptr<Handle> actual;
+                    std::shared_ptr<IObject::Handle<IObject::Any>> actual;
                     size_t elems;
                 };
 
@@ -54,6 +42,8 @@ namespace ignis {
                     void write(IObject::Any &obj) override;
 
                     void write(IObject::Any &&obj) override;
+
+                    virtual ~IWriteTransportIterator();
 
                 private:
                     std::shared_ptr<apache::thrift::transport::TTransport> transport;

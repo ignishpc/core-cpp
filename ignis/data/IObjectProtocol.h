@@ -32,6 +32,8 @@ namespace ignis {
                 writer(obj, *this);
             }
 
+            virtual ~IObjectProtocol() {}
+
         };
     }
 }

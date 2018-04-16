@@ -12,6 +12,8 @@ namespace ignis {
                 virtual void write(T &obj) = 0;
 
                 virtual void write(T &&obj) = 0;
+
+                virtual ~IWriteIterator(){};
             };
         }
     }

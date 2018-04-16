@@ -44,6 +44,10 @@ bool IRawMemoryObject::fastWrite(std::shared_ptr<apache::thrift::transport::TTra
     return true;
 }
 
+IRawMemoryObject::~IRawMemoryObject() {
+
+}
+
 
 
 

@@ -33,8 +33,12 @@ namespace ignis {
 
                 storage::IPostBox &getPostBox();
 
-            private:
+                int64_t& getExecutorId();
 
+                virtual ~IExecutorData();
+
+            private:
+                int64_t executor_id;
                 std::shared_ptr<storage::IObject> loaded_object;
                 std::unordered_map<size_t, std::shared_ptr<storage::IObject>> stored_objects;
                 storage::IPostBox post_box;

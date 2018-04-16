@@ -172,6 +172,8 @@ namespace ignis {
                 }
                 return str.str();
             }
+
+            virtual ~ITypeInfo() {}
         };
 
     }

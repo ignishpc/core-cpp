@@ -24,3 +24,7 @@ void IPostBox::newInMessage(size_t id, IMessage &msg) {
     std::lock_guard<std::mutex> lock(mutex);
     inbox[id] = msg;
 }
+
+IPostBox::~IPostBox() {
+
+}

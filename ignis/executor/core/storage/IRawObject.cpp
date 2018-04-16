@@ -23,7 +23,6 @@ void IRawObject::readHeader(shared_ptr<TTransport> transport) {
     data_reader->readType(data_proto);
     elems = readSizeAux(data_proto);
     type_handle->reader()->readType(data_proto);
-
 }
 
 void IRawObject::writeHeader(shared_ptr<TTransport> transport) {
@@ -74,5 +73,9 @@ void IRawObject::read(shared_ptr<TTransport> trans) {
         this->transport->write(buffer, bytes);
     }
     transport->flush();
+}
+
+size_t IRawObject::getSize() {
+    return elems;
 }
 

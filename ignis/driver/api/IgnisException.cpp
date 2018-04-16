@@ -15,3 +15,7 @@ std::string &IgnisException::getStacktrace() {
 void IgnisException::print(std::ostream &stream) {
     stream << string("IgnisException: ") << what() << endl << stacktrace << endl;
 }
+
+IgnisException::~IgnisException() {
+
+}

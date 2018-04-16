@@ -9,11 +9,11 @@
 namespace ignis { namespace rpc { namespace executor {
 
 
-IServerModule_setProperties_args::~IServerModule_setProperties_args() throw() {
+IServerModule_setContext_args::~IServerModule_setContext_args() throw() {
 }
 
 
-uint32_t IServerModule_setProperties_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IServerModule_setContext_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -35,6 +35,14 @@ uint32_t IServerModule_setProperties_args::read(::apache::thrift::protocol::TPro
     switch (fid)
     {
       case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
             this->properties.clear();
@@ -69,12 +77,16 @@ uint32_t IServerModule_setProperties_args::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-uint32_t IServerModule_setProperties_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IServerModule_setContext_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IServerModule_setProperties_args");
+  xfer += oprot->writeStructBegin("IServerModule_setContext_args");
 
-  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 1);
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
     std::map<std::string, std::string> ::const_iterator _iter7;
@@ -93,16 +105,20 @@ uint32_t IServerModule_setProperties_args::write(::apache::thrift::protocol::TPr
 }
 
 
-IServerModule_setProperties_pargs::~IServerModule_setProperties_pargs() throw() {
+IServerModule_setContext_pargs::~IServerModule_setContext_pargs() throw() {
 }
 
 
-uint32_t IServerModule_setProperties_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IServerModule_setContext_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IServerModule_setProperties_pargs");
+  xfer += oprot->writeStructBegin("IServerModule_setContext_pargs");
 
-  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 1);
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 2);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
     std::map<std::string, std::string> ::const_iterator _iter8;
@@ -121,11 +137,11 @@ uint32_t IServerModule_setProperties_pargs::write(::apache::thrift::protocol::TP
 }
 
 
-IServerModule_setProperties_result::~IServerModule_setProperties_result() throw() {
+IServerModule_setContext_result::~IServerModule_setContext_result() throw() {
 }
 
 
-uint32_t IServerModule_setProperties_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IServerModule_setContext_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -144,7 +160,20 @@ uint32_t IServerModule_setProperties_result::read(::apache::thrift::protocol::TP
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -153,23 +182,28 @@ uint32_t IServerModule_setProperties_result::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-uint32_t IServerModule_setProperties_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IServerModule_setContext_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IServerModule_setProperties_result");
+  xfer += oprot->writeStructBegin("IServerModule_setContext_result");
 
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IServerModule_setProperties_presult::~IServerModule_setProperties_presult() throw() {
+IServerModule_setContext_presult::~IServerModule_setContext_presult() throw() {
 }
 
 
-uint32_t IServerModule_setProperties_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IServerModule_setContext_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -188,7 +222,20 @@ uint32_t IServerModule_setProperties_presult::read(::apache::thrift::protocol::T
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -279,7 +326,20 @@ uint32_t IServerModule_stop_result::read(::apache::thrift::protocol::TProtocol* 
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -294,6 +354,11 @@ uint32_t IServerModule_stop_result::write(::apache::thrift::protocol::TProtocol*
 
   xfer += oprot->writeStructBegin("IServerModule_stop_result");
 
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -323,7 +388,20 @@ uint32_t IServerModule_stop_presult::read(::apache::thrift::protocol::TProtocol*
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -424,6 +502,14 @@ uint32_t IServerModule_test_result::read(::apache::thrift::protocol::TProtocol* 
           xfer += iprot->skip(ftype);
         }
         break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -445,6 +531,10 @@ uint32_t IServerModule_test_result::write(::apache::thrift::protocol::TProtocol*
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_BOOL, 0);
     xfer += oprot->writeBool(this->success);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
     xfer += oprot->writeFieldEnd();
   }
   xfer += oprot->writeFieldStop();
@@ -486,6 +576,14 @@ uint32_t IServerModule_test_presult::read(::apache::thrift::protocol::TProtocol*
           xfer += iprot->skip(ftype);
         }
         break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -498,18 +596,19 @@ uint32_t IServerModule_test_presult::read(::apache::thrift::protocol::TProtocol*
   return xfer;
 }
 
-void IServerModuleClient::setProperties(const std::map<std::string, std::string> & properties)
+void IServerModuleClient::setContext(const int64_t id, const std::map<std::string, std::string> & properties)
 {
-  send_setProperties(properties);
-  recv_setProperties();
+  send_setContext(id, properties);
+  recv_setContext();
 }
 
-void IServerModuleClient::send_setProperties(const std::map<std::string, std::string> & properties)
+void IServerModuleClient::send_setContext(const int64_t id, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("setProperties", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("setContext", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IServerModule_setProperties_pargs args;
+  IServerModule_setContext_pargs args;
+  args.id = &id;
   args.properties = &properties;
   args.write(oprot_);
 
@@ -518,7 +617,7 @@ void IServerModuleClient::send_setProperties(const std::map<std::string, std::st
   oprot_->getTransport()->flush();
 }
 
-void IServerModuleClient::recv_setProperties()
+void IServerModuleClient::recv_setContext()
 {
 
   int32_t rseqid = 0;
@@ -538,16 +637,19 @@ void IServerModuleClient::recv_setProperties()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("setProperties") != 0) {
+  if (fname.compare("setContext") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IServerModule_setProperties_presult result;
+  IServerModule_setContext_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
   return;
 }
 
@@ -600,6 +702,9 @@ void IServerModuleClient::recv_stop()
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
   return;
 }
 
@@ -657,6 +762,9 @@ bool IServerModuleClient::recv_test()
   if (result.__isset.success) {
     return _return;
   }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "test failed: unknown result");
 }
 
@@ -679,37 +787,40 @@ bool IServerModuleProcessor::dispatchCall(::apache::thrift::protocol::TProtocol*
   return true;
 }
 
-void IServerModuleProcessor::process_setProperties(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IServerModuleProcessor::process_setContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IServerModule.setProperties", callContext);
+    ctx = this->eventHandler_->getContext("IServerModule.setContext", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IServerModule.setProperties");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IServerModule.setContext");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IServerModule.setProperties");
+    this->eventHandler_->preRead(ctx, "IServerModule.setContext");
   }
 
-  IServerModule_setProperties_args args;
+  IServerModule_setContext_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IServerModule.setProperties", bytes);
+    this->eventHandler_->postRead(ctx, "IServerModule.setContext", bytes);
   }
 
-  IServerModule_setProperties_result result;
+  IServerModule_setContext_result result;
   try {
-    iface_->setProperties(args.properties);
+    iface_->setContext(args.id, args.properties);
+  } catch ( ::ignis::rpc::IRemoteException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IServerModule.setProperties");
+      this->eventHandler_->handlerError(ctx, "IServerModule.setContext");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("setProperties", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("setContext", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -718,17 +829,17 @@ void IServerModuleProcessor::process_setProperties(int32_t seqid, ::apache::thri
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IServerModule.setProperties");
+    this->eventHandler_->preWrite(ctx, "IServerModule.setContext");
   }
 
-  oprot->writeMessageBegin("setProperties", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("setContext", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IServerModule.setProperties", bytes);
+    this->eventHandler_->postWrite(ctx, "IServerModule.setContext", bytes);
   }
 }
 
@@ -756,6 +867,9 @@ void IServerModuleProcessor::process_stop(int32_t seqid, ::apache::thrift::proto
   IServerModule_stop_result result;
   try {
     iface_->stop();
+  } catch ( ::ignis::rpc::IRemoteException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "IServerModule.stop");
@@ -810,6 +924,9 @@ void IServerModuleProcessor::process_test(int32_t seqid, ::apache::thrift::proto
   try {
     result.success = iface_->test();
     result.__isset.success = true;
+  } catch ( ::ignis::rpc::IRemoteException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "IServerModule.test");
@@ -846,19 +963,20 @@ void IServerModuleProcessor::process_test(int32_t seqid, ::apache::thrift::proto
   return processor;
 }
 
-void IServerModuleConcurrentClient::setProperties(const std::map<std::string, std::string> & properties)
+void IServerModuleConcurrentClient::setContext(const int64_t id, const std::map<std::string, std::string> & properties)
 {
-  int32_t seqid = send_setProperties(properties);
-  recv_setProperties(seqid);
+  int32_t seqid = send_setContext(id, properties);
+  recv_setContext(seqid);
 }
 
-int32_t IServerModuleConcurrentClient::send_setProperties(const std::map<std::string, std::string> & properties)
+int32_t IServerModuleConcurrentClient::send_setContext(const int64_t id, const std::map<std::string, std::string> & properties)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("setProperties", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("setContext", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IServerModule_setProperties_pargs args;
+  IServerModule_setContext_pargs args;
+  args.id = &id;
   args.properties = &properties;
   args.write(oprot_);
 
@@ -870,7 +988,7 @@ int32_t IServerModuleConcurrentClient::send_setProperties(const std::map<std::st
   return cseqid;
 }
 
-void IServerModuleConcurrentClient::recv_setProperties(const int32_t seqid)
+void IServerModuleConcurrentClient::recv_setContext(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -899,7 +1017,7 @@ void IServerModuleConcurrentClient::recv_setProperties(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("setProperties") != 0) {
+      if (fname.compare("setContext") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -908,11 +1026,15 @@ void IServerModuleConcurrentClient::recv_setProperties(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IServerModule_setProperties_presult result;
+      IServerModule_setContext_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
 
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
       sentry.commit();
       return;
     }
@@ -990,6 +1112,10 @@ void IServerModuleConcurrentClient::recv_stop(const int32_t seqid)
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
 
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
       sentry.commit();
       return;
     }
@@ -1072,6 +1198,10 @@ bool IServerModuleConcurrentClient::recv_test(const int32_t seqid)
       if (result.__isset.success) {
         sentry.commit();
         return _return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "test failed: unknown result");

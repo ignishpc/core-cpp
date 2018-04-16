@@ -12,6 +12,8 @@ namespace ignis {
                 class ISortModule : public IgnisModule, public ignis::rpc::executor::ISortModuleIf{
                 public:
                     ISortModule(std::shared_ptr<IExecutorData> &executor_data);
+
+                    virtual ~ISortModule();
                 };
             }
         }

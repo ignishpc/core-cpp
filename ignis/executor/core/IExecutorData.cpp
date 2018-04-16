@@ -3,7 +3,9 @@
 
 using namespace ignis::executor::core;
 
-IExecutorData::IExecutorData() : properties_parser(IPropertiesParser(context.getProperties())) {}
+IExecutorData::IExecutorData() : context(api::IContext(executor_id)),
+                                 properties_parser(core::IPropertiesParser(context.getProperties())){}
+
 
 void loadObject(std::shared_ptr<storage::IObject> &object);
 
@@ -33,4 +35,12 @@ IPropertiesParser &IExecutorData::getParser(){
 
 storage::IPostBox &IExecutorData::getPostBox() {
     return post_box;
+}
+
+int64_t& IExecutorData::getExecutorId()  {
+    return executor_id;
+}
+
+IExecutorData::~IExecutorData() {
+
 }

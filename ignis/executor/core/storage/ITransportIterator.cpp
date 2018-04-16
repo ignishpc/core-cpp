@@ -24,22 +24,19 @@ IWriteTransportIterator::IWriteTransportIterator(const shared_ptr<TTransport> &t
           writer(type_handle->writer()),
           protocol(make_shared<data::IObjectProtocol>(transport)) {}
 
-IReadTransportIterator::Handle::Handle(IObject::Any *ptr, const shared_ptr<ITypeHandleBase<IObject::Any>> &type_handle)
-        : ptr(ptr), type_handle(type_handle) {}
-
-IReadTransportIterator::Handle::~Handle(){
-    (*type_handle->deleter())(ptr);
-};
-
 IObject::Any &IReadTransportIterator::next() {
     elems--;
     auto obj = reader->readPtr(*protocol);
-    actual = make_shared<IReadTransportIterator::Handle>(obj, type_handle);
+    actual = make_shared<IObject::Handle<IObject::Any>>(obj, type_handle);
     return *obj;
 }
 
 bool IReadTransportIterator::hashNext() {
     elems > 0;
+}
+
+IReadTransportIterator::~IReadTransportIterator() {
+
 }
 
 void IWriteTransportIterator::write(IObject::Any &obj) {
@@ -50,6 +47,10 @@ void IWriteTransportIterator::write(IObject::Any &obj) {
 void IWriteTransportIterator::write(IObject::Any &&obj) {
     elems++;
     (*writer)(obj, *protocol);
+}
+
+IWriteTransportIterator::~IWriteTransportIterator() {
+
 }
 
 

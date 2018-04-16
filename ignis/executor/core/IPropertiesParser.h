@@ -18,6 +18,8 @@ namespace ignis {
 
                 bool getBoolean(std::string key);
 
+                virtual ~IPropertiesParser();
+
             private:
                 std::unordered_map<std::string, std::string> &properties;
 

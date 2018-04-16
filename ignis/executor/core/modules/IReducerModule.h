@@ -12,6 +12,22 @@ namespace ignis {
                 class IReducerModule : public IgnisModule, public ignis::rpc::executor::IReducerModuleIf{
                 public:
                     IReducerModule(std::shared_ptr<IExecutorData> &executor_data);
+
+                    void getKeys(std::vector<std::string> &_return, const int64_t data_id) override;
+
+                    void
+                    setExecutorKeys(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id,
+                                    const int64_t msg_id) override;
+
+                    void joinData(const std::vector<int64_t> &msg_ids) override;
+
+                    void reduceByKey(const int64_t data_id, const int64_t ge_data_id,
+                                     const ::ignis::rpc::executor::IFunction &funct) override;
+
+                    void reset() override;
+
+                    virtual ~IReducerModule();
+
                 };
             }
         }

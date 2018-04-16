@@ -21,6 +21,11 @@ namespace ignis { namespace rpc { namespace executor {
 class IReducerModuleIf {
  public:
   virtual ~IReducerModuleIf() {}
+  virtual void getKeys(std::vector<std::string> & _return, const int64_t data_id) = 0;
+  virtual void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id) = 0;
+  virtual void joinData(const std::vector<int64_t> & msg_ids) = 0;
+  virtual void reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct) = 0;
+  virtual void reset() = 0;
 };
 
 class IReducerModuleIfFactory {
@@ -50,6 +55,572 @@ class IReducerModuleIfSingletonFactory : virtual public IReducerModuleIfFactory 
 class IReducerModuleNull : virtual public IReducerModuleIf {
  public:
   virtual ~IReducerModuleNull() {}
+  void getKeys(std::vector<std::string> & /* _return */, const int64_t /* data_id */) {
+    return;
+  }
+  void setExecutorKeys(const std::string& /* host */, const int32_t /* port */, const std::vector<int64_t> & /* keys_id */, const int64_t /* msg_id */) {
+    return;
+  }
+  void joinData(const std::vector<int64_t> & /* msg_ids */) {
+    return;
+  }
+  void reduceByKey(const int64_t /* data_id */, const int64_t /* ge_data_id */, const  ::ignis::rpc::executor::IFunction& /* funct */) {
+    return;
+  }
+  void reset() {
+    return;
+  }
+};
+
+typedef struct _IReducerModule_getKeys_args__isset {
+  _IReducerModule_getKeys_args__isset() : data_id(false) {}
+  bool data_id :1;
+} _IReducerModule_getKeys_args__isset;
+
+class IReducerModule_getKeys_args {
+ public:
+
+  IReducerModule_getKeys_args(const IReducerModule_getKeys_args&);
+  IReducerModule_getKeys_args& operator=(const IReducerModule_getKeys_args&);
+  IReducerModule_getKeys_args() : data_id(0) {
+  }
+
+  virtual ~IReducerModule_getKeys_args() throw();
+  int64_t data_id;
+
+  _IReducerModule_getKeys_args__isset __isset;
+
+  void __set_data_id(const int64_t val);
+
+  bool operator == (const IReducerModule_getKeys_args & rhs) const
+  {
+    if (!(data_id == rhs.data_id))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_getKeys_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_getKeys_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IReducerModule_getKeys_pargs {
+ public:
+
+
+  virtual ~IReducerModule_getKeys_pargs() throw();
+  const int64_t* data_id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_getKeys_result__isset {
+  _IReducerModule_getKeys_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IReducerModule_getKeys_result__isset;
+
+class IReducerModule_getKeys_result {
+ public:
+
+  IReducerModule_getKeys_result(const IReducerModule_getKeys_result&);
+  IReducerModule_getKeys_result& operator=(const IReducerModule_getKeys_result&);
+  IReducerModule_getKeys_result() {
+  }
+
+  virtual ~IReducerModule_getKeys_result() throw();
+  std::vector<std::string>  success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_getKeys_result__isset __isset;
+
+  void __set_success(const std::vector<std::string> & val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IReducerModule_getKeys_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_getKeys_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_getKeys_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_getKeys_presult__isset {
+  _IReducerModule_getKeys_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IReducerModule_getKeys_presult__isset;
+
+class IReducerModule_getKeys_presult {
+ public:
+
+
+  virtual ~IReducerModule_getKeys_presult() throw();
+  std::vector<std::string> * success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_getKeys_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IReducerModule_setExecutorKeys_args__isset {
+  _IReducerModule_setExecutorKeys_args__isset() : host(false), port(false), keys_id(false), msg_id(false) {}
+  bool host :1;
+  bool port :1;
+  bool keys_id :1;
+  bool msg_id :1;
+} _IReducerModule_setExecutorKeys_args__isset;
+
+class IReducerModule_setExecutorKeys_args {
+ public:
+
+  IReducerModule_setExecutorKeys_args(const IReducerModule_setExecutorKeys_args&);
+  IReducerModule_setExecutorKeys_args& operator=(const IReducerModule_setExecutorKeys_args&);
+  IReducerModule_setExecutorKeys_args() : host(), port(0), msg_id(0) {
+  }
+
+  virtual ~IReducerModule_setExecutorKeys_args() throw();
+  std::string host;
+  int32_t port;
+  std::vector<int64_t>  keys_id;
+  int64_t msg_id;
+
+  _IReducerModule_setExecutorKeys_args__isset __isset;
+
+  void __set_host(const std::string& val);
+
+  void __set_port(const int32_t val);
+
+  void __set_keys_id(const std::vector<int64_t> & val);
+
+  void __set_msg_id(const int64_t val);
+
+  bool operator == (const IReducerModule_setExecutorKeys_args & rhs) const
+  {
+    if (!(host == rhs.host))
+      return false;
+    if (!(port == rhs.port))
+      return false;
+    if (!(keys_id == rhs.keys_id))
+      return false;
+    if (!(msg_id == rhs.msg_id))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_setExecutorKeys_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_setExecutorKeys_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IReducerModule_setExecutorKeys_pargs {
+ public:
+
+
+  virtual ~IReducerModule_setExecutorKeys_pargs() throw();
+  const std::string* host;
+  const int32_t* port;
+  const std::vector<int64_t> * keys_id;
+  const int64_t* msg_id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_setExecutorKeys_result__isset {
+  _IReducerModule_setExecutorKeys_result__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_setExecutorKeys_result__isset;
+
+class IReducerModule_setExecutorKeys_result {
+ public:
+
+  IReducerModule_setExecutorKeys_result(const IReducerModule_setExecutorKeys_result&);
+  IReducerModule_setExecutorKeys_result& operator=(const IReducerModule_setExecutorKeys_result&);
+  IReducerModule_setExecutorKeys_result() {
+  }
+
+  virtual ~IReducerModule_setExecutorKeys_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_setExecutorKeys_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IReducerModule_setExecutorKeys_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_setExecutorKeys_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_setExecutorKeys_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_setExecutorKeys_presult__isset {
+  _IReducerModule_setExecutorKeys_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_setExecutorKeys_presult__isset;
+
+class IReducerModule_setExecutorKeys_presult {
+ public:
+
+
+  virtual ~IReducerModule_setExecutorKeys_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_setExecutorKeys_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IReducerModule_joinData_args__isset {
+  _IReducerModule_joinData_args__isset() : msg_ids(false) {}
+  bool msg_ids :1;
+} _IReducerModule_joinData_args__isset;
+
+class IReducerModule_joinData_args {
+ public:
+
+  IReducerModule_joinData_args(const IReducerModule_joinData_args&);
+  IReducerModule_joinData_args& operator=(const IReducerModule_joinData_args&);
+  IReducerModule_joinData_args() {
+  }
+
+  virtual ~IReducerModule_joinData_args() throw();
+  std::vector<int64_t>  msg_ids;
+
+  _IReducerModule_joinData_args__isset __isset;
+
+  void __set_msg_ids(const std::vector<int64_t> & val);
+
+  bool operator == (const IReducerModule_joinData_args & rhs) const
+  {
+    if (!(msg_ids == rhs.msg_ids))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_joinData_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_joinData_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IReducerModule_joinData_pargs {
+ public:
+
+
+  virtual ~IReducerModule_joinData_pargs() throw();
+  const std::vector<int64_t> * msg_ids;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_joinData_result__isset {
+  _IReducerModule_joinData_result__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_joinData_result__isset;
+
+class IReducerModule_joinData_result {
+ public:
+
+  IReducerModule_joinData_result(const IReducerModule_joinData_result&);
+  IReducerModule_joinData_result& operator=(const IReducerModule_joinData_result&);
+  IReducerModule_joinData_result() {
+  }
+
+  virtual ~IReducerModule_joinData_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_joinData_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IReducerModule_joinData_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_joinData_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_joinData_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_joinData_presult__isset {
+  _IReducerModule_joinData_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_joinData_presult__isset;
+
+class IReducerModule_joinData_presult {
+ public:
+
+
+  virtual ~IReducerModule_joinData_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_joinData_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IReducerModule_reduceByKey_args__isset {
+  _IReducerModule_reduceByKey_args__isset() : data_id(false), ge_data_id(false), funct(false) {}
+  bool data_id :1;
+  bool ge_data_id :1;
+  bool funct :1;
+} _IReducerModule_reduceByKey_args__isset;
+
+class IReducerModule_reduceByKey_args {
+ public:
+
+  IReducerModule_reduceByKey_args(const IReducerModule_reduceByKey_args&);
+  IReducerModule_reduceByKey_args& operator=(const IReducerModule_reduceByKey_args&);
+  IReducerModule_reduceByKey_args() : data_id(0), ge_data_id(0) {
+  }
+
+  virtual ~IReducerModule_reduceByKey_args() throw();
+  int64_t data_id;
+  int64_t ge_data_id;
+   ::ignis::rpc::executor::IFunction funct;
+
+  _IReducerModule_reduceByKey_args__isset __isset;
+
+  void __set_data_id(const int64_t val);
+
+  void __set_ge_data_id(const int64_t val);
+
+  void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
+
+  bool operator == (const IReducerModule_reduceByKey_args & rhs) const
+  {
+    if (!(data_id == rhs.data_id))
+      return false;
+    if (!(ge_data_id == rhs.ge_data_id))
+      return false;
+    if (!(funct == rhs.funct))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_reduceByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_reduceByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IReducerModule_reduceByKey_pargs {
+ public:
+
+
+  virtual ~IReducerModule_reduceByKey_pargs() throw();
+  const int64_t* data_id;
+  const int64_t* ge_data_id;
+  const  ::ignis::rpc::executor::IFunction* funct;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_reduceByKey_result__isset {
+  _IReducerModule_reduceByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_reduceByKey_result__isset;
+
+class IReducerModule_reduceByKey_result {
+ public:
+
+  IReducerModule_reduceByKey_result(const IReducerModule_reduceByKey_result&);
+  IReducerModule_reduceByKey_result& operator=(const IReducerModule_reduceByKey_result&);
+  IReducerModule_reduceByKey_result() {
+  }
+
+  virtual ~IReducerModule_reduceByKey_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_reduceByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IReducerModule_reduceByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_reduceByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_reduceByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_reduceByKey_presult__isset {
+  _IReducerModule_reduceByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_reduceByKey_presult__isset;
+
+class IReducerModule_reduceByKey_presult {
+ public:
+
+
+  virtual ~IReducerModule_reduceByKey_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_reduceByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IReducerModule_reset_args {
+ public:
+
+  IReducerModule_reset_args(const IReducerModule_reset_args&);
+  IReducerModule_reset_args& operator=(const IReducerModule_reset_args&);
+  IReducerModule_reset_args() {
+  }
+
+  virtual ~IReducerModule_reset_args() throw();
+
+  bool operator == (const IReducerModule_reset_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IReducerModule_reset_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_reset_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IReducerModule_reset_pargs {
+ public:
+
+
+  virtual ~IReducerModule_reset_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_reset_result__isset {
+  _IReducerModule_reset_result__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_reset_result__isset;
+
+class IReducerModule_reset_result {
+ public:
+
+  IReducerModule_reset_result(const IReducerModule_reset_result&);
+  IReducerModule_reset_result& operator=(const IReducerModule_reset_result&);
+  IReducerModule_reset_result() {
+  }
+
+  virtual ~IReducerModule_reset_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_reset_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IReducerModule_reset_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IReducerModule_reset_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IReducerModule_reset_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IReducerModule_reset_presult__isset {
+  _IReducerModule_reset_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IReducerModule_reset_presult__isset;
+
+class IReducerModule_reset_presult {
+ public:
+
+
+  virtual ~IReducerModule_reset_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IReducerModule_reset_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 class IReducerModuleClient : virtual public IReducerModuleIf {
@@ -77,6 +648,21 @@ class IReducerModuleClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void getKeys(std::vector<std::string> & _return, const int64_t data_id);
+  void send_getKeys(const int64_t data_id);
+  void recv_getKeys(std::vector<std::string> & _return);
+  void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
+  void send_setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
+  void recv_setExecutorKeys();
+  void joinData(const std::vector<int64_t> & msg_ids);
+  void send_joinData(const std::vector<int64_t> & msg_ids);
+  void recv_joinData();
+  void reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void send_reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_reduceByKey();
+  void reset();
+  void send_reset();
+  void recv_reset();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -92,9 +678,19 @@ class IReducerModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IReducerModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_getKeys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_setExecutorKeys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_joinData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reset(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IReducerModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> iface) :
     iface_(iface) {
+    processMap_["getKeys"] = &IReducerModuleProcessor::process_getKeys;
+    processMap_["setExecutorKeys"] = &IReducerModuleProcessor::process_setExecutorKeys;
+    processMap_["joinData"] = &IReducerModuleProcessor::process_joinData;
+    processMap_["reduceByKey"] = &IReducerModuleProcessor::process_reduceByKey;
+    processMap_["reset"] = &IReducerModuleProcessor::process_reset;
   }
 
   virtual ~IReducerModuleProcessor() {}
@@ -123,6 +719,52 @@ class IReducerModuleMultiface : virtual public IReducerModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void getKeys(std::vector<std::string> & _return, const int64_t data_id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getKeys(_return, data_id);
+    }
+    ifaces_[i]->getKeys(_return, data_id);
+    return;
+  }
+
+  void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->setExecutorKeys(host, port, keys_id, msg_id);
+    }
+    ifaces_[i]->setExecutorKeys(host, port, keys_id, msg_id);
+  }
+
+  void joinData(const std::vector<int64_t> & msg_ids) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->joinData(msg_ids);
+    }
+    ifaces_[i]->joinData(msg_ids);
+  }
+
+  void reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reduceByKey(data_id, ge_data_id, funct);
+    }
+    ifaces_[i]->reduceByKey(data_id, ge_data_id, funct);
+  }
+
+  void reset() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reset();
+    }
+    ifaces_[i]->reset();
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -153,6 +795,21 @@ class IReducerModuleConcurrentClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void getKeys(std::vector<std::string> & _return, const int64_t data_id);
+  int32_t send_getKeys(const int64_t data_id);
+  void recv_getKeys(std::vector<std::string> & _return, const int32_t seqid);
+  void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
+  int32_t send_setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
+  void recv_setExecutorKeys(const int32_t seqid);
+  void joinData(const std::vector<int64_t> & msg_ids);
+  int32_t send_joinData(const std::vector<int64_t> & msg_ids);
+  void recv_joinData(const int32_t seqid);
+  void reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  int32_t send_reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_reduceByKey(const int32_t seqid);
+  void reset();
+  int32_t send_reset();
+  void recv_reset(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

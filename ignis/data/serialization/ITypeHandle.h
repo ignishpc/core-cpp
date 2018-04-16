@@ -29,12 +29,39 @@ namespace ignis {
             };
 
             template<typename T>
-            class ITypeHandle : public ITypeHandleBase<T>{
+            class IColectionHandle : public ITypeHandleBase<std::vector<T>> {
             public:
 
-                virtual std::shared_ptr<ITypeHandleBase<std::vector<T>>> collectionHandle(){
-                   return std::shared_ptr<ITypeHandleBase<std::vector<T>>>();
-               }
+                virtual size_t getSize(std::vector<T> &v) {
+                    return v.size();
+                }
+
+                virtual void resize(std::vector<T> &v, size_t size) {
+                    v.resize(size);
+                }
+
+                virtual T &get(std::vector<T> &v, size_t pos) {
+                    return v[pos];
+                }
+
+                virtual void push(std::vector<T> &v, T &elem) {
+                    v.push_back(elem);
+                }
+
+                virtual void push(std::vector<T> &v, T &&elem) {
+                    v.push_back(elem);
+                }
+
+            };
+
+            template<typename T>
+            class ITypeHandle : public ITypeHandleBase<T> {
+            public:
+
+                virtual std::shared_ptr<IColectionHandle<T>> collectionHandle() {
+                    return std::shared_ptr<IColectionHandle<T>>();
+                }
+
             };
         }
     }

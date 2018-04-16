@@ -24,6 +24,8 @@ namespace ignis {
 
                     void newMessage(size_t id, IMessage &msg);
 
+                    virtual ~IPostBox();
+
                 private:
                     friend modules::IPostmanModule;
 

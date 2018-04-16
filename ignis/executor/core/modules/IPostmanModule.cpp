@@ -13,6 +13,7 @@ using namespace std;
 using namespace apache::thrift::transport;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::modules;
+using namespace ignis::executor::core;
 
 IPostmanModule::IPostmanModule(shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
@@ -37,10 +38,10 @@ void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
             int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
             if(storage == "disk"){
                 storage = "raw memory";//TODO create IDiskObject
-                object = make_shared<storage::IRawMemoryObject>(compression);
+                object = make_shared<IRawMemoryObject>(compression);
             }else{
                 storage = "raw memory";
-                object = make_shared<storage::IRawMemoryObject>(compression);
+                object = make_shared<IRawMemoryObject>(compression);
             }
             IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
                             << " mode: " << (use_shared_memory ? "shared memory" : "socket")
@@ -99,5 +100,13 @@ void IPostmanModule::stop() {
 
 void IPostmanModule::sendAll() {
 
+
+}
+
+void IPostmanModule::clearAll() {
+
+}
+
+IPostmanModule::~IPostmanModule() {
 
 }

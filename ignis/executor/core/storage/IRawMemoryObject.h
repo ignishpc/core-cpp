@@ -23,6 +23,8 @@ namespace ignis {
 
                     void write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) override;
 
+                    virtual ~IRawMemoryObject();
+
                 private:
 
                     inline bool fastWrite(std::shared_ptr<apache::thrift::transport::TTransport> transport) override;

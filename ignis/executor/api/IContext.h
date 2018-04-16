@@ -12,6 +12,8 @@ namespace ignis {
             class IContext {
             public:
 
+                IContext(int64_t &id);
+
                 std::string &operator[](const std::string &key);
 
                 std::string &operator[](const std::string key);
@@ -20,7 +22,10 @@ namespace ignis {
 
                 std::unordered_map<std::string, std::string> &getProperties();
 
+                int64_t getId();
+
             private:
+                int64_t& id;
                 std::unordered_map<std::string, std::string> properties;
             };
         }

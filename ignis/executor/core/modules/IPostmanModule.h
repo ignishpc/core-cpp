@@ -17,9 +17,13 @@ namespace ignis {
 
                     void start();
 
-                    void stop();
+                    void stop() override;
 
-                    void sendAll();
+                    void sendAll() override;
+
+                    void clearAll() override;
+
+                    virtual ~IPostmanModule();
 
                 private:
                     void threadServer();

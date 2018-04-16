@@ -15,6 +15,8 @@ namespace ignis {
             IInvalidArgument(const char *message) : IException(message) {setExceptionName(this);}
 
             IInvalidArgument(const char *message, const IException &cause) : IException(message, cause) {setExceptionName(this);}
+
+            virtual ~IInvalidArgument() {}
         };
     }
 }

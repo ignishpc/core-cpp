@@ -31,6 +31,8 @@ namespace ignis {
 
             void flush() override;
 
+            virtual ~IFileTransport();
+
         private:
 
             std::shared_ptr<TTransport> sync_trans;

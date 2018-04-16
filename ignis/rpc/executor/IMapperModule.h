@@ -21,6 +21,8 @@ namespace ignis { namespace rpc { namespace executor {
 class IMapperModuleIf {
  public:
   virtual ~IMapperModuleIf() {}
+  virtual void onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct) = 0;
+  virtual void flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct) = 0;
 };
 
 class IMapperModuleIfFactory {
@@ -50,6 +52,248 @@ class IMapperModuleIfSingletonFactory : virtual public IMapperModuleIfFactory {
 class IMapperModuleNull : virtual public IMapperModuleIf {
  public:
   virtual ~IMapperModuleNull() {}
+  void onemap(const int64_t /* data_id */, const int64_t /* ge_data_id */, const  ::ignis::rpc::executor::IFunction& /* funct */) {
+    return;
+  }
+  void flatmap(const int64_t /* data_id */, const int64_t /* ge_data_id */, const  ::ignis::rpc::executor::IFunction& /* funct */) {
+    return;
+  }
+};
+
+typedef struct _IMapperModule_onemap_args__isset {
+  _IMapperModule_onemap_args__isset() : data_id(false), ge_data_id(false), funct(false) {}
+  bool data_id :1;
+  bool ge_data_id :1;
+  bool funct :1;
+} _IMapperModule_onemap_args__isset;
+
+class IMapperModule_onemap_args {
+ public:
+
+  IMapperModule_onemap_args(const IMapperModule_onemap_args&);
+  IMapperModule_onemap_args& operator=(const IMapperModule_onemap_args&);
+  IMapperModule_onemap_args() : data_id(0), ge_data_id(0) {
+  }
+
+  virtual ~IMapperModule_onemap_args() throw();
+  int64_t data_id;
+  int64_t ge_data_id;
+   ::ignis::rpc::executor::IFunction funct;
+
+  _IMapperModule_onemap_args__isset __isset;
+
+  void __set_data_id(const int64_t val);
+
+  void __set_ge_data_id(const int64_t val);
+
+  void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
+
+  bool operator == (const IMapperModule_onemap_args & rhs) const
+  {
+    if (!(data_id == rhs.data_id))
+      return false;
+    if (!(ge_data_id == rhs.ge_data_id))
+      return false;
+    if (!(funct == rhs.funct))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_onemap_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_onemap_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMapperModule_onemap_pargs {
+ public:
+
+
+  virtual ~IMapperModule_onemap_pargs() throw();
+  const int64_t* data_id;
+  const int64_t* ge_data_id;
+  const  ::ignis::rpc::executor::IFunction* funct;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_onemap_result__isset {
+  _IMapperModule_onemap_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_onemap_result__isset;
+
+class IMapperModule_onemap_result {
+ public:
+
+  IMapperModule_onemap_result(const IMapperModule_onemap_result&);
+  IMapperModule_onemap_result& operator=(const IMapperModule_onemap_result&);
+  IMapperModule_onemap_result() {
+  }
+
+  virtual ~IMapperModule_onemap_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_onemap_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IMapperModule_onemap_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_onemap_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_onemap_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_onemap_presult__isset {
+  _IMapperModule_onemap_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_onemap_presult__isset;
+
+class IMapperModule_onemap_presult {
+ public:
+
+
+  virtual ~IMapperModule_onemap_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_onemap_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IMapperModule_flatmap_args__isset {
+  _IMapperModule_flatmap_args__isset() : data_id(false), ge_data_id(false), funct(false) {}
+  bool data_id :1;
+  bool ge_data_id :1;
+  bool funct :1;
+} _IMapperModule_flatmap_args__isset;
+
+class IMapperModule_flatmap_args {
+ public:
+
+  IMapperModule_flatmap_args(const IMapperModule_flatmap_args&);
+  IMapperModule_flatmap_args& operator=(const IMapperModule_flatmap_args&);
+  IMapperModule_flatmap_args() : data_id(0), ge_data_id(0) {
+  }
+
+  virtual ~IMapperModule_flatmap_args() throw();
+  int64_t data_id;
+  int64_t ge_data_id;
+   ::ignis::rpc::executor::IFunction funct;
+
+  _IMapperModule_flatmap_args__isset __isset;
+
+  void __set_data_id(const int64_t val);
+
+  void __set_ge_data_id(const int64_t val);
+
+  void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
+
+  bool operator == (const IMapperModule_flatmap_args & rhs) const
+  {
+    if (!(data_id == rhs.data_id))
+      return false;
+    if (!(ge_data_id == rhs.ge_data_id))
+      return false;
+    if (!(funct == rhs.funct))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_flatmap_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_flatmap_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMapperModule_flatmap_pargs {
+ public:
+
+
+  virtual ~IMapperModule_flatmap_pargs() throw();
+  const int64_t* data_id;
+  const int64_t* ge_data_id;
+  const  ::ignis::rpc::executor::IFunction* funct;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_flatmap_result__isset {
+  _IMapperModule_flatmap_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_flatmap_result__isset;
+
+class IMapperModule_flatmap_result {
+ public:
+
+  IMapperModule_flatmap_result(const IMapperModule_flatmap_result&);
+  IMapperModule_flatmap_result& operator=(const IMapperModule_flatmap_result&);
+  IMapperModule_flatmap_result() {
+  }
+
+  virtual ~IMapperModule_flatmap_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_flatmap_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IMapperModule_flatmap_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_flatmap_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_flatmap_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_flatmap_presult__isset {
+  _IMapperModule_flatmap_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_flatmap_presult__isset;
+
+class IMapperModule_flatmap_presult {
+ public:
+
+
+  virtual ~IMapperModule_flatmap_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_flatmap_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 class IMapperModuleClient : virtual public IMapperModuleIf {
@@ -77,6 +321,12 @@ class IMapperModuleClient : virtual public IMapperModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void send_onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_onemap();
+  void flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void send_flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_flatmap();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -92,9 +342,13 @@ class IMapperModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IMapperModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_onemap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IMapperModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IMapperModuleIf> iface) :
     iface_(iface) {
+    processMap_["onemap"] = &IMapperModuleProcessor::process_onemap;
+    processMap_["flatmap"] = &IMapperModuleProcessor::process_flatmap;
   }
 
   virtual ~IMapperModuleProcessor() {}
@@ -123,6 +377,24 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->onemap(data_id, ge_data_id, funct);
+    }
+    ifaces_[i]->onemap(data_id, ge_data_id, funct);
+  }
+
+  void flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->flatmap(data_id, ge_data_id, funct);
+    }
+    ifaces_[i]->flatmap(data_id, ge_data_id, funct);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -153,6 +425,12 @@ class IMapperModuleConcurrentClient : virtual public IMapperModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  int32_t send_onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_onemap(const int32_t seqid);
+  void flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  int32_t send_flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_flatmap(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

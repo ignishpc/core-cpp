@@ -21,6 +21,10 @@ namespace ignis { namespace rpc { namespace executor {
 class IPostmanModuleIf {
  public:
   virtual ~IPostmanModuleIf() {}
+  virtual void start() = 0;
+  virtual void stop() = 0;
+  virtual void sendAll() = 0;
+  virtual void clearAll() = 0;
 };
 
 class IPostmanModuleIfFactory {
@@ -50,6 +54,386 @@ class IPostmanModuleIfSingletonFactory : virtual public IPostmanModuleIfFactory 
 class IPostmanModuleNull : virtual public IPostmanModuleIf {
  public:
   virtual ~IPostmanModuleNull() {}
+  void start() {
+    return;
+  }
+  void stop() {
+    return;
+  }
+  void sendAll() {
+    return;
+  }
+  void clearAll() {
+    return;
+  }
+};
+
+
+class IPostmanModule_start_args {
+ public:
+
+  IPostmanModule_start_args(const IPostmanModule_start_args&);
+  IPostmanModule_start_args& operator=(const IPostmanModule_start_args&);
+  IPostmanModule_start_args() {
+  }
+
+  virtual ~IPostmanModule_start_args() throw();
+
+  bool operator == (const IPostmanModule_start_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IPostmanModule_start_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_start_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IPostmanModule_start_pargs {
+ public:
+
+
+  virtual ~IPostmanModule_start_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_start_result__isset {
+  _IPostmanModule_start_result__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_start_result__isset;
+
+class IPostmanModule_start_result {
+ public:
+
+  IPostmanModule_start_result(const IPostmanModule_start_result&);
+  IPostmanModule_start_result& operator=(const IPostmanModule_start_result&);
+  IPostmanModule_start_result() {
+  }
+
+  virtual ~IPostmanModule_start_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_start_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IPostmanModule_start_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IPostmanModule_start_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_start_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_start_presult__isset {
+  _IPostmanModule_start_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_start_presult__isset;
+
+class IPostmanModule_start_presult {
+ public:
+
+
+  virtual ~IPostmanModule_start_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_start_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IPostmanModule_stop_args {
+ public:
+
+  IPostmanModule_stop_args(const IPostmanModule_stop_args&);
+  IPostmanModule_stop_args& operator=(const IPostmanModule_stop_args&);
+  IPostmanModule_stop_args() {
+  }
+
+  virtual ~IPostmanModule_stop_args() throw();
+
+  bool operator == (const IPostmanModule_stop_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IPostmanModule_stop_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_stop_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IPostmanModule_stop_pargs {
+ public:
+
+
+  virtual ~IPostmanModule_stop_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_stop_result__isset {
+  _IPostmanModule_stop_result__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_stop_result__isset;
+
+class IPostmanModule_stop_result {
+ public:
+
+  IPostmanModule_stop_result(const IPostmanModule_stop_result&);
+  IPostmanModule_stop_result& operator=(const IPostmanModule_stop_result&);
+  IPostmanModule_stop_result() {
+  }
+
+  virtual ~IPostmanModule_stop_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_stop_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IPostmanModule_stop_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IPostmanModule_stop_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_stop_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_stop_presult__isset {
+  _IPostmanModule_stop_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_stop_presult__isset;
+
+class IPostmanModule_stop_presult {
+ public:
+
+
+  virtual ~IPostmanModule_stop_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_stop_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IPostmanModule_sendAll_args {
+ public:
+
+  IPostmanModule_sendAll_args(const IPostmanModule_sendAll_args&);
+  IPostmanModule_sendAll_args& operator=(const IPostmanModule_sendAll_args&);
+  IPostmanModule_sendAll_args() {
+  }
+
+  virtual ~IPostmanModule_sendAll_args() throw();
+
+  bool operator == (const IPostmanModule_sendAll_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IPostmanModule_sendAll_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_sendAll_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IPostmanModule_sendAll_pargs {
+ public:
+
+
+  virtual ~IPostmanModule_sendAll_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_sendAll_result__isset {
+  _IPostmanModule_sendAll_result__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_sendAll_result__isset;
+
+class IPostmanModule_sendAll_result {
+ public:
+
+  IPostmanModule_sendAll_result(const IPostmanModule_sendAll_result&);
+  IPostmanModule_sendAll_result& operator=(const IPostmanModule_sendAll_result&);
+  IPostmanModule_sendAll_result() {
+  }
+
+  virtual ~IPostmanModule_sendAll_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_sendAll_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IPostmanModule_sendAll_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IPostmanModule_sendAll_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_sendAll_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_sendAll_presult__isset {
+  _IPostmanModule_sendAll_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_sendAll_presult__isset;
+
+class IPostmanModule_sendAll_presult {
+ public:
+
+
+  virtual ~IPostmanModule_sendAll_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_sendAll_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IPostmanModule_clearAll_args {
+ public:
+
+  IPostmanModule_clearAll_args(const IPostmanModule_clearAll_args&);
+  IPostmanModule_clearAll_args& operator=(const IPostmanModule_clearAll_args&);
+  IPostmanModule_clearAll_args() {
+  }
+
+  virtual ~IPostmanModule_clearAll_args() throw();
+
+  bool operator == (const IPostmanModule_clearAll_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IPostmanModule_clearAll_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_clearAll_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IPostmanModule_clearAll_pargs {
+ public:
+
+
+  virtual ~IPostmanModule_clearAll_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_clearAll_result__isset {
+  _IPostmanModule_clearAll_result__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_clearAll_result__isset;
+
+class IPostmanModule_clearAll_result {
+ public:
+
+  IPostmanModule_clearAll_result(const IPostmanModule_clearAll_result&);
+  IPostmanModule_clearAll_result& operator=(const IPostmanModule_clearAll_result&);
+  IPostmanModule_clearAll_result() {
+  }
+
+  virtual ~IPostmanModule_clearAll_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_clearAll_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IPostmanModule_clearAll_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IPostmanModule_clearAll_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPostmanModule_clearAll_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPostmanModule_clearAll_presult__isset {
+  _IPostmanModule_clearAll_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IPostmanModule_clearAll_presult__isset;
+
+class IPostmanModule_clearAll_presult {
+ public:
+
+
+  virtual ~IPostmanModule_clearAll_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPostmanModule_clearAll_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 class IPostmanModuleClient : virtual public IPostmanModuleIf {
@@ -77,6 +461,18 @@ class IPostmanModuleClient : virtual public IPostmanModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void start();
+  void send_start();
+  void recv_start();
+  void stop();
+  void send_stop();
+  void recv_stop();
+  void sendAll();
+  void send_sendAll();
+  void recv_sendAll();
+  void clearAll();
+  void send_clearAll();
+  void recv_clearAll();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -92,9 +488,17 @@ class IPostmanModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IPostmanModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_start(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_stop(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sendAll(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_clearAll(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IPostmanModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IPostmanModuleIf> iface) :
     iface_(iface) {
+    processMap_["start"] = &IPostmanModuleProcessor::process_start;
+    processMap_["stop"] = &IPostmanModuleProcessor::process_stop;
+    processMap_["sendAll"] = &IPostmanModuleProcessor::process_sendAll;
+    processMap_["clearAll"] = &IPostmanModuleProcessor::process_clearAll;
   }
 
   virtual ~IPostmanModuleProcessor() {}
@@ -123,6 +527,42 @@ class IPostmanModuleMultiface : virtual public IPostmanModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void start() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->start();
+    }
+    ifaces_[i]->start();
+  }
+
+  void stop() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->stop();
+    }
+    ifaces_[i]->stop();
+  }
+
+  void sendAll() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sendAll();
+    }
+    ifaces_[i]->sendAll();
+  }
+
+  void clearAll() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->clearAll();
+    }
+    ifaces_[i]->clearAll();
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -153,6 +593,18 @@ class IPostmanModuleConcurrentClient : virtual public IPostmanModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void start();
+  int32_t send_start();
+  void recv_start(const int32_t seqid);
+  void stop();
+  int32_t send_stop();
+  void recv_stop(const int32_t seqid);
+  void sendAll();
+  int32_t send_sendAll();
+  void recv_sendAll(const int32_t seqid);
+  void clearAll();
+  int32_t send_clearAll();
+  void recv_clearAll(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

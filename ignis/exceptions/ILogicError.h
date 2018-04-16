@@ -15,6 +15,8 @@ namespace ignis {
             ILogicError(const char *message) : IException(message) {setExceptionName(this);}
 
             ILogicError(const char *message, const IException &cause) : IException(message, cause) {setExceptionName(this);}
+
+            virtual ~ILogicError() {}
         };
     }
 }

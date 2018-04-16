@@ -49,7 +49,7 @@ namespace ignis {
                     Handle(T *object_ptr, void (*destructor)(T *), void *dl) : object_ptr(object_ptr),
                                                                                destructor(destructor), dl(dl) {}
 
-                    ~Handle() {
+                    virtual ~Handle() {
                         try {
                             (*destructor)(object_ptr);
                         } catch (...) {}

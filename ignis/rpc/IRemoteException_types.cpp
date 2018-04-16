@@ -14,25 +14,25 @@
 namespace ignis { namespace rpc {
 
 
-IExecutorException::~IExecutorException() throw() {
+IRemoteException::~IRemoteException() throw() {
 }
 
 
-void IExecutorException::__set_name(const std::string& val) {
+void IRemoteException::__set_name(const std::string& val) {
   this->name = val;
 }
 
-void IExecutorException::__set_stack(const std::string& val) {
+void IRemoteException::__set_stack(const std::string& val) {
   this->stack = val;
 }
-std::ostream& operator<<(std::ostream& out, const IExecutorException& obj)
+std::ostream& operator<<(std::ostream& out, const IRemoteException& obj)
 {
   obj.printTo(out);
   return out;
 }
 
 
-uint32_t IExecutorException::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IRemoteException::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -87,10 +87,10 @@ uint32_t IExecutorException::read(::apache::thrift::protocol::TProtocol* iprot) 
   return xfer;
 }
 
-uint32_t IExecutorException::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IRemoteException::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IExecutorException");
+  xfer += oprot->writeStructBegin("IRemoteException");
 
   xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->name);
@@ -105,37 +105,37 @@ uint32_t IExecutorException::write(::apache::thrift::protocol::TProtocol* oprot)
   return xfer;
 }
 
-void swap(IExecutorException &a, IExecutorException &b) {
+void swap(IRemoteException &a, IRemoteException &b) {
   using ::std::swap;
   swap(a.name, b.name);
   swap(a.stack, b.stack);
 }
 
-IExecutorException::IExecutorException(const IExecutorException& other0) : TException() {
+IRemoteException::IRemoteException(const IRemoteException& other0) : TException() {
   name = other0.name;
   stack = other0.stack;
 }
-IExecutorException& IExecutorException::operator=(const IExecutorException& other1) {
+IRemoteException& IRemoteException::operator=(const IRemoteException& other1) {
   name = other1.name;
   stack = other1.stack;
   return *this;
 }
-void IExecutorException::printTo(std::ostream& out) const {
+void IRemoteException::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
-  out << "IExecutorException(";
+  out << "IRemoteException(";
   out << "name=" << to_string(name);
   out << ", " << "stack=" << to_string(stack);
   out << ")";
 }
 
-const char* IExecutorException::what() const throw() {
+const char* IRemoteException::what() const throw() {
   try {
     std::stringstream ss;
     ss << "TException - service has thrown: " << *this;
     this->thriftTExceptionMessageHolder_ = ss.str();
     return this->thriftTExceptionMessageHolder_.c_str();
   } catch (const std::exception&) {
-    return "TException - service has thrown: IExecutorException";
+    return "TException - service has thrown: IRemoteException";
   }
 }
 

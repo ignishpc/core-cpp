@@ -16,9 +16,7 @@ namespace ignis {
                 public:
                     typedef char Any;
 
-                    IObject() {}
-
-                    virtual ~IObject() {}
+                    virtual ~IObject() {};
 
                     virtual std::shared_ptr<api::IReadIterator<Any>> readIterator() = 0;
 
@@ -26,11 +24,31 @@ namespace ignis {
 
                     virtual void read(std::shared_ptr<apache::thrift::transport::TTransport> trans) = 0;
 
-                    virtual void write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) = 0;
+                    virtual void
+                    write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) = 0;
 
-                    void setTypeHandle(std::shared_ptr<data::serialization::ITypeHandleBase<Any>> type_handle);
+                    virtual size_t getSize() = 0;
+
+                    virtual void setTypeHandle(std::shared_ptr<data::serialization::ITypeHandleBase<Any>> type_handle) {
+                        this->type_handle = type_handle;
+                    }
+
+                    template<typename T = Any>
+                    class Handle {
+                    public:
+                        Handle(T *ptr,
+                               const std::shared_ptr<data::serialization::ITypeHandleBase<T>> &type_handle) :
+                                ptr(ptr), type_handle(type_handle) {}
+
+                        virtual ~Handle() { (*type_handle->deleter())(ptr); }
+
+                    protected:
+                        T *ptr;
+                        std::shared_ptr<data::serialization::ITypeHandleBase<T>> type_handle;
+                    };
 
                 protected:
+
                     std::shared_ptr<data::serialization::ITypeHandleBase<Any>> type_handle;
 
                 };

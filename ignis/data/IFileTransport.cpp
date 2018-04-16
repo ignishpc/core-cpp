@@ -85,3 +85,7 @@ void IFileTransport::swapWrite() {
     boost::filesystem::resize_file(buffer_path[write_flag], 0);
     write_bytes = 0;
 }
+
+IFileTransport::~IFileTransport() {
+
+}

@@ -2,7 +2,6 @@
 #ifndef IGNIS_IRAWOBJECT_H
 #define IGNIS_IRAWOBJECT_H
 
-#include <memory>
 #include <thrift/transport/TBufferTransports.h>
 #include "IObject.h"
 
@@ -24,6 +23,8 @@ namespace ignis {
                     virtual void read(std::shared_ptr<apache::thrift::transport::TTransport> trans) override;
 
                     virtual void write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) override;
+
+                    size_t getSize() override;
 
                 protected:
 

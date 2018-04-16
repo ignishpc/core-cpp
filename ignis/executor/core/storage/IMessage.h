@@ -35,6 +35,8 @@ namespace ignis {
                         return obj;
                     }
 
+                    virtual ~IMessage() {}
+
                 private:
                     std::string host;
                     int port;
