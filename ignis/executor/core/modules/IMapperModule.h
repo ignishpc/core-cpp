@@ -13,11 +13,9 @@ namespace ignis {
                 public:
                     IMapperModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void onemap(const int64_t data_id, const int64_t ge_data_id,
-                                const ::ignis::rpc::executor::IFunction &funct) override;
+                    void onemap(const ::ignis::rpc::executor::IFunction &funct) override;
 
-                    void flatmap(const int64_t data_id, const int64_t ge_data_id,
-                                 const ::ignis::rpc::executor::IFunction &funct) override;
+                    void flatmap(const ::ignis::rpc::executor::IFunction &funct) override;
 
                     virtual ~IMapperModule();
 

@@ -35,22 +35,6 @@ uint32_t IMapperModule_onemap_args::read(::apache::thrift::protocol::TProtocol* 
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->data_id);
-          this->__isset.data_id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->ge_data_id);
-          this->__isset.ge_data_id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->funct.read(iprot);
           this->__isset.funct = true;
@@ -75,15 +59,7 @@ uint32_t IMapperModule_onemap_args::write(::apache::thrift::protocol::TProtocol*
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IMapperModule_onemap_args");
 
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64(this->data_id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("ge_data_id", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->ge_data_id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->funct.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -102,15 +78,7 @@ uint32_t IMapperModule_onemap_pargs::write(::apache::thrift::protocol::TProtocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IMapperModule_onemap_pargs");
 
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64((*(this->data_id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("ge_data_id", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->ge_data_id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->funct)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -254,22 +222,6 @@ uint32_t IMapperModule_flatmap_args::read(::apache::thrift::protocol::TProtocol*
     switch (fid)
     {
       case 1:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->data_id);
-          this->__isset.data_id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->ge_data_id);
-          this->__isset.ge_data_id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->funct.read(iprot);
           this->__isset.funct = true;
@@ -294,15 +246,7 @@ uint32_t IMapperModule_flatmap_args::write(::apache::thrift::protocol::TProtocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IMapperModule_flatmap_args");
 
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64(this->data_id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("ge_data_id", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->ge_data_id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->funct.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -321,15 +265,7 @@ uint32_t IMapperModule_flatmap_pargs::write(::apache::thrift::protocol::TProtoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IMapperModule_flatmap_pargs");
 
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64((*(this->data_id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("ge_data_id", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->ge_data_id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->funct)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -446,20 +382,18 @@ uint32_t IMapperModule_flatmap_presult::read(::apache::thrift::protocol::TProtoc
   return xfer;
 }
 
-void IMapperModuleClient::onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::onemap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  send_onemap(data_id, ge_data_id, funct);
+  send_onemap(funct);
   recv_onemap();
 }
 
-void IMapperModuleClient::send_onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::send_onemap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("onemap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IMapperModule_onemap_pargs args;
-  args.data_id = &data_id;
-  args.ge_data_id = &ge_data_id;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -504,20 +438,18 @@ void IMapperModuleClient::recv_onemap()
   return;
 }
 
-void IMapperModuleClient::flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::flatmap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  send_flatmap(data_id, ge_data_id, funct);
+  send_flatmap(funct);
   recv_flatmap();
 }
 
-void IMapperModuleClient::send_flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::send_flatmap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IMapperModule_flatmap_pargs args;
-  args.data_id = &data_id;
-  args.ge_data_id = &ge_data_id;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -604,7 +536,7 @@ void IMapperModuleProcessor::process_onemap(int32_t seqid, ::apache::thrift::pro
 
   IMapperModule_onemap_result result;
   try {
-    iface_->onemap(args.data_id, args.ge_data_id, args.funct);
+    iface_->onemap(args.funct);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -660,7 +592,7 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
 
   IMapperModule_flatmap_result result;
   try {
-    iface_->flatmap(args.data_id, args.ge_data_id, args.funct);
+    iface_->flatmap(args.funct);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -700,21 +632,19 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
   return processor;
 }
 
-void IMapperModuleConcurrentClient::onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleConcurrentClient::onemap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  int32_t seqid = send_onemap(data_id, ge_data_id, funct);
+  int32_t seqid = send_onemap(funct);
   recv_onemap(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_onemap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+int32_t IMapperModuleConcurrentClient::send_onemap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("onemap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IMapperModule_onemap_pargs args;
-  args.data_id = &data_id;
-  args.ge_data_id = &ge_data_id;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -784,21 +714,19 @@ void IMapperModuleConcurrentClient::recv_onemap(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleConcurrentClient::flatmap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  int32_t seqid = send_flatmap(data_id, ge_data_id, funct);
+  int32_t seqid = send_flatmap(funct);
   recv_flatmap(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_flatmap(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+int32_t IMapperModuleConcurrentClient::send_flatmap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IMapperModule_flatmap_pargs args;
-  args.data_id = &data_id;
-  args.ge_data_id = &ge_data_id;
   args.funct = &funct;
   args.write(oprot_);
 

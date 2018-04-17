@@ -28,20 +28,20 @@ class IRemoteException : public ::apache::thrift::TException {
 
   IRemoteException(const IRemoteException&);
   IRemoteException& operator=(const IRemoteException&);
-  IRemoteException() : name(), stack() {
+  IRemoteException() : cause(), stack() {
   }
 
   virtual ~IRemoteException() throw();
-  std::string name;
+  std::string cause;
   std::string stack;
 
-  void __set_name(const std::string& val);
+  void __set_cause(const std::string& val);
 
   void __set_stack(const std::string& val);
 
   bool operator == (const IRemoteException & rhs) const
   {
-    if (!(name == rhs.name))
+    if (!(cause == rhs.cause))
       return false;
     if (!(stack == rhs.stack))
       return false;

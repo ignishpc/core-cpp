@@ -7,7 +7,9 @@ IExecutorData::IExecutorData() : context(api::IContext(executor_id)),
                                  properties_parser(core::IPropertiesParser(context.getProperties())){}
 
 
-void loadObject(std::shared_ptr<storage::IObject> &object);
+void IExecutorData::loadObject(std::shared_ptr<storage::IObject> &object){
+    loaded_object = object;
+}
 
 bool IExecutorData::hasLoadObject(){
     return bool(loaded_object);

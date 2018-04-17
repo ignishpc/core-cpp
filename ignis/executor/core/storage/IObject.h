@@ -29,8 +29,23 @@ namespace ignis {
 
                     virtual size_t getSize() = 0;
 
+                    virtual std::shared_ptr<data::serialization::ITypeHandleBase<Any>> getTypeHandle(){
+                        return type_handle;
+                    }
+
                     virtual void setTypeHandle(std::shared_ptr<data::serialization::ITypeHandleBase<Any>> type_handle) {
                         this->type_handle = type_handle;
+                    }
+
+                    template<typename T>
+                    static inline std::shared_ptr<data::serialization::ITypeHandleBase<Any>>& castTypeHandle(
+                            const std::shared_ptr<data::serialization::ITypeHandleBase<T>> &type_handle){
+                        return (std::shared_ptr<data::serialization::ITypeHandleBase<IObject::Any>>&)type_handle;
+                    }
+
+                    template<typename T>
+                    static inline Any& toAny(T &obj){
+                        return (Any&)obj;
                     }
 
                     template<typename T = Any>

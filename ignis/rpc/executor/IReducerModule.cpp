@@ -32,20 +32,7 @@ uint32_t IReducerModule_getKeys_args::read(::apache::thrift::protocol::TProtocol
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->data_id);
-          this->__isset.data_id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
+    xfer += iprot->skip(ftype);
     xfer += iprot->readFieldEnd();
   }
 
@@ -58,10 +45,6 @@ uint32_t IReducerModule_getKeys_args::write(::apache::thrift::protocol::TProtoco
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_getKeys_args");
-
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64(this->data_id);
-  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -77,10 +60,6 @@ uint32_t IReducerModule_getKeys_pargs::write(::apache::thrift::protocol::TProtoc
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_getKeys_pargs");
-
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64((*(this->data_id)));
-  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -751,22 +730,6 @@ uint32_t IReducerModule_reduceByKey_args::read(::apache::thrift::protocol::TProt
     }
     switch (fid)
     {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->data_id);
-          this->__isset.data_id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->ge_data_id);
-          this->__isset.ge_data_id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       case 3:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->funct.read(iprot);
@@ -792,14 +755,6 @@ uint32_t IReducerModule_reduceByKey_args::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_reduceByKey_args");
 
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64(this->data_id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("ge_data_id", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->ge_data_id);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += this->funct.write(oprot);
   xfer += oprot->writeFieldEnd();
@@ -818,14 +773,6 @@ uint32_t IReducerModule_reduceByKey_pargs::write(::apache::thrift::protocol::TPr
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_reduceByKey_pargs");
-
-  xfer += oprot->writeFieldBegin("data_id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64((*(this->data_id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("ge_data_id", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->ge_data_id)));
-  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += (*(this->funct)).write(oprot);
@@ -1110,19 +1057,18 @@ uint32_t IReducerModule_reset_presult::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-void IReducerModuleClient::getKeys(std::vector<std::string> & _return, const int64_t data_id)
+void IReducerModuleClient::getKeys(std::vector<std::string> & _return)
 {
-  send_getKeys(data_id);
+  send_getKeys();
   recv_getKeys(_return);
 }
 
-void IReducerModuleClient::send_getKeys(const int64_t data_id)
+void IReducerModuleClient::send_getKeys()
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getKeys", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_getKeys_pargs args;
-  args.data_id = &data_id;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1286,20 +1232,18 @@ void IReducerModuleClient::recv_joinData()
   return;
 }
 
-void IReducerModuleClient::reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IReducerModuleClient::reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  send_reduceByKey(data_id, ge_data_id, funct);
+  send_reduceByKey(funct);
   recv_reduceByKey();
 }
 
-void IReducerModuleClient::send_reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IReducerModuleClient::send_reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("reduceByKey", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_reduceByKey_pargs args;
-  args.data_id = &data_id;
-  args.ge_data_id = &ge_data_id;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -1441,7 +1385,7 @@ void IReducerModuleProcessor::process_getKeys(int32_t seqid, ::apache::thrift::p
 
   IReducerModule_getKeys_result result;
   try {
-    iface_->getKeys(result.success, args.data_id);
+    iface_->getKeys(result.success);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
@@ -1610,7 +1554,7 @@ void IReducerModuleProcessor::process_reduceByKey(int32_t seqid, ::apache::thrif
 
   IReducerModule_reduceByKey_result result;
   try {
-    iface_->reduceByKey(args.data_id, args.ge_data_id, args.funct);
+    iface_->reduceByKey(args.funct);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1706,20 +1650,19 @@ void IReducerModuleProcessor::process_reset(int32_t seqid, ::apache::thrift::pro
   return processor;
 }
 
-void IReducerModuleConcurrentClient::getKeys(std::vector<std::string> & _return, const int64_t data_id)
+void IReducerModuleConcurrentClient::getKeys(std::vector<std::string> & _return)
 {
-  int32_t seqid = send_getKeys(data_id);
+  int32_t seqid = send_getKeys();
   recv_getKeys(_return, seqid);
 }
 
-int32_t IReducerModuleConcurrentClient::send_getKeys(const int64_t data_id)
+int32_t IReducerModuleConcurrentClient::send_getKeys()
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("getKeys", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_getKeys_pargs args;
-  args.data_id = &data_id;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1961,21 +1904,19 @@ void IReducerModuleConcurrentClient::recv_joinData(const int32_t seqid)
   } // end while(true)
 }
 
-void IReducerModuleConcurrentClient::reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+void IReducerModuleConcurrentClient::reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  int32_t seqid = send_reduceByKey(data_id, ge_data_id, funct);
+  int32_t seqid = send_reduceByKey(funct);
   recv_reduceByKey(seqid);
 }
 
-int32_t IReducerModuleConcurrentClient::send_reduceByKey(const int64_t data_id, const int64_t ge_data_id, const  ::ignis::rpc::executor::IFunction& funct)
+int32_t IReducerModuleConcurrentClient::send_reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("reduceByKey", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_reduceByKey_pargs args;
-  args.data_id = &data_id;
-  args.ge_data_id = &ge_data_id;
   args.funct = &funct;
   args.write(oprot_);
 
