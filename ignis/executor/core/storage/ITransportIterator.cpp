@@ -3,23 +3,23 @@
 
 using namespace std;
 using namespace ignis::executor::core::storage;
-using namespace ignis::data::serialization;
+using namespace ignis::data;
 using namespace apache::thrift::transport;
 
 IReadTransportIterator::IReadTransportIterator(const shared_ptr<TTransport> &transport,
-                                               const shared_ptr<ITypeHandleBase<IObject::Any>> &type_handle,
+                                               const shared_ptr<IManager<IObject::Any>> &manager,
                                                size_t elems)
         : transport(transport),
-          type_handle(type_handle),
+          type_handle(manager->getClassManagerType()->getElemClassManager()->getTypeHandle()),
           elems(elems),
           reader(type_handle->reader()),
           protocol(make_shared<data::IObjectProtocol>(transport)) {}
 
 IWriteTransportIterator::IWriteTransportIterator(const shared_ptr<TTransport> &transport,
-                                                 const shared_ptr<ITypeHandleBase<IObject::Any>> &type_handle,
+                                                 const shared_ptr<IManager<IObject::Any>> &manager,
                                                  size_t &elems)
         : transport(transport),
-          type_handle(type_handle),
+          type_handle(manager->getClassManagerType()->getElemClassManager()->getTypeHandle()),
           elems(elems),
           writer(type_handle->writer()),
           protocol(make_shared<data::IObjectProtocol>(transport)) {}
@@ -36,7 +36,6 @@ bool IReadTransportIterator::hashNext() {
 }
 
 IReadTransportIterator::~IReadTransportIterator() {
-
 }
 
 void IWriteTransportIterator::write(IObject::Any &obj) {
@@ -50,7 +49,6 @@ void IWriteTransportIterator::write(IObject::Any &&obj) {
 }
 
 IWriteTransportIterator::~IWriteTransportIterator() {
-
 }
 
 

@@ -3,68 +3,59 @@
 #define IGNIS_DINAMICOBJECT_H
 
 #include <string>
+#include "../../exceptions/IInvalidArgument.h"
 #include <memory>
-#include "../api/ILoadClass.h"
 
 namespace ignis {
     namespace executor {
         namespace core {
 
-            template<typename T>
-            class IDinamicObject;
-
             class ObjectLoader {
+            public:
+                ObjectLoader(const std::string &name);
+
+                ObjectLoader(ObjectLoader &other) = delete;
+
+                ObjectLoader(ObjectLoader &&other) = delete;
+
+                void *getObject();
+
+                virtual ~ObjectLoader();
+
             private:
-                template<typename>
-                friend
-                class IDinamicObject;
 
-                static void
-                open(IDinamicObject<api::ILoadClass<void>> &obj, std::string &name, const std::type_info &info);
+                void *library;
+                void *object;
 
-                static void close(void *dl);
+                void (*destructor)(void *object);
+
             };
 
             template<typename T>
             class IDinamicObject {
             public:
-                friend ObjectLoader;
 
-                IDinamicObject(std::string &name) {
-                    ObjectLoader::open((IDinamicObject<api::ILoadClass<void>> &) *this, name, typeid(T));
+                IDinamicObject(const std::string &name) {
+                    loader = std::make_shared<ObjectLoader>(name);
+                }
+
+                IDinamicObject(const std::string &name, bool bytes) {
+                    if(bytes){
+                        throw exceptions::IInvalidArgument("C++ not support function serialization");
+                    }
+                    loader = std::make_shared<ObjectLoader>(name);
                 }
 
                 T *operator->() const {
-                    return handle->object_ptr;
+                    return loader->getObject();
                 }
 
                 T *get() const {
-                    return handle->object_ptr;
+                    return loader->getObject();
                 }
 
             private:
-
-                class Handle {
-                public:
-                    Handle(T *object_ptr, void (*destructor)(T *), void *dl) : object_ptr(object_ptr),
-                                                                               destructor(destructor), dl(dl) {}
-
-                    virtual ~Handle() {
-                        try {
-                            (*destructor)(object_ptr);
-                        } catch (...) {}
-                        ObjectLoader::close(dl);
-                    }
-
-                    void *dl;
-
-                    T *object_ptr;
-
-                    void (*destructor)(T *);
-
-                };
-
-                std::shared_ptr<Handle> handle;
+                std::shared_ptr<ObjectLoader> loader;
             };
 
         }

@@ -15,36 +15,36 @@ IRawObject::IRawObject(const std::shared_ptr<TTransport> &transport, int8_t comp
 IRawObject::~IRawObject(){}
 
 void IRawObject::readHeader(shared_ptr<TTransport> transport) {
-    auto data_type = ((ITypeHandle<Any> &) type_handle).collectionHandle();
-    auto data_reader = data_type->reader();
+    auto col_reader = manager->getClassManagerType()->getTypeHandle()->reader();
+    auto elem_reader = manager->getClassManagerType()->getElemClassManager()->getTypeHandle()->reader();
     bool native;
     data::IObjectProtocol data_proto(transport);
     data_proto.readBool(native);
-    data_reader->readType(data_proto);
+    col_reader->readType(data_proto);
     elems = readSizeAux(data_proto);
-    type_handle->reader()->readType(data_proto);
+    elem_reader->readType(data_proto);
 }
 
 void IRawObject::writeHeader(shared_ptr<TTransport> transport) {
-    auto data_type = ((ITypeHandle<Any> &) type_handle).collectionHandle();
-    auto data_writer = data_type->writer();
+    auto col_writer = manager->getClassManagerType()->getTypeHandle()->writer();
+    auto elem_writer = manager->getClassManagerType()->getElemClassManager()->getTypeHandle()->writer();
     bool native = false;
     data::IObjectProtocol data_proto(transport);
     data_proto.writeBool(native);
-    data_writer->writeType(data_proto);
+    col_writer->writeType(data_proto);
     writeSizeAux(data_proto, elems);
-    type_handle->writer()->writeType(data_proto);
+    elem_writer->writeType(data_proto);
     transport->flush();
 }
 
 shared_ptr<ignis::executor::api::IReadIterator<IObject::Any>> IRawObject::readIterator() {
-    return make_shared<IReadTransportIterator>(transport, type_handle, elems);
+    return make_shared<IReadTransportIterator>(transport, manager, elems);
 
 }
 
 shared_ptr<ignis::executor::api::IWriteIterator<IObject::Any>> IRawObject::writeIterator() {
     elems = 0;
-    return make_shared<IWriteTransportIterator>(transport, type_handle, elems);
+    return make_shared<IWriteTransportIterator>(transport, manager, elems);
 }
 
 void IRawObject::write(shared_ptr<TTransport> trans, int8_t compression) {

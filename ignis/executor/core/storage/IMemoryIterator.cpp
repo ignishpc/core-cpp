@@ -3,12 +3,15 @@
 
 using namespace std;
 using namespace ignis::executor::core::storage;
-using namespace ignis::data::serialization;
+using namespace ignis::data;
 using namespace apache::thrift::transport;
 
 
+IReadMemoryIterator::IReadMemoryIterator(vector<IObject::Any> *data, const shared_ptr<IManager<IObject::Any>> &manager)
+        : data(data), class_manager(manager->getClassManagerType()) {}
+
 IObject::Any &IReadMemoryIterator::next() {
-    return data_handle->get(*data, pos++);
+    return class_manager->get(*data, pos++);
 }
 
 bool IReadMemoryIterator::hashNext() {
@@ -18,25 +21,21 @@ bool IReadMemoryIterator::hashNext() {
 IReadMemoryIterator::~IReadMemoryIterator() {
 }
 
-IReadMemoryIterator::IReadMemoryIterator(std::vector<IObject::Any> *data,
-                                         const shared_ptr<IColectionHandle<IObject::Any>> &data_handle)
-        : data(data), data_handle(data_handle) {}
+IWriteMemoryIterator::IWriteMemoryIterator(vector<IObject::Any> *data, const shared_ptr<IManager<IObject::Any>> &manager)
+        : data(data), class_manager(manager->getClassManagerType()) {}
 
 
 void IWriteMemoryIterator::write(IObject::Any &obj) {
-    data_handle->push(*data, obj);
+    class_manager->push(*data, obj);
 }
 
 void IWriteMemoryIterator::write(IObject::Any &&obj) {
-    data_handle->push(*data, obj);
+    class_manager->push(*data, obj);
 }
 
 IWriteMemoryIterator::~IWriteMemoryIterator() {
-
 }
 
-IWriteMemoryIterator::IWriteMemoryIterator(std::vector<IObject::Any> *data,
-                                           const shared_ptr<IColectionHandle<IObject::Any>> &data_handle)
-        : data(data), data_handle(data_handle) {}
+
 
 

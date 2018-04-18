@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <thrift/transport/TTransport.h>
-#include "../../../data/serialization/ITypeHandle.h"
+#include "../../../data/IManager.h"
 #include "../../api/IReadIterator.h"
 #include "../../api/IWriteIterator.h"
 
@@ -29,42 +29,36 @@ namespace ignis {
 
                     virtual size_t getSize() = 0;
 
-                    virtual std::shared_ptr<data::serialization::ITypeHandleBase<Any>> getTypeHandle(){
-                        return type_handle;
+                    virtual std::shared_ptr<data::IManager<Any>> getManager() {
+                        return manager;
                     }
 
-                    virtual void setTypeHandle(std::shared_ptr<data::serialization::ITypeHandleBase<Any>> type_handle) {
-                        this->type_handle = type_handle;
-                    }
-
-                    template<typename T>
-                    static inline std::shared_ptr<data::serialization::ITypeHandleBase<Any>>& castTypeHandle(
-                            const std::shared_ptr<data::serialization::ITypeHandleBase<T>> &type_handle){
-                        return (std::shared_ptr<data::serialization::ITypeHandleBase<IObject::Any>>&)type_handle;
+                    virtual void setManager(std::shared_ptr<data::IManager<Any>> manager) {
+                        this->manager = manager;
                     }
 
                     template<typename T>
-                    static inline Any& toAny(T &obj){
-                        return (Any&)obj;
+                    inline static Any &toAny(T &obj) {
+                        return (Any &) obj;
                     }
 
                     template<typename T = Any>
                     class Handle {
                     public:
                         Handle(T *ptr,
-                               const std::shared_ptr<data::serialization::ITypeHandleBase<T>> &type_handle) :
+                               const std::shared_ptr<data::serialization::ITypeHandle<T>> &type_handle) :
                                 ptr(ptr), type_handle(type_handle) {}
 
                         virtual ~Handle() { (*type_handle->deleter())(ptr); }
 
-                    protected:
+                    private:
                         T *ptr;
-                        std::shared_ptr<data::serialization::ITypeHandleBase<T>> type_handle;
+                        std::shared_ptr<data::serialization::ITypeHandle<T>> type_handle;
                     };
 
                 protected:
 
-                    std::shared_ptr<data::serialization::ITypeHandleBase<Any>> type_handle;
+                    std::shared_ptr<data::IManager<Any>> manager;
 
                 };
             }

@@ -19,18 +19,19 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
         string storage = executor_data->getContext()["ignis.executor.storage"];
         int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
         shared_ptr<IObject> object;
-        auto type_handle = make_shared<data::serialization::ITypeHandleBase<string>>();
+        auto manager = make_shared<data::IManager<string>>();
+        auto& manager_any=(shared_ptr<data::IManager<IObject::Any>>&)manager;
         if (storage == "disk") {
             storage = "raw memory";//TODO create IDiskObject
             object = make_shared<IRawMemoryObject>(compression, len);
-            object->setTypeHandle(IObject::castTypeHandle(type_handle));
+            object->setManager(manager_any);
         } else if (storage == "raw memory") {
             storage = "raw memory";
             object = make_shared<IRawMemoryObject>(compression, len);
-            object->setTypeHandle(IObject::castTypeHandle(type_handle));
+            object->setManager(manager_any);
         } else {
             storage = "memory";
-            object = make_shared<IMemoryObject>(IObject::castTypeHandle(type_handle), lines);
+            object = make_shared<IMemoryObject>(manager_any, lines);
         }
         IGNIS_LOG(info) << "IFileModule reading"
                         << " path: " << path
@@ -68,12 +69,12 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
 void IFilesModule::saveFile(const std::string &path, const bool joined) {
     try {
         auto &object = executor_data->getLoadObject();
-        if (!object.getTypeHandle()) {
+        if (!object.getManager()) {
             throw exceptions::IInvalidArgument("IFileModule c++ required use this data before save it " + path);
         }
 
         auto reader = object.readIterator();
-        auto printer = object.getTypeHandle()->printer();
+        auto printer = object.getManager()->getClassManagerType()->getElemClassManager()->getTypeHandle()->printer();
 
         ofstream fs;
         if (joined) {
@@ -108,12 +109,12 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
 void IFilesModule::saveJson(const std::string &path, const bool joined) {
     try {
         auto &object = executor_data->getLoadObject();
-        if (!object.getTypeHandle()) {
+        if (!object.getManager()) {
             throw exceptions::IInvalidArgument("IFileModule c++ required use this data before save it " + path);
         }
 
         auto reader = object.readIterator();
-        auto printer = object.getTypeHandle()->printer();
+        auto printer = object.getManager()->getClassManagerType()->getElemClassManager()->getTypeHandle()->printer();
 
         ofstream fs;
         if (joined) {

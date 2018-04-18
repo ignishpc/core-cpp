@@ -5,7 +5,7 @@
 #include <memory>
 #include <unordered_map>
 #include <thrift/protocol/TProtocol.h>
-#include "../ITypeInfo.h"
+#include "ITypeInfo.h"
 #include "ITuple.h"
 #include "../serialization2/IEnumTypes.h"
 #include "IHandle.h"

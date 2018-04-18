@@ -7,7 +7,7 @@
 using namespace std;
 using namespace ignis::executor::core;
 
-void ObjectLoader::open(IDinamicObject<api::ILoadClass<void>> &obj, std::string &name, const std::type_info &info) {
+ObjectLoader::ObjectLoader(const std::string &name) {
     int sep = name.find(':');
 
     if (sep < -1) {
@@ -16,34 +16,30 @@ void ObjectLoader::open(IDinamicObject<api::ILoadClass<void>> &obj, std::string 
     string path = name.substr(0, sep);
     string class_name = name.substr(sep + 1, name.size());
 
-    void *library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
 
     if (!library) {
         throw exceptions::IInvalidArgument(path + " was not found or could not be loaded");
     }
 
-    auto constructor = (api::ILoadClass<void> *(*)()) dlsym(library, (class_name + "_constructor").c_str());
-    auto destructor = (void (*)(api::ILoadClass<void> *)) dlsym(library, (class_name + "_destructor").c_str());
+    auto constructor = (void *(*)()) dlsym(library, (class_name + "_constructor").c_str());
+    destructor = (void (*)(void *)) dlsym(library, (class_name + "_destructor").c_str());
 
     if (!constructor || !destructor) {
         throw exceptions::IInvalidArgument(
-                class_name + " must be register, use: ignis_register_class(class_name) after closing your class");
+                class_name + " must be register, use: ignis_register_class(name, class) in you library");
     }
 
-    auto object = (*constructor)();
-    if (object->info != info) {
-        string id_name = data::RTTInfo(object->info).getStandardName();
-        try {
-            (*destructor)(object);
-        } catch (...) {}
-        dlclose(library);
-        throw exceptions::IInvalidArgument(class_name + " invalid, expected (" + data::RTTInfo(info).getStandardName() +
-                               ") found (" + id_name + ")");
-    }
-
-    obj.handle = make_shared<IDinamicObject<api::ILoadClass<void>>::Handle>(object, destructor, library);
+    object = (*constructor)();
 }
 
-void ObjectLoader::close(void *dl) {
-    dlclose(dl);
+ObjectLoader::~ObjectLoader() {
+    try {
+        (*destructor)(object);
+    } catch (...) {}
+    dlclose(library);
+}
+
+void *ObjectLoader::getObject() {
+    return object;
 }

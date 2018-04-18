@@ -7,9 +7,9 @@ FILE(GLOB rpc rpc/driver/*.hpp rpc/driver/*.cpp rpc/*.hpp rpc/*.cpp)
 
 set(SOURCE_FILES
         #Data
-        data/ITypeInfo.h
         data/RTTInfo.h
         data/RTTInfo.cpp
+        data/IManager.h
         data/IObjectProtocol.h
         data/IFileTransport.h
         data/IFileTransport.cpp
@@ -20,6 +20,7 @@ set(SOURCE_FILES
         data/serialization/IReader.h
         data/serialization/ITypeHandle.h
         data/serialization/IHash.h
+        data/serialization/IClassManager.h
 
         #Executor api
         executor/api/IReadIterator.h
@@ -28,7 +29,7 @@ set(SOURCE_FILES
         executor/api/IReducer.h
         executor/api/IContext.h
         executor/api/IContext.cpp
-        executor/api/ILoadClass.h
+        executor/api/IRegister.h
 
         #Driver
         driver/api/IgnisException.h

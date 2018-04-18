@@ -1,9 +1,9 @@
 
-#ifndef IGNIS_IMAP_H
-#define IGNIS_IMAP_H
+#ifndef IGNIS_IMAPPER_H
+#define IGNIS_IMAPPER_H
 
-#include "ILoadClass.h"
-#include "../../data/serialization/ITypeHandle.h"
+#include "IRegister.h"
+#include "../../data/IManager.h"
 #include "IContext.h"
 #include "IReadIterator.h"
 #include "IWriteIterator.h"
@@ -13,10 +13,10 @@ namespace ignis {
         namespace api {
 
             template<typename T, typename R>
-            class IMapper : public ILoadClass<IMapper<T, R>> {
+            class IMapper{
             public:
-                const auto type_t = data::serialization::ITypeHandle<T>();
-                const auto type_r = data::serialization::ITypeHandle<R>();
+                const data::IManager<T> type_t;
+                const data::IManager<R> type_r;
 
                 virtual void before(IContext &context) {}
 
@@ -27,6 +27,5 @@ namespace ignis {
         }
     }
 }
-
 
 #endif

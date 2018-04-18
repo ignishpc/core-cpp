@@ -1,10 +1,10 @@
 
-#ifndef IGNIS_IMAP_H
-#define IGNIS_IMAP_H
+#ifndef IGNIS_IREDUCER_H
+#define IGNIS_IREDUCER_H
 
 #include <utility>
-#include "ILoadClass.h"
-#include "../../data/serialization/ITypeHandle.h"
+#include "IRegister.h"
+#include "../../data/IManager.h"
 #include "IContext.h"
 #include "IReadIterator.h"
 #include "IWriteIterator.h"
@@ -14,10 +14,10 @@ namespace ignis {
         namespace api {
 
             template<typename K, typename V, typename R>
-            class IReducer : public ILoadClass<IReducer<K, V, R>> {
+            class IReducer {
             public:
-                const auto type_t = data::serialization::ITypeHandle<K>();
-                const auto type_r = data::serialization::ITypeHandle<V>();
+                const data::IManager<std::pair<K,V>> type_t;
+                const data::IManager<R> type_r;
 
                 virtual void before(IContext &context) {}
 
