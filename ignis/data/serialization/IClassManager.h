@@ -48,6 +48,10 @@ namespace ignis {
                     v.size();
                 }
 
+                virtual void clear(std::vector<T> &v) {
+                    v.clear();
+                }
+
                 virtual void resize(std::vector<T> &v, size_t size) {
                     v.resize(size);
                 }
@@ -90,6 +94,10 @@ namespace ignis {
             template<typename T>
             class IClassManager {
             public:
+
+                virtual std::shared_ptr<IClassManager<T>> shared() const{
+                    return std::make_shared<IClassManager<T>>();
+                }
 
                 virtual std::shared_ptr<IClassManagerType<T>> getClassManagerType(){
                     return std::make_shared<IClassManagerType<T>>();

@@ -5,8 +5,7 @@
 #include <memory>
 #include <thrift/transport/TTransport.h>
 #include "../../../data/IManager.h"
-#include "../../api/IReadIterator.h"
-#include "../../api/IWriteIterator.h"
+#include "ICoreIterator.h"
 
 namespace ignis {
     namespace executor {
@@ -18,9 +17,9 @@ namespace ignis {
 
                     virtual ~IObject() {};
 
-                    virtual std::shared_ptr<api::IReadIterator<Any>> readIterator() = 0;
+                    virtual std::shared_ptr<ICoreReadIterator<Any>> readIterator() = 0;
 
-                    virtual std::shared_ptr<api::IWriteIterator<Any>> writeIterator() = 0;
+                    virtual std::shared_ptr<ICoreWriteIterator<Any>> writeIterator() = 0;
 
                     virtual void read(std::shared_ptr<apache::thrift::transport::TTransport> trans) = 0;
 
@@ -28,6 +27,12 @@ namespace ignis {
                     write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) = 0;
 
                     virtual size_t getSize() = 0;
+
+                    virtual bool hasSize() { return true; }
+
+                    virtual void clear() {}
+
+                    virtual void fit() {}
 
                     virtual std::shared_ptr<data::IManager<Any>> getManager() {
                         return manager;

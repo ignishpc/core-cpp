@@ -10,7 +10,7 @@ namespace ignis {
     namespace executor {
         namespace core {
             namespace storage {
-                class IReadTransportIterator : public api::IReadIterator<IObject::Any> {
+                class IReadTransportIterator : public ICoreReadIterator<IObject::Any> {
                 public:
 
                     IReadTransportIterator(const std::shared_ptr<apache::thrift::transport::TTransport> &transport,
@@ -20,6 +20,8 @@ namespace ignis {
                     IObject::Any &next() override;
 
                     bool hashNext() override;
+
+                    bool isMoved() override;
 
                     virtual ~IReadTransportIterator();
 
@@ -32,7 +34,7 @@ namespace ignis {
                     size_t elems;
                 };
 
-                class IWriteTransportIterator : public api::IWriteIterator<IObject::Any> {
+                class IWriteTransportIterator : public ICoreWriteIterator<IObject::Any> {
                 public:
 
                     IWriteTransportIterator(const std::shared_ptr<apache::thrift::transport::TTransport> &transport,

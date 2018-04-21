@@ -9,7 +9,7 @@ namespace ignis {
     namespace executor {
         namespace core {
             namespace storage {
-                class IReadMemoryIterator : public api::IReadIterator<IObject::Any> {
+                class IReadMemoryIterator : public ICoreReadIterator<IObject::Any> {
                 public:
 
                     IReadMemoryIterator(std::vector<IObject::Any> *data,
@@ -18,6 +18,8 @@ namespace ignis {
                     IObject::Any &next() override;
 
                     bool hashNext() override;
+
+                    bool isMoved() override;
 
                     ~IReadMemoryIterator() override;
 
@@ -28,7 +30,7 @@ namespace ignis {
                     size_t pos;
                 };
 
-                class IWriteMemoryIterator : public api::IWriteIterator<IObject::Any> {
+                class IWriteMemoryIterator : public ICoreWriteIterator<IObject::Any> {
                 public:
 
                     IWriteMemoryIterator(std::vector<IObject::Any> *data,

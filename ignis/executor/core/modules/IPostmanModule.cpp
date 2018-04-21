@@ -35,7 +35,7 @@ void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
         try {
             auto buffer = make_shared<TBufferedTransport>(transport);
             shared_ptr<IObject> object;
-            string storage = executor_data->getContext()["ignis.executor.storage"];
+            string storage = executor_data->getParser().getString("ignis.executor.storage");
             int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
             if (storage == "disk") {
                 storage = "raw memory";//TODO create IDiskObject
@@ -93,7 +93,7 @@ void IPostmanModule::start() {
     try {
         IGNIS_LOG(info) << "IPostmanModule starting";
         started = true;
-        auto port = executor_data->getParser().getNumber("ignis.executor.rpc.port");
+        auto port = executor_data->getParser().getNumber("ignis.executor.transport.port");
         server = std::make_shared<TServerSocket>(port);
         std::thread(&IPostmanModule::threadServer, this).detach();
     } catch (exceptions::IException &ex) {

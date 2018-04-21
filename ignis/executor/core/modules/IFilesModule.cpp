@@ -16,7 +16,7 @@ IFilesModule::IFilesModule(std::shared_ptr<IExecutorData> &executor_data) : Igni
 
 void IFilesModule::readFile(const std::string &path, const int64_t offset, const int64_t len, const int64_t lines) {
     try {
-        string storage = executor_data->getContext()["ignis.executor.storage"];
+        string storage = executor_data->getParser().getString("ignis.executor.storage");
         int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
         shared_ptr<IObject> object;
         auto manager = make_shared<data::IManager<string>>();
@@ -52,6 +52,7 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
             getline(fs, line, '\n');
             writer->write(move(IObject::toAny(line)));
         }
+        object->fit();
         executor_data->loadObject(object);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;

@@ -44,13 +44,18 @@ set(SOURCE_FILES
         ignis/executor/core/storage/IMemoryObject.cpp
         ignis/executor/core/storage/IRawMemoryObject.h
         ignis/executor/core/storage/IRawMemoryObject.cpp
+        ignis/executor/core/storage/ICoreIterator.h
         ignis/executor/core/storage/ITransportIterator.h
         ignis/executor/core/storage/ITransportIterator.cpp
         ignis/executor/core/storage/IMemoryIterator.h
         ignis/executor/core/storage/IMemoryIterator.cpp
+        ignis/executor/core/storage/IThreadSplitter.h
+        ignis/executor/core/storage/IThreadSplitter.cpp
+        ignis/executor/core/storage/ILogIterator.h
+        ignis/executor/core/storage/ILogIterator.cpp
         ${rpc})
 
-set(CMAKE_CXX_FLAGS "-pthread -DBOOST_ALL_DYN_LINK")#-O3 -fopenmp
+set(CMAKE_CXX_FLAGS "-pthread -fopenmp -DBOOST_ALL_DYN_LINK")#-O3
 add_executable(igniscpp ${SOURCE_FILES})
 
 TARGET_LINK_LIBRARIES(igniscpp igniscore boost_log boost_thread)

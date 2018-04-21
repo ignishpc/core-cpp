@@ -15,11 +15,11 @@ IMemoryObject::IMemoryObject(const std::shared_ptr<data::IManager<Any>> &manager
           handle(make_shared<IObject::Handle<vector<IObject::Any>>>(data,
                                                                     manager->getClassManagerType()->getTypeHandle())) {}
 
-shared_ptr<ignis::executor::api::IReadIterator<IObject::Any>> IMemoryObject::readIterator() {
+shared_ptr<ICoreReadIterator<IObject::Any>> IMemoryObject::readIterator() {
     return make_shared<IReadMemoryIterator>(data, manager);
 }
 
-shared_ptr<ignis::executor::api::IWriteIterator<IObject::Any>> IMemoryObject::writeIterator() {
+shared_ptr<ICoreWriteIterator<IObject::Any>> IMemoryObject::writeIterator() {
     return make_shared<IWriteMemoryIterator>(data, manager);
 }
 
@@ -45,6 +45,10 @@ IMemoryObject::~IMemoryObject() {
 
 size_t IMemoryObject::getSize() {
     return manager->getClassManagerType()->size(*data);
+}
+
+void IMemoryObject::clear() {
+    manager->getClassManagerType()->clear(*data);
 }
 
 

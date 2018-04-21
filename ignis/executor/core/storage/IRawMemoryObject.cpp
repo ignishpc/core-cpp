@@ -14,19 +14,23 @@ IRawMemoryObject::IRawMemoryObject(int8_t compression, uint32_t sz)
           IRawObject(make_shared<TZlibTransport>(raw_memory, 128, 1024, 128, 1024, compression),compression){
 }
 
-shared_ptr<ignis::executor::api::IReadIterator<IObject::Any>> IRawMemoryObject::readIterator() {
+shared_ptr<ICoreReadIterator<IObject::Any>> IRawMemoryObject::readIterator() {
     raw_memory.reset();
-    return IRawObject::readIterator();
+    uint8_t *ptr;
+    uint32_t size;
+    auto read_transport = make_shared<TZlibTransport>(make_shared<TMemoryBuffer>(ptr,size));
 
 }
 
-shared_ptr<ignis::executor::api::IWriteIterator<IObject::Any>> IRawMemoryObject::writeIterator() {
+shared_ptr<ICoreWriteIterator<IObject::Any>> IRawMemoryObject::writeIterator() {
     raw_memory.reset();
+    elems = 0;
     return IRawObject::writeIterator();
 }
 
 void IRawMemoryObject::write(shared_ptr<TTransport> trans, int8_t compression) {
     raw_memory.reset();
+    elems = 0;
     IRawObject::write(trans, compression);
 }
 
@@ -46,6 +50,15 @@ bool IRawMemoryObject::fastWrite(std::shared_ptr<apache::thrift::transport::TTra
 
 IRawMemoryObject::~IRawMemoryObject() {
 
+}
+
+void IRawMemoryObject::fit() {
+    raw_memory->setMaxBufferSize(raw_memory->getBufferSize());
+}
+
+void IRawMemoryObject::clear() {
+    elems = 0;
+    raw_memory.reset();
 }
 
 

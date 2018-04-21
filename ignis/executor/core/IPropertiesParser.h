@@ -12,6 +12,8 @@ namespace ignis {
             public:
                 IPropertiesParser(std::unordered_map<std::string, std::string> &properties);
 
+                std::string& getString(std::string key);
+
                 size_t getNumber(std::string key);
 
                 size_t getSize(std::string key);

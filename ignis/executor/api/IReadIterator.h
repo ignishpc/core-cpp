@@ -13,7 +13,7 @@ namespace ignis {
 
                 virtual bool hashNext() = 0;
 
-                virtual ~IReadIterator(){};
+                virtual ~IReadIterator() {};
             };
         }
     }

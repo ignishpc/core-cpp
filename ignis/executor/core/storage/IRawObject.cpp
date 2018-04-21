@@ -37,12 +37,12 @@ void IRawObject::writeHeader(shared_ptr<TTransport> transport) {
     transport->flush();
 }
 
-shared_ptr<ignis::executor::api::IReadIterator<IObject::Any>> IRawObject::readIterator() {
+shared_ptr<ICoreReadIterator<IObject::Any>> IRawObject::readIterator() {
     return make_shared<IReadTransportIterator>(transport, manager, elems);
 
 }
 
-shared_ptr<ignis::executor::api::IWriteIterator<IObject::Any>> IRawObject::writeIterator() {
+shared_ptr<ICoreWriteIterator<IObject::Any>> IRawObject::writeIterator() {
     elems = 0;
     return make_shared<IWriteTransportIterator>(transport, manager, elems);
 }

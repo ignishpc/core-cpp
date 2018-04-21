@@ -35,10 +35,13 @@ namespace ignis {
 
                 int64_t& getExecutorId();
 
+                int64_t getThreads();
+
                 virtual ~IExecutorData();
 
             private:
                 int64_t executor_id;
+                int64_t threads;
                 std::shared_ptr<storage::IObject> loaded_object;
                 std::unordered_map<size_t, std::shared_ptr<storage::IObject>> stored_objects;
                 storage::IPostBox post_box;

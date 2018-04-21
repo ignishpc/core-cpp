@@ -16,9 +16,9 @@ namespace ignis {
 
                     virtual ~IRawObject();
 
-                    virtual std::shared_ptr<api::IReadIterator<Any>> readIterator() override;
+                    virtual std::shared_ptr<ICoreReadIterator<Any>> readIterator() override;
 
-                    virtual std::shared_ptr<api::IWriteIterator<Any>> writeIterator() override;
+                    virtual std::shared_ptr<ICoreWriteIterator<Any>> writeIterator() override;
 
                     virtual void read(std::shared_ptr<apache::thrift::transport::TTransport> trans) override;
 

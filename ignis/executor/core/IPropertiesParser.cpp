@@ -10,8 +10,16 @@ using namespace ignis::executor::core;
 
 IPropertiesParser::IPropertiesParser(unordered_map<string, string> &properties) : properties(properties) {}
 
+std::string& IPropertiesParser::getString(std::string key){
+    auto value = properties.find(key);
+    if(value != properties.end()){
+        return value->second;
+    }
+    throw exceptions::IInvalidArgument(key + " is empty");
+}
+
 size_t IPropertiesParser::getNumber(std::string key) {
-    string &value = properties[key];
+    string &value = getString(key);
     try {
         return stoi(value);
     } catch (exception &ex) {
@@ -26,7 +34,7 @@ void parserError(std::string key, std::string value, size_t pos) {
 }
 
 size_t IPropertiesParser::getSize(std::string key) {
-    string &value = properties[key];
+    string &value = getString(key);
     string UNITS = "KMGTPEZY";
     double num;
     size_t base;

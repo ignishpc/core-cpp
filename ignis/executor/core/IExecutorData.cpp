@@ -46,3 +46,7 @@ int64_t& IExecutorData::getExecutorId()  {
 IExecutorData::~IExecutorData() {
 
 }
+
+int64_t IExecutorData::getThreads(){
+    return threads;
+}

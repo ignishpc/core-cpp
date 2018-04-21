@@ -9,11 +9,11 @@
 namespace ignis { namespace rpc { namespace executor {
 
 
-IMapperModule_onemap_args::~IMapperModule_onemap_args() throw() {
+IMapperModule_orderedMap_args::~IMapperModule_orderedMap_args() throw() {
 }
 
 
-uint32_t IMapperModule_onemap_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IMapperModule_orderedMap_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -54,10 +54,10 @@ uint32_t IMapperModule_onemap_args::read(::apache::thrift::protocol::TProtocol* 
   return xfer;
 }
 
-uint32_t IMapperModule_onemap_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IMapperModule_orderedMap_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IMapperModule_onemap_args");
+  xfer += oprot->writeStructBegin("IMapperModule_orderedMap_args");
 
   xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->funct.write(oprot);
@@ -69,14 +69,14 @@ uint32_t IMapperModule_onemap_args::write(::apache::thrift::protocol::TProtocol*
 }
 
 
-IMapperModule_onemap_pargs::~IMapperModule_onemap_pargs() throw() {
+IMapperModule_orderedMap_pargs::~IMapperModule_orderedMap_pargs() throw() {
 }
 
 
-uint32_t IMapperModule_onemap_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IMapperModule_orderedMap_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IMapperModule_onemap_pargs");
+  xfer += oprot->writeStructBegin("IMapperModule_orderedMap_pargs");
 
   xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->funct)).write(oprot);
@@ -88,11 +88,11 @@ uint32_t IMapperModule_onemap_pargs::write(::apache::thrift::protocol::TProtocol
 }
 
 
-IMapperModule_onemap_result::~IMapperModule_onemap_result() throw() {
+IMapperModule_orderedMap_result::~IMapperModule_orderedMap_result() throw() {
 }
 
 
-uint32_t IMapperModule_onemap_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IMapperModule_orderedMap_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -133,11 +133,11 @@ uint32_t IMapperModule_onemap_result::read(::apache::thrift::protocol::TProtocol
   return xfer;
 }
 
-uint32_t IMapperModule_onemap_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IMapperModule_orderedMap_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IMapperModule_onemap_result");
+  xfer += oprot->writeStructBegin("IMapperModule_orderedMap_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -150,11 +150,11 @@ uint32_t IMapperModule_onemap_result::write(::apache::thrift::protocol::TProtoco
 }
 
 
-IMapperModule_onemap_presult::~IMapperModule_onemap_presult() throw() {
+IMapperModule_orderedMap_presult::~IMapperModule_orderedMap_presult() throw() {
 }
 
 
-uint32_t IMapperModule_onemap_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IMapperModule_orderedMap_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -196,11 +196,11 @@ uint32_t IMapperModule_onemap_presult::read(::apache::thrift::protocol::TProtoco
 }
 
 
-IMapperModule_flatmap_args::~IMapperModule_flatmap_args() throw() {
+IMapperModule_unorderedMap_args::~IMapperModule_unorderedMap_args() throw() {
 }
 
 
-uint32_t IMapperModule_flatmap_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IMapperModule_unorderedMap_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -241,10 +241,10 @@ uint32_t IMapperModule_flatmap_args::read(::apache::thrift::protocol::TProtocol*
   return xfer;
 }
 
-uint32_t IMapperModule_flatmap_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IMapperModule_unorderedMap_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IMapperModule_flatmap_args");
+  xfer += oprot->writeStructBegin("IMapperModule_unorderedMap_args");
 
   xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->funct.write(oprot);
@@ -256,14 +256,14 @@ uint32_t IMapperModule_flatmap_args::write(::apache::thrift::protocol::TProtocol
 }
 
 
-IMapperModule_flatmap_pargs::~IMapperModule_flatmap_pargs() throw() {
+IMapperModule_unorderedMap_pargs::~IMapperModule_unorderedMap_pargs() throw() {
 }
 
 
-uint32_t IMapperModule_flatmap_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IMapperModule_unorderedMap_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IMapperModule_flatmap_pargs");
+  xfer += oprot->writeStructBegin("IMapperModule_unorderedMap_pargs");
 
   xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->funct)).write(oprot);
@@ -275,11 +275,11 @@ uint32_t IMapperModule_flatmap_pargs::write(::apache::thrift::protocol::TProtoco
 }
 
 
-IMapperModule_flatmap_result::~IMapperModule_flatmap_result() throw() {
+IMapperModule_unorderedMap_result::~IMapperModule_unorderedMap_result() throw() {
 }
 
 
-uint32_t IMapperModule_flatmap_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IMapperModule_unorderedMap_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -320,11 +320,11 @@ uint32_t IMapperModule_flatmap_result::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-uint32_t IMapperModule_flatmap_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IMapperModule_unorderedMap_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IMapperModule_flatmap_result");
+  xfer += oprot->writeStructBegin("IMapperModule_unorderedMap_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -337,11 +337,11 @@ uint32_t IMapperModule_flatmap_result::write(::apache::thrift::protocol::TProtoc
 }
 
 
-IMapperModule_flatmap_presult::~IMapperModule_flatmap_presult() throw() {
+IMapperModule_unorderedMap_presult::~IMapperModule_unorderedMap_presult() throw() {
 }
 
 
-uint32_t IMapperModule_flatmap_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IMapperModule_unorderedMap_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -382,18 +382,18 @@ uint32_t IMapperModule_flatmap_presult::read(::apache::thrift::protocol::TProtoc
   return xfer;
 }
 
-void IMapperModuleClient::onemap(const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::orderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  send_onemap(funct);
-  recv_onemap();
+  send_orderedMap(funct);
+  recv_orderedMap();
 }
 
-void IMapperModuleClient::send_onemap(const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::send_orderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("onemap", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("orderedMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IMapperModule_onemap_pargs args;
+  IMapperModule_orderedMap_pargs args;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -402,7 +402,7 @@ void IMapperModuleClient::send_onemap(const  ::ignis::rpc::executor::IFunction& 
   oprot_->getTransport()->flush();
 }
 
-void IMapperModuleClient::recv_onemap()
+void IMapperModuleClient::recv_orderedMap()
 {
 
   int32_t rseqid = 0;
@@ -422,12 +422,12 @@ void IMapperModuleClient::recv_onemap()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("onemap") != 0) {
+  if (fname.compare("orderedMap") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IMapperModule_onemap_presult result;
+  IMapperModule_orderedMap_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -438,18 +438,18 @@ void IMapperModuleClient::recv_onemap()
   return;
 }
 
-void IMapperModuleClient::flatmap(const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::unorderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  send_flatmap(funct);
-  recv_flatmap();
+  send_unorderedMap(funct);
+  recv_unorderedMap();
 }
 
-void IMapperModuleClient::send_flatmap(const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleClient::send_unorderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("unorderedMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IMapperModule_flatmap_pargs args;
+  IMapperModule_unorderedMap_pargs args;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -458,7 +458,7 @@ void IMapperModuleClient::send_flatmap(const  ::ignis::rpc::executor::IFunction&
   oprot_->getTransport()->flush();
 }
 
-void IMapperModuleClient::recv_flatmap()
+void IMapperModuleClient::recv_unorderedMap()
 {
 
   int32_t rseqid = 0;
@@ -478,12 +478,12 @@ void IMapperModuleClient::recv_flatmap()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("flatmap") != 0) {
+  if (fname.compare("unorderedMap") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IMapperModule_flatmap_presult result;
+  IMapperModule_unorderedMap_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -513,40 +513,40 @@ bool IMapperModuleProcessor::dispatchCall(::apache::thrift::protocol::TProtocol*
   return true;
 }
 
-void IMapperModuleProcessor::process_onemap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IMapperModuleProcessor::process_orderedMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.onemap", callContext);
+    ctx = this->eventHandler_->getContext("IMapperModule.orderedMap", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.onemap");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.orderedMap");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.onemap");
+    this->eventHandler_->preRead(ctx, "IMapperModule.orderedMap");
   }
 
-  IMapperModule_onemap_args args;
+  IMapperModule_orderedMap_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.onemap", bytes);
+    this->eventHandler_->postRead(ctx, "IMapperModule.orderedMap", bytes);
   }
 
-  IMapperModule_onemap_result result;
+  IMapperModule_orderedMap_result result;
   try {
-    iface_->onemap(args.funct);
+    iface_->orderedMap(args.funct);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.onemap");
+      this->eventHandler_->handlerError(ctx, "IMapperModule.orderedMap");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("onemap", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("orderedMap", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -555,54 +555,54 @@ void IMapperModuleProcessor::process_onemap(int32_t seqid, ::apache::thrift::pro
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.onemap");
+    this->eventHandler_->preWrite(ctx, "IMapperModule.orderedMap");
   }
 
-  oprot->writeMessageBegin("onemap", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("orderedMap", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.onemap", bytes);
+    this->eventHandler_->postWrite(ctx, "IMapperModule.orderedMap", bytes);
   }
 }
 
-void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IMapperModuleProcessor::process_unorderedMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.flatmap", callContext);
+    ctx = this->eventHandler_->getContext("IMapperModule.unorderedMap", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.flatmap");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.unorderedMap");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.flatmap");
+    this->eventHandler_->preRead(ctx, "IMapperModule.unorderedMap");
   }
 
-  IMapperModule_flatmap_args args;
+  IMapperModule_unorderedMap_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.flatmap", bytes);
+    this->eventHandler_->postRead(ctx, "IMapperModule.unorderedMap", bytes);
   }
 
-  IMapperModule_flatmap_result result;
+  IMapperModule_unorderedMap_result result;
   try {
-    iface_->flatmap(args.funct);
+    iface_->unorderedMap(args.funct);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.flatmap");
+      this->eventHandler_->handlerError(ctx, "IMapperModule.unorderedMap");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("unorderedMap", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -611,17 +611,17 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.flatmap");
+    this->eventHandler_->preWrite(ctx, "IMapperModule.unorderedMap");
   }
 
-  oprot->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("unorderedMap", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.flatmap", bytes);
+    this->eventHandler_->postWrite(ctx, "IMapperModule.unorderedMap", bytes);
   }
 }
 
@@ -632,19 +632,19 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
   return processor;
 }
 
-void IMapperModuleConcurrentClient::onemap(const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleConcurrentClient::orderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  int32_t seqid = send_onemap(funct);
-  recv_onemap(seqid);
+  int32_t seqid = send_orderedMap(funct);
+  recv_orderedMap(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_onemap(const  ::ignis::rpc::executor::IFunction& funct)
+int32_t IMapperModuleConcurrentClient::send_orderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("onemap", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("orderedMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IMapperModule_onemap_pargs args;
+  IMapperModule_orderedMap_pargs args;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -656,7 +656,7 @@ int32_t IMapperModuleConcurrentClient::send_onemap(const  ::ignis::rpc::executor
   return cseqid;
 }
 
-void IMapperModuleConcurrentClient::recv_onemap(const int32_t seqid)
+void IMapperModuleConcurrentClient::recv_orderedMap(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -685,7 +685,7 @@ void IMapperModuleConcurrentClient::recv_onemap(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("onemap") != 0) {
+      if (fname.compare("orderedMap") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -694,7 +694,7 @@ void IMapperModuleConcurrentClient::recv_onemap(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IMapperModule_onemap_presult result;
+      IMapperModule_orderedMap_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -714,19 +714,19 @@ void IMapperModuleConcurrentClient::recv_onemap(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::flatmap(const  ::ignis::rpc::executor::IFunction& funct)
+void IMapperModuleConcurrentClient::unorderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
-  int32_t seqid = send_flatmap(funct);
-  recv_flatmap(seqid);
+  int32_t seqid = send_unorderedMap(funct);
+  recv_unorderedMap(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_flatmap(const  ::ignis::rpc::executor::IFunction& funct)
+int32_t IMapperModuleConcurrentClient::send_unorderedMap(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("unorderedMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IMapperModule_flatmap_pargs args;
+  IMapperModule_unorderedMap_pargs args;
   args.funct = &funct;
   args.write(oprot_);
 
@@ -738,7 +738,7 @@ int32_t IMapperModuleConcurrentClient::send_flatmap(const  ::ignis::rpc::executo
   return cseqid;
 }
 
-void IMapperModuleConcurrentClient::recv_flatmap(const int32_t seqid)
+void IMapperModuleConcurrentClient::recv_unorderedMap(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -767,7 +767,7 @@ void IMapperModuleConcurrentClient::recv_flatmap(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("flatmap") != 0) {
+      if (fname.compare("unorderedMap") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -776,7 +776,7 @@ void IMapperModuleConcurrentClient::recv_flatmap(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IMapperModule_flatmap_presult result;
+      IMapperModule_unorderedMap_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

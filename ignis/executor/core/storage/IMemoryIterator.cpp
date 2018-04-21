@@ -21,6 +21,10 @@ bool IReadMemoryIterator::hashNext() {
 IReadMemoryIterator::~IReadMemoryIterator() {
 }
 
+bool IReadMemoryIterator::isMoved() {
+    return false;
+}
+
 IWriteMemoryIterator::IWriteMemoryIterator(vector<IObject::Any> *data, const shared_ptr<IManager<IObject::Any>> &manager)
         : data(data), class_manager(manager->getClassManagerType()) {}
 

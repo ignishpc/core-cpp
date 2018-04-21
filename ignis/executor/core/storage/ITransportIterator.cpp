@@ -38,6 +38,10 @@ bool IReadTransportIterator::hashNext() {
 IReadTransportIterator::~IReadTransportIterator() {
 }
 
+bool IReadTransportIterator::isMoved() {
+    return true;
+}
+
 void IWriteTransportIterator::write(IObject::Any &obj) {
     elems++;
     (*writer)(obj, *protocol);
