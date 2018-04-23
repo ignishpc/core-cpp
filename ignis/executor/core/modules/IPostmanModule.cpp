@@ -5,7 +5,6 @@
 #include <thrift/transport/TSocket.h>
 #include "../../../data/IObjectProtocol.h"
 #include "../../../data/IFileTransport.h"
-#include "../storage/IRawMemoryObject.h"
 #include "../storage/IMessage.h"
 #include "../ILog.h"
 
@@ -34,25 +33,14 @@ void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
         protocol->readI64(id);
         try {
             auto buffer = make_shared<TBufferedTransport>(transport);
-            shared_ptr<IObject> object;
-            string storage = executor_data->getParser().getString("ignis.executor.storage");
-            int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
-            if (storage == "disk") {
-                storage = "raw memory";//TODO create IDiskObject
-                object = make_shared<IRawMemoryObject>(compression);
-            } else {
-                storage = "raw memory";
-                object = make_shared<IRawMemoryObject>(compression);
-            }
+            shared_ptr<IObject> object = getIObject(100*1024*1024);
             IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
-                            << " mode: " << (use_shared_memory ? "shared memory" : "socket")
-                            << " storage: " << storage
-                            << " compression: " << compression;
-
+                            << " mode: " << (use_shared_memory ? "shared memory" : "socket");
             IMessage msg(object);
             executor_data->getPostBox().newMessage(id, msg);
             object->read(buffer);
             IGNIS_LOG(info) << "IPostmanModule id " << id << " received OK";
+            object->fit();
         } catch (exceptions::IException &ex) {
             IGNIS_LOG(warning) << "IPostmanModule id " << id << " received FAILS " << ex.toString();
         } catch (std::exception &ex) {

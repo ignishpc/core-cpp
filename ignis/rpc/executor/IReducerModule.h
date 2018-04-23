@@ -21,10 +21,10 @@ namespace ignis { namespace rpc { namespace executor {
 class IReducerModuleIf {
  public:
   virtual ~IReducerModuleIf() {}
-  virtual void getKeys(std::vector<std::string> & _return) = 0;
+  virtual void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct) = 0;
   virtual void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id) = 0;
   virtual void joinData(const std::vector<int64_t> & msg_ids) = 0;
-  virtual void reduceByKey(const  ::ignis::rpc::executor::IFunction& funct) = 0;
+  virtual void reduceByKey() = 0;
   virtual void reset() = 0;
 };
 
@@ -55,7 +55,7 @@ class IReducerModuleIfSingletonFactory : virtual public IReducerModuleIfFactory 
 class IReducerModuleNull : virtual public IReducerModuleIf {
  public:
   virtual ~IReducerModuleNull() {}
-  void getKeys(std::vector<std::string> & /* _return */) {
+  void getKeys(std::vector<int64_t> & /* _return */, const  ::ignis::rpc::executor::IFunction& /* funct */) {
     return;
   }
   void setExecutorKeys(const std::string& /* host */, const int32_t /* port */, const std::vector<int64_t> & /* keys_id */, const int64_t /* msg_id */) {
@@ -64,7 +64,7 @@ class IReducerModuleNull : virtual public IReducerModuleIf {
   void joinData(const std::vector<int64_t> & /* msg_ids */) {
     return;
   }
-  void reduceByKey(const  ::ignis::rpc::executor::IFunction& /* funct */) {
+  void reduceByKey() {
     return;
   }
   void reset() {
@@ -72,6 +72,10 @@ class IReducerModuleNull : virtual public IReducerModuleIf {
   }
 };
 
+typedef struct _IReducerModule_getKeys_args__isset {
+  _IReducerModule_getKeys_args__isset() : funct(false) {}
+  bool funct :1;
+} _IReducerModule_getKeys_args__isset;
 
 class IReducerModule_getKeys_args {
  public:
@@ -82,9 +86,16 @@ class IReducerModule_getKeys_args {
   }
 
   virtual ~IReducerModule_getKeys_args() throw();
+   ::ignis::rpc::executor::IFunction funct;
 
-  bool operator == (const IReducerModule_getKeys_args & /* rhs */) const
+  _IReducerModule_getKeys_args__isset __isset;
+
+  void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
+
+  bool operator == (const IReducerModule_getKeys_args & rhs) const
   {
+    if (!(funct == rhs.funct))
+      return false;
     return true;
   }
   bool operator != (const IReducerModule_getKeys_args &rhs) const {
@@ -104,6 +115,7 @@ class IReducerModule_getKeys_pargs {
 
 
   virtual ~IReducerModule_getKeys_pargs() throw();
+  const  ::ignis::rpc::executor::IFunction* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -124,12 +136,12 @@ class IReducerModule_getKeys_result {
   }
 
   virtual ~IReducerModule_getKeys_result() throw();
-  std::vector<std::string>  success;
+  std::vector<int64_t>  success;
    ::ignis::rpc::IRemoteException ex;
 
   _IReducerModule_getKeys_result__isset __isset;
 
-  void __set_success(const std::vector<std::string> & val);
+  void __set_success(const std::vector<int64_t> & val);
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
@@ -163,7 +175,7 @@ class IReducerModule_getKeys_presult {
 
 
   virtual ~IReducerModule_getKeys_presult() throw();
-  std::vector<std::string> * success;
+  std::vector<int64_t> * success;
    ::ignis::rpc::IRemoteException ex;
 
   _IReducerModule_getKeys_presult__isset __isset;
@@ -401,10 +413,6 @@ class IReducerModule_joinData_presult {
 
 };
 
-typedef struct _IReducerModule_reduceByKey_args__isset {
-  _IReducerModule_reduceByKey_args__isset() : funct(false) {}
-  bool funct :1;
-} _IReducerModule_reduceByKey_args__isset;
 
 class IReducerModule_reduceByKey_args {
  public:
@@ -415,16 +423,9 @@ class IReducerModule_reduceByKey_args {
   }
 
   virtual ~IReducerModule_reduceByKey_args() throw();
-   ::ignis::rpc::executor::IFunction funct;
 
-  _IReducerModule_reduceByKey_args__isset __isset;
-
-  void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
-
-  bool operator == (const IReducerModule_reduceByKey_args & rhs) const
+  bool operator == (const IReducerModule_reduceByKey_args & /* rhs */) const
   {
-    if (!(funct == rhs.funct))
-      return false;
     return true;
   }
   bool operator != (const IReducerModule_reduceByKey_args &rhs) const {
@@ -444,7 +445,6 @@ class IReducerModule_reduceByKey_pargs {
 
 
   virtual ~IReducerModule_reduceByKey_pargs() throw();
-  const  ::ignis::rpc::executor::IFunction* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -622,17 +622,17 @@ class IReducerModuleClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void getKeys(std::vector<std::string> & _return);
-  void send_getKeys();
-  void recv_getKeys(std::vector<std::string> & _return);
+  void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct);
+  void send_getKeys(const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_getKeys(std::vector<int64_t> & _return);
   void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   void send_setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   void recv_setExecutorKeys();
   void joinData(const std::vector<int64_t> & msg_ids);
   void send_joinData(const std::vector<int64_t> & msg_ids);
   void recv_joinData();
-  void reduceByKey(const  ::ignis::rpc::executor::IFunction& funct);
-  void send_reduceByKey(const  ::ignis::rpc::executor::IFunction& funct);
+  void reduceByKey();
+  void send_reduceByKey();
   void recv_reduceByKey();
   void reset();
   void send_reset();
@@ -693,13 +693,13 @@ class IReducerModuleMultiface : virtual public IReducerModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void getKeys(std::vector<std::string> & _return) {
+  void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getKeys(_return);
+      ifaces_[i]->getKeys(_return, funct);
     }
-    ifaces_[i]->getKeys(_return);
+    ifaces_[i]->getKeys(_return, funct);
     return;
   }
 
@@ -721,13 +721,13 @@ class IReducerModuleMultiface : virtual public IReducerModuleIf {
     ifaces_[i]->joinData(msg_ids);
   }
 
-  void reduceByKey(const  ::ignis::rpc::executor::IFunction& funct) {
+  void reduceByKey() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->reduceByKey(funct);
+      ifaces_[i]->reduceByKey();
     }
-    ifaces_[i]->reduceByKey(funct);
+    ifaces_[i]->reduceByKey();
   }
 
   void reset() {
@@ -769,17 +769,17 @@ class IReducerModuleConcurrentClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void getKeys(std::vector<std::string> & _return);
-  int32_t send_getKeys();
-  void recv_getKeys(std::vector<std::string> & _return, const int32_t seqid);
+  void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct);
+  int32_t send_getKeys(const  ::ignis::rpc::executor::IFunction& funct);
+  void recv_getKeys(std::vector<int64_t> & _return, const int32_t seqid);
   void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   int32_t send_setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   void recv_setExecutorKeys(const int32_t seqid);
   void joinData(const std::vector<int64_t> & msg_ids);
   int32_t send_joinData(const std::vector<int64_t> & msg_ids);
   void recv_joinData(const int32_t seqid);
-  void reduceByKey(const  ::ignis::rpc::executor::IFunction& funct);
-  int32_t send_reduceByKey(const  ::ignis::rpc::executor::IFunction& funct);
+  void reduceByKey();
+  int32_t send_reduceByKey();
   void recv_reduceByKey(const int32_t seqid);
   void reset();
   int32_t send_reset();

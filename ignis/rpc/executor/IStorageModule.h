@@ -21,6 +21,9 @@ namespace ignis { namespace rpc { namespace executor {
 class IStorageModuleIf {
  public:
   virtual ~IStorageModuleIf() {}
+  virtual void cache(const int64_t id, const std::string& storage) = 0;
+  virtual void uncache(const int64_t id) = 0;
+  virtual void load(const int64_t id) = 0;
 };
 
 class IStorageModuleIfFactory {
@@ -50,6 +53,334 @@ class IStorageModuleIfSingletonFactory : virtual public IStorageModuleIfFactory 
 class IStorageModuleNull : virtual public IStorageModuleIf {
  public:
   virtual ~IStorageModuleNull() {}
+  void cache(const int64_t /* id */, const std::string& /* storage */) {
+    return;
+  }
+  void uncache(const int64_t /* id */) {
+    return;
+  }
+  void load(const int64_t /* id */) {
+    return;
+  }
+};
+
+typedef struct _IStorageModule_cache_args__isset {
+  _IStorageModule_cache_args__isset() : id(false), storage(false) {}
+  bool id :1;
+  bool storage :1;
+} _IStorageModule_cache_args__isset;
+
+class IStorageModule_cache_args {
+ public:
+
+  IStorageModule_cache_args(const IStorageModule_cache_args&);
+  IStorageModule_cache_args& operator=(const IStorageModule_cache_args&);
+  IStorageModule_cache_args() : id(0), storage() {
+  }
+
+  virtual ~IStorageModule_cache_args() throw();
+  int64_t id;
+  std::string storage;
+
+  _IStorageModule_cache_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  void __set_storage(const std::string& val);
+
+  bool operator == (const IStorageModule_cache_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(storage == rhs.storage))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_cache_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_cache_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IStorageModule_cache_pargs {
+ public:
+
+
+  virtual ~IStorageModule_cache_pargs() throw();
+  const int64_t* id;
+  const std::string* storage;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_cache_result__isset {
+  _IStorageModule_cache_result__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_cache_result__isset;
+
+class IStorageModule_cache_result {
+ public:
+
+  IStorageModule_cache_result(const IStorageModule_cache_result&);
+  IStorageModule_cache_result& operator=(const IStorageModule_cache_result&);
+  IStorageModule_cache_result() {
+  }
+
+  virtual ~IStorageModule_cache_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_cache_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IStorageModule_cache_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_cache_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_cache_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_cache_presult__isset {
+  _IStorageModule_cache_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_cache_presult__isset;
+
+class IStorageModule_cache_presult {
+ public:
+
+
+  virtual ~IStorageModule_cache_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_cache_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IStorageModule_uncache_args__isset {
+  _IStorageModule_uncache_args__isset() : id(false) {}
+  bool id :1;
+} _IStorageModule_uncache_args__isset;
+
+class IStorageModule_uncache_args {
+ public:
+
+  IStorageModule_uncache_args(const IStorageModule_uncache_args&);
+  IStorageModule_uncache_args& operator=(const IStorageModule_uncache_args&);
+  IStorageModule_uncache_args() : id(0) {
+  }
+
+  virtual ~IStorageModule_uncache_args() throw();
+  int64_t id;
+
+  _IStorageModule_uncache_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  bool operator == (const IStorageModule_uncache_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_uncache_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_uncache_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IStorageModule_uncache_pargs {
+ public:
+
+
+  virtual ~IStorageModule_uncache_pargs() throw();
+  const int64_t* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_uncache_result__isset {
+  _IStorageModule_uncache_result__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_uncache_result__isset;
+
+class IStorageModule_uncache_result {
+ public:
+
+  IStorageModule_uncache_result(const IStorageModule_uncache_result&);
+  IStorageModule_uncache_result& operator=(const IStorageModule_uncache_result&);
+  IStorageModule_uncache_result() {
+  }
+
+  virtual ~IStorageModule_uncache_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_uncache_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IStorageModule_uncache_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_uncache_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_uncache_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_uncache_presult__isset {
+  _IStorageModule_uncache_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_uncache_presult__isset;
+
+class IStorageModule_uncache_presult {
+ public:
+
+
+  virtual ~IStorageModule_uncache_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_uncache_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IStorageModule_load_args__isset {
+  _IStorageModule_load_args__isset() : id(false) {}
+  bool id :1;
+} _IStorageModule_load_args__isset;
+
+class IStorageModule_load_args {
+ public:
+
+  IStorageModule_load_args(const IStorageModule_load_args&);
+  IStorageModule_load_args& operator=(const IStorageModule_load_args&);
+  IStorageModule_load_args() : id(0) {
+  }
+
+  virtual ~IStorageModule_load_args() throw();
+  int64_t id;
+
+  _IStorageModule_load_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  bool operator == (const IStorageModule_load_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_load_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_load_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IStorageModule_load_pargs {
+ public:
+
+
+  virtual ~IStorageModule_load_pargs() throw();
+  const int64_t* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_load_result__isset {
+  _IStorageModule_load_result__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_load_result__isset;
+
+class IStorageModule_load_result {
+ public:
+
+  IStorageModule_load_result(const IStorageModule_load_result&);
+  IStorageModule_load_result& operator=(const IStorageModule_load_result&);
+  IStorageModule_load_result() {
+  }
+
+  virtual ~IStorageModule_load_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_load_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IStorageModule_load_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_load_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_load_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_load_presult__isset {
+  _IStorageModule_load_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_load_presult__isset;
+
+class IStorageModule_load_presult {
+ public:
+
+
+  virtual ~IStorageModule_load_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_load_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 class IStorageModuleClient : virtual public IStorageModuleIf {
@@ -77,6 +408,15 @@ class IStorageModuleClient : virtual public IStorageModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void cache(const int64_t id, const std::string& storage);
+  void send_cache(const int64_t id, const std::string& storage);
+  void recv_cache();
+  void uncache(const int64_t id);
+  void send_uncache(const int64_t id);
+  void recv_uncache();
+  void load(const int64_t id);
+  void send_load(const int64_t id);
+  void recv_load();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -92,9 +432,15 @@ class IStorageModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IStorageModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_cache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_uncache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_load(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IStorageModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IStorageModuleIf> iface) :
     iface_(iface) {
+    processMap_["cache"] = &IStorageModuleProcessor::process_cache;
+    processMap_["uncache"] = &IStorageModuleProcessor::process_uncache;
+    processMap_["load"] = &IStorageModuleProcessor::process_load;
   }
 
   virtual ~IStorageModuleProcessor() {}
@@ -123,6 +469,33 @@ class IStorageModuleMultiface : virtual public IStorageModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void cache(const int64_t id, const std::string& storage) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->cache(id, storage);
+    }
+    ifaces_[i]->cache(id, storage);
+  }
+
+  void uncache(const int64_t id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->uncache(id);
+    }
+    ifaces_[i]->uncache(id);
+  }
+
+  void load(const int64_t id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->load(id);
+    }
+    ifaces_[i]->load(id);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -153,6 +526,15 @@ class IStorageModuleConcurrentClient : virtual public IStorageModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void cache(const int64_t id, const std::string& storage);
+  int32_t send_cache(const int64_t id, const std::string& storage);
+  void recv_cache(const int32_t seqid);
+  void uncache(const int64_t id);
+  int32_t send_uncache(const int64_t id);
+  void recv_uncache(const int32_t seqid);
+  void load(const int64_t id);
+  int32_t send_load(const int64_t id);
+  void recv_load(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

@@ -41,7 +41,7 @@ set(SOURCE_FILES
         exceptions/ILogicError.h
         exceptions/IInvalidArgument.h
         #RPC
-        ${rpc})
+        ${rpc} data/IOperators.h)
 
 set(CMAKE_CXX_FLAGS "-fPIC -rdynamic")#-O3
 add_library(igniscore SHARED ${SOURCE_FILES})

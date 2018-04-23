@@ -2,8 +2,6 @@
 #include "IFilesModule.h"
 #include <fstream>
 #include "../ILog.h"
-#include "../storage/IRawMemoryObject.h"
-#include "../storage/IMemoryObject.h"
 #include "../../../exceptions/IInvalidArgument.h"
 
 using namespace std;
@@ -16,30 +14,13 @@ IFilesModule::IFilesModule(std::shared_ptr<IExecutorData> &executor_data) : Igni
 
 void IFilesModule::readFile(const std::string &path, const int64_t offset, const int64_t len, const int64_t lines) {
     try {
-        string storage = executor_data->getParser().getString("ignis.executor.storage");
-        int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
-        shared_ptr<IObject> object;
         auto manager = make_shared<data::IManager<string>>();
         auto& manager_any=(shared_ptr<data::IManager<IObject::Any>>&)manager;
-        if (storage == "disk") {
-            storage = "raw memory";//TODO create IDiskObject
-            object = make_shared<IRawMemoryObject>(compression, len);
-            object->setManager(manager_any);
-        } else if (storage == "raw memory") {
-            storage = "raw memory";
-            object = make_shared<IRawMemoryObject>(compression, len);
-            object->setManager(manager_any);
-        } else {
-            storage = "memory";
-            object = make_shared<IMemoryObject>(manager_any, lines);
-        }
+        shared_ptr<IObject> object = getIObject(len, lines, manager_any);
         IGNIS_LOG(info) << "IFileModule reading"
                         << " path: " << path
                         << " offset: " << offset
-                        << " len: " << len
-                        << " storage: " << storage
-                        << " compression: " << compression;
-
+                        << " len: " << len;
         ifstream fs(path);
         if (!fs.is_open()) {
             throw exceptions::IInvalidArgument("IFileModule cannot open file " + path);

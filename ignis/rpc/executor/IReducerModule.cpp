@@ -32,7 +32,20 @@ uint32_t IReducerModule_getKeys_args::read(::apache::thrift::protocol::TProtocol
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->funct.read(iprot);
+          this->__isset.funct = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -45,6 +58,10 @@ uint32_t IReducerModule_getKeys_args::write(::apache::thrift::protocol::TProtoco
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_getKeys_args");
+
+  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->funct.write(oprot);
+  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -60,6 +77,10 @@ uint32_t IReducerModule_getKeys_pargs::write(::apache::thrift::protocol::TProtoc
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_getKeys_pargs");
+
+  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->funct)).write(oprot);
+  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -103,7 +124,7 @@ uint32_t IReducerModule_getKeys_result::read(::apache::thrift::protocol::TProtoc
             uint32_t _i4;
             for (_i4 = 0; _i4 < _size0; ++_i4)
             {
-              xfer += iprot->readString(this->success[_i4]);
+              xfer += iprot->readI64(this->success[_i4]);
             }
             xfer += iprot->readListEnd();
           }
@@ -141,11 +162,11 @@ uint32_t IReducerModule_getKeys_result::write(::apache::thrift::protocol::TProto
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
     {
-      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
-      std::vector<std::string> ::const_iterator _iter5;
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->success.size()));
+      std::vector<int64_t> ::const_iterator _iter5;
       for (_iter5 = this->success.begin(); _iter5 != this->success.end(); ++_iter5)
       {
-        xfer += oprot->writeString((*_iter5));
+        xfer += oprot->writeI64((*_iter5));
       }
       xfer += oprot->writeListEnd();
     }
@@ -197,7 +218,7 @@ uint32_t IReducerModule_getKeys_presult::read(::apache::thrift::protocol::TProto
             uint32_t _i10;
             for (_i10 = 0; _i10 < _size6; ++_i10)
             {
-              xfer += iprot->readString((*(this->success))[_i10]);
+              xfer += iprot->readI64((*(this->success))[_i10]);
             }
             xfer += iprot->readListEnd();
           }
@@ -728,20 +749,7 @@ uint32_t IReducerModule_reduceByKey_args::read(::apache::thrift::protocol::TProt
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    switch (fid)
-    {
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->funct.read(iprot);
-          this->__isset.funct = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
+    xfer += iprot->skip(ftype);
     xfer += iprot->readFieldEnd();
   }
 
@@ -754,10 +762,6 @@ uint32_t IReducerModule_reduceByKey_args::write(::apache::thrift::protocol::TPro
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_reduceByKey_args");
-
-  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
-  xfer += this->funct.write(oprot);
-  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -773,10 +777,6 @@ uint32_t IReducerModule_reduceByKey_pargs::write(::apache::thrift::protocol::TPr
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IReducerModule_reduceByKey_pargs");
-
-  xfer += oprot->writeFieldBegin("funct", ::apache::thrift::protocol::T_STRUCT, 3);
-  xfer += (*(this->funct)).write(oprot);
-  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -1057,18 +1057,19 @@ uint32_t IReducerModule_reset_presult::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-void IReducerModuleClient::getKeys(std::vector<std::string> & _return)
+void IReducerModuleClient::getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct)
 {
-  send_getKeys();
+  send_getKeys(funct);
   recv_getKeys(_return);
 }
 
-void IReducerModuleClient::send_getKeys()
+void IReducerModuleClient::send_getKeys(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("getKeys", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_getKeys_pargs args;
+  args.funct = &funct;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1076,7 +1077,7 @@ void IReducerModuleClient::send_getKeys()
   oprot_->getTransport()->flush();
 }
 
-void IReducerModuleClient::recv_getKeys(std::vector<std::string> & _return)
+void IReducerModuleClient::recv_getKeys(std::vector<int64_t> & _return)
 {
 
   int32_t rseqid = 0;
@@ -1232,19 +1233,18 @@ void IReducerModuleClient::recv_joinData()
   return;
 }
 
-void IReducerModuleClient::reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
+void IReducerModuleClient::reduceByKey()
 {
-  send_reduceByKey(funct);
+  send_reduceByKey();
   recv_reduceByKey();
 }
 
-void IReducerModuleClient::send_reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
+void IReducerModuleClient::send_reduceByKey()
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("reduceByKey", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_reduceByKey_pargs args;
-  args.funct = &funct;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1385,7 +1385,7 @@ void IReducerModuleProcessor::process_getKeys(int32_t seqid, ::apache::thrift::p
 
   IReducerModule_getKeys_result result;
   try {
-    iface_->getKeys(result.success);
+    iface_->getKeys(result.success, args.funct);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
@@ -1554,7 +1554,7 @@ void IReducerModuleProcessor::process_reduceByKey(int32_t seqid, ::apache::thrif
 
   IReducerModule_reduceByKey_result result;
   try {
-    iface_->reduceByKey(args.funct);
+    iface_->reduceByKey();
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1650,19 +1650,20 @@ void IReducerModuleProcessor::process_reset(int32_t seqid, ::apache::thrift::pro
   return processor;
 }
 
-void IReducerModuleConcurrentClient::getKeys(std::vector<std::string> & _return)
+void IReducerModuleConcurrentClient::getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct)
 {
-  int32_t seqid = send_getKeys();
+  int32_t seqid = send_getKeys(funct);
   recv_getKeys(_return, seqid);
 }
 
-int32_t IReducerModuleConcurrentClient::send_getKeys()
+int32_t IReducerModuleConcurrentClient::send_getKeys(const  ::ignis::rpc::executor::IFunction& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("getKeys", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_getKeys_pargs args;
+  args.funct = &funct;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1673,7 +1674,7 @@ int32_t IReducerModuleConcurrentClient::send_getKeys()
   return cseqid;
 }
 
-void IReducerModuleConcurrentClient::recv_getKeys(std::vector<std::string> & _return, const int32_t seqid)
+void IReducerModuleConcurrentClient::recv_getKeys(std::vector<int64_t> & _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -1904,20 +1905,19 @@ void IReducerModuleConcurrentClient::recv_joinData(const int32_t seqid)
   } // end while(true)
 }
 
-void IReducerModuleConcurrentClient::reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
+void IReducerModuleConcurrentClient::reduceByKey()
 {
-  int32_t seqid = send_reduceByKey(funct);
+  int32_t seqid = send_reduceByKey();
   recv_reduceByKey(seqid);
 }
 
-int32_t IReducerModuleConcurrentClient::send_reduceByKey(const  ::ignis::rpc::executor::IFunction& funct)
+int32_t IReducerModuleConcurrentClient::send_reduceByKey()
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("reduceByKey", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IReducerModule_reduceByKey_pargs args;
-  args.funct = &funct;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

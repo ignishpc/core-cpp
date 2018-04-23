@@ -19,23 +19,25 @@ IMapperModule::IMapperModule(std::shared_ptr<IExecutorData> &executor_data) : Ig
 
 void IMapperModule::map(const IFunction &funct, bool ordered) {
     try {
-        IDinamicObject<api::IMapper<IObject::Any, IObject::Any>> mapper(funct.name, funct.__isset.bytes);
+        auto mapper = loadFunction<api::IMapper<IObject::Any,IObject::Any>>(funct);
         IObject &object_in = executor_data->getLoadObject();
-        auto manager = mapper->type_t.shared();
+        auto manager = (*mapper)->type_t.shared();
         object_in.setManager((std::shared_ptr<data::IManager<IObject::Any>> &) manager);
         shared_ptr<IObject> object_out;
         size_t threads = executor_data->getThreads();
         if (threads > 1) {
             auto buffer = executor_data->getParser().getNumber("ignis.executor.cores.buffer");
+            IGNIS_LOG(info) << "IMapperModule creating " << threads << " threads";
             IThreadSplitter splitter(object_in, *object_out, threads, buffer, ordered);
 #pragma omp parallel for num_threads(threads)
             for (int t = 0; t < threads; t++) {
                 auto it = splitter[t];
-                mapper->map(*it.first, *it.second, executor_data->getContext());
+                (*mapper)->map(*it.first, *it.second, executor_data->getContext());
             }
         } else {
-            mapper->map(*object_in.readIterator(), *object_out->writeIterator(), executor_data->getContext());
+            (*mapper)->map(*object_in.readIterator(), *object_out->writeIterator(), executor_data->getContext());
         }
+        IGNIS_LOG(info) << "IMapperModule finished";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_cause(ex.what());
@@ -50,10 +52,12 @@ void IMapperModule::map(const IFunction &funct, bool ordered) {
 }
 
 void IMapperModule::orderedMap(const IFunction &funct) {
+    IGNIS_LOG(info) << "IMapperModule starting mapper";
     map(funct, true);
 }
 
 void IMapperModule::unorderedMap(const IFunction &funct) {
+    IGNIS_LOG(info) << "IMapperModule starting unordered mapper";
     map(funct, false);
 }
 

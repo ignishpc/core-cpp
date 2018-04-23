@@ -1,8 +1,6 @@
 
 #include "IReducerModule.h"
 #include "../ILog.h"
-#include "../storage/IRawMemoryObject.h"
-#include "../storage/IMemoryObject.h"
 #include "../../../exceptions/IInvalidArgument.h"
 
 using namespace ignis::executor::core::modules;
@@ -12,8 +10,11 @@ using ignis::rpc::IRemoteException;
 
 IReducerModule::IReducerModule(std::shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
-void IReducerModule::getKeys(std::vector<std::string> &_return) {
+void IReducerModule::getKeys(std::vector<int64_t> &_return, const rpc::executor::IFunction &funct) {
     try {
+        IGNIS_LOG(info) << "IReducerModule starting reducer";
+        function = loadFunction<api::IReducer<storage::IObject::Any, storage::IObject::Any, storage::IObject::Any>>(funct);
+
 
 
     } catch (exceptions::IException &ex) {
@@ -64,7 +65,7 @@ void IReducerModule::joinData(const std::vector<int64_t> &msg_ids) {
     }
 }
 
-void IReducerModule::reduceByKey(const IFunction &funct) {
+void IReducerModule::reduceByKey() {
     try {
 
 

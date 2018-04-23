@@ -130,6 +130,7 @@ public:
                 if ((*queues)[id].pop(other)) {
                     flush(*other);
                 } else {
+                    write_next = i;
                     break;
                 }
             }
