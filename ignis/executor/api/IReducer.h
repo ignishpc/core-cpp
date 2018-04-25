@@ -19,13 +19,14 @@ namespace ignis {
             public:
                 const data::IOperator<K> op_t;
                 const data::IManager<std::pair<K,V>> type_t;
+                const data::IManager<K> type_k;
                 const data::IManager<R> type_r;
 
                 virtual void before(IContext &context) {}
 
                 virtual void after(IContext &context) {}
 
-                virtual void reduce(K &key, IReadIterator<V> &values, IWriteIterator<R> &out, IContext &context) = 0;
+                virtual void reduce(IReadIterator<std::pair<K,V>> &in, IWriteIterator<R> &out, IContext &context) = 0;
             };
         }
     }

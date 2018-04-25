@@ -7,7 +7,7 @@ IExecutorData::IExecutorData() : context(api::IContext(executor_id)),
                                  properties_parser(core::IPropertiesParser(context.getProperties())){}
 
 
-void IExecutorData::loadObject(std::shared_ptr<storage::IObject> &object){
+void IExecutorData::loadObject(std::shared_ptr<storage::IObject> object){
     loaded_object = object;
 }
 
@@ -21,6 +21,10 @@ void IExecutorData::deleteLoadObject(){
 
 storage::IObject &IExecutorData::getLoadObject(){
     return *loaded_object;
+}
+
+std::shared_ptr<storage::IObject> IExecutorData::getSharedLoadObject(){
+    return loaded_object;
 }
 
 std::unordered_map<size_t, std::shared_ptr<storage::IObject>>& IExecutorData::getStoredObjects(){

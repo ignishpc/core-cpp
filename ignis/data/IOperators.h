@@ -2,6 +2,7 @@
 #define IGNIS_OPERATORS_H
 
 #include <functional>
+#include <memory>
 
 namespace ignis {
     namespace data {
@@ -28,7 +29,11 @@ namespace ignis {
             }
 
             virtual size_t hash(const T &a) {
-                return std::hash<T>(a);
+                return std::hash<T>()(a);
+            }
+
+            virtual std::shared_ptr<IOperator<T>> shared() const{
+                return std::make_shared<IOperator<T>>();
             }
 
         };

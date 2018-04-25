@@ -60,16 +60,8 @@ public:
 
     void take() {
         buffer_input->clear();
-        auto writer = buffer_input->writeIterator();
-        if (it_read->isMoved()) {
-            for (elems = 0; elems < buffer && it_read->hashNext(); elems++) {
-                writer->write((IObject::Any &&) it_read->next());
-            }
-        } else {
-            for (elems = 0; elems < buffer && it_read->hashNext(); elems++) {
-                writer->write(it_read->next());
-            }
-        }
+        readToWrite<IObject::Any>(*it_read, *buffer_input->writeIterator(), buffer);
+        elems = buffer;
         buffer_input_read = buffer_input->readIterator();
     }
 

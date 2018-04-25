@@ -17,13 +17,15 @@ namespace ignis {
 
                 IExecutorData();
 
-                void loadObject(std::shared_ptr<storage::IObject> &object);
+                void loadObject(std::shared_ptr<storage::IObject> object);
 
                 bool hasLoadObject();
 
                 void deleteLoadObject();
 
                 storage::IObject &getLoadObject();
+
+                std::shared_ptr<storage::IObject> getSharedLoadObject();
 
                 std::unordered_map<size_t, std::shared_ptr<storage::IObject>>& getStoredObjects();
 

@@ -21,6 +21,8 @@ namespace ignis {
 
                     bool isMoved() override;
 
+                    void skip(size_t elems) override;
+
                     ~IReadMemoryIterator() override;
 
                 private:

@@ -1,5 +1,7 @@
 
 #include "IStorageModule.h"
+#include "../storage/IObjectWrapper.h"
+#include "../ILog.h"
 
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core;
@@ -14,8 +16,17 @@ IStorageModule::~IStorageModule() {
 
 void IStorageModule::cache(const int64_t id, const std::string &storage) {
     try {
-
-
+        auto loaded = executor_data->getSharedLoadObject();
+        if (loaded->getType() == storage) {
+            IGNIS_LOG(info) << "IStorageModule cache object " << id;
+            executor_data->getStoredObjects()[id] = loaded;
+        } else {
+            IGNIS_LOG(info) << "IStorageModule cache object " << id << " from: " << loaded->getType() << ", to: "
+                            << storage;
+            auto obj_cache = getIObject(loaded->getManager());
+            auto wrapper = std::make_shared<storage::IObjectWrapper>(loaded, obj_cache);
+            executor_data->loadObject(wrapper);
+        }
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_cause(ex.what());
@@ -31,8 +42,8 @@ void IStorageModule::cache(const int64_t id, const std::string &storage) {
 
 void IStorageModule::uncache(const int64_t id) {
     try {
-
-
+        IGNIS_LOG(info) << "IStorageModule uncache object " << id;
+        executor_data->getStoredObjects().erase(id);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_cause(ex.what());
@@ -48,8 +59,8 @@ void IStorageModule::uncache(const int64_t id) {
 
 void IStorageModule::load(const int64_t id) {
     try {
-
-
+        IGNIS_LOG(info) << "IStorageModule load cache object " << id;
+        executor_data->loadObject(executor_data->getStoredObjects()[id]);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_cause(ex.what());

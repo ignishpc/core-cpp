@@ -34,6 +34,8 @@ namespace ignis {
 
                     virtual void fit() {}
 
+                    virtual std::string getType() { return "UNKNOWN"; }
+
                     virtual std::shared_ptr<data::IManager<Any>> getManager() {
                         return manager;
                     }

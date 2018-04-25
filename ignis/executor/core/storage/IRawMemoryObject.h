@@ -27,6 +27,8 @@ namespace ignis {
 
                     void clear() override;
 
+                    std::string getType() override;
+
                     virtual ~IRawMemoryObject();
 
                 private:

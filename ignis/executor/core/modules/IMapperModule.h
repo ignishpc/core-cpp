@@ -13,14 +13,12 @@ namespace ignis {
                 public:
                     IMapperModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void orderedMap(const ::ignis::rpc::executor::IFunction &funct) override;
+                    void _map(const  ::ignis::rpc::executor::IFunction& funct) override;
 
-                    void unorderedMap(const ::ignis::rpc::executor::IFunction &funct) override;
+                    void streamingMap(const  ::ignis::rpc::executor::IFunction& funct, bool ordered) override;
 
                     virtual ~IMapperModule();
 
-                private:
-                    void map(const ::ignis::rpc::executor::IFunction &funct, bool ordered);
                 };
             }
         }

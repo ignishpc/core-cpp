@@ -61,6 +61,10 @@ void IRawMemoryObject::clear() {
     raw_memory.reset();
 }
 
+string IRawMemoryObject::getType() {
+    return "raw memory";
+}
+
 
 
 

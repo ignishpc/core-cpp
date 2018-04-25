@@ -14,7 +14,8 @@ namespace ignis {
                 public:
                     IReducerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void getKeys(std::vector<int64_t> &_return, const rpc::executor::IFunction &funct) override;
+                    void getKeys(std::unordered_map<int64_t, int64_t> &_return,
+                                 const rpc::executor::IFunction &funct, const bool single) override;
 
                     void
                     setExecutorKeys(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id,
@@ -29,7 +30,13 @@ namespace ignis {
                     virtual ~IReducerModule();
 
                 private:
+                    void joinDataAux(storage::IObject &obj, std::unordered_map<int64_t, std::vector<std::pair<
+                            std::shared_ptr<storage::IObject>, std::shared_ptr<storage::ICoreWriteIterator<storage::IObject::Any>>>>> &keys);
+
+                    std::shared_ptr<data::IManager<storage::IObject::Any>> manager;
                     std::shared_ptr<IDinamicObject<api::IReducer<storage::IObject::Any, storage::IObject::Any, storage::IObject::Any>>> function;
+                    std::unordered_map<int64_t, std::shared_ptr<storage::IObject>> hash_value;
+                    std::vector<std::shared_ptr<storage::IObject>> key_value;
                 };
             }
         }

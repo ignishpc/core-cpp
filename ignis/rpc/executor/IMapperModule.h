@@ -21,8 +21,8 @@ namespace ignis { namespace rpc { namespace executor {
 class IMapperModuleIf {
  public:
   virtual ~IMapperModuleIf() {}
-  virtual void orderedMap(const  ::ignis::rpc::executor::IFunction& funct) = 0;
-  virtual void unorderedMap(const  ::ignis::rpc::executor::IFunction& funct) = 0;
+  virtual void _map(const  ::ignis::rpc::executor::IFunction& funct) = 0;
+  virtual void streamingMap(const  ::ignis::rpc::executor::IFunction& funct, const bool ordered) = 0;
 };
 
 class IMapperModuleIfFactory {
@@ -52,45 +52,45 @@ class IMapperModuleIfSingletonFactory : virtual public IMapperModuleIfFactory {
 class IMapperModuleNull : virtual public IMapperModuleIf {
  public:
   virtual ~IMapperModuleNull() {}
-  void orderedMap(const  ::ignis::rpc::executor::IFunction& /* funct */) {
+  void _map(const  ::ignis::rpc::executor::IFunction& /* funct */) {
     return;
   }
-  void unorderedMap(const  ::ignis::rpc::executor::IFunction& /* funct */) {
+  void streamingMap(const  ::ignis::rpc::executor::IFunction& /* funct */, const bool /* ordered */) {
     return;
   }
 };
 
-typedef struct _IMapperModule_orderedMap_args__isset {
-  _IMapperModule_orderedMap_args__isset() : funct(false) {}
+typedef struct _IMapperModule__map_args__isset {
+  _IMapperModule__map_args__isset() : funct(false) {}
   bool funct :1;
-} _IMapperModule_orderedMap_args__isset;
+} _IMapperModule__map_args__isset;
 
-class IMapperModule_orderedMap_args {
+class IMapperModule__map_args {
  public:
 
-  IMapperModule_orderedMap_args(const IMapperModule_orderedMap_args&);
-  IMapperModule_orderedMap_args& operator=(const IMapperModule_orderedMap_args&);
-  IMapperModule_orderedMap_args() {
+  IMapperModule__map_args(const IMapperModule__map_args&);
+  IMapperModule__map_args& operator=(const IMapperModule__map_args&);
+  IMapperModule__map_args() {
   }
 
-  virtual ~IMapperModule_orderedMap_args() throw();
+  virtual ~IMapperModule__map_args() throw();
    ::ignis::rpc::executor::IFunction funct;
 
-  _IMapperModule_orderedMap_args__isset __isset;
+  _IMapperModule__map_args__isset __isset;
 
   void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
 
-  bool operator == (const IMapperModule_orderedMap_args & rhs) const
+  bool operator == (const IMapperModule__map_args & rhs) const
   {
     if (!(funct == rhs.funct))
       return false;
     return true;
   }
-  bool operator != (const IMapperModule_orderedMap_args &rhs) const {
+  bool operator != (const IMapperModule__map_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IMapperModule_orderedMap_args & ) const;
+  bool operator < (const IMapperModule__map_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -98,103 +98,109 @@ class IMapperModule_orderedMap_args {
 };
 
 
-class IMapperModule_orderedMap_pargs {
+class IMapperModule__map_pargs {
  public:
 
 
-  virtual ~IMapperModule_orderedMap_pargs() throw();
+  virtual ~IMapperModule__map_pargs() throw();
   const  ::ignis::rpc::executor::IFunction* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IMapperModule_orderedMap_result__isset {
-  _IMapperModule_orderedMap_result__isset() : ex(false) {}
+typedef struct _IMapperModule__map_result__isset {
+  _IMapperModule__map_result__isset() : ex(false) {}
   bool ex :1;
-} _IMapperModule_orderedMap_result__isset;
+} _IMapperModule__map_result__isset;
 
-class IMapperModule_orderedMap_result {
+class IMapperModule__map_result {
  public:
 
-  IMapperModule_orderedMap_result(const IMapperModule_orderedMap_result&);
-  IMapperModule_orderedMap_result& operator=(const IMapperModule_orderedMap_result&);
-  IMapperModule_orderedMap_result() {
+  IMapperModule__map_result(const IMapperModule__map_result&);
+  IMapperModule__map_result& operator=(const IMapperModule__map_result&);
+  IMapperModule__map_result() {
   }
 
-  virtual ~IMapperModule_orderedMap_result() throw();
+  virtual ~IMapperModule__map_result() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IMapperModule_orderedMap_result__isset __isset;
+  _IMapperModule__map_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
-  bool operator == (const IMapperModule_orderedMap_result & rhs) const
+  bool operator == (const IMapperModule__map_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IMapperModule_orderedMap_result &rhs) const {
+  bool operator != (const IMapperModule__map_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IMapperModule_orderedMap_result & ) const;
+  bool operator < (const IMapperModule__map_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IMapperModule_orderedMap_presult__isset {
-  _IMapperModule_orderedMap_presult__isset() : ex(false) {}
+typedef struct _IMapperModule__map_presult__isset {
+  _IMapperModule__map_presult__isset() : ex(false) {}
   bool ex :1;
-} _IMapperModule_orderedMap_presult__isset;
+} _IMapperModule__map_presult__isset;
 
-class IMapperModule_orderedMap_presult {
+class IMapperModule__map_presult {
  public:
 
 
-  virtual ~IMapperModule_orderedMap_presult() throw();
+  virtual ~IMapperModule__map_presult() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IMapperModule_orderedMap_presult__isset __isset;
+  _IMapperModule__map_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IMapperModule_unorderedMap_args__isset {
-  _IMapperModule_unorderedMap_args__isset() : funct(false) {}
+typedef struct _IMapperModule_streamingMap_args__isset {
+  _IMapperModule_streamingMap_args__isset() : funct(false), ordered(false) {}
   bool funct :1;
-} _IMapperModule_unorderedMap_args__isset;
+  bool ordered :1;
+} _IMapperModule_streamingMap_args__isset;
 
-class IMapperModule_unorderedMap_args {
+class IMapperModule_streamingMap_args {
  public:
 
-  IMapperModule_unorderedMap_args(const IMapperModule_unorderedMap_args&);
-  IMapperModule_unorderedMap_args& operator=(const IMapperModule_unorderedMap_args&);
-  IMapperModule_unorderedMap_args() {
+  IMapperModule_streamingMap_args(const IMapperModule_streamingMap_args&);
+  IMapperModule_streamingMap_args& operator=(const IMapperModule_streamingMap_args&);
+  IMapperModule_streamingMap_args() : ordered(0) {
   }
 
-  virtual ~IMapperModule_unorderedMap_args() throw();
+  virtual ~IMapperModule_streamingMap_args() throw();
    ::ignis::rpc::executor::IFunction funct;
+  bool ordered;
 
-  _IMapperModule_unorderedMap_args__isset __isset;
+  _IMapperModule_streamingMap_args__isset __isset;
 
   void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
 
-  bool operator == (const IMapperModule_unorderedMap_args & rhs) const
+  void __set_ordered(const bool val);
+
+  bool operator == (const IMapperModule_streamingMap_args & rhs) const
   {
     if (!(funct == rhs.funct))
       return false;
+    if (!(ordered == rhs.ordered))
+      return false;
     return true;
   }
-  bool operator != (const IMapperModule_unorderedMap_args &rhs) const {
+  bool operator != (const IMapperModule_streamingMap_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IMapperModule_unorderedMap_args & ) const;
+  bool operator < (const IMapperModule_streamingMap_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -202,67 +208,68 @@ class IMapperModule_unorderedMap_args {
 };
 
 
-class IMapperModule_unorderedMap_pargs {
+class IMapperModule_streamingMap_pargs {
  public:
 
 
-  virtual ~IMapperModule_unorderedMap_pargs() throw();
+  virtual ~IMapperModule_streamingMap_pargs() throw();
   const  ::ignis::rpc::executor::IFunction* funct;
+  const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IMapperModule_unorderedMap_result__isset {
-  _IMapperModule_unorderedMap_result__isset() : ex(false) {}
+typedef struct _IMapperModule_streamingMap_result__isset {
+  _IMapperModule_streamingMap_result__isset() : ex(false) {}
   bool ex :1;
-} _IMapperModule_unorderedMap_result__isset;
+} _IMapperModule_streamingMap_result__isset;
 
-class IMapperModule_unorderedMap_result {
+class IMapperModule_streamingMap_result {
  public:
 
-  IMapperModule_unorderedMap_result(const IMapperModule_unorderedMap_result&);
-  IMapperModule_unorderedMap_result& operator=(const IMapperModule_unorderedMap_result&);
-  IMapperModule_unorderedMap_result() {
+  IMapperModule_streamingMap_result(const IMapperModule_streamingMap_result&);
+  IMapperModule_streamingMap_result& operator=(const IMapperModule_streamingMap_result&);
+  IMapperModule_streamingMap_result() {
   }
 
-  virtual ~IMapperModule_unorderedMap_result() throw();
+  virtual ~IMapperModule_streamingMap_result() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IMapperModule_unorderedMap_result__isset __isset;
+  _IMapperModule_streamingMap_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
-  bool operator == (const IMapperModule_unorderedMap_result & rhs) const
+  bool operator == (const IMapperModule_streamingMap_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IMapperModule_unorderedMap_result &rhs) const {
+  bool operator != (const IMapperModule_streamingMap_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IMapperModule_unorderedMap_result & ) const;
+  bool operator < (const IMapperModule_streamingMap_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IMapperModule_unorderedMap_presult__isset {
-  _IMapperModule_unorderedMap_presult__isset() : ex(false) {}
+typedef struct _IMapperModule_streamingMap_presult__isset {
+  _IMapperModule_streamingMap_presult__isset() : ex(false) {}
   bool ex :1;
-} _IMapperModule_unorderedMap_presult__isset;
+} _IMapperModule_streamingMap_presult__isset;
 
-class IMapperModule_unorderedMap_presult {
+class IMapperModule_streamingMap_presult {
  public:
 
 
-  virtual ~IMapperModule_unorderedMap_presult() throw();
+  virtual ~IMapperModule_streamingMap_presult() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IMapperModule_unorderedMap_presult__isset __isset;
+  _IMapperModule_streamingMap_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -293,12 +300,12 @@ class IMapperModuleClient : virtual public IMapperModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void orderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  void send_orderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  void recv_orderedMap();
-  void unorderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  void send_unorderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  void recv_unorderedMap();
+  void _map(const  ::ignis::rpc::executor::IFunction& funct);
+  void send__map(const  ::ignis::rpc::executor::IFunction& funct);
+  void recv__map();
+  void streamingMap(const  ::ignis::rpc::executor::IFunction& funct, const bool ordered);
+  void send_streamingMap(const  ::ignis::rpc::executor::IFunction& funct, const bool ordered);
+  void recv_streamingMap();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -314,13 +321,13 @@ class IMapperModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IMapperModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_orderedMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_unorderedMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process__map(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_streamingMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IMapperModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IMapperModuleIf> iface) :
     iface_(iface) {
-    processMap_["orderedMap"] = &IMapperModuleProcessor::process_orderedMap;
-    processMap_["unorderedMap"] = &IMapperModuleProcessor::process_unorderedMap;
+    processMap_["_map"] = &IMapperModuleProcessor::process__map;
+    processMap_["streamingMap"] = &IMapperModuleProcessor::process_streamingMap;
   }
 
   virtual ~IMapperModuleProcessor() {}
@@ -349,22 +356,22 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void orderedMap(const  ::ignis::rpc::executor::IFunction& funct) {
+  void _map(const  ::ignis::rpc::executor::IFunction& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->orderedMap(funct);
+      ifaces_[i]->_map(funct);
     }
-    ifaces_[i]->orderedMap(funct);
+    ifaces_[i]->_map(funct);
   }
 
-  void unorderedMap(const  ::ignis::rpc::executor::IFunction& funct) {
+  void streamingMap(const  ::ignis::rpc::executor::IFunction& funct, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->unorderedMap(funct);
+      ifaces_[i]->streamingMap(funct, ordered);
     }
-    ifaces_[i]->unorderedMap(funct);
+    ifaces_[i]->streamingMap(funct, ordered);
   }
 
 };
@@ -397,12 +404,12 @@ class IMapperModuleConcurrentClient : virtual public IMapperModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void orderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  int32_t send_orderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  void recv_orderedMap(const int32_t seqid);
-  void unorderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  int32_t send_unorderedMap(const  ::ignis::rpc::executor::IFunction& funct);
-  void recv_unorderedMap(const int32_t seqid);
+  void _map(const  ::ignis::rpc::executor::IFunction& funct);
+  int32_t send__map(const  ::ignis::rpc::executor::IFunction& funct);
+  void recv__map(const int32_t seqid);
+  void streamingMap(const  ::ignis::rpc::executor::IFunction& funct, const bool ordered);
+  int32_t send_streamingMap(const  ::ignis::rpc::executor::IFunction& funct, const bool ordered);
+  void recv_streamingMap(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

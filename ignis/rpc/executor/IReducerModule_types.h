@@ -19,6 +19,7 @@
 #include "../IRemoteException_types.h"
 #include "IFunction_types.h"
 
+#include <unordered_map>
 
 namespace ignis { namespace rpc { namespace executor {
 

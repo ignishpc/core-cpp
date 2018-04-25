@@ -21,6 +21,8 @@ namespace ignis {
 
                     virtual bool isMoved() = 0;
 
+                    virtual void skip(size_t elems) { while (elems-- > 0 && hashNext()) { next(); }}
+
                     virtual ~ICoreReadIterator() {};
                 };
 
@@ -34,6 +36,27 @@ namespace ignis {
 
                     virtual ~ICoreWriteIterator() {};
                 };
+
+                template<typename T>
+                inline void
+                readToWrite(ICoreReadIterator<T> &reader, ICoreWriteIterator<T> &writer, bool force_move = false) {
+                    if (reader.isMoved() || force_move) {
+                        while (reader.hashNext()) { writer.write((T &&) reader.next()); }
+                    } else {
+                        while (reader.hashNext()) { writer.write(reader.next()); }
+                    }
+                }
+
+                template<typename T>
+                inline void readToWrite(ICoreReadIterator<T> &reader, ICoreWriteIterator<T> &writer, size_t n,
+                                        bool force_move = false) {
+                    if (reader.isMoved() || force_move) {
+                        while (reader.hashNext() && n-- > 0) { writer.write((T &&) reader.next()); }
+                    } else {
+                        while (reader.hashNext() && n-- > 0) { writer.write(reader.next()); }
+                    }
+                }
+
             }
         }
     }

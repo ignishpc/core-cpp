@@ -23,6 +23,10 @@ namespace ignis {
 
                     void clear() override;
 
+                    void fit() override;
+
+                    std::string getType() override;
+
                     void
                     write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) override;
 

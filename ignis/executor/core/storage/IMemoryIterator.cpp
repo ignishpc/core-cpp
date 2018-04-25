@@ -25,6 +25,10 @@ bool IReadMemoryIterator::isMoved() {
     return false;
 }
 
+void IReadMemoryIterator::skip(size_t elems) {
+    pos += elems;
+}
+
 IWriteMemoryIterator::IWriteMemoryIterator(vector<IObject::Any> *data, const shared_ptr<IManager<IObject::Any>> &manager)
         : data(data), class_manager(manager->getClassManagerType()) {}
 

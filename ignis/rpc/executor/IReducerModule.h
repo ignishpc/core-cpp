@@ -21,7 +21,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IReducerModuleIf {
  public:
   virtual ~IReducerModuleIf() {}
-  virtual void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct) = 0;
+  virtual void getKeys(std::unordered_map<int64_t, int64_t>& _return, const  ::ignis::rpc::executor::IFunction& funct, const bool single) = 0;
   virtual void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id) = 0;
   virtual void joinData(const std::vector<int64_t> & msg_ids) = 0;
   virtual void reduceByKey() = 0;
@@ -55,7 +55,7 @@ class IReducerModuleIfSingletonFactory : virtual public IReducerModuleIfFactory 
 class IReducerModuleNull : virtual public IReducerModuleIf {
  public:
   virtual ~IReducerModuleNull() {}
-  void getKeys(std::vector<int64_t> & /* _return */, const  ::ignis::rpc::executor::IFunction& /* funct */) {
+  void getKeys(std::unordered_map<int64_t, int64_t>& /* _return */, const  ::ignis::rpc::executor::IFunction& /* funct */, const bool /* single */) {
     return;
   }
   void setExecutorKeys(const std::string& /* host */, const int32_t /* port */, const std::vector<int64_t> & /* keys_id */, const int64_t /* msg_id */) {
@@ -73,8 +73,9 @@ class IReducerModuleNull : virtual public IReducerModuleIf {
 };
 
 typedef struct _IReducerModule_getKeys_args__isset {
-  _IReducerModule_getKeys_args__isset() : funct(false) {}
+  _IReducerModule_getKeys_args__isset() : funct(false), single(false) {}
   bool funct :1;
+  bool single :1;
 } _IReducerModule_getKeys_args__isset;
 
 class IReducerModule_getKeys_args {
@@ -82,19 +83,24 @@ class IReducerModule_getKeys_args {
 
   IReducerModule_getKeys_args(const IReducerModule_getKeys_args&);
   IReducerModule_getKeys_args& operator=(const IReducerModule_getKeys_args&);
-  IReducerModule_getKeys_args() {
+  IReducerModule_getKeys_args() : single(0) {
   }
 
   virtual ~IReducerModule_getKeys_args() throw();
    ::ignis::rpc::executor::IFunction funct;
+  bool single;
 
   _IReducerModule_getKeys_args__isset __isset;
 
   void __set_funct(const  ::ignis::rpc::executor::IFunction& val);
 
+  void __set_single(const bool val);
+
   bool operator == (const IReducerModule_getKeys_args & rhs) const
   {
     if (!(funct == rhs.funct))
+      return false;
+    if (!(single == rhs.single))
       return false;
     return true;
   }
@@ -116,6 +122,7 @@ class IReducerModule_getKeys_pargs {
 
   virtual ~IReducerModule_getKeys_pargs() throw();
   const  ::ignis::rpc::executor::IFunction* funct;
+  const bool* single;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -136,12 +143,12 @@ class IReducerModule_getKeys_result {
   }
 
   virtual ~IReducerModule_getKeys_result() throw();
-  std::vector<int64_t>  success;
+  std::unordered_map<int64_t, int64_t> success;
    ::ignis::rpc::IRemoteException ex;
 
   _IReducerModule_getKeys_result__isset __isset;
 
-  void __set_success(const std::vector<int64_t> & val);
+  void __set_success(const std::unordered_map<int64_t, int64_t>& val);
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
@@ -175,7 +182,7 @@ class IReducerModule_getKeys_presult {
 
 
   virtual ~IReducerModule_getKeys_presult() throw();
-  std::vector<int64_t> * success;
+  std::unordered_map<int64_t, int64_t>* success;
    ::ignis::rpc::IRemoteException ex;
 
   _IReducerModule_getKeys_presult__isset __isset;
@@ -622,9 +629,9 @@ class IReducerModuleClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct);
-  void send_getKeys(const  ::ignis::rpc::executor::IFunction& funct);
-  void recv_getKeys(std::vector<int64_t> & _return);
+  void getKeys(std::unordered_map<int64_t, int64_t>& _return, const  ::ignis::rpc::executor::IFunction& funct, const bool single);
+  void send_getKeys(const  ::ignis::rpc::executor::IFunction& funct, const bool single);
+  void recv_getKeys(std::unordered_map<int64_t, int64_t>& _return);
   void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   void send_setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   void recv_setExecutorKeys();
@@ -693,13 +700,13 @@ class IReducerModuleMultiface : virtual public IReducerModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct) {
+  void getKeys(std::unordered_map<int64_t, int64_t>& _return, const  ::ignis::rpc::executor::IFunction& funct, const bool single) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getKeys(_return, funct);
+      ifaces_[i]->getKeys(_return, funct, single);
     }
-    ifaces_[i]->getKeys(_return, funct);
+    ifaces_[i]->getKeys(_return, funct, single);
     return;
   }
 
@@ -769,9 +776,9 @@ class IReducerModuleConcurrentClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void getKeys(std::vector<int64_t> & _return, const  ::ignis::rpc::executor::IFunction& funct);
-  int32_t send_getKeys(const  ::ignis::rpc::executor::IFunction& funct);
-  void recv_getKeys(std::vector<int64_t> & _return, const int32_t seqid);
+  void getKeys(std::unordered_map<int64_t, int64_t>& _return, const  ::ignis::rpc::executor::IFunction& funct, const bool single);
+  int32_t send_getKeys(const  ::ignis::rpc::executor::IFunction& funct, const bool single);
+  void recv_getKeys(std::unordered_map<int64_t, int64_t>& _return, const int32_t seqid);
   void setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   int32_t send_setExecutorKeys(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
   void recv_setExecutorKeys(const int32_t seqid);

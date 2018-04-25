@@ -33,7 +33,7 @@ void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
         protocol->readI64(id);
         try {
             auto buffer = make_shared<TBufferedTransport>(transport);
-            shared_ptr<IObject> object = getIObject(100*1024*1024);
+            shared_ptr<IObject> object = getIObject();
             IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
                             << " mode: " << (use_shared_memory ? "shared memory" : "socket");
             IMessage msg(object);

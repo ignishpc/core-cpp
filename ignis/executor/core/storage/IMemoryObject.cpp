@@ -51,4 +51,12 @@ void IMemoryObject::clear() {
     manager->getClassManagerType()->clear(*data);
 }
 
+void IMemoryObject::fit() {
+    manager->getClassManagerType()->resize(*data, manager->getClassManagerType()->size(*data));
+}
+
+string IMemoryObject::getType() {
+    return "memory";
+}
+
 
