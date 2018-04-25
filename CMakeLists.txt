@@ -55,7 +55,9 @@ set(SOURCE_FILES
         ignis/executor/core/storage/ILogIterator.cpp
         ignis/executor/core/storage/IObjectWrapper.h
         ignis/executor/core/storage/IObjectWrapper.cpp
-        ${rpc} ignis/executor/core/storage/ICountIterator.h ignis/executor/core/storage/ISkipIterator.h)
+        ignis/executor/core/storage/ICountIterator.h
+        ignis/executor/core/storage/ISkipIterator.h
+        ${rpc})
 
 set(CMAKE_CXX_FLAGS "-pthread -fopenmp -DBOOST_ALL_DYN_LINK")#-O3
 add_executable(igniscpp ${SOURCE_FILES})
