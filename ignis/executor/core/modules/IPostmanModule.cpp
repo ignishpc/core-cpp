@@ -5,7 +5,6 @@
 #include <thrift/transport/TSocket.h>
 #include "../../../data/IObjectProtocol.h"
 #include "../../../data/IFileTransport.h"
-#include "../storage/IMessage.h"
 #include "../ILog.h"
 
 using namespace std;
@@ -103,10 +102,75 @@ void IPostmanModule::stop() {
     server->close();
 }
 
+int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
+    try {
+        IGNIS_LOG(warning) << "IPostmanModule id " << id << " connecting to " << msg.getHost() << ":" << msg.getPort();
+        shared_ptr<TTransport> transport = make_shared<TSocket>(msg.getHost(), msg.getPort());
+        for (int i = 0; i < 10; i++) {
+            try{
+                transport->open();
+            }catch(std::exception &ex){
+                if(i == 9){
+                    throw ex;
+                }
+            }
+        }
+        auto protocol = make_shared<data::IObjectProtocol>(transport);
+        bool use_shared_memory = !msg.getSharedMemory().empty();
+        protocol->writeBool(use_shared_memory);
+        if (use_shared_memory) {
+            string folder;
+            protocol->writeString(folder);
+            string buffer1 = folder + "buffer1";
+            string buffer2 = folder + "buffer2";
+            transport = make_shared<data::IFileTransport>(buffer1, buffer2, transport);
+        }
+        protocol->writeI64(id);
+        auto buffer = make_shared<TBufferedTransport>(transport);
+        IGNIS_LOG(info) << "IPostmanModule id " << id << " sending"
+                        << " mode: " << (use_shared_memory ? "shared memory" : "socket");
+        msg.getObj()->write(buffer, compression);
+        transport->close();
+        IGNIS_LOG(info) << "IPostmanModule id " << id << " sent OK";
+    } catch (exceptions::IException &ex) {
+        IGNIS_LOG(warning) << "IPostmanModule id " << id << " sent FAILS " << ex.toString();
+        return 1;
+
+    } catch (std::exception &ex) {
+        IGNIS_LOG(warning) << "IPostmanModule id " << id << "sent FAILS " << ex.what();
+        return 1;
+    }
+}
+
 void IPostmanModule::sendAll() {
     try {
-
-
+        auto msgs = executor_data->getPostBox().getOutMessages();
+        size_t threads = executor_data->getParser().getNumber("ignis.executor.transport.threads");
+        int8_t compression = executor_data->getParser().getNumber("ignis.executor.transport.compression");
+        int errors = 0;
+        if (threads > 1) {
+            for (auto &entry: msgs) {
+                errors += send(entry.first, entry.second, compression);
+            }
+        } else {
+            pair<size_t, IMessage> msgs_array[msgs.size()];
+            int i = 0;
+            for (auto &entry: msgs) {
+                msgs_array[i] = make_pair<size_t, IMessage>((size_t) entry.first, (IMessage) entry.second);
+            }
+#pragma omp parallel for num_threads(threads), reduction(+:errors)
+            for (int i = 0; i < msgs.size(); i++) {
+                errors += send(msgs_array[i].first, msgs_array[i].second, compression);
+            }
+        }
+        if (errors > 0) {
+            IGNIS_LOG(error) << "IPostmanModule fail to send " << errors << " messages";
+            exceptions::IException ex("IPostmanModule fail to send " + to_string(errors) + " messages");
+            IRemoteException iex;
+            iex.__set_cause(ex.what());
+            iex.__set_stack(ex.toString());
+            throw iex;
+        }
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_cause(ex.what());

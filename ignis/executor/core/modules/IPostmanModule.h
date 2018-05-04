@@ -6,6 +6,7 @@
 #include <thrift/transport/TServerSocket.h>
 #include "IModule.h"
 #include "../../../rpc/executor/IPostmanModule.h"
+#include "../storage/IMessage.h"
 
 namespace ignis {
     namespace executor {
@@ -29,6 +30,8 @@ namespace ignis {
                     void threadServer();
 
                     void threadAccept(std::shared_ptr<apache::thrift::transport::TTransport> trans);
+
+                    int send(size_t id, storage::IMessage &msg, int8_t compression);
 
                     std::shared_ptr<apache::thrift::transport::TServerSocket> server;
                     bool started;
