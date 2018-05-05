@@ -36,11 +36,13 @@ int main(int argc, char *argv[]) {
 
     if (argc == 1) {
         IGNIS_LOG(error) << "Executor need a server port as argument";
+        return EXIT_FAILURE;
     }
 
-    int port = atoi(argv[0]);
+    int port = atoi(argv[1]);
     if (port == 0) {
         IGNIS_LOG(error) << "Executor need a valid server port as argument";
+        return EXIT_FAILURE;
     }
 
     server->start(processor, port);

@@ -109,7 +109,9 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
         for (int i = 0; i < 10; i++) {
             try{
                 transport->open();
+                break;
             }catch(std::exception &ex){
+                sleep(1);
                 if(i == 9){
                     throw ex;
                 }

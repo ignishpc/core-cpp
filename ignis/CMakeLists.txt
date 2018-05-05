@@ -3,7 +3,11 @@ project(igniscore)
 
 set(CMAKE_CXX_STANDARD 11)
 
-FILE(GLOB rpc rpc/driver/*.hpp rpc/driver/*.cpp rpc/*.hpp rpc/*.cpp)
+FILE(GLOB rpc
+        rpc/*.hpp
+        rpc/*.cpp
+        rpc/driver/*.hpp
+        rpc/driver/*.cpp )
 
 set(SOURCE_FILES
         #Data
@@ -11,6 +15,7 @@ set(SOURCE_FILES
         data/RTTInfo.cpp
         data/IManager.h
         data/IObjectProtocol.h
+        data/IOperators.h
         data/IFileTransport.h
         data/IFileTransport.cpp
         data/serialization/IEnumTypes.h
@@ -41,7 +46,7 @@ set(SOURCE_FILES
         exceptions/ILogicError.h
         exceptions/IInvalidArgument.h
         #RPC
-        ${rpc} data/IOperators.h)
+        ${rpc})
 
 set(CMAKE_CXX_FLAGS "-fPIC -rdynamic")#-O3
 add_library(igniscore SHARED ${SOURCE_FILES})

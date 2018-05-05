@@ -55,19 +55,7 @@ void IServerModule::stop() {
 }
 
 bool IServerModule::test() {
-    try {
-        return true;
-    } catch (exceptions::IException &ex) {
-        IRemoteException iex;
-        iex.__set_cause(ex.what());
-        iex.__set_stack(ex.toString());
-        throw iex;
-    } catch (std::exception &ex) {
-        IRemoteException iex;
-        iex.__set_cause(ex.what());
-        iex.__set_stack("UNKNOWN");
-        throw iex;
-    }
+    return true;
 }
 
 void IServerModule::setContext(const int64_t id, const std::map<std::string, std::string> &properties) {

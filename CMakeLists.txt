@@ -6,7 +6,9 @@ ADD_SUBDIRECTORY(ignis)
 set(CMAKE_CXX_STANDARD 11)
 
 
-FILE(GLOB rpc ignis/rpc/executor/*.hpp ignis/rpc/executor/*.cpp)
+FILE(GLOB rpc
+        ignis/rpc/executor/*.hpp
+        ignis/rpc/executor/*.cpp)
 
 set(SOURCE_FILES
         ignis/main.cpp
