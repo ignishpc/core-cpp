@@ -47,12 +47,12 @@ void IReducerModule::getKeys(std::unordered_map<int64_t, int64_t> &_return, cons
         IGNIS_LOG(info) << "IReducerModule keys ready";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -74,12 +74,12 @@ void IReducerModule::setExecutorKeys(const std::string &host, const int32_t port
         IGNIS_LOG(info) << "IReducerModule key swap prepared";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -139,12 +139,12 @@ void IReducerModule::joinData(const std::vector<int64_t> &msg_ids) {
         IGNIS_LOG(info) << "IReducerModule keys joined";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -183,12 +183,12 @@ void IReducerModule::reduceByKey() {
         IGNIS_LOG(info) << "IReducerModule finished";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -204,12 +204,12 @@ void IReducerModule::reset() {
         key_value.reserve(1);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }

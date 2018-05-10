@@ -53,12 +53,12 @@ void IMapperModule::_map(const ::ignis::rpc::executor::IFunction &funct) {
         IGNIS_LOG(info) << "IMapperModule finished";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -91,12 +91,12 @@ void IMapperModule::streamingMap(const ::ignis::rpc::executor::IFunction &funct,
         IGNIS_LOG(info) << "IMapperModule finished";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }

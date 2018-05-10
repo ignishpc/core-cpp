@@ -85,12 +85,12 @@ void IPostmanModule::start() {
         std::thread(&IPostmanModule::threadServer, this).detach();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -169,18 +169,18 @@ void IPostmanModule::sendAll() {
             IGNIS_LOG(error) << "IPostmanModule fail to send " << errors << " messages";
             exceptions::IException ex("IPostmanModule fail to send " + to_string(errors) + " messages");
             IRemoteException iex;
-            iex.__set_cause(ex.what());
+            iex.__set_message(ex.what());
             iex.__set_stack(ex.toString());
             throw iex;
         }
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -192,12 +192,12 @@ void IPostmanModule::clearAll() {
 
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }

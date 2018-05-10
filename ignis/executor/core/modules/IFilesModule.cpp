@@ -37,12 +37,12 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
         executor_data->loadObject(object);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -77,12 +77,12 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
         }
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -125,12 +125,12 @@ void IFilesModule::saveJson(const std::string &path, const bool joined) {
 
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }

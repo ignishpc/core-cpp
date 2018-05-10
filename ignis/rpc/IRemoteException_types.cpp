@@ -18,8 +18,8 @@ IRemoteException::~IRemoteException() throw() {
 }
 
 
-void IRemoteException::__set_cause(const std::string& val) {
-  this->cause = val;
+void IRemoteException::__set_message(const std::string& val) {
+  this->message = val;
 }
 
 void IRemoteException::__set_stack(const std::string& val) {
@@ -44,7 +44,7 @@ uint32_t IRemoteException::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   using ::apache::thrift::protocol::TProtocolException;
 
-  bool isset_cause = false;
+  bool isset_message = false;
   bool isset_stack = false;
 
   while (true)
@@ -57,8 +57,8 @@ uint32_t IRemoteException::read(::apache::thrift::protocol::TProtocol* iprot) {
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->cause);
-          isset_cause = true;
+          xfer += iprot->readString(this->message);
+          isset_message = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -80,7 +80,7 @@ uint32_t IRemoteException::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   xfer += iprot->readStructEnd();
 
-  if (!isset_cause)
+  if (!isset_message)
     throw TProtocolException(TProtocolException::INVALID_DATA);
   if (!isset_stack)
     throw TProtocolException(TProtocolException::INVALID_DATA);
@@ -92,8 +92,8 @@ uint32_t IRemoteException::write(::apache::thrift::protocol::TProtocol* oprot) c
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IRemoteException");
 
-  xfer += oprot->writeFieldBegin("cause", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->cause);
+  xfer += oprot->writeFieldBegin("message", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->message);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("stack", ::apache::thrift::protocol::T_STRING, 2);
@@ -107,23 +107,23 @@ uint32_t IRemoteException::write(::apache::thrift::protocol::TProtocol* oprot) c
 
 void swap(IRemoteException &a, IRemoteException &b) {
   using ::std::swap;
-  swap(a.cause, b.cause);
+  swap(a.message, b.message);
   swap(a.stack, b.stack);
 }
 
 IRemoteException::IRemoteException(const IRemoteException& other0) : TException() {
-  cause = other0.cause;
+  message = other0.message;
   stack = other0.stack;
 }
 IRemoteException& IRemoteException::operator=(const IRemoteException& other1) {
-  cause = other1.cause;
+  message = other1.message;
   stack = other1.stack;
   return *this;
 }
 void IRemoteException::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
   out << "IRemoteException(";
-  out << "cause=" << to_string(cause);
+  out << "message=" << to_string(message);
   out << ", " << "stack=" << to_string(stack);
   out << ")";
 }

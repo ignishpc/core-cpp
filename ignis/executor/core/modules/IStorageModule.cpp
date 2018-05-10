@@ -29,12 +29,12 @@ void IStorageModule::cache(const int64_t id, const std::string &storage) {
         }
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -46,12 +46,12 @@ void IStorageModule::uncache(const int64_t id) {
         executor_data->getStoredObjects().erase(id);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
@@ -63,12 +63,12 @@ void IStorageModule::load(const int64_t id) {
         executor_data->loadObject(executor_data->getStoredObjects()[id]);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack(ex.toString());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
-        iex.__set_cause(ex.what());
+        iex.__set_message(ex.what());
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
