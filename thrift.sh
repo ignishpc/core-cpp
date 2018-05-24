@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-if [ $# -ne 1 ] || [ ! -f "$1"/ignis/rpc/*.thrift ]; 
+if [ $# -ne 1 ] || [ ! -d "$1"/ignis/rpc/ ] || [ ! -f $(find "$1"/ignis/rpc/ -name "*thrift" | head -n 1) ];
     then echo "usage thrift.sh <rpc-folder>"
     exit
 fi
