@@ -13,12 +13,21 @@ namespace ignis {
                 public:
                     IMapperModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void _map(const  ::ignis::rpc::executor::IFunction& funct) override;
+                    void _map(const  ::ignis::rpc::executor::IFunction& sf) override;
 
-                    void streamingMap(const  ::ignis::rpc::executor::IFunction& funct, bool ordered) override;
+                    void flatmap(const  ::ignis::rpc::executor::IFunction& sf);
+
+                    void streamingMap(const  ::ignis::rpc::executor::IFunction& sf, bool ordered) override;
+
+                    void streamingFlatmap(const  ::ignis::rpc::executor::IFunction& sf, bool ordered);
 
                     virtual ~IMapperModule();
 
+                private:
+
+                    void mapAux(const  ::ignis::rpc::executor::IFunction& sf, bool flat);
+
+                    void streamingMapAux(const  ::ignis::rpc::executor::IFunction& sf, bool ordered, bool flat);
                 };
             }
         }

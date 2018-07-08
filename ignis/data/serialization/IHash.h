@@ -48,13 +48,6 @@ namespace std {
         }
     };
 
-    template<class A, class B>
-    struct hash<ignis::data::ITupleBase<A, B>> {
-        std::size_t operator()(ignis::data::ITupleBase<A, B> const &v) const noexcept {
-            return boost::hash_value(((ignis::data::ITuple<A, B> &) v).asPair());
-        }
-    };
-
     template<class T, class A>
     struct hash<std::vector<T, A>> {
         std::size_t operator()(std::vector<T, A> const &v) const noexcept {

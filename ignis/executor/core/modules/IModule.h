@@ -24,6 +24,9 @@ namespace ignis {
                     std::shared_ptr<storage::IObject>
                     getIObject(std::shared_ptr<data::IManager<storage::IObject::Any>> m, size_t lines = 1000, size_t bytes = 50 * 1024 * 1024);
 
+                    std::shared_ptr<storage::IObject>
+                    getIObject(std::shared_ptr<data::IManager<storage::IObject::Any>> m, size_t lines, size_t bytes, std::string storage);
+
                     template<typename T>
                     std::shared_ptr<IDinamicObject<T>> loadFunction(const rpc::executor::IFunction &funct) {
                         IGNIS_LOG(info) << "IModule loading function";

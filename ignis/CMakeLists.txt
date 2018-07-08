@@ -30,11 +30,14 @@ set(SOURCE_FILES
         #Executor api
         executor/api/IReadIterator.h
         executor/api/IWriteIterator.h
-        executor/api/IMapper.h
         executor/api/IReducer.h
         executor/api/IContext.h
         executor/api/IContext.cpp
         executor/api/IRegister.h
+        executor/api/Iterable.h
+        executor/api/function/IFunction.h
+        executor/api/function/IFlatMapFunction.h
+        executor/api/function/IFunction2.h
 
         #Driver
         driver/api/IgnisException.h
@@ -46,7 +49,7 @@ set(SOURCE_FILES
         exceptions/ILogicError.h
         exceptions/IInvalidArgument.h
         #RPC
-        ${rpc})
+        ${rpc} )
 
 set(CMAKE_CXX_FLAGS "-fPIC -rdynamic")#-O3
 add_library(igniscore SHARED ${SOURCE_FILES})

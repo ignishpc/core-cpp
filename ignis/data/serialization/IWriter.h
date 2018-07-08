@@ -338,22 +338,22 @@ namespace ignis {
             template<typename T>
             struct IWriterType<T *> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_STRING);
+                    IWriterType<T>().writeType(protocol);
                 }
 
                 inline void operator()(const T *&obj, IProtocol &protocol) {
-                    protocol.writeString(*obj);
+                    IWriterType<T>().operator()(*obj,protocol);
                 }
             };
 
             template<typename T>
             struct IWriterType<std::shared_ptr<T>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_STRING);
+                    IWriterType<T>().writeType(protocol);
                 }
 
                 inline void operator()(const std::shared_ptr<T> &obj, IProtocol &protocol) {
-                    protocol.writeString(*obj);
+                    IWriterType<T>().operator()(*obj,protocol);
                 }
             };
 

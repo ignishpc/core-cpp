@@ -9,12 +9,17 @@
 #include "executor/core/modules/IServerModule.h"
 #include "executor/core/modules/ISortModule.h"
 #include "executor/core/modules/IStorageModule.h"
-
+#include "executor/api/function/IFlatMapFunction.h"
+#include <set>
 using namespace ignis::executor::core::modules;
 using namespace ignis::rpc::executor;
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();
+
+
+    ignis::executor::api::function::IFlatMapFunction<int,std::set<int>> a;
+
 
     auto processor = std::make_shared<apache::thrift::TMultiplexedProcessor>();
     auto executor_data = std::make_shared<ignis::executor::core::IExecutorData>();

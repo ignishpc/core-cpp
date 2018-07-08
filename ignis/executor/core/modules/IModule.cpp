@@ -10,13 +10,18 @@ using namespace ignis::executor::core::storage;
 IgnisModule::IgnisModule(std::shared_ptr<IExecutorData> &executor_data) : executor_data(executor_data) {}
 
 std::shared_ptr<IObject> IgnisModule::getIObject(size_t bytes) {
-    return getIObject(shared_ptr<data::IManager<IObject::Any>>(), bytes, 0);
+    return getIObject(shared_ptr<data::IManager<IObject::Any>>(), 0, bytes);
 }
 
 std::shared_ptr<IObject>
 IgnisModule::getIObject(shared_ptr<data::IManager<IObject::Any>> m, size_t lines, size_t bytes) {
-    shared_ptr<IObject> object;
     string storage = executor_data->getParser().getString("ignis.executor.storage");
+    return getIObject(shared_ptr<data::IManager<IObject::Any>>(), 0, bytes, storage);
+}
+
+std::shared_ptr<IObject>
+IgnisModule::getIObject(shared_ptr<data::IManager<IObject::Any>> m, size_t lines, size_t bytes, string storage) {
+    shared_ptr<IObject> object;
     int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
     if (storage == "disk" && false) {
         IGNIS_LOG(info) << "Creating Object storage: " << storage << ", compression: " << compression;
