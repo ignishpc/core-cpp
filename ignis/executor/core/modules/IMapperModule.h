@@ -17,17 +17,21 @@ namespace ignis {
 
                     void flatmap(const  ::ignis::rpc::executor::IFunction& sf);
 
+                    void filter(const  ::ignis::rpc::executor::IFunction& sf);
+
                     void streamingMap(const  ::ignis::rpc::executor::IFunction& sf, bool ordered) override;
 
                     void streamingFlatmap(const  ::ignis::rpc::executor::IFunction& sf, bool ordered);
+
+                    void streamingFilter(const  ::ignis::rpc::executor::IFunction& sf, bool ordered);
 
                     virtual ~IMapperModule();
 
                 private:
 
-                    void mapAux(const  ::ignis::rpc::executor::IFunction& sf, bool flat);
+                    void pipe(const  ::ignis::rpc::executor::IFunction& sf, int8_t mode);
 
-                    void streamingMapAux(const  ::ignis::rpc::executor::IFunction& sf, bool ordered, bool flat);
+                    void streaming(const  ::ignis::rpc::executor::IFunction& sf, bool ordered, int8_t mode);
                 };
             }
         }

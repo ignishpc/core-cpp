@@ -11,31 +11,32 @@ using namespace apache::thrift::transport;
 
 IRawMemoryObject::IRawMemoryObject(int8_t compression, uint32_t sz)
         : raw_memory(make_shared<TMemoryBuffer>(sz)),
-          IRawObject(make_shared<TZlibTransport>(raw_memory, 128, 1024, 128, 1024, compression),compression){
+          IRawObject(make_shared<TZlibTransport>(raw_memory, 128, 1024, 128, 1024, compression), compression) {
+}
+
+std::shared_ptr<TMemoryBuffer> IRawMemoryObject::readObservation() {
+    uint8_t *ptr;
+    uint32_t size;
+    raw_memory->getBuffer(&ptr, &size);
+    return make_shared<TMemoryBuffer>(ptr, size);
 }
 
 shared_ptr<ICoreReadIterator<IObject::Any>> IRawMemoryObject::readIterator() {
-    raw_memory.reset();
-    uint8_t *ptr;
-    uint32_t size;
-    auto read_transport = make_shared<TZlibTransport>(make_shared<TMemoryBuffer>(ptr,size));
+    auto read_transport = make_shared<TZlibTransport>(readObservation());
 
 }
 
 shared_ptr<ICoreWriteIterator<IObject::Any>> IRawMemoryObject::writeIterator() {
-    raw_memory.reset();
-    elems = 0;
+    raw_memory->resetBuffer();
     return IRawObject::writeIterator();
 }
 
 void IRawMemoryObject::write(shared_ptr<TTransport> trans, int8_t compression) {
-    raw_memory.reset();
-    elems = 0;
-    IRawObject::write(trans, compression);
+    IRawObject(make_shared<TZlibTransport>(readObservation()), this->compression).write(trans, compression);
 }
 
 void IRawMemoryObject::read(shared_ptr<TTransport> trans) {
-    raw_memory.reset();
+    clear();
     IRawObject::read(trans);
 }
 
@@ -58,7 +59,7 @@ void IRawMemoryObject::fit() {
 
 void IRawMemoryObject::clear() {
     elems = 0;
-    raw_memory.reset();
+    raw_memory->resetBuffer();
 }
 
 string IRawMemoryObject::getType() {

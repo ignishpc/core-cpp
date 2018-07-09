@@ -7,10 +7,14 @@
 #include <vector>
 #include "../RTTInfo.h"
 #include "ITypeHandle.h"
+#include "../IOperators.h"
 
 namespace ignis {
     namespace data {
         namespace serialization {
+
+            template<typename T>
+            class IClassManager;
 
             template<typename T>
             struct IClassManagerType{
@@ -21,11 +25,6 @@ namespace ignis {
 
                 virtual std::shared_ptr<ITypeHandle<T>> getTypeHandle(){
                     return std::make_shared<ITypeHandle<T>>();
-                }
-
-                template<typename C>
-                IClassManagerType<C> &as(){
-                    return *(IClassManagerType<C>*)this;
                 }
             };
 
@@ -77,12 +76,24 @@ namespace ignis {
                     return "pair";
                 }
 
+                virtual T1 &first(std::pair<T1,T2> &p) {
+                    return p.first;
+                }
+
+                virtual T2 &second(std::pair<T1,T2> &p) {
+                    return p.second;
+                }
+
                 virtual std::shared_ptr<ITypeHandle<std::pair<T1,T2>>> getTypeHandle(){
                     return std::make_shared<ITypeHandle<std::pair<T1,T2>>>();
                 }
 
                 virtual std::shared_ptr<IClassManagerType<T1>> getFirstClassManager(){
                     return std::make_shared<IClassManagerType<T1>>();
+                }
+
+                virtual std::shared_ptr<IOperator<T1>> getFirstIOperator(){
+                    return std::make_shared<IOperator<T1>>();
                 }
 
                 virtual std::shared_ptr<IClassManagerType<T2>> getSecondClassManager(){

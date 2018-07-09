@@ -35,6 +35,8 @@ namespace ignis {
 
                     inline bool fastWrite(std::shared_ptr<apache::thrift::transport::TTransport> transport) override;
 
+                    inline std::shared_ptr<apache::thrift::transport::TMemoryBuffer> readObservation();
+
                     std::shared_ptr<apache::thrift::transport::TMemoryBuffer> raw_memory;
                     std::vector<uint64_t > index;
                 };

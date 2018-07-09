@@ -36,7 +36,7 @@ set(SOURCE_FILES
         executor/api/IRegister.h
         executor/api/Iterable.h
         executor/api/function/IFunction.h
-        executor/api/function/IFlatMapFunction.h
+        executor/api/function/IFlatFunction.h
         executor/api/function/IFunction2.h
 
         #Driver

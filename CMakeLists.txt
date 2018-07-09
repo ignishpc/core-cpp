@@ -20,6 +20,8 @@ set(SOURCE_FILES
         ignis/executor/core/IDinamicObject.cpp
         ignis/executor/core/IPropertiesParser.h
         ignis/executor/core/IPropertiesParser.cpp
+
+        #Modules
         ignis/executor/core/modules/IModule.h
         ignis/executor/core/modules/IModule.cpp
         ignis/executor/core/modules/IServerModule.h
@@ -28,14 +30,20 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IMapperModule.cpp
         ignis/executor/core/modules/IReducerModule.h
         ignis/executor/core/modules/IReducerModule.cpp
-        ignis/executor/core/modules/ISortModule.h
-        ignis/executor/core/modules/ISortModule.cpp
         ignis/executor/core/modules/IPostmanModule.h
         ignis/executor/core/modules/IPostmanModule.cpp
         ignis/executor/core/modules/IFilesModule.h
         ignis/executor/core/modules/IFilesModule.cpp
         ignis/executor/core/modules/IStorageModule.h
         ignis/executor/core/modules/IStorageModule.cpp
+        ignis/executor/core/modules/IKeysModule.h
+        ignis/executor/core/modules/IKeysModule.cpp
+        ignis/executor/core/modules/IDriverModule.h
+        ignis/executor/core/modules/IDriverModule.cpp
+        ignis/executor/core/modules/ISortModule.h
+        ignis/executor/core/modules/ISortModule.cpp
+
+        #Storage
         ignis/executor/core/storage/IPostBox.h
         ignis/executor/core/storage/IMessage.h
         ignis/executor/core/storage/IPostBox.cpp
@@ -59,6 +67,10 @@ set(SOURCE_FILES
         ignis/executor/core/storage/IObjectWrapper.cpp
         ignis/executor/core/storage/ICountIterator.h
         ignis/executor/core/storage/ISkipIterator.h
+        ignis/executor/core/storage/IFilterIterator.h
+        ignis/executor/core/storage/IFilterIterator.cpp
+        ignis/executor/core/storage/IObjectWrapperIterator.h
+        ignis/executor/core/storage/IObjectWrapperIterator.cpp
         ${rpc})
 
 set(CMAKE_CXX_FLAGS "-pthread -fopenmp -DBOOST_ALL_DYN_LINK")#-O3
