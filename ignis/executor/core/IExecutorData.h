@@ -27,8 +27,6 @@ namespace ignis {
 
                 std::shared_ptr<storage::IObject> getSharedLoadObject();
 
-                std::unordered_map<size_t, std::shared_ptr<storage::IObject>>& getStoredObjects();
-
                 api::IContext &getContext();
 
                 core::IPropertiesParser &getParser();
@@ -45,7 +43,6 @@ namespace ignis {
                 int64_t executor_id;
                 int64_t threads;
                 std::shared_ptr<storage::IObject> loaded_object;
-                std::unordered_map<size_t, std::shared_ptr<storage::IObject>> stored_objects;
                 storage::IPostBox post_box;
                 api::IContext context;
                 core::IPropertiesParser properties_parser;

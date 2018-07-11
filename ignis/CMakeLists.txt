@@ -38,6 +38,7 @@ set(SOURCE_FILES
         executor/api/function/IFunction.h
         executor/api/function/IFlatFunction.h
         executor/api/function/IFunction2.h
+        executor/api/function/IPairFunction2.h
 
         #Driver
         driver/api/IgnisException.h

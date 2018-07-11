@@ -38,6 +38,15 @@ namespace ignis {
                 };
 
                 template<typename T>
+                inline void copyNext(ICoreReadIterator<T> &reader, ICoreWriteIterator<T> &writer) {
+                    if (reader.isMoved()){
+                        writer.write((T &&) reader.next());
+                    }else{
+                        writer.write(reader.next());
+                    }
+                }
+
+                template<typename T>
                 inline void
                 readToWrite(ICoreReadIterator<T> &reader, ICoreWriteIterator<T> &writer, bool force_move = false) {
                     if (reader.isMoved() || force_move) {

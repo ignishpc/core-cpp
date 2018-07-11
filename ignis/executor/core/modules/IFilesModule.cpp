@@ -75,6 +75,7 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
             (*printer)(reader->next(), fs);
             fs << endl;
         }
+        executor_data->getSharedLoadObject().reset();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -122,7 +123,7 @@ void IFilesModule::saveJson(const std::string &path, const bool joined) {
             (*printer)(reader->next(), fs);
         }
         fs << "]";
-
+        executor_data->getSharedLoadObject().reset();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());

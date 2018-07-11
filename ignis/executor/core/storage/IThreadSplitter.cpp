@@ -18,13 +18,14 @@ class ISplitterIterator : public ICoreReadIterator<IObject::Any>, public ICoreWr
 public:
     ISplitterIterator(shared_ptr<ICoreReadIterator<IObject::Any>> it_read,
                       shared_ptr<ICoreWriteIterator<IObject::Any>> it_write,
-                      shared_ptr<ignis::data::IManager<IObject::Any>> m,
+                      shared_ptr<ignis::data::IManager<IObject::Any>> m_in,
+                      shared_ptr<ignis::data::IManager<IObject::Any>> m_out,
                       std::mutex &mutex_read, std::mutex &mutex_write, size_t buffer)
-            : mutex_read(mutex_read), mutex_write(mutex_write), m(m), it_read(it_read), it_write(it_write),
-              buffer(buffer) {
-        buffer_input = newBuffer(buffer);
+            : mutex_read(mutex_read), mutex_write(mutex_write), m_in(m_in), m_out(m_out), it_read(it_read),
+              it_write(it_write), buffer(buffer) {
+        buffer_input = newBuffer(buffer, m_in);
         buffer_input_read = buffer_input->readIterator();
-        buffer_output = newBuffer(buffer);
+        buffer_output = newBuffer(buffer, m_out);
         buffer_output_write = buffer_output->writeIterator();
     }
 
@@ -67,7 +68,7 @@ public:
         buffer_input_read = buffer_input->readIterator();
     }
 
-    shared_ptr<IObject> newBuffer(size_t size) {
+    shared_ptr<IObject> newBuffer(size_t size, shared_ptr<ignis::data::IManager<IObject::Any>> m) {
         return make_shared<IMemoryObject>(m, size);
     }
 
@@ -85,7 +86,8 @@ protected:
     std::mutex &mutex_write;
     shared_ptr<ICoreReadIterator<IObject::Any>> it_read;
     shared_ptr<ICoreWriteIterator<IObject::Any>> it_write;
-    shared_ptr<ignis::data::IManager<IObject::Any>> m;
+    shared_ptr<ignis::data::IManager<IObject::Any>> m_in;
+    shared_ptr<ignis::data::IManager<IObject::Any>> m_out;
     size_t elems;
     size_t buffer;
     shared_ptr<IObject> buffer_input;
@@ -101,11 +103,12 @@ public:
     IOrderSplitterIterator(size_t id, size_t threads,
                            shared_ptr<ICoreReadIterator<IObject::Any>> it_read,
                            shared_ptr<ICoreWriteIterator<IObject::Any>> it_write,
-                           shared_ptr<ignis::data::IManager<IObject::Any>> m,
+                           shared_ptr<ignis::data::IManager<IObject::Any>> m_in,
+                           shared_ptr<ignis::data::IManager<IObject::Any>> m_out,
                            std::mutex &mutex_read, std::mutex &mutex_write, size_t buffer, size_t &write_next,
                            shared_ptr<vector<boost::lockfree::spsc_queue<std::shared_ptr<IObject>>>> &queues)
-            : id(id), ISplitterIterator(it_read, it_write,m, mutex_read, mutex_write, buffer), write_next(write_next),
-              threads(threads), queues(queues) {}
+            : id(id), ISplitterIterator(it_read, it_write, m_in, m_out, mutex_read, mutex_write, buffer),
+              write_next(write_next), threads(threads), queues(queues) {}
 
     bool hashNext() override {
         if (elems > 0) {
@@ -115,7 +118,7 @@ public:
             while (!(*queues)[id].push(buffer_output)) {
                 sleep(1);
             }
-            buffer_output = newBuffer(buffer);
+            buffer_output = newBuffer(buffer, m_out);
             buffer_output_write = buffer_output->writeIterator();
         } else {
             std::lock_guard<std::mutex> lock(mutex_write);
@@ -152,18 +155,19 @@ IThreadSplitter::IThreadSplitter(IObject &object_in, IObject &object_out, size_t
         object_out(object_out) {
     auto it_read = object_in.readIterator();
     auto it_write = object_in.writeIterator();
-    auto manager = object_in.getManager();
+    auto m_in = object_in.getManager();
+    auto m_out = object_out.getManager();
     if (order) {
         auto queues = make_shared<vector<boost::lockfree::spsc_queue<std::shared_ptr<IObject>>>>();
         for (size_t i = 0; i < threads; i++) {
-            auto it = make_shared<IOrderSplitterIterator>(i, threads, it_read, it_write, manager, mutex_read,
+            auto it = make_shared<IOrderSplitterIterator>(i, threads, it_read, it_write, m_in, m_out, mutex_read,
                                                           mutex_write,
                                                           buffer, write_next, queues);
             iterators.push_back(pair<decltype(it), decltype(it)>(it, it));
         }
     } else {
         for (size_t i = 0; i < threads; i++) {
-            auto it = make_shared<ISplitterIterator>(it_read, it_write, manager, mutex_read, mutex_write, buffer);
+            auto it = make_shared<ISplitterIterator>(it_read, it_write, m_in, m_out, mutex_read, mutex_write, buffer);
             iterators.push_back(pair<decltype(it), decltype(it)>(it, it));
         }
     }

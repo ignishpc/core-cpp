@@ -13,25 +13,25 @@ namespace ignis {
                 public:
                     IMapperModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void _map(const  ::ignis::rpc::executor::IFunction& sf) override;
+                    void _map(const  rpc::ISourceFunction& sf) override;
 
-                    void flatmap(const  ::ignis::rpc::executor::IFunction& sf);
+                    void flatmap(const  rpc::ISourceFunction& sf) override;
 
-                    void filter(const  ::ignis::rpc::executor::IFunction& sf);
+                    void filter(const  rpc::ISourceFunction& sf) override;
 
-                    void streamingMap(const  ::ignis::rpc::executor::IFunction& sf, bool ordered) override;
+                    void streamingMap(const  rpc::ISourceFunction& sf, bool ordered) override;
 
-                    void streamingFlatmap(const  ::ignis::rpc::executor::IFunction& sf, bool ordered);
+                    void streamingFlatmap(const  rpc::ISourceFunction& sf, bool ordered) override;
 
-                    void streamingFilter(const  ::ignis::rpc::executor::IFunction& sf, bool ordered);
+                    void streamingFilter(const  rpc::ISourceFunction& sf, bool ordered) override;
 
                     virtual ~IMapperModule();
 
                 private:
 
-                    void pipe(const  ::ignis::rpc::executor::IFunction& sf, int8_t mode);
+                    void pipe(const  rpc::ISourceFunction& sf, bool filter);
 
-                    void streaming(const  ::ignis::rpc::executor::IFunction& sf, bool ordered, int8_t mode);
+                    void streaming(const  rpc::ISourceFunction& sf, bool ordered, bool filter);
                 };
             }
         }

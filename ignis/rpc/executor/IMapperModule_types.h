@@ -17,7 +17,7 @@
 
 #include <thrift/stdcxx.h>
 #include "../IRemoteException_types.h"
-#include "IFunction_types.h"
+#include "../ISourceFunction_types.h"
 
 
 namespace ignis { namespace rpc { namespace executor {

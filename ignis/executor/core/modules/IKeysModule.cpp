@@ -11,7 +11,6 @@ using namespace std;
 using namespace ignis::executor::core;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::modules;
-using ignis::rpc::executor::IFunction;
 using ignis::rpc::IRemoteException;
 
 IKeysModule::IKeysModule(std::shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data) {}

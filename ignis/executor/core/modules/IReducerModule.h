@@ -14,19 +14,15 @@ namespace ignis {
                 public:
                     IReducerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void reduceByKey() override;
+                    void reduceByKey(const  rpc::ISourceFunction& sf) override ;
+
+                    void groupByKey() override ;
 
                     virtual ~IReducerModule();
 
-                    ///TO DELETE
+                private:
+                    void keyMatch(std::vector<std::shared_ptr<storage::IObject>> &matches);
 
-                    void getKeys(std::unordered_map<int64_t, int64_t> &_return,
-                                 const rpc::executor::IFunction &funct, const bool single) override{}
-                    void
-                    setExecutorKeys(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id,
-                                    const int64_t msg_id) override{}
-                    void joinData(const std::vector<int64_t> &msg_ids) override{}
-                    void reset() override{}
                 };
             }
         }

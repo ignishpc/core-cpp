@@ -11,6 +11,14 @@ namespace ignis {
             namespace function {
                 template<typename T, typename R>
                 class IFlatFunction : public IFunction<T, Iterable<R>> {
+
+                    virtual void writeCall(T &t, IContext &context, IWriteIterator<R> &writer) {
+                        auto iterable = call(t, context);
+                        for (auto it = iterable.readIterator(); it->hashNext();) {
+                            writer.write(it->next());
+                        }
+                    }
+
                 };
             }
         }

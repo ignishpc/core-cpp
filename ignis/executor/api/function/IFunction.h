@@ -13,8 +13,12 @@ namespace ignis {
                 template<typename T, typename R>
                 class IFunction {
                 public:
-                    const data::IManager<T> type_t;
-                    const data::IManager<R> type_r;
+                    const data::IManager <T> type_t;
+                    const data::IManager <R> type_r;
+
+                    virtual void writeCall(T &t, IContext &context, IWriteIterator<R> &writer) {
+                        writer.write(call(t, context));
+                    }
 
                     virtual void before(IContext &context) {}
 

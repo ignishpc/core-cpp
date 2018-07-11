@@ -4,20 +4,20 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#ifndef IFunction_CONSTANTS_H
-#define IFunction_CONSTANTS_H
+#ifndef IKeysModule_CONSTANTS_H
+#define IKeysModule_CONSTANTS_H
 
-#include "IFunction_types.h"
+#include "IKeysModule_types.h"
 
 namespace ignis { namespace rpc { namespace executor {
 
-class IFunctionConstants {
+class IKeysModuleConstants {
  public:
-  IFunctionConstants();
+  IKeysModuleConstants();
 
 };
 
-extern const IFunctionConstants g_IFunction_constants;
+extern const IKeysModuleConstants g_IKeysModule_constants;
 
 }}} // namespace
 

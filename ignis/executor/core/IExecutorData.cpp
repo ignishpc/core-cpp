@@ -27,10 +27,6 @@ std::shared_ptr<storage::IObject> IExecutorData::getSharedLoadObject(){
     return loaded_object;
 }
 
-std::unordered_map<size_t, std::shared_ptr<storage::IObject>>& IExecutorData::getStoredObjects(){
-    return stored_objects;
-};
-
 ignis::executor::api::IContext &IExecutorData::getContext(){
     return context;
 }

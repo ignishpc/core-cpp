@@ -3,6 +3,8 @@
 
 #include <functional>
 #include <memory>
+#include "serialization/IPrinter.h"
+#include <sstream>
 
 namespace ignis {
     namespace data {
@@ -32,7 +34,13 @@ namespace ignis {
                 return std::hash<T>()(a);
             }
 
-            virtual std::shared_ptr<IOperator<T>> shared() const{
+            virtual std::string toString(const T &a) {
+                std::stringstream ss;
+                serialization::IPrinter<T>().operator()(a, ss);
+                return ss.str();
+            }
+
+            virtual std::shared_ptr<IOperator<T>> shared() const {
                 return std::make_shared<IOperator<T>>();
             }
 

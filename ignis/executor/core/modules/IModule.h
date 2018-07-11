@@ -7,7 +7,7 @@
 #include "../IExecutorData.h"
 #include "../IDinamicObject.h"
 #include "../ILog.h"
-#include "../../../rpc/executor/IFunction_types.h"
+#include "../../../rpc/ISourceFunction_types.h"
 #include "../../../exceptions/IInvalidArgument.h"
 
 namespace ignis {
@@ -28,7 +28,7 @@ namespace ignis {
                     getIObject(std::shared_ptr<data::IManager<storage::IObject::Any>> m, size_t lines, size_t bytes, std::string storage);
 
                     template<typename T>
-                    std::shared_ptr<IDinamicObject<T>> loadFunction(const rpc::executor::IFunction &funct) {
+                    std::shared_ptr<IDinamicObject<T>> loadFunction(const rpc::ISourceFunction &funct) {
                         IGNIS_LOG(info) << "IModule loading function";
                         if (funct.__isset.bytes) {
                             throw exceptions::IInvalidArgument("C++ not support function serialization");

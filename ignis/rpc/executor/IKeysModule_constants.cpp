@@ -4,13 +4,13 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#include "IFunction_constants.h"
+#include "IKeysModule_constants.h"
 
 namespace ignis { namespace rpc { namespace executor {
 
-const IFunctionConstants g_IFunction_constants;
+const IKeysModuleConstants g_IKeysModule_constants;
 
-IFunctionConstants::IFunctionConstants() {
+IKeysModuleConstants::IKeysModuleConstants() {
 }
 
 }}} // namespace
