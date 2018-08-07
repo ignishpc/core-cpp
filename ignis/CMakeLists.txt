@@ -57,5 +57,4 @@ add_library(igniscore SHARED ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(igniscore jsoncpp thrift boost_system boost_filesystem dl thriftz z)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
-install(DIRECTORY data driver exceptions DESTINATION include/ignis FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")
-install(DIRECTORY executor/api DESTINATION include/ignis/executor FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")
+install(DIRECTORY data driver exceptions executor rpc DESTINATION include/ignis FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")

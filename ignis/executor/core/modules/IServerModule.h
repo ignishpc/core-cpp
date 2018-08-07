@@ -15,13 +15,13 @@ namespace ignis {
                 public:
                     IServerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void start(std::shared_ptr<apache::thrift::TProcessor> processor, int port);
+                    virtual void start(std::shared_ptr<apache::thrift::TProcessor> processor, int port);
 
-                    void setContext(const int64_t id, const std::map<std::string, std::string> &properties) override;
+                    virtual void setContext(const int64_t id, const std::map<std::string, std::string> &properties) override;
 
-                    void stop() override;
+                    virtual void stop() override;
 
-                    bool test() override;
+                    virtual bool test() override;
 
                     virtual ~IServerModule();
 

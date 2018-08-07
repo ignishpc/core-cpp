@@ -22,8 +22,8 @@ class IKeysModuleIf {
  public:
   virtual ~IKeysModuleIf() {}
   virtual void getKeys(std::unordered_map<int64_t, int64_t>& _return, const bool single) = 0;
-  virtual void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id) = 0;
-  virtual void joinPairs(const std::vector<int64_t> & msg_ids) = 0;
+  virtual void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id) = 0;
+  virtual void joinPairs() = 0;
   virtual void reset() = 0;
 };
 
@@ -57,10 +57,10 @@ class IKeysModuleNull : virtual public IKeysModuleIf {
   void getKeys(std::unordered_map<int64_t, int64_t>& /* _return */, const bool /* single */) {
     return;
   }
-  void sendPairs(const std::string& /* host */, const int32_t /* port */, const std::vector<int64_t> & /* keys_id */, const int64_t /* msg_id */) {
+  void sendPairs(const std::string& /* host */, const int32_t /* port */, const std::vector<int64_t> & /* keys_id */) {
     return;
   }
-  void joinPairs(const std::vector<int64_t> & /* msg_ids */) {
+  void joinPairs() {
     return;
   }
   void reset() {
@@ -181,11 +181,10 @@ class IKeysModule_getKeys_presult {
 };
 
 typedef struct _IKeysModule_sendPairs_args__isset {
-  _IKeysModule_sendPairs_args__isset() : host(false), port(false), keys_id(false), msg_id(false) {}
+  _IKeysModule_sendPairs_args__isset() : host(false), port(false), keys_id(false) {}
   bool host :1;
   bool port :1;
   bool keys_id :1;
-  bool msg_id :1;
 } _IKeysModule_sendPairs_args__isset;
 
 class IKeysModule_sendPairs_args {
@@ -193,14 +192,13 @@ class IKeysModule_sendPairs_args {
 
   IKeysModule_sendPairs_args(const IKeysModule_sendPairs_args&);
   IKeysModule_sendPairs_args& operator=(const IKeysModule_sendPairs_args&);
-  IKeysModule_sendPairs_args() : host(), port(0), msg_id(0) {
+  IKeysModule_sendPairs_args() : host(), port(0) {
   }
 
   virtual ~IKeysModule_sendPairs_args() throw();
   std::string host;
   int32_t port;
   std::vector<int64_t>  keys_id;
-  int64_t msg_id;
 
   _IKeysModule_sendPairs_args__isset __isset;
 
@@ -210,8 +208,6 @@ class IKeysModule_sendPairs_args {
 
   void __set_keys_id(const std::vector<int64_t> & val);
 
-  void __set_msg_id(const int64_t val);
-
   bool operator == (const IKeysModule_sendPairs_args & rhs) const
   {
     if (!(host == rhs.host))
@@ -219,8 +215,6 @@ class IKeysModule_sendPairs_args {
     if (!(port == rhs.port))
       return false;
     if (!(keys_id == rhs.keys_id))
-      return false;
-    if (!(msg_id == rhs.msg_id))
       return false;
     return true;
   }
@@ -244,7 +238,6 @@ class IKeysModule_sendPairs_pargs {
   const std::string* host;
   const int32_t* port;
   const std::vector<int64_t> * keys_id;
-  const int64_t* msg_id;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -305,10 +298,6 @@ class IKeysModule_sendPairs_presult {
 
 };
 
-typedef struct _IKeysModule_joinPairs_args__isset {
-  _IKeysModule_joinPairs_args__isset() : msg_ids(false) {}
-  bool msg_ids :1;
-} _IKeysModule_joinPairs_args__isset;
 
 class IKeysModule_joinPairs_args {
  public:
@@ -319,16 +308,9 @@ class IKeysModule_joinPairs_args {
   }
 
   virtual ~IKeysModule_joinPairs_args() throw();
-  std::vector<int64_t>  msg_ids;
 
-  _IKeysModule_joinPairs_args__isset __isset;
-
-  void __set_msg_ids(const std::vector<int64_t> & val);
-
-  bool operator == (const IKeysModule_joinPairs_args & rhs) const
+  bool operator == (const IKeysModule_joinPairs_args & /* rhs */) const
   {
-    if (!(msg_ids == rhs.msg_ids))
-      return false;
     return true;
   }
   bool operator != (const IKeysModule_joinPairs_args &rhs) const {
@@ -348,7 +330,6 @@ class IKeysModule_joinPairs_pargs {
 
 
   virtual ~IKeysModule_joinPairs_pargs() throw();
-  const std::vector<int64_t> * msg_ids;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -529,11 +510,11 @@ class IKeysModuleClient : virtual public IKeysModuleIf {
   void getKeys(std::unordered_map<int64_t, int64_t>& _return, const bool single);
   void send_getKeys(const bool single);
   void recv_getKeys(std::unordered_map<int64_t, int64_t>& _return);
-  void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
-  void send_sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
+  void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id);
+  void send_sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id);
   void recv_sendPairs();
-  void joinPairs(const std::vector<int64_t> & msg_ids);
-  void send_joinPairs(const std::vector<int64_t> & msg_ids);
+  void joinPairs();
+  void send_joinPairs();
   void recv_joinPairs();
   void reset();
   void send_reset();
@@ -602,22 +583,22 @@ class IKeysModuleMultiface : virtual public IKeysModuleIf {
     return;
   }
 
-  void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id) {
+  void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->sendPairs(host, port, keys_id, msg_id);
+      ifaces_[i]->sendPairs(host, port, keys_id);
     }
-    ifaces_[i]->sendPairs(host, port, keys_id, msg_id);
+    ifaces_[i]->sendPairs(host, port, keys_id);
   }
 
-  void joinPairs(const std::vector<int64_t> & msg_ids) {
+  void joinPairs() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->joinPairs(msg_ids);
+      ifaces_[i]->joinPairs();
     }
-    ifaces_[i]->joinPairs(msg_ids);
+    ifaces_[i]->joinPairs();
   }
 
   void reset() {
@@ -662,11 +643,11 @@ class IKeysModuleConcurrentClient : virtual public IKeysModuleIf {
   void getKeys(std::unordered_map<int64_t, int64_t>& _return, const bool single);
   int32_t send_getKeys(const bool single);
   void recv_getKeys(std::unordered_map<int64_t, int64_t>& _return, const int32_t seqid);
-  void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
-  int32_t send_sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id, const int64_t msg_id);
+  void sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id);
+  int32_t send_sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id);
   void recv_sendPairs(const int32_t seqid);
-  void joinPairs(const std::vector<int64_t> & msg_ids);
-  int32_t send_joinPairs(const std::vector<int64_t> & msg_ids);
+  void joinPairs();
+  int32_t send_joinPairs();
   void recv_joinPairs(const int32_t seqid);
   void reset();
   int32_t send_reset();

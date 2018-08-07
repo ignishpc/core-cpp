@@ -14,9 +14,9 @@ namespace ignis {
                 public:
                     IReducerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void reduceByKey(const  rpc::ISourceFunction& sf) override ;
+                    virtual void reduceByKey(const  rpc::ISourceFunction& sf) override ;
 
-                    void groupByKey() override ;
+                    virtual void groupByKey() override ;
 
                     virtual ~IReducerModule();
 

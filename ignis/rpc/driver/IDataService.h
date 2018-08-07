@@ -25,7 +25,8 @@ class IDataServiceIf {
   virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
   virtual void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
   virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
-  virtual void saveAsFile(const IDataId& data, const std::string& path, const bool join) = 0;
+  virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
+  virtual void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join) = 0;
 };
 
 class IDataServiceIfFactory {
@@ -67,7 +68,10 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void reduceByKey(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
     return;
   }
-  void saveAsFile(const IDataId& /* data */, const std::string& /* path */, const bool /* join */) {
+  void saveAsTextFile(const IDataId& /* data */, const std::string& /* path */, const bool /* join */) {
+    return;
+  }
+  void saveAsJsonFile(const IDataId& /* data */, const std::string& /* path */, const bool /* join */) {
     return;
   }
 };
@@ -547,27 +551,27 @@ class IDataService_reduceByKey_presult {
 
 };
 
-typedef struct _IDataService_saveAsFile_args__isset {
-  _IDataService_saveAsFile_args__isset() : data(false), path(false), join(false) {}
+typedef struct _IDataService_saveAsTextFile_args__isset {
+  _IDataService_saveAsTextFile_args__isset() : data(false), path(false), join(false) {}
   bool data :1;
   bool path :1;
   bool join :1;
-} _IDataService_saveAsFile_args__isset;
+} _IDataService_saveAsTextFile_args__isset;
 
-class IDataService_saveAsFile_args {
+class IDataService_saveAsTextFile_args {
  public:
 
-  IDataService_saveAsFile_args(const IDataService_saveAsFile_args&);
-  IDataService_saveAsFile_args& operator=(const IDataService_saveAsFile_args&);
-  IDataService_saveAsFile_args() : path(), join(0) {
+  IDataService_saveAsTextFile_args(const IDataService_saveAsTextFile_args&);
+  IDataService_saveAsTextFile_args& operator=(const IDataService_saveAsTextFile_args&);
+  IDataService_saveAsTextFile_args() : path(), join(0) {
   }
 
-  virtual ~IDataService_saveAsFile_args() throw();
+  virtual ~IDataService_saveAsTextFile_args() throw();
   IDataId data;
   std::string path;
   bool join;
 
-  _IDataService_saveAsFile_args__isset __isset;
+  _IDataService_saveAsTextFile_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
@@ -575,7 +579,7 @@ class IDataService_saveAsFile_args {
 
   void __set_join(const bool val);
 
-  bool operator == (const IDataService_saveAsFile_args & rhs) const
+  bool operator == (const IDataService_saveAsTextFile_args & rhs) const
   {
     if (!(data == rhs.data))
       return false;
@@ -585,11 +589,11 @@ class IDataService_saveAsFile_args {
       return false;
     return true;
   }
-  bool operator != (const IDataService_saveAsFile_args &rhs) const {
+  bool operator != (const IDataService_saveAsTextFile_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataService_saveAsFile_args & ) const;
+  bool operator < (const IDataService_saveAsTextFile_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -597,11 +601,11 @@ class IDataService_saveAsFile_args {
 };
 
 
-class IDataService_saveAsFile_pargs {
+class IDataService_saveAsTextFile_pargs {
  public:
 
 
-  virtual ~IDataService_saveAsFile_pargs() throw();
+  virtual ~IDataService_saveAsTextFile_pargs() throw();
   const IDataId* data;
   const std::string* path;
   const bool* join;
@@ -610,56 +614,174 @@ class IDataService_saveAsFile_pargs {
 
 };
 
-typedef struct _IDataService_saveAsFile_result__isset {
-  _IDataService_saveAsFile_result__isset() : ex(false) {}
+typedef struct _IDataService_saveAsTextFile_result__isset {
+  _IDataService_saveAsTextFile_result__isset() : ex(false) {}
   bool ex :1;
-} _IDataService_saveAsFile_result__isset;
+} _IDataService_saveAsTextFile_result__isset;
 
-class IDataService_saveAsFile_result {
+class IDataService_saveAsTextFile_result {
  public:
 
-  IDataService_saveAsFile_result(const IDataService_saveAsFile_result&);
-  IDataService_saveAsFile_result& operator=(const IDataService_saveAsFile_result&);
-  IDataService_saveAsFile_result() {
+  IDataService_saveAsTextFile_result(const IDataService_saveAsTextFile_result&);
+  IDataService_saveAsTextFile_result& operator=(const IDataService_saveAsTextFile_result&);
+  IDataService_saveAsTextFile_result() {
   }
 
-  virtual ~IDataService_saveAsFile_result() throw();
+  virtual ~IDataService_saveAsTextFile_result() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IDataService_saveAsFile_result__isset __isset;
+  _IDataService_saveAsTextFile_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
-  bool operator == (const IDataService_saveAsFile_result & rhs) const
+  bool operator == (const IDataService_saveAsTextFile_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IDataService_saveAsFile_result &rhs) const {
+  bool operator != (const IDataService_saveAsTextFile_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataService_saveAsFile_result & ) const;
+  bool operator < (const IDataService_saveAsTextFile_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataService_saveAsFile_presult__isset {
-  _IDataService_saveAsFile_presult__isset() : ex(false) {}
+typedef struct _IDataService_saveAsTextFile_presult__isset {
+  _IDataService_saveAsTextFile_presult__isset() : ex(false) {}
   bool ex :1;
-} _IDataService_saveAsFile_presult__isset;
+} _IDataService_saveAsTextFile_presult__isset;
 
-class IDataService_saveAsFile_presult {
+class IDataService_saveAsTextFile_presult {
  public:
 
 
-  virtual ~IDataService_saveAsFile_presult() throw();
+  virtual ~IDataService_saveAsTextFile_presult() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IDataService_saveAsFile_presult__isset __isset;
+  _IDataService_saveAsTextFile_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_saveAsJsonFile_args__isset {
+  _IDataService_saveAsJsonFile_args__isset() : data(false), path(false), join(false) {}
+  bool data :1;
+  bool path :1;
+  bool join :1;
+} _IDataService_saveAsJsonFile_args__isset;
+
+class IDataService_saveAsJsonFile_args {
+ public:
+
+  IDataService_saveAsJsonFile_args(const IDataService_saveAsJsonFile_args&);
+  IDataService_saveAsJsonFile_args& operator=(const IDataService_saveAsJsonFile_args&);
+  IDataService_saveAsJsonFile_args() : path(), join(0) {
+  }
+
+  virtual ~IDataService_saveAsJsonFile_args() throw();
+  IDataId data;
+  std::string path;
+  bool join;
+
+  _IDataService_saveAsJsonFile_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set_path(const std::string& val);
+
+  void __set_join(const bool val);
+
+  bool operator == (const IDataService_saveAsJsonFile_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(path == rhs.path))
+      return false;
+    if (!(join == rhs.join))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_saveAsJsonFile_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_saveAsJsonFile_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_saveAsJsonFile_pargs {
+ public:
+
+
+  virtual ~IDataService_saveAsJsonFile_pargs() throw();
+  const IDataId* data;
+  const std::string* path;
+  const bool* join;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_saveAsJsonFile_result__isset {
+  _IDataService_saveAsJsonFile_result__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_saveAsJsonFile_result__isset;
+
+class IDataService_saveAsJsonFile_result {
+ public:
+
+  IDataService_saveAsJsonFile_result(const IDataService_saveAsJsonFile_result&);
+  IDataService_saveAsJsonFile_result& operator=(const IDataService_saveAsJsonFile_result&);
+  IDataService_saveAsJsonFile_result() {
+  }
+
+  virtual ~IDataService_saveAsJsonFile_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_saveAsJsonFile_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_saveAsJsonFile_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_saveAsJsonFile_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_saveAsJsonFile_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_saveAsJsonFile_presult__isset {
+  _IDataService_saveAsJsonFile_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_saveAsJsonFile_presult__isset;
+
+class IDataService_saveAsJsonFile_presult {
+ public:
+
+
+  virtual ~IDataService_saveAsJsonFile_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_saveAsJsonFile_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -702,9 +824,12 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv_reduceByKey(IDataId& _return);
-  void saveAsFile(const IDataId& data, const std::string& path, const bool join);
-  void send_saveAsFile(const IDataId& data, const std::string& path, const bool join);
-  void recv_saveAsFile();
+  void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
+  void send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
+  void recv_saveAsTextFile();
+  void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
+  void send_saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
+  void recv_saveAsJsonFile();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -724,7 +849,8 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process__map(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_saveAsFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IDataServiceProcessor(::apache::thrift::stdcxx::shared_ptr<IDataServiceIf> iface) :
     iface_(iface) {
@@ -732,7 +858,8 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["_map"] = &IDataServiceProcessor::process__map;
     processMap_["streamingMap"] = &IDataServiceProcessor::process_streamingMap;
     processMap_["reduceByKey"] = &IDataServiceProcessor::process_reduceByKey;
-    processMap_["saveAsFile"] = &IDataServiceProcessor::process_saveAsFile;
+    processMap_["saveAsTextFile"] = &IDataServiceProcessor::process_saveAsTextFile;
+    processMap_["saveAsJsonFile"] = &IDataServiceProcessor::process_saveAsJsonFile;
   }
 
   virtual ~IDataServiceProcessor() {}
@@ -800,13 +927,22 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void saveAsFile(const IDataId& data, const std::string& path, const bool join) {
+  void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->saveAsFile(data, path, join);
+      ifaces_[i]->saveAsTextFile(data, path, join);
     }
-    ifaces_[i]->saveAsFile(data, path, join);
+    ifaces_[i]->saveAsTextFile(data, path, join);
+  }
+
+  void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->saveAsJsonFile(data, path, join);
+    }
+    ifaces_[i]->saveAsJsonFile(data, path, join);
   }
 
 };
@@ -851,9 +987,12 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   int32_t send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv_reduceByKey(IDataId& _return, const int32_t seqid);
-  void saveAsFile(const IDataId& data, const std::string& path, const bool join);
-  int32_t send_saveAsFile(const IDataId& data, const std::string& path, const bool join);
-  void recv_saveAsFile(const int32_t seqid);
+  void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
+  int32_t send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
+  void recv_saveAsTextFile(const int32_t seqid);
+  void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
+  int32_t send_saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
+  void recv_saveAsJsonFile(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

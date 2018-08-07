@@ -66,8 +66,7 @@ private:
 
 };
 
-void IKeysModule::sendPairs(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id,
-                            const int64_t msg_id) {
+void IKeysModule::sendPairs(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id) {
     try {
         IGNIS_LOG(info) << "IKeysModule starting keys swap";
 
@@ -90,7 +89,7 @@ void IKeysModule::sendPairs(const std::string &host, const int32_t port, const s
         ), count);
         msg_obj->setManager(object_in.getManager());
         IMessage msg(host, port, msg_obj);
-        executor_data->getPostBox().newMessage(msg_id, msg);
+        executor_data->getPostBox().newMessage(msg);
 
         IGNIS_LOG(info) << "IKeysModule keys swap ready";
     } catch (exceptions::IException &ex) {
@@ -106,7 +105,7 @@ void IKeysModule::sendPairs(const std::string &host, const int32_t port, const s
     }
 }
 
-void IKeysModule::joinPairs(const std::vector<int64_t> &msg_ids) {
+void IKeysModule::joinPairs() {
     try {
         IGNIS_LOG(info) << "IKeysModule starting keys join";
 
@@ -137,10 +136,6 @@ void IKeysModule::joinPairs(const std::vector<int64_t> &msg_ids) {
         auto writer = object->writeIterator();
 
         readToWrite<IObject::Any>(*(local_keys->readIterator()), *writer, true);
-
-        for (auto &id : msg_ids) {
-            readToWrite<IObject::Any>(*(msgs[id].getObj()->readIterator()), *writer, true);
-        }
 
         executor_data->loadObject(object);
 

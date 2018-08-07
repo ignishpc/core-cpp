@@ -2,13 +2,13 @@
 
 #include <thrift/processor/TMultiplexedProcessor.h>
 #include "executor/core/IExecutorData.h"
-#include "executor/core/modules/IDriverModule.h"
 #include "executor/core/modules/IFilesModule.h"
 #include "executor/core/modules/IKeysModule.h"
 #include "executor/core/modules/IMapperModule.h"
 #include "executor/core/modules/IPostmanModule.h"
 #include "executor/core/modules/IReducerModule.h"
 #include "executor/core/modules/IServerModule.h"
+#include "executor/core/modules/IShuffleModule.h"
 #include "executor/core/modules/ISortModule.h"
 #include "executor/core/modules/IStorageModule.h"
 #include "executor/api/function/IFlatFunction.h"
@@ -22,12 +22,10 @@ int main(int argc, char *argv[]) {
     auto processor = std::make_shared<apache::thrift::TMultiplexedProcessor>();
     auto executor_data = std::make_shared<ignis::executor::core::IExecutorData>();
 
-    auto driver = std::make_shared<IDriverModule>(executor_data);
-    //processor->registerProcessor("driver", std::make_shared<IDriverModuleProcessor>(driver));
     auto files = std::make_shared<IFilesModule>(executor_data);
     processor->registerProcessor("files", std::make_shared<IFilesModuleProcessor>(files));
     auto keys = std::make_shared<IKeysModule>(executor_data);
-    //processor->registerProcessor("keys", std::make_shared<IKeysModuleProcessor>(keys));
+    processor->registerProcessor("keys", std::make_shared<IKeysModuleProcessor>(keys));
     auto mapper = std::make_shared<IMapperModule>(executor_data);
     processor->registerProcessor("mapper", std::make_shared<IMapperModuleProcessor>(mapper));
     auto postman = std::make_shared<IPostmanModule>(executor_data);
@@ -36,6 +34,8 @@ int main(int argc, char *argv[]) {
     processor->registerProcessor("reducer", std::make_shared<IReducerModuleProcessor>(reducer));
     auto server = std::make_shared<IServerModule>(executor_data);
     processor->registerProcessor("server", std::make_shared<IServerModuleProcessor>(server));
+    auto shuffle = std::make_shared<IShuffleModule>(executor_data);
+    processor->registerProcessor("shuffle", std::make_shared<IShuffleModuleProcessor>(shuffle));;
     auto sort = std::make_shared<ISortModule>(executor_data);
     processor->registerProcessor("sort", std::make_shared<ISortModuleProcessor>(sort));;
     auto storage = std::make_shared<IStorageModule>(executor_data);

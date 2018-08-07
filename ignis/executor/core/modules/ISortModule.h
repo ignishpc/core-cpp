@@ -19,4 +19,4 @@ namespace ignis {
 }
 
 
-#endif //IGNIS_ISORTMODULE_H
+#endif

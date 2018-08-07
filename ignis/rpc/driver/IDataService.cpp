@@ -897,11 +897,11 @@ uint32_t IDataService_reduceByKey_presult::read(::apache::thrift::protocol::TPro
 }
 
 
-IDataService_saveAsFile_args::~IDataService_saveAsFile_args() throw() {
+IDataService_saveAsTextFile_args::~IDataService_saveAsTextFile_args() throw() {
 }
 
 
-uint32_t IDataService_saveAsFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataService_saveAsTextFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -958,10 +958,10 @@ uint32_t IDataService_saveAsFile_args::read(::apache::thrift::protocol::TProtoco
   return xfer;
 }
 
-uint32_t IDataService_saveAsFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataService_saveAsTextFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataService_saveAsFile_args");
+  xfer += oprot->writeStructBegin("IDataService_saveAsTextFile_args");
 
   xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->data.write(oprot);
@@ -981,14 +981,14 @@ uint32_t IDataService_saveAsFile_args::write(::apache::thrift::protocol::TProtoc
 }
 
 
-IDataService_saveAsFile_pargs::~IDataService_saveAsFile_pargs() throw() {
+IDataService_saveAsTextFile_pargs::~IDataService_saveAsTextFile_pargs() throw() {
 }
 
 
-uint32_t IDataService_saveAsFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataService_saveAsTextFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataService_saveAsFile_pargs");
+  xfer += oprot->writeStructBegin("IDataService_saveAsTextFile_pargs");
 
   xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->data)).write(oprot);
@@ -1008,11 +1008,11 @@ uint32_t IDataService_saveAsFile_pargs::write(::apache::thrift::protocol::TProto
 }
 
 
-IDataService_saveAsFile_result::~IDataService_saveAsFile_result() throw() {
+IDataService_saveAsTextFile_result::~IDataService_saveAsTextFile_result() throw() {
 }
 
 
-uint32_t IDataService_saveAsFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataService_saveAsTextFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1053,11 +1053,11 @@ uint32_t IDataService_saveAsFile_result::read(::apache::thrift::protocol::TProto
   return xfer;
 }
 
-uint32_t IDataService_saveAsFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataService_saveAsTextFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataService_saveAsFile_result");
+  xfer += oprot->writeStructBegin("IDataService_saveAsTextFile_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -1070,11 +1070,230 @@ uint32_t IDataService_saveAsFile_result::write(::apache::thrift::protocol::TProt
 }
 
 
-IDataService_saveAsFile_presult::~IDataService_saveAsFile_presult() throw() {
+IDataService_saveAsTextFile_presult::~IDataService_saveAsTextFile_presult() throw() {
 }
 
 
-uint32_t IDataService_saveAsFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataService_saveAsTextFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IDataService_saveAsJsonFile_args::~IDataService_saveAsJsonFile_args() throw() {
+}
+
+
+uint32_t IDataService_saveAsJsonFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->data.read(iprot);
+          this->__isset.data = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->path);
+          this->__isset.path = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->join);
+          this->__isset.join = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataService_saveAsJsonFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataService_saveAsJsonFile_args");
+
+  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->data.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->path);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("join", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool(this->join);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataService_saveAsJsonFile_pargs::~IDataService_saveAsJsonFile_pargs() throw() {
+}
+
+
+uint32_t IDataService_saveAsJsonFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataService_saveAsJsonFile_pargs");
+
+  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->data)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->path)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("join", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool((*(this->join)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataService_saveAsJsonFile_result::~IDataService_saveAsJsonFile_result() throw() {
+}
+
+
+uint32_t IDataService_saveAsJsonFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataService_saveAsJsonFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IDataService_saveAsJsonFile_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataService_saveAsJsonFile_presult::~IDataService_saveAsJsonFile_presult() throw() {
+}
+
+
+uint32_t IDataService_saveAsJsonFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1359,18 +1578,18 @@ void IDataServiceClient::recv_reduceByKey(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "reduceByKey failed: unknown result");
 }
 
-void IDataServiceClient::saveAsFile(const IDataId& data, const std::string& path, const bool join)
+void IDataServiceClient::saveAsTextFile(const IDataId& data, const std::string& path, const bool join)
 {
-  send_saveAsFile(data, path, join);
-  recv_saveAsFile();
+  send_saveAsTextFile(data, path, join);
+  recv_saveAsTextFile();
 }
 
-void IDataServiceClient::send_saveAsFile(const IDataId& data, const std::string& path, const bool join)
+void IDataServiceClient::send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("saveAsFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("saveAsTextFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataService_saveAsFile_pargs args;
+  IDataService_saveAsTextFile_pargs args;
   args.data = &data;
   args.path = &path;
   args.join = &join;
@@ -1381,7 +1600,7 @@ void IDataServiceClient::send_saveAsFile(const IDataId& data, const std::string&
   oprot_->getTransport()->flush();
 }
 
-void IDataServiceClient::recv_saveAsFile()
+void IDataServiceClient::recv_saveAsTextFile()
 {
 
   int32_t rseqid = 0;
@@ -1401,12 +1620,70 @@ void IDataServiceClient::recv_saveAsFile()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("saveAsFile") != 0) {
+  if (fname.compare("saveAsTextFile") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IDataService_saveAsFile_presult result;
+  IDataService_saveAsTextFile_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IDataServiceClient::saveAsJsonFile(const IDataId& data, const std::string& path, const bool join)
+{
+  send_saveAsJsonFile(data, path, join);
+  recv_saveAsJsonFile();
+}
+
+void IDataServiceClient::send_saveAsJsonFile(const IDataId& data, const std::string& path, const bool join)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("saveAsJsonFile", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataService_saveAsJsonFile_pargs args;
+  args.data = &data;
+  args.path = &path;
+  args.join = &join;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IDataServiceClient::recv_saveAsJsonFile()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("saveAsJsonFile") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IDataService_saveAsJsonFile_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -1663,40 +1940,40 @@ void IDataServiceProcessor::process_reduceByKey(int32_t seqid, ::apache::thrift:
   }
 }
 
-void IDataServiceProcessor::process_saveAsFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataServiceProcessor::process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IDataService.saveAsFile", callContext);
+    ctx = this->eventHandler_->getContext("IDataService.saveAsTextFile", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataService.saveAsFile");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataService.saveAsTextFile");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IDataService.saveAsFile");
+    this->eventHandler_->preRead(ctx, "IDataService.saveAsTextFile");
   }
 
-  IDataService_saveAsFile_args args;
+  IDataService_saveAsTextFile_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IDataService.saveAsFile", bytes);
+    this->eventHandler_->postRead(ctx, "IDataService.saveAsTextFile", bytes);
   }
 
-  IDataService_saveAsFile_result result;
+  IDataService_saveAsTextFile_result result;
   try {
-    iface_->saveAsFile(args.data, args.path, args.join);
+    iface_->saveAsTextFile(args.data, args.path, args.join);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IDataService.saveAsFile");
+      this->eventHandler_->handlerError(ctx, "IDataService.saveAsTextFile");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("saveAsFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("saveAsTextFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1705,17 +1982,73 @@ void IDataServiceProcessor::process_saveAsFile(int32_t seqid, ::apache::thrift::
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IDataService.saveAsFile");
+    this->eventHandler_->preWrite(ctx, "IDataService.saveAsTextFile");
   }
 
-  oprot->writeMessageBegin("saveAsFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("saveAsTextFile", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IDataService.saveAsFile", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataService.saveAsTextFile", bytes);
+  }
+}
+
+void IDataServiceProcessor::process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IDataService.saveAsJsonFile", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataService.saveAsJsonFile");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IDataService.saveAsJsonFile");
+  }
+
+  IDataService_saveAsJsonFile_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IDataService.saveAsJsonFile", bytes);
+  }
+
+  IDataService_saveAsJsonFile_result result;
+  try {
+    iface_->saveAsJsonFile(args.data, args.path, args.join);
+  } catch ( ::ignis::rpc::IRemoteException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IDataService.saveAsJsonFile");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("saveAsJsonFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IDataService.saveAsJsonFile");
+  }
+
+  oprot->writeMessageBegin("saveAsJsonFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IDataService.saveAsJsonFile", bytes);
   }
 }
 
@@ -2077,19 +2410,19 @@ void IDataServiceConcurrentClient::recv_reduceByKey(IDataId& _return, const int3
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::saveAsFile(const IDataId& data, const std::string& path, const bool join)
+void IDataServiceConcurrentClient::saveAsTextFile(const IDataId& data, const std::string& path, const bool join)
 {
-  int32_t seqid = send_saveAsFile(data, path, join);
-  recv_saveAsFile(seqid);
+  int32_t seqid = send_saveAsTextFile(data, path, join);
+  recv_saveAsTextFile(seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send_saveAsFile(const IDataId& data, const std::string& path, const bool join)
+int32_t IDataServiceConcurrentClient::send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("saveAsFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("saveAsTextFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataService_saveAsFile_pargs args;
+  IDataService_saveAsTextFile_pargs args;
   args.data = &data;
   args.path = &path;
   args.join = &join;
@@ -2103,7 +2436,7 @@ int32_t IDataServiceConcurrentClient::send_saveAsFile(const IDataId& data, const
   return cseqid;
 }
 
-void IDataServiceConcurrentClient::recv_saveAsFile(const int32_t seqid)
+void IDataServiceConcurrentClient::recv_saveAsTextFile(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2132,7 +2465,7 @@ void IDataServiceConcurrentClient::recv_saveAsFile(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("saveAsFile") != 0) {
+      if (fname.compare("saveAsTextFile") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2141,7 +2474,91 @@ void IDataServiceConcurrentClient::recv_saveAsFile(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IDataService_saveAsFile_presult result;
+      IDataService_saveAsTextFile_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
+void IDataServiceConcurrentClient::saveAsJsonFile(const IDataId& data, const std::string& path, const bool join)
+{
+  int32_t seqid = send_saveAsJsonFile(data, path, join);
+  recv_saveAsJsonFile(seqid);
+}
+
+int32_t IDataServiceConcurrentClient::send_saveAsJsonFile(const IDataId& data, const std::string& path, const bool join)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("saveAsJsonFile", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataService_saveAsJsonFile_pargs args;
+  args.data = &data;
+  args.path = &path;
+  args.join = &join;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IDataServiceConcurrentClient::recv_saveAsJsonFile(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("saveAsJsonFile") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IDataService_saveAsJsonFile_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

@@ -38,10 +38,10 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IStorageModule.cpp
         ignis/executor/core/modules/IKeysModule.h
         ignis/executor/core/modules/IKeysModule.cpp
-        ignis/executor/core/modules/IDriverModule.h
-        ignis/executor/core/modules/IDriverModule.cpp
         ignis/executor/core/modules/ISortModule.h
         ignis/executor/core/modules/ISortModule.cpp
+        ignis/executor/core/modules/IShuffleModule.h
+        ignis/executor/core/modules/IShuffleModule.cpp
 
         #Storage
         ignis/executor/core/storage/IPostBox.h

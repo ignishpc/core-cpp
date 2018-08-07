@@ -16,20 +16,20 @@ namespace ignis {
                 public:
                     IPostmanModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void start();
+                    virtual void start();
 
-                    void stop() override;
+                    virtual void stop() override;
 
-                    void sendAll() override;
+                    virtual void sendAll() override;
 
-                    void clearAll() override;
+                    virtual void clearAll() override;
 
                     virtual ~IPostmanModule();
 
                 private:
                     void threadServer();
 
-                    void threadAccept(std::shared_ptr<apache::thrift::transport::TTransport> trans);
+                    void threadAccept(size_t id, std::shared_ptr<apache::thrift::transport::TTransport> trans);
 
                     int send(size_t id, storage::IMessage &msg, int8_t compression);
 

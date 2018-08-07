@@ -14,14 +14,13 @@ namespace ignis {
                 public:
                     IKeysModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void getKeys(std::unordered_map<int64_t, int64_t> &_return, const bool single) override ;
+                    virtual void getKeys(std::unordered_map<int64_t, int64_t> &_return, const bool single) override ;
 
-                    void sendPairs(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id,
-                                    const int64_t msg_id) override ;
+                    virtual void sendPairs(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id) override ;
 
-                    void joinPairs(const std::vector<int64_t> &msg_ids) override ;
+                    virtual void joinPairs() override ;
 
-                    void reset() override;
+                    virtual void reset() override;
 
                     virtual ~IKeysModule();
 
