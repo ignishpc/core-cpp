@@ -13,6 +13,8 @@ namespace ignis {
                 public:
                     IStorageModule(std::shared_ptr<IExecutorData> &executor_data);
 
+                    virtual int64_t count() override;
+
                     virtual void cache(const int64_t id, const std::string &storage) override;
 
                     virtual void uncache(const int64_t id) override;

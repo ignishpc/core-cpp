@@ -20,6 +20,8 @@ namespace ignis {
 
                     virtual void finishSplits();
 
+                    virtual void joinSplits(const std::vector<int64_t> & order);
+
                     virtual ~IShuffleModule();
                 private:
                     std::shared_ptr<storage::ICoreReadIterator<storage::IObject::Any>> it;

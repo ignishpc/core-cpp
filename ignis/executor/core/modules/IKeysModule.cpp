@@ -89,7 +89,7 @@ void IKeysModule::sendPairs(const std::string &host, const int32_t port, const s
         ), count);
         msg_obj->setManager(object_in.getManager());
         IMessage msg(host, port, msg_obj);
-        executor_data->getPostBox().newMessage(msg);
+        executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
 
         IGNIS_LOG(info) << "IKeysModule keys swap ready";
     } catch (exceptions::IException &ex) {
@@ -119,7 +119,7 @@ void IKeysModule::joinPairs() {
         std::vector<int64_t> keys_id;
 
         for (auto &id_count : counts) {
-            count += id_count.second ;
+            count += id_count.second;
             keys_id.push_back(id_count.first);
         }
 

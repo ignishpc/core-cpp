@@ -24,6 +24,7 @@ class IShuffleModuleIf {
   virtual void createSplits() = 0;
   virtual void nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local) = 0;
   virtual void finishSplits() = 0;
+  virtual void joinSplits(const std::vector<int64_t> & order) = 0;
 };
 
 class IShuffleModuleIfFactory {
@@ -60,6 +61,9 @@ class IShuffleModuleNull : virtual public IShuffleModuleIf {
     return;
   }
   void finishSplits() {
+    return;
+  }
+  void joinSplits(const std::vector<int64_t> & /* order */) {
     return;
   }
 };
@@ -373,6 +377,110 @@ class IShuffleModule_finishSplits_presult {
 
 };
 
+typedef struct _IShuffleModule_joinSplits_args__isset {
+  _IShuffleModule_joinSplits_args__isset() : order(false) {}
+  bool order :1;
+} _IShuffleModule_joinSplits_args__isset;
+
+class IShuffleModule_joinSplits_args {
+ public:
+
+  IShuffleModule_joinSplits_args(const IShuffleModule_joinSplits_args&);
+  IShuffleModule_joinSplits_args& operator=(const IShuffleModule_joinSplits_args&);
+  IShuffleModule_joinSplits_args() {
+  }
+
+  virtual ~IShuffleModule_joinSplits_args() throw();
+  std::vector<int64_t>  order;
+
+  _IShuffleModule_joinSplits_args__isset __isset;
+
+  void __set_order(const std::vector<int64_t> & val);
+
+  bool operator == (const IShuffleModule_joinSplits_args & rhs) const
+  {
+    if (!(order == rhs.order))
+      return false;
+    return true;
+  }
+  bool operator != (const IShuffleModule_joinSplits_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IShuffleModule_joinSplits_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IShuffleModule_joinSplits_pargs {
+ public:
+
+
+  virtual ~IShuffleModule_joinSplits_pargs() throw();
+  const std::vector<int64_t> * order;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IShuffleModule_joinSplits_result__isset {
+  _IShuffleModule_joinSplits_result__isset() : ex(false) {}
+  bool ex :1;
+} _IShuffleModule_joinSplits_result__isset;
+
+class IShuffleModule_joinSplits_result {
+ public:
+
+  IShuffleModule_joinSplits_result(const IShuffleModule_joinSplits_result&);
+  IShuffleModule_joinSplits_result& operator=(const IShuffleModule_joinSplits_result&);
+  IShuffleModule_joinSplits_result() {
+  }
+
+  virtual ~IShuffleModule_joinSplits_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IShuffleModule_joinSplits_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IShuffleModule_joinSplits_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IShuffleModule_joinSplits_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IShuffleModule_joinSplits_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IShuffleModule_joinSplits_presult__isset {
+  _IShuffleModule_joinSplits_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IShuffleModule_joinSplits_presult__isset;
+
+class IShuffleModule_joinSplits_presult {
+ public:
+
+
+  virtual ~IShuffleModule_joinSplits_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IShuffleModule_joinSplits_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class IShuffleModuleClient : virtual public IShuffleModuleIf {
  public:
   IShuffleModuleClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -407,6 +515,9 @@ class IShuffleModuleClient : virtual public IShuffleModuleIf {
   void finishSplits();
   void send_finishSplits();
   void recv_finishSplits();
+  void joinSplits(const std::vector<int64_t> & order);
+  void send_joinSplits(const std::vector<int64_t> & order);
+  void recv_joinSplits();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -425,12 +536,14 @@ class IShuffleModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_createSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_nextSplit(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_finishSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_joinSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IShuffleModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IShuffleModuleIf> iface) :
     iface_(iface) {
     processMap_["createSplits"] = &IShuffleModuleProcessor::process_createSplits;
     processMap_["nextSplit"] = &IShuffleModuleProcessor::process_nextSplit;
     processMap_["finishSplits"] = &IShuffleModuleProcessor::process_finishSplits;
+    processMap_["joinSplits"] = &IShuffleModuleProcessor::process_joinSplits;
   }
 
   virtual ~IShuffleModuleProcessor() {}
@@ -486,6 +599,15 @@ class IShuffleModuleMultiface : virtual public IShuffleModuleIf {
     ifaces_[i]->finishSplits();
   }
 
+  void joinSplits(const std::vector<int64_t> & order) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->joinSplits(order);
+    }
+    ifaces_[i]->joinSplits(order);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -525,6 +647,9 @@ class IShuffleModuleConcurrentClient : virtual public IShuffleModuleIf {
   void finishSplits();
   int32_t send_finishSplits();
   void recv_finishSplits(const int32_t seqid);
+  void joinSplits(const std::vector<int64_t> & order);
+  int32_t send_joinSplits(const std::vector<int64_t> & order);
+  void recv_joinSplits(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

@@ -5,24 +5,24 @@ using namespace ignis::executor::core::storage;
 
 IPostBox::IPostBox() {}
 
-std::vector<IMessage> IPostBox::getMessages() {
+std::unordered_map<size_t, IMessage> IPostBox::getMessages() {
     std::lock_guard<std::mutex> lock(mutex);
     return std::move(outbox);
 }
 
-void IPostBox::newMessage(IMessage &msg) {
+void IPostBox::newMessage(size_t id, IMessage &msg) {
     std::lock_guard<std::mutex> lock(mutex);
-    outbox.push_back(msg);
+    outbox[id] = msg;
 }
 
-std::vector<IMessage> IPostBox::getOutMessages() {
+std::unordered_map<size_t, IMessage> IPostBox::getOutMessages() {
     std::lock_guard<std::mutex> lock(mutex);
     return std::move(outbox);
 }
 
-void IPostBox::newInMessage(IMessage &msg) {
+void IPostBox::newInMessage(size_t id, IMessage &msg) {
     std::lock_guard<std::mutex> lock(mutex);
-    inbox.push_back(msg);
+    inbox[id] = msg;
 }
 
 IPostBox::~IPostBox() {

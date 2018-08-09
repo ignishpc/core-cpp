@@ -15,6 +15,10 @@ IStorageModule::~IStorageModule() {
 
 }
 
+int64_t IStorageModule::count(){
+    return executor_data->getLoadObject().getSize();
+}
+
 void IStorageModule::cache(const int64_t id, const std::string &storage) {
     try {
         auto loaded = executor_data->getSharedLoadObject();

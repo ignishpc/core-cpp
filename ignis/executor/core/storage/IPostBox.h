@@ -2,7 +2,7 @@
 #ifndef IGNIS_IPOSTBOX_H
 #define IGNIS_IPOSTBOX_H
 
-#include <vector>
+#include <unordered_map>
 #include <mutex>
 #include "IMessage.h"
 
@@ -20,22 +20,22 @@ namespace ignis {
 
                     IPostBox();
 
-                    std::vector<IMessage> getMessages();
+                    std::unordered_map<size_t, IMessage>  getMessages();
 
-                    void newMessage(IMessage &msg);
+                    void newMessage(size_t id, IMessage &msg);
 
                     virtual ~IPostBox();
 
                 private:
                     friend modules::IPostmanModule;
 
-                    std::vector<IMessage> getOutMessages();
+                    std::unordered_map<size_t, IMessage>  getOutMessages();
 
-                    void newInMessage(IMessage &msg);
+                    void newInMessage(size_t id, IMessage &msg);
 
                     std::mutex mutex;
-                    std::vector<IMessage> outbox;
-                    std::vector<IMessage> inbox;
+                    std::unordered_map<size_t, IMessage> outbox;
+                    std::unordered_map<size_t, IMessage> inbox;
 
                 };
             }

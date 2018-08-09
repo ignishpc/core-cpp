@@ -25,6 +25,7 @@ class IDataServiceIf {
   virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
   virtual void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
   virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
+  virtual void shuffle(IDataId& _return, const IDataId& data) = 0;
   virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
   virtual void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join) = 0;
 };
@@ -66,6 +67,9 @@ class IDataServiceNull : virtual public IDataServiceIf {
     return;
   }
   void reduceByKey(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
+    return;
+  }
+  void shuffle(IDataId& /* _return */, const IDataId& /* data */) {
     return;
   }
   void saveAsTextFile(const IDataId& /* data */, const std::string& /* path */, const bool /* join */) {
@@ -551,6 +555,118 @@ class IDataService_reduceByKey_presult {
 
 };
 
+typedef struct _IDataService_shuffle_args__isset {
+  _IDataService_shuffle_args__isset() : data(false) {}
+  bool data :1;
+} _IDataService_shuffle_args__isset;
+
+class IDataService_shuffle_args {
+ public:
+
+  IDataService_shuffle_args(const IDataService_shuffle_args&);
+  IDataService_shuffle_args& operator=(const IDataService_shuffle_args&);
+  IDataService_shuffle_args() {
+  }
+
+  virtual ~IDataService_shuffle_args() throw();
+  IDataId data;
+
+  _IDataService_shuffle_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  bool operator == (const IDataService_shuffle_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_shuffle_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_shuffle_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_shuffle_pargs {
+ public:
+
+
+  virtual ~IDataService_shuffle_pargs() throw();
+  const IDataId* data;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_shuffle_result__isset {
+  _IDataService_shuffle_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_shuffle_result__isset;
+
+class IDataService_shuffle_result {
+ public:
+
+  IDataService_shuffle_result(const IDataService_shuffle_result&);
+  IDataService_shuffle_result& operator=(const IDataService_shuffle_result&);
+  IDataService_shuffle_result() {
+  }
+
+  virtual ~IDataService_shuffle_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_shuffle_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_shuffle_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_shuffle_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_shuffle_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_shuffle_presult__isset {
+  _IDataService_shuffle_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_shuffle_presult__isset;
+
+class IDataService_shuffle_presult {
+ public:
+
+
+  virtual ~IDataService_shuffle_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_shuffle_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IDataService_saveAsTextFile_args__isset {
   _IDataService_saveAsTextFile_args__isset() : data(false), path(false), join(false) {}
   bool data :1;
@@ -824,6 +940,9 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv_reduceByKey(IDataId& _return);
+  void shuffle(IDataId& _return, const IDataId& data);
+  void send_shuffle(const IDataId& data);
+  void recv_shuffle(IDataId& _return);
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsTextFile();
@@ -849,6 +968,7 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process__map(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_shuffle(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
@@ -858,6 +978,7 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["_map"] = &IDataServiceProcessor::process__map;
     processMap_["streamingMap"] = &IDataServiceProcessor::process_streamingMap;
     processMap_["reduceByKey"] = &IDataServiceProcessor::process_reduceByKey;
+    processMap_["shuffle"] = &IDataServiceProcessor::process_shuffle;
     processMap_["saveAsTextFile"] = &IDataServiceProcessor::process_saveAsTextFile;
     processMap_["saveAsJsonFile"] = &IDataServiceProcessor::process_saveAsJsonFile;
   }
@@ -927,6 +1048,16 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
+  void shuffle(IDataId& _return, const IDataId& data) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->shuffle(_return, data);
+    }
+    ifaces_[i]->shuffle(_return, data);
+    return;
+  }
+
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -987,6 +1118,9 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   int32_t send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv_reduceByKey(IDataId& _return, const int32_t seqid);
+  void shuffle(IDataId& _return, const IDataId& data);
+  int32_t send_shuffle(const IDataId& data);
+  void recv_shuffle(IDataId& _return, const int32_t seqid);
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   int32_t send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsTextFile(const int32_t seqid);

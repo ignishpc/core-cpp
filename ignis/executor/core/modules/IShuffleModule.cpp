@@ -39,11 +39,11 @@ void IShuffleModule::nextSplit(const std::string &host, const int32_t port, cons
             IGNIS_LOG(info) << "IShuffleModule split remote(host: " << host << ", port: " << port << "), length: "
                             << length;
             IMessage msg(host, port, object);
-            executor_data->getPostBox().newMessage(msg);
+            executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
         } else {
             IGNIS_LOG(info) << "IShuffleModule split local, length: " << length;
             IMessage msg(object, true);
-            executor_data->getPostBox().newMessage(msg);
+            executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
         }
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
@@ -63,6 +63,32 @@ void IShuffleModule::finishSplits() {
     try {
         it.reset();
         executor_data->deleteLoadObject();
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.toString());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
+}
+
+void IShuffleModule::joinSplits(const std::vector<int64_t> &order) {
+    IGNIS_LOG(info) << "IShuffleModule joining splits";
+    try {
+        shared_ptr<IObject> object = getIObject(executor_data->getLoadObject().getManager());
+        executor_data->loadObject(object);
+        auto writer = object->writeIterator();
+        auto msgs = executor_data->getPostBox().getMessages();
+
+        for (auto id:order) {
+            auto it = msgs[id].getObj()->readIterator();
+            readToWrite(*it, *writer, true);
+        }
+        IGNIS_LOG(info) << "IShuffleModule splits joined";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
