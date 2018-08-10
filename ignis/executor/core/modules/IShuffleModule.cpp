@@ -29,22 +29,15 @@ void IShuffleModule::createSplits() {
     }
 }
 
-void IShuffleModule::nextSplit(const std::string &host, const int32_t port, const int64_t length, const bool local) {
+void IShuffleModule::nextSplit(const std::string &addr, const int64_t length) {
     IGNIS_LOG(info) << "IShuffleModule new split";
     try {
         shared_ptr<IObject> object = getIObject(executor_data->getLoadObject().getManager(), length);
         auto writer = object->writeIterator();
         readToWrite(*it, *writer, (size_t) length);
-        if (local) {
-            IGNIS_LOG(info) << "IShuffleModule split remote(host: " << host << ", port: " << port << "), length: "
-                            << length;
-            IMessage msg(host, port, object);
-            executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
-        } else {
-            IGNIS_LOG(info) << "IShuffleModule split local, length: " << length;
-            IMessage msg(object, true);
-            executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
-        }
+        IGNIS_LOG(info) << "IShuffleModule split addr: " << addr << ", length: " << length;
+        IMessage msg(addr, object);
+        executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());

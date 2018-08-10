@@ -16,7 +16,7 @@ namespace ignis {
 
                     virtual void createSplits();
 
-                    virtual void nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local);
+                    virtual void nextSplit(const std::string& addr, const int64_t length);
 
                     virtual void finishSplits();
 

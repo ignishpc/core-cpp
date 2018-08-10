@@ -66,7 +66,7 @@ private:
 
 };
 
-void IKeysModule::sendPairs(const std::string &host, const int32_t port, const std::vector<int64_t> &keys_id) {
+void IKeysModule::sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id) {
     try {
         IGNIS_LOG(info) << "IKeysModule starting keys swap";
 
@@ -88,7 +88,7 @@ void IKeysModule::sendPairs(const std::string &host, const int32_t port, const s
                 object_in.readIterator(), first_op, keys_id
         ), count);
         msg_obj->setManager(object_in.getManager());
-        IMessage msg(host, port, msg_obj);
+        IMessage msg(addr, msg_obj);
         executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
 
         IGNIS_LOG(info) << "IKeysModule keys swap ready";

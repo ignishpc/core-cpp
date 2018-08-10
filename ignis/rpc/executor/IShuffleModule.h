@@ -22,7 +22,7 @@ class IShuffleModuleIf {
  public:
   virtual ~IShuffleModuleIf() {}
   virtual void createSplits() = 0;
-  virtual void nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local) = 0;
+  virtual void nextSplit(const std::string& addr, const int64_t length) = 0;
   virtual void finishSplits() = 0;
   virtual void joinSplits(const std::vector<int64_t> & order) = 0;
 };
@@ -57,7 +57,7 @@ class IShuffleModuleNull : virtual public IShuffleModuleIf {
   void createSplits() {
     return;
   }
-  void nextSplit(const std::string& /* host */, const int32_t /* port */, const int64_t /* length */, const bool /* local */) {
+  void nextSplit(const std::string& /* addr */, const int64_t /* length */) {
     return;
   }
   void finishSplits() {
@@ -161,11 +161,9 @@ class IShuffleModule_createSplits_presult {
 };
 
 typedef struct _IShuffleModule_nextSplit_args__isset {
-  _IShuffleModule_nextSplit_args__isset() : host(false), port(false), length(false), local(false) {}
-  bool host :1;
-  bool port :1;
+  _IShuffleModule_nextSplit_args__isset() : addr(false), length(false) {}
+  bool addr :1;
   bool length :1;
-  bool local :1;
 } _IShuffleModule_nextSplit_args__isset;
 
 class IShuffleModule_nextSplit_args {
@@ -173,34 +171,24 @@ class IShuffleModule_nextSplit_args {
 
   IShuffleModule_nextSplit_args(const IShuffleModule_nextSplit_args&);
   IShuffleModule_nextSplit_args& operator=(const IShuffleModule_nextSplit_args&);
-  IShuffleModule_nextSplit_args() : host(), port(0), length(0), local(0) {
+  IShuffleModule_nextSplit_args() : addr(), length(0) {
   }
 
   virtual ~IShuffleModule_nextSplit_args() throw();
-  std::string host;
-  int32_t port;
+  std::string addr;
   int64_t length;
-  bool local;
 
   _IShuffleModule_nextSplit_args__isset __isset;
 
-  void __set_host(const std::string& val);
-
-  void __set_port(const int32_t val);
+  void __set_addr(const std::string& val);
 
   void __set_length(const int64_t val);
 
-  void __set_local(const bool val);
-
   bool operator == (const IShuffleModule_nextSplit_args & rhs) const
   {
-    if (!(host == rhs.host))
-      return false;
-    if (!(port == rhs.port))
+    if (!(addr == rhs.addr))
       return false;
     if (!(length == rhs.length))
-      return false;
-    if (!(local == rhs.local))
       return false;
     return true;
   }
@@ -221,10 +209,8 @@ class IShuffleModule_nextSplit_pargs {
 
 
   virtual ~IShuffleModule_nextSplit_pargs() throw();
-  const std::string* host;
-  const int32_t* port;
+  const std::string* addr;
   const int64_t* length;
-  const bool* local;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -509,8 +495,8 @@ class IShuffleModuleClient : virtual public IShuffleModuleIf {
   void createSplits();
   void send_createSplits();
   void recv_createSplits();
-  void nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local);
-  void send_nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local);
+  void nextSplit(const std::string& addr, const int64_t length);
+  void send_nextSplit(const std::string& addr, const int64_t length);
   void recv_nextSplit();
   void finishSplits();
   void send_finishSplits();
@@ -581,13 +567,13 @@ class IShuffleModuleMultiface : virtual public IShuffleModuleIf {
     ifaces_[i]->createSplits();
   }
 
-  void nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local) {
+  void nextSplit(const std::string& addr, const int64_t length) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->nextSplit(host, port, length, local);
+      ifaces_[i]->nextSplit(addr, length);
     }
-    ifaces_[i]->nextSplit(host, port, length, local);
+    ifaces_[i]->nextSplit(addr, length);
   }
 
   void finishSplits() {
@@ -641,8 +627,8 @@ class IShuffleModuleConcurrentClient : virtual public IShuffleModuleIf {
   void createSplits();
   int32_t send_createSplits();
   void recv_createSplits(const int32_t seqid);
-  void nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local);
-  int32_t send_nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local);
+  void nextSplit(const std::string& addr, const int64_t length);
+  int32_t send_nextSplit(const std::string& addr, const int64_t length);
   void recv_nextSplit(const int32_t seqid);
   void finishSplits();
   int32_t send_finishSplits();

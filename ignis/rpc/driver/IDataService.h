@@ -22,6 +22,7 @@ class IDataServiceIf {
  public:
   virtual ~IDataServiceIf() {}
   virtual void keep(const IDataId& data, const int8_t level) = 0;
+  virtual void setName(const IDataId& data, const std::string& name) = 0;
   virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
   virtual void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
   virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
@@ -58,6 +59,9 @@ class IDataServiceNull : virtual public IDataServiceIf {
  public:
   virtual ~IDataServiceNull() {}
   void keep(const IDataId& /* data */, const int8_t /* level */) {
+    return;
+  }
+  void setName(const IDataId& /* data */, const std::string& /* name */) {
     return;
   }
   void _map(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
@@ -186,6 +190,117 @@ class IDataService_keep_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_keep_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_setName_args__isset {
+  _IDataService_setName_args__isset() : data(false), name(false) {}
+  bool data :1;
+  bool name :1;
+} _IDataService_setName_args__isset;
+
+class IDataService_setName_args {
+ public:
+
+  IDataService_setName_args(const IDataService_setName_args&);
+  IDataService_setName_args& operator=(const IDataService_setName_args&);
+  IDataService_setName_args() : name() {
+  }
+
+  virtual ~IDataService_setName_args() throw();
+  IDataId data;
+  std::string name;
+
+  _IDataService_setName_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set_name(const std::string& val);
+
+  bool operator == (const IDataService_setName_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_setName_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_setName_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_setName_pargs {
+ public:
+
+
+  virtual ~IDataService_setName_pargs() throw();
+  const IDataId* data;
+  const std::string* name;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_setName_result__isset {
+  _IDataService_setName_result__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_setName_result__isset;
+
+class IDataService_setName_result {
+ public:
+
+  IDataService_setName_result(const IDataService_setName_result&);
+  IDataService_setName_result& operator=(const IDataService_setName_result&);
+  IDataService_setName_result() {
+  }
+
+  virtual ~IDataService_setName_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_setName_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_setName_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_setName_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_setName_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_setName_presult__isset {
+  _IDataService_setName_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_setName_presult__isset;
+
+class IDataService_setName_presult {
+ public:
+
+
+  virtual ~IDataService_setName_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_setName_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -931,6 +1046,9 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void keep(const IDataId& data, const int8_t level);
   void send_keep(const IDataId& data, const int8_t level);
   void recv_keep();
+  void setName(const IDataId& data, const std::string& name);
+  void send_setName(const IDataId& data, const std::string& name);
+  void recv_setName();
   void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv__map(IDataId& _return);
@@ -965,6 +1083,7 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_keep(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process__map(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -975,6 +1094,7 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   IDataServiceProcessor(::apache::thrift::stdcxx::shared_ptr<IDataServiceIf> iface) :
     iface_(iface) {
     processMap_["keep"] = &IDataServiceProcessor::process_keep;
+    processMap_["setName"] = &IDataServiceProcessor::process_setName;
     processMap_["_map"] = &IDataServiceProcessor::process__map;
     processMap_["streamingMap"] = &IDataServiceProcessor::process_streamingMap;
     processMap_["reduceByKey"] = &IDataServiceProcessor::process_reduceByKey;
@@ -1016,6 +1136,15 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
       ifaces_[i]->keep(data, level);
     }
     ifaces_[i]->keep(data, level);
+  }
+
+  void setName(const IDataId& data, const std::string& name) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->setName(data, name);
+    }
+    ifaces_[i]->setName(data, name);
   }
 
   void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) {
@@ -1109,6 +1238,9 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void keep(const IDataId& data, const int8_t level);
   int32_t send_keep(const IDataId& data, const int8_t level);
   void recv_keep(const int32_t seqid);
+  void setName(const IDataId& data, const std::string& name);
+  int32_t send_setName(const IDataId& data, const std::string& name);
+  void recv_setName(const int32_t seqid);
   void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   int32_t send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv__map(IDataId& _return, const int32_t seqid);

@@ -202,32 +202,16 @@ uint32_t IShuffleModule_nextSplit_args::read(::apache::thrift::protocol::TProtoc
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->host);
-          this->__isset.host = true;
+          xfer += iprot->readString(this->addr);
+          this->__isset.addr = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->port);
-          this->__isset.port = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->length);
           this->__isset.length = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->local);
-          this->__isset.local = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -249,20 +233,12 @@ uint32_t IShuffleModule_nextSplit_args::write(::apache::thrift::protocol::TProto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IShuffleModule_nextSplit_args");
 
-  xfer += oprot->writeFieldBegin("host", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->host);
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->addr);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("port", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32(this->port);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("length", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeFieldBegin("length", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64(this->length);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("local", ::apache::thrift::protocol::T_BOOL, 4);
-  xfer += oprot->writeBool(this->local);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -280,20 +256,12 @@ uint32_t IShuffleModule_nextSplit_pargs::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IShuffleModule_nextSplit_pargs");
 
-  xfer += oprot->writeFieldBegin("host", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->host)));
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->addr)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("port", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32((*(this->port)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("length", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeFieldBegin("length", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64((*(this->length)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("local", ::apache::thrift::protocol::T_BOOL, 4);
-  xfer += oprot->writeBool((*(this->local)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -845,22 +813,20 @@ void IShuffleModuleClient::recv_createSplits()
   return;
 }
 
-void IShuffleModuleClient::nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local)
+void IShuffleModuleClient::nextSplit(const std::string& addr, const int64_t length)
 {
-  send_nextSplit(host, port, length, local);
+  send_nextSplit(addr, length);
   recv_nextSplit();
 }
 
-void IShuffleModuleClient::send_nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local)
+void IShuffleModuleClient::send_nextSplit(const std::string& addr, const int64_t length)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("nextSplit", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IShuffleModule_nextSplit_pargs args;
-  args.host = &host;
-  args.port = &port;
+  args.addr = &addr;
   args.length = &length;
-  args.local = &local;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1113,7 +1079,7 @@ void IShuffleModuleProcessor::process_nextSplit(int32_t seqid, ::apache::thrift:
 
   IShuffleModule_nextSplit_result result;
   try {
-    iface_->nextSplit(args.host, args.port, args.length, args.local);
+    iface_->nextSplit(args.addr, args.length);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1346,23 +1312,21 @@ void IShuffleModuleConcurrentClient::recv_createSplits(const int32_t seqid)
   } // end while(true)
 }
 
-void IShuffleModuleConcurrentClient::nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local)
+void IShuffleModuleConcurrentClient::nextSplit(const std::string& addr, const int64_t length)
 {
-  int32_t seqid = send_nextSplit(host, port, length, local);
+  int32_t seqid = send_nextSplit(addr, length);
   recv_nextSplit(seqid);
 }
 
-int32_t IShuffleModuleConcurrentClient::send_nextSplit(const std::string& host, const int32_t port, const int64_t length, const bool local)
+int32_t IShuffleModuleConcurrentClient::send_nextSplit(const std::string& addr, const int64_t length)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("nextSplit", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IShuffleModule_nextSplit_pargs args;
-  args.host = &host;
-  args.port = &port;
+  args.addr = &addr;
   args.length = &length;
-  args.local = &local;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

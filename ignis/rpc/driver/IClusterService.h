@@ -22,6 +22,7 @@ class IClusterServiceIf {
  public:
   virtual ~IClusterServiceIf() {}
   virtual int64_t newInstance(const int64_t properties) = 0;
+  virtual void setName(const int64_t cluster, const std::string& name) = 0;
   virtual int32_t sendFiles(const int64_t cluster, const std::string& source, const std::string& target) = 0;
   virtual int32_t sendCompressedFile(const int64_t cluster, const std::string& source, const std::string& target) = 0;
   virtual void keep(const int64_t cluster) = 0;
@@ -57,6 +58,9 @@ class IClusterServiceNull : virtual public IClusterServiceIf {
   int64_t newInstance(const int64_t /* properties */) {
     int64_t _return = 0;
     return _return;
+  }
+  void setName(const int64_t /* cluster */, const std::string& /* name */) {
+    return;
   }
   int32_t sendFiles(const int64_t /* cluster */, const std::string& /* source */, const std::string& /* target */) {
     int32_t _return = 0;
@@ -178,6 +182,117 @@ class IClusterService_newInstance_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IClusterService_newInstance_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IClusterService_setName_args__isset {
+  _IClusterService_setName_args__isset() : cluster(false), name(false) {}
+  bool cluster :1;
+  bool name :1;
+} _IClusterService_setName_args__isset;
+
+class IClusterService_setName_args {
+ public:
+
+  IClusterService_setName_args(const IClusterService_setName_args&);
+  IClusterService_setName_args& operator=(const IClusterService_setName_args&);
+  IClusterService_setName_args() : cluster(0), name() {
+  }
+
+  virtual ~IClusterService_setName_args() throw();
+  int64_t cluster;
+  std::string name;
+
+  _IClusterService_setName_args__isset __isset;
+
+  void __set_cluster(const int64_t val);
+
+  void __set_name(const std::string& val);
+
+  bool operator == (const IClusterService_setName_args & rhs) const
+  {
+    if (!(cluster == rhs.cluster))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_setName_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_setName_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_setName_pargs {
+ public:
+
+
+  virtual ~IClusterService_setName_pargs() throw();
+  const int64_t* cluster;
+  const std::string* name;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IClusterService_setName_result__isset {
+  _IClusterService_setName_result__isset() : ex(false) {}
+  bool ex :1;
+} _IClusterService_setName_result__isset;
+
+class IClusterService_setName_result {
+ public:
+
+  IClusterService_setName_result(const IClusterService_setName_result&);
+  IClusterService_setName_result& operator=(const IClusterService_setName_result&);
+  IClusterService_setName_result() {
+  }
+
+  virtual ~IClusterService_setName_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IClusterService_setName_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IClusterService_setName_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_setName_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_setName_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IClusterService_setName_presult__isset {
+  _IClusterService_setName_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IClusterService_setName_presult__isset;
+
+class IClusterService_setName_presult {
+ public:
+
+
+  virtual ~IClusterService_setName_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IClusterService_setName_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -567,6 +682,9 @@ class IClusterServiceClient : virtual public IClusterServiceIf {
   int64_t newInstance(const int64_t properties);
   void send_newInstance(const int64_t properties);
   int64_t recv_newInstance();
+  void setName(const int64_t cluster, const std::string& name);
+  void send_setName(const int64_t cluster, const std::string& name);
+  void recv_setName();
   int32_t sendFiles(const int64_t cluster, const std::string& source, const std::string& target);
   void send_sendFiles(const int64_t cluster, const std::string& source, const std::string& target);
   int32_t recv_sendFiles();
@@ -592,6 +710,7 @@ class IClusterServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_newInstance(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sendFiles(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sendCompressedFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_keep(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -599,6 +718,7 @@ class IClusterServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   IClusterServiceProcessor(::apache::thrift::stdcxx::shared_ptr<IClusterServiceIf> iface) :
     iface_(iface) {
     processMap_["newInstance"] = &IClusterServiceProcessor::process_newInstance;
+    processMap_["setName"] = &IClusterServiceProcessor::process_setName;
     processMap_["sendFiles"] = &IClusterServiceProcessor::process_sendFiles;
     processMap_["sendCompressedFile"] = &IClusterServiceProcessor::process_sendCompressedFile;
     processMap_["keep"] = &IClusterServiceProcessor::process_keep;
@@ -637,6 +757,15 @@ class IClusterServiceMultiface : virtual public IClusterServiceIf {
       ifaces_[i]->newInstance(properties);
     }
     return ifaces_[i]->newInstance(properties);
+  }
+
+  void setName(const int64_t cluster, const std::string& name) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->setName(cluster, name);
+    }
+    ifaces_[i]->setName(cluster, name);
   }
 
   int32_t sendFiles(const int64_t cluster, const std::string& source, const std::string& target) {
@@ -699,6 +828,9 @@ class IClusterServiceConcurrentClient : virtual public IClusterServiceIf {
   int64_t newInstance(const int64_t properties);
   int32_t send_newInstance(const int64_t properties);
   int64_t recv_newInstance(const int32_t seqid);
+  void setName(const int64_t cluster, const std::string& name);
+  int32_t send_setName(const int64_t cluster, const std::string& name);
+  void recv_setName(const int32_t seqid);
   int32_t sendFiles(const int64_t cluster, const std::string& source, const std::string& target);
   int32_t send_sendFiles(const int64_t cluster, const std::string& source, const std::string& target);
   int32_t recv_sendFiles(const int32_t seqid);

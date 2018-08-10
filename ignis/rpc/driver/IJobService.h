@@ -23,6 +23,7 @@ class IJobServiceIf {
   virtual ~IJobServiceIf() {}
   virtual void newInstance(IJobId& _return, const int64_t cluster, const std::string& type) = 0;
   virtual void newInstance3(IJobId& _return, const int64_t cluster, const std::string& type, const int64_t properties) = 0;
+  virtual void setName(const IJobId& job, const std::string& name) = 0;
   virtual void keep(const IJobId& job) = 0;
   virtual void importData( ::ignis::rpc::driver::IDataId& _return, const IJobId& job, const  ::ignis::rpc::driver::IDataId& data) = 0;
   virtual void readFile( ::ignis::rpc::driver::IDataId& _return, const IJobId& job, const std::string& path) = 0;
@@ -59,6 +60,9 @@ class IJobServiceNull : virtual public IJobServiceIf {
     return;
   }
   void newInstance3(IJobId& /* _return */, const int64_t /* cluster */, const std::string& /* type */, const int64_t /* properties */) {
+    return;
+  }
+  void setName(const IJobId& /* job */, const std::string& /* name */) {
     return;
   }
   void keep(const IJobId& /* job */) {
@@ -312,6 +316,117 @@ class IJobService_newInstance3_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IJobService_newInstance3_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IJobService_setName_args__isset {
+  _IJobService_setName_args__isset() : job(false), name(false) {}
+  bool job :1;
+  bool name :1;
+} _IJobService_setName_args__isset;
+
+class IJobService_setName_args {
+ public:
+
+  IJobService_setName_args(const IJobService_setName_args&);
+  IJobService_setName_args& operator=(const IJobService_setName_args&);
+  IJobService_setName_args() : name() {
+  }
+
+  virtual ~IJobService_setName_args() throw();
+  IJobId job;
+  std::string name;
+
+  _IJobService_setName_args__isset __isset;
+
+  void __set_job(const IJobId& val);
+
+  void __set_name(const std::string& val);
+
+  bool operator == (const IJobService_setName_args & rhs) const
+  {
+    if (!(job == rhs.job))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    return true;
+  }
+  bool operator != (const IJobService_setName_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IJobService_setName_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IJobService_setName_pargs {
+ public:
+
+
+  virtual ~IJobService_setName_pargs() throw();
+  const IJobId* job;
+  const std::string* name;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IJobService_setName_result__isset {
+  _IJobService_setName_result__isset() : ex(false) {}
+  bool ex :1;
+} _IJobService_setName_result__isset;
+
+class IJobService_setName_result {
+ public:
+
+  IJobService_setName_result(const IJobService_setName_result&);
+  IJobService_setName_result& operator=(const IJobService_setName_result&);
+  IJobService_setName_result() {
+  }
+
+  virtual ~IJobService_setName_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IJobService_setName_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IJobService_setName_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IJobService_setName_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IJobService_setName_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IJobService_setName_presult__isset {
+  _IJobService_setName_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IJobService_setName_presult__isset;
+
+class IJobService_setName_presult {
+ public:
+
+
+  virtual ~IJobService_setName_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IJobService_setName_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -690,6 +805,9 @@ class IJobServiceClient : virtual public IJobServiceIf {
   void newInstance3(IJobId& _return, const int64_t cluster, const std::string& type, const int64_t properties);
   void send_newInstance3(const int64_t cluster, const std::string& type, const int64_t properties);
   void recv_newInstance3(IJobId& _return);
+  void setName(const IJobId& job, const std::string& name);
+  void send_setName(const IJobId& job, const std::string& name);
+  void recv_setName();
   void keep(const IJobId& job);
   void send_keep(const IJobId& job);
   void recv_keep();
@@ -716,6 +834,7 @@ class IJobServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   ProcessMap processMap_;
   void process_newInstance(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_keep(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_readFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -724,6 +843,7 @@ class IJobServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     iface_(iface) {
     processMap_["newInstance"] = &IJobServiceProcessor::process_newInstance;
     processMap_["newInstance3"] = &IJobServiceProcessor::process_newInstance3;
+    processMap_["setName"] = &IJobServiceProcessor::process_setName;
     processMap_["keep"] = &IJobServiceProcessor::process_keep;
     processMap_["importData"] = &IJobServiceProcessor::process_importData;
     processMap_["readFile"] = &IJobServiceProcessor::process_readFile;
@@ -773,6 +893,15 @@ class IJobServiceMultiface : virtual public IJobServiceIf {
     }
     ifaces_[i]->newInstance3(_return, cluster, type, properties);
     return;
+  }
+
+  void setName(const IJobId& job, const std::string& name) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->setName(job, name);
+    }
+    ifaces_[i]->setName(job, name);
   }
 
   void keep(const IJobId& job) {
@@ -840,6 +969,9 @@ class IJobServiceConcurrentClient : virtual public IJobServiceIf {
   void newInstance3(IJobId& _return, const int64_t cluster, const std::string& type, const int64_t properties);
   int32_t send_newInstance3(const int64_t cluster, const std::string& type, const int64_t properties);
   void recv_newInstance3(IJobId& _return, const int32_t seqid);
+  void setName(const IJobId& job, const std::string& name);
+  int32_t send_setName(const IJobId& job, const std::string& name);
+  void recv_setName(const int32_t seqid);
   void keep(const IJobId& job);
   int32_t send_keep(const IJobId& job);
   void recv_keep(const int32_t seqid);

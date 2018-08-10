@@ -282,21 +282,13 @@ uint32_t IKeysModule_sendPairs_args::read(::apache::thrift::protocol::TProtocol*
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->host);
-          this->__isset.host = true;
+          xfer += iprot->readString(this->addr);
+          this->__isset.addr = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->port);
-          this->__isset.port = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->keys_id.clear();
@@ -333,15 +325,11 @@ uint32_t IKeysModule_sendPairs_args::write(::apache::thrift::protocol::TProtocol
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IKeysModule_sendPairs_args");
 
-  xfer += oprot->writeFieldBegin("host", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->host);
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->addr);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("port", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32(this->port);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("keys_id", ::apache::thrift::protocol::T_LIST, 3);
+  xfer += oprot->writeFieldBegin("keys_id", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->keys_id.size()));
     std::vector<int64_t> ::const_iterator _iter20;
@@ -368,15 +356,11 @@ uint32_t IKeysModule_sendPairs_pargs::write(::apache::thrift::protocol::TProtoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IKeysModule_sendPairs_pargs");
 
-  xfer += oprot->writeFieldBegin("host", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->host)));
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->addr)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("port", ::apache::thrift::protocol::T_I32, 2);
-  xfer += oprot->writeI32((*(this->port)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("keys_id", ::apache::thrift::protocol::T_LIST, 3);
+  xfer += oprot->writeFieldBegin("keys_id", ::apache::thrift::protocol::T_LIST, 2);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->keys_id)).size()));
     std::vector<int64_t> ::const_iterator _iter21;
@@ -894,20 +878,19 @@ void IKeysModuleClient::recv_getKeys(std::unordered_map<int64_t, int64_t>& _retu
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "getKeys failed: unknown result");
 }
 
-void IKeysModuleClient::sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id)
+void IKeysModuleClient::sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id)
 {
-  send_sendPairs(host, port, keys_id);
+  send_sendPairs(addr, keys_id);
   recv_sendPairs();
 }
 
-void IKeysModuleClient::send_sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id)
+void IKeysModuleClient::send_sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("sendPairs", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IKeysModule_sendPairs_pargs args;
-  args.host = &host;
-  args.port = &port;
+  args.addr = &addr;
   args.keys_id = &keys_id;
   args.write(oprot_);
 
@@ -1161,7 +1144,7 @@ void IKeysModuleProcessor::process_sendPairs(int32_t seqid, ::apache::thrift::pr
 
   IKeysModule_sendPairs_result result;
   try {
-    iface_->sendPairs(args.host, args.port, args.keys_id);
+    iface_->sendPairs(args.addr, args.keys_id);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1401,21 +1384,20 @@ void IKeysModuleConcurrentClient::recv_getKeys(std::unordered_map<int64_t, int64
   } // end while(true)
 }
 
-void IKeysModuleConcurrentClient::sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id)
+void IKeysModuleConcurrentClient::sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id)
 {
-  int32_t seqid = send_sendPairs(host, port, keys_id);
+  int32_t seqid = send_sendPairs(addr, keys_id);
   recv_sendPairs(seqid);
 }
 
-int32_t IKeysModuleConcurrentClient::send_sendPairs(const std::string& host, const int32_t port, const std::vector<int64_t> & keys_id)
+int32_t IKeysModuleConcurrentClient::send_sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("sendPairs", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IKeysModule_sendPairs_pargs args;
-  args.host = &host;
-  args.port = &port;
+  args.addr = &addr;
   args.keys_id = &keys_id;
   args.write(oprot_);
 

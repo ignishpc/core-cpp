@@ -1,6 +1,7 @@
 
 #include "IPostmanModule.h"
 #include <thread>
+#include <sstream>
 #include <thrift/transport/TBufferTransports.h>
 #include <thrift/transport/TSocket.h>
 #include "../../../data/IObjectProtocol.h"
@@ -35,7 +36,7 @@ void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
             shared_ptr<IObject> object = getIObject();
             IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
                             << " mode: " << (use_shared_memory ? "shared memory" : "socket");
-            IMessage msg(object);
+            IMessage msg("local", object);
             executor_data->getPostBox().newMessage(id, msg);
             object->read(buffer);
             IGNIS_LOG(info) << "IPostmanModule id " << id << " received OK";
@@ -104,28 +105,45 @@ void IPostmanModule::stop() {
 
 int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
     try {
-        IGNIS_LOG(warning) << "IPostmanModule id " << id << " connecting to " << msg.getHost() << ":" << msg.getPort();
-        shared_ptr<TTransport> transport = make_shared<TSocket>(msg.getHost(), msg.getPort());
+        stringstream saddr(msg.getAddr());
+        vector<string> vaddr;
+        while (saddr.good()) {
+            string tmp;
+            std::getline(saddr, tmp, '!');
+            vaddr.push_back(tmp);
+        }
+
+        if (vaddr[0].find("local") == 0) {
+            executor_data->getPostBox().newMessage(id, msg);
+            return 1;
+        }
+        string addr_host = vaddr[1];
+        int addr_port = stoi(vaddr[2]);
+
+
+        IGNIS_LOG(warning) << "IPostmanModule id " << id << " connecting to " << addr_host << ":" << addr_port;
+        shared_ptr<TTransport> transport = make_shared<TSocket>(addr_host, addr_port);
         for (int i = 0; i < 10; i++) {
-            try{
+            try {
                 transport->open();
                 break;
-            }catch(std::exception &ex){
+            } catch (std::exception &ex) {
                 sleep(1);
-                if(i == 9){
+                if (i == 9) {
                     throw ex;
                 }
             }
         }
         auto protocol = make_shared<data::IObjectProtocol>(transport);
-        bool use_shared_memory = !msg.getSharedMemory().empty();
+        bool use_shared_memory = vaddr[0].find("shared") == 0;
         protocol->writeBool(use_shared_memory);
         if (use_shared_memory) {
-            string folder;
+            string folder = vaddr[3];
+            size_t block_size = stoul(vaddr[4]);
             protocol->writeString(folder);
             string buffer1 = folder + "buffer1";
             string buffer2 = folder + "buffer2";
-            transport = make_shared<data::IFileTransport>(buffer1, buffer2, transport);
+            transport = make_shared<data::IFileTransport>(buffer1, buffer2, transport, block_size);
         }
         protocol->writeI64(id);
         auto buffer = make_shared<TBufferedTransport>(transport);
@@ -188,8 +206,7 @@ void IPostmanModule::sendAll() {
 
 void IPostmanModule::clearAll() {
     try {
-
-
+        executor_data->getPostBox().getOutMessages();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
