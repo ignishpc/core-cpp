@@ -22,6 +22,7 @@ class IPropertiesServiceIf {
  public:
   virtual ~IPropertiesServiceIf() {}
   virtual int64_t newInstance() = 0;
+  virtual int64_t newInstance2(const int64_t id) = 0;
   virtual void setProperty(std::string& _return, const int64_t id, const std::string& key, const std::string& value) = 0;
   virtual void getProperty(std::string& _return, const int64_t id, const std::string& key) = 0;
   virtual bool isProperty(const int64_t id, const std::string& key) = 0;
@@ -60,6 +61,10 @@ class IPropertiesServiceNull : virtual public IPropertiesServiceIf {
  public:
   virtual ~IPropertiesServiceNull() {}
   int64_t newInstance() {
+    int64_t _return = 0;
+    return _return;
+  }
+  int64_t newInstance2(const int64_t /* id */) {
     int64_t _return = 0;
     return _return;
   }
@@ -128,8 +133,9 @@ class IPropertiesService_newInstance_pargs {
 };
 
 typedef struct _IPropertiesService_newInstance_result__isset {
-  _IPropertiesService_newInstance_result__isset() : success(false) {}
+  _IPropertiesService_newInstance_result__isset() : success(false), ex(false) {}
   bool success :1;
+  bool ex :1;
 } _IPropertiesService_newInstance_result__isset;
 
 class IPropertiesService_newInstance_result {
@@ -142,14 +148,19 @@ class IPropertiesService_newInstance_result {
 
   virtual ~IPropertiesService_newInstance_result() throw();
   int64_t success;
+   ::ignis::rpc::IRemoteException ex;
 
   _IPropertiesService_newInstance_result__isset __isset;
 
   void __set_success(const int64_t val);
 
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
   bool operator == (const IPropertiesService_newInstance_result & rhs) const
   {
     if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
       return false;
     return true;
   }
@@ -165,8 +176,9 @@ class IPropertiesService_newInstance_result {
 };
 
 typedef struct _IPropertiesService_newInstance_presult__isset {
-  _IPropertiesService_newInstance_presult__isset() : success(false) {}
+  _IPropertiesService_newInstance_presult__isset() : success(false), ex(false) {}
   bool success :1;
+  bool ex :1;
 } _IPropertiesService_newInstance_presult__isset;
 
 class IPropertiesService_newInstance_presult {
@@ -175,8 +187,121 @@ class IPropertiesService_newInstance_presult {
 
   virtual ~IPropertiesService_newInstance_presult() throw();
   int64_t* success;
+   ::ignis::rpc::IRemoteException ex;
 
   _IPropertiesService_newInstance_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IPropertiesService_newInstance2_args__isset {
+  _IPropertiesService_newInstance2_args__isset() : id(false) {}
+  bool id :1;
+} _IPropertiesService_newInstance2_args__isset;
+
+class IPropertiesService_newInstance2_args {
+ public:
+
+  IPropertiesService_newInstance2_args(const IPropertiesService_newInstance2_args&);
+  IPropertiesService_newInstance2_args& operator=(const IPropertiesService_newInstance2_args&);
+  IPropertiesService_newInstance2_args() : id(0) {
+  }
+
+  virtual ~IPropertiesService_newInstance2_args() throw();
+  int64_t id;
+
+  _IPropertiesService_newInstance2_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  bool operator == (const IPropertiesService_newInstance2_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IPropertiesService_newInstance2_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPropertiesService_newInstance2_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IPropertiesService_newInstance2_pargs {
+ public:
+
+
+  virtual ~IPropertiesService_newInstance2_pargs() throw();
+  const int64_t* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPropertiesService_newInstance2_result__isset {
+  _IPropertiesService_newInstance2_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IPropertiesService_newInstance2_result__isset;
+
+class IPropertiesService_newInstance2_result {
+ public:
+
+  IPropertiesService_newInstance2_result(const IPropertiesService_newInstance2_result&);
+  IPropertiesService_newInstance2_result& operator=(const IPropertiesService_newInstance2_result&);
+  IPropertiesService_newInstance2_result() : success(0) {
+  }
+
+  virtual ~IPropertiesService_newInstance2_result() throw();
+  int64_t success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPropertiesService_newInstance2_result__isset __isset;
+
+  void __set_success(const int64_t val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IPropertiesService_newInstance2_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IPropertiesService_newInstance2_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPropertiesService_newInstance2_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPropertiesService_newInstance2_presult__isset {
+  _IPropertiesService_newInstance2_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IPropertiesService_newInstance2_presult__isset;
+
+class IPropertiesService_newInstance2_presult {
+ public:
+
+
+  virtual ~IPropertiesService_newInstance2_presult() throw();
+  int64_t* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IPropertiesService_newInstance2_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1123,6 +1248,9 @@ class IPropertiesServiceClient : virtual public IPropertiesServiceIf {
   int64_t newInstance();
   void send_newInstance();
   int64_t recv_newInstance();
+  int64_t newInstance2(const int64_t id);
+  void send_newInstance2(const int64_t id);
+  int64_t recv_newInstance2();
   void setProperty(std::string& _return, const int64_t id, const std::string& key, const std::string& value);
   void send_setProperty(const int64_t id, const std::string& key, const std::string& value);
   void recv_setProperty(std::string& _return);
@@ -1163,6 +1291,7 @@ class IPropertiesServiceProcessor : public ::apache::thrift::TDispatchProcessor 
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_newInstance(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_newInstance2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setProperty(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getProperty(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_isProperty(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1175,6 +1304,7 @@ class IPropertiesServiceProcessor : public ::apache::thrift::TDispatchProcessor 
   IPropertiesServiceProcessor(::apache::thrift::stdcxx::shared_ptr<IPropertiesServiceIf> iface) :
     iface_(iface) {
     processMap_["newInstance"] = &IPropertiesServiceProcessor::process_newInstance;
+    processMap_["newInstance2"] = &IPropertiesServiceProcessor::process_newInstance2;
     processMap_["setProperty"] = &IPropertiesServiceProcessor::process_setProperty;
     processMap_["getProperty"] = &IPropertiesServiceProcessor::process_getProperty;
     processMap_["isProperty"] = &IPropertiesServiceProcessor::process_isProperty;
@@ -1218,6 +1348,15 @@ class IPropertiesServiceMultiface : virtual public IPropertiesServiceIf {
       ifaces_[i]->newInstance();
     }
     return ifaces_[i]->newInstance();
+  }
+
+  int64_t newInstance2(const int64_t id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->newInstance2(id);
+    }
+    return ifaces_[i]->newInstance2(id);
   }
 
   void setProperty(std::string& _return, const int64_t id, const std::string& key, const std::string& value) {
@@ -1328,6 +1467,9 @@ class IPropertiesServiceConcurrentClient : virtual public IPropertiesServiceIf {
   int64_t newInstance();
   int32_t send_newInstance();
   int64_t recv_newInstance(const int32_t seqid);
+  int64_t newInstance2(const int64_t id);
+  int32_t send_newInstance2(const int64_t id);
+  int64_t recv_newInstance2(const int32_t seqid);
   void setProperty(std::string& _return, const int64_t id, const std::string& key, const std::string& value);
   int32_t send_setProperty(const int64_t id, const std::string& key, const std::string& value);
   void recv_setProperty(std::string& _return, const int32_t seqid);
