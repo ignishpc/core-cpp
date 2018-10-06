@@ -2,6 +2,7 @@
 #ifndef IGNIS_IPOSTMAN_H
 #define IGNIS_IPOSTMAN_H
 
+#include "../../../IHeaders.h"
 #include <vector>
 #include <thrift/transport/TServerSocket.h>
 #include "IModule.h"
@@ -29,11 +30,11 @@ namespace ignis {
                 private:
                     void threadServer();
 
-                    void threadAccept(std::shared_ptr<apache::thrift::transport::TTransport> trans);
+                    void threadAccept(std::shared_ptr<transport::TTransport> trans);
 
                     int send(size_t id, storage::IMessage &msg, int8_t compression);
 
-                    std::shared_ptr<apache::thrift::transport::TServerSocket> server;
+                    std::shared_ptr<transport::TServerSocket> server;
                     bool started;
                 };
             }

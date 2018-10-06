@@ -15,22 +15,25 @@ namespace ignis {
 
                     IMemoryObject(const std::shared_ptr<data::IManager<Any>> &manager, size_t size  = 1000);
 
-                    std::shared_ptr<ICoreReadIterator<Any>> readIterator() override;
+                    virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;
 
-                    std::shared_ptr<ICoreWriteIterator<Any>> writeIterator() override;
+                    virtual std::shared_ptr<iterator::ICoreWriteIterator<Any>> writeIterator() override;
 
-                    void read(std::shared_ptr<apache::thrift::transport::TTransport> trans) override;
+                    virtual void read(std::shared_ptr<transport::TTransport> trans) override;
 
-                    void clear() override;
+                    virtual void write(std::shared_ptr<transport::TTransport> trans, int8_t compression) override;
 
-                    void fit() override;
+                    virtual void copyFrom(IObject& source) override;
 
-                    std::string getType() override;
+                    virtual void moveFrom(IObject& source) override;
 
-                    void
-                    write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) override;
+                    virtual size_t getSize() override;
 
-                    size_t getSize() override;
+                    virtual void clear() override;
+
+                    virtual void fit() override;
+
+                    virtual std::string getType() override;
 
                     virtual ~IMemoryObject();
 

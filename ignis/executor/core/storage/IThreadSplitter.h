@@ -15,16 +15,16 @@ namespace ignis {
                 public:
                     IThreadSplitter(IObject &object_in, IObject &object_out, size_t threads, size_t buffer, bool order);
 
-                    std::pair<std::shared_ptr<ICoreReadIterator<IObject::Any>>,
-                            std::shared_ptr<ICoreWriteIterator<IObject::Any>>> operator[](size_t pos);
+                    std::pair<std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>>,
+                            std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>>> operator[](size_t pos);
 
                 private:
                     IObject &object_in;
                     IObject &object_out;
                     std::mutex mutex_read;
                     std::mutex mutex_write;
-                    std::vector<std::pair<std::shared_ptr<ICoreReadIterator<IObject::Any>>,
-                            std::shared_ptr<ICoreWriteIterator<IObject::Any>>>> iterators;
+                    std::vector<std::pair<std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>>,
+                            std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>>>> iterators;
                     size_t write_next;
                 };
             }

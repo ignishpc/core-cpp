@@ -1,13 +1,12 @@
 
 #include "IFilterIterator.h"
 
-using namespace std;
 using namespace ignis::executor::core::storage;
-using namespace ignis::executor::core;
+using namespace ignis::executor::core::storage::iterator;
 
 
 IReadFilterIterator::IReadFilterIterator(const std::shared_ptr<ICoreReadIterator<IObject::Any>> &it,
-                                         const shared_ptr<data::IOperator<IObject::Any>> &op)
+                                         const std::shared_ptr<data::IOperator<IObject::Any>> &op)
         : it(it), op(op), next_elem(NULL) {}
 
 IObject::Any &IReadFilterIterator::next() {

@@ -2,7 +2,7 @@
 #ifndef IGNIS_IPROPERTIESPARSER_H
 #define IGNIS_IPROPERTIESPARSER_H
 
-#include <string>
+#include "../../IHeaders.h"
 #include <unordered_map>
 
 namespace ignis {

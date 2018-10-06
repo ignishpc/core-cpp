@@ -3,7 +3,7 @@
 #define IGNIS_ISHUFFLEMODULE_H
 
 #include "IModule.h"
-#include "../storage/ICoreIterator.h"
+#include "../storage/iterator/ICoreIterator.h"
 #include "../../../rpc/executor/IShuffleModule.h"
 
 namespace ignis {
@@ -24,7 +24,7 @@ namespace ignis {
 
                     virtual ~IShuffleModule();
                 private:
-                    std::shared_ptr<storage::ICoreReadIterator<storage::IObject::Any>> it;
+                    std::shared_ptr<storage::iterator::ICoreReadIterator<storage::IObject::Any>> it;
                 };
             }
         }

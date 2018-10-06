@@ -7,7 +7,6 @@
 #include "../../api/function/IFunction.h"
 #include "../../api/function/IFlatFunction.h"
 
-using namespace std;
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core;
@@ -35,7 +34,7 @@ void IMapperModule::pipe(const rpc::ISourceFunction &sf, bool filter) {
         if (threads > 1) {
             if (object_in->getType() != "memory") {
                 auto object_aux = getIObject(manager_t_any, object_in->getSize(), 0, "memory");
-                readToWrite<IObject::Any>(*object_in->readIterator(), *object_aux->writeIterator());
+                iterator::readToWrite<IObject::Any>(*object_in->readIterator(), *object_aux->writeIterator());
                 object_in = object_aux;
             }
             IGNIS_LOG(info) << "IMapperModule creating " << threads << " threads";
@@ -60,7 +59,7 @@ void IMapperModule::pipe(const rpc::ISourceFunction &sf, bool filter) {
                     }
                 }
 #pragma omp ordered
-                readToWrite<IObject::Any>(*object_thread->readIterator(), *writer, true);
+                iterator::readToWrite<IObject::Any>(*object_thread->readIterator(), *writer, true);
             }
         } else {
             auto reader = object_in->readIterator();

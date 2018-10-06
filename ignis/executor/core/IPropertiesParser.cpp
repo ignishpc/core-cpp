@@ -5,10 +5,9 @@
 #include <sstream>
 #include "../../exceptions/IInvalidArgument.h"
 
-using namespace std;
 using namespace ignis::executor::core;
 
-IPropertiesParser::IPropertiesParser(unordered_map<string, string> &properties) : properties(properties) {}
+IPropertiesParser::IPropertiesParser(std::unordered_map<std::string, std::string> &properties) : properties(properties) {}
 
 std::string& IPropertiesParser::getString(std::string key){
     auto value = properties.find(key);
@@ -19,23 +18,23 @@ std::string& IPropertiesParser::getString(std::string key){
 }
 
 size_t IPropertiesParser::getNumber(std::string key) {
-    string &value = getString(key);
+    std::string &value = getString(key);
     try {
         return stoi(value);
-    } catch (exception &ex) {
+    } catch (std::exception &ex) {
         throw exceptions::IInvalidArgument(key + " must be a number, find '" + value + "'");
     }
 }
 
 void parserError(std::string key, std::string value, size_t pos) {
-    stringstream ss;
+    std::stringstream ss;
     ss << key << " parsing error " << value[pos] << "(" << pos + 1 << ") in " << value;
     throw ignis::exceptions::IInvalidArgument(ss.str());
 }
 
 size_t IPropertiesParser::getSize(std::string key) {
-    string &value = getString(key);
-    string UNITS = "KMGTPEZY";
+    std::string &value = getString(key);
+    std::string UNITS = "KMGTPEZY";
     double num;
     size_t base;
     size_t exp;
@@ -89,7 +88,7 @@ size_t IPropertiesParser::getSize(std::string key) {
 }
 
 bool IPropertiesParser::getBoolean(std::string key) {
-    return std::regex_search(properties[key], regex("y|Y|yes|Yes|YES|true|True|TRUE|on|On|ON"));
+    return std::regex_search(properties[key], std::regex("y|Y|yes|Yes|YES|true|True|TRUE|on|On|ON"));
 }
 
 IPropertiesParser::~IPropertiesParser() {

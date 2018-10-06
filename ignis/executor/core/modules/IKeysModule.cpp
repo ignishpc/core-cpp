@@ -3,11 +3,10 @@
 #include "../ILog.h"
 #include "../../../exceptions/IInvalidArgument.h"
 #include "../storage/IMessage.h"
-#include "../storage/IFilterIterator.h"
+#include "../storage/iterator/IFilterIterator.h"
 #include "../storage/IObjectWrapperIterator.h"
 #include <unordered_set>
 
-using namespace std;
 using namespace ignis::executor::core;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::modules;
@@ -49,12 +48,12 @@ void IKeysModule::getKeys(std::unordered_map<int64_t, int64_t> &_return, const b
     }
 }
 
-class IReadFilterHashesIterator : public IReadFilterIterator {
+class IReadFilterHashesIterator : public iterator::IReadFilterIterator {
 public:
-    IReadFilterHashesIterator(const shared_ptr<ICoreReadIterator<IObject::Any>> &it,
-                              const shared_ptr<ignis::data::IOperator<IObject::Any>> &op,
+    IReadFilterHashesIterator(const std::shared_ptr<ICoreReadIterator<IObject::Any>> &it,
+                              const std::shared_ptr<ignis::data::IOperator<IObject::Any>> &op,
                               const std::vector<int64_t> &hashes)
-            : IReadFilterIterator(it, op), hashes(unordered_set<int64_t>(hashes.begin(), hashes.end())) {}
+            : IReadFilterIterator(it, op), hashes(std::unordered_set<int64_t>(hashes.begin(), hashes.end())) {}
 
 private:
     bool filter() override {
@@ -62,7 +61,7 @@ private:
         return hashes.find(hash) == hashes.end();
     }
 
-    unordered_set<int64_t> hashes;
+    std::unordered_set<int64_t> hashes;
 
 };
 
@@ -84,7 +83,7 @@ void IKeysModule::sendPairs(const std::string& addr, const std::vector<int64_t> 
         }
         IGNIS_LOG(info) << "IKeysModule separating keys by executor";
 
-        auto msg_obj = make_shared<IObjectWrapperIterator>(make_shared<IReadFilterHashesIterator>(
+        auto msg_obj = std::make_shared<IObjectWrapperIterator>(std::make_shared<IReadFilterHashesIterator>(
                 object_in.readIterator(), first_op, keys_id
         ), count);
         msg_obj->setManager(object_in.getManager());
@@ -123,7 +122,7 @@ void IKeysModule::joinPairs() {
             keys_id.push_back(id_count.first);
         }
 
-        auto local_keys = make_shared<IObjectWrapperIterator>(make_shared<IReadFilterHashesIterator>(
+        auto local_keys = std::make_shared<IObjectWrapperIterator>(std::make_shared<IReadFilterHashesIterator>(
                 object_in.readIterator(), first_op, keys_id
         ), count);
 
@@ -131,11 +130,11 @@ void IKeysModule::joinPairs() {
 
         auto msgs = executor_data->getPostBox().getMessages();
 
-        shared_ptr<IObject> object = getIObject();
+        std::shared_ptr<IObject> object = getIObject();
         object->setManager(object_in.getManager());
         auto writer = object->writeIterator();
 
-        readToWrite<IObject::Any>(*(local_keys->readIterator()), *writer, true);
+        iterator::readToWrite<IObject::Any>(*(local_keys->readIterator()), *writer, true);
 
         executor_data->loadObject(object);
 

@@ -1,33 +1,32 @@
 
 #include "ITransportIterator.h"
 
-using namespace std;
-using namespace ignis::executor::core::storage;
 using namespace ignis::data;
-using namespace apache::thrift::transport;
+using namespace ignis::executor::core::storage;
+using namespace ignis::executor::core::storage::iterator;
 
-IReadTransportIterator::IReadTransportIterator(const shared_ptr<TTransport> &transport,
-                                               const shared_ptr<IManager<IObject::Any>> &manager,
+IReadTransportIterator::IReadTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
+                                               const std::shared_ptr<IManager<IObject::Any>> &manager,
                                                size_t elems)
         : transport(transport),
           type_handle(manager->getClassManagerType()->getElemClassManager()->getTypeHandle()),
           elems(elems),
           reader(type_handle->reader()),
-          protocol(make_shared<data::IObjectProtocol>(transport)) {}
+          protocol(std::make_shared<data::IObjectProtocol>(transport)) {}
 
-IWriteTransportIterator::IWriteTransportIterator(const shared_ptr<TTransport> &transport,
-                                                 const shared_ptr<IManager<IObject::Any>> &manager,
+IWriteTransportIterator::IWriteTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
+                                                 const std::shared_ptr<IManager<IObject::Any>> &manager,
                                                  size_t &elems)
         : transport(transport),
           type_handle(manager->getClassManagerType()->getElemClassManager()->getTypeHandle()),
           elems(elems),
           writer(type_handle->writer()),
-          protocol(make_shared<data::IObjectProtocol>(transport)) {}
+          protocol(std::make_shared<data::IObjectProtocol>(transport)) {}
 
 IObject::Any &IReadTransportIterator::next() {
     elems--;
     auto obj = reader->readPtr(*protocol);
-    actual = make_shared<IObject::Handle<IObject::Any>>(obj, type_handle);
+    actual = std::make_shared<IObject::Handle<IObject::Any>>(obj, type_handle);
     return *obj;
 }
 

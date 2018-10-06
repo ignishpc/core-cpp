@@ -2,10 +2,9 @@
 #ifndef IGNIS_IOBJECT_H
 #define IGNIS_IOBJECT_H
 
-#include <memory>
-#include <thrift/transport/TTransport.h>
+#include "../../../IHeaders.h"
 #include "../../../data/IManager.h"
-#include "ICoreIterator.h"
+#include "iterator/ICoreIterator.h"
 
 namespace ignis {
     namespace executor {
@@ -17,14 +16,21 @@ namespace ignis {
 
                     virtual ~IObject() {};
 
-                    virtual std::shared_ptr<ICoreReadIterator<Any>> readIterator() = 0;
+                    virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() = 0;
 
-                    virtual std::shared_ptr<ICoreWriteIterator<Any>> writeIterator() = 0;
+                    virtual std::shared_ptr<iterator::ICoreWriteIterator<Any>> writeIterator() = 0;
 
-                    virtual void read(std::shared_ptr<apache::thrift::transport::TTransport> trans) = 0;
+                    virtual void read(std::shared_ptr<transport::TTransport> trans) = 0;
 
-                    virtual void
-                    write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) = 0;
+                    virtual void write(std::shared_ptr<transport::TTransport> trans, int8_t compression) = 0;
+                    
+                    virtual void copyFrom(IObject& source) = 0;
+
+                    virtual void copyTo(IObject& source) {source.copyFrom(*this);}
+
+                    virtual void moveFrom(IObject& source) = 0;
+
+                    virtual void moveTo(IObject& source) {source.moveFrom(*this);}
 
                     virtual size_t getSize() = 0;
 
@@ -34,7 +40,7 @@ namespace ignis {
 
                     virtual void fit() {}
 
-                    virtual std::string getType() { return "UNKNOWN"; }
+                    virtual std::string getType() = 0;
 
                     virtual std::shared_ptr<data::IManager<Any>> getManager() {
                         return manager;
@@ -64,7 +70,6 @@ namespace ignis {
                     };
 
                 protected:
-
                     std::shared_ptr<data::IManager<Any>> manager;
 
                 };

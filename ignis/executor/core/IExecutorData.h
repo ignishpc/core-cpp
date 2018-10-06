@@ -2,7 +2,7 @@
 #ifndef IGNIS_EXECUTORDATA_H
 #define IGNIS_EXECUTORDATA_H
 
-#include <memory>
+#include "../../IHeaders.h"
 #include <unordered_map>
 #include "../api/IContext.h"
 #include "IPropertiesParser.h"

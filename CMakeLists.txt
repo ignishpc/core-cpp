@@ -3,78 +3,9 @@ project(ignis)
 
 ADD_SUBDIRECTORY(ignis)
 
-set(CMAKE_CXX_STANDARD 11)
-
-
-FILE(GLOB rpc
-        ignis/rpc/executor/*.hpp
-        ignis/rpc/executor/*.cpp)
-
-set(SOURCE_FILES
-        ignis/main.cpp
-        ignis/executor/core/ILog.h
-        ignis/executor/core/ILog.cpp
-        ignis/executor/core/IExecutorData.h
-        ignis/executor/core/IExecutorData.cpp
-        ignis/executor/core/IDinamicObject.h
-        ignis/executor/core/IDinamicObject.cpp
-        ignis/executor/core/IPropertiesParser.h
-        ignis/executor/core/IPropertiesParser.cpp
-
-        #Modules
-        ignis/executor/core/modules/IModule.h
-        ignis/executor/core/modules/IModule.cpp
-        ignis/executor/core/modules/IServerModule.h
-        ignis/executor/core/modules/IServerModule.cpp
-        ignis/executor/core/modules/IMapperModule.h
-        ignis/executor/core/modules/IMapperModule.cpp
-        ignis/executor/core/modules/IReducerModule.h
-        ignis/executor/core/modules/IReducerModule.cpp
-        ignis/executor/core/modules/IPostmanModule.h
-        ignis/executor/core/modules/IPostmanModule.cpp
-        ignis/executor/core/modules/IFilesModule.h
-        ignis/executor/core/modules/IFilesModule.cpp
-        ignis/executor/core/modules/IStorageModule.h
-        ignis/executor/core/modules/IStorageModule.cpp
-        ignis/executor/core/modules/IKeysModule.h
-        ignis/executor/core/modules/IKeysModule.cpp
-        ignis/executor/core/modules/ISortModule.h
-        ignis/executor/core/modules/ISortModule.cpp
-        ignis/executor/core/modules/IShuffleModule.h
-        ignis/executor/core/modules/IShuffleModule.cpp
-
-        #Storage
-        ignis/executor/core/storage/IPostBox.h
-        ignis/executor/core/storage/IMessage.h
-        ignis/executor/core/storage/IPostBox.cpp
-        ignis/executor/core/storage/IObject.h
-        ignis/executor/core/storage/IRawObject.h
-        ignis/executor/core/storage/IRawObject.cpp
-        ignis/executor/core/storage/IMemoryObject.h
-        ignis/executor/core/storage/IMemoryObject.cpp
-        ignis/executor/core/storage/IRawMemoryObject.h
-        ignis/executor/core/storage/IRawMemoryObject.cpp
-        ignis/executor/core/storage/ICoreIterator.h
-        ignis/executor/core/storage/ITransportIterator.h
-        ignis/executor/core/storage/ITransportIterator.cpp
-        ignis/executor/core/storage/IMemoryIterator.h
-        ignis/executor/core/storage/IMemoryIterator.cpp
-        ignis/executor/core/storage/IThreadSplitter.h
-        ignis/executor/core/storage/IThreadSplitter.cpp
-        ignis/executor/core/storage/ILogIterator.h
-        ignis/executor/core/storage/ILogIterator.cpp
-        ignis/executor/core/storage/IObjectWrapper.h
-        ignis/executor/core/storage/IObjectWrapper.cpp
-        ignis/executor/core/storage/ICountIterator.h
-        ignis/executor/core/storage/ISkipIterator.h
-        ignis/executor/core/storage/IFilterIterator.h
-        ignis/executor/core/storage/IFilterIterator.cpp
-        ignis/executor/core/storage/IObjectWrapperIterator.h
-        ignis/executor/core/storage/IObjectWrapperIterator.cpp
-        ${rpc})
-
-set(CMAKE_CXX_FLAGS "-pthread -fopenmp -DBOOST_ALL_DYN_LINK")#-O3
-add_executable(igniscpp ${SOURCE_FILES})
-
-TARGET_LINK_LIBRARIES(igniscpp igniscore boost_log boost_thread)
+option(BUILD_TESTING "Enable testing" OFF)
+#if(BUILD_TESTING)
+#    enable_testing()
+    ADD_SUBDIRECTORY(ignis-test)
+#endif()
 

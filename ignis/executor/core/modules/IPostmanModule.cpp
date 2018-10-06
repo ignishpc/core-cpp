@@ -8,32 +8,30 @@
 #include "../../../data/IFileTransport.h"
 #include "../ILog.h"
 
-using namespace std;
-using namespace apache::thrift::transport;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core;
 using ignis::rpc::IRemoteException;
 
-IPostmanModule::IPostmanModule(shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}
+IPostmanModule::IPostmanModule(std::shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
-void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
+void IPostmanModule::threadAccept(std::shared_ptr<transport::TTransport> transport) {
     try {
-        auto protocol = make_shared<data::IObjectProtocol>(transport);
+        auto protocol = std::make_shared<data::IObjectProtocol>(transport);
         bool use_shared_memory;
         protocol->readBool(use_shared_memory);
         if (use_shared_memory) {
-            string folder;
+            std::string folder;
             protocol->readString(folder);
-            string buffer1 = folder + "buffer1";
-            string buffer2 = folder + "buffer2";
-            transport = make_shared<data::IFileTransport>(buffer1, buffer2, transport);
+            std::string buffer1 = folder + "buffer1";
+            std::string buffer2 = folder + "buffer2";
+            transport = std::make_shared<data::IFileTransport>(buffer1, buffer2, transport);
         }
         int64_t id;
         protocol->readI64(id);
         try {
-            auto buffer = make_shared<TBufferedTransport>(transport);
-            shared_ptr<IObject> object = getIObject();
+            auto buffer = std::make_shared<transport::TBufferedTransport>(transport);
+            std::shared_ptr<IObject> object = getIObject();
             IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
                             << " mode: " << (use_shared_memory ? "shared memory" : "socket");
             IMessage msg("local", object);
@@ -56,7 +54,7 @@ void IPostmanModule::threadAccept(shared_ptr<TTransport> transport) {
 
 void IPostmanModule::threadServer() {
     IGNIS_LOG(info) << "IPostmanModule started";
-    std::vector<std::shared_ptr<TTransport>> connections;
+    std::vector<std::shared_ptr<transport::TTransport>> connections;
     server->listen();
     IGNIS_LOG(info) << "IPostmanModule listening on port " << server->getPort();
     while (started) {
@@ -82,7 +80,7 @@ void IPostmanModule::start() {
         IGNIS_LOG(info) << "IPostmanModule starting";
         started = true;
         auto port = executor_data->getParser().getNumber("ignis.executor.transport.port");
-        server = std::make_shared<TServerSocket>(port);
+        server = std::make_shared<transport::TServerSocket>(port);
         std::thread(&IPostmanModule::threadServer, this).detach();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
@@ -105,10 +103,10 @@ void IPostmanModule::stop() {
 
 int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
     try {
-        stringstream saddr(msg.getAddr());
-        vector<string> vaddr;
+        std::stringstream saddr(msg.getAddr());
+        std::vector<std::string> vaddr;
         while (saddr.good()) {
-            string tmp;
+            std::string tmp;
             std::getline(saddr, tmp, '!');
             vaddr.push_back(tmp);
         }
@@ -117,12 +115,12 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
             executor_data->getPostBox().newMessage(id, msg);
             return 1;
         }
-        string addr_host = vaddr[1];
+        std::string addr_host = vaddr[1];
         int addr_port = stoi(vaddr[2]);
 
 
         IGNIS_LOG(warning) << "IPostmanModule id " << id << " connecting to " << addr_host << ":" << addr_port;
-        shared_ptr<TTransport> transport = make_shared<TSocket>(addr_host, addr_port);
+        std::shared_ptr<transport::TTransport> transport = std::make_shared<transport::TSocket>(addr_host, addr_port);
         for (int i = 0; i < 10; i++) {
             try {
                 transport->open();
@@ -134,19 +132,19 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
                 }
             }
         }
-        auto protocol = make_shared<data::IObjectProtocol>(transport);
+        auto protocol = std::make_shared<data::IObjectProtocol>(transport);
         bool use_shared_memory = vaddr[0].find("shared") == 0;
         protocol->writeBool(use_shared_memory);
         if (use_shared_memory) {
-            string folder = vaddr[3];
-            size_t block_size = stoul(vaddr[4]);
+            std::string folder = vaddr[3];
+            size_t block_size = std::stoul(vaddr[4]);
             protocol->writeString(folder);
-            string buffer1 = folder + "buffer1";
-            string buffer2 = folder + "buffer2";
-            transport = make_shared<data::IFileTransport>(buffer1, buffer2, transport, block_size);
+            std::string buffer1 = folder + "buffer1";
+            std::string buffer2 = folder + "buffer2";
+            transport =std::make_shared<data::IFileTransport>(buffer1, buffer2, transport, block_size);
         }
         protocol->writeI64(id);
-        auto buffer = make_shared<TBufferedTransport>(transport);
+        auto buffer = std::make_shared<transport::TBufferedTransport>(transport);
         IGNIS_LOG(info) << "IPostmanModule id " << id << " sending"
                         << " mode: " << (use_shared_memory ? "shared memory" : "socket");
         msg.getObj()->write(buffer, compression);
@@ -173,10 +171,10 @@ void IPostmanModule::sendAll() {
                 errors += send(entry.first, entry.second, compression);
             }
         } else {
-            pair<size_t, IMessage> msgs_array[msgs.size()];
+            std::pair<size_t, IMessage> msgs_array[msgs.size()];
             int i = 0;
             for (auto &entry: msgs) {
-                msgs_array[i] = make_pair<size_t, IMessage>((size_t) entry.first, (IMessage) entry.second);
+                msgs_array[i] = std::make_pair<size_t, IMessage>((size_t) entry.first, (IMessage) entry.second);
             }
 #pragma omp parallel for num_threads(threads), reduction(+:errors)
             for (int i = 0; i < msgs.size(); i++) {
@@ -185,7 +183,7 @@ void IPostmanModule::sendAll() {
         }
         if (errors > 0) {
             IGNIS_LOG(error) << "IPostmanModule fail to send " << errors << " messages";
-            exceptions::IException ex("IPostmanModule fail to send " + to_string(errors) + " messages");
+            exceptions::IException ex("IPostmanModule fail to send " + std::to_string(errors) + " messages");
             IRemoteException iex;
             iex.__set_message(ex.what());
             iex.__set_stack(ex.toString());

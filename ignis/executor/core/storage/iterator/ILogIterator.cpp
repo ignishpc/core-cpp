@@ -1,8 +1,9 @@
 
 #include "ILogIterator.h"
-#include "../ILog.h"
+#include "../../ILog.h"
 
 using namespace ignis::executor::core::storage;
+using namespace ignis::executor::core::storage::iterator;
 
 IReadLogIterator::IReadLogIterator(const std::shared_ptr<ICoreReadIterator<IObject::Any>> &reader,
                                    const size_t trigger_size,

@@ -15,29 +15,29 @@ namespace ignis {
                 public:
                     IRawMemoryObject(int8_t compression, uint32_t sz = 100 * 1024 * 1024);
 
-                    std::shared_ptr<ICoreReadIterator<Any>> readIterator() override;
+                    virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;
 
-                    std::shared_ptr<ICoreWriteIterator<Any>> writeIterator() override;
+                    virtual std::shared_ptr<iterator::ICoreWriteIterator<Any>> writeIterator() override;
 
-                    void read(std::shared_ptr<apache::thrift::transport::TTransport> trans) override;
+                    virtual void read(std::shared_ptr<transport::TTransport> trans) override;
 
-                    void write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) override;
+                    virtual void write(std::shared_ptr<transport::TTransport> trans, int8_t compression) override;
 
-                    void fit() override;
+                    virtual void clear() override;
 
-                    void clear() override;
+                    virtual void fit() override;
 
-                    std::string getType() override;
+                    virtual std::string getType() override;
 
                     virtual ~IRawMemoryObject();
 
                 private:
 
-                    inline bool fastWrite(std::shared_ptr<apache::thrift::transport::TTransport> transport) override;
+                    inline bool fastWrite(std::shared_ptr<transport::TTransport> transport) override;
 
-                    inline std::shared_ptr<apache::thrift::transport::TMemoryBuffer> readObservation();
+                    inline std::shared_ptr<transport::TMemoryBuffer> readObservation();
 
-                    std::shared_ptr<apache::thrift::transport::TMemoryBuffer> raw_memory;
+                    std::shared_ptr<transport::TMemoryBuffer> raw_memory;
                     std::vector<uint64_t > index;
                 };
             }

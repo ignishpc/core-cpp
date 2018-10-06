@@ -2,8 +2,7 @@
 #ifndef INGIS_DINAMICOBJECT_H
 #define INGIS_DINAMICOBJECT_H
 
-#include <string>
-#include <memory>
+#include "../../IHeaders.h"
 
 namespace ignis {
     namespace executor {

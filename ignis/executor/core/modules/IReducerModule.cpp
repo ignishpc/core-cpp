@@ -4,7 +4,6 @@
 #include "../../../exceptions/IInvalidArgument.h"
 #include "../../api/function/IPairFunction2.h"
 
-using namespace std;
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core;
@@ -47,10 +46,10 @@ void IReducerModule::reduceByKey(const rpc::ISourceFunction &sf) {
                 object_result->writeIterator()->write(match_read->next());
                 while (match_read->hashNext()) {
                     (*function)->writeCall(
-                            (pair<IObject::Any, IObject::Any> &) (object_result->readIterator()->next()),
-                            (pair<IObject::Any, IObject::Any> &) (match_read->next()),
+                            (std::pair<IObject::Any, IObject::Any> &) (object_result->readIterator()->next()),
+                            (std::pair<IObject::Any, IObject::Any> &) (match_read->next()),
                             context,
-                            (api::IWriteIterator<pair<IObject::Any, IObject::Any>> &) (*object_result->writeIterator())
+                            (api::IWriteIterator<std::pair<IObject::Any, IObject::Any>> &) (*object_result->writeIterator())
                     );
                 }
 #pragma omp critical
@@ -79,7 +78,7 @@ void IReducerModule::groupByKey() {
 
 void IReducerModule::keyMatch(std::vector<std::shared_ptr<storage::IObject>> &matches) {
     IGNIS_LOG(info) << "IReduceModule matching keys";
-    unordered_map<string, std::pair<std::shared_ptr<storage::IObject>, std::shared_ptr<ICoreWriteIterator<IObject::Any>>>> objects;
+    std::unordered_map<std::string, std::pair<std::shared_ptr<storage::IObject>, std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>>>> objects;
     auto object_in = executor_data->getSharedLoadObject();
     auto vector_manager = object_in->getManager()->getClassManagerType();
     auto elem_manager = vector_manager->getElemClassManager();

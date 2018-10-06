@@ -2,8 +2,9 @@
 #include "IMemoryIterator.h"
 
 using namespace std;
-using namespace ignis::executor::core::storage;
 using namespace ignis::data;
+using namespace ignis::executor::core::storage;
+using namespace ignis::executor::core::storage::iterator;
 using namespace apache::thrift::transport;
 
 

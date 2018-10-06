@@ -2,45 +2,47 @@
 #include "IMemoryObject.h"
 #include <thrift/transport/TZlibTransport.h>
 #include "../../../data/IObjectProtocol.h"
-#include "IMemoryIterator.h"
+#include "iterator/IMemoryIterator.h"
 
-using namespace std;
 using namespace ignis::executor::core::storage;
 using namespace ignis::data::serialization;
-using namespace apache::thrift::transport;
 
 IMemoryObject::IMemoryObject(const std::shared_ptr<data::IManager<Any>> &manager, size_t size)
         : manager(manager),
           data(new std::vector<IObject::Any>()),
-          handle(make_shared<IObject::Handle<vector<IObject::Any>>>(data,
-                                                                    manager->getClassManagerType()->getTypeHandle())) {}
+          handle(std::make_shared<IObject::Handle<std::vector<IObject::Any>>>(data,
+                                                                              manager->getClassManagerType()->getTypeHandle())) {}
 
-shared_ptr<ICoreReadIterator<IObject::Any>> IMemoryObject::readIterator() {
-    return make_shared<IReadMemoryIterator>(data, manager);
+std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IMemoryObject::readIterator() {
+    return std::make_shared<iterator::IReadMemoryIterator>(data, manager);
 }
 
-shared_ptr<ICoreWriteIterator<IObject::Any>> IMemoryObject::writeIterator() {
-    return make_shared<IWriteMemoryIterator>(data, manager);
+std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> IMemoryObject::writeIterator() {
+    return std::make_shared<iterator::IWriteMemoryIterator>(data, manager);
 }
 
-void IMemoryObject::read(std::shared_ptr<apache::thrift::transport::TTransport> trans) {
-    auto data_transport = make_shared<TZlibTransport>(trans);
+void IMemoryObject::read(std::shared_ptr<transport::TTransport> trans) {
+    auto data_transport = std::make_shared<transport::TZlibTransport>(trans);
     data::IObjectProtocol data_proto(data_transport);
     auto type_handle = manager->getClassManagerType()->getTypeHandle();
     auto reader = type_handle->reader();
     data = reader->readPtr(data_proto);
-    handle = make_shared<IObject::Handle <vector<IObject::Any>> > (data, type_handle);
+    handle = std::make_shared<IObject::Handle<std::vector<IObject::Any>>>(data, type_handle);
 }
 
-void IMemoryObject::write(std::shared_ptr<apache::thrift::transport::TTransport> trans, int8_t compression) {
-    auto data_transport = make_shared<TZlibTransport>(trans, 128, 1024, 128, 1024, compression);
+void IMemoryObject::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
+    auto data_transport = std::make_shared<transport::TZlibTransport>(trans, 128, 1024, 128, 1024, compression);
     data::IObjectProtocol data_proto(data_transport);
     auto writer = manager->getClassManagerType()->getTypeHandle()->writer();
     writer->writePtr(data, data_proto);
 }
 
-IMemoryObject::~IMemoryObject() {
+void IMemoryObject::copyFrom(IObject &source) {
+    iterator::readToWrite(*(source.readIterator()), *(this->writeIterator()));
+}
 
+void IMemoryObject::moveFrom(IObject &source) {
+    iterator::readToWrite(*(source.readIterator()), *(this->writeIterator()), true);
 }
 
 size_t IMemoryObject::getSize() {
@@ -55,8 +57,12 @@ void IMemoryObject::fit() {
     manager->getClassManagerType()->resize(*data, manager->getClassManagerType()->size(*data));
 }
 
-string IMemoryObject::getType() {
+std::string IMemoryObject::getType() {
     return "memory";
+}
+
+IMemoryObject::~IMemoryObject() {
+
 }
 
 

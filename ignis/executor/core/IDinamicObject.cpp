@@ -4,7 +4,6 @@
 #include "../../exceptions/IInvalidArgument.h"
 #include "../../data/RTTInfo.h"
 
-using namespace std;
 using namespace ignis::executor::core;
 
 ObjectLoader::ObjectLoader(const std::string &name) {
@@ -13,8 +12,8 @@ ObjectLoader::ObjectLoader(const std::string &name) {
     if (sep < -1) {
         throw exceptions::IInvalidArgument(name + " is a invalid c++ class");
     }
-    string path = name.substr(0, sep);
-    string class_name = name.substr(sep + 1, name.size());
+    std::string path = name.substr(0, sep);
+    std::string class_name = name.substr(sep + 1, name.size());
 
     library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
 
