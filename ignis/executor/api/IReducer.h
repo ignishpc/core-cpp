@@ -4,8 +4,8 @@
 
 #include <utility>
 #include "IRegister.h"
-#include "../../data/IManager.h"
-#include "../../data/IOperators.h"
+#include "../api/IManager.h"
+#include "../../data/handle/IOperators.h"
 #include "IContext.h"
 #include "IReadIterator.h"
 #include "IWriteIterator.h"
@@ -17,10 +17,10 @@ namespace ignis {
             template<typename K, typename V, typename R>
             class IReducer {
             public:
-                const data::IOperator<K> op_t;
-                const data::IManager<std::pair<K,V>> type_t;
-                const data::IManager<K> type_k;
-                const data::IManager<R> type_r;
+                const data::handle::IOperator<K> op_t;
+                const api::IPairManager<K,V> type_t;
+                const api::IManager<K> type_k;
+                const api::IManager<R> type_r;
 
                 virtual void before(IContext &context) {}
 

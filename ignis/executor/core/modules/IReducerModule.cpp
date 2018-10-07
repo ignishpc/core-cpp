@@ -19,8 +19,8 @@ void IReducerModule::reduceByKey(const rpc::ISourceFunction &sf) {
         auto object_in = executor_data->getSharedLoadObject();
         auto manager_t = (*function)->type_pt1.shared();
         auto manager_r = (*function)->type_pr.shared();
-        auto manager_t_any = (std::shared_ptr<data::IManager<IObject::Any>> &) manager_t;
-        auto manager_r_any = (std::shared_ptr<data::IManager<IObject::Any>> &) manager_r;
+        auto manager_t_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_t;
+        auto manager_r_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_r;
         object_in->setManager(manager_t_any);
         auto object_out = getIObject(manager_r_any);
         auto writer = object_out->writeIterator();
@@ -80,15 +80,15 @@ void IReducerModule::keyMatch(std::vector<std::shared_ptr<storage::IObject>> &ma
     IGNIS_LOG(info) << "IReduceModule matching keys";
     std::unordered_map<std::string, std::pair<std::shared_ptr<storage::IObject>, std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>>>> objects;
     auto object_in = executor_data->getSharedLoadObject();
-    auto vector_manager = object_in->getManager()->getClassManagerType();
-    auto elem_manager = vector_manager->getElemClassManager();
-    auto pair_manager = (data::serialization::IClassManagerType<std::pair<IObject::Any, IObject::Any>> &) (*elem_manager);
-    auto first_op = pair_manager.getFirstIOperator();
+    auto elem_manager = object_in->getManager();
+    auto pair_manager = (executor::api::IPairManager<IObject::Any, IObject::Any>&)*elem_manager;
+    auto vector_manager = pair_manager.collectionManager();
+    auto first_op = pair_manager.firstManager()->_operator();
     auto it = object_in->readIterator();
 
     while (it->hashNext()) {
-        auto &value = it->next();
-        auto key = first_op->toString(pair_manager.first((std::pair<IObject::Any, IObject::Any> &) value));
+        auto &value = (std::pair<IObject::Any, IObject::Any> &)it->next();
+        auto key = first_op->toString(pair_manager.first(value));
         auto &pair = objects[key];
         if (pair.first) {
             auto object_key = getIObject(object_in->getManager());
@@ -99,7 +99,7 @@ void IReducerModule::keyMatch(std::vector<std::shared_ptr<storage::IObject>> &ma
         if (it->isMoved()) {
             pair.second->write((IObject::Any &&) value);
         } else {
-            pair.second->write(value);
+            pair.second->write((IObject::Any &)value);
         }
     }
     IGNIS_LOG(info) << "IReduceModule keys matched";

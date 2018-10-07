@@ -19,7 +19,7 @@
 
 namespace ignis {
     namespace data {
-        namespace serialization {
+        namespace handle {
 
             typedef apache::thrift::protocol::TProtocol IProtocol;
 
@@ -48,7 +48,7 @@ namespace ignis {
             template<>
             struct IWriterType<bool> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_BOOL);
+                    writeTypeAux(protocol, IEnumTypes::I_BOOL);
                 }
 
                 inline void operator()(const bool &obj, IProtocol &protocol) {
@@ -59,7 +59,7 @@ namespace ignis {
             template<>
             struct IWriterType<int8_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I08);
+                    writeTypeAux(protocol, IEnumTypes::I_I08);
                 }
 
                 inline void operator()(const int8_t &obj, IProtocol &protocol) {
@@ -70,7 +70,7 @@ namespace ignis {
             template<>
             struct IWriterType<uint8_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I16);
+                    writeTypeAux(protocol, IEnumTypes::I_I16);
                 }
 
                 inline void operator()(const uint8_t &obj, IProtocol &protocol) {
@@ -81,7 +81,7 @@ namespace ignis {
             template<>
             struct IWriterType<int16_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I16);
+                    writeTypeAux(protocol, IEnumTypes::I_I16);
                 }
 
                 inline void operator()(const int16_t &obj, IProtocol &protocol) {
@@ -92,7 +92,7 @@ namespace ignis {
             template<>
             struct IWriterType<uint16_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I32);
+                    writeTypeAux(protocol, IEnumTypes::I_I32);
                 }
 
                 inline void operator()(const uint16_t &obj, IProtocol &protocol) {
@@ -103,7 +103,7 @@ namespace ignis {
             template<>
             struct IWriterType<int32_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I32);
+                    writeTypeAux(protocol, IEnumTypes::I_I32);
                 }
 
                 inline void operator()(const int32_t &obj, IProtocol &protocol) {
@@ -114,7 +114,7 @@ namespace ignis {
             template<>
             struct IWriterType<uint32_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I64);
+                    writeTypeAux(protocol, IEnumTypes::I_I64);
                 }
 
                 inline void operator()(const uint32_t &obj, IProtocol &protocol) {
@@ -125,7 +125,7 @@ namespace ignis {
             template<>
             struct IWriterType<int64_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I64);
+                    writeTypeAux(protocol, IEnumTypes::I_I64);
                 }
 
                 inline void operator()(const int64_t &obj, IProtocol &protocol) {
@@ -136,9 +136,9 @@ namespace ignis {
             template<>
             struct IWriterType<uint64_t> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_PAIR);
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I64);
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_I64);
+                    writeTypeAux(protocol, IEnumTypes::I_PAIR);
+                    writeTypeAux(protocol, IEnumTypes::I_I64);
+                    writeTypeAux(protocol, IEnumTypes::I_I64);
                 }
 
                 inline void operator()(const uint64_t &obj, IProtocol &protocol) {
@@ -150,7 +150,7 @@ namespace ignis {
             template<>
             struct IWriterType<float> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_DOUBLE);
+                    writeTypeAux(protocol, IEnumTypes::I_DOUBLE);
                 }
 
                 inline void operator()(const float &obj, IProtocol &protocol) {
@@ -161,7 +161,7 @@ namespace ignis {
             template<>
             struct IWriterType<double> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_DOUBLE);
+                    writeTypeAux(protocol, IEnumTypes::I_DOUBLE);
                 }
 
                 inline void operator()(const double &obj, IProtocol &protocol) {
@@ -172,7 +172,7 @@ namespace ignis {
             template<>
             struct IWriterType<std::string> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_STRING);
+                    writeTypeAux(protocol, IEnumTypes::I_STRING);
                 }
 
                 inline void operator()(const std::string &obj, IProtocol &protocol) {
@@ -183,7 +183,7 @@ namespace ignis {
             template<typename T>
             struct IWriterType<std::vector<T>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_LIST);
+                    writeTypeAux(protocol, IEnumTypes::I_LIST);
                 }
 
                 inline void operator()(const std::vector<T> &obj, IProtocol &protocol) {
@@ -199,7 +199,7 @@ namespace ignis {
             template<>
             struct IWriterType<std::vector<uint8_t >> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_BINARY);
+                    writeTypeAux(protocol, IEnumTypes::I_BINARY);
                 }
 
                 inline void operator()(const std::vector<uint8_t> &obj, IProtocol &protocol) {
@@ -215,7 +215,7 @@ namespace ignis {
             template<typename T>
             struct IWriterType<std::list<T>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_LIST);
+                    writeTypeAux(protocol, IEnumTypes::I_LIST);
                 }
 
                 inline void operator()(const std::list<T> &obj, IProtocol &protocol) {
@@ -231,7 +231,7 @@ namespace ignis {
             template<typename T>
             struct IWriterType<std::forward_list<T>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_LIST);
+                    writeTypeAux(protocol, IEnumTypes::I_LIST);
                 }
 
                 inline void operator()(const std::forward_list<T> &obj, IProtocol &protocol) {
@@ -251,7 +251,7 @@ namespace ignis {
             template<typename T>
             struct IWriterType<std::set<T>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_SET);
+                    writeTypeAux(protocol, IEnumTypes::I_SET);
                 }
 
                 inline void operator()(const std::set<T> &obj, IProtocol &protocol) {
@@ -268,7 +268,7 @@ namespace ignis {
             template<typename T>
             struct IWriterType<std::unordered_set<T>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_SET);
+                    writeTypeAux(protocol, IEnumTypes::I_SET);
                 }
 
                 inline void operator()(const std::unordered_set<T> &obj, IProtocol &protocol) {
@@ -284,7 +284,7 @@ namespace ignis {
             template<typename K, typename V>
             struct IWriterType<std::map<K, V>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_MAP);
+                    writeTypeAux(protocol, IEnumTypes::I_MAP);
                 }
 
                 inline void operator()(const std::map<K, V> &obj, IProtocol &protocol) {
@@ -303,7 +303,7 @@ namespace ignis {
             template<typename K, typename V>
             struct IWriterType<std::unordered_map<K, V>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_MAP);
+                    writeTypeAux(protocol, IEnumTypes::I_MAP);
                 }
 
                 inline void operator()(const std::unordered_map<K, V> &obj, IProtocol &protocol) {
@@ -322,7 +322,7 @@ namespace ignis {
             template<typename T1, typename T2>
             struct IWriterType<std::pair<T1, T2>> {
                 inline void writeType(IProtocol &protocol) {
-                    serialization::writeTypeAux(protocol, IEnumTypes::I_PAIR);
+                    writeTypeAux(protocol, IEnumTypes::I_PAIR);
                 }
 
                 inline void operator()(const std::pair<T1, T2> &obj, IProtocol &protocol) {

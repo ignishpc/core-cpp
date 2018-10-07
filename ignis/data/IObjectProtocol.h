@@ -6,8 +6,8 @@
 #include <thrift/transport/TTransport.h>
 #include <thrift/protocol/TProtocolDecorator.h>
 #include <thrift/protocol/TCompactProtocol.h>
-#include "serialization/IReader.h"
-#include "serialization/IWriter.h"
+#include "handle/IReader.h"
+#include "handle/IWriter.h"
 
 namespace ignis {
     namespace data {
@@ -20,14 +20,14 @@ namespace ignis {
             }
 
             template<typename T>
-            std::shared_ptr<T> readObject(serialization::IReader<T> &reader) {
+            std::shared_ptr<T> readObject(handle::IReader<T> &reader) {
                 bool native;
                 this->readBool(native);
                 return reader.readShared(*this);
             }
 
             template<typename T>
-            void writeObject(const T &obj, serialization::IWriter<T> &writer) {
+            void writeObject(const T &obj, handle::IWriter<T> &writer) {
                 this->writeBool(false);
                 writer(obj, *this);
             }

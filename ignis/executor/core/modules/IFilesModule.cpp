@@ -4,7 +4,6 @@
 #include "../ILog.h"
 #include "../../../exceptions/IInvalidArgument.h"
 
-using namespace std;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core;
@@ -14,24 +13,24 @@ IFilesModule::IFilesModule(std::shared_ptr<IExecutorData> &executor_data) : Igni
 
 void IFilesModule::readFile(const std::string &path, const int64_t offset, const int64_t len, const int64_t lines) {
     try {
-        auto manager = make_shared<data::IManager<string>>();
-        auto& manager_any=(shared_ptr<data::IManager<IObject::Any>>&)manager;
-        shared_ptr<IObject> object = getIObject(manager_any, lines, len);
+        auto manager = std::make_shared<api::IManager<std::string>>();
+        auto& manager_any=(std::shared_ptr<api::IManager<IObject::Any>>&)manager;
+        std::shared_ptr<IObject> object = getIObject(manager_any, lines, len);
         IGNIS_LOG(info) << "IFileModule reading"
                         << " path: " << path
                         << " offset: " << offset
                         << " len: " << len;
-        ifstream fs(path);
+        std::ifstream fs(path);
         if (!fs.is_open()) {
             throw exceptions::IInvalidArgument("IFileModule cannot open file " + path);
         }
         fs.seekg(offset);
 
         auto writer = object->writeIterator();
-        string line;
+        std::string line;
         for (int i = 0; i < lines; i++) {
             getline(fs, line, '\n');
-            writer->write(move(IObject::toAny(line)));
+            writer->write(std::move(IObject::toAny(line)));
         }
         object->fit();
         executor_data->loadObject(object);
@@ -50,19 +49,19 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
 
 void IFilesModule::saveFile(const std::string &path, const bool joined) {
     try {
-        auto &object = executor_data->getLoadObject();
-        if (!object.getManager()) {
+        std::shared_ptr<IObject> object= executor_data->getSharedLoadObject();
+        if (!object->getManager()) {
             throw exceptions::IInvalidArgument("IFileModule c++ required use this data before save it " + path);
         }
 
-        auto reader = object.readIterator();
-        auto printer = object.getManager()->getClassManagerType()->getElemClassManager()->getTypeHandle()->printer();
+        auto reader = object->readIterator();
+        auto printer = object->getManager()->printer();
 
-        ofstream fs;
+        std::ofstream fs;
         if (joined) {
-            fs.open(path, fstream::app);
+            fs.open(path, std::fstream::app);
         } else {
-            fs.open(path + "_" + to_string(executor_data->getExecutorId()), fstream::trunc);
+            fs.open(path + "_" + std::to_string(executor_data->getExecutorId()), std::fstream::trunc);
         }
         if (!fs.is_open()) {
             throw exceptions::IInvalidArgument("IFileModule cannot create/open file " + path);
@@ -73,7 +72,7 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
                         << " joined: " << joined ? "true" : "false";
         while (reader->hashNext()) {
             (*printer)(reader->next(), fs);
-            fs << endl;
+            fs << std::endl;
         }
         executor_data->getSharedLoadObject().reset();
     } catch (exceptions::IException &ex) {
@@ -91,24 +90,24 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
 
 void IFilesModule::saveJson(const std::string &path, const bool joined) {
     try {
-        auto &object = executor_data->getLoadObject();
-        if (!object.getManager()) {
+        std::shared_ptr<IObject> object= executor_data->getSharedLoadObject();
+        if (!object->getManager()) {
             throw exceptions::IInvalidArgument("IFileModule c++ required use this data before save it " + path);
         }
 
-        auto reader = object.readIterator();
-        auto printer = object.getManager()->getClassManagerType()->getElemClassManager()->getTypeHandle()->printer();
+        auto reader = object->readIterator();
+        auto printer = object->getManager()->printer();
 
-        ofstream fs;
+        std::ofstream fs;
         if (joined) {
-            fs.open(path, fstream::app);
+            fs.open(path, std::fstream::app);
             fs.seekp(-1, fs.end);
         } else {
-            fs.open(path + "_" + to_string(executor_data->getExecutorId()), fstream::trunc);
+            fs.open(path + "_" + std::to_string(executor_data->getExecutorId()), std::fstream::trunc);
         }
         if (!fs.is_open()) {
             throw exceptions::IInvalidArgument("IFileModule cannot create/open file " + path);
-            fs << "[" << endl;
+            fs << "[" << std::endl;
         }
 
         IGNIS_LOG(info) << "IFileModule saving as json"
@@ -119,7 +118,7 @@ void IFilesModule::saveJson(const std::string &path, const bool joined) {
         }
 
         while (reader->hashNext()) {
-            fs << endl;
+            fs << std::endl;
             (*printer)(reader->next(), fs);
         }
         fs << "]";

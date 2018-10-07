@@ -5,7 +5,7 @@
 #include "iterator/ITransportIterator.h"
 
 using namespace ignis::executor::core::storage;
-using namespace ignis::data::serialization;
+using namespace ignis::data;
 
 IRawMemoryObject::IRawMemoryObject(int8_t compression, uint32_t sz)
         : raw_memory(std::make_shared<transport::TMemoryBuffer>(sz)),
@@ -14,7 +14,7 @@ IRawMemoryObject::IRawMemoryObject(int8_t compression, uint32_t sz)
 
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IRawMemoryObject::readIterator() {
     auto read_transport = std::make_shared<transport::TZlibTransport>(readObservation());
-
+    return std::make_shared<iterator::IReadTransportIterator>(read_transport, manager, elems);
 }
 
 std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> IRawMemoryObject::writeIterator() {

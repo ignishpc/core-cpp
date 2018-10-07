@@ -15,9 +15,9 @@ namespace ignis {
 
         public:
 
-            IException(const std::string &message);
+            IException(const std::string message);
 
-            IException(const std::string &message, const IException &cause);
+            IException(const std::string message, const IException &cause);
 
             IException(const char *message);
 

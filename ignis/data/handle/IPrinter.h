@@ -19,7 +19,7 @@
 
 namespace ignis {
     namespace data {
-        namespace serialization {
+        namespace handle {
 
             std::string inline tab(size_t n) { return std::string(n, '\t'); }
 

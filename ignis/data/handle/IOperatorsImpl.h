@@ -1,6 +1,6 @@
 
-#ifndef IGNIS_IHASH_H
-#define IGNIS_IHASH_H
+#ifndef IGNIS_IOPERATORSIMPL
+#define IGNIS_IOPERATORSIMPL
 
 #include <vector>
 #include <set>
@@ -11,19 +11,13 @@
 #include <functional>
 #include <boost/functional/hash/extensions.hpp>
 
+#ifndef IGNIS_DISABLE_ALL
 namespace std {
 
-    inline void hash_combine(size_t &seed, size_t value) {
-        return boost::hash_detail::hash_combine_impl(seed, value);
-    }
+#ifndef IGNIS_DISABLE_UNORDERER_MAP
 
     template<class K, class T, class C, class A>
     std::size_t hash_value(std::unordered_map<K, T, C, A> const &v) {
-        return boost::hash_range(v.begin(), v.end());
-    };
-
-    template<class K, class C, class A>
-    std::size_t hash_value(std::unordered_set<K, C, A> const &v) {
         return boost::hash_range(v.begin(), v.end());
     };
 
@@ -34,12 +28,27 @@ namespace std {
         }
     };
 
+#endif
+
+
+#ifndef IGNIS_DISABLE_UNORDERED_SET
+
+    template<class K, class C, class A>
+    std::size_t hash_value(std::unordered_set<K, C, A> const &v) {
+        return boost::hash_range(v.begin(), v.end());
+    };
+
     template<class K, class C, class A>
     struct hash<std::unordered_set<K, C, A>> {
         size_t operator()(std::unordered_set<K, C, A> const &v) const noexcept {
             return hash_value(v);
         }
     };
+
+#endif
+
+
+#ifndef IGNIS_DISABLE_PAIR
 
     template<class A, class B>
     struct hash<std::pair<A, B>> {
@@ -48,12 +57,20 @@ namespace std {
         }
     };
 
+#endif
+
+#ifndef IGNIS_DISABLE_VECTOR
+
     template<class T, class A>
     struct hash<std::vector<T, A>> {
         std::size_t operator()(std::vector<T, A> const &v) const noexcept {
             return boost::hash_value(v);
         }
     };
+
+#endif
+
+#ifndef IGNIS_DISABLE_LIST
 
     template<class T, class A>
     struct hash<std::list<T, A>> {
@@ -62,12 +79,20 @@ namespace std {
         }
     };
 
+#endif
+
+#ifndef IGNIS_DISABLE_DEQUE
+
     template<class T, class A>
     struct hash<std::deque<T, A>> {
         std::size_t operator()(std::deque<T, A> const &v) const noexcept {
             return boost::hash_value(v);
         }
     };
+
+#endif
+
+#ifndef IGNIS_DISABLE_SET
 
     template<class K, class C, class A>
     struct hash<std::set<K, C, A>> {
@@ -76,12 +101,20 @@ namespace std {
         }
     };
 
+#endif
+
+#ifndef IGNIS_DISABLE_MULTISET
+
     template<class K, class C, class A>
     struct hash<std::multiset<K, C, A>> {
         std::size_t operator()(std::multiset<K, C, A> const &v) const noexcept {
             return boost::hash_value(v);
         }
     };
+
+#endif
+
+#ifndef IGNIS_DISABLE_MAP
 
     template<class K, class T, class C, class A>
     struct hash<std::map<K, T, C, A>> {
@@ -90,6 +123,10 @@ namespace std {
         }
     };
 
+#endif
+
+#ifndef IGNIS_DISABLE_MULTIMAP
+
     template<class K, class T, class C, class A>
     struct hash<std::multimap<K, T, C, A>> {
         std::size_t operator()(std::multimap<K, T, C, A> const &v) const noexcept {
@@ -97,6 +134,8 @@ namespace std {
         }
     };
 
-}
+#endif
 
+}
+#endif
 #endif

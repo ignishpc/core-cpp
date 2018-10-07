@@ -3,7 +3,7 @@
 #define IGNIS_IFUNCTION_H
 
 #include "../IRegister.h"
-#include "../../../data/IManager.h"
+#include "../IManager.h"
 #include "../IContext.h"
 
 namespace ignis {
@@ -13,10 +13,10 @@ namespace ignis {
                 template<typename T, typename R>
                 class IFunction {
                 public:
-                    const data::IManager <T> type_t;
-                    const data::IManager <R> type_r;
+                    const api::IManager<T> type_t;
+                    const api::IManager<R> type_r;
 
-                    virtual void writeCall(T &t, IContext &context, IWriteIterator<R> &writer) {
+                    virtual void writeCall(T &t, IContext &context, IWriteIterator <R> &writer) {
                         writer.write(call(t, context));
                     }
 

@@ -2,30 +2,30 @@
 #ifndef IGNIS_IMEMORYOBJECTTEST_H
 #define IGNIS_IMEMORYOBJECTTEST_H
 
+#include "IObjectTest.h"
 
-#include <cppunit/TestCase.h>
-#include <cppunit/extensions/HelperMacros.h>
+//#include "../../../../ignis/executor/api/IManager.h"
+//#include "../../../../ignis/executor/core/storage/IMemoryObject.h"
 
-class IMemoryObjectTest : public CPPUNIT_NS::TestCase {
+namespace ignis {
+    namespace executor {
+        namespace core {
+            namespace storage {
+                class IMemoryObjectTest : public IObjectTest {
 
-CPPUNIT_TEST_SUITE(IMemoryObjectTest);
-        CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
+                CPPUNIT_TEST_SUITE(IMemoryObjectTest);
+                        CPPUNIT_TEST(testIterator);
+                    CPPUNIT_TEST_SUITE_END();
 
-public:
+                    std::shared_ptr<IObject> createObject() {
+                        //return std::make_shared<IMemoryObject>()
+                    }
 
-    void setUp() {
-        int b = 2;
+                    CPPUNIT_TEST_SUITE_REGISTRATION(IMemoryObjectTest);
+                };
+            }
+        }
     }
-
-    void test() {
-        int a = 2;
-    }
-
-    void tearDown() {};
-
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION(IMemoryObjectTest);
+}
 
 #endif

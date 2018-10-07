@@ -34,9 +34,9 @@ namespace ignis {
 
                     virtual std::string getType() override;
 
-                    std::shared_ptr<data::IManager<Any>> getManager() override;
+                    virtual std::shared_ptr<api::IManager<Any>> getManager() override;
 
-                    void setManager(std::shared_ptr<data::IManager<Any>> manager) override;
+                    virtual void setManager(std::shared_ptr<api::IManager<Any>> manager) override;
 
                     virtual ~IObjectWrapper();
 

@@ -19,7 +19,7 @@
 
 namespace ignis {
     namespace data {
-        namespace serialization {
+        namespace handle {
 
             typedef apache::thrift::protocol::TProtocol IProtocol;
 

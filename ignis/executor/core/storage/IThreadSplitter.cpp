@@ -17,8 +17,8 @@ class ISplitterIterator : public iterator::ICoreReadIterator<IObject::Any>, publ
 public:
     ISplitterIterator(std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> it_read,
                       std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> it_write,
-                      std::shared_ptr<ignis::data::IManager<IObject::Any>> m_in,
-                      std::shared_ptr<ignis::data::IManager<IObject::Any>> m_out,
+                      std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> m_in,
+                      std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> m_out,
                       std::mutex &mutex_read, std::mutex &mutex_write, size_t buffer)
             : mutex_read(mutex_read), mutex_write(mutex_write), m_in(m_in), m_out(m_out), it_read(it_read),
               it_write(it_write), buffer(buffer) {
@@ -67,7 +67,7 @@ public:
         buffer_input_read = buffer_input->readIterator();
     }
 
-    std::shared_ptr<IObject> newBuffer(size_t size, std::shared_ptr<ignis::data::IManager<IObject::Any>> m) {
+    std::shared_ptr<IObject> newBuffer(size_t size, std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> m) {
         return std::make_shared<IMemoryObject>(m, size);
     }
 
@@ -85,8 +85,8 @@ protected:
     std::mutex &mutex_write;
     std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> it_read;
     std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> it_write;
-    std::shared_ptr<ignis::data::IManager<IObject::Any>> m_in;
-    std::shared_ptr<ignis::data::IManager<IObject::Any>> m_out;
+    std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> m_in;
+    std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> m_out;
     size_t elems;
     size_t buffer;
     std::shared_ptr<IObject> buffer_input;
@@ -102,8 +102,8 @@ public:
     IOrderSplitterIterator(size_t id, size_t threads,
                            std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> it_read,
                            std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> it_write,
-                           std::shared_ptr<ignis::data::IManager<IObject::Any>> m_in,
-                           std::shared_ptr<ignis::data::IManager<IObject::Any>> m_out,
+                           std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> m_in,
+                           std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> m_out,
                            std::mutex &mutex_read, std::mutex &mutex_write, size_t buffer, size_t &write_next,
                            std::shared_ptr<std::vector<boost::lockfree::spsc_queue<std::shared_ptr<IObject>>>> &queues)
             : id(id), ISplitterIterator(it_read, it_write, m_in, m_out, mutex_read, mutex_write, buffer),

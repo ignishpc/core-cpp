@@ -26,9 +26,9 @@ void IObjectWrapperIterator::read(std::shared_ptr<transport::TTransport> trans) 
 void IObjectWrapperIterator::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
     auto data_transport = std::make_shared<transport::TZlibTransport>(trans, 128, 1024, 128, 1024, compression);
     data::IObjectProtocol data_proto(data_transport);
-    manager->getClassManagerType()->getTypeHandle()->writer()->writeType(data_proto);
-    auto elem_writer = manager->getClassManagerType()->getElemClassManager()->getTypeHandle()->writer();
-    data::serialization::writeSizeAux(data_proto,size);
+    manager->collectionManager()->writer()->writeType(data_proto);
+    auto elem_writer = manager->writer();
+    data::handle::writeSizeAux(data_proto,size);
     elem_writer->writeType(data_proto);
     while(it->hashNext()){
         auto& value = it->next();

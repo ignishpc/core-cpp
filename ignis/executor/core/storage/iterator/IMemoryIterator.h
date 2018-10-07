@@ -3,7 +3,7 @@
 #define IGNIS_IMEMORYITERATOR_H
 
 #include "../IObject.h"
-#include "../../../../data/IManager.h"
+#include "../../../api/IManager.h"
 
 namespace ignis {
     namespace executor {
@@ -14,7 +14,7 @@ namespace ignis {
                     public:
 
                         IReadMemoryIterator(std::vector<IObject::Any> *data,
-                                            const std::shared_ptr<data::IManager<IObject::Any>> &manager);
+                                            const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager);
 
                         IObject::Any &next() override;
 
@@ -28,7 +28,7 @@ namespace ignis {
 
                     private:
                         std::vector<IObject::Any> *data;
-                        std::shared_ptr<data::serialization::IClassManagerType<std::vector<IObject::Any>>> class_manager;
+                        std::shared_ptr<api::ICollectionManager<IObject::Any>> collection_manager;
                         size_t elems;
                         size_t pos;
                     };
@@ -37,7 +37,7 @@ namespace ignis {
                     public:
 
                         IWriteMemoryIterator(std::vector<IObject::Any> *data,
-                                             const std::shared_ptr<data::IManager<IObject::Any>> &manager);
+                                             const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager);
 
                         void write(IObject::Any &obj) override;
 
@@ -47,7 +47,7 @@ namespace ignis {
 
                     private:
                         std::vector<IObject::Any> *data;
-                        std::shared_ptr<data::serialization::IClassManagerType<std::vector<IObject::Any>>> class_manager;
+                        std::shared_ptr<api::ICollectionManager<IObject::Any>> collection_manager;
                     };
                 }
             }

@@ -9,10 +9,11 @@ namespace ignis {
     namespace executor {
         namespace core {
             namespace storage {
-                class IRawObject : public IObject{
+                class IRawObject : public IObject {
                 public:
 
-                    IRawObject(const std::shared_ptr<apache::thrift::transport::TTransport> &transport, int8_t compression);
+                    IRawObject(const std::shared_ptr<apache::thrift::transport::TTransport> &transport,
+                               int8_t compression);
 
                     virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;
 
@@ -22,9 +23,9 @@ namespace ignis {
 
                     virtual void write(std::shared_ptr<transport::TTransport> trans, int8_t compression) override;
 
-                    virtual void copyFrom(IObject& source) override;
+                    virtual void copyFrom(IObject &source) override;
 
-                    virtual void moveFrom(IObject& source) override;
+                    virtual void moveFrom(IObject &source) override;
 
                     virtual size_t getSize() override;
 
@@ -43,6 +44,7 @@ namespace ignis {
                     std::shared_ptr<transport::TTransport> transport;
                     size_t elems;
                     int8_t compression;
+
                 };
             }
         }

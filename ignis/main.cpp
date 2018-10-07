@@ -11,7 +11,7 @@
 #include "executor/core/modules/IShuffleModule.h"
 #include "executor/core/modules/ISortModule.h"
 #include "executor/core/modules/IStorageModule.h"
-#include "executor/api/function/IFlatFunction.h"
+#include "executor/api/function/IFlatMapFunction.h"
 
 using namespace ignis::executor::core::modules;
 using namespace ignis::rpc::executor;

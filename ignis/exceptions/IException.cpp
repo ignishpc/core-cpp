@@ -4,7 +4,7 @@
 using namespace std;
 using namespace ignis::exceptions;
 
-IException::IException(const string &message)
+IException::IException(const string message)
         : runtime_error(message),
           stacktrace(boost::stacktrace::stacktrace()) {
     setExceptionName(this);
@@ -16,7 +16,7 @@ IException::IException(const char *message)
     setExceptionName(this);
 }
 
-IException::IException(const string &message, const IException &cause)
+IException::IException(const string message, const IException &cause)
         : runtime_error(message),
           cause(make_shared<IException>(cause)),
           stacktrace(boost::stacktrace::stacktrace()) {

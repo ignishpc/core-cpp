@@ -14,21 +14,18 @@ FILE(GLOB rpc
 set(SOURCE_FILES
         IHeaders.h
         #Data
-        data/RTTInfo.h
-        data/RTTInfo.cpp
-        data/IManager.h
-        data/IObjectProtocol.h
-        data/IOperators.h
+        data/handle/IDeleter.h
+        data/handle/IEnumTypes.h
+        data/handle/IOperators.h
+        data/handle/IOperatorsImpl.h
+        data/handle/IPrinter.h
+        data/handle/IReader.h
+        data/handle/IWriter.h
         data/IFileTransport.h
         data/IFileTransport.cpp
-        data/serialization/IEnumTypes.h
-        data/serialization/IPrinter.h
-        data/serialization/IDeleter.h
-        data/serialization/IWriter.h
-        data/serialization/IReader.h
-        data/serialization/ITypeHandle.h
-        data/serialization/IHash.h
-        data/serialization/IClassManager.h
+        data/IObjectProtocol.h
+        data/RTTInfo.h
+        data/RTTInfo.cpp
 
         #Driver
         driver/api/IgnisException.h
@@ -41,6 +38,7 @@ set(SOURCE_FILES
         exceptions/IInvalidArgument.h
 
         #Executor api
+        executor/api/IManager.h
         executor/api/IReadIterator.h
         executor/api/IWriteIterator.h
         executor/api/IReducer.h
@@ -49,7 +47,7 @@ set(SOURCE_FILES
         executor/api/IRegister.h
         executor/api/Iterable.h
         executor/api/function/IFunction.h
-        executor/api/function/IFlatFunction.h
+        executor/api/function/IFlatMapFunction.h
         executor/api/function/IFunction2.h
         executor/api/function/IPairFunction2.h
 
@@ -122,9 +120,8 @@ set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -DBOOST_ALL_DYN_LINK")#-O
 add_library(igniscore SHARED ${SOURCE_FILES})
 add_executable(igniscpp main.cpp)
 
-TARGET_LINK_LIBRARIES(igniscore jsoncpp thrift boost_system boost_filesystem dl thriftz z)
-TARGET_LINK_LIBRARIES(igniscpp igniscore boost_log boost_thread)
-
+TARGET_LINK_LIBRARIES(igniscore jsoncpp thrift boost_system boost_filesystem dl thriftz z boost_log boost_thread)
+TARGET_LINK_LIBRARIES(igniscpp igniscore)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
 install(DIRECTORY ../ignis DESTINATION include/ FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")

@@ -1,32 +1,31 @@
 
 #include "ITransportIterator.h"
 
-using namespace ignis::data;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::storage::iterator;
 
 IReadTransportIterator::IReadTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
-                                               const std::shared_ptr<IManager<IObject::Any>> &manager,
+                                               const std::shared_ptr<api::IManager<IObject::Any>> &manager,
                                                size_t elems)
         : transport(transport),
-          type_handle(manager->getClassManagerType()->getElemClassManager()->getTypeHandle()),
+          manager(manager),
           elems(elems),
-          reader(type_handle->reader()),
+          reader(manager->reader()),
           protocol(std::make_shared<data::IObjectProtocol>(transport)) {}
 
 IWriteTransportIterator::IWriteTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
-                                                 const std::shared_ptr<IManager<IObject::Any>> &manager,
+                                                 const std::shared_ptr<api::IManager<IObject::Any>> &manager,
                                                  size_t &elems)
         : transport(transport),
-          type_handle(manager->getClassManagerType()->getElemClassManager()->getTypeHandle()),
+          manager(manager),
           elems(elems),
-          writer(type_handle->writer()),
+          writer(manager->writer()),
           protocol(std::make_shared<data::IObjectProtocol>(transport)) {}
 
 IObject::Any &IReadTransportIterator::next() {
     elems--;
     auto obj = reader->readPtr(*protocol);
-    actual = std::make_shared<IObject::Handle<IObject::Any>>(obj, type_handle);
+    actual = std::make_shared<IObject::DataHandle<IObject::Any>>(obj, manager);
     return *obj;
 }
 

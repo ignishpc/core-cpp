@@ -13,9 +13,9 @@ namespace ignis {
                 class IPairFunction2 : public IFunction2<T1, T2, R> {
                 public:
 
-                    const data::IManager<std::pair<K, T1>> type_pt1;
-                    const data::IManager<std::pair<K, T2>> type_pt2;
-                    const data::IManager<std::pair<K, R>> type_pr;
+                    const api::IPairManager<K, T1> type_pt1;
+                    const api::IPairManager<K, T1> type_pt2;
+                    const api::IPairManager<K, T1> type_pr;
 
                     void writeCall(std::pair<K, T1> &t1, std::pair<K, T2> &t2, IContext &context,
                                    IWriteIterator<std::pair<K, R>> &writer){

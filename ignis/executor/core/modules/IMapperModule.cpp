@@ -5,7 +5,7 @@
 #include "../../../exceptions/IInvalidArgument.h"
 #include "../IDinamicObject.h"
 #include "../../api/function/IFunction.h"
-#include "../../api/function/IFlatFunction.h"
+#include "../../api/function/IFlatMapFunction.h"
 
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core::storage;
@@ -20,8 +20,8 @@ void IMapperModule::pipe(const rpc::ISourceFunction &sf, bool filter) {
         auto object_in = executor_data->getSharedLoadObject();
         auto manager_t = (*function)->type_t.shared();
         auto manager_r = (*function)->type_r.shared();
-        auto manager_t_any = (std::shared_ptr<data::IManager<IObject::Any>> &) manager_t;
-        auto manager_r_any = (std::shared_ptr<data::IManager<IObject::Any>> &) manager_r;
+        auto manager_t_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_t;
+        auto manager_r_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_r;
         object_in->setManager(manager_t_any);
         auto object_out = getIObject(manager_r_any);
         size_t threads = executor_data->getThreads();
@@ -96,8 +96,8 @@ void IMapperModule::streaming(const rpc::ISourceFunction &sf, bool ordered, bool
         auto object_in = executor_data->getSharedLoadObject();
         auto manager_t = (*function)->type_t.shared();
         auto manager_r = (*function)->type_r.shared();
-        auto manager_t_any = (std::shared_ptr<data::IManager<IObject::Any>> &) manager_t;
-        auto manager_r_any = (std::shared_ptr<data::IManager<IObject::Any>> &) manager_r;
+        auto manager_t_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_t;
+        auto manager_r_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_r;
         object_in->setManager(manager_t_any);
         auto object_out = getIObject(manager_r_any);
         size_t threads = executor_data->getThreads();

@@ -1,10 +1,10 @@
 
-#ifndef IGNIS_ITYPES_H
-#define IGNIS_ITYPES_H
+#ifndef IGNIS_IENUMTYPES_H
+#define IGNIS_IENUMTYPES_H
 
 namespace ignis {
     namespace data {
-        namespace serialization {
+        namespace handle {
 
             enum IEnumTypes {
                 I_VOID      = 0x0,

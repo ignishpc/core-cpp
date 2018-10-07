@@ -19,14 +19,14 @@ void IKeysModule::getKeys(std::unordered_map<int64_t, int64_t> &_return, const b
         IGNIS_LOG(info) << "IKeysModule starting getKeys";
         auto &object_in = executor_data->getLoadObject();
         auto it = object_in.readIterator();
-        auto vector_manager = object_in.getManager()->getClassManagerType();
-        auto elem_manager = vector_manager->getElemClassManager();
-        auto pair_manager = (data::serialization::IClassManagerType<std::pair<IObject::Any, IObject::Any>> &) (*elem_manager);
-        auto first_op = pair_manager.getFirstIOperator();
+        auto elem_manager = object_in.getManager();
+        auto pair_manager = (executor::api::IPairManager<IObject::Any, IObject::Any>&)*elem_manager;
+        auto vector_manager = pair_manager.collectionManager();
+        auto first_op = pair_manager._operator();
 
         while (it->hashNext()) {
-            auto &value = it->next();
-            auto key_id = first_op->hash(pair_manager.first((std::pair<IObject::Any, IObject::Any> &) value));
+            auto &value = (std::pair<IObject::Any, IObject::Any> &)it->next();
+            auto key_id = first_op->hash(value);
             if (_return.find(key_id) == _return.end()) {
                 _return[key_id]++;
             } else {
@@ -51,7 +51,7 @@ void IKeysModule::getKeys(std::unordered_map<int64_t, int64_t> &_return, const b
 class IReadFilterHashesIterator : public iterator::IReadFilterIterator {
 public:
     IReadFilterHashesIterator(const std::shared_ptr<ICoreReadIterator<IObject::Any>> &it,
-                              const std::shared_ptr<ignis::data::IOperator<IObject::Any>> &op,
+                              const std::shared_ptr<ignis::data::handle::IOperator<IObject::Any>> &op,
                               const std::vector<int64_t> &hashes)
             : IReadFilterIterator(it, op), hashes(std::unordered_set<int64_t>(hashes.begin(), hashes.end())) {}
 
@@ -71,10 +71,9 @@ void IKeysModule::sendPairs(const std::string& addr, const std::vector<int64_t> 
 
         auto &object_in = executor_data->getLoadObject();
         auto it = object_in.readIterator();
-        auto vector_manager = object_in.getManager()->getClassManagerType();
-        auto elem_manager = vector_manager->getElemClassManager();
-        auto pair_manager = (data::serialization::IClassManagerType<std::pair<IObject::Any, IObject::Any>> &) (*elem_manager);
-        auto first_op = pair_manager.getFirstIOperator();
+        auto pair_manager = object_in.getManager();
+        auto vector_manager = pair_manager->collectionManager();
+        auto first_op = pair_manager->_operator();
         size_t count = 0;
 
         for (auto &id : keys_id) {
@@ -110,10 +109,11 @@ void IKeysModule::joinPairs() {
 
         auto &object_in = executor_data->getLoadObject();
         auto it = object_in.readIterator();
-        auto vector_manager = object_in.getManager()->getClassManagerType();
-        auto elem_manager = vector_manager->getElemClassManager();
-        auto pair_manager = (data::serialization::IClassManagerType<std::pair<IObject::Any, IObject::Any>> &) (*elem_manager);
-        auto first_op = pair_manager.getFirstIOperator();
+        auto elem_manager = object_in.getManager();
+        auto pair_manager = (executor::api::IPairManager<IObject::Any, IObject::Any>&)*elem_manager;
+        auto vector_manager = pair_manager.collectionManager();
+        auto first_op = object_in.getManager()->_operator();
+
         size_t count = 0;
         std::vector<int64_t> keys_id;
 

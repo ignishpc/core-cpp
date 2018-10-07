@@ -3,7 +3,7 @@
 #define IGNIS_IOBJECT_H
 
 #include "../../../IHeaders.h"
-#include "../../../data/IManager.h"
+#include "../../api/IManager.h"
 #include "iterator/ICoreIterator.h"
 
 namespace ignis {
@@ -23,14 +23,14 @@ namespace ignis {
                     virtual void read(std::shared_ptr<transport::TTransport> trans) = 0;
 
                     virtual void write(std::shared_ptr<transport::TTransport> trans, int8_t compression) = 0;
-                    
-                    virtual void copyFrom(IObject& source) = 0;
 
-                    virtual void copyTo(IObject& source) {source.copyFrom(*this);}
+                    virtual void copyFrom(IObject &source) = 0;
 
-                    virtual void moveFrom(IObject& source) = 0;
+                    virtual void copyTo(IObject &source) { source.copyFrom(*this); }
 
-                    virtual void moveTo(IObject& source) {source.moveFrom(*this);}
+                    virtual void moveFrom(IObject &source) = 0;
+
+                    virtual void moveTo(IObject &source) { source.moveFrom(*this); }
 
                     virtual size_t getSize() = 0;
 
@@ -42,11 +42,11 @@ namespace ignis {
 
                     virtual std::string getType() = 0;
 
-                    virtual std::shared_ptr<data::IManager<Any>> getManager() {
+                    virtual std::shared_ptr<api::IManager<Any>> getManager() {
                         return manager;
                     }
 
-                    virtual void setManager(std::shared_ptr<data::IManager<Any>> manager) {
+                    virtual void setManager(std::shared_ptr<api::IManager<Any>> manager) {
                         this->manager = manager;
                     }
 
@@ -56,21 +56,20 @@ namespace ignis {
                     }
 
                     template<typename T = Any>
-                    class Handle {
+                    class DataHandle {
                     public:
-                        Handle(T *ptr,
-                               const std::shared_ptr<data::serialization::ITypeHandle<T>> &type_handle) :
-                                ptr(ptr), type_handle(type_handle) {}
+                        DataHandle(T *ptr, const std::shared_ptr<api::IManager<T>> &manager) : ptr(ptr),
+                                                                                               manager(manager) {}
 
-                        virtual ~Handle() { (*type_handle->deleter())(ptr); }
+                        virtual ~DataHandle() { (*manager->deleter())(ptr); }
 
                     private:
                         T *ptr;
-                        std::shared_ptr<data::serialization::ITypeHandle<T>> type_handle;
+                        std::shared_ptr<api::IManager<T>> manager;
                     };
 
                 protected:
-                    std::shared_ptr<data::IManager<Any>> manager;
+                    std::shared_ptr<api::IManager<Any>> manager;
 
                 };
             }

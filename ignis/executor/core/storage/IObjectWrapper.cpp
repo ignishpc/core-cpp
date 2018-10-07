@@ -77,11 +77,11 @@ std::string IObjectWrapper::getType() {
     return to_read->getType();
 }
 
-std::shared_ptr<ignis::data::IManager<IObject::Any>> IObjectWrapper::getManager() {
+std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> IObjectWrapper::getManager() {
     return to_read->getManager();
 }
 
-void IObjectWrapper::setManager(std::shared_ptr<ignis::data::IManager<IObject::Any>> manager) {
+void IObjectWrapper::setManager(std::shared_ptr<api::IManager<IObject::Any>> manager) {
     to_read->setManager(manager);
 }
 

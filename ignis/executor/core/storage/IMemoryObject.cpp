@@ -5,35 +5,34 @@
 #include "iterator/IMemoryIterator.h"
 
 using namespace ignis::executor::core::storage;
-using namespace ignis::data::serialization;
+using namespace ignis::data;
 
-IMemoryObject::IMemoryObject(const std::shared_ptr<data::IManager<Any>> &manager, size_t size)
-        : manager(manager),
-          data(new std::vector<IObject::Any>()),
-          handle(std::make_shared<IObject::Handle<std::vector<IObject::Any>>>(data,
-                                                                              manager->getClassManagerType()->getTypeHandle())) {}
+IMemoryObject::IMemoryObject(const std::shared_ptr<api::IManager<Any>> &manager, size_t size)
+        : data(new std::vector<IObject::Any>()), collection_manager(manager->collectionManager()) {
+    setManager(manager);
+}
 
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IMemoryObject::readIterator() {
-    return std::make_shared<iterator::IReadMemoryIterator>(data, manager);
+    return std::make_shared<iterator::IReadMemoryIterator>(data, collection_manager);
 }
 
 std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> IMemoryObject::writeIterator() {
-    return std::make_shared<iterator::IWriteMemoryIterator>(data, manager);
+    return std::make_shared<iterator::IWriteMemoryIterator>(data, collection_manager);
 }
 
 void IMemoryObject::read(std::shared_ptr<transport::TTransport> trans) {
     auto data_transport = std::make_shared<transport::TZlibTransport>(trans);
     data::IObjectProtocol data_proto(data_transport);
-    auto type_handle = manager->getClassManagerType()->getTypeHandle();
-    auto reader = type_handle->reader();
+    auto reader = collection_manager->reader();
+    clear();
+    delete data;
     data = reader->readPtr(data_proto);
-    handle = std::make_shared<IObject::Handle<std::vector<IObject::Any>>>(data, type_handle);
 }
 
 void IMemoryObject::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
     auto data_transport = std::make_shared<transport::TZlibTransport>(trans, 128, 1024, 128, 1024, compression);
     data::IObjectProtocol data_proto(data_transport);
-    auto writer = manager->getClassManagerType()->getTypeHandle()->writer();
+    auto writer = collection_manager->writer();
     writer->writePtr(data, data_proto);
 }
 
@@ -46,15 +45,15 @@ void IMemoryObject::moveFrom(IObject &source) {
 }
 
 size_t IMemoryObject::getSize() {
-    return manager->getClassManagerType()->size(*data);
+    return collection_manager->size(*data);
 }
 
 void IMemoryObject::clear() {
-    manager->getClassManagerType()->clear(*data);
+    collection_manager->clear(*data);
 }
 
 void IMemoryObject::fit() {
-    manager->getClassManagerType()->resize(*data, manager->getClassManagerType()->size(*data));
+    collection_manager->resize(*data, collection_manager->size(*data));
 }
 
 std::string IMemoryObject::getType() {
@@ -62,7 +61,7 @@ std::string IMemoryObject::getType() {
 }
 
 IMemoryObject::~IMemoryObject() {
-
+    clear();
+    delete data;
 }
-
 

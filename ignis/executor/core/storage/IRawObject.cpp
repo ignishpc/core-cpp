@@ -5,32 +5,32 @@
 #include "iterator/ITransportIterator.h"
 
 using namespace ignis::executor::core::storage;
-using namespace ignis::data::serialization;
+using namespace ignis::data;
 
-IRawObject::IRawObject(const std::shared_ptr<transport::TTransport> &transport, int8_t compression) : transport(transport),
-                                                                                           elems(0),
-                                                                                           compression(compression) {}
-IRawObject::~IRawObject(){}
+IRawObject::IRawObject(const std::shared_ptr<transport::TTransport> &transport, int8_t compression) :
+        transport(transport), elems(0), compression(compression) {}
+
+IRawObject::~IRawObject() {}
 
 void IRawObject::readHeader(std::shared_ptr<transport::TTransport> transport) {
-    auto col_reader = manager->getClassManagerType()->getTypeHandle()->reader();
-    auto elem_reader = manager->getClassManagerType()->getElemClassManager()->getTypeHandle()->reader();
+    auto col_reader = manager->reader();
+    auto elem_reader = manager->collectionManager()->reader();
     bool native;
     data::IObjectProtocol data_proto(transport);
     data_proto.readBool(native);
     col_reader->readType(data_proto);
-    elems = readSizeAux(data_proto);
+    elems = handle::readSizeAux(data_proto);
     elem_reader->readType(data_proto);
 }
 
 void IRawObject::writeHeader(std::shared_ptr<transport::TTransport> transport) {
-    auto col_writer = manager->getClassManagerType()->getTypeHandle()->writer();
-    auto elem_writer = manager->getClassManagerType()->getElemClassManager()->getTypeHandle()->writer();
+    auto col_writer = manager->writer();
+    auto elem_writer = manager->collectionManager()->writer();
     bool native = false;
     data::IObjectProtocol data_proto(transport);
     data_proto.writeBool(native);
     col_writer->writeType(data_proto);
-    writeSizeAux(data_proto, elems);
+    handle::writeSizeAux(data_proto, elems);
     elem_writer->writeType(data_proto);
     transport->flush();
 }

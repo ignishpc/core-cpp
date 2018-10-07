@@ -3,7 +3,7 @@
 #define IGNIS_IMEMORYOBJECT_H
 
 #include "IObject.h"
-#include "../../../data/IManager.h"
+#include "../../api/IManager.h"
 
 namespace ignis {
     namespace executor {
@@ -13,7 +13,7 @@ namespace ignis {
 
                 public:
 
-                    IMemoryObject(const std::shared_ptr<data::IManager<Any>> &manager, size_t size  = 1000);
+                    IMemoryObject(const std::shared_ptr<api::IManager<Any>> &manager, size_t size  = 1000);
 
                     virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;
 
@@ -39,9 +39,7 @@ namespace ignis {
 
                 private:
                     std::vector<IObject::Any> *data;
-                    std::shared_ptr<data::IManager<Any>> manager;
-                    std::shared_ptr<IObject::Handle<std::vector<IObject::Any>>> handle;
-
+                    std::shared_ptr<api::ICollectionManager<Any>> collection_manager;
                 };
             }
         }

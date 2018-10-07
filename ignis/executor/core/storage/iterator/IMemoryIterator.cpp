@@ -1,18 +1,16 @@
 
 #include "IMemoryIterator.h"
 
-using namespace std;
-using namespace ignis::data;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::storage::iterator;
-using namespace apache::thrift::transport;
 
 
-IReadMemoryIterator::IReadMemoryIterator(vector<IObject::Any> *data, const shared_ptr<IManager<IObject::Any>> &manager)
-        : data(data), class_manager(manager->getClassManagerType()) {}
+IReadMemoryIterator::IReadMemoryIterator(std::vector<IObject::Any> *data,
+                                         const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager)
+        : data(data), collection_manager(collection_manager) {}
 
 IObject::Any &IReadMemoryIterator::next() {
-    return class_manager->get(*data, pos++);
+    return collection_manager->get(*data, pos++);
 }
 
 bool IReadMemoryIterator::hashNext() {
@@ -30,16 +28,17 @@ void IReadMemoryIterator::skip(size_t elems) {
     pos += elems;
 }
 
-IWriteMemoryIterator::IWriteMemoryIterator(vector<IObject::Any> *data, const shared_ptr<IManager<IObject::Any>> &manager)
-        : data(data), class_manager(manager->getClassManagerType()) {}
+IWriteMemoryIterator::IWriteMemoryIterator(std::vector<IObject::Any> *data,
+                                           const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager)
+        : data(data), collection_manager(collection_manager) {}
 
 
 void IWriteMemoryIterator::write(IObject::Any &obj) {
-    class_manager->push(*data, obj);
+    collection_manager->push(*data, obj);
 }
 
 void IWriteMemoryIterator::write(IObject::Any &&obj) {
-    class_manager->push(*data, obj);
+    collection_manager->push(*data, obj);
 }
 
 IWriteMemoryIterator::~IWriteMemoryIterator() {

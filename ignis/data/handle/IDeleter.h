@@ -4,7 +4,7 @@
 
 namespace ignis {
     namespace data {
-        namespace serialization {
+        namespace handle {
 
             template<typename T>
             struct IDeleterType {

@@ -14,7 +14,7 @@ namespace ignis {
                     public:
 
                         IReadTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
-                                               const std::shared_ptr<data::IManager<IObject::Any>> &manager,
+                                               const std::shared_ptr<api::IManager<IObject::Any>> &manager,
                                                size_t elems);
 
                         IObject::Any &next() override;
@@ -27,10 +27,10 @@ namespace ignis {
 
                     private:
                         std::shared_ptr<transport::TTransport> transport;
-                        std::shared_ptr<ignis::data::IObjectProtocol> protocol;
-                        std::shared_ptr<ignis::data::serialization::ITypeHandle<IObject::Any>> type_handle;
-                        std::shared_ptr<ignis::data::serialization::IReader<IObject::Any>> reader;
-                        std::shared_ptr<IObject::Handle<IObject::Any>> actual;
+                        std::shared_ptr<data::IObjectProtocol> protocol;
+                        std::shared_ptr<api::IManager<IObject::Any>> manager;
+                        std::shared_ptr<data::handle::IReader<IObject::Any>> reader;
+                        std::shared_ptr<IObject::DataHandle<IObject::Any>> actual;
                         size_t elems;
                     };
 
@@ -38,7 +38,7 @@ namespace ignis {
                     public:
 
                         IWriteTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
-                                                const std::shared_ptr<data::IManager<IObject::Any>> &manager,
+                                                const std::shared_ptr<api::IManager<IObject::Any>> &manager,
                                                 size_t &elems);
 
                         void write(IObject::Any &obj) override;
@@ -49,9 +49,9 @@ namespace ignis {
 
                     private:
                         std::shared_ptr<transport::TTransport> transport;
-                        std::shared_ptr<ignis::data::IObjectProtocol> protocol;
-                        std::shared_ptr<ignis::data::serialization::ITypeHandle<IObject::Any>> type_handle;
-                        std::shared_ptr<ignis::data::serialization::IWriter<IObject::Any>> writer;
+                        std::shared_ptr<data::IObjectProtocol> protocol;
+                        std::shared_ptr<api::IManager<IObject::Any>> manager;
+                        std::shared_ptr<data::handle::IWriter<IObject::Any>> writer;
                         size_t &elems;
                     };
                 }
