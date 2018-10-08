@@ -3,7 +3,7 @@
 #include "IObjectWrapperIterator.h"
 #include "../../../exceptions/ILogicError.h"
 #include "../../../data/IObjectProtocol.h"
-#include <thrift/transport/TZlibTransport.h>
+#include "../../../data/IZlibTransport.h"
 
 using namespace ignis::executor::core::storage;
 
@@ -24,7 +24,7 @@ void IObjectWrapperIterator::read(std::shared_ptr<transport::TTransport> trans) 
 }
 
 void IObjectWrapperIterator::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
-    auto data_transport = std::make_shared<transport::TZlibTransport>(trans, 128, 1024, 128, 1024, compression);
+    auto data_transport = std::make_shared<data::IZlibTransport>(trans, compression);
     data::IObjectProtocol data_proto(data_transport);
     manager->collectionManager()->writer()->writeType(data_proto);
     auto elem_writer = manager->writer();

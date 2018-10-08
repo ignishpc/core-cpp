@@ -1,7 +1,7 @@
 
 #include "IRawObject.h"
 
-#include <thrift/transport/TZlibTransport.h>
+#include "../../../data/IZlibTransport.h"
 #include "iterator/ITransportIterator.h"
 
 using namespace ignis::executor::core::storage;
@@ -36,17 +36,18 @@ void IRawObject::writeHeader(std::shared_ptr<transport::TTransport> transport) {
 }
 
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IRawObject::readIterator() {
+    this->transport->flush();
     return std::make_shared<iterator::IReadTransportIterator>(transport, manager, elems);
 
 }
 
 std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> IRawObject::writeIterator() {
-    elems = 0;
     return std::make_shared<iterator::IWriteTransportIterator>(transport, manager, elems);
 }
 
 void IRawObject::read(std::shared_ptr<transport::TTransport> trans) {
-    auto data_transport = std::make_shared<transport::TZlibTransport>(trans);
+    this->transport->flush();
+    auto data_transport = std::make_shared<data::IZlibTransport>(trans);
     readHeader(data_transport);
     uint8_t buffer[256];
     size_t bytes;
@@ -57,7 +58,7 @@ void IRawObject::read(std::shared_ptr<transport::TTransport> trans) {
 }
 
 void IRawObject::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
-    auto data_transport = std::make_shared<transport::TZlibTransport>(trans, 128, 1024, 128, 1024, compression);
+    auto data_transport = std::make_shared<data::IZlibTransport>(trans, compression);
     writeHeader(data_transport);
     if (!(this->compression == compression && fastWrite(trans))) {
         uint8_t buffer[256];

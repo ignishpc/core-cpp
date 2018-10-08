@@ -14,11 +14,26 @@ namespace ignis {
                 class IObjectTest : public CPPUNIT_NS::TestCase {
                 public:
 
-                    virtual std::shared_ptr<IObject> createObject() = 0;
+                    virtual std::shared_ptr<IObject> getObject(std::shared_ptr<api::IManager<IObject::Any>> &m,
+                            size_t lines, size_t bytes) = 0;
 
                     virtual void setUp();
 
-                    virtual void testIterator();
+                    virtual void itWriteItReadTest();
+
+                    virtual void itWriteTransReadTest();
+
+                    virtual void transWriteItReadTest();
+
+                    virtual void transWriteTransReadTest();
+
+                    virtual void clearTest();
+
+                    virtual void appendTest();
+
+                    virtual void copyTest();
+
+                    virtual void moveTest();
 
                     virtual void tearDown();
 

@@ -1,21 +1,21 @@
 
-#ifndef IGNIS_IMEMORYOBJECTTEST_H
-#define IGNIS_IMEMORYOBJECTTEST_H
+#ifndef IGNIS_IRAWMEMORYOBJECTTEST_H
+#define IGNIS_IRAWMEMORYOBJECTTEST_H
 
 #include "IObjectTest.h"
-#include "../../../../ignis/executor/core/storage/IMemoryObject.h"
+#include "../../../../ignis/executor/core/storage/IRawMemoryObject.h"
 
 namespace ignis {
     namespace executor {
         namespace core {
             namespace storage {
-                class IMemoryObjectTest : public IObjectTest {
+                class IRawMemoryObjectTest : public IObjectTest {
 
-                CPPUNIT_TEST_SUITE(IMemoryObjectTest);
+                CPPUNIT_TEST_SUITE(IRawMemoryObjectTest);
                         CPPUNIT_TEST(itWriteItReadTest);
-                        CPPUNIT_TEST(itWriteTransReadTest);
-                        CPPUNIT_TEST(transWriteItReadTest);
-                        CPPUNIT_TEST(transWriteTransReadTest);
+                        //CPPUNIT_TEST(itWriteTransReadTest);
+                        //CPPUNIT_TEST(transWriteItReadTest);
+                        //CPPUNIT_TEST(transWriteTransReadTest);
                         CPPUNIT_TEST(clearTest);
                         CPPUNIT_TEST(appendTest);
                         CPPUNIT_TEST(copyTest);
@@ -24,7 +24,9 @@ namespace ignis {
 
                     virtual std::shared_ptr<IObject> getObject(std::shared_ptr<api::IManager<IObject::Any>> &m,
                                                                size_t lines, size_t bytes) {
-                        return std::make_shared<IMemoryObject>(m, lines);
+                        auto object = std::make_shared<IRawMemoryObject>(6, bytes);
+                        object->setManager(m);
+                        return object;
                     }
 
                 };

@@ -9,6 +9,11 @@
 #include <cppunit/TestCase.h>
 
 #include "executor/core/storage/IMemoryObjectTest.h"
+#include "executor/core/storage/IRawMemoryObjectTest.h"
+
+
+CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IMemoryObjectTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IRawMemoryObjectTest);
 
 int main(int argc, char *argv[]) {
     CPPUNIT_NS::TestResult results;

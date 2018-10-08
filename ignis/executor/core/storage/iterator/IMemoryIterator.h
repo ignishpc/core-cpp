@@ -29,8 +29,8 @@ namespace ignis {
                     private:
                         std::vector<IObject::Any> *data;
                         std::shared_ptr<api::ICollectionManager<IObject::Any>> collection_manager;
-                        size_t elems;
                         size_t pos;
+                        size_t size;
                     };
 
                     class IWriteMemoryIterator : public ICoreWriteIterator<IObject::Any> {

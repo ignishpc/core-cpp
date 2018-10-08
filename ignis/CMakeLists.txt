@@ -18,6 +18,8 @@ set(SOURCE_FILES
         data/handle/IEnumTypes.h
         data/handle/IOperators.h
         data/handle/IOperatorsImpl.h
+        data/IZlibTransport.h
+        data/IZlibTransport.cpp
         data/handle/IPrinter.h
         data/handle/IReader.h
         data/handle/IWriter.h

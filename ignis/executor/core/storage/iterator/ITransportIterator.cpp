@@ -6,7 +6,7 @@ using namespace ignis::executor::core::storage::iterator;
 
 IReadTransportIterator::IReadTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
                                                const std::shared_ptr<api::IManager<IObject::Any>> &manager,
-                                               size_t elems)
+                                               size_t &elems)
         : transport(transport),
           manager(manager),
           elems(elems),
@@ -30,7 +30,7 @@ IObject::Any &IReadTransportIterator::next() {
 }
 
 bool IReadTransportIterator::hashNext() {
-    elems > 0;
+    return elems > 0;
 }
 
 IReadTransportIterator::~IReadTransportIterator() {

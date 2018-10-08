@@ -15,7 +15,7 @@ namespace ignis {
 
                         IReadTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
                                                const std::shared_ptr<api::IManager<IObject::Any>> &manager,
-                                               size_t elems);
+                                               size_t& elems);
 
                         IObject::Any &next() override;
 
@@ -31,7 +31,7 @@ namespace ignis {
                         std::shared_ptr<api::IManager<IObject::Any>> manager;
                         std::shared_ptr<data::handle::IReader<IObject::Any>> reader;
                         std::shared_ptr<IObject::DataHandle<IObject::Any>> actual;
-                        size_t elems;
+                        size_t& elems;
                     };
 
                     class IWriteTransportIterator : public ICoreWriteIterator<IObject::Any> {

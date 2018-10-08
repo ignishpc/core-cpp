@@ -8,6 +8,7 @@
 #include <thrift/protocol/TCompactProtocol.h>
 #include "handle/IReader.h"
 #include "handle/IWriter.h"
+#include "../exceptions/IInvalidArgument.h"
 
 namespace ignis {
     namespace data {
@@ -21,9 +22,17 @@ namespace ignis {
 
             template<typename T>
             std::shared_ptr<T> readObject(handle::IReader<T> &reader) {
+                return std::shared_ptr<T>(readPtrObject(reader));
+            }
+
+            template<typename T>
+            T* readPtrObject(handle::IReader<T> &reader) {
                 bool native;
                 this->readBool(native);
-                return reader.readShared(*this);
+                if(native){
+                    throw exceptions::IInvalidArgument("C++ does not have a native serialization");
+                }
+                return reader.readPtr(*this);
             }
 
             template<typename T>

@@ -37,7 +37,7 @@ namespace ignis {
 
             template <typename T>
             inline void checkTypeAux(bool readType) {
-                if (readType) {
+                if (!readType) {
                     throw exceptions::ILogicError(
                             "IReaderType type error for" + RTTInfo(typeid(T)).getStandardName());
                 }
@@ -60,7 +60,7 @@ namespace ignis {
             template<>
             struct IReaderType<bool> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_BOOL == readType(protocol);
+                    return IEnumTypes::I_BOOL == readTypeAux(protocol);
                 }
 
                 inline bool operator()(IProtocol &protocol) {
@@ -73,7 +73,7 @@ namespace ignis {
             template<>
             struct IReaderType<int8_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_I08 == readType(protocol);
+                    return IEnumTypes::I_I08 == readTypeAux(protocol);
                 }
 
                 inline int8_t operator()(IProtocol &protocol) {
@@ -86,7 +86,7 @@ namespace ignis {
             template<>
             struct IReaderType<uint8_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_I16 == readType(protocol);
+                    return IEnumTypes::I_I16 == readTypeAux(protocol);
                 }
 
                 inline uint8_t operator()(IProtocol &protocol) {
@@ -99,7 +99,7 @@ namespace ignis {
             template<>
             struct IReaderType<int16_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_I16 == readType(protocol);
+                    return IEnumTypes::I_I16 == readTypeAux(protocol);
                 }
 
                 inline int16_t operator()(IProtocol &protocol) {
@@ -112,7 +112,7 @@ namespace ignis {
             template<>
             struct IReaderType<uint16_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_I32 == readType(protocol);
+                    return IEnumTypes::I_I32 == readTypeAux(protocol);
                 }
 
                 inline uint16_t operator()(IProtocol &protocol) {
@@ -125,7 +125,7 @@ namespace ignis {
             template<>
             struct IReaderType<int32_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_I32 == readType(protocol);
+                    return IEnumTypes::I_I32 == readTypeAux(protocol);
                 }
 
                 inline int32_t operator()(IProtocol &protocol) {
@@ -138,7 +138,7 @@ namespace ignis {
             template<>
             struct IReaderType<uint32_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_I64 == readType(protocol);
+                    return IEnumTypes::I_I64 == readTypeAux(protocol);
                 }
 
                 inline uint32_t operator()(IProtocol &protocol) {
@@ -151,7 +151,7 @@ namespace ignis {
             template<>
             struct IReaderType<int64_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_I64 == readType(protocol);
+                    return IEnumTypes::I_I64 == readTypeAux(protocol);
                 }
 
                 inline int64_t operator()(IProtocol &protocol) {
@@ -164,9 +164,9 @@ namespace ignis {
             template<>
             struct IReaderType<uint64_t> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_PAIR == readType(protocol) &&
-                           IEnumTypes::I_I64 == readType(protocol) &&
-                           IEnumTypes::I_I64 == readType(protocol);
+                    return IEnumTypes::I_PAIR == readTypeAux(protocol) &&
+                           IEnumTypes::I_I64 == readTypeAux(protocol) &&
+                           IEnumTypes::I_I64 == readTypeAux(protocol);
                 }
 
                 inline uint64_t operator()(IProtocol &protocol) {
@@ -181,7 +181,7 @@ namespace ignis {
             template<>
             struct IReaderType<float> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_DOUBLE == readType(protocol);
+                    return IEnumTypes::I_DOUBLE == readTypeAux(protocol);
                 }
 
                 inline float operator()(IProtocol &protocol) {
@@ -194,7 +194,7 @@ namespace ignis {
             template<>
             struct IReaderType<double> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_DOUBLE == readType(protocol);
+                    return IEnumTypes::I_DOUBLE == readTypeAux(protocol);
                 }
 
                 inline double operator()(IProtocol &protocol) {
@@ -207,7 +207,7 @@ namespace ignis {
             template<>
             struct IReaderType<std::string> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_STRING == readType(protocol);
+                    return IEnumTypes::I_STRING == readTypeAux(protocol);
                 }
 
                 inline std::string operator()(IProtocol &protocol) {
@@ -220,7 +220,7 @@ namespace ignis {
             template<typename T>
             struct IReaderType<std::vector<T>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_LIST == readType(protocol);
+                    return IEnumTypes::I_LIST == readTypeAux(protocol);
                 }
 
                 inline std::vector<T> operator()(IProtocol &protocol) {
@@ -239,7 +239,7 @@ namespace ignis {
             template<>
             struct IReaderType<std::vector<uint8_t >> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_BINARY == readType(protocol);
+                    return IEnumTypes::I_BINARY == readTypeAux(protocol);
                 }
 
                 inline std::vector<uint8_t> operator()(IProtocol &protocol) {
@@ -257,7 +257,7 @@ namespace ignis {
             template<typename T>
             struct IReaderType<std::list<T>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_LIST == readType(protocol);
+                    return IEnumTypes::I_LIST == readTypeAux(protocol);
                 }
 
                 inline std::list<T> operator()(IProtocol &protocol) {
@@ -275,7 +275,7 @@ namespace ignis {
             template<typename T>
             struct IReaderType<std::forward_list<T>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_LIST == readType(protocol);
+                    return IEnumTypes::I_LIST == readTypeAux(protocol);
                 }
 
                 inline std::forward_list<T> operator()(IProtocol &protocol) {
@@ -294,7 +294,7 @@ namespace ignis {
             template<typename T>
             struct IReaderType<std::set<T>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_SET == readType(protocol);
+                    return IEnumTypes::I_SET == readTypeAux(protocol);
                 }
 
                 inline std::set<T> operator()(IProtocol &protocol) {
@@ -312,7 +312,7 @@ namespace ignis {
             template<typename T>
             struct IReaderType<std::unordered_set<T>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_SET == readType(protocol);
+                    return IEnumTypes::I_SET == readTypeAux(protocol);
                 }
 
                 inline std::unordered_set<T> operator()(IProtocol &protocol) {
@@ -331,7 +331,7 @@ namespace ignis {
             template<typename K, typename V>
             struct IReaderType<std::map<K, V>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_MAP == readType(protocol);
+                    return IEnumTypes::I_MAP == readTypeAux(protocol);
                 }
 
                 inline std::map<K, V> operator()(IProtocol &protocol) {
@@ -351,7 +351,7 @@ namespace ignis {
             template<typename K, typename V>
             struct IReaderType<std::unordered_map<K, V>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_MAP == readType(protocol);
+                    return IEnumTypes::I_MAP == readTypeAux(protocol);
                 }
 
                 inline std::unordered_map<K, V> operator()(IProtocol &protocol) {
@@ -372,7 +372,7 @@ namespace ignis {
             template<typename T1, typename T2>
             struct IReaderType<std::pair<T1, T2>> {
                 inline bool readType(IProtocol &protocol) {
-                    return IEnumTypes::I_PAIR == readType(protocol);
+                    return IEnumTypes::I_PAIR == readTypeAux(protocol);
                 }
 
                 inline std::pair<T1, T2> operator()(IProtocol &protocol) {

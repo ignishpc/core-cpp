@@ -1,24 +1,27 @@
 
 #include "IRawMemoryObject.h"
 
-#include <thrift/transport/TZlibTransport.h>
 #include "iterator/ITransportIterator.h"
+#include "../../../data/IZlibTransport.h"
 
 using namespace ignis::executor::core::storage;
 using namespace ignis::data;
 
+IRawMemoryObject::IRawMemoryObject(std::shared_ptr<transport::TMemoryBuffer> buffer, int8_t compression)
+        : IRawObject(std::make_shared<data::IZlibTransport>(buffer, compression),
+                     compression), raw_memory(buffer) {}
+
 IRawMemoryObject::IRawMemoryObject(int8_t compression, uint32_t sz)
-        : raw_memory(std::make_shared<transport::TMemoryBuffer>(sz)),
-          IRawObject(std::make_shared<transport::TZlibTransport>(raw_memory, 128, 1024, 128, 1024, compression), compression) {
+        : IRawMemoryObject(std::make_shared<transport::TMemoryBuffer>(sz), compression) {
 }
 
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IRawMemoryObject::readIterator() {
-    auto read_transport = std::make_shared<transport::TZlibTransport>(readObservation());
+    this->transport->flush();
+    auto read_transport = std::make_shared<data::IZlibTransport>(readObservation());
     return std::make_shared<iterator::IReadTransportIterator>(read_transport, manager, elems);
 }
 
 std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> IRawMemoryObject::writeIterator() {
-    raw_memory->resetBuffer();
     return IRawObject::writeIterator();
 }
 
@@ -28,7 +31,8 @@ void IRawMemoryObject::read(std::shared_ptr<transport::TTransport> trans) {
 }
 
 void IRawMemoryObject::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
-    IRawObject(std::make_shared<transport::TZlibTransport>(readObservation()), this->compression).write(trans, compression);
+    IRawObject(std::make_shared<data::IZlibTransport>(readObservation()), this->compression).write(trans,
+                                                                                                        compression);
 }
 
 bool IRawMemoryObject::fastWrite(std::shared_ptr<transport::TTransport> transport) {
@@ -40,7 +44,7 @@ bool IRawMemoryObject::fastWrite(std::shared_ptr<transport::TTransport> transpor
     return true;
 }
 
-std::shared_ptr<ignis::transport::TMemoryBuffer> IRawMemoryObject::readObservation() {
+std::shared_ptr<ignis::transport::TTransport> IRawMemoryObject::readObservation() {
     uint8_t *ptr;
     uint32_t size;
     raw_memory->getBuffer(&ptr, &size);
@@ -53,6 +57,7 @@ void IRawMemoryObject::fit() {
 
 void IRawMemoryObject::clear() {
     elems = 0;
+    this->transport->flush();
     raw_memory->resetBuffer();
 }
 
