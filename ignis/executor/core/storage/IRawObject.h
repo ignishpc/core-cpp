@@ -35,7 +35,8 @@ namespace ignis {
 
                 protected:
 
-                    inline virtual bool fastWrite(std::shared_ptr<transport::TTransport> transport);
+                    IRawObject(const std::shared_ptr<apache::thrift::transport::TTransport> &transport,
+                               int8_t compression, size_t elems, int8_t type);
 
                     inline void readHeader(std::shared_ptr<transport::TTransport> transport);
 
@@ -44,7 +45,7 @@ namespace ignis {
                     std::shared_ptr<transport::TTransport> transport;
                     size_t elems;
                     int8_t compression;
-
+                    int8_t type;
                 };
             }
         }

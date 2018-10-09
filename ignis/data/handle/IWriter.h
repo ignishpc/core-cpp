@@ -365,7 +365,6 @@ namespace ignis {
                 }
 
                 virtual void operator()(const T &obj, IProtocol &protocol) {
-                    writeType(protocol);
                     writer(obj, protocol);
                 }
 

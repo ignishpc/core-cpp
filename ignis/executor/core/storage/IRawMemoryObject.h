@@ -33,13 +33,15 @@ namespace ignis {
 
                 private:
 
-                    IRawMemoryObject(std::shared_ptr<transport::TMemoryBuffer> buffer, int8_t compression);
+                    IRawMemoryObject(const std::shared_ptr<transport::TMemoryBuffer> &buffer, int8_t compression, size_t elems,
+                                     int8_t type, bool read_only);
 
-                    inline bool fastWrite(std::shared_ptr<transport::TTransport> transport) override;
+                    IRawMemoryObject(const std::shared_ptr<transport::TMemoryBuffer> &buffer, int8_t compression);
 
-                    inline std::shared_ptr<transport::TTransport> readObservation();
+                    inline std::shared_ptr<transport::TMemoryBuffer> readObservation();
 
                     std::shared_ptr<transport::TMemoryBuffer> raw_memory;
+                    bool read_only;
                 };
             }
         }

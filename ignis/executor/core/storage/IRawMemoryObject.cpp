@@ -7,44 +7,48 @@
 using namespace ignis::executor::core::storage;
 using namespace ignis::data;
 
-IRawMemoryObject::IRawMemoryObject(std::shared_ptr<transport::TMemoryBuffer> buffer, int8_t compression)
+IRawMemoryObject::IRawMemoryObject(const std::shared_ptr<transport::TMemoryBuffer> &buffer,
+                                   int8_t compression, size_t elems, int8_t type, bool read_only)
+        : IRawObject(std::make_shared<data::IZlibTransport>(buffer, compression), compression, elems, type),
+          raw_memory(buffer), read_only(read_only) {}
+
+IRawMemoryObject::IRawMemoryObject(const std::shared_ptr<transport::TMemoryBuffer> &buffer, int8_t compression)
         : IRawObject(std::make_shared<data::IZlibTransport>(buffer, compression),
-                     compression), raw_memory(buffer) {}
+                     compression), raw_memory(buffer), read_only(false) {}
 
 IRawMemoryObject::IRawMemoryObject(int8_t compression, uint32_t sz)
         : IRawMemoryObject(std::make_shared<transport::TMemoryBuffer>(sz), compression) {
 }
 
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IRawMemoryObject::readIterator() {
-    this->transport->flush();
-    auto read_transport = std::make_shared<data::IZlibTransport>(readObservation());
-    return std::make_shared<iterator::IReadTransportIterator>(read_transport, manager, elems);
+    if (!read_only) {
+        this->transport->flush();
+        return IRawMemoryObject(readObservation(), this->compression, elems, type, true).
+                setManager(manager).readIterator();
+    }
+    return this->IRawObject::readIterator();
 }
 
 std::shared_ptr<iterator::ICoreWriteIterator<IObject::Any>> IRawMemoryObject::writeIterator() {
-    return IRawObject::writeIterator();
+    return this->IRawObject::writeIterator();
 }
 
 void IRawMemoryObject::read(std::shared_ptr<transport::TTransport> trans) {
-    clear();
-    IRawObject::read(trans);
+    this->IRawObject::read(trans);
 }
 
 void IRawMemoryObject::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
-    IRawObject(std::make_shared<data::IZlibTransport>(readObservation()), this->compression).write(trans,
-                                                                                                        compression);
+    if (!read_only) {
+        this->transport->flush();
+        IRawMemoryObject(readObservation(), this->compression, elems, type, true).setManager(manager).
+                write(trans, compression);
+        return;
+    }
+    this->IRawObject::write(trans, compression);
 }
 
-bool IRawMemoryObject::fastWrite(std::shared_ptr<transport::TTransport> transport) {
-    uint8_t *buffer;
-    uint32_t size;
-    raw_memory->getBuffer(&buffer, &size);
-    transport->write(buffer, raw_memory->available_read());
-    transport->flush();
-    return true;
-}
-
-std::shared_ptr<ignis::transport::TTransport> IRawMemoryObject::readObservation() {
+std::shared_ptr<ignis::transport::TMemoryBuffer> IRawMemoryObject::readObservation() {
+    this->transport->flush();
     uint8_t *ptr;
     uint32_t size;
     raw_memory->getBuffer(&ptr, &size);
@@ -57,7 +61,7 @@ void IRawMemoryObject::fit() {
 
 void IRawMemoryObject::clear() {
     elems = 0;
-    this->transport->flush();
+    std::dynamic_pointer_cast<data::IZlibTransport> (transport)->restart();
     raw_memory->resetBuffer();
 }
 

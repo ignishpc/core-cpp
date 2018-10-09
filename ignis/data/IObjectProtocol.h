@@ -32,12 +32,14 @@ namespace ignis {
                 if(native){
                     throw exceptions::IInvalidArgument("C++ does not have a native serialization");
                 }
+                reader.readType(*this);
                 return reader.readPtr(*this);
             }
 
             template<typename T>
             void writeObject(const T &obj, handle::IWriter<T> &writer) {
                 this->writeBool(false);
+                writer.writeType(*this);
                 writer(obj, *this);
             }
 

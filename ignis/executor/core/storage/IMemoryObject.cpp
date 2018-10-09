@@ -43,6 +43,7 @@ void IMemoryObject::copyFrom(IObject &source) {
 
 void IMemoryObject::moveFrom(IObject &source) {
     iterator::readToWrite(*(source.readIterator()), *(this->writeIterator()), true);
+    source.clear();
 }
 
 size_t IMemoryObject::getSize() {

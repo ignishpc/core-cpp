@@ -14,8 +14,8 @@ namespace ignis {
                 class IObjectTest : public CPPUNIT_NS::TestCase {
                 public:
 
-                    virtual std::shared_ptr<IObject> getObject(std::shared_ptr<api::IManager<IObject::Any>> &m,
-                            size_t lines, size_t bytes) = 0;
+                    virtual std::shared_ptr<IObject> getObject(std::shared_ptr<api::IManager<IObject::Any>> m,
+                                                               size_t lines, size_t bytes) = 0;
 
                     virtual void setUp();
 
@@ -38,6 +38,7 @@ namespace ignis {
                     virtual void tearDown();
 
                 private:
+
                     std::shared_ptr<IObject> object;
 
                 };

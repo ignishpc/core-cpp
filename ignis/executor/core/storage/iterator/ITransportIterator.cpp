@@ -8,19 +8,19 @@ IReadTransportIterator::IReadTransportIterator(const std::shared_ptr<transport::
                                                const std::shared_ptr<api::IManager<IObject::Any>> &manager,
                                                size_t &elems)
         : transport(transport),
+          protocol(std::make_shared<data::IObjectProtocol>(transport)),
           manager(manager),
           elems(elems),
-          reader(manager->reader()),
-          protocol(std::make_shared<data::IObjectProtocol>(transport)) {}
+          reader(manager->reader()) {}
 
 IWriteTransportIterator::IWriteTransportIterator(const std::shared_ptr<transport::TTransport> &transport,
                                                  const std::shared_ptr<api::IManager<IObject::Any>> &manager,
                                                  size_t &elems)
         : transport(transport),
+          protocol(std::make_shared<data::IObjectProtocol>(transport)),
           manager(manager),
           elems(elems),
-          writer(manager->writer()),
-          protocol(std::make_shared<data::IObjectProtocol>(transport)) {}
+          writer(manager->writer()){}
 
 IObject::Any &IReadTransportIterator::next() {
     elems--;

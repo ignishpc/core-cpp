@@ -391,17 +391,14 @@ namespace ignis {
             class IReader {
             public:
                 virtual inline std::shared_ptr<T> readShared(IProtocol &protocol) {
-                    readType(protocol);
                     return std::make_shared<T>(reader(protocol));
                 }
 
                 virtual inline T *readPtr(IProtocol &protocol) {
-                    readType(protocol);
                     return new T(reader(protocol));
                 }
 
                 virtual T operator()(IProtocol &protocol) {
-                    readType(protocol);
                     return reader(protocol);
                 }
 

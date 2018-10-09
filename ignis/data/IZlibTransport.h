@@ -19,6 +19,8 @@ namespace ignis {
 
             virtual void flush() override;
 
+            virtual void restart();
+
         };
     }
 }

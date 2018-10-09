@@ -81,8 +81,9 @@ std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> IObjectWrapper::ge
     return to_read->getManager();
 }
 
-void IObjectWrapper::setManager(std::shared_ptr<api::IManager<IObject::Any>> manager) {
+IObject& IObjectWrapper::setManager(std::shared_ptr<api::IManager<IObject::Any>> manager) {
     to_read->setManager(manager);
+    return *this;
 }
 
 IObjectWrapper::~IObjectWrapper() {

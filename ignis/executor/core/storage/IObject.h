@@ -46,8 +46,9 @@ namespace ignis {
                         return manager;
                     }
 
-                    virtual void setManager(std::shared_ptr<api::IManager<Any>> manager) {
+                    virtual IObject& setManager(std::shared_ptr<api::IManager<Any>> manager) {
                         this->manager = manager;
+                        return *this;
                     }
 
                     template<typename T>

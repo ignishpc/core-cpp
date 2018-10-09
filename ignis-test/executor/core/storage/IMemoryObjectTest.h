@@ -22,7 +22,7 @@ namespace ignis {
                         CPPUNIT_TEST(moveTest);
                     CPPUNIT_TEST_SUITE_END();
 
-                    virtual std::shared_ptr<IObject> getObject(std::shared_ptr<api::IManager<IObject::Any>> &m,
+                    virtual std::shared_ptr<IObject> getObject(std::shared_ptr<api::IManager<IObject::Any>> m,
                                                                size_t lines, size_t bytes) {
                         return std::make_shared<IMemoryObject>(m, lines);
                     }
