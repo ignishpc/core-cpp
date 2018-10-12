@@ -35,7 +35,7 @@ namespace ignis {
                 return size;
             }
 
-            template <typename T>
+            template<typename T>
             inline void checkTypeAux(bool readType) {
                 if (!readType) {
                     throw exceptions::ILogicError(
@@ -231,6 +231,27 @@ namespace ignis {
                     obj.reserve(size);
                     for (decltype(size) i = 0; i < size; i++) {
                         obj.push_back(reader(protocol));
+                    }
+                    return obj;
+                }
+            };
+
+            template<typename T1, typename T2>
+            struct IReaderType<std::vector<std::pair<T1, T2>>> {
+                inline bool readType(IProtocol &protocol) {
+                    return IEnumTypes::I_PAIR_LIST == readTypeAux(protocol);
+                }
+
+                inline std::vector<std::pair<T1, T2>> operator()(IProtocol &protocol) {
+                    std::vector<std::pair<T1, T2>> obj;
+                    auto size = readSizeAux(protocol);
+                    obj.reserve(size);
+                    auto r_first = IReaderType<T1>();
+                    auto r_second = IReaderType<T2>();
+                    checkTypeAux<T1>(r_first.readType(protocol));
+                    checkTypeAux<T2>(r_second.readType(protocol));
+                    for (decltype(size) i = 0; i < size; i++) {
+                        obj.push_back(std::make_pair<T1, T2>(r_first(protocol), r_second(protocol)));
                     }
                     return obj;
                 }

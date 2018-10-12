@@ -7,6 +7,8 @@
 using namespace ignis::executor::core::storage;
 using namespace ignis::data;
 
+const std::string IMemoryObject::TYPE = "memory";
+
 IMemoryObject::IMemoryObject(const std::shared_ptr<api::IManager<Any>> &manager, size_t size)
         : data(new std::vector<IObject::Any>()), collection_manager(manager->collectionManager()) {
     setManager(manager);
@@ -59,7 +61,7 @@ void IMemoryObject::fit() {
 }
 
 std::string IMemoryObject::getType() {
-    return "memory";
+    return TYPE;
 }
 
 IMemoryObject::~IMemoryObject() {

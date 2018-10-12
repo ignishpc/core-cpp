@@ -12,6 +12,8 @@ namespace ignis {
                 class IRawObject : public IObject {
                 public:
 
+                    static const std::string TYPE;
+
                     IRawObject(const std::shared_ptr<apache::thrift::transport::TTransport> &transport,
                                int8_t compression);
 

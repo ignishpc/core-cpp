@@ -24,7 +24,7 @@ void IKeysModule::getKeys(std::unordered_map<int64_t, int64_t> &_return, const b
         auto vector_manager = pair_manager.collectionManager();
         auto first_op = pair_manager._operator();
 
-        while (it->hashNext()) {
+        while (it->hasNext()) {
             auto &value = (std::pair<IObject::Any, IObject::Any> &)it->next();
             auto key_id = first_op->hash(value);
             if (_return.find(key_id) == _return.end()) {

@@ -47,27 +47,30 @@ namespace ignis {
             template<typename T>
             class ICollectionManager : public IBasicManager<std::vector<T>> {
             public:
-                virtual size_t size(std::vector<T> &v) {
+
+                typedef  std::vector<T> Class;
+
+                virtual size_t size(Class &v) {
                     return v.size();
                 }
 
-                virtual void clear(std::vector<T> &v) {
+                virtual void clear(Class &v) {
                     v.clear();
                 }
 
-                virtual void resize(std::vector<T> &v, size_t size) {
+                virtual void resize(Class &v, size_t size) {
                     v.resize(size);
                 }
 
-                virtual T &get(std::vector<T> &v, size_t pos) {
+                virtual T &get(Class &v, size_t pos) {
                     return v[pos];
                 }
 
-                virtual void push(std::vector<T> &v, T &elem) {
+                virtual void push(Class &v, T &elem) {
                     v.push_back(elem);
                 }
 
-                virtual void push(std::vector<T> &v, T &&elem) {
+                virtual void push(Class &v, T &&elem) {
                     v.push_back(elem);
                 }
 
@@ -89,13 +92,18 @@ namespace ignis {
             template<typename T1, typename T2>
             class IPairManager : public IManager<std::pair<T1, T2>> {
             public:
-                virtual T1 &first(std::pair<T1,T2> &p) {
+
+                typedef  std::pair<T1, T2> Class;
+
+                virtual T1 &first(Class &p) {
                     return p.first;
                 }
 
-                virtual T2 &second(std::pair<T1,T2> &p) {
+                virtual T2 &second(Class &p) {
                     return p.second;
                 }
+
+
 
                 virtual std::shared_ptr<IManager<T1>> firstManager() const{
                     return std::make_shared<IManager<T1>>();
@@ -105,15 +113,7 @@ namespace ignis {
                     return std::make_shared<IManager<T2>>();
                 }
 
-                virtual std::shared_ptr<IBasicManager<std::vector<std::pair<T1, T2>>>> collectionFirstManager() {
-                    return std::make_shared<IBasicManager<std::vector<std::pair<T1, T2>>>>();
-                }
-
-                virtual std::shared_ptr<ICollectionManager<std::pair<T1, T2>>> collectionSecondManager() {
-                    return std::make_shared<ICollectionManager<std::pair<T1, T2>>>();
-                }
-
-                virtual std::shared_ptr<IPairManager<T1,T2>> pairShared() const{
+                virtual std::shared_ptr<IManager<Class>> shared() const{
                     return std::make_shared<IPairManager<T1,T2>>();
                 }
 

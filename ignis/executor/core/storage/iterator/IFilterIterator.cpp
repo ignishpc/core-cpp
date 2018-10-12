@@ -13,9 +13,9 @@ IObject::Any &IReadFilterIterator::next() {
     return *next_elem;
 }
 
-bool IReadFilterIterator::hashNext() {
+bool IReadFilterIterator::hasNext() {
     bool check = false;
-    while(it->hashNext()){
+    while(it->hasNext()){
         next_elem = &it->next();
         if(check = filter()){
             break;

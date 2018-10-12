@@ -1,6 +1,6 @@
 
-#ifndef IGNIS_IITERATOR_H
-#define IGNIS_IITERATOR_H
+#ifndef IGNIS_IREADITERATOR_H
+#define IGNIS_IREADITERATOR_H
 
 namespace ignis {
     namespace executor {
@@ -11,7 +11,7 @@ namespace ignis {
 
                 virtual T &next() = 0;
 
-                virtual bool hashNext() = 0;
+                virtual bool hasNext() = 0;
 
                 virtual ~IReadIterator() {};
             };

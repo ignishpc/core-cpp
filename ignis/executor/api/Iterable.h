@@ -8,67 +8,50 @@
 namespace ignis {
     namespace executor {
         namespace api {
-            namespace function {
-                template<typename C>
-                class Iterable {
-                public:
 
-                    typedef typename C::value_type value_type;
-                    typedef typename C::iterator iterator;
+            template<typename T>
+            class Iterable {
+            private:
+
+                template<typename C>
+                class IterableIterator : public IReadIterator<T>{
+                public:
+                    IterableIterator(C &c) : collection(c), e(c.begin()) {}
+
+                    virtual T &next() override {
+                        e++;
+                        return *e;
+                    }
+
+                    virtual bool hasNext() override {
+                        return e == collection.end();
+                    }
+
+                    virtual ~IterableIterator() override {}
 
                 private:
-                    class IterableIterator : api::IReadIterator<value_type> {
-                    public:
-                        IterableIterator(C &c) : collection(c), e(NULL) {}
-
-                        virtual value_type &next() override {
-                            e++;
-                            return (value_type &)*e;
-                        }
-
-                        virtual bool hashNext() override {
-                            return e == collection.end();
-                        }
-
-                        virtual ~IterableIterator() override {
-
-                        }
-
-                    private:
-                        C &collection;
-                        iterator e;
-                    };
-
-                    C collection;
-
-                public:
-
-                    Iterable(){}
-
-                    Iterable(const C&& c ) : collection(c){}
-
-                    virtual C &getCollection() {
-                        return collection;
-                    }
-
-                    virtual std::shared_ptr<api::IReadIterator<value_type>> readIterator() {
-                        auto it = std::make_shared<IterableIterator>(collection);
-                        return (std::shared_ptr<api::IReadIterator<value_type>>&)it;
-                    }
-
+                    C &collection;
+                    typename C::iterator e;
                 };
-            }
+
+                std::shared_ptr<IReadIterator<T>> iterator;
+
+                Iterable(const std::shared_ptr<IReadIterator<T>> &iterator) : iterator(iterator) {}
+
+            public:
+
+                template<typename C>
+                static Iterable<T> collection(C& c){
+                    return Iterable<T>(std::make_shared<IterableIterator<C>>(c));
+                }
+
+                std::shared_ptr<IReadIterator<T>> readIterator(){
+                    return iterator;
+                }
+
+            };
         }
     }
-}
-
-namespace std {
-    template<class T>
-    struct hash<ignis::executor::api::function::Iterable<T>> {
-        std::size_t operator()(ignis::executor::api::function::Iterable<T> const &it) const noexcept {
-
-        }
-    };
 }
 
 #endif

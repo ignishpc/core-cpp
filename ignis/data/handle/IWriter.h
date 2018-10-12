@@ -196,6 +196,25 @@ namespace ignis {
                 }
             };
 
+            template<typename T1, typename T2>
+            struct IWriterType<std::vector<std::pair<T1, T2>>> {
+                inline void writeType(IProtocol &protocol) {
+                    writeTypeAux(protocol, IEnumTypes::I_PAIR_LIST);
+                }
+
+                inline void operator()(const std::vector<std::pair<T1, T2>> &obj, IProtocol &protocol) {
+                    writeSizeAux(protocol, obj.size());
+                    auto w_first = IWriterType<T1>();
+                    auto w_second = IWriterType<T2>();
+                    w_first.writeType(protocol);
+                    w_second.writeType(protocol);
+                    for (auto &elem: obj) {
+                        w_first(elem.first, protocol);
+                        w_second(elem.second, protocol);
+                    }
+                }
+            };
+
             template<>
             struct IWriterType<std::vector<uint8_t >> {
                 inline void writeType(IProtocol &protocol) {

@@ -18,7 +18,7 @@ namespace ignis {
 
                         IObject::Any &next() override;
 
-                        bool hashNext() override;
+                        bool hasNext() override;
 
                         bool isMoved() override;
 

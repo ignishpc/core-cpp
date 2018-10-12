@@ -48,10 +48,16 @@ set(SOURCE_FILES
         executor/api/IContext.cpp
         executor/api/IRegister.h
         executor/api/Iterable.h
+        executor/api/function/IFunctionBase.h
         executor/api/function/IFunction.h
-        executor/api/function/IFlatMapFunction.h
+        executor/api/function/IFunction2Base.h
         executor/api/function/IFunction2.h
-        executor/api/function/IPairFunction2.h
+        executor/api/function/IFlatFunctionBase.h
+        executor/api/function/IFlatFunction.h
+        executor/api/function/IPairFunctionBase.h
+        executor/api/function/IPairFunction.h
+        executor/api/function/IPairFlatFunctionBase.h
+        executor/api/function/IPairFlatFunction.h
 
         #Executor core
         executor/core/ILog.h
@@ -101,10 +107,6 @@ set(SOURCE_FILES
         executor/core/storage/iterator/ITransportIterator.cpp
         executor/core/storage/iterator/IMemoryIterator.h
         executor/core/storage/iterator/IMemoryIterator.cpp
-        executor/core/storage/IThreadSplitter.h
-        executor/core/storage/IThreadSplitter.cpp
-        executor/core/storage/iterator/ILogIterator.h
-        executor/core/storage/iterator/ILogIterator.cpp
         executor/core/storage/IObjectWrapper.h
         executor/core/storage/IObjectWrapper.cpp
         executor/core/storage/iterator/ICountIterator.h
@@ -115,7 +117,7 @@ set(SOURCE_FILES
         executor/core/storage/IObjectWrapperIterator.cpp
 
         #RPC
-        ${rpc})
+        ${rpc} )
 
 set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -DBOOST_ALL_DYN_LINK")#-O3
 

@@ -29,10 +29,10 @@ void IObjectTest::itWriteItReadTest() {
 //////////////////////////////////////////////////////////////////////////
     auto read = object->readIterator();
     for (auto &elem: examples) {
-        CPPUNIT_ASSERT(read->hashNext());
+        CPPUNIT_ASSERT(read->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) read->next());
     }
-    CPPUNIT_ASSERT(!read->hashNext());
+    CPPUNIT_ASSERT(!read->hasNext());
 }
 
 void IObjectTest::itWriteTransReadTest() {
@@ -79,10 +79,10 @@ void IObjectTest::transWriteItReadTest() {
 //////////////////////////////////////////////////////////////////////////
     auto read = object->readIterator();
     for (auto &elem: examples) {
-        CPPUNIT_ASSERT(read->hashNext());
+        CPPUNIT_ASSERT(read->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) read->next());
     }
-    CPPUNIT_ASSERT(!read->hashNext());
+    CPPUNIT_ASSERT(!read->hasNext());
 }
 
 void IObjectTest::transWriteTransReadTest() {
@@ -149,14 +149,14 @@ void IObjectTest::appendTest() {
 
     auto read = object->readIterator();
     for (auto &elem: examples) {
-        CPPUNIT_ASSERT(read->hashNext());
+        CPPUNIT_ASSERT(read->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) read->next());
     }
     for (auto &elem: examples2) {
-        CPPUNIT_ASSERT(read->hashNext());
+        CPPUNIT_ASSERT(read->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) read->next());
     }
-    CPPUNIT_ASSERT(!read->hashNext());
+    CPPUNIT_ASSERT(!read->hasNext());
 }
 
 void IObjectTest::copyTest() {
@@ -180,13 +180,13 @@ void IObjectTest::copyTest() {
     auto read = object->readIterator();
     auto read_copy = copy->readIterator();
     for (auto &elem: examples) {
-        CPPUNIT_ASSERT(read->hashNext());
+        CPPUNIT_ASSERT(read->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) read->next());
-        CPPUNIT_ASSERT(read_copy->hashNext());
+        CPPUNIT_ASSERT(read_copy->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) read_copy->next());
     }
-    CPPUNIT_ASSERT(!read->hashNext());
-    CPPUNIT_ASSERT(!read_copy->hashNext());
+    CPPUNIT_ASSERT(!read->hasNext());
+    CPPUNIT_ASSERT(!read_copy->hasNext());
 }
 
 void IObjectTest::moveTest() {
@@ -210,10 +210,10 @@ void IObjectTest::moveTest() {
 //////////////////////////////////////////////////////////////////////////
     auto read = object->readIterator();
     for (auto &elem: examples) {
-        CPPUNIT_ASSERT(read->hashNext());
+        CPPUNIT_ASSERT(read->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) read->next());
     }
-    CPPUNIT_ASSERT(!read->hashNext());
+    CPPUNIT_ASSERT(!read->hasNext());
 }
 
 void IObjectTest::tearDown() {

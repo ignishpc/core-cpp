@@ -7,6 +7,8 @@
 using namespace ignis::executor::core::storage;
 using namespace ignis::data;
 
+const std::string IRawObject::TYPE = "raw";
+
 IRawObject::IRawObject(const std::shared_ptr<transport::TTransport> &transport, int8_t compression) :
         IRawObject(transport, compression, 0, -1) {}
 
@@ -87,6 +89,6 @@ size_t IRawObject::getSize() {
 }
 
 std::string IRawObject::getType() {
-    return "raw";
+    return TYPE;
 }
 

@@ -10,6 +10,9 @@ namespace ignis {
             namespace storage {
                 class IObjectWrapperIterator : public IObject{
                 public:
+
+                    static const std::string TYPE;
+
                     IObjectWrapperIterator(const std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> &it, size_t size);
 
                     std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;

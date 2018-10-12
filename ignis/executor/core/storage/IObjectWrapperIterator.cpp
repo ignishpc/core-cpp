@@ -7,6 +7,8 @@
 
 using namespace ignis::executor::core::storage;
 
+const std::string IObjectWrapperIterator::TYPE = "wrapper iterator";
+
 IObjectWrapperIterator::IObjectWrapperIterator(const std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> &it, size_t size)
         :it(it),size(size) {}
 
@@ -30,7 +32,7 @@ void IObjectWrapperIterator::write(std::shared_ptr<transport::TTransport> trans,
     auto elem_writer = manager->writer();
     data::handle::writeSizeAux(data_proto,size);
     elem_writer->writeType(data_proto);
-    while(it->hashNext()){
+    while(it->hasNext()){
         auto& value = it->next();
         elem_writer->writePtr(&value,data_proto);
     }
@@ -61,7 +63,7 @@ void IObjectWrapperIterator::setSize(size_t size){
 }
 
 std::string IObjectWrapperIterator::getType(){
-    return "wrapper iterator";
+    return TYPE;
 }
 
 IObjectWrapperIterator::~IObjectWrapperIterator() {

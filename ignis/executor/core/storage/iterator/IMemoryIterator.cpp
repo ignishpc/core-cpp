@@ -13,7 +13,7 @@ IObject::Any &IReadMemoryIterator::next() {
     return collection_manager->get(*data, pos++);
 }
 
-bool IReadMemoryIterator::hashNext() {
+bool IReadMemoryIterator::hasNext() {
     return pos < size || pos < collection_manager->size(*data);
 }
 

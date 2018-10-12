@@ -21,11 +21,16 @@ namespace ignis {
 
                     std::shared_ptr<storage::IObject> getIObject(size_t bytes = 50 * 1024 * 1024);
 
-                    std::shared_ptr<storage::IObject>
-                    getIObject(std::shared_ptr<api::IManager<storage::IObject::Any>> m, size_t lines = 1000, size_t bytes = 50 * 1024 * 1024);
+                    std::shared_ptr<storage::IObject> getIObject(
+                            const std::shared_ptr<api::IManager<storage::IObject::Any>> &m,
+                            size_t elems = 1000,
+                            size_t bytes = 50 * 1024 * 1024);
 
-                    std::shared_ptr<storage::IObject>
-                    getIObject(std::shared_ptr<api::IManager<storage::IObject::Any>> m, size_t lines, size_t bytes, std::string storage);
+                    std::shared_ptr<storage::IObject> getIObject(
+                            const std::shared_ptr<api::IManager<storage::IObject::Any>> &m,
+                            size_t elems,
+                            size_t bytes,
+                            const std::string& type);
 
                     template<typename T>
                     std::shared_ptr<IDinamicObject<T>> loadFunction(const rpc::ISourceFunction &funct) {

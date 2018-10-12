@@ -17,8 +17,8 @@ public:
         return value;
     }
 
-    bool hashNext() override {
-        return to_read->hashNext();
+    bool hasNext() override {
+        return to_read->hasNext();
     }
 
     bool isMoved() override {

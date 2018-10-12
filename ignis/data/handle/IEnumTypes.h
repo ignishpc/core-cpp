@@ -20,6 +20,7 @@ namespace ignis {
                 I_MAP       = 0xa,
                 I_PAIR      = 0xb,
                 I_BINARY    = 0xc,
+                I_PAIR_LIST = 0xd,
             };
 
         }

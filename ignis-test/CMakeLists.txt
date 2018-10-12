@@ -8,10 +8,16 @@ set(SOURCE_FILES
         executor/core/storage/IObjectTest.h
         executor/core/storage/IObjectTest.cpp
         executor/core/storage/IMemoryObjectTest.h
-        executor/core/storage/IRawMemoryObjectTest.h)
+        executor/core/storage/IRawMemoryObjectTest.h
+        executor/core/modules/IMapperModuleTest.h
+        executor/core/modules/IMapperModuleTest.cpp)
 
 add_executable(ignistest ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)
+
+add_library(testfunctions SHARED executor/core/modules/TestFunctions.cpp)
+SET_TARGET_PROPERTIES(testfunctions PROPERTIES LINKER_LANGUAGE CXX)
+TARGET_LINK_LIBRARIES(testfunctions igniscore)
 
 
 #add_test(NAME ignistest COMMAND ignistest)

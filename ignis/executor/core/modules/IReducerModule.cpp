@@ -2,7 +2,7 @@
 #include "IReducerModule.h"
 #include "../ILog.h"
 #include "../../../exceptions/IInvalidArgument.h"
-#include "../../api/function/IPairFunction2.h"
+#include "../../api/function/IFunction2.h"
 
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core::storage;
@@ -14,11 +14,11 @@ IReducerModule::IReducerModule(std::shared_ptr<IExecutorData> &executor_data) : 
 void IReducerModule::reduceByKey(const rpc::ISourceFunction &sf) {
     IGNIS_LOG(info) << "IReduceModule starting reduce by key";
     try {
-        auto function = loadFunction<api::function::IPairFunction2<IObject::Any, IObject::Any, IObject::Any, IObject::Any>>(
+        auto function = loadFunction<api::function::IFunction2<IObject::Any, IObject::Any, IObject::Any>>(
                 sf);
         auto object_in = executor_data->getSharedLoadObject();
-        auto manager_t = (*function)->type_pt1.shared();
-        auto manager_r = (*function)->type_pr.shared();
+        auto manager_t = (*function)->type_t1.shared();
+        auto manager_r = (*function)->type_r.shared();
         auto manager_t_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_t;
         auto manager_r_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_r;
         object_in->setManager(manager_t_any);
@@ -44,13 +44,13 @@ void IReducerModule::reduceByKey(const rpc::ISourceFunction &sf) {
             } else {
                 auto object_result = getIObject(manager_t_any, 1, 0, "memory");
                 object_result->writeIterator()->write(match_read->next());
-                while (match_read->hashNext()) {
+                while (match_read->hasNext()) {/*
                     (*function)->writeCall(
                             (std::pair<IObject::Any, IObject::Any> &) (object_result->readIterator()->next()),
                             (std::pair<IObject::Any, IObject::Any> &) (match_read->next()),
                             context,
                             (api::IWriteIterator<std::pair<IObject::Any, IObject::Any>> &) (*object_result->writeIterator())
-                    );
+                    );*/
                 }
 #pragma omp critical
                 writer->write(object_result->readIterator()->next());
@@ -86,7 +86,7 @@ void IReducerModule::keyMatch(std::vector<std::shared_ptr<storage::IObject>> &ma
     auto first_op = pair_manager.firstManager()->_operator();
     auto it = object_in->readIterator();
 
-    while (it->hashNext()) {
+    while (it->hasNext()) {
         auto &value = (std::pair<IObject::Any, IObject::Any> &)it->next();
         auto key = first_op->toString(pair_manager.first(value));
         auto &pair = objects[key];

@@ -13,6 +13,8 @@ namespace ignis {
 
                 public:
 
+                    static const std::string TYPE;
+
                     IMemoryObject(const std::shared_ptr<api::IManager<Any>> &manager, size_t size  = 1000);
 
                     virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;

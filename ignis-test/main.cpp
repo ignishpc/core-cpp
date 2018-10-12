@@ -11,9 +11,14 @@
 #include "executor/core/storage/IMemoryObjectTest.h"
 #include "executor/core/storage/IRawMemoryObjectTest.h"
 
+#include "executor/core/modules/IMapperModuleTest.h"
+#include "../ignis/executor/core/modules/IMapperModule.h"
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IMemoryObjectTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IRawMemoryObjectTest);
+
+CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IMapperModuleTest);
 
 int main(int argc, char *argv[]) {
     CPPUNIT_NS::TestResult results;
@@ -30,3 +35,16 @@ int main(int argc, char *argv[]) {
 
     return result_collector.wasSuccessful() ? 0 : 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

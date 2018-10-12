@@ -7,6 +7,8 @@
 using namespace ignis::executor::core::storage;
 using namespace ignis::data;
 
+const std::string IRawMemoryObject::TYPE = "raw memory";
+
 IRawMemoryObject::IRawMemoryObject(const std::shared_ptr<transport::TMemoryBuffer> &buffer,
                                    int8_t compression, size_t elems, int8_t type, bool read_only)
         : IRawObject(std::make_shared<data::IZlibTransport>(buffer, compression), compression, elems, type),
@@ -66,7 +68,7 @@ void IRawMemoryObject::clear() {
 }
 
 std::string IRawMemoryObject::getType() {
-    return "raw memory";
+    return TYPE;
 }
 
 IRawMemoryObject::~IRawMemoryObject() {

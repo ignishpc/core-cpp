@@ -29,7 +29,7 @@ IObject::Any &IReadTransportIterator::next() {
     return *obj;
 }
 
-bool IReadTransportIterator::hashNext() {
+bool IReadTransportIterator::hasNext() {
     return elems > 0;
 }
 

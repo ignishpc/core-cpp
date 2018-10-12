@@ -10,6 +10,7 @@ namespace ignis {
             namespace storage {
                 class IObjectWrapper : public IObject{
                 public:
+
                     IObjectWrapper(const std::shared_ptr<IObject> &to_read, const std::shared_ptr<IObject> &to_write);
 
                     virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;

@@ -22,8 +22,8 @@ namespace ignis {
                             return iterator->next();
                         }
 
-                        inline bool hashNext() override {
-                            return count > 0 && iterator->hashNext();
+                        inline bool hasNext() override {
+                            return count > 0 && iterator->hasNext();
                         }
 
                         inline bool isMoved() override {

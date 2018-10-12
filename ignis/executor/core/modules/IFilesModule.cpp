@@ -70,7 +70,7 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
         IGNIS_LOG(info) << "IFileModule saving "
                         << " path: " << path
                         << " joined: " << joined ? "true" : "false";
-        while (reader->hashNext()) {
+        while (reader->hasNext()) {
             (*printer)(reader->next(), fs);
             fs << std::endl;
         }
@@ -113,11 +113,11 @@ void IFilesModule::saveJson(const std::string &path, const bool joined) {
         IGNIS_LOG(info) << "IFileModule saving as json"
                         << " path: " << path
                         << " joined: " << joined ? "true" : "false";
-        if (reader->hashNext()) {
+        if (reader->hasNext()) {
             (*printer)(reader->next(), fs);
         }
 
-        while (reader->hashNext()) {
+        while (reader->hasNext()) {
             fs << std::endl;
             (*printer)(reader->next(), fs);
         }

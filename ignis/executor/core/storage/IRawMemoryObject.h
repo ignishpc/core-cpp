@@ -13,6 +13,9 @@ namespace ignis {
             namespace storage {
                 class IRawMemoryObject : public IRawObject {
                 public:
+
+                    static const std::string TYPE;
+
                     IRawMemoryObject(int8_t compression, uint32_t sz = 100 * 1024 * 1024);
 
                     virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;

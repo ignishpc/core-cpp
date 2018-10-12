@@ -19,11 +19,11 @@ namespace ignis {
                             return iterator->next();
                         }
 
-                        inline bool hashNext() override {
-                            while (skip > 0 && iterator->hashNext()) {
+                        inline bool hasNext() override {
+                            while (skip > 0 && iterator->hasNext()) {
                                 iterator->next();
                             }
-                            return iterator->hashNext();
+                            return iterator->hasNext();
                         }
 
                         inline bool isMoved() override {

@@ -1,21 +1,20 @@
 
-#ifndef IGNIS_IFUNCTION_H
-#define IGNIS_IFUNCTION_H
+#ifndef IGNIS_IPAIRFUNCTION_H
+#define IGNIS_IPAIRFUNCTION_H
 
-#include "IFunctionBase.h"
+#include "IPairFunctionBase.h"
 
 namespace ignis {
     namespace executor {
         namespace api {
             namespace function {
 
-                template<typename T, typename R>
-                class IFunction : public IFunctionBase<T,R>{
+                template<typename T, typename K, typename V>
+                class IPairFunction : public IPairFunctionBase{
                 public:
-
                     virtual void before(IContext &context) {}
 
-                    virtual R call(T &t, IContext &context) {}
+                    virtual std::pair<K, V> call(T &t, IContext &context) {};
 
                     virtual void after(IContext &context) {}
 
