@@ -38,11 +38,15 @@ namespace ignis {
                 }
 
                 T *operator->() const {
-                    return (T*)loader->getObject();
+                    return (T *) loader->getObject();
+                }
+
+                T &operator*() const {
+                    return *((T *)loader->getObject());
                 }
 
                 T *get() const {
-                    return (T*)loader->getObject();
+                    return (T *) loader->getObject();
                 }
 
             private:

@@ -15,21 +15,19 @@ std::shared_ptr<IObject> IgnisModule::getIObject(size_t bytes) {
 std::shared_ptr<IObject>
 IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>>& m, size_t elems, size_t bytes) {
     std::string storage = executor_data->getParser().getString("ignis.executor.storage");
-    return getIObject(std::shared_ptr<api::IManager<IObject::Any>>(), elems, bytes, storage);
+    return getIObject(m, elems, bytes, storage);
 }
 
 std::shared_ptr<IObject>
 IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>>& m, size_t elems, size_t bytes,const  std::string& type) {
     std::shared_ptr<IObject> object;
-    int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
-    if (type == "disk" && false) {
-        IGNIS_LOG(info) << "Creating Object storage: " << type << ", compression: " << compression;
+    if (false) {
+        int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
         object = std::make_shared<IRawMemoryObject>(compression, bytes);
-    } else if (type == "raw memory" || !m) {
-        IGNIS_LOG(info) << "Creating Object storage: " << type << ", compression: " << compression;
+    } else if (type == IRawMemoryObject::TYPE || !m) {
+        int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
         object = std::make_shared<IRawMemoryObject>(compression, bytes);
     } else {
-        IGNIS_LOG(info) << "Creating Object storage: memory";
         object = std::make_shared<IMemoryObject>(m, elems);
     }
     if (m) {

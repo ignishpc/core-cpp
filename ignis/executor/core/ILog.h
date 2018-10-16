@@ -8,6 +8,8 @@
 
 #define IGNIS_LOG_INIT() ignis::executor::core::ILog::initLog()
 
+#define IGNIS_LOG_ENABLE(enable) ignis::executor::core::ILog::logEnable(enable)
+
 #define IGNIS_LOG(sev) \
    BOOST_LOG_STREAM_WITH_PARAMS( \
       (boost::log::trivial::logger::get()), \
@@ -31,6 +33,8 @@ namespace ignis {
                 }
 
                 static std::string filename(std::string path);
+
+                static bool logEnable(bool enable);
 
             private:
                 ILog(){}

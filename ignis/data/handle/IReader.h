@@ -217,17 +217,17 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IReaderType<std::vector<T>> {
+            template<typename _Tp, typename _Alloc>
+            struct IReaderType<std::vector<_Tp, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_LIST == readTypeAux(protocol);
                 }
 
-                inline std::vector<T> operator()(IProtocol &protocol) {
-                    std::vector<T> obj;
+                inline std::vector<_Tp, _Alloc> operator()(IProtocol &protocol) {
+                    std::vector<_Tp, _Alloc> obj;
                     auto size = readSizeAux(protocol);
-                    auto reader = IReaderType<T>();
-                    checkTypeAux<T>(reader.readType(protocol));
+                    auto reader = IReaderType<_Tp>();
+                    checkTypeAux<_Tp>(reader.readType(protocol));
                     obj.reserve(size);
                     for (decltype(size) i = 0; i < size; i++) {
                         obj.push_back(reader(protocol));
@@ -236,35 +236,35 @@ namespace ignis {
                 }
             };
 
-            template<typename T1, typename T2>
-            struct IReaderType<std::vector<std::pair<T1, T2>>> {
+            template<typename _T1, typename _T2, typename _Alloc>
+            struct IReaderType<std::vector<std::pair<_T1, _T2>, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_PAIR_LIST == readTypeAux(protocol);
                 }
 
-                inline std::vector<std::pair<T1, T2>> operator()(IProtocol &protocol) {
-                    std::vector<std::pair<T1, T2>> obj;
+                inline std::vector<std::pair<_T1, _T2>, _Alloc> operator()(IProtocol &protocol) {
+                    std::vector<std::pair<_T1, _T2>, _Alloc> obj;
                     auto size = readSizeAux(protocol);
                     obj.reserve(size);
-                    auto r_first = IReaderType<T1>();
-                    auto r_second = IReaderType<T2>();
-                    checkTypeAux<T1>(r_first.readType(protocol));
-                    checkTypeAux<T2>(r_second.readType(protocol));
+                    auto r_first = IReaderType<_T1>();
+                    auto r_second = IReaderType<_T2>();
+                    checkTypeAux<_T1>(r_first.readType(protocol));
+                    checkTypeAux<_T2>(r_second.readType(protocol));
                     for (decltype(size) i = 0; i < size; i++) {
-                        obj.push_back(std::make_pair<T1, T2>(r_first(protocol), r_second(protocol)));
+                        obj.push_back(std::make_pair<_T1, _T2>(r_first(protocol), r_second(protocol)));
                     }
                     return obj;
                 }
             };
 
-            template<>
-            struct IReaderType<std::vector<uint8_t >> {
+            template<typename _Alloc>
+            struct IReaderType<std::vector<uint8_t, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_BINARY == readTypeAux(protocol);
                 }
 
-                inline std::vector<uint8_t> operator()(IProtocol &protocol) {
-                    std::vector<uint8_t> obj;
+                inline std::vector<uint8_t, _Alloc> operator()(IProtocol &protocol) {
+                    std::vector<uint8_t, _Alloc> obj;
                     auto size = readSizeAux(protocol);
                     obj.resize(size);
                     auto data = obj.data();
@@ -275,17 +275,17 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IReaderType<std::list<T>> {
+            template<typename _Tp, typename _Alloc>
+            struct IReaderType<std::list<_Tp, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_LIST == readTypeAux(protocol);
                 }
 
-                inline std::list<T> operator()(IProtocol &protocol) {
-                    std::list<T> obj;
+                inline std::list<_Tp, _Alloc> operator()(IProtocol &protocol) {
+                    std::list<_Tp, _Alloc> obj;
                     auto size = readSizeAux(protocol);
-                    auto reader = IReaderType<T>();
-                    checkTypeAux<T>(reader.readType(protocol));
+                    auto reader = IReaderType<_Tp>();
+                    checkTypeAux<_Tp>(reader.readType(protocol));
                     for (decltype(size) i = 0; i < size; i++) {
                         obj.push_back(std::move(reader(protocol)));
                     }
@@ -293,17 +293,17 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IReaderType<std::forward_list<T>> {
+            template<typename _Tp, typename _Alloc>
+            struct IReaderType<std::forward_list<_Tp, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_LIST == readTypeAux(protocol);
                 }
 
-                inline std::forward_list<T> operator()(IProtocol &protocol) {
-                    std::forward_list<T> obj;
+                inline std::forward_list<_Tp, _Alloc> operator()(IProtocol &protocol) {
+                    std::forward_list<_Tp, _Alloc> obj;
                     auto size = readSizeAux(protocol);
-                    auto reader = IReaderType<T>();
-                    checkTypeAux<T>(reader.readType(protocol));
+                    auto reader = IReaderType<_Tp>();
+                    checkTypeAux<_Tp>(reader.readType(protocol));
                     auto it = obj.before_begin();
                     for (decltype(size) i = 0; i < size; i++) {
                         it = obj.insert_after(it, std::move(reader(protocol)));
@@ -312,17 +312,17 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IReaderType<std::set<T>> {
+            template<typename _Key, typename _Compare>
+            struct IReaderType<std::set<_Key, _Compare>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_SET == readTypeAux(protocol);
                 }
 
-                inline std::set<T> operator()(IProtocol &protocol) {
-                    std::set<T> obj;
+                inline std::set<_Key, _Compare> operator()(IProtocol &protocol) {
+                    std::set<_Key, _Compare> obj;
                     auto size = readSizeAux(protocol);
-                    auto reader = IReaderType<T>();
-                    checkTypeAux<T>(reader.readType(protocol));
+                    auto reader = IReaderType<_Key>();
+                    checkTypeAux<_Key>(reader.readType(protocol));
                     for (decltype(size) i = 0; i < size; i++) {
                         obj.insert(std::move(reader(protocol)));
                     }
@@ -330,17 +330,17 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IReaderType<std::unordered_set<T>> {
+            template<typename _Value, typename _Hash, typename _Pred, typename _Alloc>
+            struct IReaderType<std::unordered_set<_Value, _Hash, _Pred, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_SET == readTypeAux(protocol);
                 }
 
-                inline std::unordered_set<T> operator()(IProtocol &protocol) {
-                    std::unordered_set<T> obj;
+                inline std::unordered_set<_Value, _Hash, _Pred, _Alloc> operator()(IProtocol &protocol) {
+                    std::unordered_set<_Value, _Hash, _Pred, _Alloc> obj;
                     auto size = readSizeAux(protocol);
-                    auto reader = IReaderType<T>();
-                    checkTypeAux<T>(reader.readType(protocol));
+                    auto reader = IReaderType<_Value>();
+                    checkTypeAux<_Value>(reader.readType(protocol));
                     obj.reserve(size);
                     for (decltype(size) i = 0; i < size; i++) {
                         obj.insert(std::move(reader(protocol)));
@@ -349,59 +349,59 @@ namespace ignis {
                 }
             };
 
-            template<typename K, typename V>
-            struct IReaderType<std::map<K, V>> {
+            template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+            struct IReaderType<std::map<_Key, _Tp, _Compare, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_MAP == readTypeAux(protocol);
                 }
 
-                inline std::map<K, V> operator()(IProtocol &protocol) {
-                    std::map<K, V> obj;
+                inline std::map<_Key, _Tp, _Compare, _Alloc> operator()(IProtocol &protocol) {
+                    std::map<_Key, _Tp, _Compare, _Alloc> obj;
                     auto size = readSizeAux(protocol);
-                    auto r_key = IReaderType<K>();
-                    auto r_value = IReaderType<V>();
-                    checkTypeAux<K>(r_key.readType(protocol));
-                    checkTypeAux<V>(r_value.readType(protocol));
+                    auto r_key = IReaderType<_Key>();
+                    auto r_value = IReaderType<_Tp>();
+                    checkTypeAux<_Key>(r_key.readType(protocol));
+                    checkTypeAux<_Tp>(r_value.readType(protocol));
                     for (decltype(size) i = 0; i < size; i++) {
-                        obj[std::move(IReaderType<K>()(protocol))] = std::move(IReaderType<V>()(protocol));
+                        obj[std::move(IReaderType<_Key>()(protocol))] = std::move(IReaderType<_Tp>()(protocol));
                     }
                     return obj;
                 }
             };
 
-            template<typename K, typename V>
-            struct IReaderType<std::unordered_map<K, V>> {
+            template<typename _Key, typename _Tp, typename _Hash, typename _Pred , typename _Alloc>
+            struct IReaderType<std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_MAP == readTypeAux(protocol);
                 }
 
-                inline std::unordered_map<K, V> operator()(IProtocol &protocol) {
-                    std::unordered_map<K, V> obj;
+                inline std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> operator()(IProtocol &protocol) {
+                    std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> obj;
                     auto size = readSizeAux(protocol);
-                    auto r_key = IReaderType<K>();
-                    auto r_value = IReaderType<V>();
-                    checkTypeAux<K>(r_key.readType(protocol));
-                    checkTypeAux<V>(r_value.readType(protocol));
+                    auto r_key = IReaderType<_Key>();
+                    auto r_value = IReaderType<_Tp>();
+                    checkTypeAux<_Key>(r_key.readType(protocol));
+                    checkTypeAux<_Tp>(r_value.readType(protocol));
                     obj.reserve(size);
                     for (decltype(size) i = 0; i < size; i++) {
-                        obj[std::move(IReaderType<K>()(protocol))] = std::move(IReaderType<V>()(protocol));
+                        obj[std::move(IReaderType<_Key>()(protocol))] = std::move(IReaderType<_Tp>()(protocol));
                     }
                     return obj;
                 }
             };
 
-            template<typename T1, typename T2>
-            struct IReaderType<std::pair<T1, T2>> {
+            template<typename _T1, typename _T2>
+            struct IReaderType<std::pair<_T1, _T2>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_PAIR == readTypeAux(protocol);
                 }
 
-                inline std::pair<T1, T2> operator()(IProtocol &protocol) {
-                    std::pair<T1, T2> obj;
-                    auto r_first = IReaderType<T1>();
-                    auto r_second = IReaderType<T2>();
-                    checkTypeAux<T1>(r_first.readType(protocol));
-                    checkTypeAux<T2>(r_second.readType(protocol));
+                inline std::pair<_T1, _T2> operator()(IProtocol &protocol) {
+                    std::pair<_T1, _T2> obj;
+                    auto r_first = IReaderType<_T1>();
+                    auto r_second = IReaderType<_T2>();
+                    checkTypeAux<_T1>(r_first.readType(protocol));
+                    checkTypeAux<_T2>(r_second.readType(protocol));
                     obj.first = r_first(protocol);
                     obj.second = r_second(protocol);
                     return obj;

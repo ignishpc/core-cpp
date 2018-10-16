@@ -35,7 +35,7 @@ void IPostmanModule::threadAccept(std::shared_ptr<transport::TTransport> transpo
             IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
                             << " mode: " << (use_shared_memory ? "shared memory" : "socket");
             IMessage msg("local", object);
-            executor_data->getPostBox().newMessage(id, msg);
+            executor_data->getPostBox().newInMessage(id, msg);
             object->read(buffer);
             IGNIS_LOG(info) << "IPostmanModule id " << id << " received OK";
             object->fit();
@@ -112,7 +112,7 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
         }
 
         if (vaddr[0].find("local") == 0) {
-            executor_data->getPostBox().newMessage(id, msg);
+            executor_data->getPostBox().newInMessage(id, msg);
             return 1;
         }
         std::string addr_host = vaddr[1];
@@ -162,7 +162,7 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
 
 void IPostmanModule::sendAll() {
     try {
-        auto msgs = executor_data->getPostBox().getOutMessages();
+        auto msgs = executor_data->getPostBox().popOutBox();
         size_t threads = executor_data->getParser().getNumber("ignis.executor.transport.threads");
         int8_t compression = executor_data->getParser().getNumber("ignis.executor.transport.compression");
         int errors = 0;
@@ -204,7 +204,7 @@ void IPostmanModule::sendAll() {
 
 void IPostmanModule::clearAll() {
     try {
-        executor_data->getPostBox().getOutMessages();
+        executor_data->getPostBox().popOutBox();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());

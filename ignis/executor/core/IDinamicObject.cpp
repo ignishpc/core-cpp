@@ -15,7 +15,7 @@ ObjectLoader::ObjectLoader(const std::string &name) {
     std::string path = name.substr(0, sep);
     std::string class_name = name.substr(sep + 1, name.size());
 
-    library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
 
     if (!library) {
         throw exceptions::IInvalidArgument(path + " was not found or could not be loaded");
@@ -34,9 +34,9 @@ ObjectLoader::ObjectLoader(const std::string &name) {
 
 ObjectLoader::~ObjectLoader() {
     try {
-        (*destructor)(object);
+      //  (*destructor)(object);
     } catch (...) {}
-    dlclose(library);
+    //dlclose(library);
 }
 
 void *ObjectLoader::getObject() {

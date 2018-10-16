@@ -92,9 +92,9 @@ set(SOURCE_FILES
         executor/core/modules/IShuffleModule.cpp
 
         #Storage
-        executor/core/storage/IPostBox.h
-        executor/core/storage/IMessage.h
-        executor/core/storage/IPostBox.cpp
+        executor/core/IPostBox.h
+        executor/core/IMessage.h
+        executor/core/IPostBox.cpp
         executor/core/storage/IObject.h
         executor/core/storage/IRawObject.h
         executor/core/storage/IRawObject.cpp

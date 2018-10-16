@@ -48,6 +48,7 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
 }
 
 void IFilesModule::saveFile(const std::string &path, const bool joined) {
+    bool new_line = true;//TODO make argument
     try {
         std::shared_ptr<IObject> object= executor_data->getSharedLoadObject();
         if (!object->getManager()) {
@@ -61,7 +62,7 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
         if (joined) {
             fs.open(path, std::fstream::app);
         } else {
-            fs.open(path + "_" + std::to_string(executor_data->getExecutorId()), std::fstream::trunc);
+            fs.open(path, std::fstream::trunc);
         }
         if (!fs.is_open()) {
             throw exceptions::IInvalidArgument("IFileModule cannot create/open file " + path);
@@ -70,11 +71,21 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
         IGNIS_LOG(info) << "IFileModule saving "
                         << " path: " << path
                         << " joined: " << joined ? "true" : "false";
-        while (reader->hasNext()) {
+
+        if (reader->hasNext()) {
             (*printer)(reader->next(), fs);
+        }
+
+        while (reader->hasNext()) {
+            fs << std::endl;
+            (*printer)(reader->next(), fs);
+        }
+
+        if(new_line){
             fs << std::endl;
         }
-        executor_data->getSharedLoadObject().reset();
+
+        executor_data->deleteLoadObject();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -89,6 +100,8 @@ void IFilesModule::saveFile(const std::string &path, const bool joined) {
 }
 
 void IFilesModule::saveJson(const std::string &path, const bool joined) {
+    bool start=false;//TODO make argument
+    bool end=false;//TODO make argument
     try {
         std::shared_ptr<IObject> object= executor_data->getSharedLoadObject();
         if (!object->getManager()) {
@@ -99,29 +112,37 @@ void IFilesModule::saveJson(const std::string &path, const bool joined) {
         auto printer = object->getManager()->printer();
 
         std::ofstream fs;
-        if (joined) {
+        if (!start && !end) {
             fs.open(path, std::fstream::app);
             fs.seekp(-1, fs.end);
         } else {
-            fs.open(path + "_" + std::to_string(executor_data->getExecutorId()), std::fstream::trunc);
+            fs.open(path, std::fstream::trunc);
         }
         if (!fs.is_open()) {
             throw exceptions::IInvalidArgument("IFileModule cannot create/open file " + path);
-            fs << "[" << std::endl;
-        }
+            }
 
         IGNIS_LOG(info) << "IFileModule saving as json"
                         << " path: " << path
                         << " joined: " << joined ? "true" : "false";
+
+        if(start){
+            fs << "[" << std::endl;
+        }
+
         if (reader->hasNext()) {
-            (*printer)(reader->next(), fs);
+            printer->printJson(reader->next(), fs);
         }
 
         while (reader->hasNext()) {
-            fs << std::endl;
+            fs << std::endl << "," << std::endl;
             (*printer)(reader->next(), fs);
         }
-        fs << "]";
+
+        if(end){
+            fs << std::endl << "]";
+        }
+
         executor_data->getSharedLoadObject().reset();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;

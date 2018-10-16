@@ -13,7 +13,7 @@ namespace ignis {
                     class IReadMemoryIterator : public ICoreReadIterator<IObject::Any> {
                     public:
 
-                        IReadMemoryIterator(std::vector<IObject::Any> *data,
+                        IReadMemoryIterator(api::ICollectionManager<IObject::Any>::Class* data,
                                             const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager);
 
                         IObject::Any &next() override;
@@ -27,7 +27,8 @@ namespace ignis {
                         ~IReadMemoryIterator() override;
 
                     private:
-                        std::vector<IObject::Any> *data;
+                        IObject::Any bool_ref;
+                        api::ICollectionManager<IObject::Any>::Class* data;
                         std::shared_ptr<api::ICollectionManager<IObject::Any>> collection_manager;
                         size_t pos;
                         size_t size;
@@ -36,7 +37,7 @@ namespace ignis {
                     class IWriteMemoryIterator : public ICoreWriteIterator<IObject::Any> {
                     public:
 
-                        IWriteMemoryIterator(std::vector<IObject::Any> *data,
+                        IWriteMemoryIterator(api::ICollectionManager<IObject::Any>::Class* data,
                                              const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager);
 
                         void write(IObject::Any &obj) override;
@@ -46,7 +47,7 @@ namespace ignis {
                         ~IWriteMemoryIterator() override;
 
                     private:
-                        std::vector<IObject::Any> *data;
+                        api::ICollectionManager<IObject::Any>::Class* data;
                         std::shared_ptr<api::ICollectionManager<IObject::Any>> collection_manager;
                     };
                 }

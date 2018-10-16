@@ -180,32 +180,32 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IWriterType<std::vector<T>> {
+            template<typename _Tp, typename _Alloc>
+            struct IWriterType<std::vector<_Tp, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_LIST);
                 }
 
-                inline void operator()(const std::vector<T> &obj, IProtocol &protocol) {
+                inline void operator()(const std::vector<_Tp, _Alloc> &obj, IProtocol &protocol) {
                     writeSizeAux(protocol, obj.size());
-                    auto writer = IWriterType<T>();
+                    auto writer = IWriterType<_Tp>();
                     writer.writeType(protocol);
-                    for (auto &elem: obj) {
+                    for (const auto &elem: obj) {
                         writer(elem, protocol);
                     }
                 }
             };
 
-            template<typename T1, typename T2>
-            struct IWriterType<std::vector<std::pair<T1, T2>>> {
+            template<typename _T1, typename _T2, typename _Alloc>
+            struct IWriterType<std::vector<std::pair<_T1, _T2>, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_PAIR_LIST);
                 }
 
-                inline void operator()(const std::vector<std::pair<T1, T2>> &obj, IProtocol &protocol) {
+                inline void operator()(const std::vector<std::pair<_T1, _T2>, _Alloc> &obj, IProtocol &protocol) {
                     writeSizeAux(protocol, obj.size());
-                    auto w_first = IWriterType<T1>();
-                    auto w_second = IWriterType<T2>();
+                    auto w_first = IWriterType<_T1>();
+                    auto w_second = IWriterType<_T2>();
                     w_first.writeType(protocol);
                     w_second.writeType(protocol);
                     for (auto &elem: obj) {
@@ -215,15 +215,16 @@ namespace ignis {
                 }
             };
 
-            template<>
-            struct IWriterType<std::vector<uint8_t >> {
+            template<typename _Alloc>
+            struct IWriterType<std::vector<uint8_t, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_BINARY);
                 }
 
-                inline void operator()(const std::vector<uint8_t> &obj, IProtocol &protocol) {
+                inline void operator()(const std::vector<uint8_t, _Alloc> &obj, IProtocol &protocol) {
                     auto size = obj.size();
                     writeSizeAux(protocol, size);
+                    IWriterType<uint8_t>().writeType(protocol);
                     auto data = obj.data();
                     for (decltype(size) i = 0; i < size; i++) {
                         protocol.writeByte(*(int8_t *) data);
@@ -231,15 +232,15 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IWriterType<std::list<T>> {
+            template<typename _Tp, typename _Alloc>
+            struct IWriterType<std::list<_Tp, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_LIST);
                 }
 
-                inline void operator()(const std::list<T> &obj, IProtocol &protocol) {
+                inline void operator()(const std::list<_Tp, _Alloc> &obj, IProtocol &protocol) {
                     writeSizeAux(protocol, obj.size());
-                    auto writer = IWriterType<T>();
+                    auto writer = IWriterType<_Tp>();
                     writer.writeType(protocol);
                     for (auto it = obj.begin(); it != obj.end(); it++) {
                         writer(*it, protocol);
@@ -247,19 +248,19 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IWriterType<std::forward_list<T>> {
+            template<typename _Tp, typename _Alloc>
+            struct IWriterType<std::forward_list<_Tp, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_LIST);
                 }
 
-                inline void operator()(const std::forward_list<T> &obj, IProtocol &protocol) {
+                inline void operator()(const std::forward_list<_Tp, _Alloc> &obj, IProtocol &protocol) {
                     size_t size = 0;
                     for (auto it = obj.begin(); it != obj.end(); it++) {
                         size++;
                     }
                     writeSizeAux(protocol, size);
-                    auto writer = IWriterType<T>();
+                    auto writer = IWriterType<_Tp>();
                     writer.writeType(protocol);
                     for (auto it = obj.begin(); it != obj.end(); it++) {
                         writer(*it, protocol);
@@ -267,15 +268,15 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IWriterType<std::set<T>> {
+            template<typename _Key, typename _Compare>
+            struct IWriterType<std::set<_Key, _Compare>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_SET);
                 }
 
-                inline void operator()(const std::set<T> &obj, IProtocol &protocol) {
+                inline void operator()(const std::set<_Key, _Compare> &obj, IProtocol &protocol) {
                     writeSizeAux(protocol, obj.size());
-                    auto writer = IWriterType<T>();
+                    auto writer = IWriterType<_Key>();
                     writer.writeType(protocol);
                     for (auto it = obj.begin(); it != obj.end(); it++) {
                         writer(*it, protocol);
@@ -284,15 +285,15 @@ namespace ignis {
             };
 
 
-            template<typename T>
-            struct IWriterType<std::unordered_set<T>> {
+            template<typename _Value, typename _Hash, typename _Pred, typename _Alloc>
+            struct IWriterType<std::unordered_set<_Value, _Hash, _Pred, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_SET);
                 }
 
-                inline void operator()(const std::unordered_set<T> &obj, IProtocol &protocol) {
+                inline void operator()(const std::unordered_set<_Value, _Hash, _Pred, _Alloc> &obj, IProtocol &protocol) {
                     writeSizeAux(protocol, obj.size());
-                    auto writer = IWriterType<T>();
+                    auto writer = IWriterType<_Value>();
                     writer.writeType(protocol);
                     for (auto it = obj.begin(); it != obj.end(); it++) {
                         writer(*it, protocol);
@@ -300,16 +301,16 @@ namespace ignis {
                 }
             };
 
-            template<typename K, typename V>
-            struct IWriterType<std::map<K, V>> {
+            template<typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+            struct IWriterType<std::map<_Key, _Tp, _Compare, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_MAP);
                 }
 
-                inline void operator()(const std::map<K, V> &obj, IProtocol &protocol) {
+                inline void operator()(const std::map<_Key, _Tp, _Compare, _Alloc> &obj, IProtocol &protocol) {
                     writeSizeAux(protocol, obj.size());
-                    auto w_key = IWriterType<K>();
-                    auto w_value = IWriterType<V>();
+                    auto w_key = IWriterType<_Key>();
+                    auto w_value = IWriterType<_Tp>();
                     w_key.writeType(protocol);
                     w_value.writeType(protocol);
                     for (auto it = obj.begin(); it != obj.end(); it++) {
@@ -319,16 +320,16 @@ namespace ignis {
                 }
             };
 
-            template<typename K, typename V>
-            struct IWriterType<std::unordered_map<K, V>> {
+            template<typename _Key, typename _Tp, typename _Hash, typename _Pred , typename _Alloc>
+            struct IWriterType<std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_MAP);
                 }
 
-                inline void operator()(const std::unordered_map<K, V> &obj, IProtocol &protocol) {
+                inline void operator()(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &obj, IProtocol &protocol) {
                     writeSizeAux(protocol, obj.size());
-                    auto w_key = IWriterType<K>();
-                    auto w_value = IWriterType<V>();
+                    auto w_key = IWriterType<_Key>();
+                    auto w_value = IWriterType<_Tp>();
                     w_key.writeType(protocol);
                     w_value.writeType(protocol);
                     for (auto it = obj.begin(); it != obj.end(); it++) {
@@ -338,15 +339,15 @@ namespace ignis {
                 }
             };
 
-            template<typename T1, typename T2>
-            struct IWriterType<std::pair<T1, T2>> {
+            template<typename _T1, typename _T2>
+            struct IWriterType<std::pair<_T1, _T2>> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_PAIR);
                 }
 
-                inline void operator()(const std::pair<T1, T2> &obj, IProtocol &protocol) {
-                    auto w_first = IWriterType<T1>();
-                    auto w_second = IWriterType<T2>();
+                inline void operator()(const std::pair<_T1, _T2> &obj, IProtocol &protocol) {
+                    auto w_first = IWriterType<_T1>();
+                    auto w_second = IWriterType<_T2>();
                     w_first.writeType(protocol);
                     w_second.writeType(protocol);
                     w_first(obj.first, protocol);
@@ -354,25 +355,25 @@ namespace ignis {
                 }
             };
 
-            template<typename T>
-            struct IWriterType<T *> {
+            template<typename _Tp>
+            struct IWriterType<_Tp *> {
                 inline void writeType(IProtocol &protocol) {
-                    IWriterType<T>().writeType(protocol);
+                    IWriterType<_Tp>().writeType(protocol);
                 }
 
-                inline void operator()(const T *&obj, IProtocol &protocol) {
-                    IWriterType<T>().operator()(*obj,protocol);
+                inline void operator()(const _Tp *&obj, IProtocol &protocol) {
+                    IWriterType<_Tp>().operator()(*obj,protocol);
                 }
             };
 
-            template<typename T>
-            struct IWriterType<std::shared_ptr<T>> {
+            template<typename _Tp>
+            struct IWriterType<std::shared_ptr<_Tp>> {
                 inline void writeType(IProtocol &protocol) {
-                    IWriterType<T>().writeType(protocol);
+                    IWriterType<_Tp>().writeType(protocol);
                 }
 
-                inline void operator()(const std::shared_ptr<T> &obj, IProtocol &protocol) {
-                    IWriterType<T>().operator()(*obj,protocol);
+                inline void operator()(const std::shared_ptr<_Tp> &obj, IProtocol &protocol) {
+                    IWriterType<_Tp>().operator()(*obj,protocol);
                 }
             };
 

@@ -10,7 +10,7 @@ using namespace ignis::data;
 const std::string IMemoryObject::TYPE = "memory";
 
 IMemoryObject::IMemoryObject(const std::shared_ptr<api::IManager<Any>> &manager, size_t size)
-        : data(new std::vector<IObject::Any>()), collection_manager(manager->collectionManager()) {
+        : data(new api::ICollectionManager<IObject::Any>::Class()), collection_manager(manager->collectionManager()) {
     setManager(manager);
 }
 

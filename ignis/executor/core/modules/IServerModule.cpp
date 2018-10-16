@@ -61,7 +61,6 @@ bool IServerModule::test() {
 void IServerModule::setContext(const int64_t id, const std::map<std::string, std::string> &properties) {
     try {
         executor_data->getContext().getProperties().insert(properties.begin(), properties.end());
-        executor_data->getExecutorId() = id;
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());

@@ -5,11 +5,15 @@ using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::storage::iterator;
 
 
-IReadMemoryIterator::IReadMemoryIterator(std::vector<IObject::Any> *data,
+IReadMemoryIterator::IReadMemoryIterator(api::ICollectionManager<IObject::Any>::Class* data,
                                          const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager)
         : data(data), collection_manager(collection_manager), pos(0), size(collection_manager->size(*data)) {}
 
 IObject::Any &IReadMemoryIterator::next() {
+    if(collection_manager->isBool()){
+        bool_ref = (bool)collection_manager->get(*data, pos++);
+        return bool_ref;
+    }
     return collection_manager->get(*data, pos++);
 }
 
@@ -28,7 +32,7 @@ void IReadMemoryIterator::skip(size_t elems) {
     pos += elems;
 }
 
-IWriteMemoryIterator::IWriteMemoryIterator(std::vector<IObject::Any> *data,
+IWriteMemoryIterator::IWriteMemoryIterator(api::ICollectionManager<IObject::Any>::Class* data,
                                            const std::shared_ptr<api::ICollectionManager<IObject::Any>> &collection_manager)
         : data(data), collection_manager(collection_manager) {}
 
@@ -38,7 +42,7 @@ void IWriteMemoryIterator::write(IObject::Any &obj) {
 }
 
 void IWriteMemoryIterator::write(IObject::Any &&obj) {
-    collection_manager->push(*data, obj);
+    collection_manager->push(*data, (IObject::Any &&)obj);
 }
 
 IWriteMemoryIterator::~IWriteMemoryIterator() {

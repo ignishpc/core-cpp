@@ -2,12 +2,11 @@
 #ifndef IGNIS_IPOSTMAN_H
 #define IGNIS_IPOSTMAN_H
 
-#include "../../../IHeaders.h"
-#include <vector>
 #include <thrift/transport/TServerSocket.h>
-#include "IModule.h"
 #include "../../../rpc/executor/IPostmanModule.h"
-#include "../storage/IMessage.h"
+#include "../../../IHeaders.h"
+#include "../IMessage.h"
+#include "IModule.h"
 
 namespace ignis {
     namespace executor {
@@ -32,7 +31,7 @@ namespace ignis {
 
                     void threadAccept(std::shared_ptr<transport::TTransport> trans);
 
-                    int send(size_t id, storage::IMessage &msg, int8_t compression);
+                    int send(size_t id, IMessage &msg, int8_t compression);
 
                     std::shared_ptr<transport::TServerSocket> server;
                     bool started;

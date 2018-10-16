@@ -2,12 +2,12 @@
 #ifndef IGNIS_EXECUTORDATA_H
 #define IGNIS_EXECUTORDATA_H
 
-#include "../../IHeaders.h"
 #include <unordered_map>
+#include "../../IHeaders.h"
 #include "../api/IContext.h"
 #include "IPropertiesParser.h"
 #include "storage/IObject.h"
-#include "storage/IPostBox.h"
+#include "IPostBox.h"
 
 namespace ignis {
     namespace executor {
@@ -31,19 +31,15 @@ namespace ignis {
 
                 core::IPropertiesParser &getParser();
 
-                storage::IPostBox &getPostBox();
-
-                int64_t& getExecutorId();
+                IPostBox &getPostBox();
 
                 int64_t getThreads();
 
                 virtual ~IExecutorData();
 
             private:
-                int64_t executor_id;
-                int64_t threads;
                 std::shared_ptr<storage::IObject> loaded_object;
-                storage::IPostBox post_box;
+                IPostBox post_box;
                 api::IContext context;
                 core::IPropertiesParser properties_parser;
             };

@@ -40,7 +40,7 @@ namespace ignis {
                     virtual ~IMemoryObject();
 
                 private:
-                    std::vector<IObject::Any> *data;
+                    api::ICollectionManager<IObject::Any>::Class* data;
                     std::shared_ptr<api::ICollectionManager<Any>> collection_manager;
                 };
             }

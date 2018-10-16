@@ -7,6 +7,7 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/TestCase.h>
+#include "../ignis/executor/core/ILog.h"
 
 #include "executor/core/storage/IMemoryObjectTest.h"
 #include "executor/core/storage/IRawMemoryObjectTest.h"
@@ -21,6 +22,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IRawMemoryObject
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IMapperModuleTest);
 
 int main(int argc, char *argv[]) {
+    IGNIS_LOG_INIT();
+    IGNIS_LOG_ENABLE(false);
     CPPUNIT_NS::TestResult results;
     CPPUNIT_NS::TestResultCollector result_collector;
     CPPUNIT_NS::BriefTestProgressListener progress;

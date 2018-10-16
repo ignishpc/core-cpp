@@ -1,7 +1,7 @@
 
 #include "IShuffleModule.h"
 #include "../ILog.h"
-#include "../storage/IMessage.h"
+#include "../IMessage.h"
 #include "../../../exceptions/IInvalidArgument.h"
 
 using namespace std;
@@ -30,6 +30,7 @@ void IShuffleModule::createSplits() {
 }
 
 void IShuffleModule::nextSplit(const std::string &addr, const int64_t length) {
+    size_t msg_id = 0;//TODO make argument
     IGNIS_LOG(info) << "IShuffleModule new split";
     try {
         shared_ptr<IObject> object = getIObject(executor_data->getLoadObject().getManager(), length);
@@ -37,7 +38,7 @@ void IShuffleModule::nextSplit(const std::string &addr, const int64_t length) {
         readToWrite(*it, *writer, (size_t) length);
         IGNIS_LOG(info) << "IShuffleModule split addr: " << addr << ", length: " << length;
         IMessage msg(addr, object);
-        executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
+        executor_data->getPostBox().newOutMessage(msg_id, msg);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -75,7 +76,7 @@ void IShuffleModule::joinSplits(const std::vector<int64_t> &order) {
         shared_ptr<IObject> object = getIObject(executor_data->getLoadObject().getManager());
         executor_data->loadObject(object);
         auto writer = object->writeIterator();
-        auto msgs = executor_data->getPostBox().getMessages();
+        auto msgs = executor_data->getPostBox().popInBox();
 
         for (auto id:order) {
             auto it = msgs[id].getObj()->readIterator();

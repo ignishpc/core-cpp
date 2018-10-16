@@ -17,8 +17,8 @@ void IReducerModule::reduceByKey(const rpc::ISourceFunction &sf) {
         auto function = loadFunction<api::function::IFunction2<IObject::Any, IObject::Any, IObject::Any>>(
                 sf);
         auto object_in = executor_data->getSharedLoadObject();
-        auto manager_t = (*function)->type_t1.shared();
-        auto manager_r = (*function)->type_r.shared();
+        auto manager_t = (*function)->type_t1();
+        auto manager_r = (*function)->type_r();
         auto manager_t_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_t;
         auto manager_r_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager_r;
         object_in->setManager(manager_t_any);

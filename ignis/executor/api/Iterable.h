@@ -16,21 +16,24 @@ namespace ignis {
                 template<typename C>
                 class IterableIterator : public IReadIterator<T>{
                 public:
-                    IterableIterator(C &c) : collection(c), e(c.begin()) {}
+                    IterableIterator(C &c) : collection(c), e(collection.begin()) {}
+
+                    IterableIterator(C &&c) : collection(c), e(collection.begin()) {}
 
                     virtual T &next() override {
+                        T& value = *e;
                         e++;
-                        return *e;
+                        return value;
                     }
 
                     virtual bool hasNext() override {
-                        return e == collection.end();
+                        return e != collection.end();
                     }
 
                     virtual ~IterableIterator() override {}
 
                 private:
-                    C &collection;
+                    C collection;
                     typename C::iterator e;
                 };
 
@@ -41,7 +44,12 @@ namespace ignis {
             public:
 
                 template<typename C>
-                static Iterable<T> collection(C& c){
+                static Iterable<T> fromCollection(C& c){
+                    return Iterable<T>(std::make_shared<IterableIterator<C>>(c));
+                }
+
+                template<typename C>
+                static Iterable<T> fromCollection(C&& c){
                     return Iterable<T>(std::make_shared<IterableIterator<C>>(c));
                 }
 

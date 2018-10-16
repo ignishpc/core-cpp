@@ -3,8 +3,8 @@
 #define IGNIS_IFUNCTIONBASE_H
 
 #include "../IRegister.h"
-#include "../IManager.h"
 #include "../IContext.h"
+#include "../IManager.h"
 #include "../IWriteIterator.h"
 
 namespace ignis {
@@ -14,11 +14,20 @@ namespace ignis {
 
                 template<typename T, typename R>
                 class IFunctionBase {
+                private:
+                    Type_ptr<IManager < T>>var_type_t;
+                    Type_ptr<IManager < R>>var_type_r;
+                    Type_ptr<IPairManager < R, T>>var_pair_rt;
+                    Type_ptr<IPairManager < R, typename ICollectionManager<T>::Class >>var_group_t;
+
                 public:
-                    const IManager <T> type_t;
-                    const IManager <R> type_r;
-                    const IPairManager <R, T> key_t;
-                    const IPairManager<R, typename ICollectionManager<T>::Class> group_t;
+                    decltype(var_type_t) type_t() { return var_type_t; }
+
+                    decltype(var_type_r) type_r() { return var_type_r; }
+
+                    decltype(var_pair_rt) pair_rt() { return var_pair_rt; }
+
+                    decltype(var_group_t) group_t() { return var_group_t; }
 
                     virtual R call(T &t, IContext &context) = 0;
 
@@ -27,7 +36,7 @@ namespace ignis {
                     }
 
                     virtual void
-                    writeWithKey(T &t, IContext &context, IWriteIterator<typename IPairManager<R, T>::Class> &writer) {
+                    write(T &t, IContext &context, IWriteIterator<typename IPairManager<R, T>::Class> &writer) {
                         writer.write(typename IPairManager<R, T>::Class(call(t, context), t));
                     }
 

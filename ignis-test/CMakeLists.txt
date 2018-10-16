@@ -9,6 +9,8 @@ set(SOURCE_FILES
         executor/core/storage/IObjectTest.cpp
         executor/core/storage/IMemoryObjectTest.h
         executor/core/storage/IRawMemoryObjectTest.h
+        executor/core/modules/IModuleTest.h
+        executor/core/modules/IModuleTest.cpp
         executor/core/modules/IMapperModuleTest.h
         executor/core/modules/IMapperModuleTest.cpp)
 

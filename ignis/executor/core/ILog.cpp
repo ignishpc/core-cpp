@@ -27,3 +27,7 @@ std::string ignis::executor::core::ILog::filename(std::string path) {
     return path.substr(path.find_last_of("/\\") + 1);
 }
 
+bool ignis::executor::core::ILog::logEnable(bool enable){
+    boost::log::core::get()->set_logging_enabled(enable);
+}
+

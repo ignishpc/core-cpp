@@ -2,7 +2,7 @@
 #include "IKeysModule.h"
 #include "../ILog.h"
 #include "../../../exceptions/IInvalidArgument.h"
-#include "../storage/IMessage.h"
+#include "../IMessage.h"
 #include "../storage/iterator/IFilterIterator.h"
 #include "../storage/IObjectWrapperIterator.h"
 #include <unordered_set>
@@ -66,6 +66,7 @@ private:
 };
 
 void IKeysModule::sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id) {
+    size_t msg_id = 0;//TODO make as argument
     try {
         IGNIS_LOG(info) << "IKeysModule starting keys swap";
 
@@ -87,7 +88,7 @@ void IKeysModule::sendPairs(const std::string& addr, const std::vector<int64_t> 
         ), count);
         msg_obj->setManager(object_in.getManager());
         IMessage msg(addr, msg_obj);
-        executor_data->getPostBox().newMessage(executor_data->getExecutorId(), msg);
+        executor_data->getPostBox().newOutMessage(msg_id, msg);
 
         IGNIS_LOG(info) << "IKeysModule keys swap ready";
     } catch (exceptions::IException &ex) {
@@ -128,8 +129,8 @@ void IKeysModule::joinPairs() {
 
         IGNIS_LOG(info) << "IKeysModule joining keys";
 
-        auto msgs = executor_data->getPostBox().getMessages();
-
+        auto msgs = executor_data->getPostBox().popInBox();
+        //TODO use msgs
         std::shared_ptr<IObject> object = getIObject();
         object->setManager(object_in.getManager());
         auto writer = object->writeIterator();

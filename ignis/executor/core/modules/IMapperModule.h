@@ -27,15 +27,18 @@ namespace ignis {
 
                     virtual void streamingFilter(const rpc::ISourceFunction &sf, bool ordered) override;
 
+                    virtual void streamingKeyBy(const rpc::ISourceFunction &sf, bool ordered);
+
                     virtual ~IMapperModule();
 
                 private:
 
-                    template<template<typename...> typename F>
-                    void pipe(const rpc::ISourceFunction &sf, bool filter);
+                    template<template<typename...> typename F, bool filter = false, bool key = false>
+                    void pipe(const rpc::ISourceFunction &sf);
 
-                    template<template<typename...> typename F>
-                    void streaming(const rpc::ISourceFunction &sf, bool ordered, bool filter);
+                    template<template<typename...> typename F, bool filter = false, bool key = false>
+                    void streaming(const rpc::ISourceFunction &sf, bool ordered);
+
                 };
             }
         }
