@@ -1,33 +1,95 @@
 
 #include "ILog.h"
+#include <boost/log/expressions.hpp>
 #include <boost/log/support/date_time.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/attributes/mutable_constant.hpp>
+#include <mutex>
+
+
+using namespace ignis::executor::core;
 
 namespace logging  = boost::log;
 namespace attrs    = boost::log::attributes;
 
-void ignis::executor::core::ILog::initLog() {
-    logging::core::get()->add_thread_attribute("File", attrs::mutable_constant<std::string>(""));
-    logging::core::get()->add_thread_attribute("Line", attrs::mutable_constant<int>(0));
+int parse[] = {
+        logging::trivial::trace,
+        logging::trivial::debug,
+        logging::trivial::info,
+        logging::trivial::warning,
+        logging::trivial::error,
+        logging::trivial::fatal
+};
 
-    logging::add_console_log(std::clog, boost::log::keywords::format = (boost::log::expressions::stream
-                                     << boost::log::expressions::format_date_time<boost::posix_time::ptime>( "TimeStamp", "%B %e, %Y %I:%M:%S %p")
+std::mutex log_mutex;
+
+void ILog::initLog() {
+    logging::core::get()->add_global_attribute("File", attrs::mutable_constant<std::string>(""));
+    logging::core::get()->add_global_attribute("Line", attrs::mutable_constant<int>(0));
+
+    logging::add_console_log(std::clog, logging::keywords::format = (boost::log::expressions::stream
+                                     << logging::expressions::format_date_time<boost::posix_time::ptime>("TimeStamp", "%B %e, %Y %I:%M:%S %p")
                                      << ": <" << boost::log::trivial::severity << "> "
-                                     << '[' << boost::log::expressions::attr<std::string>("File")
-                                     << ':' << boost::log::expressions::attr<int>("Line") << "] "
-                                     << boost::log::expressions::smessage
+                                     << '[' << logging::expressions::attr<std::string>("File")
+                                     << ':' << logging::expressions::attr<int>("Line") << "] "
+                                     << logging::expressions::smessage
                              )
     );
     logging::add_common_attributes();
 }
 
-std::string ignis::executor::core::ILog::filename(std::string path) {
+
+std::string filename(std::string path) {
     return path.substr(path.find_last_of("/\\") + 1);
 }
 
-bool ignis::executor::core::ILog::logEnable(bool enable){
-    boost::log::core::get()->set_logging_enabled(enable);
+template<typename ValueType>
+ValueType newAttr(const char *name, ValueType value) {
+    auto attr = boost::log::attribute_cast<boost::log::attributes::mutable_constant<ValueType>>(
+            boost::log::core::get()->get_global_attributes()[name]);
+    attr.set(value);
+    return attr.get();
 }
 
+ILog::Streamlog::Streamlog(level l, bool thread, const std::string &file, const int &line)
+        : l(l), file(file), line(line), flush(true), thread(thread) {}
+
+ILog::Streamlog::Streamlog(const ILog::Streamlog &&other) :
+        l(other.l), file(other.file), line(other.line), thread(other.thread), flush(true) {
+    ((ILog::Streamlog &) other).flush = false;
+}
+
+void ILog::Streamlog::write() {
+    BOOST_LOG_STREAM_WITH_PARAMS((boost::log::trivial::logger::get()),
+                                 (newAttr<std::string>("File", filename(file)))(newAttr<int>("Line", line))
+                                         (boost::log::keywords::severity = (logging::trivial::severity_level) l)
+    ) << this->str();
+}
+
+ILog::Streamlog::~Streamlog() {
+    if (flush) {
+        if (thread) {
+            std::lock_guard<std::mutex> lock(log_mutex);
+            write();
+        } else {
+            write();
+        }
+    }
+}
+
+
+ILog::Streamlog ILog::threadLog(level l, const std::string &file, const int &line) {
+    return Streamlog((level) parse[l], true, file, line);
+}
+
+ILog::Streamlog ILog::log(level l, const std::string &file, const int &line) {
+    return Streamlog((level) parse[l], false, file, line);
+}
+
+
+bool ILog::logEnable(bool enable) {
+    logging::core::get()->set_logging_enabled(enable);
+}

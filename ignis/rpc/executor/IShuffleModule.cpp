@@ -32,7 +32,32 @@ uint32_t IShuffleModule_createSplits_args::read(::apache::thrift::protocol::TPro
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->splits.clear();
+            uint32_t _size2;
+            ::apache::thrift::protocol::TType _etype5;
+            xfer += iprot->readListBegin(_etype5, _size2);
+            this->splits.resize(_size2);
+            uint32_t _i6;
+            for (_i6 = 0; _i6 < _size2; ++_i6)
+            {
+              xfer += this->splits[_i6].read(iprot);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.splits = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -45,6 +70,18 @@ uint32_t IShuffleModule_createSplits_args::write(::apache::thrift::protocol::TPr
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IShuffleModule_createSplits_args");
+
+  xfer += oprot->writeFieldBegin("splits", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>(this->splits.size()));
+    std::vector<ISplit> ::const_iterator _iter7;
+    for (_iter7 = this->splits.begin(); _iter7 != this->splits.end(); ++_iter7)
+    {
+      xfer += (*_iter7).write(oprot);
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -60,6 +97,18 @@ uint32_t IShuffleModule_createSplits_pargs::write(::apache::thrift::protocol::TP
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IShuffleModule_createSplits_pargs");
+
+  xfer += oprot->writeFieldBegin("splits", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRUCT, static_cast<uint32_t>((*(this->splits)).size()));
+    std::vector<ISplit> ::const_iterator _iter8;
+    for (_iter8 = (*(this->splits)).begin(); _iter8 != (*(this->splits)).end(); ++_iter8)
+    {
+      xfer += (*_iter8).write(oprot);
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -175,375 +224,6 @@ uint32_t IShuffleModule_createSplits_presult::read(::apache::thrift::protocol::T
 }
 
 
-IShuffleModule_nextSplit_args::~IShuffleModule_nextSplit_args() throw() {
-}
-
-
-uint32_t IShuffleModule_nextSplit_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->addr);
-          this->__isset.addr = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->length);
-          this->__isset.length = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IShuffleModule_nextSplit_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IShuffleModule_nextSplit_args");
-
-  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->addr);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("length", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->length);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IShuffleModule_nextSplit_pargs::~IShuffleModule_nextSplit_pargs() throw() {
-}
-
-
-uint32_t IShuffleModule_nextSplit_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IShuffleModule_nextSplit_pargs");
-
-  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->addr)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("length", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->length)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IShuffleModule_nextSplit_result::~IShuffleModule_nextSplit_result() throw() {
-}
-
-
-uint32_t IShuffleModule_nextSplit_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IShuffleModule_nextSplit_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IShuffleModule_nextSplit_result");
-
-  if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IShuffleModule_nextSplit_presult::~IShuffleModule_nextSplit_presult() throw() {
-}
-
-
-uint32_t IShuffleModule_nextSplit_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-IShuffleModule_finishSplits_args::~IShuffleModule_finishSplits_args() throw() {
-}
-
-
-uint32_t IShuffleModule_finishSplits_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    xfer += iprot->skip(ftype);
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IShuffleModule_finishSplits_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IShuffleModule_finishSplits_args");
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IShuffleModule_finishSplits_pargs::~IShuffleModule_finishSplits_pargs() throw() {
-}
-
-
-uint32_t IShuffleModule_finishSplits_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IShuffleModule_finishSplits_pargs");
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IShuffleModule_finishSplits_result::~IShuffleModule_finishSplits_result() throw() {
-}
-
-
-uint32_t IShuffleModule_finishSplits_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IShuffleModule_finishSplits_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IShuffleModule_finishSplits_result");
-
-  if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IShuffleModule_finishSplits_presult::~IShuffleModule_finishSplits_presult() throw() {
-}
-
-
-uint32_t IShuffleModule_finishSplits_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
 IShuffleModule_joinSplits_args::~IShuffleModule_joinSplits_args() throw() {
 }
 
@@ -573,14 +253,14 @@ uint32_t IShuffleModule_joinSplits_args::read(::apache::thrift::protocol::TProto
         if (ftype == ::apache::thrift::protocol::T_LIST) {
           {
             this->order.clear();
-            uint32_t _size0;
-            ::apache::thrift::protocol::TType _etype3;
-            xfer += iprot->readListBegin(_etype3, _size0);
-            this->order.resize(_size0);
-            uint32_t _i4;
-            for (_i4 = 0; _i4 < _size0; ++_i4)
+            uint32_t _size9;
+            ::apache::thrift::protocol::TType _etype12;
+            xfer += iprot->readListBegin(_etype12, _size9);
+            this->order.resize(_size9);
+            uint32_t _i13;
+            for (_i13 = 0; _i13 < _size9; ++_i13)
             {
-              xfer += iprot->readI64(this->order[_i4]);
+              xfer += iprot->readI64(this->order[_i13]);
             }
             xfer += iprot->readListEnd();
           }
@@ -609,10 +289,10 @@ uint32_t IShuffleModule_joinSplits_args::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeFieldBegin("order", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->order.size()));
-    std::vector<int64_t> ::const_iterator _iter5;
-    for (_iter5 = this->order.begin(); _iter5 != this->order.end(); ++_iter5)
+    std::vector<int64_t> ::const_iterator _iter14;
+    for (_iter14 = this->order.begin(); _iter14 != this->order.end(); ++_iter14)
     {
-      xfer += oprot->writeI64((*_iter5));
+      xfer += oprot->writeI64((*_iter14));
     }
     xfer += oprot->writeListEnd();
   }
@@ -636,10 +316,10 @@ uint32_t IShuffleModule_joinSplits_pargs::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeFieldBegin("order", ::apache::thrift::protocol::T_LIST, 1);
   {
     xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->order)).size()));
-    std::vector<int64_t> ::const_iterator _iter6;
-    for (_iter6 = (*(this->order)).begin(); _iter6 != (*(this->order)).end(); ++_iter6)
+    std::vector<int64_t> ::const_iterator _iter15;
+    for (_iter15 = (*(this->order)).begin(); _iter15 != (*(this->order)).end(); ++_iter15)
     {
-      xfer += oprot->writeI64((*_iter6));
+      xfer += oprot->writeI64((*_iter15));
     }
     xfer += oprot->writeListEnd();
   }
@@ -758,18 +438,19 @@ uint32_t IShuffleModule_joinSplits_presult::read(::apache::thrift::protocol::TPr
   return xfer;
 }
 
-void IShuffleModuleClient::createSplits()
+void IShuffleModuleClient::createSplits(const std::vector<ISplit> & splits)
 {
-  send_createSplits();
+  send_createSplits(splits);
   recv_createSplits();
 }
 
-void IShuffleModuleClient::send_createSplits()
+void IShuffleModuleClient::send_createSplits(const std::vector<ISplit> & splits)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("createSplits", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IShuffleModule_createSplits_pargs args;
+  args.splits = &splits;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -803,118 +484,6 @@ void IShuffleModuleClient::recv_createSplits()
     iprot_->getTransport()->readEnd();
   }
   IShuffleModule_createSplits_presult result;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  return;
-}
-
-void IShuffleModuleClient::nextSplit(const std::string& addr, const int64_t length)
-{
-  send_nextSplit(addr, length);
-  recv_nextSplit();
-}
-
-void IShuffleModuleClient::send_nextSplit(const std::string& addr, const int64_t length)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("nextSplit", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IShuffleModule_nextSplit_pargs args;
-  args.addr = &addr;
-  args.length = &length;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IShuffleModuleClient::recv_nextSplit()
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("nextSplit") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IShuffleModule_nextSplit_presult result;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  return;
-}
-
-void IShuffleModuleClient::finishSplits()
-{
-  send_finishSplits();
-  recv_finishSplits();
-}
-
-void IShuffleModuleClient::send_finishSplits()
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("finishSplits", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IShuffleModule_finishSplits_pargs args;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IShuffleModuleClient::recv_finishSplits()
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("finishSplits") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IShuffleModule_finishSplits_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -1023,7 +592,7 @@ void IShuffleModuleProcessor::process_createSplits(int32_t seqid, ::apache::thri
 
   IShuffleModule_createSplits_result result;
   try {
-    iface_->createSplits();
+    iface_->createSplits(args.splits);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1053,118 +622,6 @@ void IShuffleModuleProcessor::process_createSplits(int32_t seqid, ::apache::thri
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "IShuffleModule.createSplits", bytes);
-  }
-}
-
-void IShuffleModuleProcessor::process_nextSplit(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IShuffleModule.nextSplit", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IShuffleModule.nextSplit");
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IShuffleModule.nextSplit");
-  }
-
-  IShuffleModule_nextSplit_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IShuffleModule.nextSplit", bytes);
-  }
-
-  IShuffleModule_nextSplit_result result;
-  try {
-    iface_->nextSplit(args.addr, args.length);
-  } catch ( ::ignis::rpc::IRemoteException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IShuffleModule.nextSplit");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("nextSplit", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IShuffleModule.nextSplit");
-  }
-
-  oprot->writeMessageBegin("nextSplit", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IShuffleModule.nextSplit", bytes);
-  }
-}
-
-void IShuffleModuleProcessor::process_finishSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IShuffleModule.finishSplits", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IShuffleModule.finishSplits");
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IShuffleModule.finishSplits");
-  }
-
-  IShuffleModule_finishSplits_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IShuffleModule.finishSplits", bytes);
-  }
-
-  IShuffleModule_finishSplits_result result;
-  try {
-    iface_->finishSplits();
-  } catch ( ::ignis::rpc::IRemoteException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IShuffleModule.finishSplits");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("finishSplits", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IShuffleModule.finishSplits");
-  }
-
-  oprot->writeMessageBegin("finishSplits", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IShuffleModule.finishSplits", bytes);
   }
 }
 
@@ -1231,19 +688,20 @@ void IShuffleModuleProcessor::process_joinSplits(int32_t seqid, ::apache::thrift
   return processor;
 }
 
-void IShuffleModuleConcurrentClient::createSplits()
+void IShuffleModuleConcurrentClient::createSplits(const std::vector<ISplit> & splits)
 {
-  int32_t seqid = send_createSplits();
+  int32_t seqid = send_createSplits(splits);
   recv_createSplits(seqid);
 }
 
-int32_t IShuffleModuleConcurrentClient::send_createSplits()
+int32_t IShuffleModuleConcurrentClient::send_createSplits(const std::vector<ISplit> & splits)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("createSplits", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IShuffleModule_createSplits_pargs args;
+  args.splits = &splits;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1293,170 +751,6 @@ void IShuffleModuleConcurrentClient::recv_createSplits(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       IShuffleModule_createSplits_presult result;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      sentry.commit();
-      return;
-    }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_.waitForWork(seqid);
-  } // end while(true)
-}
-
-void IShuffleModuleConcurrentClient::nextSplit(const std::string& addr, const int64_t length)
-{
-  int32_t seqid = send_nextSplit(addr, length);
-  recv_nextSplit(seqid);
-}
-
-int32_t IShuffleModuleConcurrentClient::send_nextSplit(const std::string& addr, const int64_t length)
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("nextSplit", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IShuffleModule_nextSplit_pargs args;
-  args.addr = &addr;
-  args.length = &length;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IShuffleModuleConcurrentClient::recv_nextSplit(const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-
-  while(true) {
-    if(!this->sync_.getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("nextSplit") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IShuffleModule_nextSplit_presult result;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      sentry.commit();
-      return;
-    }
-    // seqid != rseqid
-    this->sync_.updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_.waitForWork(seqid);
-  } // end while(true)
-}
-
-void IShuffleModuleConcurrentClient::finishSplits()
-{
-  int32_t seqid = send_finishSplits();
-  recv_finishSplits(seqid);
-}
-
-int32_t IShuffleModuleConcurrentClient::send_finishSplits()
-{
-  int32_t cseqid = this->sync_.generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("finishSplits", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IShuffleModule_finishSplits_pargs args;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IShuffleModuleConcurrentClient::recv_finishSplits(const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
-
-  while(true) {
-    if(!this->sync_.getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("finishSplits") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IShuffleModule_finishSplits_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

@@ -13,12 +13,12 @@ namespace ignis {
                 public:
                     IFilesModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    virtual void readFile(const std::string &path, const int64_t offset, const int64_t len, const int64_t lines)
-                    override;
+                    virtual void readFile(const std::string &path, const int64_t offset, const int64_t len,
+                                          const int64_t lines) override;
 
-                    virtual void saveFile(const std::string &path, const bool joined) override;
+                    virtual void saveFile(const std::string &path, const bool trunc, const bool new_line);
 
-                    virtual void saveJson(const std::string &path, const bool joined) override;
+                    virtual void saveJson(const std::string &path, const bool array_start, const bool array_end);
 
                     virtual ~IFilesModule();
 

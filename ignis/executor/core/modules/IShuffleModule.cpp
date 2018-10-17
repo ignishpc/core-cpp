@@ -4,59 +4,28 @@
 #include "../IMessage.h"
 #include "../../../exceptions/IInvalidArgument.h"
 
-using namespace std;
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core;
 using ignis::rpc::IRemoteException;
 
-IShuffleModule::IShuffleModule(shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data) {}
+IShuffleModule::IShuffleModule(std::shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
-void IShuffleModule::createSplits() {
+void IShuffleModule::createSplits(const std::vector<ignis::rpc::executor::ISplit> &splits) {
     IGNIS_LOG(info) << "IShuffleModule started";
     try {
-        it = executor_data->getLoadObject().readIterator();
-    } catch (exceptions::IException &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
-        throw iex;
-    } catch (std::exception &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack("UNKNOWN");
-        throw iex;
-    }
-}
-
-void IShuffleModule::nextSplit(const std::string &addr, const int64_t length) {
-    size_t msg_id = 0;//TODO make argument
-    IGNIS_LOG(info) << "IShuffleModule new split";
-    try {
-        shared_ptr<IObject> object = getIObject(executor_data->getLoadObject().getManager(), length);
-        auto writer = object->writeIterator();
-        readToWrite(*it, *writer, (size_t) length);
-        IGNIS_LOG(info) << "IShuffleModule split addr: " << addr << ", length: " << length;
-        IMessage msg(addr, object);
-        executor_data->getPostBox().newOutMessage(msg_id, msg);
-    } catch (exceptions::IException &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
-        throw iex;
-    } catch (std::exception &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack("UNKNOWN");
-        throw iex;
-    }
-}
-
-void IShuffleModule::finishSplits() {
-    IGNIS_LOG(info) << "IShuffleModule finished";
-    try {
-        it.reset();
-        executor_data->deleteLoadObject();
+        auto object = executor_data->getSharedLoadObject();
+        if (!object->getManager()) {
+            throw exceptions::IInvalidArgument("IFileModule c++ required use this data before use it");
+        }
+        auto reader = object->readIterator();
+        for (auto &split : splits) {
+            auto split_object = getIObject(object->getManager(), split.length);
+            storage::iterator::readToWrite(*reader, *split_object->writeIterator(), true);
+            executor_data->getPostBox().newOutMessage(split.msg_id, IMessage(split.addr, object));
+            IGNIS_LOG(info) << "IShuffleModule split addr: " << split.addr << ", length: " << split.length;
+        }
+        IGNIS_LOG(info) << "IShuffleModule finished";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -73,15 +42,12 @@ void IShuffleModule::finishSplits() {
 void IShuffleModule::joinSplits(const std::vector<int64_t> &order) {
     IGNIS_LOG(info) << "IShuffleModule joining splits";
     try {
-        shared_ptr<IObject> object = getIObject(executor_data->getLoadObject().getManager());
-        executor_data->loadObject(object);
-        auto writer = object->writeIterator();
+        auto object = getIObject(executor_data->getLoadObject().getManager());
         auto msgs = executor_data->getPostBox().popInBox();
-
         for (auto id:order) {
-            auto it = msgs[id].getObj()->readIterator();
-            readToWrite(*it, *writer, true);
+            msgs[id].getObj()->moveTo(*object);
         }
+        executor_data->loadObject(object);
         IGNIS_LOG(info) << "IShuffleModule splits joined";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
@@ -98,3 +64,6 @@ void IShuffleModule::joinSplits(const std::vector<int64_t> &order) {
 
 IShuffleModule::~IShuffleModule() {
 }
+
+
+

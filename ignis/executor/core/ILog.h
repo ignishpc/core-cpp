@@ -2,43 +2,58 @@
 #ifndef IGNIS_ILOG_H
 #define IGNIS_ILOG_H
 
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/attributes/mutable_constant.hpp>
+#include <string>
+#include <sstream>
 
 #define IGNIS_LOG_INIT() ignis::executor::core::ILog::initLog()
 
 #define IGNIS_LOG_ENABLE(enable) ignis::executor::core::ILog::logEnable(enable)
 
-#define IGNIS_LOG(sev) \
-   BOOST_LOG_STREAM_WITH_PARAMS( \
-      (boost::log::trivial::logger::get()), \
-         (ignis::executor::core::ILog::newAttr("File", ignis::executor::core::ILog::filename(__FILE__))) \
-         (ignis::executor::core::ILog::newAttr("Line", __LINE__)) \
-         (boost::log::keywords::severity = (boost::log::trivial::sev)) \
-   )
+#define IGNIS_LOG(sev) ignis::executor::core::ILog::log(ignis::executor::core::ILog::sev, __FILE__, __LINE__)
+
+#define IGNIS_THREAD_LOG(sev) ignis::executor::core::ILog::threadLog(ignis::executor::core::ILog::sev, __FILE__, __LINE__)
+
 namespace ignis {
     namespace executor {
         namespace core {
             class ILog {
             public:
+                enum level {
+                    trace,
+                    debug,
+                    info,
+                    warning,
+                    error,
+                    fatal
+                };
+
+                class Streamlog : public std::ostringstream{
+                    friend ILog;
+                    const std::string &file;
+                    const int &line;
+                    const bool thread;
+                    const level l;
+                    bool flush;
+
+                    Streamlog(const Streamlog&& other);
+
+                    Streamlog(level l, bool thread, const std::string &file, const int &line);
+
+                    void write();
+                public:
+                    virtual ~Streamlog();
+                };
+
                 static void initLog();
 
-                template<typename ValueType>
-                static ValueType newAttr(const char *name, ValueType value) {
-                    auto attr =  boost::log::attribute_cast<boost::log::attributes::mutable_constant<ValueType>>(
-                            boost::log::core::get()->get_thread_attributes()[name]);
-                    attr.set(value);
-                    return attr.get();
-                }
+                static Streamlog threadLog(level l, const std::string &file, const int &line);
 
-                static std::string filename(std::string path);
+                static Streamlog log(level l, const std::string &file, const int &line);
 
                 static bool logEnable(bool enable);
 
             private:
-                ILog(){}
-
+                ILog() {}
             };
         }
     }

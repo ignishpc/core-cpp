@@ -21,9 +21,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IShuffleModuleIf {
  public:
   virtual ~IShuffleModuleIf() {}
-  virtual void createSplits() = 0;
-  virtual void nextSplit(const std::string& addr, const int64_t length) = 0;
-  virtual void finishSplits() = 0;
+  virtual void createSplits(const std::vector<ISplit> & splits) = 0;
   virtual void joinSplits(const std::vector<int64_t> & order) = 0;
 };
 
@@ -54,13 +52,7 @@ class IShuffleModuleIfSingletonFactory : virtual public IShuffleModuleIfFactory 
 class IShuffleModuleNull : virtual public IShuffleModuleIf {
  public:
   virtual ~IShuffleModuleNull() {}
-  void createSplits() {
-    return;
-  }
-  void nextSplit(const std::string& /* addr */, const int64_t /* length */) {
-    return;
-  }
-  void finishSplits() {
+  void createSplits(const std::vector<ISplit> & /* splits */) {
     return;
   }
   void joinSplits(const std::vector<int64_t> & /* order */) {
@@ -68,6 +60,10 @@ class IShuffleModuleNull : virtual public IShuffleModuleIf {
   }
 };
 
+typedef struct _IShuffleModule_createSplits_args__isset {
+  _IShuffleModule_createSplits_args__isset() : splits(false) {}
+  bool splits :1;
+} _IShuffleModule_createSplits_args__isset;
 
 class IShuffleModule_createSplits_args {
  public:
@@ -78,9 +74,16 @@ class IShuffleModule_createSplits_args {
   }
 
   virtual ~IShuffleModule_createSplits_args() throw();
+  std::vector<ISplit>  splits;
 
-  bool operator == (const IShuffleModule_createSplits_args & /* rhs */) const
+  _IShuffleModule_createSplits_args__isset __isset;
+
+  void __set_splits(const std::vector<ISplit> & val);
+
+  bool operator == (const IShuffleModule_createSplits_args & rhs) const
   {
+    if (!(splits == rhs.splits))
+      return false;
     return true;
   }
   bool operator != (const IShuffleModule_createSplits_args &rhs) const {
@@ -100,6 +103,7 @@ class IShuffleModule_createSplits_pargs {
 
 
   virtual ~IShuffleModule_createSplits_pargs() throw();
+  const std::vector<ISplit> * splits;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -155,209 +159,6 @@ class IShuffleModule_createSplits_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IShuffleModule_createSplits_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _IShuffleModule_nextSplit_args__isset {
-  _IShuffleModule_nextSplit_args__isset() : addr(false), length(false) {}
-  bool addr :1;
-  bool length :1;
-} _IShuffleModule_nextSplit_args__isset;
-
-class IShuffleModule_nextSplit_args {
- public:
-
-  IShuffleModule_nextSplit_args(const IShuffleModule_nextSplit_args&);
-  IShuffleModule_nextSplit_args& operator=(const IShuffleModule_nextSplit_args&);
-  IShuffleModule_nextSplit_args() : addr(), length(0) {
-  }
-
-  virtual ~IShuffleModule_nextSplit_args() throw();
-  std::string addr;
-  int64_t length;
-
-  _IShuffleModule_nextSplit_args__isset __isset;
-
-  void __set_addr(const std::string& val);
-
-  void __set_length(const int64_t val);
-
-  bool operator == (const IShuffleModule_nextSplit_args & rhs) const
-  {
-    if (!(addr == rhs.addr))
-      return false;
-    if (!(length == rhs.length))
-      return false;
-    return true;
-  }
-  bool operator != (const IShuffleModule_nextSplit_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IShuffleModule_nextSplit_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IShuffleModule_nextSplit_pargs {
- public:
-
-
-  virtual ~IShuffleModule_nextSplit_pargs() throw();
-  const std::string* addr;
-  const int64_t* length;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IShuffleModule_nextSplit_result__isset {
-  _IShuffleModule_nextSplit_result__isset() : ex(false) {}
-  bool ex :1;
-} _IShuffleModule_nextSplit_result__isset;
-
-class IShuffleModule_nextSplit_result {
- public:
-
-  IShuffleModule_nextSplit_result(const IShuffleModule_nextSplit_result&);
-  IShuffleModule_nextSplit_result& operator=(const IShuffleModule_nextSplit_result&);
-  IShuffleModule_nextSplit_result() {
-  }
-
-  virtual ~IShuffleModule_nextSplit_result() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IShuffleModule_nextSplit_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
-
-  bool operator == (const IShuffleModule_nextSplit_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IShuffleModule_nextSplit_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IShuffleModule_nextSplit_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IShuffleModule_nextSplit_presult__isset {
-  _IShuffleModule_nextSplit_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IShuffleModule_nextSplit_presult__isset;
-
-class IShuffleModule_nextSplit_presult {
- public:
-
-
-  virtual ~IShuffleModule_nextSplit_presult() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IShuffleModule_nextSplit_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-
-class IShuffleModule_finishSplits_args {
- public:
-
-  IShuffleModule_finishSplits_args(const IShuffleModule_finishSplits_args&);
-  IShuffleModule_finishSplits_args& operator=(const IShuffleModule_finishSplits_args&);
-  IShuffleModule_finishSplits_args() {
-  }
-
-  virtual ~IShuffleModule_finishSplits_args() throw();
-
-  bool operator == (const IShuffleModule_finishSplits_args & /* rhs */) const
-  {
-    return true;
-  }
-  bool operator != (const IShuffleModule_finishSplits_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IShuffleModule_finishSplits_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IShuffleModule_finishSplits_pargs {
- public:
-
-
-  virtual ~IShuffleModule_finishSplits_pargs() throw();
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IShuffleModule_finishSplits_result__isset {
-  _IShuffleModule_finishSplits_result__isset() : ex(false) {}
-  bool ex :1;
-} _IShuffleModule_finishSplits_result__isset;
-
-class IShuffleModule_finishSplits_result {
- public:
-
-  IShuffleModule_finishSplits_result(const IShuffleModule_finishSplits_result&);
-  IShuffleModule_finishSplits_result& operator=(const IShuffleModule_finishSplits_result&);
-  IShuffleModule_finishSplits_result() {
-  }
-
-  virtual ~IShuffleModule_finishSplits_result() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IShuffleModule_finishSplits_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
-
-  bool operator == (const IShuffleModule_finishSplits_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IShuffleModule_finishSplits_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IShuffleModule_finishSplits_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IShuffleModule_finishSplits_presult__isset {
-  _IShuffleModule_finishSplits_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IShuffleModule_finishSplits_presult__isset;
-
-class IShuffleModule_finishSplits_presult {
- public:
-
-
-  virtual ~IShuffleModule_finishSplits_presult() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IShuffleModule_finishSplits_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -492,15 +293,9 @@ class IShuffleModuleClient : virtual public IShuffleModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void createSplits();
-  void send_createSplits();
+  void createSplits(const std::vector<ISplit> & splits);
+  void send_createSplits(const std::vector<ISplit> & splits);
   void recv_createSplits();
-  void nextSplit(const std::string& addr, const int64_t length);
-  void send_nextSplit(const std::string& addr, const int64_t length);
-  void recv_nextSplit();
-  void finishSplits();
-  void send_finishSplits();
-  void recv_finishSplits();
   void joinSplits(const std::vector<int64_t> & order);
   void send_joinSplits(const std::vector<int64_t> & order);
   void recv_joinSplits();
@@ -520,15 +315,11 @@ class IShuffleModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_createSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_nextSplit(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_finishSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_joinSplits(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IShuffleModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IShuffleModuleIf> iface) :
     iface_(iface) {
     processMap_["createSplits"] = &IShuffleModuleProcessor::process_createSplits;
-    processMap_["nextSplit"] = &IShuffleModuleProcessor::process_nextSplit;
-    processMap_["finishSplits"] = &IShuffleModuleProcessor::process_finishSplits;
     processMap_["joinSplits"] = &IShuffleModuleProcessor::process_joinSplits;
   }
 
@@ -558,31 +349,13 @@ class IShuffleModuleMultiface : virtual public IShuffleModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void createSplits() {
+  void createSplits(const std::vector<ISplit> & splits) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->createSplits();
+      ifaces_[i]->createSplits(splits);
     }
-    ifaces_[i]->createSplits();
-  }
-
-  void nextSplit(const std::string& addr, const int64_t length) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->nextSplit(addr, length);
-    }
-    ifaces_[i]->nextSplit(addr, length);
-  }
-
-  void finishSplits() {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->finishSplits();
-    }
-    ifaces_[i]->finishSplits();
+    ifaces_[i]->createSplits(splits);
   }
 
   void joinSplits(const std::vector<int64_t> & order) {
@@ -624,15 +397,9 @@ class IShuffleModuleConcurrentClient : virtual public IShuffleModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void createSplits();
-  int32_t send_createSplits();
+  void createSplits(const std::vector<ISplit> & splits);
+  int32_t send_createSplits(const std::vector<ISplit> & splits);
   void recv_createSplits(const int32_t seqid);
-  void nextSplit(const std::string& addr, const int64_t length);
-  int32_t send_nextSplit(const std::string& addr, const int64_t length);
-  void recv_nextSplit(const int32_t seqid);
-  void finishSplits();
-  int32_t send_finishSplits();
-  void recv_finishSplits(const int32_t seqid);
   void joinSplits(const std::vector<int64_t> & order);
   int32_t send_joinSplits(const std::vector<int64_t> & order);
   void recv_joinSplits(const int32_t seqid);

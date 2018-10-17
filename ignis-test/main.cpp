@@ -13,13 +13,16 @@
 #include "executor/core/storage/IRawMemoryObjectTest.h"
 
 #include "executor/core/modules/IMapperModuleTest.h"
-#include "../ignis/executor/core/modules/IMapperModule.h"
+#include "executor/core/modules/IShuffleModuleTest.h"
+#include "executor/core/modules/IPostmanModuleTest.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IMemoryObjectTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IRawMemoryObjectTest);
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IMapperModuleTest);
+//CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IShuffleModuleTest);
+//CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IPostmanModuleTest);
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();

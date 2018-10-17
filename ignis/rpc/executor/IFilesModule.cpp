@@ -279,8 +279,16 @@ uint32_t IFilesModule_saveFile_args::read(::apache::thrift::protocol::TProtocol*
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->joined);
-          this->__isset.joined = true;
+          xfer += iprot->readBool(this->trunc);
+          this->__isset.trunc = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->new_line);
+          this->__isset.new_line = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -306,8 +314,12 @@ uint32_t IFilesModule_saveFile_args::write(::apache::thrift::protocol::TProtocol
   xfer += oprot->writeString(this->path);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("joined", ::apache::thrift::protocol::T_BOOL, 2);
-  xfer += oprot->writeBool(this->joined);
+  xfer += oprot->writeFieldBegin("trunc", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->trunc);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("new_line", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool(this->new_line);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -329,8 +341,12 @@ uint32_t IFilesModule_saveFile_pargs::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeString((*(this->path)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("joined", ::apache::thrift::protocol::T_BOOL, 2);
-  xfer += oprot->writeBool((*(this->joined)));
+  xfer += oprot->writeFieldBegin("trunc", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->trunc)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("new_line", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool((*(this->new_line)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -482,8 +498,16 @@ uint32_t IFilesModule_saveJson_args::read(::apache::thrift::protocol::TProtocol*
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->joined);
-          this->__isset.joined = true;
+          xfer += iprot->readBool(this->array_start);
+          this->__isset.array_start = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->array_end);
+          this->__isset.array_end = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -509,8 +533,12 @@ uint32_t IFilesModule_saveJson_args::write(::apache::thrift::protocol::TProtocol
   xfer += oprot->writeString(this->path);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("joined", ::apache::thrift::protocol::T_BOOL, 2);
-  xfer += oprot->writeBool(this->joined);
+  xfer += oprot->writeFieldBegin("array_start", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->array_start);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("array_end", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool(this->array_end);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -532,8 +560,12 @@ uint32_t IFilesModule_saveJson_pargs::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeString((*(this->path)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("joined", ::apache::thrift::protocol::T_BOOL, 2);
-  xfer += oprot->writeBool((*(this->joined)));
+  xfer += oprot->writeFieldBegin("array_start", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->array_start)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("array_end", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool((*(this->array_end)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -708,20 +740,21 @@ void IFilesModuleClient::recv_readFile()
   return;
 }
 
-void IFilesModuleClient::saveFile(const std::string& path, const bool joined)
+void IFilesModuleClient::saveFile(const std::string& path, const bool trunc, const bool new_line)
 {
-  send_saveFile(path, joined);
+  send_saveFile(path, trunc, new_line);
   recv_saveFile();
 }
 
-void IFilesModuleClient::send_saveFile(const std::string& path, const bool joined)
+void IFilesModuleClient::send_saveFile(const std::string& path, const bool trunc, const bool new_line)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("saveFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IFilesModule_saveFile_pargs args;
   args.path = &path;
-  args.joined = &joined;
+  args.trunc = &trunc;
+  args.new_line = &new_line;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -765,20 +798,21 @@ void IFilesModuleClient::recv_saveFile()
   return;
 }
 
-void IFilesModuleClient::saveJson(const std::string& path, const bool joined)
+void IFilesModuleClient::saveJson(const std::string& path, const bool array_start, const bool array_end)
 {
-  send_saveJson(path, joined);
+  send_saveJson(path, array_start, array_end);
   recv_saveJson();
 }
 
-void IFilesModuleClient::send_saveJson(const std::string& path, const bool joined)
+void IFilesModuleClient::send_saveJson(const std::string& path, const bool array_start, const bool array_end)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("saveJson", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IFilesModule_saveJson_pargs args;
   args.path = &path;
-  args.joined = &joined;
+  args.array_start = &array_start;
+  args.array_end = &array_end;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -920,7 +954,7 @@ void IFilesModuleProcessor::process_saveFile(int32_t seqid, ::apache::thrift::pr
 
   IFilesModule_saveFile_result result;
   try {
-    iface_->saveFile(args.path, args.joined);
+    iface_->saveFile(args.path, args.trunc, args.new_line);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -976,7 +1010,7 @@ void IFilesModuleProcessor::process_saveJson(int32_t seqid, ::apache::thrift::pr
 
   IFilesModule_saveJson_result result;
   try {
-    iface_->saveJson(args.path, args.joined);
+    iface_->saveJson(args.path, args.array_start, args.array_end);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1101,13 +1135,13 @@ void IFilesModuleConcurrentClient::recv_readFile(const int32_t seqid)
   } // end while(true)
 }
 
-void IFilesModuleConcurrentClient::saveFile(const std::string& path, const bool joined)
+void IFilesModuleConcurrentClient::saveFile(const std::string& path, const bool trunc, const bool new_line)
 {
-  int32_t seqid = send_saveFile(path, joined);
+  int32_t seqid = send_saveFile(path, trunc, new_line);
   recv_saveFile(seqid);
 }
 
-int32_t IFilesModuleConcurrentClient::send_saveFile(const std::string& path, const bool joined)
+int32_t IFilesModuleConcurrentClient::send_saveFile(const std::string& path, const bool trunc, const bool new_line)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -1115,7 +1149,8 @@ int32_t IFilesModuleConcurrentClient::send_saveFile(const std::string& path, con
 
   IFilesModule_saveFile_pargs args;
   args.path = &path;
-  args.joined = &joined;
+  args.trunc = &trunc;
+  args.new_line = &new_line;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1184,13 +1219,13 @@ void IFilesModuleConcurrentClient::recv_saveFile(const int32_t seqid)
   } // end while(true)
 }
 
-void IFilesModuleConcurrentClient::saveJson(const std::string& path, const bool joined)
+void IFilesModuleConcurrentClient::saveJson(const std::string& path, const bool array_start, const bool array_end)
 {
-  int32_t seqid = send_saveJson(path, joined);
+  int32_t seqid = send_saveJson(path, array_start, array_end);
   recv_saveJson(seqid);
 }
 
-int32_t IFilesModuleConcurrentClient::send_saveJson(const std::string& path, const bool joined)
+int32_t IFilesModuleConcurrentClient::send_saveJson(const std::string& path, const bool array_start, const bool array_end)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -1198,7 +1233,8 @@ int32_t IFilesModuleConcurrentClient::send_saveJson(const std::string& path, con
 
   IFilesModule_saveJson_pargs args;
   args.path = &path;
-  args.joined = &joined;
+  args.array_start = &array_start;
+  args.array_end = &array_end;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

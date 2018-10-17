@@ -21,6 +21,54 @@
 
 namespace ignis { namespace rpc { namespace executor {
 
+class ISplit;
+
+
+class ISplit : public virtual ::apache::thrift::TBase {
+ public:
+
+  ISplit(const ISplit&);
+  ISplit& operator=(const ISplit&);
+  ISplit() : msg_id(0), addr(), length(0) {
+  }
+
+  virtual ~ISplit() throw();
+  int64_t msg_id;
+  std::string addr;
+  int64_t length;
+
+  void __set_msg_id(const int64_t val);
+
+  void __set_addr(const std::string& val);
+
+  void __set_length(const int64_t val);
+
+  bool operator == (const ISplit & rhs) const
+  {
+    if (!(msg_id == rhs.msg_id))
+      return false;
+    if (!(addr == rhs.addr))
+      return false;
+    if (!(length == rhs.length))
+      return false;
+    return true;
+  }
+  bool operator != (const ISplit &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISplit & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(ISplit &a, ISplit &b);
+
+std::ostream& operator<<(std::ostream& out, const ISplit& obj);
+
 }}} // namespace
 
 #endif

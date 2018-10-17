@@ -17,7 +17,7 @@ namespace ignis {
 
                     virtual void start(std::shared_ptr<apache::thrift::TProcessor> processor, int port);
 
-                    virtual void setContext(const int64_t id, const std::map<std::string, std::string> &properties) override;
+                    virtual void updateProperties(const std::map<std::string, std::string> & properties) override;
 
                     virtual void stop() override;
 
@@ -26,7 +26,7 @@ namespace ignis {
                     virtual ~IServerModule();
 
                 private:
-                    apache::thrift::server::TServer* server_ptr;
+                    std::shared_ptr<apache::thrift::server::TServer> server;
                 };
             }
         }

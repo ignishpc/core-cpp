@@ -16,13 +16,13 @@ namespace ignis {
                 public:
                     IPostmanModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void start();
+                    virtual void start() override;
 
-                    void stop() override;
+                    virtual void stop() override;
 
-                    void sendAll() override;
+                    virtual void sendAll() override;
 
-                    void clearAll() override;
+                    virtual void clearAll() override;
 
                     virtual ~IPostmanModule();
 

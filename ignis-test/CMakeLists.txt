@@ -12,7 +12,11 @@ set(SOURCE_FILES
         executor/core/modules/IModuleTest.h
         executor/core/modules/IModuleTest.cpp
         executor/core/modules/IMapperModuleTest.h
-        executor/core/modules/IMapperModuleTest.cpp)
+        executor/core/modules/IMapperModuleTest.cpp
+        executor/core/modules/IShuffleModuleTest.h
+        executor/core/modules/IShuffleModuleTest.cpp
+        executor/core/modules/IPostmanModuleTest.h
+        executor/core/modules/IPostmanModuleTest.cpp)
 
 add_executable(ignistest ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)

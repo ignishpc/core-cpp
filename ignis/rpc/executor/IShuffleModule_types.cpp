@@ -13,4 +13,142 @@
 
 namespace ignis { namespace rpc { namespace executor {
 
+
+ISplit::~ISplit() throw() {
+}
+
+
+void ISplit::__set_msg_id(const int64_t val) {
+  this->msg_id = val;
+}
+
+void ISplit::__set_addr(const std::string& val) {
+  this->addr = val;
+}
+
+void ISplit::__set_length(const int64_t val) {
+  this->length = val;
+}
+std::ostream& operator<<(std::ostream& out, const ISplit& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+
+uint32_t ISplit::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_msg_id = false;
+  bool isset_addr = false;
+  bool isset_length = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->msg_id);
+          isset_msg_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->addr);
+          isset_addr = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->length);
+          isset_length = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  if (!isset_msg_id)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_addr)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  if (!isset_length)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
+  return xfer;
+}
+
+uint32_t ISplit::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ISplit");
+
+  xfer += oprot->writeFieldBegin("msg_id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->msg_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->addr);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("length", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->length);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(ISplit &a, ISplit &b) {
+  using ::std::swap;
+  swap(a.msg_id, b.msg_id);
+  swap(a.addr, b.addr);
+  swap(a.length, b.length);
+}
+
+ISplit::ISplit(const ISplit& other0) {
+  msg_id = other0.msg_id;
+  addr = other0.addr;
+  length = other0.length;
+}
+ISplit& ISplit::operator=(const ISplit& other1) {
+  msg_id = other1.msg_id;
+  addr = other1.addr;
+  length = other1.length;
+  return *this;
+}
+void ISplit::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "ISplit(";
+  out << "msg_id=" << to_string(msg_id);
+  out << ", " << "addr=" << to_string(addr);
+  out << ", " << "length=" << to_string(length);
+  out << ")";
+}
+
 }}} // namespace

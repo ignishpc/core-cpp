@@ -24,7 +24,11 @@ class IDataServiceIf {
   virtual void keep(const IDataId& data, const int8_t level) = 0;
   virtual void setName(const IDataId& data, const std::string& name) = 0;
   virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
+  virtual void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
+  virtual void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
   virtual void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
+  virtual void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
+  virtual void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
   virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
   virtual void shuffle(IDataId& _return, const IDataId& data) = 0;
   virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
@@ -67,7 +71,19 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void _map(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
     return;
   }
+  void flatmap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
+    return;
+  }
+  void filter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
+    return;
+  }
   void streamingMap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */, const bool /* ordered */) {
+    return;
+  }
+  void streamingFlatmap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */, const bool /* ordered */) {
+    return;
+  }
+  void streamingFilter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */, const bool /* ordered */) {
     return;
   }
   void reduceByKey(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
@@ -425,6 +441,244 @@ class IDataService__map_presult {
 
 };
 
+typedef struct _IDataService_flatmap_args__isset {
+  _IDataService_flatmap_args__isset() : data(false), _function(false) {}
+  bool data :1;
+  bool _function :1;
+} _IDataService_flatmap_args__isset;
+
+class IDataService_flatmap_args {
+ public:
+
+  IDataService_flatmap_args(const IDataService_flatmap_args&);
+  IDataService_flatmap_args& operator=(const IDataService_flatmap_args&);
+  IDataService_flatmap_args() {
+  }
+
+  virtual ~IDataService_flatmap_args() throw();
+  IDataId data;
+   ::ignis::rpc::ISourceFunction _function;
+
+  _IDataService_flatmap_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+
+  bool operator == (const IDataService_flatmap_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(_function == rhs._function))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_flatmap_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_flatmap_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_flatmap_pargs {
+ public:
+
+
+  virtual ~IDataService_flatmap_pargs() throw();
+  const IDataId* data;
+  const  ::ignis::rpc::ISourceFunction* _function;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_flatmap_result__isset {
+  _IDataService_flatmap_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_flatmap_result__isset;
+
+class IDataService_flatmap_result {
+ public:
+
+  IDataService_flatmap_result(const IDataService_flatmap_result&);
+  IDataService_flatmap_result& operator=(const IDataService_flatmap_result&);
+  IDataService_flatmap_result() {
+  }
+
+  virtual ~IDataService_flatmap_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_flatmap_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_flatmap_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_flatmap_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_flatmap_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_flatmap_presult__isset {
+  _IDataService_flatmap_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_flatmap_presult__isset;
+
+class IDataService_flatmap_presult {
+ public:
+
+
+  virtual ~IDataService_flatmap_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_flatmap_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_filter_args__isset {
+  _IDataService_filter_args__isset() : data(false), _function(false) {}
+  bool data :1;
+  bool _function :1;
+} _IDataService_filter_args__isset;
+
+class IDataService_filter_args {
+ public:
+
+  IDataService_filter_args(const IDataService_filter_args&);
+  IDataService_filter_args& operator=(const IDataService_filter_args&);
+  IDataService_filter_args() {
+  }
+
+  virtual ~IDataService_filter_args() throw();
+  IDataId data;
+   ::ignis::rpc::ISourceFunction _function;
+
+  _IDataService_filter_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+
+  bool operator == (const IDataService_filter_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(_function == rhs._function))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_filter_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_filter_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_filter_pargs {
+ public:
+
+
+  virtual ~IDataService_filter_pargs() throw();
+  const IDataId* data;
+  const  ::ignis::rpc::ISourceFunction* _function;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_filter_result__isset {
+  _IDataService_filter_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_filter_result__isset;
+
+class IDataService_filter_result {
+ public:
+
+  IDataService_filter_result(const IDataService_filter_result&);
+  IDataService_filter_result& operator=(const IDataService_filter_result&);
+  IDataService_filter_result() {
+  }
+
+  virtual ~IDataService_filter_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_filter_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_filter_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_filter_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_filter_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_filter_presult__isset {
+  _IDataService_filter_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_filter_presult__isset;
+
+class IDataService_filter_presult {
+ public:
+
+
+  virtual ~IDataService_filter_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_filter_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IDataService_streamingMap_args__isset {
   _IDataService_streamingMap_args__isset() : data(false), _function(false), ordered(false) {}
   bool data :1;
@@ -546,6 +800,258 @@ class IDataService_streamingMap_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_streamingMap_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_streamingFlatmap_args__isset {
+  _IDataService_streamingFlatmap_args__isset() : data(false), _function(false), ordered(false) {}
+  bool data :1;
+  bool _function :1;
+  bool ordered :1;
+} _IDataService_streamingFlatmap_args__isset;
+
+class IDataService_streamingFlatmap_args {
+ public:
+
+  IDataService_streamingFlatmap_args(const IDataService_streamingFlatmap_args&);
+  IDataService_streamingFlatmap_args& operator=(const IDataService_streamingFlatmap_args&);
+  IDataService_streamingFlatmap_args() : ordered(0) {
+  }
+
+  virtual ~IDataService_streamingFlatmap_args() throw();
+  IDataId data;
+   ::ignis::rpc::ISourceFunction _function;
+  bool ordered;
+
+  _IDataService_streamingFlatmap_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+
+  void __set_ordered(const bool val);
+
+  bool operator == (const IDataService_streamingFlatmap_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(_function == rhs._function))
+      return false;
+    if (!(ordered == rhs.ordered))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_streamingFlatmap_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_streamingFlatmap_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_streamingFlatmap_pargs {
+ public:
+
+
+  virtual ~IDataService_streamingFlatmap_pargs() throw();
+  const IDataId* data;
+  const  ::ignis::rpc::ISourceFunction* _function;
+  const bool* ordered;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_streamingFlatmap_result__isset {
+  _IDataService_streamingFlatmap_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_streamingFlatmap_result__isset;
+
+class IDataService_streamingFlatmap_result {
+ public:
+
+  IDataService_streamingFlatmap_result(const IDataService_streamingFlatmap_result&);
+  IDataService_streamingFlatmap_result& operator=(const IDataService_streamingFlatmap_result&);
+  IDataService_streamingFlatmap_result() {
+  }
+
+  virtual ~IDataService_streamingFlatmap_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_streamingFlatmap_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_streamingFlatmap_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_streamingFlatmap_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_streamingFlatmap_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_streamingFlatmap_presult__isset {
+  _IDataService_streamingFlatmap_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_streamingFlatmap_presult__isset;
+
+class IDataService_streamingFlatmap_presult {
+ public:
+
+
+  virtual ~IDataService_streamingFlatmap_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_streamingFlatmap_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_streamingFilter_args__isset {
+  _IDataService_streamingFilter_args__isset() : data(false), _function(false), ordered(false) {}
+  bool data :1;
+  bool _function :1;
+  bool ordered :1;
+} _IDataService_streamingFilter_args__isset;
+
+class IDataService_streamingFilter_args {
+ public:
+
+  IDataService_streamingFilter_args(const IDataService_streamingFilter_args&);
+  IDataService_streamingFilter_args& operator=(const IDataService_streamingFilter_args&);
+  IDataService_streamingFilter_args() : ordered(0) {
+  }
+
+  virtual ~IDataService_streamingFilter_args() throw();
+  IDataId data;
+   ::ignis::rpc::ISourceFunction _function;
+  bool ordered;
+
+  _IDataService_streamingFilter_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+
+  void __set_ordered(const bool val);
+
+  bool operator == (const IDataService_streamingFilter_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(_function == rhs._function))
+      return false;
+    if (!(ordered == rhs.ordered))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_streamingFilter_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_streamingFilter_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_streamingFilter_pargs {
+ public:
+
+
+  virtual ~IDataService_streamingFilter_pargs() throw();
+  const IDataId* data;
+  const  ::ignis::rpc::ISourceFunction* _function;
+  const bool* ordered;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_streamingFilter_result__isset {
+  _IDataService_streamingFilter_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_streamingFilter_result__isset;
+
+class IDataService_streamingFilter_result {
+ public:
+
+  IDataService_streamingFilter_result(const IDataService_streamingFilter_result&);
+  IDataService_streamingFilter_result& operator=(const IDataService_streamingFilter_result&);
+  IDataService_streamingFilter_result() {
+  }
+
+  virtual ~IDataService_streamingFilter_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_streamingFilter_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_streamingFilter_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_streamingFilter_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_streamingFilter_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_streamingFilter_presult__isset {
+  _IDataService_streamingFilter_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_streamingFilter_presult__isset;
+
+class IDataService_streamingFilter_presult {
+ public:
+
+
+  virtual ~IDataService_streamingFilter_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_streamingFilter_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1052,9 +1558,21 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv__map(IDataId& _return);
+  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void send_flatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void recv_flatmap(IDataId& _return);
+  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void send_filter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void recv_filter(IDataId& _return);
   void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
   void send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
   void recv_streamingMap(IDataId& _return);
+  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void recv_streamingFlatmap(IDataId& _return);
+  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void recv_streamingFilter(IDataId& _return);
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv_reduceByKey(IDataId& _return);
@@ -1085,7 +1603,11 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_keep(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process__map(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_streamingFlatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_streamingFilter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_shuffle(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1096,7 +1618,11 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["keep"] = &IDataServiceProcessor::process_keep;
     processMap_["setName"] = &IDataServiceProcessor::process_setName;
     processMap_["_map"] = &IDataServiceProcessor::process__map;
+    processMap_["flatmap"] = &IDataServiceProcessor::process_flatmap;
+    processMap_["filter"] = &IDataServiceProcessor::process_filter;
     processMap_["streamingMap"] = &IDataServiceProcessor::process_streamingMap;
+    processMap_["streamingFlatmap"] = &IDataServiceProcessor::process_streamingFlatmap;
+    processMap_["streamingFilter"] = &IDataServiceProcessor::process_streamingFilter;
     processMap_["reduceByKey"] = &IDataServiceProcessor::process_reduceByKey;
     processMap_["shuffle"] = &IDataServiceProcessor::process_shuffle;
     processMap_["saveAsTextFile"] = &IDataServiceProcessor::process_saveAsTextFile;
@@ -1157,6 +1683,26 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
+  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->flatmap(_return, data, _function);
+    }
+    ifaces_[i]->flatmap(_return, data, _function);
+    return;
+  }
+
+  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->filter(_return, data, _function);
+    }
+    ifaces_[i]->filter(_return, data, _function);
+    return;
+  }
+
   void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1164,6 +1710,26 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
       ifaces_[i]->streamingMap(_return, data, _function, ordered);
     }
     ifaces_[i]->streamingMap(_return, data, _function, ordered);
+    return;
+  }
+
+  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->streamingFlatmap(_return, data, _function, ordered);
+    }
+    ifaces_[i]->streamingFlatmap(_return, data, _function, ordered);
+    return;
+  }
+
+  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->streamingFilter(_return, data, _function, ordered);
+    }
+    ifaces_[i]->streamingFilter(_return, data, _function, ordered);
     return;
   }
 
@@ -1244,9 +1810,21 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   int32_t send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv__map(IDataId& _return, const int32_t seqid);
+  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  int32_t send_flatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void recv_flatmap(IDataId& _return, const int32_t seqid);
+  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  int32_t send_filter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void recv_filter(IDataId& _return, const int32_t seqid);
   void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
   int32_t send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
   void recv_streamingMap(IDataId& _return, const int32_t seqid);
+  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  int32_t send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void recv_streamingFlatmap(IDataId& _return, const int32_t seqid);
+  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  int32_t send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void recv_streamingFilter(IDataId& _return, const int32_t seqid);
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   int32_t send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
   void recv_reduceByKey(IDataId& _return, const int32_t seqid);

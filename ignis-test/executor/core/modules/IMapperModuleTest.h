@@ -80,6 +80,7 @@ namespace ignis {
 
                 private:
 
+                    std::vector<int> input;
                     std::shared_ptr<IMapperModule> mapper_module;
 
                 };

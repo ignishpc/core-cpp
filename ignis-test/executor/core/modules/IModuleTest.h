@@ -18,7 +18,6 @@ namespace ignis {
 
                 protected:
                     std::string library;
-                    std::vector<int> input;
                     std::shared_ptr<IExecutorData> executor_data;
 
                 };

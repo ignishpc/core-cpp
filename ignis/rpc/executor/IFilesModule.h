@@ -22,8 +22,8 @@ class IFilesModuleIf {
  public:
   virtual ~IFilesModuleIf() {}
   virtual void readFile(const std::string& path, const int64_t offset, const int64_t len, const int64_t lines) = 0;
-  virtual void saveFile(const std::string& path, const bool joined) = 0;
-  virtual void saveJson(const std::string& path, const bool joined) = 0;
+  virtual void saveFile(const std::string& path, const bool trunc, const bool new_line) = 0;
+  virtual void saveJson(const std::string& path, const bool array_start, const bool array_end) = 0;
 };
 
 class IFilesModuleIfFactory {
@@ -56,10 +56,10 @@ class IFilesModuleNull : virtual public IFilesModuleIf {
   void readFile(const std::string& /* path */, const int64_t /* offset */, const int64_t /* len */, const int64_t /* lines */) {
     return;
   }
-  void saveFile(const std::string& /* path */, const bool /* joined */) {
+  void saveFile(const std::string& /* path */, const bool /* trunc */, const bool /* new_line */) {
     return;
   }
-  void saveJson(const std::string& /* path */, const bool /* joined */) {
+  void saveJson(const std::string& /* path */, const bool /* array_start */, const bool /* array_end */) {
     return;
   }
 };
@@ -190,9 +190,10 @@ class IFilesModule_readFile_presult {
 };
 
 typedef struct _IFilesModule_saveFile_args__isset {
-  _IFilesModule_saveFile_args__isset() : path(false), joined(false) {}
+  _IFilesModule_saveFile_args__isset() : path(false), trunc(false), new_line(false) {}
   bool path :1;
-  bool joined :1;
+  bool trunc :1;
+  bool new_line :1;
 } _IFilesModule_saveFile_args__isset;
 
 class IFilesModule_saveFile_args {
@@ -200,24 +201,29 @@ class IFilesModule_saveFile_args {
 
   IFilesModule_saveFile_args(const IFilesModule_saveFile_args&);
   IFilesModule_saveFile_args& operator=(const IFilesModule_saveFile_args&);
-  IFilesModule_saveFile_args() : path(), joined(0) {
+  IFilesModule_saveFile_args() : path(), trunc(0), new_line(0) {
   }
 
   virtual ~IFilesModule_saveFile_args() throw();
   std::string path;
-  bool joined;
+  bool trunc;
+  bool new_line;
 
   _IFilesModule_saveFile_args__isset __isset;
 
   void __set_path(const std::string& val);
 
-  void __set_joined(const bool val);
+  void __set_trunc(const bool val);
+
+  void __set_new_line(const bool val);
 
   bool operator == (const IFilesModule_saveFile_args & rhs) const
   {
     if (!(path == rhs.path))
       return false;
-    if (!(joined == rhs.joined))
+    if (!(trunc == rhs.trunc))
+      return false;
+    if (!(new_line == rhs.new_line))
       return false;
     return true;
   }
@@ -239,7 +245,8 @@ class IFilesModule_saveFile_pargs {
 
   virtual ~IFilesModule_saveFile_pargs() throw();
   const std::string* path;
-  const bool* joined;
+  const bool* trunc;
+  const bool* new_line;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -301,9 +308,10 @@ class IFilesModule_saveFile_presult {
 };
 
 typedef struct _IFilesModule_saveJson_args__isset {
-  _IFilesModule_saveJson_args__isset() : path(false), joined(false) {}
+  _IFilesModule_saveJson_args__isset() : path(false), array_start(false), array_end(false) {}
   bool path :1;
-  bool joined :1;
+  bool array_start :1;
+  bool array_end :1;
 } _IFilesModule_saveJson_args__isset;
 
 class IFilesModule_saveJson_args {
@@ -311,24 +319,29 @@ class IFilesModule_saveJson_args {
 
   IFilesModule_saveJson_args(const IFilesModule_saveJson_args&);
   IFilesModule_saveJson_args& operator=(const IFilesModule_saveJson_args&);
-  IFilesModule_saveJson_args() : path(), joined(0) {
+  IFilesModule_saveJson_args() : path(), array_start(0), array_end(0) {
   }
 
   virtual ~IFilesModule_saveJson_args() throw();
   std::string path;
-  bool joined;
+  bool array_start;
+  bool array_end;
 
   _IFilesModule_saveJson_args__isset __isset;
 
   void __set_path(const std::string& val);
 
-  void __set_joined(const bool val);
+  void __set_array_start(const bool val);
+
+  void __set_array_end(const bool val);
 
   bool operator == (const IFilesModule_saveJson_args & rhs) const
   {
     if (!(path == rhs.path))
       return false;
-    if (!(joined == rhs.joined))
+    if (!(array_start == rhs.array_start))
+      return false;
+    if (!(array_end == rhs.array_end))
       return false;
     return true;
   }
@@ -350,7 +363,8 @@ class IFilesModule_saveJson_pargs {
 
   virtual ~IFilesModule_saveJson_pargs() throw();
   const std::string* path;
-  const bool* joined;
+  const bool* array_start;
+  const bool* array_end;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -439,11 +453,11 @@ class IFilesModuleClient : virtual public IFilesModuleIf {
   void readFile(const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
   void send_readFile(const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
   void recv_readFile();
-  void saveFile(const std::string& path, const bool joined);
-  void send_saveFile(const std::string& path, const bool joined);
+  void saveFile(const std::string& path, const bool trunc, const bool new_line);
+  void send_saveFile(const std::string& path, const bool trunc, const bool new_line);
   void recv_saveFile();
-  void saveJson(const std::string& path, const bool joined);
-  void send_saveJson(const std::string& path, const bool joined);
+  void saveJson(const std::string& path, const bool array_start, const bool array_end);
+  void send_saveJson(const std::string& path, const bool array_start, const bool array_end);
   void recv_saveJson();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -506,22 +520,22 @@ class IFilesModuleMultiface : virtual public IFilesModuleIf {
     ifaces_[i]->readFile(path, offset, len, lines);
   }
 
-  void saveFile(const std::string& path, const bool joined) {
+  void saveFile(const std::string& path, const bool trunc, const bool new_line) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->saveFile(path, joined);
+      ifaces_[i]->saveFile(path, trunc, new_line);
     }
-    ifaces_[i]->saveFile(path, joined);
+    ifaces_[i]->saveFile(path, trunc, new_line);
   }
 
-  void saveJson(const std::string& path, const bool joined) {
+  void saveJson(const std::string& path, const bool array_start, const bool array_end) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->saveJson(path, joined);
+      ifaces_[i]->saveJson(path, array_start, array_end);
     }
-    ifaces_[i]->saveJson(path, joined);
+    ifaces_[i]->saveJson(path, array_start, array_end);
   }
 
 };
@@ -557,11 +571,11 @@ class IFilesModuleConcurrentClient : virtual public IFilesModuleIf {
   void readFile(const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
   int32_t send_readFile(const std::string& path, const int64_t offset, const int64_t len, const int64_t lines);
   void recv_readFile(const int32_t seqid);
-  void saveFile(const std::string& path, const bool joined);
-  int32_t send_saveFile(const std::string& path, const bool joined);
+  void saveFile(const std::string& path, const bool trunc, const bool new_line);
+  int32_t send_saveFile(const std::string& path, const bool trunc, const bool new_line);
   void recv_saveFile(const int32_t seqid);
-  void saveJson(const std::string& path, const bool joined);
-  int32_t send_saveJson(const std::string& path, const bool joined);
+  void saveJson(const std::string& path, const bool array_start, const bool array_end);
+  int32_t send_saveJson(const std::string& path, const bool array_start, const bool array_end);
   void recv_saveJson(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

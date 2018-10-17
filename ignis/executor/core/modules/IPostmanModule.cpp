@@ -32,52 +32,52 @@ void IPostmanModule::threadAccept(std::shared_ptr<transport::TTransport> transpo
         try {
             auto buffer = std::make_shared<transport::TBufferedTransport>(transport);
             std::shared_ptr<IObject> object = getIObject();
-            IGNIS_LOG(info) << "IPostmanModule id " << id << " receiving"
+            IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " receiving"
                             << " mode: " << (use_shared_memory ? "shared memory" : "socket");
             IMessage msg("local", object);
             executor_data->getPostBox().newInMessage(id, msg);
             object->read(buffer);
-            IGNIS_LOG(info) << "IPostmanModule id " << id << " received OK";
+            IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " received OK";
             object->fit();
         } catch (exceptions::IException &ex) {
-            IGNIS_LOG(warning) << "IPostmanModule id " << id << " received FAILS " << ex.toString();
+            IGNIS_THREAD_LOG(warning) << "IPostmanModule id " << id << " received FAILS " << ex.toString();
         } catch (std::exception &ex) {
-            IGNIS_LOG(warning) << "IPostmanModule id " << id << " received FAILS " << ex.what();
+            IGNIS_THREAD_LOG(warning) << "IPostmanModule id " << id << " received FAILS " << ex.what();
         }
     } catch (exceptions::IException &ex) {
-        IGNIS_LOG(warning) << "IPostmanModule connection exception " << ex.toString();
+        IGNIS_THREAD_LOG(warning) << "IPostmanModule connection exception " << ex.toString();
     } catch (std::exception &ex) {
-        IGNIS_LOG(warning) << "IPostmanModule connection exception " << ex.what();
+        IGNIS_THREAD_LOG(warning) << "IPostmanModule connection exception " << ex.what();
     }
     transport->close();
 }
 
 void IPostmanModule::threadServer() {
-    IGNIS_LOG(info) << "IPostmanModule started";
+    IGNIS_THREAD_LOG(info) << "IPostmanModule started";
     std::vector<std::shared_ptr<transport::TTransport>> connections;
     server->listen();
-    IGNIS_LOG(info) << "IPostmanModule listening on port " << server->getPort();
+    IGNIS_THREAD_LOG(info) << "IPostmanModule listening on port " << server->getPort();
     while (started) {
         try {
             auto connection = server->accept();
-            IGNIS_LOG(info) << "IPostmanModule connection accepted";
+            IGNIS_THREAD_LOG(info) << "IPostmanModule connection accepted";
             connections.push_back(connection);
             std::thread(&IPostmanModule::threadAccept, this, connection).detach();
         } catch (std::exception &ex) {
             if (started) {
-                IGNIS_LOG(warning) << "IPostmanModule accept exception" << ex.what();
+                IGNIS_THREAD_LOG(warning) << "IPostmanModule accept exception" << ex.what();
             }
         }
     }
     for (auto trans:connections) {
         trans->close();
     }
-    IGNIS_LOG(info) << "IPostmanModule stopped, " << connections.size() << " connections accepted";
+    IGNIS_THREAD_LOG(info) << "IPostmanModule stopped, " << connections.size() << " connections accepted";
 }
 
 void IPostmanModule::start() {
     try {
-        IGNIS_LOG(info) << "IPostmanModule starting";
+        IGNIS_THREAD_LOG(info) << "IPostmanModule starting";
         started = true;
         auto port = executor_data->getParser().getNumber("ignis.executor.transport.port");
         server = std::make_shared<transport::TServerSocket>(port);
@@ -96,7 +96,7 @@ void IPostmanModule::start() {
 }
 
 void IPostmanModule::stop() {
-    IGNIS_LOG(info) << "IPostmanModule stopping";
+    IGNIS_THREAD_LOG(info) << "IPostmanModule stopping";
     started = false;
     server->close();
 }
@@ -118,8 +118,7 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
         std::string addr_host = vaddr[1];
         int addr_port = stoi(vaddr[2]);
 
-
-        IGNIS_LOG(warning) << "IPostmanModule id " << id << " connecting to " << addr_host << ":" << addr_port;
+        IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " connecting to " << addr_host << ":" << addr_port;
         std::shared_ptr<transport::TTransport> transport = std::make_shared<transport::TSocket>(addr_host, addr_port);
         for (int i = 0; i < 10; i++) {
             try {
@@ -145,17 +144,17 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
         }
         protocol->writeI64(id);
         auto buffer = std::make_shared<transport::TBufferedTransport>(transport);
-        IGNIS_LOG(info) << "IPostmanModule id " << id << " sending"
+        IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " sending"
                         << " mode: " << (use_shared_memory ? "shared memory" : "socket");
         msg.getObj()->write(buffer, compression);
         transport->close();
-        IGNIS_LOG(info) << "IPostmanModule id " << id << " sent OK";
+        IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " sent OK";
     } catch (exceptions::IException &ex) {
-        IGNIS_LOG(warning) << "IPostmanModule id " << id << " sent FAILS " << ex.toString();
+        IGNIS_THREAD_LOG(warning) << "IPostmanModule id " << id << " sent FAILS " << ex.toString();
         return 1;
 
     } catch (std::exception &ex) {
-        IGNIS_LOG(warning) << "IPostmanModule id " << id << "sent FAILS " << ex.what();
+        IGNIS_THREAD_LOG(warning) << "IPostmanModule id " << id << "sent FAILS " << ex.what();
         return 1;
     }
 }
@@ -182,7 +181,7 @@ void IPostmanModule::sendAll() {
             }
         }
         if (errors > 0) {
-            IGNIS_LOG(error) << "IPostmanModule fail to send " << errors << " messages";
+            IGNIS_THREAD_LOG(error) << "IPostmanModule fail to send " << errors << " messages";
             exceptions::IException ex("IPostmanModule fail to send " + std::to_string(errors) + " messages");
             IRemoteException iex;
             iex.__set_message(ex.what());

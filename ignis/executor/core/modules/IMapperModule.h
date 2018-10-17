@@ -19,7 +19,7 @@ namespace ignis {
 
                     virtual void filter(const rpc::ISourceFunction &sf) override;
 
-                    virtual void keyBy(const rpc::ISourceFunction &sf);
+                    virtual void keyBy(const rpc::ISourceFunction &sf) override;
 
                     virtual void streamingMap(const rpc::ISourceFunction &sf, bool ordered) override;
 
@@ -27,7 +27,7 @@ namespace ignis {
 
                     virtual void streamingFilter(const rpc::ISourceFunction &sf, bool ordered) override;
 
-                    virtual void streamingKeyBy(const rpc::ISourceFunction &sf, bool ordered);
+                    virtual void streamingKeyBy(const rpc::ISourceFunction &sf, bool ordered) override;
 
                     virtual ~IMapperModule();
 

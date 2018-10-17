@@ -10,21 +10,15 @@ namespace ignis {
     namespace executor {
         namespace core {
             namespace modules {
-                class IShuffleModule : public IgnisModule, public ignis::rpc::executor::IShuffleModuleIf{
+                class IShuffleModule : public IgnisModule, public ignis::rpc::executor::IShuffleModuleIf {
                 public:
                     IShuffleModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    virtual void createSplits();
+                    virtual void createSplits(const std::vector<ignis::rpc::executor::ISplit> &splits) override;
 
-                    virtual void nextSplit(const std::string& addr, const int64_t length);
-
-                    virtual void finishSplits();
-
-                    virtual void joinSplits(const std::vector<int64_t> & order);
+                    virtual void joinSplits(const std::vector<int64_t> &order) override;
 
                     virtual ~IShuffleModule();
-                private:
-                    std::shared_ptr<storage::iterator::ICoreReadIterator<storage::IObject::Any>> it;
                 };
             }
         }
