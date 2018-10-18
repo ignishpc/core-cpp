@@ -61,9 +61,9 @@ namespace ignis {
                     inline void readToWrite(ICoreReadIterator<T> &reader, ICoreWriteIterator<T> &writer, size_t n,
                                             bool force_move = false) {
                         if (reader.isMoved() || force_move) {
-                            while (reader.hasNext() && n-- > 0) { writer.write((T &&) reader.next()); }
+                            for (; reader.hasNext() && n > 0; n--) { writer.write((T &&) reader.next()); }
                         } else {
-                            while (reader.hasNext() && n-- > 0) { writer.write(reader.next()); }
+                            for (; reader.hasNext() && n > 0; n--) { writer.write(reader.next()); }
                         }
                     }
 

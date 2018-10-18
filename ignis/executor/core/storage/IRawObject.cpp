@@ -40,7 +40,6 @@ void IRawObject::writeHeader(std::shared_ptr<transport::TTransport> transport) {
     } else {
         data::handle::writeTypeAux(data_proto, type);
     }
-    transport->flush();
 }
 
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IRawObject::readIterator() {

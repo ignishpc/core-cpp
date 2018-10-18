@@ -1,18 +1,20 @@
 
 #include "IFileTransport.h"
 
-using namespace std;
 using namespace apache::thrift::transport;
 using namespace ignis::data;
 
-IFileTransport::IFileTransport(std::string &read_file, std::string &write_file, shared_ptr<TTransport> &sync,
-                               size_t blockSize) : sync_trans(sync_trans),
-                                                   block_size(block_size),
+IFileTransport::IFileTransport(std::string &read_file, std::string &write_file, std::shared_ptr<TTransport> &sync,
+                               size_t blockSize) : sync_trans(sync),
+                                                   block_size(blockSize),
                                                    write_bytes(blockSize),
                                                    read_flag(0),
-                                                   write_flag(1) {
-    buffer[read_flag].open(read_file, ios::binary | ios::trunc);
-    buffer[write_flag].open(write_file, ios::binary | ios::trunc);
+                                                   write_flag(1),
+                                                   init(false){
+    buffer_path[read_flag] = boost::filesystem::path(read_file);
+    buffer_path[write_flag] = boost::filesystem::path(write_file);
+    buffer[read_flag].open(read_file, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
+    buffer[write_flag].open(write_file, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
 }
 
 bool IFileTransport::isOpen() {
@@ -36,6 +38,11 @@ uint32_t IFileTransport::read_virt(uint8_t *buf, uint32_t len) {
     if (read_sz == 0) {
         swapRead();
         read_sz = buffer[read_flag].readsome((char *) buf, len);
+        if (!init) {//Only the first time
+            init = true;
+            swapRead();
+            read_sz = buffer[read_flag].readsome((char *) buf, len);
+        }
     }
     return read_sz;
 }
@@ -56,7 +63,7 @@ void IFileTransport::write_virt(const uint8_t *buf, uint32_t len) {
 
 void IFileTransport::flush() {
     if (write_bytes > 0) {
-        TTransport::flush();
+        swapWrite();
     }
 }
 
@@ -70,18 +77,15 @@ void IFileTransport::sync() {
 
 void IFileTransport::swapRead() {
     sync();
-    read_flag %= read_flag + 1;
-    write_flag %= write_flag + 1;
+    read_flag = (read_flag + 1) % 2;
+    write_flag = (write_flag + 1) % 2;
     buffer[read_flag].seekg(0);
 }
 
 
 void IFileTransport::swapWrite() {
-    sync();
     buffer[write_flag].flush();
-    read_flag %= read_flag + 1;
-    write_flag %= write_flag + 1;
-    buffer[write_flag].seekg(0);
+    swapRead();
     boost::filesystem::resize_file(buffer_path[write_flag], 0);
     write_bytes = 0;
 }

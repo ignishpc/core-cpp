@@ -42,6 +42,7 @@ namespace ignis {
             size_t write_bytes;
             int8_t read_flag;
             int8_t write_flag;
+            bool init;
 
             inline void sync();
 

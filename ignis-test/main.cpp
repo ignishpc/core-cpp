@@ -21,8 +21,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IMemoryObjectTes
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IRawMemoryObjectTest);
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IMapperModuleTest);
-//CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IShuffleModuleTest);
-//CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IPostmanModuleTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IShuffleModuleTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IPostmanModuleTest);
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();

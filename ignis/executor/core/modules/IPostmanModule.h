@@ -3,6 +3,7 @@
 #define IGNIS_IPOSTMAN_H
 
 #include <thrift/transport/TServerSocket.h>
+#include <thread>
 #include "../../../rpc/executor/IPostmanModule.h"
 #include "../../../IHeaders.h"
 #include "../IMessage.h"
@@ -34,6 +35,7 @@ namespace ignis {
                     int send(size_t id, IMessage &msg, int8_t compression);
 
                     std::shared_ptr<transport::TServerSocket> server;
+                    std::shared_ptr<std::thread> thread_server;
                     bool started;
                 };
             }

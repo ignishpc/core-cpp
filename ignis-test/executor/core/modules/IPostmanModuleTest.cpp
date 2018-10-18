@@ -41,11 +41,12 @@ void IPostmanModuleTest::test(std::string addr) {
     CPPUNIT_ASSERT(msg.find(id) != msg.end());
 
     auto result = msg[id].getObj();
+    result->setManager(object->getManager());
     auto reader = result->readIterator();
 
-    CPPUNIT_ASSERT(input.size() == result->getSize());
+    CPPUNIT_ASSERT_EQUAL(input.size(), result->getSize());
     for (auto &elem:input) {
-        CPPUNIT_ASSERT_EQUAL(std::to_string(elem), (std::string &) reader->next());
+        CPPUNIT_ASSERT_EQUAL(elem, (int &) reader->next());
     }
 }
 
