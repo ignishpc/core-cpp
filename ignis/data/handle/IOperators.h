@@ -32,7 +32,7 @@ namespace ignis {
                 }
 
                 virtual size_t hash(const T &a) {
-                    //return std::hash<T>()(a);//TODO
+                    return std::hash<T>()(a);
                 }
 
                 virtual std::string toString(const T &a) {

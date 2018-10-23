@@ -21,14 +21,14 @@ namespace ignis { namespace rpc { namespace executor {
 class IMapperModuleIf {
  public:
   virtual ~IMapperModuleIf() {}
-  virtual void _map(const  ::ignis::rpc::ISourceFunction& funct) = 0;
-  virtual void flatmap(const  ::ignis::rpc::ISourceFunction& funct) = 0;
-  virtual void filter(const  ::ignis::rpc::ISourceFunction& funct) = 0;
-  virtual void keyBy(const  ::ignis::rpc::ISourceFunction& funct) = 0;
-  virtual void streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) = 0;
-  virtual void streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) = 0;
-  virtual void streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) = 0;
-  virtual void streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) = 0;
+  virtual void _map(const  ::ignis::rpc::ISource& funct) = 0;
+  virtual void flatmap(const  ::ignis::rpc::ISource& funct) = 0;
+  virtual void filter(const  ::ignis::rpc::ISource& funct) = 0;
+  virtual void keyBy(const  ::ignis::rpc::ISource& funct) = 0;
+  virtual void streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered) = 0;
+  virtual void streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered) = 0;
+  virtual void streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered) = 0;
+  virtual void streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered) = 0;
 };
 
 class IMapperModuleIfFactory {
@@ -58,28 +58,28 @@ class IMapperModuleIfSingletonFactory : virtual public IMapperModuleIfFactory {
 class IMapperModuleNull : virtual public IMapperModuleIf {
  public:
   virtual ~IMapperModuleNull() {}
-  void _map(const  ::ignis::rpc::ISourceFunction& /* funct */) {
+  void _map(const  ::ignis::rpc::ISource& /* funct */) {
     return;
   }
-  void flatmap(const  ::ignis::rpc::ISourceFunction& /* funct */) {
+  void flatmap(const  ::ignis::rpc::ISource& /* funct */) {
     return;
   }
-  void filter(const  ::ignis::rpc::ISourceFunction& /* funct */) {
+  void filter(const  ::ignis::rpc::ISource& /* funct */) {
     return;
   }
-  void keyBy(const  ::ignis::rpc::ISourceFunction& /* funct */) {
+  void keyBy(const  ::ignis::rpc::ISource& /* funct */) {
     return;
   }
-  void streamingMap(const  ::ignis::rpc::ISourceFunction& /* funct */, const bool /* ordered */) {
+  void streamingMap(const  ::ignis::rpc::ISource& /* funct */, const bool /* ordered */) {
     return;
   }
-  void streamingFlatmap(const  ::ignis::rpc::ISourceFunction& /* funct */, const bool /* ordered */) {
+  void streamingFlatmap(const  ::ignis::rpc::ISource& /* funct */, const bool /* ordered */) {
     return;
   }
-  void streamingFilter(const  ::ignis::rpc::ISourceFunction& /* funct */, const bool /* ordered */) {
+  void streamingFilter(const  ::ignis::rpc::ISource& /* funct */, const bool /* ordered */) {
     return;
   }
-  void streamingKeyBy(const  ::ignis::rpc::ISourceFunction& /* funct */, const bool /* ordered */) {
+  void streamingKeyBy(const  ::ignis::rpc::ISource& /* funct */, const bool /* ordered */) {
     return;
   }
 };
@@ -98,11 +98,11 @@ class IMapperModule__map_args {
   }
 
   virtual ~IMapperModule__map_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
 
   _IMapperModule__map_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IMapperModule__map_args & rhs) const
   {
@@ -127,7 +127,7 @@ class IMapperModule__map_pargs {
 
 
   virtual ~IMapperModule__map_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -202,11 +202,11 @@ class IMapperModule_flatmap_args {
   }
 
   virtual ~IMapperModule_flatmap_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
 
   _IMapperModule_flatmap_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IMapperModule_flatmap_args & rhs) const
   {
@@ -231,7 +231,7 @@ class IMapperModule_flatmap_pargs {
 
 
   virtual ~IMapperModule_flatmap_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -306,11 +306,11 @@ class IMapperModule_filter_args {
   }
 
   virtual ~IMapperModule_filter_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
 
   _IMapperModule_filter_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IMapperModule_filter_args & rhs) const
   {
@@ -335,7 +335,7 @@ class IMapperModule_filter_pargs {
 
 
   virtual ~IMapperModule_filter_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -410,11 +410,11 @@ class IMapperModule_keyBy_args {
   }
 
   virtual ~IMapperModule_keyBy_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
 
   _IMapperModule_keyBy_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IMapperModule_keyBy_args & rhs) const
   {
@@ -439,7 +439,7 @@ class IMapperModule_keyBy_pargs {
 
 
   virtual ~IMapperModule_keyBy_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -515,12 +515,12 @@ class IMapperModule_streamingMap_args {
   }
 
   virtual ~IMapperModule_streamingMap_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
   bool ordered;
 
   _IMapperModule_streamingMap_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   void __set_ordered(const bool val);
 
@@ -549,7 +549,7 @@ class IMapperModule_streamingMap_pargs {
 
 
   virtual ~IMapperModule_streamingMap_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
   const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -626,12 +626,12 @@ class IMapperModule_streamingFlatmap_args {
   }
 
   virtual ~IMapperModule_streamingFlatmap_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
   bool ordered;
 
   _IMapperModule_streamingFlatmap_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   void __set_ordered(const bool val);
 
@@ -660,7 +660,7 @@ class IMapperModule_streamingFlatmap_pargs {
 
 
   virtual ~IMapperModule_streamingFlatmap_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
   const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -737,12 +737,12 @@ class IMapperModule_streamingFilter_args {
   }
 
   virtual ~IMapperModule_streamingFilter_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
   bool ordered;
 
   _IMapperModule_streamingFilter_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   void __set_ordered(const bool val);
 
@@ -771,7 +771,7 @@ class IMapperModule_streamingFilter_pargs {
 
 
   virtual ~IMapperModule_streamingFilter_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
   const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -848,12 +848,12 @@ class IMapperModule_streamingKeyBy_args {
   }
 
   virtual ~IMapperModule_streamingKeyBy_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
+   ::ignis::rpc::ISource funct;
   bool ordered;
 
   _IMapperModule_streamingKeyBy_args__isset __isset;
 
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
+  void __set_funct(const  ::ignis::rpc::ISource& val);
 
   void __set_ordered(const bool val);
 
@@ -882,7 +882,7 @@ class IMapperModule_streamingKeyBy_pargs {
 
 
   virtual ~IMapperModule_streamingKeyBy_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
+  const  ::ignis::rpc::ISource* funct;
   const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -969,29 +969,29 @@ class IMapperModuleClient : virtual public IMapperModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void _map(const  ::ignis::rpc::ISourceFunction& funct);
-  void send__map(const  ::ignis::rpc::ISourceFunction& funct);
+  void _map(const  ::ignis::rpc::ISource& funct);
+  void send__map(const  ::ignis::rpc::ISource& funct);
   void recv__map();
-  void flatmap(const  ::ignis::rpc::ISourceFunction& funct);
-  void send_flatmap(const  ::ignis::rpc::ISourceFunction& funct);
+  void flatmap(const  ::ignis::rpc::ISource& funct);
+  void send_flatmap(const  ::ignis::rpc::ISource& funct);
   void recv_flatmap();
-  void filter(const  ::ignis::rpc::ISourceFunction& funct);
-  void send_filter(const  ::ignis::rpc::ISourceFunction& funct);
+  void filter(const  ::ignis::rpc::ISource& funct);
+  void send_filter(const  ::ignis::rpc::ISource& funct);
   void recv_filter();
-  void keyBy(const  ::ignis::rpc::ISourceFunction& funct);
-  void send_keyBy(const  ::ignis::rpc::ISourceFunction& funct);
+  void keyBy(const  ::ignis::rpc::ISource& funct);
+  void send_keyBy(const  ::ignis::rpc::ISource& funct);
   void recv_keyBy();
-  void streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  void send_streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  void send_streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingMap();
-  void streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  void send_streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  void send_streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingFlatmap();
-  void streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  void send_streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  void send_streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingFilter();
-  void streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  void send_streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  void send_streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingKeyBy();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -1055,7 +1055,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void _map(const  ::ignis::rpc::ISourceFunction& funct) {
+  void _map(const  ::ignis::rpc::ISource& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1064,7 +1064,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_[i]->_map(funct);
   }
 
-  void flatmap(const  ::ignis::rpc::ISourceFunction& funct) {
+  void flatmap(const  ::ignis::rpc::ISource& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1073,7 +1073,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_[i]->flatmap(funct);
   }
 
-  void filter(const  ::ignis::rpc::ISourceFunction& funct) {
+  void filter(const  ::ignis::rpc::ISource& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1082,7 +1082,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_[i]->filter(funct);
   }
 
-  void keyBy(const  ::ignis::rpc::ISourceFunction& funct) {
+  void keyBy(const  ::ignis::rpc::ISource& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1091,7 +1091,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_[i]->keyBy(funct);
   }
 
-  void streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) {
+  void streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1100,7 +1100,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_[i]->streamingMap(funct, ordered);
   }
 
-  void streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) {
+  void streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1109,7 +1109,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_[i]->streamingFlatmap(funct, ordered);
   }
 
-  void streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) {
+  void streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1118,7 +1118,7 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
     ifaces_[i]->streamingFilter(funct, ordered);
   }
 
-  void streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered) {
+  void streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1157,29 +1157,29 @@ class IMapperModuleConcurrentClient : virtual public IMapperModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void _map(const  ::ignis::rpc::ISourceFunction& funct);
-  int32_t send__map(const  ::ignis::rpc::ISourceFunction& funct);
+  void _map(const  ::ignis::rpc::ISource& funct);
+  int32_t send__map(const  ::ignis::rpc::ISource& funct);
   void recv__map(const int32_t seqid);
-  void flatmap(const  ::ignis::rpc::ISourceFunction& funct);
-  int32_t send_flatmap(const  ::ignis::rpc::ISourceFunction& funct);
+  void flatmap(const  ::ignis::rpc::ISource& funct);
+  int32_t send_flatmap(const  ::ignis::rpc::ISource& funct);
   void recv_flatmap(const int32_t seqid);
-  void filter(const  ::ignis::rpc::ISourceFunction& funct);
-  int32_t send_filter(const  ::ignis::rpc::ISourceFunction& funct);
+  void filter(const  ::ignis::rpc::ISource& funct);
+  int32_t send_filter(const  ::ignis::rpc::ISource& funct);
   void recv_filter(const int32_t seqid);
-  void keyBy(const  ::ignis::rpc::ISourceFunction& funct);
-  int32_t send_keyBy(const  ::ignis::rpc::ISourceFunction& funct);
+  void keyBy(const  ::ignis::rpc::ISource& funct);
+  int32_t send_keyBy(const  ::ignis::rpc::ISource& funct);
   void recv_keyBy(const int32_t seqid);
-  void streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  int32_t send_streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  int32_t send_streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingMap(const int32_t seqid);
-  void streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  int32_t send_streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  int32_t send_streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingFlatmap(const int32_t seqid);
-  void streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  int32_t send_streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  int32_t send_streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingFilter(const int32_t seqid);
-  void streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
-  int32_t send_streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered);
+  void streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered);
+  int32_t send_streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered);
   void recv_streamingKeyBy(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

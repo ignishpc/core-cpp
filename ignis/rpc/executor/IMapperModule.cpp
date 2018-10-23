@@ -1568,13 +1568,13 @@ uint32_t IMapperModule_streamingKeyBy_presult::read(::apache::thrift::protocol::
   return xfer;
 }
 
-void IMapperModuleClient::_map(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::_map(const  ::ignis::rpc::ISource& funct)
 {
   send__map(funct);
   recv__map();
 }
 
-void IMapperModuleClient::send__map(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::send__map(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("_map", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1624,13 +1624,13 @@ void IMapperModuleClient::recv__map()
   return;
 }
 
-void IMapperModuleClient::flatmap(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::flatmap(const  ::ignis::rpc::ISource& funct)
 {
   send_flatmap(funct);
   recv_flatmap();
 }
 
-void IMapperModuleClient::send_flatmap(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::send_flatmap(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1680,13 +1680,13 @@ void IMapperModuleClient::recv_flatmap()
   return;
 }
 
-void IMapperModuleClient::filter(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::filter(const  ::ignis::rpc::ISource& funct)
 {
   send_filter(funct);
   recv_filter();
 }
 
-void IMapperModuleClient::send_filter(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::send_filter(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("filter", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1736,13 +1736,13 @@ void IMapperModuleClient::recv_filter()
   return;
 }
 
-void IMapperModuleClient::keyBy(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::keyBy(const  ::ignis::rpc::ISource& funct)
 {
   send_keyBy(funct);
   recv_keyBy();
 }
 
-void IMapperModuleClient::send_keyBy(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleClient::send_keyBy(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("keyBy", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1792,13 +1792,13 @@ void IMapperModuleClient::recv_keyBy()
   return;
 }
 
-void IMapperModuleClient::streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   send_streamingMap(funct, ordered);
   recv_streamingMap();
 }
 
-void IMapperModuleClient::send_streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::send_streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("streamingMap", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1849,13 +1849,13 @@ void IMapperModuleClient::recv_streamingMap()
   return;
 }
 
-void IMapperModuleClient::streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   send_streamingFlatmap(funct, ordered);
   recv_streamingFlatmap();
 }
 
-void IMapperModuleClient::send_streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::send_streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("streamingFlatmap", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1906,13 +1906,13 @@ void IMapperModuleClient::recv_streamingFlatmap()
   return;
 }
 
-void IMapperModuleClient::streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   send_streamingFilter(funct, ordered);
   recv_streamingFilter();
 }
 
-void IMapperModuleClient::send_streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::send_streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("streamingFilter", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1963,13 +1963,13 @@ void IMapperModuleClient::recv_streamingFilter()
   return;
 }
 
-void IMapperModuleClient::streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   send_streamingKeyBy(funct, ordered);
   recv_streamingKeyBy();
 }
 
-void IMapperModuleClient::send_streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleClient::send_streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("streamingKeyBy", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -2494,13 +2494,13 @@ void IMapperModuleProcessor::process_streamingKeyBy(int32_t seqid, ::apache::thr
   return processor;
 }
 
-void IMapperModuleConcurrentClient::_map(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleConcurrentClient::_map(const  ::ignis::rpc::ISource& funct)
 {
   int32_t seqid = send__map(funct);
   recv__map(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send__map(const  ::ignis::rpc::ISourceFunction& funct)
+int32_t IMapperModuleConcurrentClient::send__map(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -2576,13 +2576,13 @@ void IMapperModuleConcurrentClient::recv__map(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::flatmap(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleConcurrentClient::flatmap(const  ::ignis::rpc::ISource& funct)
 {
   int32_t seqid = send_flatmap(funct);
   recv_flatmap(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_flatmap(const  ::ignis::rpc::ISourceFunction& funct)
+int32_t IMapperModuleConcurrentClient::send_flatmap(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -2658,13 +2658,13 @@ void IMapperModuleConcurrentClient::recv_flatmap(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::filter(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleConcurrentClient::filter(const  ::ignis::rpc::ISource& funct)
 {
   int32_t seqid = send_filter(funct);
   recv_filter(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_filter(const  ::ignis::rpc::ISourceFunction& funct)
+int32_t IMapperModuleConcurrentClient::send_filter(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -2740,13 +2740,13 @@ void IMapperModuleConcurrentClient::recv_filter(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::keyBy(const  ::ignis::rpc::ISourceFunction& funct)
+void IMapperModuleConcurrentClient::keyBy(const  ::ignis::rpc::ISource& funct)
 {
   int32_t seqid = send_keyBy(funct);
   recv_keyBy(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_keyBy(const  ::ignis::rpc::ISourceFunction& funct)
+int32_t IMapperModuleConcurrentClient::send_keyBy(const  ::ignis::rpc::ISource& funct)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -2822,13 +2822,13 @@ void IMapperModuleConcurrentClient::recv_keyBy(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleConcurrentClient::streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t seqid = send_streamingMap(funct, ordered);
   recv_streamingMap(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_streamingMap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+int32_t IMapperModuleConcurrentClient::send_streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -2905,13 +2905,13 @@ void IMapperModuleConcurrentClient::recv_streamingMap(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleConcurrentClient::streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t seqid = send_streamingFlatmap(funct, ordered);
   recv_streamingFlatmap(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_streamingFlatmap(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+int32_t IMapperModuleConcurrentClient::send_streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -2988,13 +2988,13 @@ void IMapperModuleConcurrentClient::recv_streamingFlatmap(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleConcurrentClient::streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t seqid = send_streamingFilter(funct, ordered);
   recv_streamingFilter(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_streamingFilter(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+int32_t IMapperModuleConcurrentClient::send_streamingFilter(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -3071,13 +3071,13 @@ void IMapperModuleConcurrentClient::recv_streamingFilter(const int32_t seqid)
   } // end while(true)
 }
 
-void IMapperModuleConcurrentClient::streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+void IMapperModuleConcurrentClient::streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t seqid = send_streamingKeyBy(funct, ordered);
   recv_streamingKeyBy(seqid);
 }
 
-int32_t IMapperModuleConcurrentClient::send_streamingKeyBy(const  ::ignis::rpc::ISourceFunction& funct, const bool ordered)
+int32_t IMapperModuleConcurrentClient::send_streamingKeyBy(const  ::ignis::rpc::ISource& funct, const bool ordered)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);

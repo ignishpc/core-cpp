@@ -4,7 +4,7 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#include "ISourceFunction_types.h"
+#include "ISource_types.h"
 
 #include <algorithm>
 #include <ostream>
@@ -14,27 +14,27 @@
 namespace ignis { namespace rpc {
 
 
-ISourceFunction::~ISourceFunction() throw() {
+ISource::~ISource() throw() {
 }
 
 
-void ISourceFunction::__set_name(const std::string& val) {
+void ISource::__set_name(const std::string& val) {
   this->name = val;
 __isset.name = true;
 }
 
-void ISourceFunction::__set_bytes(const std::string& val) {
+void ISource::__set_bytes(const std::string& val) {
   this->bytes = val;
 __isset.bytes = true;
 }
-std::ostream& operator<<(std::ostream& out, const ISourceFunction& obj)
+std::ostream& operator<<(std::ostream& out, const ISource& obj)
 {
   obj.printTo(out);
   return out;
 }
 
 
-uint32_t ISourceFunction::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t ISource::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -83,10 +83,10 @@ uint32_t ISourceFunction::read(::apache::thrift::protocol::TProtocol* iprot) {
   return xfer;
 }
 
-uint32_t ISourceFunction::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t ISource::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("ISourceFunction");
+  xfer += oprot->writeStructBegin("ISource");
 
   if (this->__isset.name) {
     xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
@@ -103,27 +103,27 @@ uint32_t ISourceFunction::write(::apache::thrift::protocol::TProtocol* oprot) co
   return xfer;
 }
 
-void swap(ISourceFunction &a, ISourceFunction &b) {
+void swap(ISource &a, ISource &b) {
   using ::std::swap;
   swap(a.name, b.name);
   swap(a.bytes, b.bytes);
   swap(a.__isset, b.__isset);
 }
 
-ISourceFunction::ISourceFunction(const ISourceFunction& other0) {
+ISource::ISource(const ISource& other0) {
   name = other0.name;
   bytes = other0.bytes;
   __isset = other0.__isset;
 }
-ISourceFunction& ISourceFunction::operator=(const ISourceFunction& other1) {
+ISource& ISource::operator=(const ISource& other1) {
   name = other1.name;
   bytes = other1.bytes;
   __isset = other1.__isset;
   return *this;
 }
-void ISourceFunction::printTo(std::ostream& out) const {
+void ISource::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
-  out << "ISourceFunction(";
+  out << "ISource(";
   out << "name="; (__isset.name ? (out << to_string(name)) : (out << "<null>"));
   out << ", " << "bytes="; (__isset.bytes ? (out << to_string(bytes)) : (out << "<null>"));
   out << ")";

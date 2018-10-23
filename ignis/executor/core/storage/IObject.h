@@ -62,6 +62,10 @@ namespace ignis {
                         DataHandle(T *ptr, const std::shared_ptr<api::IManager<T>> &manager) : ptr(ptr),
                                                                                                manager(manager) {}
 
+                        virtual T& get(){return *ptr;}
+
+                        virtual std::shared_ptr<api::IManager<T>>& getManager(){return manager;}
+
                         virtual ~DataHandle() { (*manager->deleter())(ptr); }
 
                     private:

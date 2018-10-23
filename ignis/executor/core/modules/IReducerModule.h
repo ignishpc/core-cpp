@@ -3,7 +3,6 @@
 #define IGNIS_IREDUCERMODULE_H
 
 #include "IModule.h"
-#include "../../api/IReducer.h"
 #include "../../../rpc/executor/IReducerModule.h"
 
 namespace ignis {
@@ -14,14 +13,7 @@ namespace ignis {
                 public:
                     IReducerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    virtual void reduceByKey(const  rpc::ISourceFunction& sf) override ;
-
-                    virtual void groupByKey() override ;
-
                     virtual ~IReducerModule();
-
-                private:
-                    void keyMatch(std::vector<std::shared_ptr<storage::IObject>> &matches);
 
                 };
             }

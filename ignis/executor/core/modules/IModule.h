@@ -7,7 +7,8 @@
 #include "../IExecutorData.h"
 #include "../IDinamicObject.h"
 #include "../ILog.h"
-#include "../../../rpc/ISourceFunction_types.h"
+#include "../../api/IManager.h"
+#include "../../../rpc/ISource_types.h"
 #include "../../../exceptions/IInvalidArgument.h"
 
 namespace ignis {
@@ -33,13 +34,17 @@ namespace ignis {
                             const std::string& type);
 
                     template<typename T>
-                    std::shared_ptr<IDinamicObject<T>> loadFunction(const rpc::ISourceFunction &funct) {
+                    std::shared_ptr<IDinamicObject<T>> loadFunction(const rpc::ISource &funct) {
                         IGNIS_LOG(info) << "IModule loading function";
                         if (funct.__isset.bytes) {
                             throw exceptions::IInvalidArgument("C++ not support function handle");
                         }
                         return std::make_shared<IDinamicObject<T>>(funct.name);
                     }
+
+                    std::shared_ptr<api::IManager<storage::IObject::Any>> getManager(storage::IObject& object);
+
+                    std::shared_ptr<storage::IObject> memoryObject(const std::shared_ptr<storage::IObject>& object);
 
                     virtual ~IgnisModule();
 

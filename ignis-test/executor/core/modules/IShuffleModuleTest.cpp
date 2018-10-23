@@ -57,7 +57,7 @@ void IShuffleModuleTest::shuffle() {
     }
 
     shuffle_module->joinSplits(order);
-    auto result = executor_data->getSharedLoadObject();
+    auto result = executor_data->loadObject();
     CPPUNIT_ASSERT(object != result);
     auto reader = result->readIterator();
 

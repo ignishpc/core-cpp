@@ -1,39 +1,27 @@
 
 #include "IKeysModule.h"
+#include <unordered_map>
 #include "../ILog.h"
-#include "../../../exceptions/IInvalidArgument.h"
 #include "../IMessage.h"
-#include "../storage/iterator/IFilterIterator.h"
-#include "../storage/IObjectWrapperIterator.h"
-#include <unordered_set>
+#include "../storage/iterator/IElementIterator.h"
+#include "../../../exceptions/IInvalidArgument.h"
+#include "../../api/function/IFunction2.h"
+
 
 using namespace ignis::executor::core;
+using namespace ignis::executor::api;
 using namespace ignis::executor::core::storage;
 using namespace ignis::executor::core::modules;
 using ignis::rpc::IRemoteException;
 
 IKeysModule::IKeysModule(std::shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
-void IKeysModule::getKeys(std::unordered_map<int64_t, int64_t> &_return, const bool single) {
+void IKeysModule::getKeys(std::vector<int64_t> &_return) {
     try {
         IGNIS_LOG(info) << "IKeysModule starting getKeys";
-        auto &object_in = executor_data->getLoadObject();
-        auto it = object_in.readIterator();
-        auto elem_manager = object_in.getManager();
-        auto pair_manager = (executor::api::IPairManager<IObject::Any, IObject::Any>&)*elem_manager;
-        auto vector_manager = pair_manager.collectionManager();
-        auto first_op = pair_manager._operator();
-
-        while (it->hasNext()) {
-            auto &value = (std::pair<IObject::Any, IObject::Any> &)it->next();
-            auto key_id = first_op->hash(value);
-            if (_return.find(key_id) == _return.end()) {
-                _return[key_id]++;
-            } else {
-                _return[key_id] = 1;
-            }
-        }
-        counts = _return;
+        auto size = executor_data->loadObject()->getSize();
+        _return.resize(size);
+        memcpy(hashes.get(), &_return[0], size * sizeof(int64_t));
         IGNIS_LOG(info) << "IKeysModule keys ready";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
@@ -48,98 +36,164 @@ void IKeysModule::getKeys(std::unordered_map<int64_t, int64_t> &_return, const b
     }
 }
 
-class IReadFilterHashesIterator : public iterator::IReadFilterIterator {
-public:
-    IReadFilterHashesIterator(const std::shared_ptr<ICoreReadIterator<IObject::Any>> &it,
-                              const std::shared_ptr<ignis::data::handle::IOperator<IObject::Any>> &op,
-                              const std::vector<int64_t> &hashes)
-            : IReadFilterIterator(it, op), hashes(std::unordered_set<int64_t>(hashes.begin(), hashes.end())) {}
+void IKeysModule::getKeysWithCount(std::unordered_map<int64_t, int64_t> &_return) {
+}
 
-private:
-    bool filter() override {
-        auto hash = op->hash(*next_elem);
-        return hashes.find(hash) == hashes.end();
+void IKeysModule::prepareKeys(const std::vector<ignis::rpc::executor::IExecutorKeys> &executorKeys) {
+    try {
+        IGNIS_LOG(info) << "IKeysModule preparing keys";
+        auto object = memoryObject(executor_data->loadObject());
+        auto manager = getManager(*object);
+        std::unordered_map<int64_t, decltype(object->writeIterator())> hashWriter;
+        size_t threads = executor_data->getThreads();
+        size_t size = object->getSize();
+
+        for (auto &entry:executorKeys) {
+            auto msg_object = getIObject(manager, object->getSize() / executorKeys.size());
+            executor_data->getPostBox().newOutMessage(entry.msg_id, IMessage(entry.addr, msg_object));
+            auto writer = msg_object->writeIterator();
+            for (auto &id:entry.keys) {
+                hashWriter[id] = writer;
+            }
+        }
+
+        auto reader = object->readIterator();
+        for (size_t i = 0; i < size; i++) {
+            hashWriter[hashes.get()[i]]->write((storage::IObject::Any &&) reader->next());
+        }
+        hashes.reset();
+        IGNIS_LOG(info) << "IKeysModule keys prepared";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.toString());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
     }
+}
 
-    std::unordered_set<int64_t> hashes;
+struct IOperatorLess {
+    static std::shared_ptr<ignis::data::handle::IOperator<storage::IObject::Any>> o;
 
+    bool operator()(const storage::IObject::Any &__x, const storage::IObject::Any &__y) const {
+        return o->less(__x, __y);
+    }
 };
 
-void IKeysModule::sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id) {
-    size_t msg_id = 0;//TODO make as argument
+std::shared_ptr<ignis::data::handle::IOperator<storage::IObject::Any>> IOperatorLess::o;
+
+void IKeysModule::reduceByKey(const rpc::ISource &funct) {
     try {
-        IGNIS_LOG(info) << "IKeysModule starting keys swap";
-
-        auto &object_in = executor_data->getLoadObject();
-        auto it = object_in.readIterator();
-        auto pair_manager = object_in.getManager();
-        auto vector_manager = pair_manager->collectionManager();
-        auto first_op = pair_manager->_operator();
-        size_t count = 0;
-
-        for (auto &id : keys_id) {
-            count += counts[id];
-            counts.erase(id);
-        }
-        IGNIS_LOG(info) << "IKeysModule separating keys by executor";
-
-        auto msg_obj = std::make_shared<IObjectWrapperIterator>(std::make_shared<IReadFilterHashesIterator>(
-                object_in.readIterator(), first_op, keys_id
-        ), count);
-        msg_obj->setManager(object_in.getManager());
-        IMessage msg(addr, msg_obj);
-        executor_data->getPostBox().newOutMessage(msg_id, msg);
-
-        IGNIS_LOG(info) << "IKeysModule keys swap ready";
-    } catch (exceptions::IException &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
-        throw iex;
-    } catch (std::exception &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack("UNKNOWN");
-        throw iex;
-    }
-}
-
-void IKeysModule::joinPairs() {
-    try {
-        IGNIS_LOG(info) << "IKeysModule starting keys join";
-
-        auto &object_in = executor_data->getLoadObject();
-        auto it = object_in.readIterator();
-        auto elem_manager = object_in.getManager();
-        auto pair_manager = (executor::api::IPairManager<IObject::Any, IObject::Any>&)*elem_manager;
-        auto vector_manager = pair_manager.collectionManager();
-        auto first_op = object_in.getManager()->_operator();
-
-        size_t count = 0;
-        std::vector<int64_t> keys_id;
-
-        for (auto &id_count : counts) {
-            count += id_count.second;
-            keys_id.push_back(id_count.first);
-        }
-
-        auto local_keys = std::make_shared<IObjectWrapperIterator>(std::make_shared<IReadFilterHashesIterator>(
-                object_in.readIterator(), first_op, keys_id
-        ), count);
-
-        IGNIS_LOG(info) << "IKeysModule joining keys";
-
-        auto msgs = executor_data->getPostBox().popInBox();
-        //TODO use msgs
-        std::shared_ptr<IObject> object = getIObject();
-        object->setManager(object_in.getManager());
-        auto writer = object->writeIterator();
-
-        iterator::readToWrite<IObject::Any>(*(local_keys->readIterator()), *writer, true);
-
+        IGNIS_LOG(info) << "IKeysModule reduceByKey starting";
+        typedef api::function::IFunction2<IObject::Any, IObject::Any, IObject::Any> IFunction2_Type;
+        auto function = loadFunction<IFunction2_Type>(funct);
+        auto &context = executor_data->getContext();
+        auto object = memoryObject(executor_data->loadObject());
         executor_data->loadObject(object);
+        auto manager = getManager(*object);
+        auto pair_manager = (std::shared_ptr<api::IPairManager<storage::IObject::Any, storage::IObject::Any>> &) manager;
+        auto op = pair_manager->firstManager()->_operator();
+        size_t threads = executor_data->getThreads();
+        size_t size = object->getSize();
+        hashes = std::shared_ptr<int64_t>(new ssize_t[size], std::default_delete<int64_t[]>());
+        size_t n_buckets = sizeof(int64_t) * threads;
+        decltype(object) buckets[n_buckets];
+        decltype(object->writeIterator()) w_buckets[n_buckets];
+        std::mutex locks[n_buckets];
+        if (threads > 1) {
+//Split keys in buckets using hash
+#pragma omp parallel for num_threads(threads)
+            for (int t = 0; t < threads; t++) {
+                auto div = size / threads;
+                auto mod = size % threads;
+                auto size_thread = div + (mod > t ? 1 : 0);
+                auto skip = div * t + (mod > t ? t : mod);
+                auto reader_thread = object->readIterator();
+                reader_thread->skip(skip);
+                for (size_t i = 0; i < size_thread; i++) {
+                    auto &value = reader_thread->next();
+                    auto hash = op->hash(value);
+                    hashes.get()[i + skip] = hash;
+                    auto bucket = hash % n_buckets;
+                    std::lock_guard<std::mutex> lock((std::mutex &)locks[bucket]);
+                    if (!buckets[bucket]) {
+                        buckets[bucket] = getIObject(manager, 2 * size / n_buckets, 0, "memory");
+                        w_buckets[bucket] = buckets[bucket]->writeIterator();
+                    }
+                    w_buckets[bucket]->write((storage::IObject::Any &&) value);
+                }
+            }
+            object->clear();
+        } else {
+            n_buckets = 1;
+            buckets[0] = object;
+        }
 
-        IGNIS_LOG(info) << "IKeysModule keys joined";
+        std::vector<std::shared_ptr<storage::IObject>> keys;
+        IOperatorLess::o = op;
+        typedef std::map<
+                std::reference_wrapper<storage::IObject::Any>,
+                decltype(object->writeIterator()),
+                IOperatorLess
+        > Map;
+//separate different keys inside each bucket
+#pragma omp parallel for schedule(dynamic)
+        for (int i = 0; i < n_buckets; i++) {
+            auto &bucket = buckets[i];
+            if (bucket && bucket->getSize() > 0) {
+                auto size = bucket->getSize();
+                auto reader = bucket->readIterator();
+                Map writers;
+                for (size_t j = 0; j < size; j++) {
+                    auto &value = reader->next();
+                    auto node = writers.lower_bound(value);
+                    decltype(object->writeIterator()) writer;
+                    if (node != writers.end() && !(writers.key_comp()(value, node->first))) {
+                        writer = node->second;
+                    } else {
+                        auto key_obj = getIObject(manager);
+                        writer = key_obj->writeIterator();
+                        writers.insert(node, Map::value_type(value, writer));
+#pragma omp critical
+                        {
+                            keys.push_back(key_obj);
+                        }
+                    }
+                    writer->write((storage::IObject::Any &&) value);
+                }
+            }
+            bucket.reset();
+        }
+
+        auto object_out = getIObject(manager, keys.size());
+        auto writer_out = object_out->writeIterator();
+        typedef typename IPairManager<IFunction2_Type::Any, storage::IObject::Any>::Class F_arg;
+        typedef IPairManager<IFunction2_Type::Any, storage::IObject::Any> M_arg;
+
+//Reduce values with same key
+#pragma omp parallel for schedule(dynamic)
+        for (int i = 0; i < keys.size(); i++) {
+            auto &object_key = keys[i];
+            auto reader = object_key->readIterator();
+            auto size = object_key->getSize();
+            storage::iterator::IElementIterator base(manager);
+            base.write((storage::IObject::Any &&) reader->next());
+            for (size_t j = 0; j < size - 1; j++) {
+                (*function)->writeReduceByKey((F_arg &) reader->next(), (F_arg &) base.next(), context,
+                                              (M_arg &) *manager);
+            }
+#pragma omp critical
+            {
+                writer_out->write((storage::IObject::Any &&) base.next());
+            }
+            object_key.reset();
+        }
+        executor_data->loadObject(object_out);
+        IGNIS_LOG(info) << "IKeysModule reduceByKey ready";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -151,12 +205,12 @@ void IKeysModule::joinPairs() {
         iex.__set_stack("UNKNOWN");
         throw iex;
     }
-}
 
-void IKeysModule::reset() {
-    counts.clear();
+
 }
 
 IKeysModule::~IKeysModule() {
 
 }
+
+

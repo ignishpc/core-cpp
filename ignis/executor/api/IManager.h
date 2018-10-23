@@ -51,6 +51,18 @@ namespace ignis {
                     return type_info;
                 }
 
+                virtual void copy(T& source, T& target){
+                    target = source;
+                }
+
+                virtual void move(T& source, T& target){
+                    target = std::move(source);
+                }
+
+                virtual T* _new(){
+                    return new T();
+                }
+
             private:
                 const std::type_info &type_info;
                 std::shared_ptr<data::handle::IOperator<T>> operator_var;
@@ -64,13 +76,28 @@ namespace ignis {
             template<typename T>
             class ICollectionManager : public IBasicManager<std::vector<T>> {
             public:
-
                 typedef std::vector<T> Class;
-                typedef typename std::conditional<std::is_same<T, bool>::value, T, T &>::type Ref;
+            private:
+                class Ref {
+                public:
+                    template<class Q = T>
+                    inline static typename std::enable_if<std::is_same<Q, bool>::value, bool&>::type
+                    get(Class &v, size_t pos) {
+                            static bool v_true = true;
+                            static bool v_false = false;
+                            if(v[pos]){
+                                return v_true;
+                            }
+                            return v_false;
+                    }
+                    template<class Q = T>
+                    inline static typename std::enable_if<!std::is_same<Q, bool>::value, T&>::type
+                    get(Class &v, size_t pos) {
+                        return v[pos];
+                    }
+                };
 
-                virtual bool isBool(){
-                    return std::is_same<T, bool>::value;
-                }
+            public:
 
                 virtual size_t size(Class &v) {
                     return v.size();
@@ -84,8 +111,8 @@ namespace ignis {
                     v.resize(size);
                 }
 
-                virtual Ref get(Class &v, size_t pos) {
-                    return v[pos];
+                virtual T &get(Class &v, size_t pos) {
+                    return Ref::get(v, pos);
                 }
 
                 virtual void push(Class &v, T &elem) {
@@ -93,7 +120,7 @@ namespace ignis {
                 }
 
                 virtual void push(Class &v, T &&elem) {
-                    v.push_back((T&&)elem);
+                    v.push_back((T &&) elem);
                 }
 
             };

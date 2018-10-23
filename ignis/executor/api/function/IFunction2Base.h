@@ -34,14 +34,12 @@ namespace ignis {
                     }
 
                     virtual void writeReduceByKey(typename IPairManager<Any, T1>::Class &pt1,
-                                                  typename IPairManager<Any, T2>::Class &pt2,//It is a copy
+                                                  typename IPairManager<Any, T2>::Class &pt2,
                                                   IContext &context,
-                                                  IWriteIterator<typename IPairManager<Any, R>::Class> &writer,
                                                   IPairManager <Any, T2> &mp) {
                         T1 &t1 = mp.second((typename IPairManager<Any, T2>::Class &) pt1);
                         T2 &t2 = mp.second(pt2);
-                        t2 = (T1 &) call(t1, t2, context);
-                        writer.write(pt2);
+                        t2 = call(t1, t2, context);
                     }
 
                 };

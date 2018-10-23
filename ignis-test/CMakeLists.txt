@@ -16,7 +16,9 @@ set(SOURCE_FILES
         executor/core/modules/IShuffleModuleTest.h
         executor/core/modules/IShuffleModuleTest.cpp
         executor/core/modules/IPostmanModuleTest.h
-        executor/core/modules/IPostmanModuleTest.cpp)
+        executor/core/modules/IPostmanModuleTest.cpp
+        executor/core/modules/IKeysModuleTest.h
+        executor/core/modules/IKeysModuleTest.cpp)
 
 add_executable(ignistest ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)

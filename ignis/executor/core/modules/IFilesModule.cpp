@@ -49,14 +49,12 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
 
 void IFilesModule::saveFile(const std::string &path, const bool trunc, const bool new_line) {
     try {
-        std::shared_ptr<IObject> object = executor_data->getSharedLoadObject();
+        std::shared_ptr<IObject> object = executor_data->loadObject();
         executor_data->deleteLoadObject();
-        if (!object->getManager()) {
-            throw exceptions::IInvalidArgument("IFileModule c++ required use this data before use it");
-        }
+        auto manager = getManager(*object);
 
         auto reader = object->readIterator();
-        auto printer = object->getManager()->printer();
+        auto printer = manager->printer();
 
         std::ofstream fs;
         if (trunc) {
@@ -99,14 +97,12 @@ void IFilesModule::saveFile(const std::string &path, const bool trunc, const boo
 
 void IFilesModule::saveJson(const std::string &path, const bool array_start, const bool array_end) {
     try {
-        std::shared_ptr<IObject> object = executor_data->getSharedLoadObject();
+        std::shared_ptr<IObject> object = executor_data->loadObject();
         executor_data->deleteLoadObject();
-        if (!object->getManager()) {
-            throw exceptions::IInvalidArgument("IFileModule c++ required use this data before use it");
-        }
+        auto manager = getManager(*object);
 
         auto reader = object->readIterator();
-        auto printer = object->getManager()->printer();
+        auto printer = manager->printer();
 
         std::ofstream fs;
         if (!array_start && !array_end) {

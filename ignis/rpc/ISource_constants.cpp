@@ -4,13 +4,13 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#include "ISourceFunction_constants.h"
+#include "ISource_constants.h"
 
 namespace ignis { namespace rpc {
 
-const ISourceFunctionConstants g_ISourceFunction_constants;
+const ISourceConstants g_ISource_constants;
 
-ISourceFunctionConstants::ISourceFunctionConstants() {
+ISourceConstants::ISourceConstants() {
 }
 
 }} // namespace

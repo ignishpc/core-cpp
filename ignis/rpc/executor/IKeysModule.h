@@ -21,10 +21,10 @@ namespace ignis { namespace rpc { namespace executor {
 class IKeysModuleIf {
  public:
   virtual ~IKeysModuleIf() {}
-  virtual void getKeys(std::unordered_map<int64_t, int64_t>& _return, const bool single) = 0;
-  virtual void sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id) = 0;
-  virtual void joinPairs() = 0;
-  virtual void reset() = 0;
+  virtual void getKeys(std::vector<int64_t> & _return) = 0;
+  virtual void getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return) = 0;
+  virtual void prepareKeys(const std::vector<IExecutorKeys> & executorKeys) = 0;
+  virtual void reduceByKey(const  ::ignis::rpc::ISource& funct) = 0;
 };
 
 class IKeysModuleIfFactory {
@@ -54,44 +54,33 @@ class IKeysModuleIfSingletonFactory : virtual public IKeysModuleIfFactory {
 class IKeysModuleNull : virtual public IKeysModuleIf {
  public:
   virtual ~IKeysModuleNull() {}
-  void getKeys(std::unordered_map<int64_t, int64_t>& /* _return */, const bool /* single */) {
+  void getKeys(std::vector<int64_t> & /* _return */) {
     return;
   }
-  void sendPairs(const std::string& /* addr */, const std::vector<int64_t> & /* keys_id */) {
+  void getKeysWithCount(std::unordered_map<int64_t, int64_t>& /* _return */) {
     return;
   }
-  void joinPairs() {
+  void prepareKeys(const std::vector<IExecutorKeys> & /* executorKeys */) {
     return;
   }
-  void reset() {
+  void reduceByKey(const  ::ignis::rpc::ISource& /* funct */) {
     return;
   }
 };
 
-typedef struct _IKeysModule_getKeys_args__isset {
-  _IKeysModule_getKeys_args__isset() : single(false) {}
-  bool single :1;
-} _IKeysModule_getKeys_args__isset;
 
 class IKeysModule_getKeys_args {
  public:
 
   IKeysModule_getKeys_args(const IKeysModule_getKeys_args&);
   IKeysModule_getKeys_args& operator=(const IKeysModule_getKeys_args&);
-  IKeysModule_getKeys_args() : single(0) {
+  IKeysModule_getKeys_args() {
   }
 
   virtual ~IKeysModule_getKeys_args() throw();
-  bool single;
 
-  _IKeysModule_getKeys_args__isset __isset;
-
-  void __set_single(const bool val);
-
-  bool operator == (const IKeysModule_getKeys_args & rhs) const
+  bool operator == (const IKeysModule_getKeys_args & /* rhs */) const
   {
-    if (!(single == rhs.single))
-      return false;
     return true;
   }
   bool operator != (const IKeysModule_getKeys_args &rhs) const {
@@ -111,7 +100,6 @@ class IKeysModule_getKeys_pargs {
 
 
   virtual ~IKeysModule_getKeys_pargs() throw();
-  const bool* single;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -132,12 +120,12 @@ class IKeysModule_getKeys_result {
   }
 
   virtual ~IKeysModule_getKeys_result() throw();
-  std::unordered_map<int64_t, int64_t> success;
+  std::vector<int64_t>  success;
    ::ignis::rpc::IRemoteException ex;
 
   _IKeysModule_getKeys_result__isset __isset;
 
-  void __set_success(const std::unordered_map<int64_t, int64_t>& val);
+  void __set_success(const std::vector<int64_t> & val);
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
@@ -171,7 +159,7 @@ class IKeysModule_getKeys_presult {
 
 
   virtual ~IKeysModule_getKeys_presult() throw();
-  std::unordered_map<int64_t, int64_t>* success;
+  std::vector<int64_t> * success;
    ::ignis::rpc::IRemoteException ex;
 
   _IKeysModule_getKeys_presult__isset __isset;
@@ -180,43 +168,26 @@ class IKeysModule_getKeys_presult {
 
 };
 
-typedef struct _IKeysModule_sendPairs_args__isset {
-  _IKeysModule_sendPairs_args__isset() : addr(false), keys_id(false) {}
-  bool addr :1;
-  bool keys_id :1;
-} _IKeysModule_sendPairs_args__isset;
 
-class IKeysModule_sendPairs_args {
+class IKeysModule_getKeysWithCount_args {
  public:
 
-  IKeysModule_sendPairs_args(const IKeysModule_sendPairs_args&);
-  IKeysModule_sendPairs_args& operator=(const IKeysModule_sendPairs_args&);
-  IKeysModule_sendPairs_args() : addr() {
+  IKeysModule_getKeysWithCount_args(const IKeysModule_getKeysWithCount_args&);
+  IKeysModule_getKeysWithCount_args& operator=(const IKeysModule_getKeysWithCount_args&);
+  IKeysModule_getKeysWithCount_args() {
   }
 
-  virtual ~IKeysModule_sendPairs_args() throw();
-  std::string addr;
-  std::vector<int64_t>  keys_id;
+  virtual ~IKeysModule_getKeysWithCount_args() throw();
 
-  _IKeysModule_sendPairs_args__isset __isset;
-
-  void __set_addr(const std::string& val);
-
-  void __set_keys_id(const std::vector<int64_t> & val);
-
-  bool operator == (const IKeysModule_sendPairs_args & rhs) const
+  bool operator == (const IKeysModule_getKeysWithCount_args & /* rhs */) const
   {
-    if (!(addr == rhs.addr))
-      return false;
-    if (!(keys_id == rhs.keys_id))
-      return false;
     return true;
   }
-  bool operator != (const IKeysModule_sendPairs_args &rhs) const {
+  bool operator != (const IKeysModule_getKeysWithCount_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IKeysModule_sendPairs_args & ) const;
+  bool operator < (const IKeysModule_getKeysWithCount_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -224,93 +195,214 @@ class IKeysModule_sendPairs_args {
 };
 
 
-class IKeysModule_sendPairs_pargs {
+class IKeysModule_getKeysWithCount_pargs {
  public:
 
 
-  virtual ~IKeysModule_sendPairs_pargs() throw();
-  const std::string* addr;
-  const std::vector<int64_t> * keys_id;
+  virtual ~IKeysModule_getKeysWithCount_pargs() throw();
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IKeysModule_sendPairs_result__isset {
-  _IKeysModule_sendPairs_result__isset() : ex(false) {}
+typedef struct _IKeysModule_getKeysWithCount_result__isset {
+  _IKeysModule_getKeysWithCount_result__isset() : success(false), ex(false) {}
+  bool success :1;
   bool ex :1;
-} _IKeysModule_sendPairs_result__isset;
+} _IKeysModule_getKeysWithCount_result__isset;
 
-class IKeysModule_sendPairs_result {
+class IKeysModule_getKeysWithCount_result {
  public:
 
-  IKeysModule_sendPairs_result(const IKeysModule_sendPairs_result&);
-  IKeysModule_sendPairs_result& operator=(const IKeysModule_sendPairs_result&);
-  IKeysModule_sendPairs_result() {
+  IKeysModule_getKeysWithCount_result(const IKeysModule_getKeysWithCount_result&);
+  IKeysModule_getKeysWithCount_result& operator=(const IKeysModule_getKeysWithCount_result&);
+  IKeysModule_getKeysWithCount_result() {
   }
 
-  virtual ~IKeysModule_sendPairs_result() throw();
+  virtual ~IKeysModule_getKeysWithCount_result() throw();
+  std::unordered_map<int64_t, int64_t> success;
    ::ignis::rpc::IRemoteException ex;
 
-  _IKeysModule_sendPairs_result__isset __isset;
+  _IKeysModule_getKeysWithCount_result__isset __isset;
+
+  void __set_success(const std::unordered_map<int64_t, int64_t>& val);
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
-  bool operator == (const IKeysModule_sendPairs_result & rhs) const
+  bool operator == (const IKeysModule_getKeysWithCount_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IKeysModule_getKeysWithCount_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IKeysModule_getKeysWithCount_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IKeysModule_getKeysWithCount_presult__isset {
+  _IKeysModule_getKeysWithCount_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IKeysModule_getKeysWithCount_presult__isset;
+
+class IKeysModule_getKeysWithCount_presult {
+ public:
+
+
+  virtual ~IKeysModule_getKeysWithCount_presult() throw();
+  std::unordered_map<int64_t, int64_t>* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IKeysModule_getKeysWithCount_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IKeysModule_prepareKeys_args__isset {
+  _IKeysModule_prepareKeys_args__isset() : executorKeys(false) {}
+  bool executorKeys :1;
+} _IKeysModule_prepareKeys_args__isset;
+
+class IKeysModule_prepareKeys_args {
+ public:
+
+  IKeysModule_prepareKeys_args(const IKeysModule_prepareKeys_args&);
+  IKeysModule_prepareKeys_args& operator=(const IKeysModule_prepareKeys_args&);
+  IKeysModule_prepareKeys_args() {
+  }
+
+  virtual ~IKeysModule_prepareKeys_args() throw();
+  std::vector<IExecutorKeys>  executorKeys;
+
+  _IKeysModule_prepareKeys_args__isset __isset;
+
+  void __set_executorKeys(const std::vector<IExecutorKeys> & val);
+
+  bool operator == (const IKeysModule_prepareKeys_args & rhs) const
+  {
+    if (!(executorKeys == rhs.executorKeys))
+      return false;
+    return true;
+  }
+  bool operator != (const IKeysModule_prepareKeys_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IKeysModule_prepareKeys_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IKeysModule_prepareKeys_pargs {
+ public:
+
+
+  virtual ~IKeysModule_prepareKeys_pargs() throw();
+  const std::vector<IExecutorKeys> * executorKeys;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IKeysModule_prepareKeys_result__isset {
+  _IKeysModule_prepareKeys_result__isset() : ex(false) {}
+  bool ex :1;
+} _IKeysModule_prepareKeys_result__isset;
+
+class IKeysModule_prepareKeys_result {
+ public:
+
+  IKeysModule_prepareKeys_result(const IKeysModule_prepareKeys_result&);
+  IKeysModule_prepareKeys_result& operator=(const IKeysModule_prepareKeys_result&);
+  IKeysModule_prepareKeys_result() {
+  }
+
+  virtual ~IKeysModule_prepareKeys_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IKeysModule_prepareKeys_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IKeysModule_prepareKeys_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IKeysModule_sendPairs_result &rhs) const {
+  bool operator != (const IKeysModule_prepareKeys_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IKeysModule_sendPairs_result & ) const;
+  bool operator < (const IKeysModule_prepareKeys_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IKeysModule_sendPairs_presult__isset {
-  _IKeysModule_sendPairs_presult__isset() : ex(false) {}
+typedef struct _IKeysModule_prepareKeys_presult__isset {
+  _IKeysModule_prepareKeys_presult__isset() : ex(false) {}
   bool ex :1;
-} _IKeysModule_sendPairs_presult__isset;
+} _IKeysModule_prepareKeys_presult__isset;
 
-class IKeysModule_sendPairs_presult {
+class IKeysModule_prepareKeys_presult {
  public:
 
 
-  virtual ~IKeysModule_sendPairs_presult() throw();
+  virtual ~IKeysModule_prepareKeys_presult() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IKeysModule_sendPairs_presult__isset __isset;
+  _IKeysModule_prepareKeys_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
+typedef struct _IKeysModule_reduceByKey_args__isset {
+  _IKeysModule_reduceByKey_args__isset() : funct(false) {}
+  bool funct :1;
+} _IKeysModule_reduceByKey_args__isset;
 
-class IKeysModule_joinPairs_args {
+class IKeysModule_reduceByKey_args {
  public:
 
-  IKeysModule_joinPairs_args(const IKeysModule_joinPairs_args&);
-  IKeysModule_joinPairs_args& operator=(const IKeysModule_joinPairs_args&);
-  IKeysModule_joinPairs_args() {
+  IKeysModule_reduceByKey_args(const IKeysModule_reduceByKey_args&);
+  IKeysModule_reduceByKey_args& operator=(const IKeysModule_reduceByKey_args&);
+  IKeysModule_reduceByKey_args() {
   }
 
-  virtual ~IKeysModule_joinPairs_args() throw();
+  virtual ~IKeysModule_reduceByKey_args() throw();
+   ::ignis::rpc::ISource funct;
 
-  bool operator == (const IKeysModule_joinPairs_args & /* rhs */) const
+  _IKeysModule_reduceByKey_args__isset __isset;
+
+  void __set_funct(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IKeysModule_reduceByKey_args & rhs) const
   {
+    if (!(funct == rhs.funct))
+      return false;
     return true;
   }
-  bool operator != (const IKeysModule_joinPairs_args &rhs) const {
+  bool operator != (const IKeysModule_reduceByKey_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IKeysModule_joinPairs_args & ) const;
+  bool operator < (const IKeysModule_reduceByKey_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -318,158 +410,67 @@ class IKeysModule_joinPairs_args {
 };
 
 
-class IKeysModule_joinPairs_pargs {
+class IKeysModule_reduceByKey_pargs {
  public:
 
 
-  virtual ~IKeysModule_joinPairs_pargs() throw();
+  virtual ~IKeysModule_reduceByKey_pargs() throw();
+  const  ::ignis::rpc::ISource* funct;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IKeysModule_joinPairs_result__isset {
-  _IKeysModule_joinPairs_result__isset() : ex(false) {}
+typedef struct _IKeysModule_reduceByKey_result__isset {
+  _IKeysModule_reduceByKey_result__isset() : ex(false) {}
   bool ex :1;
-} _IKeysModule_joinPairs_result__isset;
+} _IKeysModule_reduceByKey_result__isset;
 
-class IKeysModule_joinPairs_result {
+class IKeysModule_reduceByKey_result {
  public:
 
-  IKeysModule_joinPairs_result(const IKeysModule_joinPairs_result&);
-  IKeysModule_joinPairs_result& operator=(const IKeysModule_joinPairs_result&);
-  IKeysModule_joinPairs_result() {
+  IKeysModule_reduceByKey_result(const IKeysModule_reduceByKey_result&);
+  IKeysModule_reduceByKey_result& operator=(const IKeysModule_reduceByKey_result&);
+  IKeysModule_reduceByKey_result() {
   }
 
-  virtual ~IKeysModule_joinPairs_result() throw();
+  virtual ~IKeysModule_reduceByKey_result() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IKeysModule_joinPairs_result__isset __isset;
+  _IKeysModule_reduceByKey_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
-  bool operator == (const IKeysModule_joinPairs_result & rhs) const
+  bool operator == (const IKeysModule_reduceByKey_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IKeysModule_joinPairs_result &rhs) const {
+  bool operator != (const IKeysModule_reduceByKey_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IKeysModule_joinPairs_result & ) const;
+  bool operator < (const IKeysModule_reduceByKey_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IKeysModule_joinPairs_presult__isset {
-  _IKeysModule_joinPairs_presult__isset() : ex(false) {}
+typedef struct _IKeysModule_reduceByKey_presult__isset {
+  _IKeysModule_reduceByKey_presult__isset() : ex(false) {}
   bool ex :1;
-} _IKeysModule_joinPairs_presult__isset;
+} _IKeysModule_reduceByKey_presult__isset;
 
-class IKeysModule_joinPairs_presult {
+class IKeysModule_reduceByKey_presult {
  public:
 
 
-  virtual ~IKeysModule_joinPairs_presult() throw();
+  virtual ~IKeysModule_reduceByKey_presult() throw();
    ::ignis::rpc::IRemoteException ex;
 
-  _IKeysModule_joinPairs_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-
-class IKeysModule_reset_args {
- public:
-
-  IKeysModule_reset_args(const IKeysModule_reset_args&);
-  IKeysModule_reset_args& operator=(const IKeysModule_reset_args&);
-  IKeysModule_reset_args() {
-  }
-
-  virtual ~IKeysModule_reset_args() throw();
-
-  bool operator == (const IKeysModule_reset_args & /* rhs */) const
-  {
-    return true;
-  }
-  bool operator != (const IKeysModule_reset_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IKeysModule_reset_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IKeysModule_reset_pargs {
- public:
-
-
-  virtual ~IKeysModule_reset_pargs() throw();
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IKeysModule_reset_result__isset {
-  _IKeysModule_reset_result__isset() : ex(false) {}
-  bool ex :1;
-} _IKeysModule_reset_result__isset;
-
-class IKeysModule_reset_result {
- public:
-
-  IKeysModule_reset_result(const IKeysModule_reset_result&);
-  IKeysModule_reset_result& operator=(const IKeysModule_reset_result&);
-  IKeysModule_reset_result() {
-  }
-
-  virtual ~IKeysModule_reset_result() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IKeysModule_reset_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
-
-  bool operator == (const IKeysModule_reset_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IKeysModule_reset_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IKeysModule_reset_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IKeysModule_reset_presult__isset {
-  _IKeysModule_reset_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IKeysModule_reset_presult__isset;
-
-class IKeysModule_reset_presult {
- public:
-
-
-  virtual ~IKeysModule_reset_presult() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IKeysModule_reset_presult__isset __isset;
+  _IKeysModule_reduceByKey_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -500,18 +501,18 @@ class IKeysModuleClient : virtual public IKeysModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void getKeys(std::unordered_map<int64_t, int64_t>& _return, const bool single);
-  void send_getKeys(const bool single);
-  void recv_getKeys(std::unordered_map<int64_t, int64_t>& _return);
-  void sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id);
-  void send_sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id);
-  void recv_sendPairs();
-  void joinPairs();
-  void send_joinPairs();
-  void recv_joinPairs();
-  void reset();
-  void send_reset();
-  void recv_reset();
+  void getKeys(std::vector<int64_t> & _return);
+  void send_getKeys();
+  void recv_getKeys(std::vector<int64_t> & _return);
+  void getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return);
+  void send_getKeysWithCount();
+  void recv_getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return);
+  void prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
+  void send_prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
+  void recv_prepareKeys();
+  void reduceByKey(const  ::ignis::rpc::ISource& funct);
+  void send_reduceByKey(const  ::ignis::rpc::ISource& funct);
+  void recv_reduceByKey();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -528,16 +529,16 @@ class IKeysModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_getKeys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_sendPairs(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_joinPairs(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_reset(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getKeysWithCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_prepareKeys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IKeysModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IKeysModuleIf> iface) :
     iface_(iface) {
     processMap_["getKeys"] = &IKeysModuleProcessor::process_getKeys;
-    processMap_["sendPairs"] = &IKeysModuleProcessor::process_sendPairs;
-    processMap_["joinPairs"] = &IKeysModuleProcessor::process_joinPairs;
-    processMap_["reset"] = &IKeysModuleProcessor::process_reset;
+    processMap_["getKeysWithCount"] = &IKeysModuleProcessor::process_getKeysWithCount;
+    processMap_["prepareKeys"] = &IKeysModuleProcessor::process_prepareKeys;
+    processMap_["reduceByKey"] = &IKeysModuleProcessor::process_reduceByKey;
   }
 
   virtual ~IKeysModuleProcessor() {}
@@ -566,41 +567,42 @@ class IKeysModuleMultiface : virtual public IKeysModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void getKeys(std::unordered_map<int64_t, int64_t>& _return, const bool single) {
+  void getKeys(std::vector<int64_t> & _return) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getKeys(_return, single);
+      ifaces_[i]->getKeys(_return);
     }
-    ifaces_[i]->getKeys(_return, single);
+    ifaces_[i]->getKeys(_return);
     return;
   }
 
-  void sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id) {
+  void getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->sendPairs(addr, keys_id);
+      ifaces_[i]->getKeysWithCount(_return);
     }
-    ifaces_[i]->sendPairs(addr, keys_id);
+    ifaces_[i]->getKeysWithCount(_return);
+    return;
   }
 
-  void joinPairs() {
+  void prepareKeys(const std::vector<IExecutorKeys> & executorKeys) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->joinPairs();
+      ifaces_[i]->prepareKeys(executorKeys);
     }
-    ifaces_[i]->joinPairs();
+    ifaces_[i]->prepareKeys(executorKeys);
   }
 
-  void reset() {
+  void reduceByKey(const  ::ignis::rpc::ISource& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->reset();
+      ifaces_[i]->reduceByKey(funct);
     }
-    ifaces_[i]->reset();
+    ifaces_[i]->reduceByKey(funct);
   }
 
 };
@@ -633,18 +635,18 @@ class IKeysModuleConcurrentClient : virtual public IKeysModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void getKeys(std::unordered_map<int64_t, int64_t>& _return, const bool single);
-  int32_t send_getKeys(const bool single);
-  void recv_getKeys(std::unordered_map<int64_t, int64_t>& _return, const int32_t seqid);
-  void sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id);
-  int32_t send_sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id);
-  void recv_sendPairs(const int32_t seqid);
-  void joinPairs();
-  int32_t send_joinPairs();
-  void recv_joinPairs(const int32_t seqid);
-  void reset();
-  int32_t send_reset();
-  void recv_reset(const int32_t seqid);
+  void getKeys(std::vector<int64_t> & _return);
+  int32_t send_getKeys();
+  void recv_getKeys(std::vector<int64_t> & _return, const int32_t seqid);
+  void getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return);
+  int32_t send_getKeysWithCount();
+  void recv_getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return, const int32_t seqid);
+  void prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
+  int32_t send_prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
+  void recv_prepareKeys(const int32_t seqid);
+  void reduceByKey(const  ::ignis::rpc::ISource& funct);
+  int32_t send_reduceByKey(const  ::ignis::rpc::ISource& funct);
+  void recv_reduceByKey(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

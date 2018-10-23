@@ -2782,13 +2782,13 @@ void IDataServiceClient::recv_setName()
   return;
 }
 
-void IDataServiceClient::_map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::_map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   send__map(data, _function);
   recv__map(_return);
 }
 
-void IDataServiceClient::send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::send__map(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("_map", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -2844,13 +2844,13 @@ void IDataServiceClient::recv__map(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "_map failed: unknown result");
 }
 
-void IDataServiceClient::flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   send_flatmap(data, _function);
   recv_flatmap(_return);
 }
 
-void IDataServiceClient::send_flatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::send_flatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -2906,13 +2906,13 @@ void IDataServiceClient::recv_flatmap(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "flatmap failed: unknown result");
 }
 
-void IDataServiceClient::filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   send_filter(data, _function);
   recv_filter(_return);
 }
 
-void IDataServiceClient::send_filter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::send_filter(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("filter", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -2968,13 +2968,13 @@ void IDataServiceClient::recv_filter(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "filter failed: unknown result");
 }
 
-void IDataServiceClient::streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceClient::streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   send_streamingMap(data, _function, ordered);
   recv_streamingMap(_return);
 }
 
-void IDataServiceClient::send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceClient::send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("streamingMap", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -3031,13 +3031,13 @@ void IDataServiceClient::recv_streamingMap(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "streamingMap failed: unknown result");
 }
 
-void IDataServiceClient::streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceClient::streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   send_streamingFlatmap(data, _function, ordered);
   recv_streamingFlatmap(_return);
 }
 
-void IDataServiceClient::send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceClient::send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("streamingFlatmap", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -3094,13 +3094,13 @@ void IDataServiceClient::recv_streamingFlatmap(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "streamingFlatmap failed: unknown result");
 }
 
-void IDataServiceClient::streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceClient::streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   send_streamingFilter(data, _function, ordered);
   recv_streamingFilter(_return);
 }
 
-void IDataServiceClient::send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceClient::send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("streamingFilter", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -3157,13 +3157,13 @@ void IDataServiceClient::recv_streamingFilter(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "streamingFilter failed: unknown result");
 }
 
-void IDataServiceClient::reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   send_reduceByKey(data, _function);
   recv_reduceByKey(_return);
 }
 
-void IDataServiceClient::send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceClient::send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("reduceByKey", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -4268,13 +4268,13 @@ void IDataServiceConcurrentClient::recv_setName(const int32_t seqid)
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::_map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceConcurrentClient::_map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t seqid = send__map(data, _function);
   recv__map(_return, seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+int32_t IDataServiceConcurrentClient::send__map(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -4357,13 +4357,13 @@ void IDataServiceConcurrentClient::recv__map(IDataId& _return, const int32_t seq
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceConcurrentClient::flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t seqid = send_flatmap(data, _function);
   recv_flatmap(_return, seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send_flatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+int32_t IDataServiceConcurrentClient::send_flatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -4446,13 +4446,13 @@ void IDataServiceConcurrentClient::recv_flatmap(IDataId& _return, const int32_t 
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceConcurrentClient::filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t seqid = send_filter(data, _function);
   recv_filter(_return, seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send_filter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+int32_t IDataServiceConcurrentClient::send_filter(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -4535,13 +4535,13 @@ void IDataServiceConcurrentClient::recv_filter(IDataId& _return, const int32_t s
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceConcurrentClient::streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t seqid = send_streamingMap(data, _function, ordered);
   recv_streamingMap(_return, seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+int32_t IDataServiceConcurrentClient::send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -4625,13 +4625,13 @@ void IDataServiceConcurrentClient::recv_streamingMap(IDataId& _return, const int
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceConcurrentClient::streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t seqid = send_streamingFlatmap(data, _function, ordered);
   recv_streamingFlatmap(_return, seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+int32_t IDataServiceConcurrentClient::send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -4715,13 +4715,13 @@ void IDataServiceConcurrentClient::recv_streamingFlatmap(IDataId& _return, const
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+void IDataServiceConcurrentClient::streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t seqid = send_streamingFilter(data, _function, ordered);
   recv_streamingFilter(_return, seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered)
+int32_t IDataServiceConcurrentClient::send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -4805,13 +4805,13 @@ void IDataServiceConcurrentClient::recv_streamingFilter(IDataId& _return, const 
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+void IDataServiceConcurrentClient::reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t seqid = send_reduceByKey(data, _function);
   recv_reduceByKey(_return, seqid);
 }
 
-int32_t IDataServiceConcurrentClient::send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function)
+int32_t IDataServiceConcurrentClient::send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);

@@ -10,10 +10,6 @@ IReadMemoryIterator::IReadMemoryIterator(api::ICollectionManager<IObject::Any>::
         : data(data), collection_manager(collection_manager), pos(0), size(collection_manager->size(*data)) {}
 
 IObject::Any &IReadMemoryIterator::next() {
-    if(collection_manager->isBool()){
-        bool_ref = (bool)collection_manager->get(*data, pos++);
-        return bool_ref;
-    }
     return collection_manager->get(*data, pos++);
 }
 

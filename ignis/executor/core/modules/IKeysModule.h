@@ -14,19 +14,19 @@ namespace ignis {
                 public:
                     IKeysModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    virtual void getKeys(std::unordered_map<int64_t, int64_t> &_return, const bool single) override ;
+                    virtual void getKeys(std::vector<int64_t> & _return) override;
 
-                    virtual void sendPairs(const std::string& addr, const std::vector<int64_t> & keys_id) override ;
+                    virtual void getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return) override;
 
-                    virtual void joinPairs() override ;
+                    virtual void prepareKeys(const std::vector<ignis::rpc::executor::IExecutorKeys> & executorKeys) override;
 
-                    virtual void reset() override;
+                    virtual void reduceByKey(const rpc::ISource &funct) override;
 
                     virtual ~IKeysModule();
 
                 private:
 
-                    std::unordered_map<int64_t, int64_t> counts;
+                    std::shared_ptr<int64_t> hashes;
                 };
             }
         }

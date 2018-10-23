@@ -23,13 +23,13 @@ class IDataServiceIf {
   virtual ~IDataServiceIf() {}
   virtual void keep(const IDataId& data, const int8_t level) = 0;
   virtual void setName(const IDataId& data, const std::string& name) = 0;
-  virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
-  virtual void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
-  virtual void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
-  virtual void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
-  virtual void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
-  virtual void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) = 0;
-  virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) = 0;
+  virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
+  virtual void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
+  virtual void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
+  virtual void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
+  virtual void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
+  virtual void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
+  virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
   virtual void shuffle(IDataId& _return, const IDataId& data) = 0;
   virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
   virtual void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join) = 0;
@@ -68,25 +68,25 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void setName(const IDataId& /* data */, const std::string& /* name */) {
     return;
   }
-  void _map(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
+  void _map(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
     return;
   }
-  void flatmap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
+  void flatmap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
     return;
   }
-  void filter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
+  void filter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
     return;
   }
-  void streamingMap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */, const bool /* ordered */) {
+  void streamingMap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */, const bool /* ordered */) {
     return;
   }
-  void streamingFlatmap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */, const bool /* ordered */) {
+  void streamingFlatmap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */, const bool /* ordered */) {
     return;
   }
-  void streamingFilter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */, const bool /* ordered */) {
+  void streamingFilter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */, const bool /* ordered */) {
     return;
   }
-  void reduceByKey(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISourceFunction& /* _function */) {
+  void reduceByKey(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
     return;
   }
   void shuffle(IDataId& /* _return */, const IDataId& /* data */) {
@@ -338,13 +338,13 @@ class IDataService__map_args {
 
   virtual ~IDataService__map_args() throw();
   IDataId data;
-   ::ignis::rpc::ISourceFunction _function;
+   ::ignis::rpc::ISource _function;
 
   _IDataService__map_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
-  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+  void __set__function(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IDataService__map_args & rhs) const
   {
@@ -372,7 +372,7 @@ class IDataService__map_pargs {
 
   virtual ~IDataService__map_pargs() throw();
   const IDataId* data;
-  const  ::ignis::rpc::ISourceFunction* _function;
+  const  ::ignis::rpc::ISource* _function;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -457,13 +457,13 @@ class IDataService_flatmap_args {
 
   virtual ~IDataService_flatmap_args() throw();
   IDataId data;
-   ::ignis::rpc::ISourceFunction _function;
+   ::ignis::rpc::ISource _function;
 
   _IDataService_flatmap_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
-  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+  void __set__function(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IDataService_flatmap_args & rhs) const
   {
@@ -491,7 +491,7 @@ class IDataService_flatmap_pargs {
 
   virtual ~IDataService_flatmap_pargs() throw();
   const IDataId* data;
-  const  ::ignis::rpc::ISourceFunction* _function;
+  const  ::ignis::rpc::ISource* _function;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -576,13 +576,13 @@ class IDataService_filter_args {
 
   virtual ~IDataService_filter_args() throw();
   IDataId data;
-   ::ignis::rpc::ISourceFunction _function;
+   ::ignis::rpc::ISource _function;
 
   _IDataService_filter_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
-  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+  void __set__function(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IDataService_filter_args & rhs) const
   {
@@ -610,7 +610,7 @@ class IDataService_filter_pargs {
 
   virtual ~IDataService_filter_pargs() throw();
   const IDataId* data;
-  const  ::ignis::rpc::ISourceFunction* _function;
+  const  ::ignis::rpc::ISource* _function;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -696,14 +696,14 @@ class IDataService_streamingMap_args {
 
   virtual ~IDataService_streamingMap_args() throw();
   IDataId data;
-   ::ignis::rpc::ISourceFunction _function;
+   ::ignis::rpc::ISource _function;
   bool ordered;
 
   _IDataService_streamingMap_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
-  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+  void __set__function(const  ::ignis::rpc::ISource& val);
 
   void __set_ordered(const bool val);
 
@@ -735,7 +735,7 @@ class IDataService_streamingMap_pargs {
 
   virtual ~IDataService_streamingMap_pargs() throw();
   const IDataId* data;
-  const  ::ignis::rpc::ISourceFunction* _function;
+  const  ::ignis::rpc::ISource* _function;
   const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -822,14 +822,14 @@ class IDataService_streamingFlatmap_args {
 
   virtual ~IDataService_streamingFlatmap_args() throw();
   IDataId data;
-   ::ignis::rpc::ISourceFunction _function;
+   ::ignis::rpc::ISource _function;
   bool ordered;
 
   _IDataService_streamingFlatmap_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
-  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+  void __set__function(const  ::ignis::rpc::ISource& val);
 
   void __set_ordered(const bool val);
 
@@ -861,7 +861,7 @@ class IDataService_streamingFlatmap_pargs {
 
   virtual ~IDataService_streamingFlatmap_pargs() throw();
   const IDataId* data;
-  const  ::ignis::rpc::ISourceFunction* _function;
+  const  ::ignis::rpc::ISource* _function;
   const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -948,14 +948,14 @@ class IDataService_streamingFilter_args {
 
   virtual ~IDataService_streamingFilter_args() throw();
   IDataId data;
-   ::ignis::rpc::ISourceFunction _function;
+   ::ignis::rpc::ISource _function;
   bool ordered;
 
   _IDataService_streamingFilter_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
-  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+  void __set__function(const  ::ignis::rpc::ISource& val);
 
   void __set_ordered(const bool val);
 
@@ -987,7 +987,7 @@ class IDataService_streamingFilter_pargs {
 
   virtual ~IDataService_streamingFilter_pargs() throw();
   const IDataId* data;
-  const  ::ignis::rpc::ISourceFunction* _function;
+  const  ::ignis::rpc::ISource* _function;
   const bool* ordered;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1073,13 +1073,13 @@ class IDataService_reduceByKey_args {
 
   virtual ~IDataService_reduceByKey_args() throw();
   IDataId data;
-   ::ignis::rpc::ISourceFunction _function;
+   ::ignis::rpc::ISource _function;
 
   _IDataService_reduceByKey_args__isset __isset;
 
   void __set_data(const IDataId& val);
 
-  void __set__function(const  ::ignis::rpc::ISourceFunction& val);
+  void __set__function(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IDataService_reduceByKey_args & rhs) const
   {
@@ -1107,7 +1107,7 @@ class IDataService_reduceByKey_pargs {
 
   virtual ~IDataService_reduceByKey_pargs() throw();
   const IDataId* data;
-  const  ::ignis::rpc::ISourceFunction* _function;
+  const  ::ignis::rpc::ISource* _function;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1555,26 +1555,26 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void setName(const IDataId& data, const std::string& name);
   void send_setName(const IDataId& data, const std::string& name);
   void recv_setName();
-  void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  void send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  void send__map(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv__map(IDataId& _return);
-  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  void send_flatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  void send_flatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_flatmap(IDataId& _return);
-  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  void send_filter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  void send_filter(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_filter(IDataId& _return);
-  void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
-  void send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  void send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingMap(IDataId& _return);
-  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
-  void send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  void send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingFlatmap(IDataId& _return);
-  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
-  void send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  void send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingFilter(IDataId& _return);
-  void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  void send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  void send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_reduceByKey(IDataId& _return);
   void shuffle(IDataId& _return, const IDataId& data);
   void send_shuffle(const IDataId& data);
@@ -1673,7 +1673,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     ifaces_[i]->setName(data, name);
   }
 
-  void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) {
+  void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1683,7 +1683,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) {
+  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1693,7 +1693,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) {
+  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1703,7 +1703,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) {
+  void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1713,7 +1713,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) {
+  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1723,7 +1723,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered) {
+  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1733,7 +1733,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function) {
+  void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -1807,26 +1807,26 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void setName(const IDataId& data, const std::string& name);
   int32_t send_setName(const IDataId& data, const std::string& name);
   void recv_setName(const int32_t seqid);
-  void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  int32_t send__map(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  int32_t send__map(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv__map(IDataId& _return, const int32_t seqid);
-  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  int32_t send_flatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  int32_t send_flatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_flatmap(IDataId& _return, const int32_t seqid);
-  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  int32_t send_filter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  int32_t send_filter(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_filter(IDataId& _return, const int32_t seqid);
-  void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
-  int32_t send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  int32_t send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingMap(IDataId& _return, const int32_t seqid);
-  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
-  int32_t send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  int32_t send_streamingFlatmap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingFlatmap(IDataId& _return, const int32_t seqid);
-  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
-  int32_t send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function, const bool ordered);
+  void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  int32_t send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingFilter(IDataId& _return, const int32_t seqid);
-  void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
-  int32_t send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISourceFunction& _function);
+  void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  int32_t send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_reduceByKey(IDataId& _return, const int32_t seqid);
   void shuffle(IDataId& _return, const IDataId& data);
   int32_t send_shuffle(const IDataId& data);

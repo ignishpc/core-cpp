@@ -103,16 +103,14 @@ set(SOURCE_FILES
         executor/core/storage/IRawMemoryObject.h
         executor/core/storage/IRawMemoryObject.cpp
         executor/core/storage/iterator/ICoreIterator.h
+        executor/core/storage/iterator/IElementIterator.h
+        executor/core/storage/iterator/IElementIterator.cpp
         executor/core/storage/iterator/ITransportIterator.h
         executor/core/storage/iterator/ITransportIterator.cpp
         executor/core/storage/iterator/IMemoryIterator.h
         executor/core/storage/iterator/IMemoryIterator.cpp
         executor/core/storage/IObjectWrapper.h
         executor/core/storage/IObjectWrapper.cpp
-        executor/core/storage/iterator/ICountIterator.h
-        executor/core/storage/iterator/ISkipIterator.h
-        executor/core/storage/iterator/IFilterIterator.h
-        executor/core/storage/iterator/IFilterIterator.cpp
         executor/core/storage/IObjectWrapperIterator.h
         executor/core/storage/IObjectWrapperIterator.cpp
 

@@ -21,8 +21,6 @@ namespace ignis { namespace rpc { namespace executor {
 class IReducerModuleIf {
  public:
   virtual ~IReducerModuleIf() {}
-  virtual void reduceByKey(const  ::ignis::rpc::ISourceFunction& funct) = 0;
-  virtual void groupByKey() = 0;
 };
 
 class IReducerModuleIfFactory {
@@ -52,208 +50,6 @@ class IReducerModuleIfSingletonFactory : virtual public IReducerModuleIfFactory 
 class IReducerModuleNull : virtual public IReducerModuleIf {
  public:
   virtual ~IReducerModuleNull() {}
-  void reduceByKey(const  ::ignis::rpc::ISourceFunction& /* funct */) {
-    return;
-  }
-  void groupByKey() {
-    return;
-  }
-};
-
-typedef struct _IReducerModule_reduceByKey_args__isset {
-  _IReducerModule_reduceByKey_args__isset() : funct(false) {}
-  bool funct :1;
-} _IReducerModule_reduceByKey_args__isset;
-
-class IReducerModule_reduceByKey_args {
- public:
-
-  IReducerModule_reduceByKey_args(const IReducerModule_reduceByKey_args&);
-  IReducerModule_reduceByKey_args& operator=(const IReducerModule_reduceByKey_args&);
-  IReducerModule_reduceByKey_args() {
-  }
-
-  virtual ~IReducerModule_reduceByKey_args() throw();
-   ::ignis::rpc::ISourceFunction funct;
-
-  _IReducerModule_reduceByKey_args__isset __isset;
-
-  void __set_funct(const  ::ignis::rpc::ISourceFunction& val);
-
-  bool operator == (const IReducerModule_reduceByKey_args & rhs) const
-  {
-    if (!(funct == rhs.funct))
-      return false;
-    return true;
-  }
-  bool operator != (const IReducerModule_reduceByKey_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IReducerModule_reduceByKey_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IReducerModule_reduceByKey_pargs {
- public:
-
-
-  virtual ~IReducerModule_reduceByKey_pargs() throw();
-  const  ::ignis::rpc::ISourceFunction* funct;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IReducerModule_reduceByKey_result__isset {
-  _IReducerModule_reduceByKey_result__isset() : ex(false) {}
-  bool ex :1;
-} _IReducerModule_reduceByKey_result__isset;
-
-class IReducerModule_reduceByKey_result {
- public:
-
-  IReducerModule_reduceByKey_result(const IReducerModule_reduceByKey_result&);
-  IReducerModule_reduceByKey_result& operator=(const IReducerModule_reduceByKey_result&);
-  IReducerModule_reduceByKey_result() {
-  }
-
-  virtual ~IReducerModule_reduceByKey_result() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IReducerModule_reduceByKey_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
-
-  bool operator == (const IReducerModule_reduceByKey_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IReducerModule_reduceByKey_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IReducerModule_reduceByKey_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IReducerModule_reduceByKey_presult__isset {
-  _IReducerModule_reduceByKey_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IReducerModule_reduceByKey_presult__isset;
-
-class IReducerModule_reduceByKey_presult {
- public:
-
-
-  virtual ~IReducerModule_reduceByKey_presult() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IReducerModule_reduceByKey_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-
-class IReducerModule_groupByKey_args {
- public:
-
-  IReducerModule_groupByKey_args(const IReducerModule_groupByKey_args&);
-  IReducerModule_groupByKey_args& operator=(const IReducerModule_groupByKey_args&);
-  IReducerModule_groupByKey_args() {
-  }
-
-  virtual ~IReducerModule_groupByKey_args() throw();
-
-  bool operator == (const IReducerModule_groupByKey_args & /* rhs */) const
-  {
-    return true;
-  }
-  bool operator != (const IReducerModule_groupByKey_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IReducerModule_groupByKey_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IReducerModule_groupByKey_pargs {
- public:
-
-
-  virtual ~IReducerModule_groupByKey_pargs() throw();
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IReducerModule_groupByKey_result__isset {
-  _IReducerModule_groupByKey_result__isset() : ex(false) {}
-  bool ex :1;
-} _IReducerModule_groupByKey_result__isset;
-
-class IReducerModule_groupByKey_result {
- public:
-
-  IReducerModule_groupByKey_result(const IReducerModule_groupByKey_result&);
-  IReducerModule_groupByKey_result& operator=(const IReducerModule_groupByKey_result&);
-  IReducerModule_groupByKey_result() {
-  }
-
-  virtual ~IReducerModule_groupByKey_result() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IReducerModule_groupByKey_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
-
-  bool operator == (const IReducerModule_groupByKey_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IReducerModule_groupByKey_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IReducerModule_groupByKey_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IReducerModule_groupByKey_presult__isset {
-  _IReducerModule_groupByKey_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IReducerModule_groupByKey_presult__isset;
-
-class IReducerModule_groupByKey_presult {
- public:
-
-
-  virtual ~IReducerModule_groupByKey_presult() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IReducerModule_groupByKey_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
 };
 
 class IReducerModuleClient : virtual public IReducerModuleIf {
@@ -281,12 +77,6 @@ class IReducerModuleClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void reduceByKey(const  ::ignis::rpc::ISourceFunction& funct);
-  void send_reduceByKey(const  ::ignis::rpc::ISourceFunction& funct);
-  void recv_reduceByKey();
-  void groupByKey();
-  void send_groupByKey();
-  void recv_groupByKey();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -302,13 +92,9 @@ class IReducerModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IReducerModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_groupByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IReducerModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IReducerModuleIf> iface) :
     iface_(iface) {
-    processMap_["reduceByKey"] = &IReducerModuleProcessor::process_reduceByKey;
-    processMap_["groupByKey"] = &IReducerModuleProcessor::process_groupByKey;
   }
 
   virtual ~IReducerModuleProcessor() {}
@@ -337,24 +123,6 @@ class IReducerModuleMultiface : virtual public IReducerModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void reduceByKey(const  ::ignis::rpc::ISourceFunction& funct) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->reduceByKey(funct);
-    }
-    ifaces_[i]->reduceByKey(funct);
-  }
-
-  void groupByKey() {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->groupByKey();
-    }
-    ifaces_[i]->groupByKey();
-  }
-
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -385,12 +153,6 @@ class IReducerModuleConcurrentClient : virtual public IReducerModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void reduceByKey(const  ::ignis::rpc::ISourceFunction& funct);
-  int32_t send_reduceByKey(const  ::ignis::rpc::ISourceFunction& funct);
-  void recv_reduceByKey(const int32_t seqid);
-  void groupByKey();
-  int32_t send_groupByKey();
-  void recv_groupByKey(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

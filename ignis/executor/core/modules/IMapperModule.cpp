@@ -18,9 +18,9 @@ using ignis::rpc::IRemoteException;
 IMapperModule::IMapperModule(std::shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
 template<template<typename...> typename F, bool filter, bool key>
-void IMapperModule::pipe(const rpc::ISourceFunction &sf) {
+void IMapperModule::pipe(const rpc::ISource &sf) {
     try {
-        auto object_in = executor_data->getSharedLoadObject();
+        auto object_in = executor_data->loadObject();
         executor_data->deleteLoadObject();
         auto function = loadFunction<F<IObject::Any, IObject::Any>>(sf);
         auto manager_t = (*function)->type_t();
@@ -39,12 +39,7 @@ void IMapperModule::pipe(const rpc::ISourceFunction &sf) {
 
         (*function)->before(executor_data->getContext());
         if (threads > 1) {
-            IGNIS_LOG(info) << "IMapperModule converting storage to memory";
-            if (object_in->getType() != storage::IMemoryObject::TYPE) {
-                auto object_aux = getIObject(manager_t, object_in->getSize(), 0, storage::IMemoryObject::TYPE);
-                object_in->moveTo(*object_aux);
-                object_in = object_aux;
-            }
+            object_in = memoryObject(object_in);
             IGNIS_LOG(info) << "IMapperModule creating " << threads << " threads";
 #pragma omp parallel for num_threads(threads) ordered
             for (int t = 0; t < threads; t++) {
@@ -121,9 +116,9 @@ void IMapperModule::pipe(const rpc::ISourceFunction &sf) {
 
 
 template<template<typename...> typename F, bool filter, bool key>
-void IMapperModule::streaming(const rpc::ISourceFunction &sf, bool ordered) {
+void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
     try {
-        auto object_in = executor_data->getSharedLoadObject();
+        auto object_in = executor_data->loadObject();
         executor_data->deleteLoadObject();
         auto function = loadFunction<F<IObject::Any, IObject::Any>>(sf);
         auto manager_t = (*function)->type_t();
@@ -142,14 +137,14 @@ void IMapperModule::streaming(const rpc::ISourceFunction &sf, bool ordered) {
         (*function)->before(executor_data->getContext());
         if (threads > 1) {
             IGNIS_LOG(info) << "IMapperModule creating " << threads << " threads";
-            auto buffer = executor_data->getParser().getNumber("ignis.executor.cores.buffer");
+            auto chunk = executor_data->getParser().getNumber("ignis.executor.cores.chunk");
             auto reader = object_in->readIterator();
             std::list<std::pair<std::shared_ptr<bool>, std::shared_ptr<storage::IObject>>> result_queue;
             std::mutex mutex;
 #pragma omp parallel num_threads(threads)
             {
-                auto out_object_thread = getIObject(object_out->getManager(), buffer, 0, storage::IMemoryObject::TYPE);
-                auto in_object_thread = getIObject(object_in->getManager(), buffer, 0, storage::IMemoryObject::TYPE);
+                auto out_object_thread = getIObject(object_out->getManager(), chunk, 0, storage::IMemoryObject::TYPE);
+                auto in_object_thread = getIObject(object_in->getManager(), chunk, 0, storage::IMemoryObject::TYPE);
                 std::shared_ptr<bool> object_check;
                 bool empty = false;
                 while (!empty) {
@@ -157,7 +152,7 @@ void IMapperModule::streaming(const rpc::ISourceFunction &sf, bool ordered) {
                     {
                         empty = !reader->hasNext();
                         if (!empty) {
-                            storage::iterator::readToWrite(*reader, *in_object_thread->writeIterator(), buffer);
+                            storage::iterator::readToWrite(*reader, *in_object_thread->writeIterator(), chunk);
                             if (ordered) {
                                 object_check = std::make_shared<bool>(false);
                                 {
@@ -195,7 +190,7 @@ void IMapperModule::streaming(const rpc::ISourceFunction &sf, bool ordered) {
                             if (ordered) {
                                 *object_check = true;
                                 out_object_thread =
-                                        getIObject(object_out->getManager(), buffer, 0, storage::IMemoryObject::TYPE);
+                                        getIObject(object_out->getManager(), chunk, 0, storage::IMemoryObject::TYPE);
                                 while (!result_queue.empty() && *(result_queue.front().first)) {
                                     auto &object = result_queue.front();
                                     object.second->moveTo(*object_out);
@@ -252,42 +247,42 @@ void IMapperModule::streaming(const rpc::ISourceFunction &sf, bool ordered) {
     }
 }
 
-void IMapperModule::_map(const rpc::ISourceFunction &sf) {
+void IMapperModule::_map(const rpc::ISource &sf) {
     IGNIS_LOG(info) << "IMapperModule starting map";
     pipe < api::function::IFunction > (sf);
 }
 
-void IMapperModule::flatmap(const rpc::ISourceFunction &sf) {
+void IMapperModule::flatmap(const rpc::ISource &sf) {
     IGNIS_LOG(info) << "IMapperModule starting flatmap";
     pipe < api::function::IFlatFunction > (sf);
 }
 
-void IMapperModule::filter(const rpc::ISourceFunction &sf) {
+void IMapperModule::filter(const rpc::ISource &sf) {
     IGNIS_LOG(info) << "IMapperModule starting filter";
     pipe < api::function::IFunction, true > (sf);
 }
 
-void IMapperModule::keyBy(const rpc::ISourceFunction &sf) {
+void IMapperModule::keyBy(const rpc::ISource &sf) {
     IGNIS_LOG(info) << "IMapperModule starting keyBy";
     pipe < api::function::IFunction, false, true > (sf);
 }
 
-void IMapperModule::streamingMap(const rpc::ISourceFunction &sf, bool ordered) {
+void IMapperModule::streamingMap(const rpc::ISource &sf, bool ordered) {
     IGNIS_LOG(info) << "IMapperModule starting streaming map, mode: " << (ordered ? "ordered" : "unordered");
     streaming<api::function::IFunction, false>(sf, ordered);
 }
 
-void IMapperModule::streamingFlatmap(const rpc::ISourceFunction &sf, bool ordered) {
+void IMapperModule::streamingFlatmap(const rpc::ISource &sf, bool ordered) {
     IGNIS_LOG(info) << "IMapperModule starting streaming flatmap, mode: " << (ordered ? "ordered" : "unordered");
     streaming<api::function::IFlatFunction, false>(sf, ordered);
 }
 
-void IMapperModule::streamingFilter(const rpc::ISourceFunction &sf, bool ordered) {
+void IMapperModule::streamingFilter(const rpc::ISource &sf, bool ordered) {
     IGNIS_LOG(info) << "IMapperModule starting streaming filter, mode: " << (ordered ? "ordered" : "unordered");
     streaming<api::function::IFunction, true>(sf, ordered);
 }
 
-void IMapperModule::streamingKeyBy(const rpc::ISourceFunction &sf, bool ordered) {
+void IMapperModule::streamingKeyBy(const rpc::ISource &sf, bool ordered) {
     IGNIS_LOG(info) << "IMapperModule starting streaming keyBy, mode: " << (ordered ? "ordered" : "unordered");
     streaming<api::function::IFunction, false, true>(sf, ordered);
 }

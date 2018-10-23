@@ -14,13 +14,12 @@ IShuffleModule::IShuffleModule(std::shared_ptr<IExecutorData> &executor_data) : 
 void IShuffleModule::createSplits(const std::vector<ignis::rpc::executor::ISplit> &splits) {
     IGNIS_LOG(info) << "IShuffleModule started";
     try {
-        auto object = executor_data->getSharedLoadObject();
-        if (!object->getManager()) {
-            throw exceptions::IInvalidArgument("IFileModule c++ required use this data before use it");
-        }
+        auto object = executor_data->loadObject();
+        auto manager = getManager(*object);
+
         auto reader = object->readIterator();
         for (auto &split : splits) {
-            auto split_object = getIObject(object->getManager(), split.length);
+            auto split_object = getIObject(manager, split.length);
             storage::iterator::readToWrite(*reader, *split_object->writeIterator(), split.length, true);
             executor_data->getPostBox().newOutMessage(split.msg_id, IMessage(split.addr, split_object));
             IGNIS_LOG(info) << "IShuffleModule split addr: " << split.addr << ", length: " << split.length;
@@ -42,7 +41,7 @@ void IShuffleModule::createSplits(const std::vector<ignis::rpc::executor::ISplit
 void IShuffleModule::joinSplits(const std::vector<int64_t> &order) {
     IGNIS_LOG(info) << "IShuffleModule joining splits";
     try {
-        auto object = getIObject(executor_data->getLoadObject().getManager());
+        auto object = getIObject(executor_data->loadObject()->getManager());
         auto msgs = executor_data->getPostBox().popInBox();
         for (auto id:order) {
             msgs[id].getObj()->moveTo(*object);

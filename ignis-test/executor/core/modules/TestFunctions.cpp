@@ -1,5 +1,6 @@
 #include "../../../../ignis/executor/api/function/IFunction.h"
 #include "../../../../ignis/executor/api/function/IFlatFunction.h"
+#include "../../../../ignis/executor/api/function/IFunction2.h"
 #include <iostream>
 
 namespace function = ignis::executor::api::function;
@@ -41,4 +42,15 @@ public:
 };
 
 ignis_register_class(filterFunction, filterFunction);
+
+class reduceByKeyFunction : public function::IFunction2<int, int, int> {
+public:
+
+    int call(int &t1, int &t2, ignis::executor::api::IContext &context) override {
+        return t1 + t2;
+    }
+
+};
+
+ignis_register_class(reduceByKeyFunction, reduceByKeyFunction);
 

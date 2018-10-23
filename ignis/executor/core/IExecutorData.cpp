@@ -6,23 +6,17 @@ using namespace ignis::executor::core;
 IExecutorData::IExecutorData() : properties_parser(core::IPropertiesParser(context.getProperties())) {}
 
 
-void IExecutorData::loadObject(std::shared_ptr<storage::IObject> object) {
+std::shared_ptr<storage::IObject> IExecutorData::loadObject(std::shared_ptr<storage::IObject> object) {
+    auto aux = loaded_object;
     loaded_object = object;
-}
-
-bool IExecutorData::hasLoadObject() {
-    return bool(loaded_object);
+    return aux;
 }
 
 void IExecutorData::deleteLoadObject() {
     loaded_object.reset();
 }
 
-storage::IObject &IExecutorData::getLoadObject() {
-    return *loaded_object;
-}
-
-std::shared_ptr<storage::IObject> IExecutorData::getSharedLoadObject() {
+std::shared_ptr<storage::IObject> IExecutorData::loadObject() {
     return loaded_object;
 }
 

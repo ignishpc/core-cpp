@@ -16,12 +16,12 @@ IStorageModule::~IStorageModule() {
 }
 
 int64_t IStorageModule::count(){
-    return executor_data->getLoadObject().getSize();
+    return executor_data->loadObject()->getSize();
 }
 
 void IStorageModule::cache(const int64_t id, const std::string &storage) {
     try {
-        auto loaded = executor_data->getSharedLoadObject();
+        auto loaded = executor_data->loadObject();
         if (loaded->getType() == storage) {
             IGNIS_LOG(info) << "IStorageModule cache object " << id;
             object_cache[id] = loaded;
@@ -84,7 +84,7 @@ void IStorageModule::restore(const int64_t id) {
 
 void IStorageModule::saveContext(const int64_t id) {
     try {
-        object_context[id] = executor_data->getSharedLoadObject();
+        object_context[id] = executor_data->loadObject();
         IGNIS_LOG(info) << "IStorageModule context save" << id;
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
@@ -104,7 +104,7 @@ void IStorageModule::loadContext(const int64_t id) {
         if (object_context.find(id) == object_context.end()) {
             throw exceptions::IInvalidArgument("IStorageModule object not found");
         }
-        bool already_loaded = object_context[id] == executor_data->getSharedLoadObject();
+        bool already_loaded = object_context[id] == executor_data->loadObject();
 
         if(!already_loaded){
             executor_data->loadObject(object_context[id]);

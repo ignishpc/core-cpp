@@ -27,7 +27,6 @@ namespace ignis {
                         ~IReadMemoryIterator() override;
 
                     private:
-                        IObject::Any bool_ref;
                         api::ICollectionManager<IObject::Any>::Class* data;
                         std::shared_ptr<api::ICollectionManager<IObject::Any>> collection_manager;
                         size_t pos;

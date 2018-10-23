@@ -13,13 +13,14 @@ std::shared_ptr<IObject> IgnisModule::getIObject(size_t bytes) {
 }
 
 std::shared_ptr<IObject>
-IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>>& m, size_t elems, size_t bytes) {
+IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>> &m, size_t elems, size_t bytes) {
     std::string storage = executor_data->getParser().getString("ignis.executor.storage");
     return getIObject(m, elems, bytes, storage);
 }
 
 std::shared_ptr<IObject>
-IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>>& m, size_t elems, size_t bytes,const  std::string& type) {
+IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>> &m, size_t elems, size_t bytes,
+                        const std::string &type) {
     std::shared_ptr<IObject> object;
     if (false) {
         int compression = executor_data->getParser().getNumber("ignis.executor.storage.compression");
@@ -32,6 +33,24 @@ IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>>& m, s
     }
     if (m) {
         object->setManager(m);
+    }
+    return object;
+}
+
+std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> IgnisModule::getManager(IObject &object) {
+    auto manager = object.getManager();
+    if (!manager) {
+        //TODO generate manager with gcc and load it
+        throw exceptions::IInvalidArgument("C++ requires type this data before using it");
+    }
+    return manager;
+}
+
+std::shared_ptr<IObject> IgnisModule::memoryObject(const std::shared_ptr<IObject> &object) {
+    if (object->getType() != storage::IMemoryObject::TYPE) {
+        auto object_aux = getIObject(getManager(*object), object->getSize(), 0, storage::IMemoryObject::TYPE);
+        object->moveTo(*object_aux);
+        return object_aux;
     }
     return object;
 }
