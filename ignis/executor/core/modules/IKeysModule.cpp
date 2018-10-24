@@ -21,7 +21,7 @@ void IKeysModule::getKeys(std::vector<int64_t> &_return) {
         IGNIS_LOG(info) << "IKeysModule starting getKeys";
         auto size = executor_data->loadObject()->getSize();
         _return.resize(size);
-        memcpy(hashes.get(), &_return[0], size * sizeof(int64_t));
+        memcpy(&_return[0], hashes.get(), size * sizeof(int64_t));
         IGNIS_LOG(info) << "IKeysModule keys ready";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
@@ -39,13 +39,44 @@ void IKeysModule::getKeys(std::vector<int64_t> &_return) {
 void IKeysModule::getKeysWithCount(std::unordered_map<int64_t, int64_t> &_return) {
 }
 
+void IKeysModule::collectKeys() {
+    try {
+        IGNIS_LOG(info) << "IKeysModule collecting keys";
+        auto manager = getManager(*executor_data->loadObject());
+        auto msgs = executor_data->getPostBox().popInBox();
+
+        auto size = 0;
+        for (auto &entry: msgs) {
+            auto &obj = entry.second.getObj();
+            obj->setManager(manager);
+            size += obj->getSize();
+        }
+        auto object_out = getIObject(manager, size, 0, "memory");
+
+        for (auto &entry: msgs) {
+            entry.second.getObj()->moveTo(*object_out);
+        }
+        executor_data->loadObject(object_out);
+        IGNIS_LOG(info) << "IKeysModule keys collected";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.toString());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
+}
+
 void IKeysModule::prepareKeys(const std::vector<ignis::rpc::executor::IExecutorKeys> &executorKeys) {
     try {
         IGNIS_LOG(info) << "IKeysModule preparing keys";
-        auto object = memoryObject(executor_data->loadObject());
+        auto object = executor_data->loadObject();
         auto manager = getManager(*object);
         std::unordered_map<int64_t, decltype(object->writeIterator())> hashWriter;
-        size_t threads = executor_data->getThreads();
         size_t size = object->getSize();
 
         for (auto &entry:executorKeys) {
@@ -119,7 +150,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
                     auto hash = op->hash(value);
                     hashes.get()[i + skip] = hash;
                     auto bucket = hash % n_buckets;
-                    std::lock_guard<std::mutex> lock((std::mutex &)locks[bucket]);
+                    std::lock_guard<std::mutex> lock((std::mutex &) locks[bucket]);
                     if (!buckets[bucket]) {
                         buckets[bucket] = getIObject(manager, 2 * size / n_buckets, 0, "memory");
                         w_buckets[bucket] = buckets[bucket]->writeIterator();

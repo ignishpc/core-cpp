@@ -20,6 +20,8 @@ namespace ignis {
 
                     virtual void prepareKeys(const std::vector<ignis::rpc::executor::IExecutorKeys> & executorKeys) override;
 
+                    virtual void collectKeys() override;
+
                     virtual void reduceByKey(const rpc::ISource &funct) override;
 
                     virtual ~IKeysModule();

@@ -51,15 +51,15 @@ namespace ignis {
                     return type_info;
                 }
 
-                virtual void copy(T& source, T& target){
+                virtual void copy(T &source, T &target) {
                     target = source;
                 }
 
-                virtual void move(T& source, T& target){
+                virtual void move(T &source, T &target) {
                     target = std::move(source);
                 }
 
-                virtual T* _new(){
+                virtual T *_new() {
                     return new T();
                 }
 
@@ -81,17 +81,18 @@ namespace ignis {
                 class Ref {
                 public:
                     template<class Q = T>
-                    inline static typename std::enable_if<std::is_same<Q, bool>::value, bool&>::type
+                    inline static typename std::enable_if<std::is_same<Q, bool>::value, bool &>::type
                     get(Class &v, size_t pos) {
-                            static bool v_true = true;
-                            static bool v_false = false;
-                            if(v[pos]){
-                                return v_true;
-                            }
-                            return v_false;
+                        static bool v_true = true;
+                        static bool v_false = false;
+                        if (v[pos]) {
+                            return v_true;
+                        }
+                        return v_false;
                     }
+
                     template<class Q = T>
-                    inline static typename std::enable_if<!std::is_same<Q, bool>::value, T&>::type
+                    inline static typename std::enable_if<!std::is_same<Q, bool>::value, T &>::type
                     get(Class &v, size_t pos) {
                         return v[pos];
                     }
@@ -126,10 +127,9 @@ namespace ignis {
             };
 
             template<typename T>
-            class IManager : public IBasicManager<T> {
+            class IBaseManager : public IBasicManager<T> {
             public:
-
-                IManager() : collection_manager(std::make_shared<ICollectionManager<T>>()) {}
+                IBaseManager() : collection_manager(std::make_shared<ICollectionManager<T>>()) {}
 
                 virtual std::shared_ptr<ICollectionManager<T>> collectionManager() {
                     return collection_manager;
@@ -139,13 +139,16 @@ namespace ignis {
                 std::shared_ptr<ICollectionManager<T>> collection_manager;
             };
 
+            template<typename T>
+            class IManager : public IBaseManager<T>{};
+
             template<typename T1, typename T2>
-            class IPairManager : public IManager<std::pair<T1, T2>> {
+            class IManager<std::pair<T1, T2>> : public IBaseManager<std::pair<T1, T2>> {
             public:
 
                 typedef std::pair<T1, T2> Class;
 
-                IPairManager() :
+                IManager() :
                         first_manager(std::make_shared<IManager<T1>>()),
                         second_manager(std::make_shared<IManager<T2>>()) {}
 
@@ -170,6 +173,10 @@ namespace ignis {
                 std::shared_ptr<IManager<T2>> second_manager;
 
             };
+
+            template<typename T1, typename T2>
+            class IPairManager : public IManager<std::pair<T1, T2>>{};
+
         }
     }
 }

@@ -11,12 +11,12 @@ namespace ignis {
             namespace modules {
                 class IKeysModuleTest : public IModuleTest{
                 CPPUNIT_TEST_SUITE(IKeysModuleTest);
-                        CPPUNIT_TEST(keysTest);
+                        CPPUNIT_TEST(reduceByKeyTest);
                     CPPUNIT_TEST_SUITE_END();
                 public:
                     virtual void setUp();
 
-                    virtual void keysTest();
+                    virtual void reduceByKeyTest();
 
                     virtual void tearDown();
 

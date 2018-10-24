@@ -24,6 +24,7 @@ class IKeysModuleIf {
   virtual void getKeys(std::vector<int64_t> & _return) = 0;
   virtual void getKeysWithCount(std::unordered_map<int64_t, int64_t>& _return) = 0;
   virtual void prepareKeys(const std::vector<IExecutorKeys> & executorKeys) = 0;
+  virtual void collectKeys() = 0;
   virtual void reduceByKey(const  ::ignis::rpc::ISource& funct) = 0;
 };
 
@@ -61,6 +62,9 @@ class IKeysModuleNull : virtual public IKeysModuleIf {
     return;
   }
   void prepareKeys(const std::vector<IExecutorKeys> & /* executorKeys */) {
+    return;
+  }
+  void collectKeys() {
     return;
   }
   void reduceByKey(const  ::ignis::rpc::ISource& /* funct */) {
@@ -372,6 +376,98 @@ class IKeysModule_prepareKeys_presult {
 
 };
 
+
+class IKeysModule_collectKeys_args {
+ public:
+
+  IKeysModule_collectKeys_args(const IKeysModule_collectKeys_args&);
+  IKeysModule_collectKeys_args& operator=(const IKeysModule_collectKeys_args&);
+  IKeysModule_collectKeys_args() {
+  }
+
+  virtual ~IKeysModule_collectKeys_args() throw();
+
+  bool operator == (const IKeysModule_collectKeys_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IKeysModule_collectKeys_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IKeysModule_collectKeys_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IKeysModule_collectKeys_pargs {
+ public:
+
+
+  virtual ~IKeysModule_collectKeys_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IKeysModule_collectKeys_result__isset {
+  _IKeysModule_collectKeys_result__isset() : ex(false) {}
+  bool ex :1;
+} _IKeysModule_collectKeys_result__isset;
+
+class IKeysModule_collectKeys_result {
+ public:
+
+  IKeysModule_collectKeys_result(const IKeysModule_collectKeys_result&);
+  IKeysModule_collectKeys_result& operator=(const IKeysModule_collectKeys_result&);
+  IKeysModule_collectKeys_result() {
+  }
+
+  virtual ~IKeysModule_collectKeys_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IKeysModule_collectKeys_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IKeysModule_collectKeys_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IKeysModule_collectKeys_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IKeysModule_collectKeys_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IKeysModule_collectKeys_presult__isset {
+  _IKeysModule_collectKeys_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IKeysModule_collectKeys_presult__isset;
+
+class IKeysModule_collectKeys_presult {
+ public:
+
+
+  virtual ~IKeysModule_collectKeys_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IKeysModule_collectKeys_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IKeysModule_reduceByKey_args__isset {
   _IKeysModule_reduceByKey_args__isset() : funct(false) {}
   bool funct :1;
@@ -510,6 +606,9 @@ class IKeysModuleClient : virtual public IKeysModuleIf {
   void prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
   void send_prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
   void recv_prepareKeys();
+  void collectKeys();
+  void send_collectKeys();
+  void recv_collectKeys();
   void reduceByKey(const  ::ignis::rpc::ISource& funct);
   void send_reduceByKey(const  ::ignis::rpc::ISource& funct);
   void recv_reduceByKey();
@@ -531,6 +630,7 @@ class IKeysModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_getKeys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getKeysWithCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_prepareKeys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_collectKeys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IKeysModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IKeysModuleIf> iface) :
@@ -538,6 +638,7 @@ class IKeysModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getKeys"] = &IKeysModuleProcessor::process_getKeys;
     processMap_["getKeysWithCount"] = &IKeysModuleProcessor::process_getKeysWithCount;
     processMap_["prepareKeys"] = &IKeysModuleProcessor::process_prepareKeys;
+    processMap_["collectKeys"] = &IKeysModuleProcessor::process_collectKeys;
     processMap_["reduceByKey"] = &IKeysModuleProcessor::process_reduceByKey;
   }
 
@@ -596,6 +697,15 @@ class IKeysModuleMultiface : virtual public IKeysModuleIf {
     ifaces_[i]->prepareKeys(executorKeys);
   }
 
+  void collectKeys() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->collectKeys();
+    }
+    ifaces_[i]->collectKeys();
+  }
+
   void reduceByKey(const  ::ignis::rpc::ISource& funct) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -644,6 +754,9 @@ class IKeysModuleConcurrentClient : virtual public IKeysModuleIf {
   void prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
   int32_t send_prepareKeys(const std::vector<IExecutorKeys> & executorKeys);
   void recv_prepareKeys(const int32_t seqid);
+  void collectKeys();
+  int32_t send_collectKeys();
+  void recv_collectKeys(const int32_t seqid);
   void reduceByKey(const  ::ignis::rpc::ISource& funct);
   int32_t send_reduceByKey(const  ::ignis::rpc::ISource& funct);
   void recv_reduceByKey(const int32_t seqid);

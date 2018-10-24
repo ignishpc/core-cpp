@@ -17,13 +17,13 @@
 #include "executor/core/modules/IPostmanModuleTest.h"
 #include "executor/core/modules/IKeysModuleTest.h"
 
-/*
+
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IMemoryObjectTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IRawMemoryObjectTest);
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IMapperModuleTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IShuffleModuleTest);
-CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IPostmanModuleTest);*/
+CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IPostmanModuleTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IKeysModuleTest);
 
 int main(int argc, char *argv[]) {

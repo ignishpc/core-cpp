@@ -43,21 +43,19 @@ set(SOURCE_FILES
         executor/api/IManager.h
         executor/api/IReadIterator.h
         executor/api/IWriteIterator.h
-        executor/api/IReducer.h
         executor/api/IContext.h
         executor/api/IContext.cpp
         executor/api/IRegister.h
         executor/api/Iterable.h
+        executor/api/IValueBase.h
+        executor/api/IValue.h
+        executor/api/IExecute.h
         executor/api/function/IFunctionBase.h
         executor/api/function/IFunction.h
         executor/api/function/IFunction2Base.h
         executor/api/function/IFunction2.h
         executor/api/function/IFlatFunctionBase.h
         executor/api/function/IFlatFunction.h
-        executor/api/function/IPairFunctionBase.h
-        executor/api/function/IPairFunction.h
-        executor/api/function/IPairFlatFunctionBase.h
-        executor/api/function/IPairFlatFunction.h
 
         #Executor core
         executor/core/ILog.h
@@ -115,7 +113,7 @@ set(SOURCE_FILES
         executor/core/storage/IObjectWrapperIterator.cpp
 
         #RPC
-        ${rpc} )
+        ${rpc})
 
 set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -DBOOST_ALL_DYN_LINK")#-O3
 
@@ -126,4 +124,7 @@ TARGET_LINK_LIBRARIES(igniscore jsoncpp thrift boost_system boost_filesystem dl 
 TARGET_LINK_LIBRARIES(igniscpp igniscore)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
-install(DIRECTORY ../ignis DESTINATION include/ FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")
+install(DIRECTORY ../ignis
+        DESTINATION include/
+        FILES_MATCHING PATTERN "*.h"
+        PATTERN executor/core EXCLUDE)
