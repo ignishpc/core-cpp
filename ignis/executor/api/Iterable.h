@@ -16,7 +16,7 @@ namespace ignis {
                 template<typename C>
                 class IterableIterator : public IReadIterator<T>{
                 public:
-                    IterableIterator(C &c) : collection(c), e(collection.begin()) {}
+                    IterableIterator(const C &c) : collection(c), e(collection.begin()) {}
 
                     IterableIterator(C &&c) : collection(c), e(collection.begin()) {}
 
@@ -44,13 +44,13 @@ namespace ignis {
             public:
 
                 template<typename C>
-                static Iterable<T> fromCollection(C& c){
+                static Iterable<T> fromCollection(const C& c){
                     return Iterable<T>(std::make_shared<IterableIterator<C>>(c));
                 }
 
                 template<typename C>
                 static Iterable<T> fromCollection(C&& c){
-                    return Iterable<T>(std::make_shared<IterableIterator<C>>(c));
+                    return Iterable<T>(std::make_shared<IterableIterator<typename std::remove_reference<C>::type>>(c));
                 }
 
                 std::shared_ptr<IReadIterator<T>> readIterator(){
