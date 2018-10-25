@@ -33,10 +33,10 @@ namespace ignis {
 
                 private:
 
-                    template<template<typename...> typename F, bool filter = false, bool key = false>
+                    template<template<typename...> class F, bool filter = false, bool key = false>
                     void pipe(const rpc::ISource &sf);
 
-                    template<template<typename...> typename F, bool filter = false, bool key = false>
+                    template<template<typename...> class F, bool filter = false, bool key = false>
                     void streaming(const rpc::ISource &sf, bool ordered);
 
                 };

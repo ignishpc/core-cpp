@@ -17,7 +17,7 @@ using ignis::rpc::IRemoteException;
 
 IMapperModule::IMapperModule(std::shared_ptr<IExecutorData> &executor_data) : IgnisModule(executor_data) {}
 
-template<template<typename...> typename F, bool filter, bool key>
+template<template<typename...> class F, bool filter, bool key>
 void IMapperModule::pipe(const rpc::ISource &sf) {
     try {
         auto object_in = executor_data->loadObject();
@@ -115,7 +115,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
 }
 
 
-template<template<typename...> typename F, bool filter, bool key>
+template<template<typename...> class F, bool filter, bool key>
 void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
     try {
         auto object_in = executor_data->loadObject();
