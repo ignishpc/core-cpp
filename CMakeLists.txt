@@ -3,9 +3,8 @@ project(ignis)
 
 ADD_SUBDIRECTORY(ignis)
 
-option(BUILD_TESTING "Enable testing" OFF)
-#if(BUILD_TESTING)
-#    enable_testing()
+option(BUILD_TESTING "Enable testing" ON)
+if(BUILD_TESTING)
     ADD_SUBDIRECTORY(ignis-test)
-#endif()
+endif()
 

@@ -26,6 +26,3 @@ TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)
 add_library(testfunctions SHARED executor/core/modules/TestFunctions.cpp)
 SET_TARGET_PROPERTIES(testfunctions PROPERTIES LINKER_LANGUAGE CXX)
 TARGET_LINK_LIBRARIES(testfunctions igniscore)
-
-
-#add_test(NAME ignistest COMMAND ignistest)
