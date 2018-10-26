@@ -171,7 +171,12 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
 void IPostmanModule::sendAll() {
     try {
         auto msgs = executor_data->getPostBox().popOutBox();
-        size_t threads = executor_data->getParser().getNumber("ignis.executor.transport.threads");
+        size_t threads;
+        if(executor_data->getParser().getString("ignis.executor.transport.threads") == "cores"){
+            threads = executor_data->getParser().getNumber("ignis.executor.cores");
+        }else{
+            threads = executor_data->getParser().getNumber("ignis.executor.transport.threads");
+        }
         int8_t compression = executor_data->getParser().getNumber("ignis.executor.transport.compression");
         int errors = 0;
         if (threads == 1) {
