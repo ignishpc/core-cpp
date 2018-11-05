@@ -50,7 +50,7 @@ std::string IException::getStacktrace() const {
 }
 
 void IException::print(std::ostream &stream) const {
-    stream << class_name << ": " << what() << endl;
+    stream << class_name << ": " << what() << " from ";
     printStackTrace(stream);
     if (hasCause()) {
         stream << "Caused by: ";
