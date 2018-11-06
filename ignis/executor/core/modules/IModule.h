@@ -39,7 +39,9 @@ namespace ignis {
                         if (funct.__isset.bytes) {
                             throw exceptions::IInvalidArgument("C++ not support function handle");
                         }
-                        return std::make_shared<IDinamicObject<T>>(funct.name);
+                        auto result = std::make_shared<IDinamicObject<T>>(funct.name);
+                        IGNIS_LOG(info) << "IModule function loaded";
+                        return result;
                     }
 
                     std::shared_ptr<api::IManager<storage::IObject::Any>> getManager(storage::IObject& object);

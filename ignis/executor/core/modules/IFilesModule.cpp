@@ -18,8 +18,9 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
         std::shared_ptr<IObject> object = getIObject(manager_any, lines, len);
         IGNIS_LOG(info) << "IFileModule reading"
                         << " path: " << path
-                        << " offset: " << offset
-                        << " len: " << len;
+                        << ", offset: " << offset
+                        << ", len: " << len
+                        << ", lines: " << lines;
         std::ifstream fs(path);
         if (!fs.is_open()) {
             throw exceptions::IInvalidArgument("IFileModule cannot open file " + path);
