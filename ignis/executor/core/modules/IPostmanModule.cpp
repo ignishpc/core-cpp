@@ -14,7 +14,8 @@ using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core;
 using ignis::rpc::IRemoteException;
 
-IPostmanModule::IPostmanModule(std::shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data) {}
+IPostmanModule::IPostmanModule(std::shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data),
+                                                                                      started(false){}
 
 void IPostmanModule::threadAccept(std::shared_ptr<transport::TTransport> transport) {
     try {
@@ -69,11 +70,11 @@ void IPostmanModule::threadServer() {
             }
         }
     }
+    started = false;
     for (auto &th:connections) {
         th->join();
     }
     server->close();
-    server.reset();
     IGNIS_THREAD_LOG(info) << "IPostmanModule stopped, " << connections.size() << " connections accepted";
 }
 
@@ -105,6 +106,7 @@ void IPostmanModule::stop() {
         started = false;
         server->interrupt();
         thread_server->join();
+        server.reset();
         thread_server.reset();
     }
 }

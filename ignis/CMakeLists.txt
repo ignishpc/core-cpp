@@ -18,11 +18,13 @@ set(SOURCE_FILES
         data/handle/IEnumTypes.h
         data/handle/IOperators.h
         data/handle/IOperatorsImpl.h
-        data/IZlibTransport.h
-        data/IZlibTransport.cpp
         data/handle/IPrinter.h
         data/handle/IReader.h
         data/handle/IWriter.h
+        data/IMemoryBuffer.h
+        data/IMemoryBuffer.cpp
+        data/IZlibTransport.h
+        data/IZlibTransport.cpp
         data/IFileTransport.h
         data/IFileTransport.cpp
         data/IObjectProtocol.h

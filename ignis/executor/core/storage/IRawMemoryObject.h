@@ -3,7 +3,7 @@
 #define IGNIS_IRAWMEMORYOBJECT_H
 
 #include <memory>
-#include <thrift/transport/TBufferTransports.h>
+#include "../../../data/IMemoryBuffer.h"
 #include "IRawObject.h"
 
 
@@ -36,14 +36,14 @@ namespace ignis {
 
                 private:
 
-                    IRawMemoryObject(const std::shared_ptr<transport::TMemoryBuffer> &buffer, int8_t compression, size_t elems,
+                    IRawMemoryObject(const std::shared_ptr<data::IMemoryBuffer> &buffer, int8_t compression, size_t elems,
                                      int8_t type, bool read_only);
 
-                    IRawMemoryObject(const std::shared_ptr<transport::TMemoryBuffer> &buffer, int8_t compression);
+                    IRawMemoryObject(const std::shared_ptr<data::IMemoryBuffer> &buffer, int8_t compression);
 
-                    inline std::shared_ptr<transport::TMemoryBuffer> readObservation();
+                    inline std::shared_ptr<data::IMemoryBuffer> readObservation();
 
-                    std::shared_ptr<transport::TMemoryBuffer> raw_memory;
+                    std::shared_ptr<data::IMemoryBuffer> raw_memory;
                     bool read_only;
                 };
             }
