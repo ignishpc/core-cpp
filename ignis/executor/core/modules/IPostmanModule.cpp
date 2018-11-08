@@ -15,7 +15,7 @@ using namespace ignis::executor::core;
 using ignis::rpc::IRemoteException;
 
 IPostmanModule::IPostmanModule(std::shared_ptr<core::IExecutorData> &executor_data) : IgnisModule(executor_data),
-                                                                                      started(false){}
+                                                                                      started(false) {}
 
 void IPostmanModule::threadAccept(std::shared_ptr<transport::TTransport> transport) {
     try {
@@ -174,22 +174,37 @@ void IPostmanModule::sendAll() {
     try {
         auto msgs = executor_data->getPostBox().popOutBox();
         size_t threads;
-        if(executor_data->getParser().getString("ignis.executor.transport.threads") == "cores"){
+        if (executor_data->getParser().getString("ignis.executor.transport.threads") == "cores") {
             threads = executor_data->getParser().getNumber("ignis.executor.cores");
-        }else{
+        } else {
             threads = executor_data->getParser().getNumber("ignis.executor.transport.threads");
         }
         int8_t compression = executor_data->getParser().getNumber("ignis.executor.transport.compression");
+        int8_t reconnections = executor_data->getParser().getNumber("ignis.executor.transport.reconnections");
         int errors = 0;
         if (threads == 1) {
             for (auto &entry: msgs) {
-                errors += send(entry.first, entry.second, compression);
+                int error;
+                for (int cn = 0; cn < reconnections + 1; cn++) {
+                    error = send(entry.first, entry.second, compression);
+                    if (error == 0) {
+                        break;
+                    }
+                }
+                errors += error;
             }
         } else {
             std::vector<std::pair<size_t, IMessage>> i_msgs(msgs.begin(), msgs.end());
 #pragma omp parallel for num_threads(threads), reduction(+:errors)
             for (int i = 0; i < msgs.size(); i++) {
-                errors += send(i_msgs[i].first, i_msgs[i].second, compression);
+                int error=0;
+                for (int cn = 0; cn < reconnections + 1; cn++) {
+                    error = send(i_msgs[i].first, i_msgs[i].second, compression);
+                    if (error == 0) {
+                        break;
+                    }
+                }
+                errors += error;
             }
         }
         if (errors > 0) {

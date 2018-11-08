@@ -10,6 +10,7 @@ void IPostmanModuleTest::setUp() {
     executor_data->getContext()["ignis.executor.transport.port"] = "54321";
     executor_data->getContext()["ignis.executor.transport.threads"] = "4";
     executor_data->getContext()["ignis.executor.transport.compression"] = "1";
+    executor_data->getContext()["ignis.executor.transport.reconnections"] = "0";
 }
 
 void IPostmanModuleTest::tearDown() {
