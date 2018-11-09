@@ -183,10 +183,17 @@ namespace ignis {
             template<typename _Tp, typename _Alloc>
             struct IPrinterType<std::vector<_Tp, _Alloc>> {
                 inline void operator()(const std::vector<_Tp, _Alloc> &v, std::ostream &out, size_t level) {
-                    for (const auto &elem:v) {
-                        out << tab(level);
-                        IPrinterType<_Tp>()(elem, out, level + 1);
+                    auto begin = v.begin();
+                    auto end = v.end();
+                    if (begin != end) {
+                        IPrinterType<_Tp>()(*begin, out, level + 1);
+                        begin++;
+                    }
+
+                    while (begin != end) {
                         out << std::endl;
+                        IPrinterType<_Tp>()(*begin, out, level + 1);
+                        begin++;
                     }
                 }
 
@@ -206,10 +213,17 @@ namespace ignis {
             template<typename _Tp, typename _Alloc>
             struct IPrinterType<std::list<_Tp, _Alloc>> {
                 inline void operator()(const std::list<_Tp, _Alloc> &l, std::ostream &out, size_t level) {
-                    for (const auto &elem:l) {
-                        out << tab(level);
-                        IPrinterType<_Tp>()(elem, out, level + 1);
+                    auto begin = l.begin();
+                    auto end = l.end();
+                    if (begin != end) {
+                        IPrinterType<_Tp>()(*begin, out, level + 1);
+                        begin++;
+                    }
+
+                    while (begin != end) {
                         out << std::endl;
+                        IPrinterType<_Tp>()(*begin, out, level + 1);
+                        begin++;
                     }
                 }
 
@@ -229,10 +243,17 @@ namespace ignis {
             template<typename _Tp, typename _Alloc>
             struct IPrinterType<std::forward_list<_Tp, _Alloc>> {
                 inline void operator()(const std::forward_list<_Tp, _Alloc> &fl, std::ostream &out, size_t level) {
-                    for (const auto &elem:fl) {
-                        out << tab(level);
-                        IPrinterType<_Tp>()(elem, out, level + 1);
+                    auto begin = fl.begin();
+                    auto end = fl.end();
+                    if (begin != end) {
+                        IPrinterType<_Tp>()(*begin, out, level + 1);
+                        begin++;
+                    }
+
+                    while (begin != end) {
                         out << std::endl;
+                        IPrinterType<_Tp>()(*begin, out, level + 1);
+                        begin++;
                     }
                 }
 
@@ -250,10 +271,17 @@ namespace ignis {
             template<typename _Key, typename _Compare>
             struct IPrinterType<std::set<_Key, _Compare>> {
                 inline void operator()(const std::set<_Key, _Compare> &s, std::ostream &out, size_t level) {
-                    for (const auto &elem:s) {
-                        out << tab(level);
-                        IPrinterType<_Key>()(elem, out, level + 1);
+                    auto begin = s.begin();
+                    auto end = s.end();
+                    if (begin != end) {
+                        IPrinterType<_Key>()(*begin, out, level + 1);
+                        begin++;
+                    }
+
+                    while (begin != end) {
                         out << std::endl;
+                        IPrinterType<_Key>()(*begin, out, level + 1);
+                        begin++;
                     }
                 }
 
@@ -273,10 +301,17 @@ namespace ignis {
             template<typename _Value, typename _Hash, typename _Pred, typename _Alloc>
             struct IPrinterType<std::unordered_set<_Value, _Hash, _Pred, _Alloc>> {
                 inline void operator()(const std::unordered_set<_Value> &us, std::ostream &out, size_t level) {
-                    for (const auto &elem:us) {
-                        out << tab(level);
-                        IPrinterType<_Value>()(elem, out, level + 1);
+                    auto begin = us.begin();
+                    auto end = us.end();
+                    if (begin != end) {
+                        IPrinterType<_Value>()(*begin, out, level + 1);
+                        begin++;
+                    }
+
+                    while (begin != end) {
                         out << std::endl;
+                        IPrinterType<_Value>()(*begin, out, level + 1);
+                        begin++;
                     }
                 }
 
@@ -297,12 +332,17 @@ namespace ignis {
             struct IPrinterType<std::map<_Key, _Tp, _Compare, _Alloc>> {
                 inline void
                 operator()(const std::map<_Key, _Tp, _Compare, _Alloc> &m, std::ostream &out, size_t level) {
-                    for (const auto &elem:m) {
-                        out << tab(level) << "(";
-                        IPrinterType<_Key>()(elem.first, out, level + 1);
-                        out << ", ";
-                        IPrinterType<_Tp>()(elem.second, out, level + 1);
-                        out << ")" << std::endl;
+                    auto begin = m.begin();
+                    auto end = m.end();
+                    if (begin != end) {
+                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        begin++;
+                    }
+
+                    while (begin != end) {
+                        out << std::endl;
+                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        begin++;
                     }
                 }
 
@@ -327,28 +367,35 @@ namespace ignis {
                 }
             };
 
-            template<typename _Key, typename _Tp, typename _Hash, typename _Pred , typename _Alloc>
+            template<typename _Key, typename _Tp, typename _Hash, typename _Pred, typename _Alloc>
             struct IPrinterType<std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>> {
-                inline void operator()(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &m, std::ostream &out, size_t level) {
-                    for (const auto &elem:m) {
-                        out << tab(level) << "(";
-                        IPrinterType<_Key>()(elem.first, out, level + 1);
-                        out << ", ";
-                        IPrinterType<_Tp>()(elem.second, out, level + 1);
-                        out << ")" << std::endl;
+                inline void operator()(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &um, std::ostream &out,
+                                       size_t level) {
+                    auto begin = um.begin();
+                    auto end = um.end();
+                    if (begin != end) {
+                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        begin++;
+                    }
+
+                    while (begin != end) {
+                        out << std::endl;
+                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        begin++;
                     }
                 }
 
-                inline void printJson(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &m, Json::Value &json) {
+                inline void
+                printJson(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &um, Json::Value &json) {
                     json = Json::Value(Json::objectValue);
                     if (std::is_convertible<_Key, std::string>()) {
-                        for (const auto &elem:m) {
+                        for (const auto &elem:um) {
                             Json::Value child;
                             IPrinterType<_Tp>().printJson(elem.second, child);
                             json[(std::string &) elem.first] = child;
                         }
                     } else {
-                        for (const auto &elem:m) {
+                        for (const auto &elem:um) {
                             Json::Value key;
                             Json::Value value;
                             IPrinterType<_Key>().printJson(elem.first, key);
@@ -368,7 +415,7 @@ namespace ignis {
                     IPrinterType<_T1>()(p.first, out, level + 1);
                     out << ", ";
                     IPrinterType<_T2>()(p.second, out, level + 1);
-                    out << ")" << std::endl;
+                    out << ")";
                 }
 
                 inline void printJson(const std::pair<_T1, _T2> &p, Json::Value &json) {
