@@ -172,7 +172,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
                 IOperatorLess
         > Map;
 //separate different keys inside each bucket
-#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(dynamic) num_threads(threads)
         for (int i = 0; i < n_buckets; i++) {
             auto &bucket = buckets[i];
             if (bucket && bucket->getSize() > 0) {
@@ -206,7 +206,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         typedef IPairManager<IFunction2_Type::Any, storage::IObject::Any> M_arg;
 
 //Reduce values with same key
-#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(dynamic) num_threads(threads)
         for (int i = 0; i < keys.size(); i++) {
             auto &object_key = keys[i];
             auto reader = object_key->readIterator();
