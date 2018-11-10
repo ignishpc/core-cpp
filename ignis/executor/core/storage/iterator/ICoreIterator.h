@@ -18,6 +18,8 @@ namespace ignis {
 
                         virtual T &next() = 0;
 
+                        virtual std::shared_ptr<T> nextShared() = 0;
+
                         virtual bool hasNext() = 0;
 
                         virtual bool isMoved() = 0;

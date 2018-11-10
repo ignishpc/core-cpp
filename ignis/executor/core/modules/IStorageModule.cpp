@@ -1,6 +1,5 @@
 
 #include "IStorageModule.h"
-#include "../storage/IObjectWrapper.h"
 #include "../../../exceptions/IInvalidArgument.h"
 #include "../ILog.h"
 
@@ -20,29 +19,6 @@ int64_t IStorageModule::count(){
 }
 
 void IStorageModule::cache(const int64_t id, const std::string &storage) {
-    try {
-        auto loaded = executor_data->loadObject();
-        if (loaded->getType() == storage) {
-            IGNIS_LOG(info) << "IStorageModule cache object " << id;
-            object_cache[id] = loaded;
-        } else {
-            IGNIS_LOG(info) << "IStorageModule cache object " << id << " from: " << loaded->getType() << ", to: "
-                            << storage;
-            auto obj_cache = getIObject(loaded->getManager());
-            auto wrapper = std::make_shared<storage::IObjectWrapper>(loaded, obj_cache);
-            executor_data->loadObject(wrapper);
-        }
-    } catch (exceptions::IException &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
-        throw iex;
-    } catch (std::exception &ex) {
-        IRemoteException iex;
-        iex.__set_message(ex.what());
-        iex.__set_stack("UNKNOWN");
-        throw iex;
-    }
 }
 
 void IStorageModule::uncache(const int64_t id) {

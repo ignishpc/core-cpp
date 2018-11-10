@@ -99,6 +99,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
             }
         }
         (*function)->after(executor_data->getContext());
+        object_out->fit();
         executor_data->loadObject(object_out);
         IGNIS_LOG(info) << "IMapperModule finished";
     } catch (exceptions::IException &ex) {
@@ -232,6 +233,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
             }
         }
         (*function)->after(executor_data->getContext());
+        object_out->fit();
         executor_data->loadObject(object_out);
         IGNIS_LOG(info) << "IMapperModule finished";
     } catch (exceptions::IException &ex) {

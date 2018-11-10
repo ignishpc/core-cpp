@@ -165,16 +165,19 @@ namespace ignis {
             struct IReaderType<uint64_t> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_PAIR == readTypeAux(protocol) &&
-                           IEnumTypes::I_I64 == readTypeAux(protocol) &&
+                           IEnumTypes::I_BOOL == readTypeAux(protocol) &&
                            IEnumTypes::I_I64 == readTypeAux(protocol);
                 }
 
                 inline uint64_t operator()(IProtocol &protocol) {
+                    bool flag;
                     uint64_t obj;
+                    protocol.readBool(flag);
                     protocol.readI64((int64_t &) obj);
-                    int64_t aux;
-                    protocol.readI64(aux);
-                    return (obj << 32) & aux;
+                    if(flag){
+                        obj |= 1UL << 63;
+                    }
+                    return obj;
                 }
             };
 
@@ -369,7 +372,7 @@ namespace ignis {
                 }
             };
 
-            template<typename _Key, typename _Tp, typename _Hash, typename _Pred , typename _Alloc>
+            template<typename _Key, typename _Tp, typename _Hash, typename _Pred, typename _Alloc>
             struct IReaderType<std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>> {
                 inline bool readType(IProtocol &protocol) {
                     return IEnumTypes::I_MAP == readTypeAux(protocol);

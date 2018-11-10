@@ -137,13 +137,13 @@ namespace ignis {
             struct IWriterType<uint64_t> {
                 inline void writeType(IProtocol &protocol) {
                     writeTypeAux(protocol, IEnumTypes::I_PAIR);
-                    writeTypeAux(protocol, IEnumTypes::I_I64);
+                    writeTypeAux(protocol, IEnumTypes::I_BOOL);
                     writeTypeAux(protocol, IEnumTypes::I_I64);
                 }
 
                 inline void operator()(const uint64_t &obj, IProtocol &protocol) {
-                    protocol.writeI64((int64_t) (obj >> 32));
-                    protocol.writeI64((int64_t) (obj & 0x00000000FFFFFFFF));
+                    protocol.writeBool((obj >> 63) == 1);
+                    protocol.writeI64((int64_t) (obj & 0x7FFFFFFFFFFFFFFF));
                 }
             };
 

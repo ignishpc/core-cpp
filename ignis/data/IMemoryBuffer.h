@@ -147,7 +147,9 @@ namespace ignis {
              * @param[in]  maxSize  the new maximum buffer size allowed to grow to
              * @throws  TTransportException(BAD_ARGS) if maxSize is less than the current buffer size
              */
-            void setMaxBufferSize(uint32_t maxSize);
+            void setMaxBufferSize(size_t maxSize);
+
+            void setBufferSize(size_t new_size);
 
         protected:
             void swap(IMemoryBuffer &that);

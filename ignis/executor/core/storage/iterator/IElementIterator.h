@@ -15,7 +15,12 @@ namespace ignis {
 
                         IElementIterator(const std::shared_ptr<api::IManager<IObject::Any>> &manager);
 
+                        IElementIterator(const std::shared_ptr<api::IManager<IObject::Any>> &manager,
+                                const std::shared_ptr<IObject::Any> &data);
+
                         virtual IObject::Any &next() override;
+
+                        virtual std::shared_ptr<IObject::Any> nextShared() override;
 
                         virtual bool hasNext() override;
 
@@ -30,7 +35,8 @@ namespace ignis {
                         virtual ~IElementIterator() override;
 
                     private:
-                        IObject::DataHandle<IObject::Any> data;
+                        std::shared_ptr<api::IManager<IObject::Any>> manager;
+                        std::shared_ptr<IObject::Any> data;
                     };
 
                 }

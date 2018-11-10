@@ -110,8 +110,9 @@ void IKeysModule::prepareKeys(const std::vector<ignis::rpc::executor::IExecutorK
 struct IOperatorLess {
     static std::shared_ptr<ignis::data::handle::IOperator<storage::IObject::Any>> o;
 
-    bool operator()(const storage::IObject::Any &__x, const storage::IObject::Any &__y) const {
-        return o->less(__x, __y);
+    bool operator()(const std::shared_ptr<storage::IObject::Any> &__x,
+                    const std::shared_ptr<storage::IObject::Any> &__y) const {
+        return o->less(*__x, *__y);
     }
 };
 
@@ -135,44 +136,39 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         decltype(object) buckets[n_buckets];
         decltype(object->writeIterator()) w_buckets[n_buckets];
         std::mutex locks[n_buckets];
-        if (threads > 1) {
 //Split keys in buckets using hash
-#pragma omp parallel for num_threads(threads)
-            for (int t = 0; t < threads; t++) {
-                auto div = size / threads;
-                auto mod = size % threads;
-                auto size_thread = div + (mod > t ? 1 : 0);
-                auto skip = div * t + (mod > t ? t : mod);
-                auto reader_thread = object->readIterator();
-                reader_thread->skip(skip);
-                for (size_t i = 0; i < size_thread; i++) {
-                    auto &value = reader_thread->next();
-                    auto hash = op->hash(value);
-                    hashes.get()[i + skip] = hash;
-                    auto bucket = hash % n_buckets;
-                    std::lock_guard<std::mutex> lock((std::mutex &) locks[bucket]);
-                    if (!buckets[bucket]) {
-                        buckets[bucket] = getIObject(manager, 2 * size / n_buckets, 0, "memory");
-                        w_buckets[bucket] = buckets[bucket]->writeIterator();
-                    }
-                    w_buckets[bucket]->write((storage::IObject::Any &&) value);
+//#pragma omp parallel for num_threads(threads)
+        for (int t = 0; t < threads; t++) {
+            auto div = size / threads;
+            auto mod = size % threads;
+            auto size_thread = div + (mod > t ? 1 : 0);
+            auto skip = div * t + (mod > t ? t : mod);
+            auto reader_thread = object->readIterator();
+            reader_thread->skip(skip);
+            for (size_t i = 0; i < size_thread; i++) {
+                auto &value = reader_thread->next();
+                auto hash = op->hash(value);
+                hashes.get()[i + skip] = hash;
+                auto bucket = hash % n_buckets;
+                std::lock_guard<std::mutex> lock((std::mutex &) locks[bucket]);
+                if (!buckets[bucket]) {
+                    buckets[bucket] = getIObject(manager, 2 * size / n_buckets);
+                    w_buckets[bucket] = buckets[bucket]->writeIterator();
                 }
+                w_buckets[bucket]->write((storage::IObject::Any &&) value);
             }
-            object->clear();
-        } else {
-            n_buckets = 1;
-            buckets[0] = object;
         }
+        object->clear();
 
         std::vector<std::shared_ptr<storage::IObject>> keys;
         IOperatorLess::o = op;
         typedef std::map<
-                std::reference_wrapper<storage::IObject::Any>,
+                std::shared_ptr<storage::IObject::Any>,
                 decltype(object->writeIterator()),
                 IOperatorLess
         > Map;
 //separate different keys inside each bucket
-#pragma omp parallel for schedule(dynamic) num_threads(threads)
+//#pragma omp parallel for schedule(dynamic) num_threads(threads)
         for (int i = 0; i < n_buckets; i++) {
             auto &bucket = buckets[i];
             if (bucket && bucket->getSize() > 0) {
@@ -180,21 +176,20 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
                 auto reader = bucket->readIterator();
                 Map writers;
                 for (size_t j = 0; j < size; j++) {
-                    auto &value = reader->next();
+                    auto value = reader->nextShared();
                     auto node = writers.lower_bound(value);
-                    decltype(object->writeIterator()) writer;
                     if (node != writers.end() && !(writers.key_comp()(value, node->first))) {
-                        writer = node->second;
+                        node->second->write((storage::IObject::Any &&) *value);
                     } else {
                         auto key_obj = getIObject(manager);
-                        writer = key_obj->writeIterator();
+                        auto writer = key_obj->writeIterator();
                         writers.insert(node, Map::value_type(value, writer));
-#pragma omp critical
+//#pragma omp critical
                         {
                             keys.push_back(key_obj);
                         }
+                        writer->write(*value);
                     }
-                    writer->write((storage::IObject::Any &&) value);
                 }
             }
             bucket.reset();
@@ -206,7 +201,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         typedef IPairManager<IFunction2_Type::Any, storage::IObject::Any> M_arg;
 
 //Reduce values with same key
-#pragma omp parallel for schedule(dynamic) num_threads(threads)
+//#pragma omp parallel for schedule(dynamic) num_threads(threads)
         for (int i = 0; i < keys.size(); i++) {
             auto &object_key = keys[i];
             auto reader = object_key->readIterator();
@@ -217,12 +212,13 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
                 (*function)->writeReduceByKey((F_arg &) reader->next(), (F_arg &) base.next(), context,
                                               (M_arg &) *manager);
             }
-#pragma omp critical
+//#pragma omp critical
             {
                 writer_out->write((storage::IObject::Any &&) base.next());
             }
             object_key.reset();
         }
+        object_out->fit();
         executor_data->loadObject(object_out);
         IGNIS_LOG(info) << "IKeysModule reduceByKey ready";
     } catch (exceptions::IException &ex) {

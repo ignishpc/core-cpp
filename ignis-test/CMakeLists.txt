@@ -20,6 +20,8 @@ set(SOURCE_FILES
         executor/core/modules/IKeysModuleTest.h
         executor/core/modules/IKeysModuleTest.cpp)
 
+set(CMAKE_CXX_FLAGS "-g -O0")
+
 add_executable(ignistest ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)
 

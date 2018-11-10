@@ -18,6 +18,8 @@ namespace ignis {
 
                         IObject::Any &next() override;
 
+                        std::shared_ptr<IObject::Any> nextShared();
+
                         bool hasNext() override;
 
                         bool isMoved() override;

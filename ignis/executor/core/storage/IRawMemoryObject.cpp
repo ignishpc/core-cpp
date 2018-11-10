@@ -58,7 +58,8 @@ std::shared_ptr<ignis::data::IMemoryBuffer> IRawMemoryObject::readObservation() 
 }
 
 void IRawMemoryObject::fit() {
-    raw_memory->setMaxBufferSize(raw_memory->getBufferSize());
+    this->transport->flush();
+    raw_memory->setBufferSize(raw_memory->getBufferSize());
 }
 
 void IRawMemoryObject::clear() {

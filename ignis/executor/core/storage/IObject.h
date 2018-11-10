@@ -56,22 +56,12 @@ namespace ignis {
                         return (Any &) obj;
                     }
 
-                    template<typename T = Any>
-                    class DataHandle {
-                    public:
-                        DataHandle(T *ptr, const std::shared_ptr<api::IManager<T>> &manager) : ptr(ptr),
-                                                                                               manager(manager) {}
-
-                        virtual T& get(){return *ptr;}
-
-                        virtual std::shared_ptr<api::IManager<T>>& getManager(){return manager;}
-
-                        virtual ~DataHandle() { (*manager->deleter())(ptr); }
-
-                    private:
-                        T *ptr;
-                        std::shared_ptr<api::IManager<T>> manager;
-                    };
+                    template<typename T>
+                    inline static std::shared_ptr<T> toShared(T* elem, const std::shared_ptr<api::IManager<T>>& manager){
+                        return std::shared_ptr<T>(elem,[&manager](T* elem){
+                            (*manager->deleter())(elem);
+                        });
+                    }
 
                 protected:
                     std::shared_ptr<api::IManager<Any>> manager;

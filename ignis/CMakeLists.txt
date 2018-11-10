@@ -109,10 +109,6 @@ set(SOURCE_FILES
         executor/core/storage/iterator/ITransportIterator.cpp
         executor/core/storage/iterator/IMemoryIterator.h
         executor/core/storage/iterator/IMemoryIterator.cpp
-        executor/core/storage/IObjectWrapper.h
-        executor/core/storage/IObjectWrapper.cpp
-        executor/core/storage/IObjectWrapperIterator.h
-        executor/core/storage/IObjectWrapperIterator.cpp
 
         #RPC
         ${rpc})

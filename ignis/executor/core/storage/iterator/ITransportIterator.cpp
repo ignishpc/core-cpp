@@ -24,9 +24,13 @@ IWriteTransportIterator::IWriteTransportIterator(const std::shared_ptr<transport
 
 IObject::Any &IReadTransportIterator::next() {
     elems--;
-    auto obj = reader->readPtr(*protocol);
-    actual = std::make_shared<IObject::DataHandle<IObject::Any>>(obj, manager);
-    return *obj;
+    data = IObject::toShared(reader->readPtr(*protocol), manager);
+    return *data;
+}
+
+std::shared_ptr<IObject::Any> IReadTransportIterator::nextShared() {
+    next();
+    return data;
 }
 
 bool IReadTransportIterator::hasNext() {

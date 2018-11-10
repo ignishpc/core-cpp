@@ -1,5 +1,6 @@
 
 #include "IMemoryBuffer.h"
+#include <algorithm>
 
 using namespace ignis::data;
 using namespace apache::thrift::transport;
@@ -214,7 +215,7 @@ size_t IMemoryBuffer::getMaxBufferSize() const {
     return maxBufferSize_;
 }
 
-void IMemoryBuffer::setMaxBufferSize(uint32_t maxSize) {
+void IMemoryBuffer::setMaxBufferSize(size_t maxSize) {
     if (maxSize < bufferSize_) {
         throw TTransportException(TTransportException::BAD_ARGS,
                                   "Maximum buffer size would be less than current buffer size");
@@ -250,7 +251,7 @@ void IMemoryBuffer::ensureCanWrite(size_t len) {
     size_t new_size = bufferSize_;
     while (len > avail) {
         if (new_size > maxBufferSize_ / 2) {
-            if(available_write() + maxBufferSize_ - bufferSize_ < len){
+            if (available_write() + maxBufferSize_ - bufferSize_ < len) {
                 throw TTransportException(TTransportException::BAD_ARGS,
                                           "Internal buffer size overflow");
             }
@@ -259,19 +260,7 @@ void IMemoryBuffer::ensureCanWrite(size_t len) {
         new_size = new_size > 0 ? new_size * 2 : 1;
         avail = available_write() + (new_size - bufferSize_);
     }
-
-    // Allocate into a new pointer so we don't bork ours if it fails.
-    uint8_t *new_buffer = static_cast<uint8_t *>(std::realloc(buffer_, new_size));
-    if (new_buffer == NULL) {
-        throw std::bad_alloc();
-    }
-
-    rBase_ = new_buffer + (rBase_ - buffer_);
-    rBound_ = new_buffer + (rBound_ - buffer_);
-    wBase_ = new_buffer + (wBase_ - buffer_);
-    wBound_ = new_buffer + new_size;
-    buffer_ = new_buffer;
-    bufferSize_ = new_size;
+    setBufferSize(new_size);
 }
 
 void IMemoryBuffer::computeRead(size_t len, uint8_t **out_start, size_t *out_give) {
@@ -289,7 +278,7 @@ void IMemoryBuffer::computeRead(size_t len, uint8_t **out_start, size_t *out_giv
 }
 
 uint32_t IMemoryBuffer::readSlow(uint8_t *buf, uint32_t len) {
-    uint8_t* start;
+    uint8_t *start;
     size_t give;
     computeRead(len, &start, &give);
 
@@ -308,11 +297,26 @@ void IMemoryBuffer::writeSlow(const uint8_t *buf, uint32_t len) {
 }
 
 const uint8_t *IMemoryBuffer::borrowSlow(uint8_t *buf, uint32_t *len) {
-    (void)buf;
+    (void) buf;
     rBound_ = wBase_;
     if (available_read() >= *len) {
         *len = available_read();
         return rBase_;
     }
     return NULL;
+}
+
+void IMemoryBuffer::setBufferSize(size_t new_size) {
+    // Allocate into a new pointer so we don't bork ours if it fails.
+    uint8_t *new_buffer = static_cast<uint8_t *>(std::realloc(buffer_, new_size));
+    if (new_buffer == NULL) {
+        throw std::bad_alloc();
+    }
+
+    rBase_ = new_buffer + std::min(static_cast<size_t>(rBase_ - buffer_), new_size);
+    rBound_ = new_buffer + std::min(static_cast<size_t>(rBound_ - buffer_), new_size);
+    wBase_ = new_buffer + std::min(static_cast<size_t>(wBase_ - buffer_), new_size);
+    wBound_ = new_buffer + new_size;
+    buffer_ = new_buffer;
+    bufferSize_ = new_size;
 }

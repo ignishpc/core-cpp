@@ -19,6 +19,8 @@ namespace ignis {
 
                         IObject::Any &next() override;
 
+                        virtual std::shared_ptr<IObject::Any> nextShared();
+
                         bool hasNext() override;
 
                         bool isMoved() override;
@@ -30,7 +32,7 @@ namespace ignis {
                         std::shared_ptr<data::IObjectProtocol> protocol;
                         std::shared_ptr<api::IManager<IObject::Any>> manager;
                         std::shared_ptr<data::handle::IReader<IObject::Any>> reader;
-                        std::shared_ptr<IObject::DataHandle<IObject::Any>> actual;
+                        std::shared_ptr<IObject::Any> data;
                         size_t elems;
                     };
 
