@@ -21,6 +21,8 @@ void IZlibTransport::IZlibTransport::flush() {
 }
 
 void IZlibTransport::restart(){
+    inflateEnd(rstream_);
+    deflateEnd(wstream_);
     delete rstream_;
     delete wstream_;
     initZlib();

@@ -137,7 +137,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         decltype(object->writeIterator()) w_buckets[n_buckets];
         std::mutex locks[n_buckets];
 //Split keys in buckets using hash
-//#pragma omp parallel for num_threads(threads)
+#pragma omp parallel for num_threads(threads)
         for (int t = 0; t < threads; t++) {
             auto div = size / threads;
             auto mod = size % threads;
@@ -168,7 +168,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
                 IOperatorLess
         > Map;
 //separate different keys inside each bucket
-//#pragma omp parallel for schedule(dynamic) num_threads(threads)
+#pragma omp parallel for schedule(dynamic) num_threads(threads)
         for (int i = 0; i < n_buckets; i++) {
             auto &bucket = buckets[i];
             if (bucket && bucket->getSize() > 0) {
@@ -184,7 +184,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
                         auto key_obj = getIObject(manager);
                         auto writer = key_obj->writeIterator();
                         writers.insert(node, Map::value_type(value, writer));
-//#pragma omp critical
+#pragma omp critical
                         {
                             keys.push_back(key_obj);
                         }
@@ -201,7 +201,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         typedef IPairManager<IFunction2_Type::Any, storage::IObject::Any> M_arg;
 
 //Reduce values with same key
-//#pragma omp parallel for schedule(dynamic) num_threads(threads)
+#pragma omp parallel for schedule(dynamic) num_threads(threads)
         for (int i = 0; i < keys.size(); i++) {
             auto &object_key = keys[i];
             auto reader = object_key->readIterator();
@@ -209,10 +209,10 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
             storage::iterator::IElementIterator base(manager);
             base.write((storage::IObject::Any &&) reader->next());
             for (size_t j = 0; j < size - 1; j++) {
-                (*function)->writeReduceByKey((F_arg &) reader->next(), (F_arg &) base.next(), context,
+                function->writeReduceByKey((F_arg &) reader->next(), (F_arg &) base.next(), context,
                                               (M_arg &) *manager);
             }
-//#pragma omp critical
+#pragma omp critical
             {
                 writer_out->write((storage::IObject::Any &&) base.next());
             }

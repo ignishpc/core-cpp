@@ -5,7 +5,7 @@
 #include <memory>
 #include "../storage/IObject.h"
 #include "../IExecutorData.h"
-#include "../IDinamicObject.h"
+#include "../IObjectLoader.h"
 #include "../ILog.h"
 #include "../../api/IManager.h"
 #include "../../../rpc/ISource_types.h"
@@ -34,12 +34,18 @@ namespace ignis {
                             const std::string& type);
 
                     template<typename T>
-                    std::shared_ptr<IDinamicObject<T>> loadFunction(const rpc::ISource &funct) {
+                    std::shared_ptr<T> loadFunction(const rpc::ISource &funct) {
                         IGNIS_LOG(info) << "IModule loading function";
                         if (funct.__isset.bytes) {
                             throw exceptions::IInvalidArgument("C++ not support function handle");
                         }
-                        auto result = std::make_shared<IDinamicObject<T>>(funct.name);
+                        auto cache = executor_data->libraries.find(funct.name);
+                        std::shared_ptr<T> result;
+                        if(cache != executor_data->libraries.end()){
+                            result = std::static_pointer_cast<T>(cache->second);
+                        }else{
+                            result = IObjectLoader::load<T>(funct.name);
+                        }
                         IGNIS_LOG(info) << "IModule function loaded";
                         return result;
                     }

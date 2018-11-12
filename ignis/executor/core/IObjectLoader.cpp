@@ -1,13 +1,10 @@
 
-#include "IDinamicObject.h"
+#include "IObjectLoader.h"
 #include <dlfcn.h>
 #include <boost/filesystem.hpp>
 #include "../../exceptions/IInvalidArgument.h"
-#include "../../data/RTTInfo.h"
 
-using namespace ignis::executor::core;
-
-ObjectLoader::ObjectLoader(const std::string &name) {
+std::shared_ptr<void> ignis::executor::core::IObjectLoader::innerload(const std::string &name){
     int sep = name.find(':');
 
     if (sep < -1) {
@@ -20,30 +17,24 @@ ObjectLoader::ObjectLoader(const std::string &name) {
         throw exceptions::IInvalidArgument(path + " was not found");
     }
 
-    library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
+    void* library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
 
     if (!library) {
         throw exceptions::IInvalidArgument(path + " could not be loaded");
     }
 
     auto constructor = (void *(*)()) dlsym(library, (class_name + "_constructor").c_str());
-    destructor = (void (*)(void *)) dlsym(library, (class_name + "_destructor").c_str());
+    auto destructor = (void (*)(void *)) dlsym(library, (class_name + "_destructor").c_str());
 
     if (!constructor || !destructor) {
         throw exceptions::IInvalidArgument(
                 class_name + " must be register, use: ignis_register_class(name, class) in you library");
     }
 
-    object = (*constructor)();
-}
+    auto object = (*constructor)();
 
-ObjectLoader::~ObjectLoader() {
-    try {
-      //  (*destructor)(object);
-    } catch (...) {}
-    //dlclose(library);
-}
-
-void *ObjectLoader::getObject() {
-    return object;
+    return std::shared_ptr<void>(object, [library,destructor](void* object){
+        (*destructor)(object);
+        dlclose(library);
+    });
 }

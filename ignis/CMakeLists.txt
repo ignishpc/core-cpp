@@ -64,8 +64,8 @@ set(SOURCE_FILES
         executor/core/ILog.cpp
         executor/core/IExecutorData.h
         executor/core/IExecutorData.cpp
-        executor/core/IDinamicObject.h
-        executor/core/IDinamicObject.cpp
+        executor/core/IObjectLoader.h
+        executor/core/IObjectLoader.cpp
         executor/core/IPropertiesParser.h
         executor/core/IPropertiesParser.cpp
 

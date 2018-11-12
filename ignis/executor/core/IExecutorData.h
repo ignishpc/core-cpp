@@ -33,6 +33,8 @@ namespace ignis {
 
                 virtual ~IExecutorData();
 
+                std::unordered_map<std::string, std::shared_ptr<void>> libraries;
+
             private:
                 std::shared_ptr<storage::IObject> loaded_object;
                 IPostBox post_box;

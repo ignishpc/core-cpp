@@ -3,7 +3,7 @@
 #include <list>
 #include <mutex>
 #include "../ILog.h"
-#include "../IDinamicObject.h"
+#include "../IObjectLoader.h"
 #include "../../../exceptions/IInvalidArgument.h"
 #include "../../api/function/IFunction.h"
 #include "../../api/function/IFlatFunction.h"
@@ -23,10 +23,10 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
         auto object_in = executor_data->loadObject();
         executor_data->deleteLoadObject();
         auto function = loadFunction<F<IObject::Any, IObject::Any>>(sf);
-        auto manager_t = (*function)->type_t();
-        auto manager_r = (*function)->type_r();
+        auto manager_t = function->type_t();
+        auto manager_r = function->type_r();
         if (key) {
-            auto manager_rt = ((api::function::IFunction<IObject::Any, IObject::Any> *) function->get())->pair_rt();
+            auto manager_rt = ((api::function::IFunction<IObject::Any, IObject::Any> *) function.get())->pair_rt();
             manager_r = (decltype(manager_r) &) manager_rt;
         } else if (filter) {
             manager_r = manager_t;
@@ -37,7 +37,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
         auto &context = executor_data->getContext();
         auto size = object_in->getSize();
 
-        (*function)->before(executor_data->getContext());
+        function->before(executor_data->getContext());
         if (threads > 1) {
             object_in = memoryObject(object_in);
             IGNIS_LOG(info) << "IMapperModule creating " << threads << " threads";
@@ -52,7 +52,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
                 auto writer_thread = object_thread->writeIterator();
                 reader_thread->skip(skip);
                 if (filter) {
-                    auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) **function;
+                    auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) *function;
                     for (size_t i = 0; i < size_thread; i++) {
                         auto &value = reader_thread->next();
                         if (function_filter.call(value, context)) {
@@ -60,7 +60,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
                         }
                     }
                 } else if (key) {
-                    auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) **function;
+                    auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) *function;
                     auto &pair_writer = (storage::iterator::ICoreWriteIterator<typename api::IPairManager<IObject::Any,
                             IObject::Any>::Class> &) *writer_thread;
                     for (size_t i = 0; i < size_thread; i++) {
@@ -68,7 +68,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
                     }
                 } else {
                     for (size_t i = 0; i < size_thread; i++) {
-                        (*function)->write(reader_thread->next(), context, *writer_thread);
+                        function->write(reader_thread->next(), context, *writer_thread);
                     }
                 }
 #pragma omp ordered
@@ -78,7 +78,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
             auto reader = object_in->readIterator();
             auto writer = object_out->writeIterator();
             if (filter) {
-                auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) **function;
+                auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) *function;
                 for (size_t i = 0; i < size; i++) {
                     auto &value = reader->next();
                     if (function_filter.call(value, context)) {
@@ -86,7 +86,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
                     }
                 }
             } else if (key) {
-                auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) **function;
+                auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) *function;
                 auto &pair_writer = (storage::iterator::ICoreWriteIterator<typename api::IPairManager<IObject::Any,
                         IObject::Any>::Class> &) *writer;
                 for (size_t i = 0; i < size; i++) {
@@ -94,11 +94,11 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
                 }
             } else {
                 for (size_t i = 0; i < size; i++) {
-                    (*function)->write(reader->next(), context, *writer);
+                    function->write(reader->next(), context, *writer);
                 }
             }
         }
-        (*function)->after(executor_data->getContext());
+        function->after(executor_data->getContext());
         object_out->fit();
         executor_data->loadObject(object_out);
         IGNIS_LOG(info) << "IMapperModule finished";
@@ -122,10 +122,10 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
         auto object_in = executor_data->loadObject();
         executor_data->deleteLoadObject();
         auto function = loadFunction<F<IObject::Any, IObject::Any>>(sf);
-        auto manager_t = (*function)->type_t();
-        auto manager_r = (*function)->type_r();
+        auto manager_t = function->type_t();
+        auto manager_r = function->type_r();
         if (key) {
-            auto manager_rt = ((api::function::IFunction<IObject::Any, IObject::Any> *) function->get())->pair_rt();
+            auto manager_rt = ((api::function::IFunction<IObject::Any, IObject::Any> *) function.get())->pair_rt();
             manager_r = (decltype(manager_r) &) manager_rt;
         } else if (filter) {
             manager_r = manager_t;
@@ -135,7 +135,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
         size_t threads = executor_data->getThreads();
         auto &context = executor_data->getContext();
 
-        (*function)->before(executor_data->getContext());
+        function->before(executor_data->getContext());
         if (threads > 1) {
             IGNIS_LOG(info) << "IMapperModule creating " << threads << " threads";
             auto chunk = executor_data->getParser().getNumber("ignis.executor.cores.chunk");
@@ -167,7 +167,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
                         auto writer_thread = out_object_thread->writeIterator();
                         auto reader_thread = in_object_thread->readIterator();
                         if (filter) {
-                            auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) **function;
+                            auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) *function;
                             while (reader_thread->hasNext()) {
                                 auto &elem = reader_thread->next();
                                 if (function_filter.call(elem, context)) {
@@ -175,7 +175,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
                                 }
                             }
                         } else if (key) {
-                            auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) **function;
+                            auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) *function;
                             auto &pair_writer = (storage::iterator::ICoreWriteIterator<typename api::IPairManager<IObject::Any,
                                     IObject::Any>::Class> &) *writer_thread;
                             while (reader_thread->hasNext()) {
@@ -183,7 +183,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
                             }
                         } else {
                             while (reader_thread->hasNext()) {
-                                (*function)->write(reader_thread->next(), context, *writer_thread);
+                                function->write(reader_thread->next(), context, *writer_thread);
                             }
                         }
 #pragma omp critical
@@ -212,7 +212,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
             auto reader = object_in->readIterator();
             auto writer = object_out->writeIterator();
             if (filter) {
-                auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) **function;
+                auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) *function;
                 while (reader->hasNext()) {
                     auto &value = reader->next();
                     if (function_filter.call(value, context)) {
@@ -220,7 +220,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
                     }
                 }
             } else if (key) {
-                auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) **function;
+                auto &function_key = (api::function::IFunction<IObject::Any, IObject::Any> &) *function;
                 auto &pair_writer = (storage::iterator::ICoreWriteIterator<typename api::IPairManager<IObject::Any,
                         IObject::Any>::Class> &) *writer;
                 while (reader->hasNext()) {
@@ -228,11 +228,11 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
                 }
             } else {
                 while (reader->hasNext()) {
-                    (*function)->write(reader->next(), context, *writer);
+                    function->write(reader->next(), context, *writer);
                 }
             }
         }
-        (*function)->after(executor_data->getContext());
+        function->after(executor_data->getContext());
         object_out->fit();
         executor_data->loadObject(object_out);
         IGNIS_LOG(info) << "IMapperModule finished";
