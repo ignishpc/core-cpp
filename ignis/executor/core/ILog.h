@@ -27,7 +27,7 @@ namespace ignis {
                     fatal
                 };
 
-                class Streamlog : public std::ostringstream{
+                class Streamlog : public std::ostringstream {
                     friend ILog;
                     const std::string &file;
                     const int &line;
@@ -35,11 +35,12 @@ namespace ignis {
                     const level l;
                     bool flush;
 
-                    Streamlog(const Streamlog&& other);
+                    Streamlog(const Streamlog &&other);
 
                     Streamlog(level l, bool thread, const std::string &file, const int &line);
 
                     void write();
+
                 public:
                     virtual ~Streamlog();
                 };
@@ -54,6 +55,9 @@ namespace ignis {
 
             private:
                 ILog() {}
+
+                static void safeDumpRegister();
+
             };
         }
     }

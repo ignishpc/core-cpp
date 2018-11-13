@@ -7,7 +7,10 @@
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/attributes/mutable_constant.hpp>
+#include <boost/filesystem.hpp>
 #include <mutex>
+#include <signal.h>
+#include "../../exceptions/IException.h"
 
 
 using namespace ignis::executor::core;
@@ -27,6 +30,7 @@ int parse[] = {
 std::mutex log_mutex;
 
 void ILog::initLog() {
+    safeDumpRegister();
     logging::core::get()->add_global_attribute("File", attrs::mutable_constant<std::string>(""));
     logging::core::get()->add_global_attribute("Line", attrs::mutable_constant<int>(0));
 
@@ -92,4 +96,25 @@ ILog::Streamlog ILog::log(level l, const std::string &file, const int &line) {
 
 bool ILog::logEnable(bool enable) {
     logging::core::get()->set_logging_enabled(enable);
+}
+
+#define DUMP_FILE "/tmp/ignis-cpp-core.dump"
+void signalHandler(int signum) {
+    ::signal(signum, SIG_DFL);
+    boost::stacktrace::safe_dump_to(DUMP_FILE);
+    ::raise(SIGABRT);
+}
+
+void ILog::safeDumpRegister() {
+    if (boost::filesystem::exists(DUMP_FILE)) {
+        std::ifstream ifs(DUMP_FILE);
+
+        boost::stacktrace::stacktrace st = boost::stacktrace::stacktrace::from_dump(ifs);
+        std::cerr << "Previous execution crashed log found:" << std::endl << st << std::endl;
+
+        ifs.close();
+        boost::filesystem::remove(DUMP_FILE);
+    }
+    ::signal(SIGSEGV, &signalHandler);
+    ::signal(SIGABRT, &signalHandler);
 }
