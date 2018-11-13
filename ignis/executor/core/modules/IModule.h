@@ -31,7 +31,7 @@ namespace ignis {
                             const std::shared_ptr<api::IManager<storage::IObject::Any>> &m,
                             size_t elems,
                             size_t bytes,
-                            const std::string& type);
+                            const std::string &type);
 
                     template<typename T>
                     std::shared_ptr<T> loadFunction(const rpc::ISource &funct) {
@@ -41,18 +41,19 @@ namespace ignis {
                         }
                         auto cache = executor_data->libraries.find(funct.name);
                         std::shared_ptr<T> result;
-                        if(cache != executor_data->libraries.end()){
+                        if (cache != executor_data->libraries.end()) {
                             result = std::static_pointer_cast<T>(cache->second);
-                        }else{
+                        } else {
                             result = IObjectLoader::load<T>(funct.name);
+                            executor_data->libraries[funct.name] = result;
                         }
                         IGNIS_LOG(info) << "IModule function loaded";
                         return result;
                     }
 
-                    std::shared_ptr<api::IManager<storage::IObject::Any>> getManager(storage::IObject& object);
+                    std::shared_ptr<api::IManager<storage::IObject::Any>> getManager(storage::IObject &object);
 
-                    std::shared_ptr<storage::IObject> memoryObject(const std::shared_ptr<storage::IObject>& object);
+                    std::shared_ptr<storage::IObject> memoryObject(const std::shared_ptr<storage::IObject> &object);
 
                     virtual ~IgnisModule();
 
