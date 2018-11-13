@@ -3,9 +3,8 @@
 #include <dlfcn.h>
 #include <boost/filesystem.hpp>
 #include "../../exceptions/IInvalidArgument.h"
-#include <iostream>
 
-std::shared_ptr<void> ignis::executor::core::IObjectLoader::innerload(const std::string &name) {
+std::shared_ptr<void> ignis::executor::core::IObjectLoader::innerload(const std::string &name){
     int sep = name.find(':');
 
     if (sep < -1) {
@@ -14,11 +13,11 @@ std::shared_ptr<void> ignis::executor::core::IObjectLoader::innerload(const std:
     std::string path = name.substr(0, sep);
     std::string class_name = name.substr(sep + 1, name.size());
 
-    if (!boost::filesystem::exists(path)) {
+    if(!boost::filesystem::exists(path)){
         throw exceptions::IInvalidArgument(path + " was not found");
     }
 
-    void *library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
+    void* library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
 
     if (!library) {
         throw exceptions::IInvalidArgument(path + " could not be loaded");
@@ -34,8 +33,7 @@ std::shared_ptr<void> ignis::executor::core::IObjectLoader::innerload(const std:
 
     auto object = (*constructor)();
 
-    return std::shared_ptr<void>(object, [library, destructor](void *object) {
-        std::cerr << "clossing" << std::endl;
+    return std::shared_ptr<void>(object, [library,destructor](void* object){
         (*destructor)(object);
         dlclose(library);
     });
