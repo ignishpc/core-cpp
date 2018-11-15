@@ -23,49 +23,49 @@ namespace ignis {
             static const uint32_t defaultSize = 1024;
 
             /*
-             * This enum specifies how a TMemoryBuffer should treat
+             * This enum specifies how a IMemoryBuffer should treat
              * memory passed to it via constructors or resetBuffer.
              *
              * OBSERVE:
-             *   TMemoryBuffer will simply store a pointer to the memory.
+             *   IMemoryBuffer will simply store a pointer to the memory.
              *   It is the callers responsibility to ensure that the pointer
-             *   remains valid for the lifetime of the TMemoryBuffer,
+             *   remains valid for the lifetime of the IMemoryBuffer,
              *   and that it is properly cleaned up.
              *   Note that no data can be written to observed buffers.
              *
              * COPY:
-             *   TMemoryBuffer will make an internal copy of the buffer.
+             *   IMemoryBuffer will make an internal copy of the buffer.
              *   The caller has no responsibilities.
              *
              * TAKE_OWNERSHIP:
-             *   TMemoryBuffer will become the "owner" of the buffer,
+             *   IMemoryBuffer will become the "owner" of the buffer,
              *   and will be responsible for freeing it.
-             *   The membory must have been allocated with malloc.
+             *   The memory must have been allocated with malloc.
              */
             enum MemoryPolicy {
                 OBSERVE = 1, COPY = 2, TAKE_OWNERSHIP = 3
             };
 
             /*
-             * Construct a TMemoryBuffer with a default-sized buffer,
-             * owned by the TMemoryBuffer object.
+             * Construct a IMemoryBuffer with a default-sized buffer,
+             * owned by the IMemoryBuffer object.
              */
             IMemoryBuffer();
 
             /*
-             * Construct a TMemoryBuffer with a buffer of a specified size,
-             * owned by the TMemoryBuffer object.
+             * Construct a IMemoryBuffer with a buffer of a specified size,
+             * owned by the IMemoryBuffer object.
              *
              * @param sz  The initial size of the buffer.
              */
             IMemoryBuffer(size_t sz);
 
             /*
-             * Construct a TMemoryBuffer with buf as its initial contents.
+             * Construct a IMemoryBuffer with buf as its initial contents.
              *
              * @param buf    The initial contents of the buffer.
              *               Note that, while buf is a non-const pointer,
-             *               TMemoryBuffer will not write to it if policy == OBSERVE,
+             *               IMemoryBuffer will not write to it if policy == OBSERVE,
              *               so it is safe to const_cast<uint8_t*>(whatever).
              * @param sz     The size of @c buf.
              * @param policy See @link MemoryPolicy @endlink .
@@ -112,7 +112,7 @@ namespace ignis {
 
             /*
              * Returns a pointer to where the client can write data to append to
-             * the TMemoryBuffer, and ensures the buffer is big enough to accommodate a
+             * the IMemoryBuffer, and ensures the buffer is big enough to accommodate a
              * write of the provided length.  The returned pointer is very convenient for
              * passing to read(), recv(), or similar. You must call wroteBytes() as soon
              * as data is written or the buffer will not be aware that data has changed.
