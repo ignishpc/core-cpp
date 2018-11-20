@@ -13,7 +13,7 @@ namespace ignis {
                 CPPUNIT_TEST_SUITE(IPostmanModuleTest);
                         CPPUNIT_TEST(localTest);
                         CPPUNIT_TEST(socketTest);
-                        CPPUNIT_TEST(sharedMemoryTest);
+                        CPPUNIT_TEST(memoryBufferTest);
                     CPPUNIT_TEST_SUITE_END();
                 public:
 
@@ -23,7 +23,7 @@ namespace ignis {
 
                     virtual void socketTest();
 
-                    virtual void sharedMemoryTest();
+                    virtual void memoryBufferTest();
 
                     virtual void tearDown();
                 private:

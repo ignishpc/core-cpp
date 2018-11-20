@@ -20,25 +20,32 @@ IPostmanModule::IPostmanModule(std::shared_ptr<core::IExecutorData> &executor_da
 void IPostmanModule::threadAccept(std::shared_ptr<transport::TTransport> transport) {
     try {
         auto protocol = std::make_shared<data::IObjectProtocol>(transport);
-        bool use_shared_memory;
-        protocol->readBool(use_shared_memory);
-        if (use_shared_memory) {
-            std::string folder;
-            protocol->readString(folder);
-            std::string buffer1 = folder + "buffer1";
-            std::string buffer2 = folder + "buffer2";
-            transport = std::make_shared<data::IFileTransport>(buffer1, buffer2, transport);
-        }
         int64_t id;
+        std::string addr_mode;
         protocol->readI64(id);
+        protocol->readString(addr_mode);
+        if (addr_mode == "socket") {
+            //Do nothing else
+        } else if (addr_mode == "unixSocket") {
+            throw ignis::exceptions::ILogicError(
+                    "IPostmanModule id " + std::to_string(id) + " mode " + addr_mode + " not implemented yet");
+        } else if (addr_mode == "memoryBuffer") {
+            std::string addr_path;
+            protocol->readString(addr_path);
+            std::string buffer1 = addr_path + "/buffer1";
+            std::string buffer2 = addr_path + "/buffer2";
+            transport = std::make_shared<data::IFileTransport>(buffer1, buffer2, transport);
+        } else {
+            throw ignis::exceptions::ILogicError(
+                    "IPostmanModule id " + std::to_string(id) + " mode " + addr_mode + " unknown");
+        }
         try {
             auto buffer = std::make_shared<transport::TBufferedTransport>(transport);
             std::shared_ptr<IObject> object = getIObject();
-            IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " receiving"
-                                   << " mode: " << (use_shared_memory ? "shared memory" : "socket");
+            IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " receiving" << " mode: " << addr_mode;
+            object->read(buffer);
             IMessage msg("local", object);
             executor_data->getPostBox().newInMessage(id, msg);
-            object->read(buffer);
             IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " received OK";
             object->fit();
         } catch (exceptions::IException &ex) {
@@ -70,7 +77,6 @@ void IPostmanModule::threadServer() {
             }
         }
     }
-    started = false;
     for (auto &th:connections) {
         th->join();
     }
@@ -90,7 +96,7 @@ void IPostmanModule::start() {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -101,13 +107,25 @@ void IPostmanModule::start() {
 }
 
 void IPostmanModule::stop() {
-    IGNIS_THREAD_LOG(info) << "IPostmanModule stopping";
-    if (started) {
-        started = false;
-        server->interrupt();
-        thread_server->join();
-        server.reset();
-        thread_server.reset();
+    try {
+        IGNIS_THREAD_LOG(info) << "IPostmanModule stopping";
+        if (started) {
+            started = false;
+            server->interrupt();
+            thread_server->join();
+            server.reset();
+            thread_server.reset();
+        }
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw ex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
     }
 }
 
@@ -120,8 +138,9 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
             std::getline(saddr, tmp, '!');
             vaddr.push_back(tmp);
         }
+        std::string addr_mode = vaddr[0];
 
-        if (vaddr[0].find("local") == 0) {
+        if (addr_mode == "local") {
             executor_data->getPostBox().newInMessage(id, msg);
             return 0;
         }
@@ -142,22 +161,32 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
             }
         }
         auto protocol = std::make_shared<data::IObjectProtocol>(transport);
-        bool use_shared_memory = vaddr[0].find("shared") == 0;
-        protocol->writeBool(use_shared_memory);
-        if (use_shared_memory) {
-            std::string folder = vaddr[3];
-            size_t block_size = std::stoul(vaddr[4]);
-            protocol->writeString(folder);
-            std::string buffer1 = folder + "buffer1";
-            std::string buffer2 = folder + "buffer2";
-            transport = std::make_shared<data::IFileTransport>(buffer1, buffer2, transport, block_size);
-        }
         protocol->writeI64(id);
+        protocol->writeString(addr_mode);
+        if (addr_mode == "socket") {
+            //Do nothing else
+        } else if (addr_mode == "unixSocket") {
+            throw ignis::exceptions::ILogicError(
+                    "IPostmanModule id " + std::to_string(id) + " mode " + addr_mode + " not implemented yet");
+        } else if (addr_mode == "memoryBuffer") {
+            std::string addr_path = vaddr[3];
+            size_t addr_block_size = std::stoul(vaddr[4]);
+            protocol->writeString(addr_path);
+            std::string buffer1 = addr_path + "/buffer1";
+            std::string buffer2 = addr_path + "/buffer2";
+            transport = std::make_shared<data::IFileTransport>(buffer1, buffer2, transport, addr_block_size);
+        } else {
+            throw ignis::exceptions::ILogicError(
+                    "IPostmanModule id " + std::to_string(id) + " mode " + addr_mode + " unknown");
+        }
         auto buffer = std::make_shared<transport::TBufferedTransport>(transport);
-        IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " sending"
-                               << " mode: " << (use_shared_memory ? "shared memory" : "socket");
-        msg.getObj()->write(buffer, compression);
-        transport->close();
+        IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " sending" << " mode: " << addr_mode;
+        try {
+            msg.getObj()->write(buffer, compression);
+        } catch (std::exception &ex) {
+            transport->close();
+            throw ex;
+        }
         IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " sent OK";
         return 0;
     } catch (exceptions::IException &ex) {
@@ -197,7 +226,7 @@ void IPostmanModule::sendAll() {
             std::vector<std::pair<size_t, IMessage>> i_msgs(msgs.begin(), msgs.end());
 #pragma omp parallel for num_threads(threads), reduction(+:errors)
             for (int i = 0; i < msgs.size(); i++) {
-                int error=0;
+                int error = 0;
                 for (int cn = 0; cn < reconnections + 1; cn++) {
                     error = send(i_msgs[i].first, i_msgs[i].second, compression);
                     if (error == 0) {
@@ -209,16 +238,12 @@ void IPostmanModule::sendAll() {
         }
         if (errors > 0) {
             IGNIS_THREAD_LOG(error) << "IPostmanModule fail to send " << errors << " messages";
-            exceptions::IException ex("IPostmanModule fail to send " + std::to_string(errors) + " messages");
-            IRemoteException iex;
-            iex.__set_message(ex.what());
-            iex.__set_stack(ex.toString());
-            throw iex;
+            throw exceptions::IException("IPostmanModule fail to send " + std::to_string(errors) + " messages");
         }
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -234,7 +259,7 @@ void IPostmanModule::clearAll() {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;

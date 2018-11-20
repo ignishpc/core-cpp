@@ -28,7 +28,7 @@ void IStorageModule::uncache(const int64_t id) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -48,7 +48,7 @@ void IStorageModule::restore(const int64_t id) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -65,7 +65,7 @@ void IStorageModule::saveContext(const int64_t id) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -91,7 +91,7 @@ void IStorageModule::loadContext(const int64_t id) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;

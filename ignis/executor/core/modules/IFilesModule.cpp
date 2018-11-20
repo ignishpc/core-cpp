@@ -38,7 +38,7 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -86,7 +86,7 @@ void IFilesModule::saveFile(const std::string &path, const bool trunc, const boo
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -140,7 +140,7 @@ void IFilesModule::saveJson(const std::string &path, const bool array_start, con
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;

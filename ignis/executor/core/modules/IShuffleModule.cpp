@@ -28,7 +28,7 @@ void IShuffleModule::createSplits(const std::vector<ignis::rpc::executor::ISplit
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -51,7 +51,7 @@ void IShuffleModule::joinSplits(const std::vector<int64_t> &order) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;

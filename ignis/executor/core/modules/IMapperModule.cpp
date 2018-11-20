@@ -22,7 +22,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
     try {
         auto object_in = executor_data->loadObject();
         executor_data->deleteLoadObject();
-        auto function = loadFunction<F<IObject::Any, IObject::Any>>(sf);
+        auto function = loadSource<F<IObject::Any, IObject::Any>>(sf);
         auto manager_t = function->type_t();
         auto manager_r = function->type_r();
         if (key) {
@@ -105,7 +105,7 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -121,7 +121,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
     try {
         auto object_in = executor_data->loadObject();
         executor_data->deleteLoadObject();
-        auto function = loadFunction<F<IObject::Any, IObject::Any>>(sf);
+        auto function = loadSource<F<IObject::Any, IObject::Any>>(sf);
         auto manager_t = function->type_t();
         auto manager_r = function->type_r();
         if (key) {
@@ -239,7 +239,7 @@ void IMapperModule::streaming(const rpc::ISource &sf, bool ordered) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;

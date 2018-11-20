@@ -41,6 +41,10 @@ IException &IException::getCause() {
 
 void IException::printStackTrace(std::ostream &stream) const {
     stream << stacktrace;
+    if (hasCause()) {
+        stream << "Caused by: ";
+        stream << cause->toString();
+    }
 }
 
 std::string IException::getStacktrace() const {
@@ -52,10 +56,6 @@ std::string IException::getStacktrace() const {
 void IException::print(std::ostream &stream) const {
     stream << class_name << ": " << what() << endl;
     printStackTrace(stream);
-    if (hasCause()) {
-        stream << "Caused by: ";
-        stream << cause->toString();
-    }
 }
 
 void IException::setCause(std::shared_ptr<IException> &cause) {

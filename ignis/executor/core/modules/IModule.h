@@ -34,18 +34,18 @@ namespace ignis {
                             const std::string &type);
 
                     template<typename T>
-                    std::shared_ptr<T> loadFunction(const rpc::ISource &funct) {
+                    std::shared_ptr<T> loadSource(const rpc::ISource &source) {
                         IGNIS_LOG(info) << "IModule loading function";
-                        if (funct.__isset.bytes) {
+                        if (source.__isset.bytes) {
                             throw exceptions::IInvalidArgument("C++ not support function handle");
                         }
-                        auto cache = executor_data->libraries.find(funct.name);
+                        auto cache = executor_data->libraries.find(source.name);
                         std::shared_ptr<T> result;
                         if (cache != executor_data->libraries.end()) {
                             result = std::static_pointer_cast<T>(cache->second);
                         } else {
-                            result = IObjectLoader::load<T>(funct.name);
-                            executor_data->libraries[funct.name] = result;
+                            result = IObjectLoader::load<T>(source.name);
+                            executor_data->libraries[source.name] = result;
                         }
                         IGNIS_LOG(info) << "IModule function loaded";
                         return result;

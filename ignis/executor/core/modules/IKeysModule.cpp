@@ -26,7 +26,7 @@ void IKeysModule::getKeys(std::vector<int64_t> &_return) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -61,7 +61,7 @@ void IKeysModule::collectKeys() {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -97,7 +97,7 @@ void IKeysModule::prepareKeys(const std::vector<ignis::rpc::executor::IExecutorK
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;
@@ -122,7 +122,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
     try {
         IGNIS_LOG(info) << "IKeysModule reduceByKey starting";
         typedef api::function::IFunction2<IObject::Any, IObject::Any, IObject::Any> IFunction2_Type;
-        auto function = loadFunction<IFunction2_Type>(funct);
+        auto function = loadSource<IFunction2_Type>(funct);
         auto &context = executor_data->getContext();
         auto object = memoryObject(executor_data->loadObject());
         executor_data->loadObject(object);
@@ -224,7 +224,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
-        iex.__set_stack(ex.toString());
+        iex.__set_stack(ex.getStacktrace());
         throw iex;
     } catch (std::exception &ex) {
         IRemoteException iex;

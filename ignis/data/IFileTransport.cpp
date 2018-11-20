@@ -5,12 +5,12 @@ using namespace apache::thrift::transport;
 using namespace ignis::data;
 
 IFileTransport::IFileTransport(std::string &read_file, std::string &write_file, std::shared_ptr<TTransport> &sync,
-                               size_t blockSize) : sync_trans(sync),
-                                                   block_size(blockSize),
-                                                   write_bytes(blockSize),
-                                                   read_flag(0),
-                                                   write_flag(1),
-                                                   init(false){
+                               size_t block_size) : sync_trans(sync),
+                                                    block_size(block_size),
+                                                    write_bytes(block_size),
+                                                    read_flag(0),
+                                                    write_flag(1),
+                                                    init(false) {
     buffer_path[read_flag] = boost::filesystem::path(read_file);
     buffer_path[write_flag] = boost::filesystem::path(write_file);
     buffer[read_flag].open(read_file, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
@@ -28,6 +28,7 @@ void IFileTransport::open() {
 }
 
 void IFileTransport::close() {
+    flush();
     buffer[read_flag].close();
     buffer[write_flag].close();
     sync_trans->close();
@@ -48,14 +49,12 @@ uint32_t IFileTransport::read_virt(uint8_t *buf, uint32_t len) {
 }
 
 void IFileTransport::write_virt(const uint8_t *buf, uint32_t len) {
-    if (write_bytes + len > block_size) {
-        do {
-            auto send = block_size - write_bytes;
-            buffer[write_flag].write((char *) buf, send);
-            len -= send;
-            buf += send;
-            swapWrite();
-        } while (len > block_size);
+    while (write_bytes + len > block_size) {
+        auto avail = block_size - write_bytes;
+        buffer[write_flag].write((char *) buf, avail);
+        len -= avail;
+        buf += avail;
+        swapWrite();
     }
     buffer[write_flag].write((char *) buf, len);
     write_bytes += len;
