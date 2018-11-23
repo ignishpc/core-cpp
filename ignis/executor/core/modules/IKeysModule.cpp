@@ -45,15 +45,10 @@ void IKeysModule::collectKeys() {
         auto manager = getManager(*executor_data->loadObject());
         auto msgs = executor_data->getPostBox().popInBox();
 
-        auto size = 0;
-        for (auto &entry: msgs) {
-            auto &obj = entry.second.getObj();
-            obj->setManager(manager);
-            size += obj->getSize();
-        }
-        auto object_out = getIObject(manager, size, 0, "memory");
+        auto object_out = getIObject(manager);
 
         for (auto &entry: msgs) {
+            entry.second.getObj()->setManager(manager);
             entry.second.getObj()->moveTo(*object_out);
         }
         executor_data->loadObject(object_out);
