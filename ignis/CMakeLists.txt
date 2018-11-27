@@ -113,7 +113,7 @@ set(SOURCE_FILES
         #RPC
         ${rpc})
 
-set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -DBOOST_ALL_DYN_LINK -g")#-O3
+set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -DBOOST_ALL_DYN_LINK -g -O3")
 
 add_library(igniscore SHARED ${SOURCE_FILES})
 add_executable(ignis-cpp main.cpp)
