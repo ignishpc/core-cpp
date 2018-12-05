@@ -228,14 +228,6 @@ uint32_t IStorageModule_cache_args::read(::apache::thrift::protocol::TProtocol* 
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->storage);
-          this->__isset.storage = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -257,10 +249,6 @@ uint32_t IStorageModule_cache_args::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeI64(this->id);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("storage", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->storage);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -278,10 +266,6 @@ uint32_t IStorageModule_cache_pargs::write(::apache::thrift::protocol::TProtocol
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("storage", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->storage)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -585,11 +569,11 @@ uint32_t IStorageModule_uncache_presult::read(::apache::thrift::protocol::TProto
 }
 
 
-IStorageModule_restore_args::~IStorageModule_restore_args() throw() {
+IStorageModule_loadCache_args::~IStorageModule_loadCache_args() throw() {
 }
 
 
-uint32_t IStorageModule_restore_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IStorageModule_loadCache_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -630,10 +614,10 @@ uint32_t IStorageModule_restore_args::read(::apache::thrift::protocol::TProtocol
   return xfer;
 }
 
-uint32_t IStorageModule_restore_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IStorageModule_loadCache_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IStorageModule_restore_args");
+  xfer += oprot->writeStructBegin("IStorageModule_loadCache_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64(this->id);
@@ -645,14 +629,14 @@ uint32_t IStorageModule_restore_args::write(::apache::thrift::protocol::TProtoco
 }
 
 
-IStorageModule_restore_pargs::~IStorageModule_restore_pargs() throw() {
+IStorageModule_loadCache_pargs::~IStorageModule_loadCache_pargs() throw() {
 }
 
 
-uint32_t IStorageModule_restore_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IStorageModule_loadCache_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IStorageModule_restore_pargs");
+  xfer += oprot->writeStructBegin("IStorageModule_loadCache_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->id)));
@@ -664,11 +648,11 @@ uint32_t IStorageModule_restore_pargs::write(::apache::thrift::protocol::TProtoc
 }
 
 
-IStorageModule_restore_result::~IStorageModule_restore_result() throw() {
+IStorageModule_loadCache_result::~IStorageModule_loadCache_result() throw() {
 }
 
 
-uint32_t IStorageModule_restore_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IStorageModule_loadCache_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -709,11 +693,11 @@ uint32_t IStorageModule_restore_result::read(::apache::thrift::protocol::TProtoc
   return xfer;
 }
 
-uint32_t IStorageModule_restore_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IStorageModule_loadCache_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IStorageModule_restore_result");
+  xfer += oprot->writeStructBegin("IStorageModule_loadCache_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -726,11 +710,11 @@ uint32_t IStorageModule_restore_result::write(::apache::thrift::protocol::TProto
 }
 
 
-IStorageModule_restore_presult::~IStorageModule_restore_presult() throw() {
+IStorageModule_loadCache_presult::~IStorageModule_loadCache_presult() throw() {
 }
 
 
-uint32_t IStorageModule_restore_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IStorageModule_loadCache_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1205,20 +1189,19 @@ int64_t IStorageModuleClient::recv_count()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "count failed: unknown result");
 }
 
-void IStorageModuleClient::cache(const int64_t id, const std::string& storage)
+void IStorageModuleClient::cache(const int64_t id)
 {
-  send_cache(id, storage);
+  send_cache(id);
   recv_cache();
 }
 
-void IStorageModuleClient::send_cache(const int64_t id, const std::string& storage)
+void IStorageModuleClient::send_cache(const int64_t id)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("cache", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IStorageModule_cache_pargs args;
   args.id = &id;
-  args.storage = &storage;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1318,18 +1301,18 @@ void IStorageModuleClient::recv_uncache()
   return;
 }
 
-void IStorageModuleClient::restore(const int64_t id)
+void IStorageModuleClient::loadCache(const int64_t id)
 {
-  send_restore(id);
-  recv_restore();
+  send_loadCache(id);
+  recv_loadCache();
 }
 
-void IStorageModuleClient::send_restore(const int64_t id)
+void IStorageModuleClient::send_loadCache(const int64_t id)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("restore", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("loadCache", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IStorageModule_restore_pargs args;
+  IStorageModule_loadCache_pargs args;
   args.id = &id;
   args.write(oprot_);
 
@@ -1338,7 +1321,7 @@ void IStorageModuleClient::send_restore(const int64_t id)
   oprot_->getTransport()->flush();
 }
 
-void IStorageModuleClient::recv_restore()
+void IStorageModuleClient::recv_loadCache()
 {
 
   int32_t rseqid = 0;
@@ -1358,12 +1341,12 @@ void IStorageModuleClient::recv_restore()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("restore") != 0) {
+  if (fname.compare("loadCache") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IStorageModule_restore_presult result;
+  IStorageModule_loadCache_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -1585,7 +1568,7 @@ void IStorageModuleProcessor::process_cache(int32_t seqid, ::apache::thrift::pro
 
   IStorageModule_cache_result result;
   try {
-    iface_->cache(args.id, args.storage);
+    iface_->cache(args.id);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1674,40 +1657,40 @@ void IStorageModuleProcessor::process_uncache(int32_t seqid, ::apache::thrift::p
   }
 }
 
-void IStorageModuleProcessor::process_restore(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IStorageModuleProcessor::process_loadCache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IStorageModule.restore", callContext);
+    ctx = this->eventHandler_->getContext("IStorageModule.loadCache", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IStorageModule.restore");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IStorageModule.loadCache");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IStorageModule.restore");
+    this->eventHandler_->preRead(ctx, "IStorageModule.loadCache");
   }
 
-  IStorageModule_restore_args args;
+  IStorageModule_loadCache_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IStorageModule.restore", bytes);
+    this->eventHandler_->postRead(ctx, "IStorageModule.loadCache", bytes);
   }
 
-  IStorageModule_restore_result result;
+  IStorageModule_loadCache_result result;
   try {
-    iface_->restore(args.id);
+    iface_->loadCache(args.id);
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IStorageModule.restore");
+      this->eventHandler_->handlerError(ctx, "IStorageModule.loadCache");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("restore", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("loadCache", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1716,17 +1699,17 @@ void IStorageModuleProcessor::process_restore(int32_t seqid, ::apache::thrift::p
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IStorageModule.restore");
+    this->eventHandler_->preWrite(ctx, "IStorageModule.loadCache");
   }
 
-  oprot->writeMessageBegin("restore", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("loadCache", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IStorageModule.restore", bytes);
+    this->eventHandler_->postWrite(ctx, "IStorageModule.loadCache", bytes);
   }
 }
 
@@ -1936,13 +1919,13 @@ int64_t IStorageModuleConcurrentClient::recv_count(const int32_t seqid)
   } // end while(true)
 }
 
-void IStorageModuleConcurrentClient::cache(const int64_t id, const std::string& storage)
+void IStorageModuleConcurrentClient::cache(const int64_t id)
 {
-  int32_t seqid = send_cache(id, storage);
+  int32_t seqid = send_cache(id);
   recv_cache(seqid);
 }
 
-int32_t IStorageModuleConcurrentClient::send_cache(const int64_t id, const std::string& storage)
+int32_t IStorageModuleConcurrentClient::send_cache(const int64_t id)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
@@ -1950,7 +1933,6 @@ int32_t IStorageModuleConcurrentClient::send_cache(const int64_t id, const std::
 
   IStorageModule_cache_pargs args;
   args.id = &id;
-  args.storage = &storage;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2101,19 +2083,19 @@ void IStorageModuleConcurrentClient::recv_uncache(const int32_t seqid)
   } // end while(true)
 }
 
-void IStorageModuleConcurrentClient::restore(const int64_t id)
+void IStorageModuleConcurrentClient::loadCache(const int64_t id)
 {
-  int32_t seqid = send_restore(id);
-  recv_restore(seqid);
+  int32_t seqid = send_loadCache(id);
+  recv_loadCache(seqid);
 }
 
-int32_t IStorageModuleConcurrentClient::send_restore(const int64_t id)
+int32_t IStorageModuleConcurrentClient::send_loadCache(const int64_t id)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("restore", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("loadCache", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IStorageModule_restore_pargs args;
+  IStorageModule_loadCache_pargs args;
   args.id = &id;
   args.write(oprot_);
 
@@ -2125,7 +2107,7 @@ int32_t IStorageModuleConcurrentClient::send_restore(const int64_t id)
   return cseqid;
 }
 
-void IStorageModuleConcurrentClient::recv_restore(const int32_t seqid)
+void IStorageModuleConcurrentClient::recv_loadCache(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2154,7 +2136,7 @@ void IStorageModuleConcurrentClient::recv_restore(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("restore") != 0) {
+      if (fname.compare("loadCache") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2163,7 +2145,7 @@ void IStorageModuleConcurrentClient::recv_restore(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IStorageModule_restore_presult result;
+      IStorageModule_loadCache_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

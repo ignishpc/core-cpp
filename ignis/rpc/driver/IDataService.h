@@ -21,7 +21,6 @@ namespace ignis { namespace rpc { namespace driver {
 class IDataServiceIf {
  public:
   virtual ~IDataServiceIf() {}
-  virtual void keep(const IDataId& data, const int8_t level) = 0;
   virtual void setName(const IDataId& data, const std::string& name) = 0;
   virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
   virtual void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
@@ -30,9 +29,16 @@ class IDataServiceIf {
   virtual void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
   virtual void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
   virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
+  virtual void values(IDataId& _return, const IDataId& data) = 0;
   virtual void shuffle(IDataId& _return, const IDataId& data) = 0;
+  virtual void parallelize(IDataId& _return) = 0;
+  virtual void take(std::string& _return, const IDataId& data, const int64_t n, const bool light) = 0;
+  virtual void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light) = 0;
+  virtual void collect(std::string& _return, const IDataId& data, const bool light) = 0;
   virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
   virtual void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join) = 0;
+  virtual void cache(const IDataId& data) = 0;
+  virtual void uncache(const IDataId& data) = 0;
 };
 
 class IDataServiceIfFactory {
@@ -62,9 +68,6 @@ class IDataServiceIfSingletonFactory : virtual public IDataServiceIfFactory {
 class IDataServiceNull : virtual public IDataServiceIf {
  public:
   virtual ~IDataServiceNull() {}
-  void keep(const IDataId& /* data */, const int8_t /* level */) {
-    return;
-  }
   void setName(const IDataId& /* data */, const std::string& /* name */) {
     return;
   }
@@ -89,7 +92,22 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void reduceByKey(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
     return;
   }
+  void values(IDataId& /* _return */, const IDataId& /* data */) {
+    return;
+  }
   void shuffle(IDataId& /* _return */, const IDataId& /* data */) {
+    return;
+  }
+  void parallelize(IDataId& /* _return */) {
+    return;
+  }
+  void take(std::string& /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* light */) {
+    return;
+  }
+  void takeSample(std::string& /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* randomSeed */, const bool /* light */) {
+    return;
+  }
+  void collect(std::string& /* _return */, const IDataId& /* data */, const bool /* light */) {
     return;
   }
   void saveAsTextFile(const IDataId& /* data */, const std::string& /* path */, const bool /* join */) {
@@ -98,117 +116,12 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void saveAsJsonFile(const IDataId& /* data */, const std::string& /* path */, const bool /* join */) {
     return;
   }
-};
-
-typedef struct _IDataService_keep_args__isset {
-  _IDataService_keep_args__isset() : data(false), level(false) {}
-  bool data :1;
-  bool level :1;
-} _IDataService_keep_args__isset;
-
-class IDataService_keep_args {
- public:
-
-  IDataService_keep_args(const IDataService_keep_args&);
-  IDataService_keep_args& operator=(const IDataService_keep_args&);
-  IDataService_keep_args() : level(0) {
+  void cache(const IDataId& /* data */) {
+    return;
   }
-
-  virtual ~IDataService_keep_args() throw();
-  IDataId data;
-  int8_t level;
-
-  _IDataService_keep_args__isset __isset;
-
-  void __set_data(const IDataId& val);
-
-  void __set_level(const int8_t val);
-
-  bool operator == (const IDataService_keep_args & rhs) const
-  {
-    if (!(data == rhs.data))
-      return false;
-    if (!(level == rhs.level))
-      return false;
-    return true;
+  void uncache(const IDataId& /* data */) {
+    return;
   }
-  bool operator != (const IDataService_keep_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataService_keep_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IDataService_keep_pargs {
- public:
-
-
-  virtual ~IDataService_keep_pargs() throw();
-  const IDataId* data;
-  const int8_t* level;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataService_keep_result__isset {
-  _IDataService_keep_result__isset() : ex(false) {}
-  bool ex :1;
-} _IDataService_keep_result__isset;
-
-class IDataService_keep_result {
- public:
-
-  IDataService_keep_result(const IDataService_keep_result&);
-  IDataService_keep_result& operator=(const IDataService_keep_result&);
-  IDataService_keep_result() {
-  }
-
-  virtual ~IDataService_keep_result() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IDataService_keep_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
-
-  bool operator == (const IDataService_keep_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataService_keep_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataService_keep_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataService_keep_presult__isset {
-  _IDataService_keep_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IDataService_keep_presult__isset;
-
-class IDataService_keep_presult {
- public:
-
-
-  virtual ~IDataService_keep_presult() throw();
-   ::ignis::rpc::IRemoteException ex;
-
-  _IDataService_keep_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
 };
 
 typedef struct _IDataService_setName_args__isset {
@@ -1176,6 +1089,118 @@ class IDataService_reduceByKey_presult {
 
 };
 
+typedef struct _IDataService_values_args__isset {
+  _IDataService_values_args__isset() : data(false) {}
+  bool data :1;
+} _IDataService_values_args__isset;
+
+class IDataService_values_args {
+ public:
+
+  IDataService_values_args(const IDataService_values_args&);
+  IDataService_values_args& operator=(const IDataService_values_args&);
+  IDataService_values_args() {
+  }
+
+  virtual ~IDataService_values_args() throw();
+  IDataId data;
+
+  _IDataService_values_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  bool operator == (const IDataService_values_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_values_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_values_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_values_pargs {
+ public:
+
+
+  virtual ~IDataService_values_pargs() throw();
+  const IDataId* data;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_values_result__isset {
+  _IDataService_values_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_values_result__isset;
+
+class IDataService_values_result {
+ public:
+
+  IDataService_values_result(const IDataService_values_result&);
+  IDataService_values_result& operator=(const IDataService_values_result&);
+  IDataService_values_result() {
+  }
+
+  virtual ~IDataService_values_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_values_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_values_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_values_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_values_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_values_presult__isset {
+  _IDataService_values_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_values_presult__isset;
+
+class IDataService_values_presult {
+ public:
+
+
+  virtual ~IDataService_values_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_values_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IDataService_shuffle_args__isset {
   _IDataService_shuffle_args__isset() : data(false) {}
   bool data :1;
@@ -1283,6 +1308,498 @@ class IDataService_shuffle_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_shuffle_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IDataService_parallelize_args {
+ public:
+
+  IDataService_parallelize_args(const IDataService_parallelize_args&);
+  IDataService_parallelize_args& operator=(const IDataService_parallelize_args&);
+  IDataService_parallelize_args() {
+  }
+
+  virtual ~IDataService_parallelize_args() throw();
+
+  bool operator == (const IDataService_parallelize_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IDataService_parallelize_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_parallelize_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_parallelize_pargs {
+ public:
+
+
+  virtual ~IDataService_parallelize_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_parallelize_result__isset {
+  _IDataService_parallelize_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_parallelize_result__isset;
+
+class IDataService_parallelize_result {
+ public:
+
+  IDataService_parallelize_result(const IDataService_parallelize_result&);
+  IDataService_parallelize_result& operator=(const IDataService_parallelize_result&);
+  IDataService_parallelize_result() {
+  }
+
+  virtual ~IDataService_parallelize_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_parallelize_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_parallelize_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_parallelize_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_parallelize_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_parallelize_presult__isset {
+  _IDataService_parallelize_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_parallelize_presult__isset;
+
+class IDataService_parallelize_presult {
+ public:
+
+
+  virtual ~IDataService_parallelize_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_parallelize_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_take_args__isset {
+  _IDataService_take_args__isset() : data(false), n(false), light(false) {}
+  bool data :1;
+  bool n :1;
+  bool light :1;
+} _IDataService_take_args__isset;
+
+class IDataService_take_args {
+ public:
+
+  IDataService_take_args(const IDataService_take_args&);
+  IDataService_take_args& operator=(const IDataService_take_args&);
+  IDataService_take_args() : n(0), light(0) {
+  }
+
+  virtual ~IDataService_take_args() throw();
+  IDataId data;
+  int64_t n;
+  bool light;
+
+  _IDataService_take_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set_n(const int64_t val);
+
+  void __set_light(const bool val);
+
+  bool operator == (const IDataService_take_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(n == rhs.n))
+      return false;
+    if (!(light == rhs.light))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_take_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_take_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_take_pargs {
+ public:
+
+
+  virtual ~IDataService_take_pargs() throw();
+  const IDataId* data;
+  const int64_t* n;
+  const bool* light;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_take_result__isset {
+  _IDataService_take_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_take_result__isset;
+
+class IDataService_take_result {
+ public:
+
+  IDataService_take_result(const IDataService_take_result&);
+  IDataService_take_result& operator=(const IDataService_take_result&);
+  IDataService_take_result() : success() {
+  }
+
+  virtual ~IDataService_take_result() throw();
+  std::string success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_take_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_take_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_take_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_take_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_take_presult__isset {
+  _IDataService_take_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_take_presult__isset;
+
+class IDataService_take_presult {
+ public:
+
+
+  virtual ~IDataService_take_presult() throw();
+  std::string* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_take_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_takeSample_args__isset {
+  _IDataService_takeSample_args__isset() : data(false), n(false), withRemplacement(false), seed(false), randomSeed(false), light(false) {}
+  bool data :1;
+  bool n :1;
+  bool withRemplacement :1;
+  bool seed :1;
+  bool randomSeed :1;
+  bool light :1;
+} _IDataService_takeSample_args__isset;
+
+class IDataService_takeSample_args {
+ public:
+
+  IDataService_takeSample_args(const IDataService_takeSample_args&);
+  IDataService_takeSample_args& operator=(const IDataService_takeSample_args&);
+  IDataService_takeSample_args() : n(0), withRemplacement(0), seed(0), randomSeed(0), light(0) {
+  }
+
+  virtual ~IDataService_takeSample_args() throw();
+  IDataId data;
+  int64_t n;
+  bool withRemplacement;
+  int32_t seed;
+  bool randomSeed;
+  bool light;
+
+  _IDataService_takeSample_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set_n(const int64_t val);
+
+  void __set_withRemplacement(const bool val);
+
+  void __set_seed(const int32_t val);
+
+  void __set_randomSeed(const bool val);
+
+  void __set_light(const bool val);
+
+  bool operator == (const IDataService_takeSample_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(n == rhs.n))
+      return false;
+    if (!(withRemplacement == rhs.withRemplacement))
+      return false;
+    if (!(seed == rhs.seed))
+      return false;
+    if (!(randomSeed == rhs.randomSeed))
+      return false;
+    if (!(light == rhs.light))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_takeSample_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_takeSample_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_takeSample_pargs {
+ public:
+
+
+  virtual ~IDataService_takeSample_pargs() throw();
+  const IDataId* data;
+  const int64_t* n;
+  const bool* withRemplacement;
+  const int32_t* seed;
+  const bool* randomSeed;
+  const bool* light;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_takeSample_result__isset {
+  _IDataService_takeSample_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_takeSample_result__isset;
+
+class IDataService_takeSample_result {
+ public:
+
+  IDataService_takeSample_result(const IDataService_takeSample_result&);
+  IDataService_takeSample_result& operator=(const IDataService_takeSample_result&);
+  IDataService_takeSample_result() : success() {
+  }
+
+  virtual ~IDataService_takeSample_result() throw();
+  std::string success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_takeSample_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_takeSample_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_takeSample_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_takeSample_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_takeSample_presult__isset {
+  _IDataService_takeSample_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_takeSample_presult__isset;
+
+class IDataService_takeSample_presult {
+ public:
+
+
+  virtual ~IDataService_takeSample_presult() throw();
+  std::string* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_takeSample_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_collect_args__isset {
+  _IDataService_collect_args__isset() : data(false), light(false) {}
+  bool data :1;
+  bool light :1;
+} _IDataService_collect_args__isset;
+
+class IDataService_collect_args {
+ public:
+
+  IDataService_collect_args(const IDataService_collect_args&);
+  IDataService_collect_args& operator=(const IDataService_collect_args&);
+  IDataService_collect_args() : light(0) {
+  }
+
+  virtual ~IDataService_collect_args() throw();
+  IDataId data;
+  bool light;
+
+  _IDataService_collect_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set_light(const bool val);
+
+  bool operator == (const IDataService_collect_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(light == rhs.light))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_collect_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_collect_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_collect_pargs {
+ public:
+
+
+  virtual ~IDataService_collect_pargs() throw();
+  const IDataId* data;
+  const bool* light;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_collect_result__isset {
+  _IDataService_collect_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_collect_result__isset;
+
+class IDataService_collect_result {
+ public:
+
+  IDataService_collect_result(const IDataService_collect_result&);
+  IDataService_collect_result& operator=(const IDataService_collect_result&);
+  IDataService_collect_result() : success() {
+  }
+
+  virtual ~IDataService_collect_result() throw();
+  std::string success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_collect_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_collect_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_collect_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_collect_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_collect_presult__isset {
+  _IDataService_collect_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_collect_presult__isset;
+
+class IDataService_collect_presult {
+ public:
+
+
+  virtual ~IDataService_collect_presult() throw();
+  std::string* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_collect_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1524,6 +2041,214 @@ class IDataService_saveAsJsonFile_presult {
 
 };
 
+typedef struct _IDataService_cache_args__isset {
+  _IDataService_cache_args__isset() : data(false) {}
+  bool data :1;
+} _IDataService_cache_args__isset;
+
+class IDataService_cache_args {
+ public:
+
+  IDataService_cache_args(const IDataService_cache_args&);
+  IDataService_cache_args& operator=(const IDataService_cache_args&);
+  IDataService_cache_args() {
+  }
+
+  virtual ~IDataService_cache_args() throw();
+  IDataId data;
+
+  _IDataService_cache_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  bool operator == (const IDataService_cache_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_cache_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_cache_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_cache_pargs {
+ public:
+
+
+  virtual ~IDataService_cache_pargs() throw();
+  const IDataId* data;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_cache_result__isset {
+  _IDataService_cache_result__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_cache_result__isset;
+
+class IDataService_cache_result {
+ public:
+
+  IDataService_cache_result(const IDataService_cache_result&);
+  IDataService_cache_result& operator=(const IDataService_cache_result&);
+  IDataService_cache_result() {
+  }
+
+  virtual ~IDataService_cache_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_cache_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_cache_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_cache_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_cache_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_cache_presult__isset {
+  _IDataService_cache_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_cache_presult__isset;
+
+class IDataService_cache_presult {
+ public:
+
+
+  virtual ~IDataService_cache_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_cache_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_uncache_args__isset {
+  _IDataService_uncache_args__isset() : data(false) {}
+  bool data :1;
+} _IDataService_uncache_args__isset;
+
+class IDataService_uncache_args {
+ public:
+
+  IDataService_uncache_args(const IDataService_uncache_args&);
+  IDataService_uncache_args& operator=(const IDataService_uncache_args&);
+  IDataService_uncache_args() {
+  }
+
+  virtual ~IDataService_uncache_args() throw();
+  IDataId data;
+
+  _IDataService_uncache_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  bool operator == (const IDataService_uncache_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_uncache_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_uncache_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_uncache_pargs {
+ public:
+
+
+  virtual ~IDataService_uncache_pargs() throw();
+  const IDataId* data;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_uncache_result__isset {
+  _IDataService_uncache_result__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_uncache_result__isset;
+
+class IDataService_uncache_result {
+ public:
+
+  IDataService_uncache_result(const IDataService_uncache_result&);
+  IDataService_uncache_result& operator=(const IDataService_uncache_result&);
+  IDataService_uncache_result() {
+  }
+
+  virtual ~IDataService_uncache_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_uncache_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_uncache_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_uncache_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_uncache_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_uncache_presult__isset {
+  _IDataService_uncache_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IDataService_uncache_presult__isset;
+
+class IDataService_uncache_presult {
+ public:
+
+
+  virtual ~IDataService_uncache_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_uncache_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class IDataServiceClient : virtual public IDataServiceIf {
  public:
   IDataServiceClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1549,9 +2274,6 @@ class IDataServiceClient : virtual public IDataServiceIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void keep(const IDataId& data, const int8_t level);
-  void send_keep(const IDataId& data, const int8_t level);
-  void recv_keep();
   void setName(const IDataId& data, const std::string& name);
   void send_setName(const IDataId& data, const std::string& name);
   void recv_setName();
@@ -1576,15 +2298,36 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_reduceByKey(IDataId& _return);
+  void values(IDataId& _return, const IDataId& data);
+  void send_values(const IDataId& data);
+  void recv_values(IDataId& _return);
   void shuffle(IDataId& _return, const IDataId& data);
   void send_shuffle(const IDataId& data);
   void recv_shuffle(IDataId& _return);
+  void parallelize(IDataId& _return);
+  void send_parallelize();
+  void recv_parallelize(IDataId& _return);
+  void take(std::string& _return, const IDataId& data, const int64_t n, const bool light);
+  void send_take(const IDataId& data, const int64_t n, const bool light);
+  void recv_take(std::string& _return);
+  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
+  void send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
+  void recv_takeSample(std::string& _return);
+  void collect(std::string& _return, const IDataId& data, const bool light);
+  void send_collect(const IDataId& data, const bool light);
+  void recv_collect(std::string& _return);
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsTextFile();
   void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
   void send_saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsJsonFile();
+  void cache(const IDataId& data);
+  void send_cache(const IDataId& data);
+  void recv_cache();
+  void uncache(const IDataId& data);
+  void send_uncache(const IDataId& data);
+  void recv_uncache();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1600,7 +2343,6 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IDataServiceProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_keep(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process__map(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1609,13 +2351,19 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_streamingFlatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingFilter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_values(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_shuffle(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_parallelize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_takeSample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_collect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_cache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_uncache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IDataServiceProcessor(::apache::thrift::stdcxx::shared_ptr<IDataServiceIf> iface) :
     iface_(iface) {
-    processMap_["keep"] = &IDataServiceProcessor::process_keep;
     processMap_["setName"] = &IDataServiceProcessor::process_setName;
     processMap_["_map"] = &IDataServiceProcessor::process__map;
     processMap_["flatmap"] = &IDataServiceProcessor::process_flatmap;
@@ -1624,9 +2372,16 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["streamingFlatmap"] = &IDataServiceProcessor::process_streamingFlatmap;
     processMap_["streamingFilter"] = &IDataServiceProcessor::process_streamingFilter;
     processMap_["reduceByKey"] = &IDataServiceProcessor::process_reduceByKey;
+    processMap_["values"] = &IDataServiceProcessor::process_values;
     processMap_["shuffle"] = &IDataServiceProcessor::process_shuffle;
+    processMap_["parallelize"] = &IDataServiceProcessor::process_parallelize;
+    processMap_["take"] = &IDataServiceProcessor::process_take;
+    processMap_["takeSample"] = &IDataServiceProcessor::process_takeSample;
+    processMap_["collect"] = &IDataServiceProcessor::process_collect;
     processMap_["saveAsTextFile"] = &IDataServiceProcessor::process_saveAsTextFile;
     processMap_["saveAsJsonFile"] = &IDataServiceProcessor::process_saveAsJsonFile;
+    processMap_["cache"] = &IDataServiceProcessor::process_cache;
+    processMap_["uncache"] = &IDataServiceProcessor::process_uncache;
   }
 
   virtual ~IDataServiceProcessor() {}
@@ -1655,15 +2410,6 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     ifaces_.push_back(iface);
   }
  public:
-  void keep(const IDataId& data, const int8_t level) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->keep(data, level);
-    }
-    ifaces_[i]->keep(data, level);
-  }
-
   void setName(const IDataId& data, const std::string& name) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1743,6 +2489,16 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
+  void values(IDataId& _return, const IDataId& data) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->values(_return, data);
+    }
+    ifaces_[i]->values(_return, data);
+    return;
+  }
+
   void shuffle(IDataId& _return, const IDataId& data) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1750,6 +2506,46 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
       ifaces_[i]->shuffle(_return, data);
     }
     ifaces_[i]->shuffle(_return, data);
+    return;
+  }
+
+  void parallelize(IDataId& _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->parallelize(_return);
+    }
+    ifaces_[i]->parallelize(_return);
+    return;
+  }
+
+  void take(std::string& _return, const IDataId& data, const int64_t n, const bool light) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->take(_return, data, n, light);
+    }
+    ifaces_[i]->take(_return, data, n, light);
+    return;
+  }
+
+  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->takeSample(_return, data, n, withRemplacement, seed, randomSeed, light);
+    }
+    ifaces_[i]->takeSample(_return, data, n, withRemplacement, seed, randomSeed, light);
+    return;
+  }
+
+  void collect(std::string& _return, const IDataId& data, const bool light) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->collect(_return, data, light);
+    }
+    ifaces_[i]->collect(_return, data, light);
     return;
   }
 
@@ -1769,6 +2565,24 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
       ifaces_[i]->saveAsJsonFile(data, path, join);
     }
     ifaces_[i]->saveAsJsonFile(data, path, join);
+  }
+
+  void cache(const IDataId& data) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->cache(data);
+    }
+    ifaces_[i]->cache(data);
+  }
+
+  void uncache(const IDataId& data) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->uncache(data);
+    }
+    ifaces_[i]->uncache(data);
   }
 
 };
@@ -1801,9 +2615,6 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void keep(const IDataId& data, const int8_t level);
-  int32_t send_keep(const IDataId& data, const int8_t level);
-  void recv_keep(const int32_t seqid);
   void setName(const IDataId& data, const std::string& name);
   int32_t send_setName(const IDataId& data, const std::string& name);
   void recv_setName(const int32_t seqid);
@@ -1828,15 +2639,36 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
   int32_t send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_reduceByKey(IDataId& _return, const int32_t seqid);
+  void values(IDataId& _return, const IDataId& data);
+  int32_t send_values(const IDataId& data);
+  void recv_values(IDataId& _return, const int32_t seqid);
   void shuffle(IDataId& _return, const IDataId& data);
   int32_t send_shuffle(const IDataId& data);
   void recv_shuffle(IDataId& _return, const int32_t seqid);
+  void parallelize(IDataId& _return);
+  int32_t send_parallelize();
+  void recv_parallelize(IDataId& _return, const int32_t seqid);
+  void take(std::string& _return, const IDataId& data, const int64_t n, const bool light);
+  int32_t send_take(const IDataId& data, const int64_t n, const bool light);
+  void recv_take(std::string& _return, const int32_t seqid);
+  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
+  int32_t send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
+  void recv_takeSample(std::string& _return, const int32_t seqid);
+  void collect(std::string& _return, const IDataId& data, const bool light);
+  int32_t send_collect(const IDataId& data, const bool light);
+  void recv_collect(std::string& _return, const int32_t seqid);
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   int32_t send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsTextFile(const int32_t seqid);
   void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
   int32_t send_saveAsJsonFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsJsonFile(const int32_t seqid);
+  void cache(const IDataId& data);
+  int32_t send_cache(const IDataId& data);
+  void recv_cache(const int32_t seqid);
+  void uncache(const IDataId& data);
+  int32_t send_uncache(const IDataId& data);
+  void recv_uncache(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

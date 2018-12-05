@@ -15,11 +15,11 @@ namespace ignis {
 
                     virtual int64_t count() override;
 
-                    virtual void cache(const int64_t id, const std::string &storage) override;
+                    virtual void cache(const int64_t id) override;
 
                     virtual void uncache(const int64_t id) override;
 
-                    virtual void restore(const int64_t id) override;
+                    virtual void loadCache(const int64_t id) override;
 
                     virtual void saveContext(const int64_t id) override;
 
@@ -28,8 +28,8 @@ namespace ignis {
                     virtual ~IStorageModule();
 
                 private:
-                    std::unordered_map<size_t, std::shared_ptr<storage::IObject>> object_cache;
-                    std::unordered_map<size_t, std::shared_ptr<storage::IObject>> object_context;
+                    std::unordered_map<size_t, std::shared_ptr<storage::IObject>> objects_cache;
+                    std::unordered_map<size_t, std::shared_ptr<storage::IObject>> objects_context;
                 };
             }
         }

@@ -14,17 +14,14 @@ IStorageModule::~IStorageModule() {
 
 }
 
-int64_t IStorageModule::count(){
+int64_t IStorageModule::count() {
     return executor_data->loadObject()->getSize();
 }
 
-void IStorageModule::cache(const int64_t id, const std::string &storage) {
-}
-
-void IStorageModule::uncache(const int64_t id) {
+void IStorageModule::cache(const int64_t id) {
     try {
-        IGNIS_LOG(info) << "IStorageModule uncache object " << id;
-        object_cache.erase(id);
+        IGNIS_LOG(info) << "IStorageModule loading cache object " << id;
+        objects_cache[id] = executor_data->loadObject();
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -38,13 +35,30 @@ void IStorageModule::uncache(const int64_t id) {
     }
 }
 
-void IStorageModule::restore(const int64_t id) {
+void IStorageModule::uncache(const int64_t id) {
     try {
-        IGNIS_LOG(info) << "IStorageModule load cache object " << id;
-        if (object_cache.find(id) == object_cache.end()) {
-            throw exceptions::IInvalidArgument("IStorageModule object not found");
+        IGNIS_LOG(info) << "IStorageModule deleting cache object " << id;
+        objects_cache.erase(id);
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
+}
+
+void IStorageModule::loadCache(const int64_t id) {
+    try {
+        IGNIS_LOG(info) << "IStorageModule loading cache object " << id;
+        if (objects_cache.find(id) == objects_cache.end()) {
+            throw exceptions::IInvalidArgument("IStorageModule cache object not found");
         }
-        executor_data->loadObject(object_cache[id]);
+        executor_data->loadObject(objects_cache[id]);
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -60,8 +74,8 @@ void IStorageModule::restore(const int64_t id) {
 
 void IStorageModule::saveContext(const int64_t id) {
     try {
-        object_context[id] = executor_data->loadObject();
-        IGNIS_LOG(info) << "IStorageModule context save" << id;
+        objects_context[id] = executor_data->loadObject();
+        IGNIS_LOG(info) << "IStorageModule context " << id << " saved";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -77,16 +91,16 @@ void IStorageModule::saveContext(const int64_t id) {
 
 void IStorageModule::loadContext(const int64_t id) {
     try {
-        if (object_context.find(id) == object_context.end()) {
-            throw exceptions::IInvalidArgument("IStorageModule object not found");
+        if (objects_context.find(id) == objects_context.end()) {
+            throw exceptions::IInvalidArgument("IStorageModule context object not found");
         }
-        bool already_loaded = object_context[id] == executor_data->loadObject();
+        bool already_loaded = objects_context[id] == executor_data->loadObject();
 
-        if(!already_loaded){
-            executor_data->loadObject(object_context[id]);
-            IGNIS_LOG(info) << "IStorageModule context loaded" << id;
+        if (!already_loaded) {
+            executor_data->loadObject(objects_context[id]);
+            IGNIS_LOG(info) << "IStorageModule context " << id << " loaded";
         }
-        object_context.erase(id);
+        objects_context.erase(id);
 
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
