@@ -289,4 +289,11 @@ void IMapperModule::streamingKeyBy(const rpc::ISource &sf, bool ordered) {
     streaming<api::function::IFunction, false, true>(sf, ordered);
 }
 
+void IMapperModule::values() {
+    IGNIS_LOG(info) << "IMapperModule starting values";
+    // TODO
+}
+
 IMapperModule::~IMapperModule() {}
+
+

@@ -25,15 +25,17 @@ class IDataServiceIf {
   virtual void _map(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
   virtual void flatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
   virtual void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
+  virtual void keyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
   virtual void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
   virtual void streamingFlatmap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
   virtual void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
+  virtual void streamingKeyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
   virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
   virtual void values(IDataId& _return, const IDataId& data) = 0;
   virtual void shuffle(IDataId& _return, const IDataId& data) = 0;
   virtual void parallelize(IDataId& _return) = 0;
   virtual void take(std::string& _return, const IDataId& data, const int64_t n, const bool light) = 0;
-  virtual void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light) = 0;
+  virtual void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
   virtual void collect(std::string& _return, const IDataId& data, const bool light) = 0;
   virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
   virtual void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join) = 0;
@@ -80,6 +82,9 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void filter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
     return;
   }
+  void keyBy(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
+    return;
+  }
   void streamingMap(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */, const bool /* ordered */) {
     return;
   }
@@ -87,6 +92,9 @@ class IDataServiceNull : virtual public IDataServiceIf {
     return;
   }
   void streamingFilter(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */, const bool /* ordered */) {
+    return;
+  }
+  void streamingKeyBy(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */, const bool /* ordered */) {
     return;
   }
   void reduceByKey(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* _function */) {
@@ -104,7 +112,7 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void take(std::string& /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* light */) {
     return;
   }
-  void takeSample(std::string& /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* randomSeed */, const bool /* light */) {
+  void takeSample(std::string& /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* light */) {
     return;
   }
   void collect(std::string& /* _return */, const IDataId& /* data */, const bool /* light */) {
@@ -592,6 +600,125 @@ class IDataService_filter_presult {
 
 };
 
+typedef struct _IDataService_keyBy_args__isset {
+  _IDataService_keyBy_args__isset() : data(false), _function(false) {}
+  bool data :1;
+  bool _function :1;
+} _IDataService_keyBy_args__isset;
+
+class IDataService_keyBy_args {
+ public:
+
+  IDataService_keyBy_args(const IDataService_keyBy_args&);
+  IDataService_keyBy_args& operator=(const IDataService_keyBy_args&);
+  IDataService_keyBy_args() {
+  }
+
+  virtual ~IDataService_keyBy_args() throw();
+  IDataId data;
+   ::ignis::rpc::ISource _function;
+
+  _IDataService_keyBy_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set__function(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataService_keyBy_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(_function == rhs._function))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_keyBy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_keyBy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_keyBy_pargs {
+ public:
+
+
+  virtual ~IDataService_keyBy_pargs() throw();
+  const IDataId* data;
+  const  ::ignis::rpc::ISource* _function;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_keyBy_result__isset {
+  _IDataService_keyBy_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_keyBy_result__isset;
+
+class IDataService_keyBy_result {
+ public:
+
+  IDataService_keyBy_result(const IDataService_keyBy_result&);
+  IDataService_keyBy_result& operator=(const IDataService_keyBy_result&);
+  IDataService_keyBy_result() {
+  }
+
+  virtual ~IDataService_keyBy_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_keyBy_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_keyBy_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_keyBy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_keyBy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_keyBy_presult__isset {
+  _IDataService_keyBy_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_keyBy_presult__isset;
+
+class IDataService_keyBy_presult {
+ public:
+
+
+  virtual ~IDataService_keyBy_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_keyBy_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IDataService_streamingMap_args__isset {
   _IDataService_streamingMap_args__isset() : data(false), _function(false), ordered(false) {}
   bool data :1;
@@ -965,6 +1092,132 @@ class IDataService_streamingFilter_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_streamingFilter_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_streamingKeyBy_args__isset {
+  _IDataService_streamingKeyBy_args__isset() : data(false), _function(false), ordered(false) {}
+  bool data :1;
+  bool _function :1;
+  bool ordered :1;
+} _IDataService_streamingKeyBy_args__isset;
+
+class IDataService_streamingKeyBy_args {
+ public:
+
+  IDataService_streamingKeyBy_args(const IDataService_streamingKeyBy_args&);
+  IDataService_streamingKeyBy_args& operator=(const IDataService_streamingKeyBy_args&);
+  IDataService_streamingKeyBy_args() : ordered(0) {
+  }
+
+  virtual ~IDataService_streamingKeyBy_args() throw();
+  IDataId data;
+   ::ignis::rpc::ISource _function;
+  bool ordered;
+
+  _IDataService_streamingKeyBy_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set__function(const  ::ignis::rpc::ISource& val);
+
+  void __set_ordered(const bool val);
+
+  bool operator == (const IDataService_streamingKeyBy_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(_function == rhs._function))
+      return false;
+    if (!(ordered == rhs.ordered))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_streamingKeyBy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_streamingKeyBy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_streamingKeyBy_pargs {
+ public:
+
+
+  virtual ~IDataService_streamingKeyBy_pargs() throw();
+  const IDataId* data;
+  const  ::ignis::rpc::ISource* _function;
+  const bool* ordered;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_streamingKeyBy_result__isset {
+  _IDataService_streamingKeyBy_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_streamingKeyBy_result__isset;
+
+class IDataService_streamingKeyBy_result {
+ public:
+
+  IDataService_streamingKeyBy_result(const IDataService_streamingKeyBy_result&);
+  IDataService_streamingKeyBy_result& operator=(const IDataService_streamingKeyBy_result&);
+  IDataService_streamingKeyBy_result() {
+  }
+
+  virtual ~IDataService_streamingKeyBy_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_streamingKeyBy_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_streamingKeyBy_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_streamingKeyBy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_streamingKeyBy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_streamingKeyBy_presult__isset {
+  _IDataService_streamingKeyBy_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_streamingKeyBy_presult__isset;
+
+class IDataService_streamingKeyBy_presult {
+ public:
+
+
+  virtual ~IDataService_streamingKeyBy_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_streamingKeyBy_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1540,12 +1793,11 @@ class IDataService_take_presult {
 };
 
 typedef struct _IDataService_takeSample_args__isset {
-  _IDataService_takeSample_args__isset() : data(false), n(false), withRemplacement(false), seed(false), randomSeed(false), light(false) {}
+  _IDataService_takeSample_args__isset() : data(false), n(false), withRemplacement(false), seed(false), light(false) {}
   bool data :1;
   bool n :1;
   bool withRemplacement :1;
   bool seed :1;
-  bool randomSeed :1;
   bool light :1;
 } _IDataService_takeSample_args__isset;
 
@@ -1554,7 +1806,7 @@ class IDataService_takeSample_args {
 
   IDataService_takeSample_args(const IDataService_takeSample_args&);
   IDataService_takeSample_args& operator=(const IDataService_takeSample_args&);
-  IDataService_takeSample_args() : n(0), withRemplacement(0), seed(0), randomSeed(0), light(0) {
+  IDataService_takeSample_args() : n(0), withRemplacement(0), seed(0), light(0) {
   }
 
   virtual ~IDataService_takeSample_args() throw();
@@ -1562,7 +1814,6 @@ class IDataService_takeSample_args {
   int64_t n;
   bool withRemplacement;
   int32_t seed;
-  bool randomSeed;
   bool light;
 
   _IDataService_takeSample_args__isset __isset;
@@ -1575,8 +1826,6 @@ class IDataService_takeSample_args {
 
   void __set_seed(const int32_t val);
 
-  void __set_randomSeed(const bool val);
-
   void __set_light(const bool val);
 
   bool operator == (const IDataService_takeSample_args & rhs) const
@@ -1588,8 +1837,6 @@ class IDataService_takeSample_args {
     if (!(withRemplacement == rhs.withRemplacement))
       return false;
     if (!(seed == rhs.seed))
-      return false;
-    if (!(randomSeed == rhs.randomSeed))
       return false;
     if (!(light == rhs.light))
       return false;
@@ -1616,7 +1863,6 @@ class IDataService_takeSample_pargs {
   const int64_t* n;
   const bool* withRemplacement;
   const int32_t* seed;
-  const bool* randomSeed;
   const bool* light;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2286,6 +2532,9 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void send_filter(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_filter(IDataId& _return);
+  void keyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  void send_keyBy(const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  void recv_keyBy(IDataId& _return);
   void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingMap(IDataId& _return);
@@ -2295,6 +2544,9 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingFilter(IDataId& _return);
+  void streamingKeyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  void send_streamingKeyBy(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  void recv_streamingKeyBy(IDataId& _return);
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_reduceByKey(IDataId& _return);
@@ -2310,8 +2562,8 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void take(std::string& _return, const IDataId& data, const int64_t n, const bool light);
   void send_take(const IDataId& data, const int64_t n, const bool light);
   void recv_take(std::string& _return);
-  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
-  void send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
+  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
   void recv_takeSample(std::string& _return);
   void collect(std::string& _return, const IDataId& data, const bool light);
   void send_collect(const IDataId& data, const bool light);
@@ -2347,9 +2599,11 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process__map(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_keyBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingFlatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingFilter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_streamingKeyBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_values(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_shuffle(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2368,9 +2622,11 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["_map"] = &IDataServiceProcessor::process__map;
     processMap_["flatmap"] = &IDataServiceProcessor::process_flatmap;
     processMap_["filter"] = &IDataServiceProcessor::process_filter;
+    processMap_["keyBy"] = &IDataServiceProcessor::process_keyBy;
     processMap_["streamingMap"] = &IDataServiceProcessor::process_streamingMap;
     processMap_["streamingFlatmap"] = &IDataServiceProcessor::process_streamingFlatmap;
     processMap_["streamingFilter"] = &IDataServiceProcessor::process_streamingFilter;
+    processMap_["streamingKeyBy"] = &IDataServiceProcessor::process_streamingKeyBy;
     processMap_["reduceByKey"] = &IDataServiceProcessor::process_reduceByKey;
     processMap_["values"] = &IDataServiceProcessor::process_values;
     processMap_["shuffle"] = &IDataServiceProcessor::process_shuffle;
@@ -2449,6 +2705,16 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
+  void keyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->keyBy(_return, data, _function);
+    }
+    ifaces_[i]->keyBy(_return, data, _function);
+    return;
+  }
+
   void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -2476,6 +2742,16 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
       ifaces_[i]->streamingFilter(_return, data, _function, ordered);
     }
     ifaces_[i]->streamingFilter(_return, data, _function, ordered);
+    return;
+  }
+
+  void streamingKeyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->streamingKeyBy(_return, data, _function, ordered);
+    }
+    ifaces_[i]->streamingKeyBy(_return, data, _function, ordered);
     return;
   }
 
@@ -2529,13 +2805,13 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light) {
+  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->takeSample(_return, data, n, withRemplacement, seed, randomSeed, light);
+      ifaces_[i]->takeSample(_return, data, n, withRemplacement, seed, light);
     }
-    ifaces_[i]->takeSample(_return, data, n, withRemplacement, seed, randomSeed, light);
+    ifaces_[i]->takeSample(_return, data, n, withRemplacement, seed, light);
     return;
   }
 
@@ -2627,6 +2903,9 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void filter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
   int32_t send_filter(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_filter(IDataId& _return, const int32_t seqid);
+  void keyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  int32_t send_keyBy(const IDataId& data, const  ::ignis::rpc::ISource& _function);
+  void recv_keyBy(IDataId& _return, const int32_t seqid);
   void streamingMap(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   int32_t send_streamingMap(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingMap(IDataId& _return, const int32_t seqid);
@@ -2636,6 +2915,9 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void streamingFilter(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   int32_t send_streamingFilter(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
   void recv_streamingFilter(IDataId& _return, const int32_t seqid);
+  void streamingKeyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  int32_t send_streamingKeyBy(const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered);
+  void recv_streamingKeyBy(IDataId& _return, const int32_t seqid);
   void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function);
   int32_t send_reduceByKey(const IDataId& data, const  ::ignis::rpc::ISource& _function);
   void recv_reduceByKey(IDataId& _return, const int32_t seqid);
@@ -2651,8 +2933,8 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void take(std::string& _return, const IDataId& data, const int64_t n, const bool light);
   int32_t send_take(const IDataId& data, const int64_t n, const bool light);
   void recv_take(std::string& _return, const int32_t seqid);
-  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
-  int32_t send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool randomSeed, const bool light);
+  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  int32_t send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
   void recv_takeSample(std::string& _return, const int32_t seqid);
   void collect(std::string& _return, const IDataId& data, const bool light);
   int32_t send_collect(const IDataId& data, const bool light);

@@ -27,6 +27,9 @@ class IStorageModuleIf {
   virtual void loadCache(const int64_t id) = 0;
   virtual void saveContext(const int64_t id) = 0;
   virtual void loadContext(const int64_t id) = 0;
+  virtual void take(std::string& _return, const int64_t n, const bool light) = 0;
+  virtual void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
+  virtual void collect(std::string& _return, const bool light) = 0;
 };
 
 class IStorageModuleIfFactory {
@@ -73,6 +76,15 @@ class IStorageModuleNull : virtual public IStorageModuleIf {
     return;
   }
   void loadContext(const int64_t /* id */) {
+    return;
+  }
+  void take(std::string& /* _return */, const int64_t /* n */, const bool /* light */) {
+    return;
+  }
+  void takeSample(std::string& /* _return */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* light */) {
+    return;
+  }
+  void collect(std::string& /* _return */, const bool /* light */) {
     return;
   }
 };
@@ -697,6 +709,370 @@ class IStorageModule_loadContext_presult {
 
 };
 
+typedef struct _IStorageModule_take_args__isset {
+  _IStorageModule_take_args__isset() : n(false), light(false) {}
+  bool n :1;
+  bool light :1;
+} _IStorageModule_take_args__isset;
+
+class IStorageModule_take_args {
+ public:
+
+  IStorageModule_take_args(const IStorageModule_take_args&);
+  IStorageModule_take_args& operator=(const IStorageModule_take_args&);
+  IStorageModule_take_args() : n(0), light(0) {
+  }
+
+  virtual ~IStorageModule_take_args() throw();
+  int64_t n;
+  bool light;
+
+  _IStorageModule_take_args__isset __isset;
+
+  void __set_n(const int64_t val);
+
+  void __set_light(const bool val);
+
+  bool operator == (const IStorageModule_take_args & rhs) const
+  {
+    if (!(n == rhs.n))
+      return false;
+    if (!(light == rhs.light))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_take_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_take_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IStorageModule_take_pargs {
+ public:
+
+
+  virtual ~IStorageModule_take_pargs() throw();
+  const int64_t* n;
+  const bool* light;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_take_result__isset {
+  _IStorageModule_take_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IStorageModule_take_result__isset;
+
+class IStorageModule_take_result {
+ public:
+
+  IStorageModule_take_result(const IStorageModule_take_result&);
+  IStorageModule_take_result& operator=(const IStorageModule_take_result&);
+  IStorageModule_take_result() : success() {
+  }
+
+  virtual ~IStorageModule_take_result() throw();
+  std::string success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_take_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IStorageModule_take_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_take_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_take_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_take_presult__isset {
+  _IStorageModule_take_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IStorageModule_take_presult__isset;
+
+class IStorageModule_take_presult {
+ public:
+
+
+  virtual ~IStorageModule_take_presult() throw();
+  std::string* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_take_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IStorageModule_takeSample_args__isset {
+  _IStorageModule_takeSample_args__isset() : n(false), withRemplacement(false), seed(false), light(false) {}
+  bool n :1;
+  bool withRemplacement :1;
+  bool seed :1;
+  bool light :1;
+} _IStorageModule_takeSample_args__isset;
+
+class IStorageModule_takeSample_args {
+ public:
+
+  IStorageModule_takeSample_args(const IStorageModule_takeSample_args&);
+  IStorageModule_takeSample_args& operator=(const IStorageModule_takeSample_args&);
+  IStorageModule_takeSample_args() : n(0), withRemplacement(0), seed(0), light(0) {
+  }
+
+  virtual ~IStorageModule_takeSample_args() throw();
+  int64_t n;
+  bool withRemplacement;
+  int32_t seed;
+  bool light;
+
+  _IStorageModule_takeSample_args__isset __isset;
+
+  void __set_n(const int64_t val);
+
+  void __set_withRemplacement(const bool val);
+
+  void __set_seed(const int32_t val);
+
+  void __set_light(const bool val);
+
+  bool operator == (const IStorageModule_takeSample_args & rhs) const
+  {
+    if (!(n == rhs.n))
+      return false;
+    if (!(withRemplacement == rhs.withRemplacement))
+      return false;
+    if (!(seed == rhs.seed))
+      return false;
+    if (!(light == rhs.light))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_takeSample_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_takeSample_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IStorageModule_takeSample_pargs {
+ public:
+
+
+  virtual ~IStorageModule_takeSample_pargs() throw();
+  const int64_t* n;
+  const bool* withRemplacement;
+  const int32_t* seed;
+  const bool* light;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_takeSample_result__isset {
+  _IStorageModule_takeSample_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IStorageModule_takeSample_result__isset;
+
+class IStorageModule_takeSample_result {
+ public:
+
+  IStorageModule_takeSample_result(const IStorageModule_takeSample_result&);
+  IStorageModule_takeSample_result& operator=(const IStorageModule_takeSample_result&);
+  IStorageModule_takeSample_result() : success() {
+  }
+
+  virtual ~IStorageModule_takeSample_result() throw();
+  std::string success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_takeSample_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IStorageModule_takeSample_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_takeSample_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_takeSample_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_takeSample_presult__isset {
+  _IStorageModule_takeSample_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IStorageModule_takeSample_presult__isset;
+
+class IStorageModule_takeSample_presult {
+ public:
+
+
+  virtual ~IStorageModule_takeSample_presult() throw();
+  std::string* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_takeSample_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IStorageModule_collect_args__isset {
+  _IStorageModule_collect_args__isset() : light(false) {}
+  bool light :1;
+} _IStorageModule_collect_args__isset;
+
+class IStorageModule_collect_args {
+ public:
+
+  IStorageModule_collect_args(const IStorageModule_collect_args&);
+  IStorageModule_collect_args& operator=(const IStorageModule_collect_args&);
+  IStorageModule_collect_args() : light(0) {
+  }
+
+  virtual ~IStorageModule_collect_args() throw();
+  bool light;
+
+  _IStorageModule_collect_args__isset __isset;
+
+  void __set_light(const bool val);
+
+  bool operator == (const IStorageModule_collect_args & rhs) const
+  {
+    if (!(light == rhs.light))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_collect_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_collect_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IStorageModule_collect_pargs {
+ public:
+
+
+  virtual ~IStorageModule_collect_pargs() throw();
+  const bool* light;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_collect_result__isset {
+  _IStorageModule_collect_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IStorageModule_collect_result__isset;
+
+class IStorageModule_collect_result {
+ public:
+
+  IStorageModule_collect_result(const IStorageModule_collect_result&);
+  IStorageModule_collect_result& operator=(const IStorageModule_collect_result&);
+  IStorageModule_collect_result() : success() {
+  }
+
+  virtual ~IStorageModule_collect_result() throw();
+  std::string success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_collect_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IStorageModule_collect_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_collect_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_collect_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_collect_presult__isset {
+  _IStorageModule_collect_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IStorageModule_collect_presult__isset;
+
+class IStorageModule_collect_presult {
+ public:
+
+
+  virtual ~IStorageModule_collect_presult() throw();
+  std::string* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_collect_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class IStorageModuleClient : virtual public IStorageModuleIf {
  public:
   IStorageModuleClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -740,6 +1116,15 @@ class IStorageModuleClient : virtual public IStorageModuleIf {
   void loadContext(const int64_t id);
   void send_loadContext(const int64_t id);
   void recv_loadContext();
+  void take(std::string& _return, const int64_t n, const bool light);
+  void send_take(const int64_t n, const bool light);
+  void recv_take(std::string& _return);
+  void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void send_takeSample(const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void recv_takeSample(std::string& _return);
+  void collect(std::string& _return, const bool light);
+  void send_collect(const bool light);
+  void recv_collect(std::string& _return);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -761,6 +1146,9 @@ class IStorageModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_loadCache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_takeSample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_collect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IStorageModuleProcessor(::apache::thrift::stdcxx::shared_ptr<IStorageModuleIf> iface) :
     iface_(iface) {
@@ -770,6 +1158,9 @@ class IStorageModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["loadCache"] = &IStorageModuleProcessor::process_loadCache;
     processMap_["saveContext"] = &IStorageModuleProcessor::process_saveContext;
     processMap_["loadContext"] = &IStorageModuleProcessor::process_loadContext;
+    processMap_["take"] = &IStorageModuleProcessor::process_take;
+    processMap_["takeSample"] = &IStorageModuleProcessor::process_takeSample;
+    processMap_["collect"] = &IStorageModuleProcessor::process_collect;
   }
 
   virtual ~IStorageModuleProcessor() {}
@@ -852,6 +1243,36 @@ class IStorageModuleMultiface : virtual public IStorageModuleIf {
     ifaces_[i]->loadContext(id);
   }
 
+  void take(std::string& _return, const int64_t n, const bool light) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->take(_return, n, light);
+    }
+    ifaces_[i]->take(_return, n, light);
+    return;
+  }
+
+  void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->takeSample(_return, n, withRemplacement, seed, light);
+    }
+    ifaces_[i]->takeSample(_return, n, withRemplacement, seed, light);
+    return;
+  }
+
+  void collect(std::string& _return, const bool light) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->collect(_return, light);
+    }
+    ifaces_[i]->collect(_return, light);
+    return;
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -900,6 +1321,15 @@ class IStorageModuleConcurrentClient : virtual public IStorageModuleIf {
   void loadContext(const int64_t id);
   int32_t send_loadContext(const int64_t id);
   void recv_loadContext(const int32_t seqid);
+  void take(std::string& _return, const int64_t n, const bool light);
+  int32_t send_take(const int64_t n, const bool light);
+  void recv_take(std::string& _return, const int32_t seqid);
+  void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  int32_t send_takeSample(const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void recv_takeSample(std::string& _return, const int32_t seqid);
+  void collect(std::string& _return, const bool light);
+  int32_t send_collect(const bool light);
+  void recv_collect(std::string& _return, const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

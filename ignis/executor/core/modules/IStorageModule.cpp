@@ -114,3 +114,16 @@ void IStorageModule::loadContext(const int64_t id) {
         throw iex;
     }
 }
+
+void IStorageModule::take(std::string &_return, const int64_t n, const bool light) {
+    // TODO
+}
+
+void IStorageModule::takeSample(std::string &_return, const int64_t n, const bool withRemplacement, const int32_t seed,
+                                const bool light) {
+    // TODO
+}
+
+void IStorageModule::collect(std::string &_return, const bool light) {
+    // TODO
+}

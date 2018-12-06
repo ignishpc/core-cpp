@@ -21,6 +21,8 @@ namespace ignis {
 
                     virtual void keyBy(const rpc::ISource &sf) override;
 
+                    virtual void values() override;
+
                     virtual void streamingMap(const rpc::ISource &sf, bool ordered) override;
 
                     virtual void streamingFlatmap(const rpc::ISource &sf, bool ordered) override;
