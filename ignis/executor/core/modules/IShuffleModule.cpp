@@ -15,6 +15,11 @@ void IShuffleModule::createSplits(const std::vector<ignis::rpc::executor::ISplit
     IGNIS_LOG(info) << "IShuffleModule started";
     try {
         auto object = executor_data->loadObject();
+        if(splits.size() == 1 && object->getSize() == splits[0].length){
+            executor_data->getPostBox().newOutMessage(splits[0].msg_id, IMessage(splits[0].addr, object));
+            IGNIS_LOG(info) << "IShuffleModule split addr: " << splits[0].addr << ", length: " << splits[0].length;
+        }
+
         auto manager = getManager(*object);
 
         auto reader = object->readIterator();

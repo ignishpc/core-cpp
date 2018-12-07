@@ -291,7 +291,33 @@ void IMapperModule::streamingKeyBy(const rpc::ISource &sf, bool ordered) {
 
 void IMapperModule::values() {
     IGNIS_LOG(info) << "IMapperModule starting values";
-    // TODO
+    try {
+        auto object_in = memoryObject(executor_data->loadObject());
+        auto manager = getManager(*object_in);
+        auto pair_manager = (std::shared_ptr<api::IPairManager<storage::IObject::Any, storage::IObject::Any>> &) manager;
+        auto manager_r = pair_manager->secondManager();
+        auto size = object_in->getSize();
+        auto object_out = getIObject(manager_r, size);
+
+        auto reader = object_in->readIterator();
+        auto writer = object_out->writeIterator();
+        for (size_t i = 0; i < size; i++) {
+            auto& pair = (std::pair<storage::IObject::Any, storage::IObject::Any>&)reader->next();
+            writer->write(pair_manager->second(pair));
+        }
+        executor_data->loadObject(object_out);
+        IGNIS_LOG(info) << "IMapperModule finished";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
 }
 
 IMapperModule::~IMapperModule() {}
