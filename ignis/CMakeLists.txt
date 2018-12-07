@@ -60,6 +60,8 @@ set(SOURCE_FILES
         executor/api/function/IFlatFunction.h
 
         #Executor core
+        executor/core/ICompileManager.h
+        executor/core/ICompileManager.cpp
         executor/core/ILog.h
         executor/core/ILog.cpp
         executor/core/IExecutorData.h

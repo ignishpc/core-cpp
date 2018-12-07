@@ -25,12 +25,15 @@ namespace ignis {
 
                     virtual void loadContext(const int64_t id) override;
 
-                    virtual void take(std::string &_return, const int64_t n, const bool light) override;
+                    virtual void take(std::string &_return, const int64_t msg_id, const std::string &addr,
+                                      const int64_t n, const bool light) override;
 
-                    virtual void takeSample(std::string &_return, const int64_t n, const bool withRemplacement,
-                                            const int32_t seed, const bool light) override;
+                    virtual void takeSample(std::string &_return, const int64_t msg_id, const std::string &addr,
+                                            const int64_t n, const bool withRemplacement, const int32_t seed,
+                                            const bool light) override;
 
-                    virtual void collect(std::string &_return, const bool light) override;
+                    virtual void collect(std::string &_return, const int64_t msg_id, const std::string &addr,
+                                         const bool light) override;
 
                     virtual ~IStorageModule();
 

@@ -27,9 +27,9 @@ class IStorageModuleIf {
   virtual void loadCache(const int64_t id) = 0;
   virtual void saveContext(const int64_t id) = 0;
   virtual void loadContext(const int64_t id) = 0;
-  virtual void take(std::string& _return, const int64_t n, const bool light) = 0;
-  virtual void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
-  virtual void collect(std::string& _return, const bool light) = 0;
+  virtual void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light) = 0;
+  virtual void takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
+  virtual void collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light) = 0;
 };
 
 class IStorageModuleIfFactory {
@@ -78,13 +78,13 @@ class IStorageModuleNull : virtual public IStorageModuleIf {
   void loadContext(const int64_t /* id */) {
     return;
   }
-  void take(std::string& /* _return */, const int64_t /* n */, const bool /* light */) {
+  void take(std::string& /* _return */, const int64_t /* msg_id */, const std::string& /* addr */, const int64_t /* n */, const bool /* light */) {
     return;
   }
-  void takeSample(std::string& /* _return */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* light */) {
+  void takeSample(std::string& /* _return */, const int64_t /* msg_id */, const std::string& /* addr */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* light */) {
     return;
   }
-  void collect(std::string& /* _return */, const bool /* light */) {
+  void collect(std::string& /* _return */, const int64_t /* msg_id */, const std::string& /* addr */, const bool /* light */) {
     return;
   }
 };
@@ -710,7 +710,9 @@ class IStorageModule_loadContext_presult {
 };
 
 typedef struct _IStorageModule_take_args__isset {
-  _IStorageModule_take_args__isset() : n(false), light(false) {}
+  _IStorageModule_take_args__isset() : msg_id(false), addr(false), n(false), light(false) {}
+  bool msg_id :1;
+  bool addr :1;
   bool n :1;
   bool light :1;
 } _IStorageModule_take_args__isset;
@@ -720,14 +722,20 @@ class IStorageModule_take_args {
 
   IStorageModule_take_args(const IStorageModule_take_args&);
   IStorageModule_take_args& operator=(const IStorageModule_take_args&);
-  IStorageModule_take_args() : n(0), light(0) {
+  IStorageModule_take_args() : msg_id(0), addr(), n(0), light(0) {
   }
 
   virtual ~IStorageModule_take_args() throw();
+  int64_t msg_id;
+  std::string addr;
   int64_t n;
   bool light;
 
   _IStorageModule_take_args__isset __isset;
+
+  void __set_msg_id(const int64_t val);
+
+  void __set_addr(const std::string& val);
 
   void __set_n(const int64_t val);
 
@@ -735,6 +743,10 @@ class IStorageModule_take_args {
 
   bool operator == (const IStorageModule_take_args & rhs) const
   {
+    if (!(msg_id == rhs.msg_id))
+      return false;
+    if (!(addr == rhs.addr))
+      return false;
     if (!(n == rhs.n))
       return false;
     if (!(light == rhs.light))
@@ -758,6 +770,8 @@ class IStorageModule_take_pargs {
 
 
   virtual ~IStorageModule_take_pargs() throw();
+  const int64_t* msg_id;
+  const std::string* addr;
   const int64_t* n;
   const bool* light;
 
@@ -829,7 +843,9 @@ class IStorageModule_take_presult {
 };
 
 typedef struct _IStorageModule_takeSample_args__isset {
-  _IStorageModule_takeSample_args__isset() : n(false), withRemplacement(false), seed(false), light(false) {}
+  _IStorageModule_takeSample_args__isset() : msg_id(false), addr(false), n(false), withRemplacement(false), seed(false), light(false) {}
+  bool msg_id :1;
+  bool addr :1;
   bool n :1;
   bool withRemplacement :1;
   bool seed :1;
@@ -841,16 +857,22 @@ class IStorageModule_takeSample_args {
 
   IStorageModule_takeSample_args(const IStorageModule_takeSample_args&);
   IStorageModule_takeSample_args& operator=(const IStorageModule_takeSample_args&);
-  IStorageModule_takeSample_args() : n(0), withRemplacement(0), seed(0), light(0) {
+  IStorageModule_takeSample_args() : msg_id(0), addr(), n(0), withRemplacement(0), seed(0), light(0) {
   }
 
   virtual ~IStorageModule_takeSample_args() throw();
+  int64_t msg_id;
+  std::string addr;
   int64_t n;
   bool withRemplacement;
   int32_t seed;
   bool light;
 
   _IStorageModule_takeSample_args__isset __isset;
+
+  void __set_msg_id(const int64_t val);
+
+  void __set_addr(const std::string& val);
 
   void __set_n(const int64_t val);
 
@@ -862,6 +884,10 @@ class IStorageModule_takeSample_args {
 
   bool operator == (const IStorageModule_takeSample_args & rhs) const
   {
+    if (!(msg_id == rhs.msg_id))
+      return false;
+    if (!(addr == rhs.addr))
+      return false;
     if (!(n == rhs.n))
       return false;
     if (!(withRemplacement == rhs.withRemplacement))
@@ -889,6 +915,8 @@ class IStorageModule_takeSample_pargs {
 
 
   virtual ~IStorageModule_takeSample_pargs() throw();
+  const int64_t* msg_id;
+  const std::string* addr;
   const int64_t* n;
   const bool* withRemplacement;
   const int32_t* seed;
@@ -962,7 +990,9 @@ class IStorageModule_takeSample_presult {
 };
 
 typedef struct _IStorageModule_collect_args__isset {
-  _IStorageModule_collect_args__isset() : light(false) {}
+  _IStorageModule_collect_args__isset() : msg_id(false), addr(false), light(false) {}
+  bool msg_id :1;
+  bool addr :1;
   bool light :1;
 } _IStorageModule_collect_args__isset;
 
@@ -971,18 +1001,28 @@ class IStorageModule_collect_args {
 
   IStorageModule_collect_args(const IStorageModule_collect_args&);
   IStorageModule_collect_args& operator=(const IStorageModule_collect_args&);
-  IStorageModule_collect_args() : light(0) {
+  IStorageModule_collect_args() : msg_id(0), addr(), light(0) {
   }
 
   virtual ~IStorageModule_collect_args() throw();
+  int64_t msg_id;
+  std::string addr;
   bool light;
 
   _IStorageModule_collect_args__isset __isset;
+
+  void __set_msg_id(const int64_t val);
+
+  void __set_addr(const std::string& val);
 
   void __set_light(const bool val);
 
   bool operator == (const IStorageModule_collect_args & rhs) const
   {
+    if (!(msg_id == rhs.msg_id))
+      return false;
+    if (!(addr == rhs.addr))
+      return false;
     if (!(light == rhs.light))
       return false;
     return true;
@@ -1004,6 +1044,8 @@ class IStorageModule_collect_pargs {
 
 
   virtual ~IStorageModule_collect_pargs() throw();
+  const int64_t* msg_id;
+  const std::string* addr;
   const bool* light;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1116,14 +1158,14 @@ class IStorageModuleClient : virtual public IStorageModuleIf {
   void loadContext(const int64_t id);
   void send_loadContext(const int64_t id);
   void recv_loadContext();
-  void take(std::string& _return, const int64_t n, const bool light);
-  void send_take(const int64_t n, const bool light);
+  void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
+  void send_take(const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
   void recv_take(std::string& _return);
-  void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
-  void send_takeSample(const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void send_takeSample(const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
   void recv_takeSample(std::string& _return);
-  void collect(std::string& _return, const bool light);
-  void send_collect(const bool light);
+  void collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light);
+  void send_collect(const int64_t msg_id, const std::string& addr, const bool light);
   void recv_collect(std::string& _return);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -1243,33 +1285,33 @@ class IStorageModuleMultiface : virtual public IStorageModuleIf {
     ifaces_[i]->loadContext(id);
   }
 
-  void take(std::string& _return, const int64_t n, const bool light) {
+  void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->take(_return, n, light);
+      ifaces_[i]->take(_return, msg_id, addr, n, light);
     }
-    ifaces_[i]->take(_return, n, light);
+    ifaces_[i]->take(_return, msg_id, addr, n, light);
     return;
   }
 
-  void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
+  void takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->takeSample(_return, n, withRemplacement, seed, light);
+      ifaces_[i]->takeSample(_return, msg_id, addr, n, withRemplacement, seed, light);
     }
-    ifaces_[i]->takeSample(_return, n, withRemplacement, seed, light);
+    ifaces_[i]->takeSample(_return, msg_id, addr, n, withRemplacement, seed, light);
     return;
   }
 
-  void collect(std::string& _return, const bool light) {
+  void collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->collect(_return, light);
+      ifaces_[i]->collect(_return, msg_id, addr, light);
     }
-    ifaces_[i]->collect(_return, light);
+    ifaces_[i]->collect(_return, msg_id, addr, light);
     return;
   }
 
@@ -1321,14 +1363,14 @@ class IStorageModuleConcurrentClient : virtual public IStorageModuleIf {
   void loadContext(const int64_t id);
   int32_t send_loadContext(const int64_t id);
   void recv_loadContext(const int32_t seqid);
-  void take(std::string& _return, const int64_t n, const bool light);
-  int32_t send_take(const int64_t n, const bool light);
+  void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
+  int32_t send_take(const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
   void recv_take(std::string& _return, const int32_t seqid);
-  void takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
-  int32_t send_takeSample(const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  int32_t send_takeSample(const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
   void recv_takeSample(std::string& _return, const int32_t seqid);
-  void collect(std::string& _return, const bool light);
-  int32_t send_collect(const bool light);
+  void collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light);
+  int32_t send_collect(const int64_t msg_id, const std::string& addr, const bool light);
   void recv_collect(std::string& _return, const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

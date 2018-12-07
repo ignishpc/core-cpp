@@ -1157,13 +1157,29 @@ uint32_t IStorageModule_take_args::read(::apache::thrift::protocol::TProtocol* i
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->msg_id);
+          this->__isset.msg_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->addr);
+          this->__isset.addr = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->n);
           this->__isset.n = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
           xfer += iprot->readBool(this->light);
           this->__isset.light = true;
@@ -1188,11 +1204,19 @@ uint32_t IStorageModule_take_args::write(::apache::thrift::protocol::TProtocol* 
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IStorageModule_take_args");
 
-  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeFieldBegin("msg_id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->msg_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->addr);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64(this->n);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 4);
   xfer += oprot->writeBool(this->light);
   xfer += oprot->writeFieldEnd();
 
@@ -1211,11 +1235,19 @@ uint32_t IStorageModule_take_pargs::write(::apache::thrift::protocol::TProtocol*
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IStorageModule_take_pargs");
 
-  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeFieldBegin("msg_id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->msg_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->addr)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64((*(this->n)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 4);
   xfer += oprot->writeBool((*(this->light)));
   xfer += oprot->writeFieldEnd();
 
@@ -1380,13 +1412,29 @@ uint32_t IStorageModule_takeSample_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->msg_id);
+          this->__isset.msg_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->addr);
+          this->__isset.addr = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->n);
           this->__isset.n = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
           xfer += iprot->readBool(this->withRemplacement);
           this->__isset.withRemplacement = true;
@@ -1394,7 +1442,7 @@ uint32_t IStorageModule_takeSample_args::read(::apache::thrift::protocol::TProto
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      case 5:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->seed);
           this->__isset.seed = true;
@@ -1402,7 +1450,7 @@ uint32_t IStorageModule_takeSample_args::read(::apache::thrift::protocol::TProto
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 6:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
           xfer += iprot->readBool(this->light);
           this->__isset.light = true;
@@ -1427,19 +1475,27 @@ uint32_t IStorageModule_takeSample_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IStorageModule_takeSample_args");
 
-  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeFieldBegin("msg_id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->msg_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->addr);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64(this->n);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("withRemplacement", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("withRemplacement", ::apache::thrift::protocol::T_BOOL, 4);
   xfer += oprot->writeBool(this->withRemplacement);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 5);
   xfer += oprot->writeI32(this->seed);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 4);
+  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 6);
   xfer += oprot->writeBool(this->light);
   xfer += oprot->writeFieldEnd();
 
@@ -1458,19 +1514,27 @@ uint32_t IStorageModule_takeSample_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IStorageModule_takeSample_pargs");
 
-  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeFieldBegin("msg_id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->msg_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->addr)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("n", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64((*(this->n)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("withRemplacement", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeFieldBegin("withRemplacement", ::apache::thrift::protocol::T_BOOL, 4);
   xfer += oprot->writeBool((*(this->withRemplacement)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 5);
   xfer += oprot->writeI32((*(this->seed)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 4);
+  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 6);
   xfer += oprot->writeBool((*(this->light)));
   xfer += oprot->writeFieldEnd();
 
@@ -1634,6 +1698,22 @@ uint32_t IStorageModule_collect_args::read(::apache::thrift::protocol::TProtocol
     switch (fid)
     {
       case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->msg_id);
+          this->__isset.msg_id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->addr);
+          this->__isset.addr = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_BOOL) {
           xfer += iprot->readBool(this->light);
           this->__isset.light = true;
@@ -1658,7 +1738,15 @@ uint32_t IStorageModule_collect_args::write(::apache::thrift::protocol::TProtoco
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IStorageModule_collect_args");
 
-  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 1);
+  xfer += oprot->writeFieldBegin("msg_id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->msg_id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->addr);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 3);
   xfer += oprot->writeBool(this->light);
   xfer += oprot->writeFieldEnd();
 
@@ -1677,7 +1765,15 @@ uint32_t IStorageModule_collect_pargs::write(::apache::thrift::protocol::TProtoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IStorageModule_collect_pargs");
 
-  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 1);
+  xfer += oprot->writeFieldBegin("msg_id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->msg_id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("addr", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->addr)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("light", ::apache::thrift::protocol::T_BOOL, 3);
   xfer += oprot->writeBool((*(this->light)));
   xfer += oprot->writeFieldEnd();
 
@@ -2154,18 +2250,20 @@ void IStorageModuleClient::recv_loadContext()
   return;
 }
 
-void IStorageModuleClient::take(std::string& _return, const int64_t n, const bool light)
+void IStorageModuleClient::take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light)
 {
-  send_take(n, light);
+  send_take(msg_id, addr, n, light);
   recv_take(_return);
 }
 
-void IStorageModuleClient::send_take(const int64_t n, const bool light)
+void IStorageModuleClient::send_take(const int64_t msg_id, const std::string& addr, const int64_t n, const bool light)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("take", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IStorageModule_take_pargs args;
+  args.msg_id = &msg_id;
+  args.addr = &addr;
   args.n = &n;
   args.light = &light;
   args.write(oprot_);
@@ -2216,18 +2314,20 @@ void IStorageModuleClient::recv_take(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "take failed: unknown result");
 }
 
-void IStorageModuleClient::takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
+void IStorageModuleClient::takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
 {
-  send_takeSample(n, withRemplacement, seed, light);
+  send_takeSample(msg_id, addr, n, withRemplacement, seed, light);
   recv_takeSample(_return);
 }
 
-void IStorageModuleClient::send_takeSample(const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
+void IStorageModuleClient::send_takeSample(const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("takeSample", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IStorageModule_takeSample_pargs args;
+  args.msg_id = &msg_id;
+  args.addr = &addr;
   args.n = &n;
   args.withRemplacement = &withRemplacement;
   args.seed = &seed;
@@ -2280,18 +2380,20 @@ void IStorageModuleClient::recv_takeSample(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "takeSample failed: unknown result");
 }
 
-void IStorageModuleClient::collect(std::string& _return, const bool light)
+void IStorageModuleClient::collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light)
 {
-  send_collect(light);
+  send_collect(msg_id, addr, light);
   recv_collect(_return);
 }
 
-void IStorageModuleClient::send_collect(const bool light)
+void IStorageModuleClient::send_collect(const int64_t msg_id, const std::string& addr, const bool light)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("collect", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IStorageModule_collect_pargs args;
+  args.msg_id = &msg_id;
+  args.addr = &addr;
   args.light = &light;
   args.write(oprot_);
 
@@ -2720,7 +2822,7 @@ void IStorageModuleProcessor::process_take(int32_t seqid, ::apache::thrift::prot
 
   IStorageModule_take_result result;
   try {
-    iface_->take(result.success, args.n, args.light);
+    iface_->take(result.success, args.msg_id, args.addr, args.n, args.light);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
@@ -2777,7 +2879,7 @@ void IStorageModuleProcessor::process_takeSample(int32_t seqid, ::apache::thrift
 
   IStorageModule_takeSample_result result;
   try {
-    iface_->takeSample(result.success, args.n, args.withRemplacement, args.seed, args.light);
+    iface_->takeSample(result.success, args.msg_id, args.addr, args.n, args.withRemplacement, args.seed, args.light);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
@@ -2834,7 +2936,7 @@ void IStorageModuleProcessor::process_collect(int32_t seqid, ::apache::thrift::p
 
   IStorageModule_collect_result result;
   try {
-    iface_->collect(result.success, args.light);
+    iface_->collect(result.success, args.msg_id, args.addr, args.light);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::IRemoteException &ex) {
     result.ex = ex;
@@ -3372,19 +3474,21 @@ void IStorageModuleConcurrentClient::recv_loadContext(const int32_t seqid)
   } // end while(true)
 }
 
-void IStorageModuleConcurrentClient::take(std::string& _return, const int64_t n, const bool light)
+void IStorageModuleConcurrentClient::take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light)
 {
-  int32_t seqid = send_take(n, light);
+  int32_t seqid = send_take(msg_id, addr, n, light);
   recv_take(_return, seqid);
 }
 
-int32_t IStorageModuleConcurrentClient::send_take(const int64_t n, const bool light)
+int32_t IStorageModuleConcurrentClient::send_take(const int64_t msg_id, const std::string& addr, const int64_t n, const bool light)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("take", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IStorageModule_take_pargs args;
+  args.msg_id = &msg_id;
+  args.addr = &addr;
   args.n = &n;
   args.light = &light;
   args.write(oprot_);
@@ -3461,19 +3565,21 @@ void IStorageModuleConcurrentClient::recv_take(std::string& _return, const int32
   } // end while(true)
 }
 
-void IStorageModuleConcurrentClient::takeSample(std::string& _return, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
+void IStorageModuleConcurrentClient::takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
 {
-  int32_t seqid = send_takeSample(n, withRemplacement, seed, light);
+  int32_t seqid = send_takeSample(msg_id, addr, n, withRemplacement, seed, light);
   recv_takeSample(_return, seqid);
 }
 
-int32_t IStorageModuleConcurrentClient::send_takeSample(const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
+int32_t IStorageModuleConcurrentClient::send_takeSample(const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("takeSample", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IStorageModule_takeSample_pargs args;
+  args.msg_id = &msg_id;
+  args.addr = &addr;
   args.n = &n;
   args.withRemplacement = &withRemplacement;
   args.seed = &seed;
@@ -3552,19 +3658,21 @@ void IStorageModuleConcurrentClient::recv_takeSample(std::string& _return, const
   } // end while(true)
 }
 
-void IStorageModuleConcurrentClient::collect(std::string& _return, const bool light)
+void IStorageModuleConcurrentClient::collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light)
 {
-  int32_t seqid = send_collect(light);
+  int32_t seqid = send_collect(msg_id, addr, light);
   recv_collect(_return, seqid);
 }
 
-int32_t IStorageModuleConcurrentClient::send_collect(const bool light)
+int32_t IStorageModuleConcurrentClient::send_collect(const int64_t msg_id, const std::string& addr, const bool light)
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
   oprot_->writeMessageBegin("collect", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IStorageModule_collect_pargs args;
+  args.msg_id = &msg_id;
+  args.addr = &addr;
   args.light = &light;
   args.write(oprot_);
 

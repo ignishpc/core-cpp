@@ -1,6 +1,8 @@
 
 #include "IStorageModule.h"
 #include "../../../exceptions/IInvalidArgument.h"
+#include "../../../data/IMemoryBuffer.h"
+#include "../IMessage.h"
 #include "../ILog.h"
 
 using namespace ignis::executor::core::modules;
@@ -115,15 +117,89 @@ void IStorageModule::loadContext(const int64_t id) {
     }
 }
 
-void IStorageModule::take(std::string &_return, const int64_t n, const bool light) {
-    // TODO
+void IStorageModule::take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light) {
+    IGNIS_LOG(info) << "IMapperModule starting take, n: " << n << ", light: " << (light ? "ordered" : "unordered");
+    try {
+        auto loaded = executor_data->loadObject();
+        executor_data->deleteLoadObject();
+        auto object = getIObject(loaded->getManager(),n);
+        storage::iterator::readToWrite(*loaded->readIterator(), *object->writeIterator(), n, false);
+
+        if(light){
+            auto buffer = std::make_shared<data::IMemoryBuffer>();
+            object->write(buffer, 0);//rpc already has compression
+            _return = buffer->getBufferAsString();
+        }else{
+            executor_data->getPostBox().newOutMessage(msg_id, IMessage(addr, object));
+        }
+        IGNIS_LOG(info) << "IMapperModule take done";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
 }
 
-void IStorageModule::takeSample(std::string &_return, const int64_t n, const bool withRemplacement, const int32_t seed,
-                                const bool light) {
-    // TODO
+void IStorageModule::takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
+    IGNIS_LOG(info) << "IMapperModule starting takeSample, n: " << n
+                    << ", withRemplacement: " << (withRemplacement ? "ordered" : "unordered")
+                    << ", seed: " << seed
+                    << ", light: " << (light ? "ordered" : "unordered");
+    try {
+        auto loaded = executor_data->loadObject();
+        executor_data->deleteLoadObject();
+        auto object = getIObject(loaded->getManager(),n);
+
+        // TODO
+        if(light){
+            auto buffer = std::make_shared<data::IMemoryBuffer>();
+            object->write(buffer, 0);//rpc already has compression
+            _return = buffer->getBufferAsString();
+        }else{
+            executor_data->getPostBox().newOutMessage(msg_id, IMessage(addr, object));
+        }
+        IGNIS_LOG(info) << "IMapperModule takeSample done";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
 }
 
-void IStorageModule::collect(std::string &_return, const bool light) {
-    // TODO
+void IStorageModule::collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light) {
+    IGNIS_LOG(info) << "IMapperModule starting collect, light: " << (light ? "ordered" : "unordered");
+    try {
+        auto object = executor_data->loadObject();
+        executor_data->deleteLoadObject();
+        if(light){
+            auto buffer = std::make_shared<data::IMemoryBuffer>();
+            object->write(buffer, 0);//rpc already has compression
+            _return = buffer->getBufferAsString();
+        }else{
+            executor_data->getPostBox().newOutMessage(msg_id, IMessage(addr, object));
+        }
+        IGNIS_LOG(info) << "IMapperModule collect done";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
 }

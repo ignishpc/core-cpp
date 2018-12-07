@@ -2,6 +2,8 @@
 #include "IModule.h"
 #include "../storage/IRawMemoryObject.h"
 #include "../storage/IMemoryObject.h"
+#include "../ICompileManager.h"
+#include "../../api/IValue.h"
 
 using namespace ignis::executor::core::modules;
 using namespace ignis::executor::core::storage;
@@ -40,7 +42,17 @@ IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>> &m, s
 std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> IgnisModule::getManager(IObject &object) {
     auto manager = object.getManager();
     if (!manager) {
-        //TODO generate manager with gcc and load it
+        IGNIS_LOG(warning) << "IModule binary data has not type, trying to compile it";
+        ICompileManager cm(object);
+        auto lib = cm.compile();
+        if (lib.length() > 0){
+            IGNIS_LOG(info) << "IModule binary data type compiled successfully";
+            rpc::ISource source;
+            source.__set_name(lib);
+            auto value =  loadSource<api::IValue<IObject::Any>>(source);
+            return value->type_t();
+        }
+        IGNIS_LOG(error) << "IModule binary data type compiled fails";
         throw exceptions::IInvalidArgument("C++ requires type this data before using it");
     }
     return manager;
