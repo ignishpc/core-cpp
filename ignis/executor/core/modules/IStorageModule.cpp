@@ -117,22 +117,26 @@ void IStorageModule::loadContext(const int64_t id) {
     }
 }
 
-void IStorageModule::take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light) {
-    IGNIS_LOG(info) << "IMapperModule starting take, n: " << n << ", light: " << (light ? "ordered" : "unordered");
+void IStorageModule::take(std::string &_return, const int64_t msg_id, const std::string &addr, const int64_t n,
+                          const bool light) {
+    IGNIS_LOG(info) << "IStorageModule starting take, msg_id: " << msg_id
+                    << ", addr: " << addr
+                    << ", n: " << n
+                    << ", light: " << (light ? "ordered" : "unordered");
     try {
         auto loaded = executor_data->loadObject();
         executor_data->deleteLoadObject();
-        auto object = getIObject(loaded->getManager(),n);
+        auto object = getIObject(loaded->getManager(), n);
         storage::iterator::readToWrite(*loaded->readIterator(), *object->writeIterator(), n, false);
 
-        if(light){
+        if (light) {
             auto buffer = std::make_shared<data::IMemoryBuffer>();
             object->write(buffer, 0);//rpc already has compression
             _return = buffer->getBufferAsString();
-        }else{
+        } else {
             executor_data->getPostBox().newOutMessage(msg_id, IMessage(addr, object));
         }
-        IGNIS_LOG(info) << "IMapperModule take done";
+        IGNIS_LOG(info) << "IStorageModule take done";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -146,25 +150,28 @@ void IStorageModule::take(std::string& _return, const int64_t msg_id, const std:
     }
 }
 
-void IStorageModule::takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
-    IGNIS_LOG(info) << "IMapperModule starting takeSample, n: " << n
+void IStorageModule::takeSample(std::string &_return, const int64_t msg_id, const std::string &addr, const int64_t n,
+                                const bool withRemplacement, const int32_t seed, const bool light) {
+    IGNIS_LOG(info) << "IStorageModule starting takeSample, msg_id: " << msg_id
+                    << ", addr: " << addr
+                    << ", n: " << n
                     << ", withRemplacement: " << (withRemplacement ? "ordered" : "unordered")
                     << ", seed: " << seed
                     << ", light: " << (light ? "ordered" : "unordered");
     try {
         auto loaded = executor_data->loadObject();
         executor_data->deleteLoadObject();
-        auto object = getIObject(loaded->getManager(),n);
+        auto object = getIObject(loaded->getManager(), n);
 
         // TODO
-        if(light){
+        if (light) {
             auto buffer = std::make_shared<data::IMemoryBuffer>();
             object->write(buffer, 0);//rpc already has compression
             _return = buffer->getBufferAsString();
-        }else{
+        } else {
             executor_data->getPostBox().newOutMessage(msg_id, IMessage(addr, object));
         }
-        IGNIS_LOG(info) << "IMapperModule takeSample done";
+        IGNIS_LOG(info) << "IStorageModule takeSample done";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -178,19 +185,22 @@ void IStorageModule::takeSample(std::string& _return, const int64_t msg_id, cons
     }
 }
 
-void IStorageModule::collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light) {
-    IGNIS_LOG(info) << "IMapperModule starting collect, light: " << (light ? "ordered" : "unordered");
+void IStorageModule::collect(std::string &_return, const int64_t msg_id, const std::string &addr, const bool light) {
+    IGNIS_LOG(info) << "IStorageModule starting collect, msg_id: " << msg_id
+                    << ", addr: " << addr
+                    << " light: "
+                    << (light ? "ordered" : "unordered");
     try {
         auto object = executor_data->loadObject();
         executor_data->deleteLoadObject();
-        if(light){
+        if (light) {
             auto buffer = std::make_shared<data::IMemoryBuffer>();
             object->write(buffer, 0);//rpc already has compression
             _return = buffer->getBufferAsString();
-        }else{
+        } else {
             executor_data->getPostBox().newOutMessage(msg_id, IMessage(addr, object));
         }
-        IGNIS_LOG(info) << "IMapperModule collect done";
+        IGNIS_LOG(info) << "IStorageModule collect done";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
