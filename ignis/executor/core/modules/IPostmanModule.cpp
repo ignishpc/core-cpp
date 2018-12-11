@@ -167,7 +167,7 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
             //Do nothing else
         } else if (addr_mode == "unixSocket") {
             throw ignis::exceptions::ILogicError(
-                    "IPostmanModule id " + std::to_string(id) + " mode " + addr_mode + " not implemented yet");
+                    "IPostmanModule id " + std::to_string(id) + " mode: " + addr_mode + " not implemented yet");
         } else if (addr_mode == "memoryBuffer") {
             std::string addr_path = vaddr[3];
             size_t addr_block_size = std::stoul(vaddr[4]);
@@ -177,7 +177,7 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
             transport = std::make_shared<data::IFileTransport>(buffer1, buffer2, transport, addr_block_size);
         } else {
             throw ignis::exceptions::ILogicError(
-                    "IPostmanModule id " + std::to_string(id) + " mode " + addr_mode + " unknown");
+                    "IPostmanModule id " + std::to_string(id) + " mode: " + addr_mode + " unknown");
         }
         auto buffer = std::make_shared<transport::TBufferedTransport>(transport);
         IGNIS_THREAD_LOG(info) << "IPostmanModule id " << id << " sending" << " mode: " << addr_mode;

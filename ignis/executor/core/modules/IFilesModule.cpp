@@ -17,7 +17,7 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
         auto &manager_any = (std::shared_ptr<api::IManager<IObject::Any>> &) manager;
         std::shared_ptr<IObject> object = getIObject(manager_any, lines, len);
         IGNIS_LOG(info) << "IFileModule reading"
-                        << " path: " << path
+                        << ", path: " << path
                         << ", offset: " << offset
                         << ", len: " << len
                         << ", lines: " << lines;
@@ -67,9 +67,10 @@ void IFilesModule::saveFile(const std::string &path, const bool trunc, const boo
             throw exceptions::IInvalidArgument("IFileModule cannot create/open file " + path);
         }
 
-        IGNIS_LOG(info) << "IFileModule saving "
+        IGNIS_LOG(info) << "IFileModule saving, "
                         << " path: " << path
-                        << ", truncate: " << trunc ? "true" : "false";
+                        << ", truncate: " << (trunc ? "true" : "false")
+                        << ", new_line: " << (new_line ? "true" : "false");
 
         if (reader->hasNext()) {
             (*printer)(reader->next(), fs);
@@ -108,7 +109,6 @@ void IFilesModule::saveJson(const std::string &path, const bool array_start, con
         std::ofstream fs;
         if (!array_start && !array_end) {
             fs.open(path, std::fstream::app);
-            fs.seekp(-1, fs.end);
         } else {
             fs.open(path, std::fstream::trunc);
         }
@@ -130,8 +130,8 @@ void IFilesModule::saveJson(const std::string &path, const bool array_start, con
         }
 
         while (reader->hasNext()) {
-            fs << std::endl << "," << std::endl;
-            (*printer)(reader->next(), fs);
+            fs << "," << std::endl;
+            printer->printJson(reader->next(), fs);
         }
 
         if (array_end) {

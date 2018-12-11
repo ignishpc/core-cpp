@@ -47,12 +47,12 @@ void IShuffleModuleTest::shuffle() {
 
     shuffle_module->createSplits(splits);
 
-    auto mgsg = executor_data->getPostBox().popOutBox();
+    auto msgs = executor_data->getPostBox().popOutBox();
     for(int i=0;i<order.size();i++){
-        CPPUNIT_ASSERT_EQUAL(splits[i].length, (int64_t)mgsg[order[i]].getObj()->getSize());
+        CPPUNIT_ASSERT_EQUAL(splits[i].length, (int64_t)msgs[order[i]].getObj()->getSize());
     }
 
-    for(auto& msg : mgsg){
+    for(auto& msg : msgs){
         executor_data->getPostBox().newInMessage(msg.first,msg.second);
     }
 
