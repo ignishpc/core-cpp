@@ -17,13 +17,19 @@ namespace ignis {
                     IRawObject(const std::shared_ptr<apache::thrift::transport::TTransport> &transport,
                                int8_t compression);
 
-                    virtual std::shared_ptr<iterator::ICoreReadIterator<Any>> readIterator() override;
+                    virtual std::shared_ptr<iterator::ICoreReadIterator < Any>> readIterator()
+                    override;
 
-                    virtual std::shared_ptr<iterator::ICoreWriteIterator<Any>> writeIterator() override;
+                    virtual std::shared_ptr<iterator::ICoreWriteIterator < Any>> writeIterator()
+                    override;
 
                     virtual void read(std::shared_ptr<transport::TTransport> trans) override;
 
                     virtual void write(std::shared_ptr<transport::TTransport> trans, int8_t compression) override;
+
+                    virtual void clear() override;
+
+                    virtual void copyTo(IObject &target) override;
 
                     virtual void copyFrom(IObject &source) override;
 
@@ -43,6 +49,8 @@ namespace ignis {
                     inline void readHeader(std::shared_ptr<transport::TTransport> transport);
 
                     inline void writeHeader(std::shared_ptr<transport::TTransport> transport);
+
+                    virtual void flush();
 
                     std::shared_ptr<transport::TTransport> transport;
                     size_t elems;

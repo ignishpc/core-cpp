@@ -85,13 +85,7 @@ void IKeysModule::prepareKeys(const std::vector<ignis::rpc::executor::IExecutorK
 
         auto reader = object->readIterator();
         for (size_t i = 0; i < size; i++) {
-            auto writer = hashWriter[hashes.get()[i]];
-
-            auto &value = (storage::IObject::Any &) reader->next();
-
-            writer->write(value);
-
-            //hashWriter[hashes.get()[i]]->write((storage::IObject::Any &&) reader->next());
+            hashWriter[hashes.get()[i]]->write((storage::IObject::Any &&) reader->next());
         }
         hashes.reset();
         IGNIS_LOG(info) << "IKeysModule keys prepared";

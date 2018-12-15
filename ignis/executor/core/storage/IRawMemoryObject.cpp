@@ -22,6 +22,10 @@ IRawMemoryObject::IRawMemoryObject(int8_t compression, uint32_t sz)
         : IRawMemoryObject(std::make_shared<data::IMemoryBuffer>(sz), compression) {
 }
 
+IRawMemoryObject::~IRawMemoryObject() {
+
+}
+
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IRawMemoryObject::readIterator() {
     if (!read_only) {
         this->transport->flush();
@@ -49,8 +53,17 @@ void IRawMemoryObject::write(std::shared_ptr<transport::TTransport> trans, int8_
     this->IRawObject::write(trans, compression);
 }
 
+void IRawMemoryObject::copyTo(IObject &target){
+    if (!read_only) {
+        this->transport->flush();
+        return IRawMemoryObject(readObservation(), this->compression, elems, type, true).
+                setManager(manager).copyTo(target);
+    }
+    IRawObject::copyTo(target);
+}
+
 std::shared_ptr<ignis::data::IMemoryBuffer> IRawMemoryObject::readObservation() {
-    this->transport->flush();
+    flush();
     uint8_t *ptr;
     size_t size;
     raw_memory->getBuffer(&ptr, &size);
@@ -63,7 +76,7 @@ void IRawMemoryObject::fit() {
 }
 
 void IRawMemoryObject::clear() {
-    elems = 0;
+    IRawObject::clear();
     std::dynamic_pointer_cast<data::IZlibTransport> (transport)->restart();
     raw_memory->resetBuffer();
 }
@@ -72,9 +85,13 @@ std::string IRawMemoryObject::getType() {
     return TYPE;
 }
 
-IRawMemoryObject::~IRawMemoryObject() {
-
+void IRawMemoryObject::flush() {
+    if(!read_only){
+        IRawObject::flush();
+    }
 }
+
+
 
 
 

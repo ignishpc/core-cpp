@@ -175,16 +175,21 @@ void IObjectTest::copyTest() {
     }
     CPPUNIT_ASSERT_EQUAL(examples.size(), object->getSize());
 //////////////////////////////////////////////////////////////////////////
-    auto copy = getObject(object->getManager(),100, 10 * 1024);
+    auto copy = getObject(object->getManager(), 100, 10 * 1024);
+    copy->copyFrom(*object);
     copy->copyFrom(*object);
     CPPUNIT_ASSERT_EQUAL(examples.size(), object->getSize());
-    CPPUNIT_ASSERT_EQUAL(examples.size(), copy->getSize());
+    CPPUNIT_ASSERT_EQUAL(examples.size() * 2, copy->getSize());
 //////////////////////////////////////////////////////////////////////////
     auto reader = object->readIterator();
     auto reader_copy = copy->readIterator();
     for (auto &elem: examples) {
         CPPUNIT_ASSERT(reader->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) reader->next());
+        CPPUNIT_ASSERT(reader_copy->hasNext());
+        CPPUNIT_ASSERT_EQUAL(elem, (std::string &) reader_copy->next());
+    }
+    for (auto &elem: examples) {
         CPPUNIT_ASSERT(reader_copy->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) reader_copy->next());
     }
@@ -205,7 +210,7 @@ void IObjectTest::moveTest() {
     }
     CPPUNIT_ASSERT_EQUAL(examples.size(), object->getSize());
 //////////////////////////////////////////////////////////////////////////
-    auto moved = getObject(object->getManager(),100, 10 * 1024);
+    auto moved = getObject(object->getManager(), 100, 10 * 1024);
     moved->moveFrom(*object);
     CPPUNIT_ASSERT_EQUAL(0ul, object->getSize());
     CPPUNIT_ASSERT_EQUAL(examples.size(), moved->getSize());
@@ -216,6 +221,29 @@ void IObjectTest::moveTest() {
     for (auto &elem: examples) {
         CPPUNIT_ASSERT(reader->hasNext());
         CPPUNIT_ASSERT_EQUAL(elem, (std::string &) reader->next());
+    }
+    CPPUNIT_ASSERT(!reader->hasNext());
+}
+
+void IObjectTest::skipTest() {
+    std::srand(0);
+    std::vector<std::string> examples;
+    for (int i = 0; i < 100; i++) {
+        examples.push_back(std::to_string(std::rand() % 100));
+    }
+//////////////////////////////////////////////////////////////////////////
+    auto write = object->writeIterator();
+    for (auto &elem: examples) {
+        write->write((IObject::Any &) elem);
+    }
+    CPPUNIT_ASSERT_EQUAL(examples.size(), object->getSize());
+//////////////////////////////////////////////////////////////////////////
+    auto reader = object->readIterator();
+    size_t skipped = object->getSize() / 2;
+    reader->skip(skipped);
+    for (size_t i = skipped; i < examples.size(); i++) {
+        CPPUNIT_ASSERT(reader->hasNext());
+        CPPUNIT_ASSERT_EQUAL(examples[i], (std::string &) reader->next());
     }
     CPPUNIT_ASSERT(!reader->hasNext());
 }

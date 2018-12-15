@@ -43,6 +43,7 @@ void IRawObject::writeHeader(std::shared_ptr<transport::TTransport> transport) {
 }
 
 std::shared_ptr<iterator::ICoreReadIterator<IObject::Any>> IRawObject::readIterator() {
+    flush();
     return std::make_shared<iterator::IReadTransportIterator>(transport, manager, elems);
 
 }
@@ -60,10 +61,10 @@ void IRawObject::read(std::shared_ptr<transport::TTransport> trans) {
     while ((bytes = data_transport->read(buffer, 256)) > 0) {
         this->transport->write(buffer, bytes);
     }
-    this->transport->flush();
 }
 
 void IRawObject::write(std::shared_ptr<transport::TTransport> trans, int8_t compression) {
+    flush();
     auto data_transport = std::make_shared<data::IZlibTransport>(trans, compression);
     writeHeader(data_transport);
     uint8_t buffer[256];
@@ -74,12 +75,34 @@ void IRawObject::write(std::shared_ptr<transport::TTransport> trans, int8_t comp
     data_transport->flush();
 }
 
+void IRawObject::copyTo(IObject &target){
+    auto raw = dynamic_cast<IRawObject*>(&target);
+    if(raw != NULL){
+        flush();
+        if(raw->getSize() == 0){
+            raw->type = type;
+        }
+        raw->elems += elems;
+        uint8_t buffer[256];
+        size_t bytes;
+        while ((bytes = this->transport->read(buffer, 256)) > 0) {
+            raw->transport->write(buffer, bytes);
+        }
+    }else{
+        iterator::readToWrite(*(this->readIterator()), *(target.writeIterator()));
+    }
+}
+
 void IRawObject::copyFrom(IObject &source) {
-    iterator::readToWrite(*(source.readIterator()), *(this->writeIterator()));
+    if(dynamic_cast<IRawObject*>(&source) != NULL){
+        source.copyTo(*this);
+    }else{
+        iterator::readToWrite(*(source.readIterator()), *(this->writeIterator()));
+    }
 }
 
 void IRawObject::moveFrom(IObject &source) {
-    iterator::readToWrite(*(source.readIterator()), *(this->writeIterator()), true);
+    copyFrom(source);
     source.clear();
 }
 
@@ -89,5 +112,14 @@ size_t IRawObject::getSize() {
 
 std::string IRawObject::getType() {
     return TYPE;
+}
+
+void IRawObject::clear() {
+    flush();
+    elems = 0;
+}
+
+void IRawObject::flush() {
+    transport->flush();
 }
 

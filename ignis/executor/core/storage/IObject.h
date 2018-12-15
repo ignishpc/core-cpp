@@ -26,11 +26,11 @@ namespace ignis {
 
                     virtual void copyFrom(IObject &source) = 0;
 
-                    virtual void copyTo(IObject &source) { source.copyFrom(*this); }
+                    virtual void copyTo(IObject &target) { target.copyFrom(*this); }
 
                     virtual void moveFrom(IObject &source) = 0;
 
-                    virtual void moveTo(IObject &source) { source.moveFrom(*this); }
+                    virtual void moveTo(IObject &target) { target.moveFrom(*this); }
 
                     virtual size_t getSize() = 0;
 

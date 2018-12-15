@@ -35,6 +35,7 @@ void IFilesModule::readFile(const std::string &path, const int64_t offset, const
         }
         object->fit();
         executor_data->loadObject(object);
+        IGNIS_LOG(info) << "IFileModule read";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -84,6 +85,7 @@ void IFilesModule::saveFile(const std::string &path, const bool trunc, const boo
         if (new_line) {
             fs << std::endl;
         }
+        IGNIS_LOG(info) << "IFileModule saved";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());
@@ -137,6 +139,7 @@ void IFilesModule::saveJson(const std::string &path, const bool array_start, con
         if (array_end) {
             fs << std::endl << "]";
         }
+        IGNIS_LOG(info) << "IFileModule saved";
     } catch (exceptions::IException &ex) {
         IRemoteException iex;
         iex.__set_message(ex.what());

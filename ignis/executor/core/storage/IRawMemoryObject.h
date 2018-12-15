@@ -28,6 +28,8 @@ namespace ignis {
 
                     virtual void clear() override;
 
+                    virtual void copyTo(IObject &target) override;
+
                     virtual void fit() override;
 
                     virtual std::string getType() override;
@@ -42,6 +44,8 @@ namespace ignis {
                     IRawMemoryObject(const std::shared_ptr<data::IMemoryBuffer> &buffer, int8_t compression);
 
                     inline std::shared_ptr<data::IMemoryBuffer> readObservation();
+
+                    virtual void flush();
 
                     std::shared_ptr<data::IMemoryBuffer> raw_memory;
                     bool read_only;

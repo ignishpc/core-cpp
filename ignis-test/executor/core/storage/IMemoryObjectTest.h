@@ -20,6 +20,7 @@ namespace ignis {
                         CPPUNIT_TEST(appendTest);
                         CPPUNIT_TEST(copyTest);
                         CPPUNIT_TEST(moveTest);
+                        CPPUNIT_TEST(skipTest);
                     CPPUNIT_TEST_SUITE_END();
 
                     virtual std::shared_ptr<IObject> getObject(std::shared_ptr<api::IManager<IObject::Any>> m,

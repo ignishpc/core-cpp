@@ -35,6 +35,8 @@ namespace ignis {
 
                     virtual void moveTest();
 
+                    virtual void skipTest();
+
                     virtual void tearDown();
 
                 private:
