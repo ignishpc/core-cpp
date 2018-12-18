@@ -120,8 +120,8 @@ set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -DBOOST_ALL_DYN_LINK -g -
 add_library(igniscore SHARED ${SOURCE_FILES})
 add_executable(ignis-cpp main.cpp ${SOURCE_FILES})
 
-TARGET_LINK_LIBRARIES(igniscore jsoncpp thrift boost_system boost_filesystem dl thriftz z boost_log boost_thread)
-TARGET_LINK_LIBRARIES(ignis-cpp jsoncpp thrift boost_system boost_filesystem dl thriftz z boost_log boost_thread)
+TARGET_LINK_LIBRARIES(igniscore thrift boost_system boost_filesystem dl thriftz z boost_log boost_thread)
+TARGET_LINK_LIBRARIES(ignis-cpp thrift boost_system boost_filesystem dl thriftz z boost_log boost_thread)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
 install(DIRECTORY ../ignis
