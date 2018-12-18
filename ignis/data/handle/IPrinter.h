@@ -13,8 +13,8 @@
 #include <unordered_map>
 #include <memory>
 #include <ostream>
-#include <jsoncpp/json/json.h>
-#include<jsoncpp/json/writer.h>
+#include <rapidjson/prettywriter.h>
+#include <rapidjson/ostreamwrapper.h>
 #include "../../exceptions/ILogicError.h"
 #include "../RTTInfo.h"
 
@@ -24,6 +24,8 @@ namespace ignis {
 
             std::string inline tab(size_t n) { return std::string(n, '\t'); }
 
+            typedef rapidjson::Writer<rapidjson::OStreamWrapper> JsonStream;
+
             template<typename T>
             struct IPrinterType {
                 virtual void operator()(const T &b, std::ostream &out, size_t level) {
@@ -31,7 +33,7 @@ namespace ignis {
                             "IPrinterType not implemented for " + RTTInfo(typeid(T)).getStandardName());
                 }
 
-                virtual void printJson(const T &b, Json::Value &json) {
+                virtual void printJson(const T &b, JsonStream &out) {
                     throw exceptions::ILogicError(
                             "IPrinterType json not implemented for " + RTTInfo(typeid(T)).getStandardName());
                 }
@@ -43,8 +45,8 @@ namespace ignis {
                     out << b;
                 }
 
-                inline void printJson(const bool &b, Json::Value &json) {
-                    json = Json::Value(b);
+                inline void printJson(const bool &b, JsonStream &out) {
+                    out.Bool(b);
                 }
             };
 
@@ -54,8 +56,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const int8_t &i, Json::Value &json) {
-                    json = Json::Value(i);
+                inline void printJson(const int8_t &i, JsonStream &out) {
+                    out.Int(i);
                 }
             };
 
@@ -65,8 +67,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const uint8_t &i, Json::Value &json) {
-                    json = Json::Value(i);
+                inline void printJson(const uint8_t &i, JsonStream &out) {
+                    out.Uint(i);
                 }
             };
 
@@ -76,8 +78,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const int16_t &i, Json::Value &json) {
-                    json = Json::Value(i);
+                inline void printJson(const int16_t &i, JsonStream &out) {
+                    out.Int(i);
                 }
             };
 
@@ -87,8 +89,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const uint16_t &i, Json::Value &json) {
-                    json = Json::Value(i);
+                inline void printJson(const uint16_t &i, JsonStream &out) {
+                    out.Uint(i);
                 }
             };
 
@@ -98,8 +100,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const int32_t &i, Json::Value &json) {
-                    json = Json::Value(i);
+                inline void printJson(const int32_t &i, JsonStream &out) {
+                    out.Int(i);
                 }
             };
 
@@ -109,8 +111,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const uint32_t &i, Json::Value &json) {
-                    json = Json::Value(i);
+                inline void printJson(const uint32_t &i, JsonStream &out) {
+                    out.Uint(i);
                 }
             };
 
@@ -120,8 +122,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const int64_t &i, Json::Value &json) {
-                    json = Json::Value((Json::Int64) i);
+                inline void printJson(const int64_t &i, JsonStream &out) {
+                    out.Int64(i);
                 }
             };
 
@@ -131,8 +133,8 @@ namespace ignis {
                     out << i;
                 }
 
-                inline void printJson(const uint64_t &i, Json::Value &json) {
-                    json = Json::Value((Json::Int64) i);
+                inline void printJson(const uint64_t &i, JsonStream &out) {
+                    out.Uint64(i);
                 }
             };
 
@@ -142,8 +144,8 @@ namespace ignis {
                     out << d;
                 }
 
-                inline void printJson(const float &d, Json::Value &json) {
-                    json = Json::Value(d);
+                inline void printJson(const float &d, JsonStream &out) {
+                    out.Double(d);
                 }
             };
 
@@ -153,19 +155,8 @@ namespace ignis {
                     out << d;
                 }
 
-                inline void printJson(const double &d, Json::Value &json) {
-                    json = Json::Value(d);
-                }
-            };
-
-            template<>
-            struct IPrinterType<long double> {
-                inline void operator()(const long double &d, std::ostream &out, size_t level) {
-                    out << d;
-                }
-
-                inline void printJson(const long double &d, Json::Value &json) {
-                    json = Json::Value(std::to_string(d));
+                inline void printJson(const double &d, JsonStream &out) {
+                    out.Double(d);
                 }
             };
 
@@ -175,8 +166,8 @@ namespace ignis {
                     out << s;
                 }
 
-                inline void printJson(const std::string &s, Json::Value &json) {
-                    json = Json::Value(s);
+                inline void printJson(const std::string &s, JsonStream &out) {
+                    out.String(s.data());
                 }
             };
 
@@ -197,16 +188,12 @@ namespace ignis {
                     }
                 }
 
-                inline void printJson(const std::vector<_Tp, _Alloc> &v, Json::Value &json) {
-                    json = Json::Value(Json::arrayValue);
-                    json.resize(v.size());
-                    Json::ArrayIndex i = 0;
+                inline void printJson(const std::vector<_Tp, _Alloc> &v, JsonStream &out) {
+                    out.StartArray();
                     for (const auto &elem:v) {
-                        Json::Value child;
-                        IPrinterType<_Tp>().printJson(elem, child);
-                        json[i++] = child;
+                        IPrinterType<_Tp>().printJson(elem, out);
                     }
-
+                    out.EndArray();
                 }
             };
 
@@ -227,16 +214,12 @@ namespace ignis {
                     }
                 }
 
-                inline void printJson(const std::list<_Tp, _Alloc> &l, Json::Value &json) {
-                    json = Json::Value(Json::arrayValue);
-                    json.resize(l.size());
-                    Json::ArrayIndex i = 0;
+                inline void printJson(const std::list<_Tp, _Alloc> &l, JsonStream &out) {
+                    out.StartArray();
                     for (const auto &elem:l) {
-                        Json::Value child;
-                        IPrinterType<_Tp>().printJson(elem, child);
-                        json[i++] = child;
+                        IPrinterType<_Tp>().printJson(elem, out);
                     }
-
+                    out.EndArray();
                 }
             };
 
@@ -257,14 +240,12 @@ namespace ignis {
                     }
                 }
 
-                inline void printJson(const std::forward_list<_Tp, _Alloc> &fl, Json::Value &json) {
-                    json = Json::Value(Json::arrayValue);
+                inline void printJson(const std::forward_list<_Tp, _Alloc> &fl, JsonStream &out) {
+                    out.StartArray();
                     for (const auto &elem:fl) {
-                        Json::Value child;
-                        IPrinterType<_Tp>().printJson(elem, child);
-                        json.append(child);
+                        IPrinterType<_Tp>().printJson(elem, out);
                     }
-
+                    out.EndArray();
                 }
             };
 
@@ -285,16 +266,12 @@ namespace ignis {
                     }
                 }
 
-                inline void printJson(const std::set<_Key, _Compare> &s, Json::Value &json) {
-                    json = Json::Value(Json::arrayValue);
-                    json.resize(s.size());
-                    Json::ArrayIndex i = 0;
+                inline void printJson(const std::set<_Key, _Compare> &s, JsonStream &out) {
+                    out.StartArray();
                     for (const auto &elem:s) {
-                        Json::Value child;
-                        IPrinterType<_Key>().printJson(elem, child);
-                        json[i++] = child;
+                        IPrinterType<_Key>().printJson(elem, out);
                     }
-
+                    out.EndArray();
                 }
             };
 
@@ -315,16 +292,12 @@ namespace ignis {
                     }
                 }
 
-                inline void printJson(const std::unordered_set<_Value, _Hash, _Pred, _Alloc> &us, Json::Value &json) {
-                    json = Json::Value(Json::arrayValue);
-                    json.resize(us.size());
-                    Json::ArrayIndex i = 0;
+                inline void printJson(const std::unordered_set<_Value, _Hash, _Pred, _Alloc> &us, JsonStream &out) {
+                    out.StartArray();
                     for (const auto &elem:us) {
-                        Json::Value child;
-                        IPrinterType<_Value>().printJson(elem, child);
-                        json[i++] = child;
+                        IPrinterType<_Value>().printJson(elem, out);
                     }
-
+                    out.EndArray();
                 }
             };
 
@@ -335,35 +308,33 @@ namespace ignis {
                     auto begin = m.begin();
                     auto end = m.end();
                     if (begin != end) {
-                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        IPrinterType<std::pair<_Key, _Tp>>()(*begin, out, level);
                         begin++;
                     }
 
                     while (begin != end) {
                         out << std::endl;
-                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        IPrinterType<std::pair<_Key, _Tp>>()(*begin, out, level);
                         begin++;
                     }
                 }
 
-                inline void printJson(const std::map<_Key, _Tp, _Compare, _Alloc> &m, Json::Value &json) {
-                    json = Json::Value(Json::objectValue);
+                inline void printJson(const std::map<_Key, _Tp, _Compare, _Alloc> &m, JsonStream &out) {
+                    out.StartObject();
                     if (std::is_convertible<_Key, std::string>()) {
                         for (const auto &elem:m) {
-                            Json::Value child;
-                            IPrinterType<_Tp>().printJson(elem.second, child);
-                            json[(std::string &) elem.first] = child;
+                            out.Key(((std::string &) elem.first).data());
+                            IPrinterType<_Tp>().printJson(elem.second, out);
                         }
                     } else {
                         for (const auto &elem:m) {
-                            Json::Value key;
-                            Json::Value value;
-                            IPrinterType<_Key>().printJson(elem.first, key);
-                            IPrinterType<_Tp>().printJson(elem.second, value);
-                            json["key"] = key;
-                            json["value"] = value;
+                            out.Key("key");
+                            IPrinterType<_Key>().printJson(elem.first, out);
+                            out.Key("value");
+                            IPrinterType<_Tp>().printJson(elem.second, out);
                         }
                     }
+                    out.EndObject();
                 }
             };
 
@@ -374,36 +345,34 @@ namespace ignis {
                     auto begin = um.begin();
                     auto end = um.end();
                     if (begin != end) {
-                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        IPrinterType<std::pair<_Key, _Tp>>()(*begin, out, level);
                         begin++;
                     }
 
                     while (begin != end) {
                         out << std::endl;
-                        IPrinterType<std::pair<_Key,_Tp>>()(*begin, out, level);
+                        IPrinterType<std::pair<_Key, _Tp>>()(*begin, out, level);
                         begin++;
                     }
                 }
 
                 inline void
-                printJson(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &um, Json::Value &json) {
-                    json = Json::Value(Json::objectValue);
+                printJson(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &um, JsonStream &out) {
+                    out.StartObject();
                     if (std::is_convertible<_Key, std::string>()) {
                         for (const auto &elem:um) {
-                            Json::Value child;
-                            IPrinterType<_Tp>().printJson(elem.second, child);
-                            json[(std::string &) elem.first] = child;
+                            out.Key(((std::string &) elem.first).data());
+                            IPrinterType<_Tp>().printJson(elem.second, out);
                         }
                     } else {
                         for (const auto &elem:um) {
-                            Json::Value key;
-                            Json::Value value;
-                            IPrinterType<_Key>().printJson(elem.first, key);
-                            IPrinterType<_Tp>().printJson(elem.second, value);
-                            json["key"] = key;
-                            json["value"] = value;
+                            out.Key("key");
+                            IPrinterType<_Key>().printJson(elem.first, out);
+                            out.Key("value");
+                            IPrinterType<_Tp>().printJson(elem.second, out);
                         }
                     }
+                    out.EndObject();
                 }
             };
 
@@ -418,18 +387,19 @@ namespace ignis {
                     out << ")";
                 }
 
-                inline void printJson(const std::pair<_T1, _T2> &p, Json::Value &json) {
-                    json = Json::Value(Json::objectValue);
-                    Json::Value second;
-                    IPrinterType<_T2>().printJson(p.second, second);
+                inline void printJson(const std::pair<_T1, _T2> &p, JsonStream &out) {
+                    out.StartObject();
                     if (std::is_convertible<_T1, std::string>()) {
-                        json[(std::string &) p.first] = second;
+                        out.Key(((std::string &) p.first).data());
+                        IPrinterType<_T2>().printJson(p.second, out);
+
                     } else {
-                        Json::Value first;
-                        IPrinterType<_T1>().printJson(p.first, first);
-                        json["first"] = first;
-                        json["second"] = second;
+                        out.Key("first");
+                        IPrinterType<_T1>().printJson(p.first, out);
+                        out.Key("second");
+                        IPrinterType<_T2>().printJson(p.second, out);
                     }
+                    out.EndObject();
                 }
             };
 
@@ -439,8 +409,8 @@ namespace ignis {
                     IPrinterType<_Tp *>()(*v, out, level);
                 }
 
-                inline void printJson(const _Tp *&v, Json::Value &json) {
-                    IPrinterType<_Tp *>().printJson(*v, json);
+                inline void printJson(const _Tp *&v, JsonStream &out) {
+                    IPrinterType<_Tp *>().printJson(*v, out);
                 }
             };
 
@@ -450,8 +420,8 @@ namespace ignis {
                     IPrinterType<_Tp *>()(*v, out, level);
                 }
 
-                inline void printJson(const std::shared_ptr<_Tp> &v, Json::Value &json) {
-                    IPrinterType<_Tp *>().printJson(*v, json);
+                inline void printJson(const std::shared_ptr<_Tp> &v, JsonStream &out) {
+                    IPrinterType<_Tp *>().printJson(*v, out);
                 }
             };
 
@@ -462,10 +432,16 @@ namespace ignis {
                     printer(b, out, 0);
                 }
 
-                virtual void printJson(const T &b, std::ostream &out) {
-                    Json::Value root;
-                    printer.printJson(b, root);
-                    out << root;
+                virtual void printJson(const T &b, std::ostream &out, bool pretty = true) {
+                    rapidjson::OStreamWrapper wrapper(out);
+                    if (pretty) {
+                        rapidjson::PrettyWriter<rapidjson::OStreamWrapper> writer(wrapper);
+                        printer.printJson(b, (JsonStream&)writer);
+
+                    } else {
+                        JsonStream writer(wrapper);
+                        printer.printJson(b, writer);
+                    }
                 }
 
             private:
