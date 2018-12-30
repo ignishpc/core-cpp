@@ -24,8 +24,12 @@ namespace ignis {
 
                     std::shared_ptr<storage::IObject> getIObject(
                             const std::shared_ptr<api::IManager<storage::IObject::Any>> &m,
-                            size_t elems = 1000,
-                            size_t bytes = 50 * 1024 * 1024);
+                            size_t elems = 1000);
+
+                    std::shared_ptr<storage::IObject> getIObject(
+                            const std::shared_ptr<api::IManager<storage::IObject::Any>> &m,
+                            size_t elems,
+                            size_t bytes);
 
                     std::shared_ptr<storage::IObject> getIObject(
                             const std::shared_ptr<api::IManager<storage::IObject::Any>> &m,
@@ -52,8 +56,6 @@ namespace ignis {
                     }
 
                     std::shared_ptr<api::IManager<storage::IObject::Any>> getManager(storage::IObject &object);
-
-                    std::shared_ptr<storage::IObject> memoryObject(const std::shared_ptr<storage::IObject> &object);
 
                     virtual ~IgnisModule();
 

@@ -119,8 +119,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         typedef api::function::IFunction2<IObject::Any, IObject::Any, IObject::Any> IFunction2_Type;
         auto function = loadSource<IFunction2_Type>(funct);
         auto &context = executor_data->getContext();
-        auto object = memoryObject(executor_data->loadObject());
-        executor_data->loadObject(object);
+        auto object = executor_data->loadObject();
         auto manager = getManager(*object);
         auto pair_manager = (std::shared_ptr<api::IPairManager<storage::IObject::Any, storage::IObject::Any>> &) manager;
         auto op = pair_manager->firstManager()->_operator();
@@ -130,28 +129,18 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         size_t n_buckets = sizeof(int64_t) * threads;
         decltype(object) buckets[n_buckets];
         decltype(object->writeIterator()) w_buckets[n_buckets];
-        std::mutex locks[n_buckets];
-//Split keys in buckets using hash
-#pragma omp parallel for num_threads(threads)
-        for (int t = 0; t < threads; t++) {
-            auto div = size / threads;
-            auto mod = size % threads;
-            auto size_thread = div + (mod > t ? 1 : 0);
-            auto skip = div * t + (mod > t ? t : mod);
-            auto reader_thread = object->readIterator();
-            reader_thread->skip(skip);
-            for (size_t i = 0; i < size_thread; i++) {
-                auto &value = reader_thread->next();
-                auto hash = op->hash(value);
-                hashes.get()[i + skip] = hash;
-                auto bucket = hash % n_buckets;
-                std::lock_guard<std::mutex> lock((std::mutex &) locks[bucket]);
-                if (!buckets[bucket]) {
-                    buckets[bucket] = getIObject(manager, 2 * size / n_buckets);
-                    w_buckets[bucket] = buckets[bucket]->writeIterator();
-                }
-                w_buckets[bucket]->write((storage::IObject::Any &&) value);
+        auto reader = object->readIterator();
+        //Split keys in buckets using hash
+        for (size_t i = 0; i < size; i++) {
+            auto &value = reader->next();
+            auto hash = op->hash(value);
+            hashes.get()[i] = hash;
+            auto bucket = hash % n_buckets;
+            if (!buckets[bucket]) {
+                buckets[bucket] = getIObject(manager, 2 * size / n_buckets);
+                w_buckets[bucket] = buckets[bucket]->writeIterator();
             }
+            w_buckets[bucket]->write((storage::IObject::Any &&) value);
         }
         object->clear();
 

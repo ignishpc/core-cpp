@@ -18,7 +18,9 @@ set(SOURCE_FILES
         executor/core/modules/IPostmanModuleTest.h
         executor/core/modules/IPostmanModuleTest.cpp
         executor/core/modules/IKeysModuleTest.h
-        executor/core/modules/IKeysModuleTest.cpp)
+        executor/core/modules/IKeysModuleTest.cpp
+        executor/core/modules/ISortModuleTest.h
+        executor/core/modules/ISortModuleTest.cpp)
 
 set(CMAKE_CXX_FLAGS "-g -O0")
 

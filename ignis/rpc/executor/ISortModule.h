@@ -21,6 +21,8 @@ namespace ignis { namespace rpc { namespace executor {
 class ISortModuleIf {
  public:
   virtual ~ISortModuleIf() {}
+  virtual void localCustomSort(const  ::ignis::rpc::ISource& funct, const bool ascending) = 0;
+  virtual void localSort(const bool ascending) = 0;
 };
 
 class ISortModuleIfFactory {
@@ -50,6 +52,227 @@ class ISortModuleIfSingletonFactory : virtual public ISortModuleIfFactory {
 class ISortModuleNull : virtual public ISortModuleIf {
  public:
   virtual ~ISortModuleNull() {}
+  void localCustomSort(const  ::ignis::rpc::ISource& /* funct */, const bool /* ascending */) {
+    return;
+  }
+  void localSort(const bool /* ascending */) {
+    return;
+  }
+};
+
+typedef struct _ISortModule_localCustomSort_args__isset {
+  _ISortModule_localCustomSort_args__isset() : funct(false), ascending(false) {}
+  bool funct :1;
+  bool ascending :1;
+} _ISortModule_localCustomSort_args__isset;
+
+class ISortModule_localCustomSort_args {
+ public:
+
+  ISortModule_localCustomSort_args(const ISortModule_localCustomSort_args&);
+  ISortModule_localCustomSort_args& operator=(const ISortModule_localCustomSort_args&);
+  ISortModule_localCustomSort_args() : ascending(0) {
+  }
+
+  virtual ~ISortModule_localCustomSort_args() throw();
+   ::ignis::rpc::ISource funct;
+  bool ascending;
+
+  _ISortModule_localCustomSort_args__isset __isset;
+
+  void __set_funct(const  ::ignis::rpc::ISource& val);
+
+  void __set_ascending(const bool val);
+
+  bool operator == (const ISortModule_localCustomSort_args & rhs) const
+  {
+    if (!(funct == rhs.funct))
+      return false;
+    if (!(ascending == rhs.ascending))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_localCustomSort_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_localCustomSort_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ISortModule_localCustomSort_pargs {
+ public:
+
+
+  virtual ~ISortModule_localCustomSort_pargs() throw();
+  const  ::ignis::rpc::ISource* funct;
+  const bool* ascending;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_localCustomSort_result__isset {
+  _ISortModule_localCustomSort_result__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_localCustomSort_result__isset;
+
+class ISortModule_localCustomSort_result {
+ public:
+
+  ISortModule_localCustomSort_result(const ISortModule_localCustomSort_result&);
+  ISortModule_localCustomSort_result& operator=(const ISortModule_localCustomSort_result&);
+  ISortModule_localCustomSort_result() {
+  }
+
+  virtual ~ISortModule_localCustomSort_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_localCustomSort_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const ISortModule_localCustomSort_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_localCustomSort_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_localCustomSort_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_localCustomSort_presult__isset {
+  _ISortModule_localCustomSort_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_localCustomSort_presult__isset;
+
+class ISortModule_localCustomSort_presult {
+ public:
+
+
+  virtual ~ISortModule_localCustomSort_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_localCustomSort_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ISortModule_localSort_args__isset {
+  _ISortModule_localSort_args__isset() : ascending(false) {}
+  bool ascending :1;
+} _ISortModule_localSort_args__isset;
+
+class ISortModule_localSort_args {
+ public:
+
+  ISortModule_localSort_args(const ISortModule_localSort_args&);
+  ISortModule_localSort_args& operator=(const ISortModule_localSort_args&);
+  ISortModule_localSort_args() : ascending(0) {
+  }
+
+  virtual ~ISortModule_localSort_args() throw();
+  bool ascending;
+
+  _ISortModule_localSort_args__isset __isset;
+
+  void __set_ascending(const bool val);
+
+  bool operator == (const ISortModule_localSort_args & rhs) const
+  {
+    if (!(ascending == rhs.ascending))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_localSort_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_localSort_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ISortModule_localSort_pargs {
+ public:
+
+
+  virtual ~ISortModule_localSort_pargs() throw();
+  const bool* ascending;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_localSort_result__isset {
+  _ISortModule_localSort_result__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_localSort_result__isset;
+
+class ISortModule_localSort_result {
+ public:
+
+  ISortModule_localSort_result(const ISortModule_localSort_result&);
+  ISortModule_localSort_result& operator=(const ISortModule_localSort_result&);
+  ISortModule_localSort_result() {
+  }
+
+  virtual ~ISortModule_localSort_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_localSort_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const ISortModule_localSort_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_localSort_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_localSort_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_localSort_presult__isset {
+  _ISortModule_localSort_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_localSort_presult__isset;
+
+class ISortModule_localSort_presult {
+ public:
+
+
+  virtual ~ISortModule_localSort_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_localSort_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 class ISortModuleClient : virtual public ISortModuleIf {
@@ -77,6 +300,12 @@ class ISortModuleClient : virtual public ISortModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void localCustomSort(const  ::ignis::rpc::ISource& funct, const bool ascending);
+  void send_localCustomSort(const  ::ignis::rpc::ISource& funct, const bool ascending);
+  void recv_localCustomSort();
+  void localSort(const bool ascending);
+  void send_localSort(const bool ascending);
+  void recv_localSort();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -92,9 +321,13 @@ class ISortModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (ISortModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_localCustomSort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_localSort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ISortModuleProcessor(::apache::thrift::stdcxx::shared_ptr<ISortModuleIf> iface) :
     iface_(iface) {
+    processMap_["localCustomSort"] = &ISortModuleProcessor::process_localCustomSort;
+    processMap_["localSort"] = &ISortModuleProcessor::process_localSort;
   }
 
   virtual ~ISortModuleProcessor() {}
@@ -123,6 +356,24 @@ class ISortModuleMultiface : virtual public ISortModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void localCustomSort(const  ::ignis::rpc::ISource& funct, const bool ascending) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->localCustomSort(funct, ascending);
+    }
+    ifaces_[i]->localCustomSort(funct, ascending);
+  }
+
+  void localSort(const bool ascending) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->localSort(ascending);
+    }
+    ifaces_[i]->localSort(ascending);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -153,6 +404,12 @@ class ISortModuleConcurrentClient : virtual public ISortModuleIf {
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void localCustomSort(const  ::ignis::rpc::ISource& funct, const bool ascending);
+  int32_t send_localCustomSort(const  ::ignis::rpc::ISource& funct, const bool ascending);
+  void recv_localCustomSort(const int32_t seqid);
+  void localSort(const bool ascending);
+  int32_t send_localSort(const bool ascending);
+  void recv_localSort(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

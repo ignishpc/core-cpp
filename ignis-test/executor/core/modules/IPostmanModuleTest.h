@@ -13,6 +13,7 @@ namespace ignis {
                 CPPUNIT_TEST_SUITE(IPostmanModuleTest);
                         CPPUNIT_TEST(localTest);
                         CPPUNIT_TEST(socketTest);
+                        //CPPUNIT_TEST(unixSocketTest); //Not work on WSL
                         CPPUNIT_TEST(memoryBufferTest);
                     CPPUNIT_TEST_SUITE_END();
                 public:
@@ -22,6 +23,8 @@ namespace ignis {
                     virtual void localTest();
 
                     virtual void socketTest();
+
+                    virtual void unixSocketTest();
 
                     virtual void memoryBufferTest();
 

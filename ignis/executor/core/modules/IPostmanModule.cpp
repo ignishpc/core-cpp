@@ -27,8 +27,11 @@ void IPostmanModule::threadAccept(std::shared_ptr<transport::TTransport> transpo
         if (addr_mode == "socket") {
             //Do nothing else
         } else if (addr_mode == "unixSocket") {
-            throw ignis::exceptions::ILogicError(
-                    "IPostmanModule id " + std::to_string(id) + " mode " + addr_mode + " not implemented yet");
+            std::string name;
+            protocol->readString(name);
+            transport->close();
+            transport = std::make_shared<transport::TSocket>(name);
+            transport->open();
         } else if (addr_mode == "memoryBuffer") {
             std::string addr_path;
             protocol->readString(addr_path);
@@ -166,8 +169,13 @@ int IPostmanModule::send(size_t id, IMessage &msg, int8_t compression) {
         if (addr_mode == "socket") {
             //Do nothing else
         } else if (addr_mode == "unixSocket") {
-            throw ignis::exceptions::ILogicError(
-                    "IPostmanModule id " + std::to_string(id) + " mode: " + addr_mode + " not implemented yet");
+            transport::TServerSocket ss(vaddr[3]);
+            ss.listen();
+            protocol->writeString(vaddr[3]);
+            transport->close();
+            ss.setAcceptTimeout(10);
+            transport = ss.accept();
+            ss.close();
         } else if (addr_mode == "memoryBuffer") {
             std::string addr_path = vaddr[3];
             size_t addr_block_size = std::stoul(vaddr[4]);

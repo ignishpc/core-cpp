@@ -39,18 +39,32 @@ void IMapperModule::pipe(const rpc::ISource &sf) {
 
         function->before(executor_data->getContext());
         if (threads > 1) {
-            object_in = memoryObject(object_in);
+            auto reader = object_in->readIterator();
+            decltype(object_in) parts[threads];
+            decltype(reader) readers[threads];
+            auto div = size / threads;
+            auto mod = size % threads;
+            if (object_in->getType() == storage::IMemoryObject::TYPE) {
+                for (int t = 0; t < threads; t++) {
+                    readers[t] = object_in->readIterator();
+                    readers[t]->skip(t * div + (t < mod ? t : mod));
+                }
+            } else {
+                for (int t = 0; t < threads; t++) {
+                    parts[t] = getIObject(manager_t, div + 1);
+                    storage::iterator::readToWrite(*reader, *parts[t]->writeIterator(), div + (t < mod ? 1 : 0));
+                    readers[t] = parts[t]->readIterator();
+                }
+                object_in = parts[0];
+            }
+
             IGNIS_LOG(info) << "IMapperModule creating " << threads << " threads";
 #pragma omp parallel for num_threads(threads) ordered
             for (int t = 0; t < threads; t++) {
-                auto div = size / threads;
-                auto mod = size % threads;
-                auto size_thread = div + (mod > t ? 1 : 0);
-                auto skip = div * t + (mod > t ? t : mod);
+                auto size_thread = size / threads + (t < mod ? 1 : 0);
                 auto object_thread = getIObject(manager_r, size_thread);
-                auto reader_thread = object_in->readIterator();
+                auto reader_thread = readers[t];
                 auto writer_thread = object_thread->writeIterator();
-                reader_thread->skip(skip);
                 if (filter) {
                     auto &function_filter = (api::function::IFunction<IObject::Any, bool> &) *function;
                     for (size_t i = 0; i < size_thread; i++) {
@@ -292,7 +306,7 @@ void IMapperModule::streamingKeyBy(const rpc::ISource &sf, bool ordered) {
 void IMapperModule::values() {
     IGNIS_LOG(info) << "IMapperModule starting values";
     try {
-        auto object_in = memoryObject(executor_data->loadObject());
+        auto object_in = executor_data->loadObject();
         auto manager = getManager(*object_in);
         auto pair_manager = (std::shared_ptr<api::IPairManager<storage::IObject::Any, storage::IObject::Any>> &) manager;
         auto manager_r = pair_manager->secondManager();
@@ -302,7 +316,7 @@ void IMapperModule::values() {
         auto reader = object_in->readIterator();
         auto writer = object_out->writeIterator();
         for (size_t i = 0; i < size; i++) {
-            auto& pair = (std::pair<storage::IObject::Any, storage::IObject::Any>&)reader->next();
+            auto &pair = (std::pair<storage::IObject::Any, storage::IObject::Any> &) reader->next();
             writer->write(pair_manager->second(pair));
         }
         executor_data->loadObject(object_out);

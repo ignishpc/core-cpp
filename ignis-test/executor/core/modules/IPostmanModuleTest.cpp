@@ -59,8 +59,13 @@ void IPostmanModuleTest::socketTest() {
     test("socket!localhost!" + executor_data->getContext()["ignis.executor.transport.port"]);
 }
 
+void IPostmanModuleTest::unixSocketTest() {
+    test("unixSocket!/tmp/testIgnis.socket");
+}
+
 void IPostmanModuleTest::memoryBufferTest() {
     std::string path = "./";
     std::string block_size = std::to_string(10 * 1024);
-    test("memoryBuffer!localhost!" + executor_data->getContext()["ignis.executor.transport.port"]+"!"+path+"!"+block_size);
+    test("memoryBuffer!localhost!" + executor_data->getContext()["ignis.executor.transport.port"] + "!" + path + "!" +
+         block_size);
 }
