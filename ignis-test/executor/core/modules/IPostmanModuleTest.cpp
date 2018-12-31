@@ -5,7 +5,7 @@ using namespace ignis::executor::core::modules;
 
 void IPostmanModuleTest::setUp() {
     postman_module = std::make_shared<IPostmanModule>(executor_data);
-    executor_data->getContext()["ignis.executor.storage"] = "raw memory";
+    executor_data->getContext()["ignis.executor.storage"] = "rawMemory";
     executor_data->getContext()["ignis.executor.storage.compression"] = "6";
     executor_data->getContext()["ignis.executor.transport.port"] = "54321";
     executor_data->getContext()["ignis.executor.transport.threads"] = "4";

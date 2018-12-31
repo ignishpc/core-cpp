@@ -5,7 +5,7 @@ using namespace ignis::executor::core::modules;
 
 void IKeysModuleTest::setUp() {
     keys_module = std::make_shared<IKeysModule>(executor_data);
-    executor_data->getContext()["ignis.executor.storage"] = "raw memory";
+    executor_data->getContext()["ignis.executor.storage"] = "rawMemory";
     executor_data->getContext()["ignis.executor.storage.compression"] = "6";
 }
 

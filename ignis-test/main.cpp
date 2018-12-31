@@ -28,25 +28,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IPostmanModuleTe
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IKeysModuleTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::ISortModuleTest);
 
-#include <thrift/transport/TSocket.h>
-
-using namespace apache::thrift::transport;
-
 int main(int argc, char *argv[]) {
-    TServerSocket ss("/tmp/a.socket");
-    ss.listen();
-    TSocket sc("/tmp/a.socket");
-    auto sc2 = ss.accept();
-    ss.close();
-
-
-    sc.open();
-    sc2->open();
-
-    sc2->close();
-    sc.close();
-
-    return 0;
     IGNIS_LOG_INIT();
     IGNIS_LOG_ENABLE(false);
     CPPUNIT_NS::TestResult results;

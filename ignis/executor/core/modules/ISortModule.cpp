@@ -95,6 +95,7 @@ void ISortModule::mergeSort(function::IFunction2<IObject::Any, IObject::Any, boo
     threads = std::min(threads, (size_t)size / 10);
     threads = std::max(threads, (size_t)1);
     IGNIS_LOG(info) << "ISortModule sorting with " << threads << " threads";
+    less.before(executor_data->getContext());
 #pragma omp parallel num_threads(threads)
     {
 #pragma omp for
@@ -224,7 +225,7 @@ void ISortModule::mergeSort(function::IFunction2<IObject::Any, IObject::Any, boo
             }
         }
     }
-
+    less.after(executor_data->getContext());
     executor_data->loadObject(merges[0]);
     IGNIS_LOG(info) << "ISortModule sorted";
 }

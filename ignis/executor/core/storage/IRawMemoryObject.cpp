@@ -7,7 +7,7 @@
 using namespace ignis::executor::core::storage;
 using namespace ignis::data;
 
-const std::string IRawMemoryObject::TYPE = "raw memory";
+const std::string IRawMemoryObject::TYPE = "rawMemory";
 
 IRawMemoryObject::IRawMemoryObject(const std::shared_ptr<data::IMemoryBuffer> &buffer,
                                    int8_t compression, size_t elems, int8_t type, bool read_only)

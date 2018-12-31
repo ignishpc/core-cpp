@@ -6,7 +6,7 @@ using ignis::rpc::executor::ISplit;
 
 void IShuffleModuleTest::setUp() {
     shuffle_module = std::make_shared<IShuffleModule>(executor_data);
-    executor_data->getContext()["ignis.executor.storage"] = "raw memory";
+    executor_data->getContext()["ignis.executor.storage"] = "rawMemory";
     executor_data->getContext()["ignis.executor.storage.compression"] = "6";
 }
 

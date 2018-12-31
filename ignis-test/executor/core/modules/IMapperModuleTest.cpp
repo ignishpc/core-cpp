@@ -5,7 +5,7 @@
 using namespace ignis::executor::core::modules;
 
 void IMapperModuleTest::setUp() {
-    executor_data->getContext()["ignis.executor.storage"] = "raw memory";
+    executor_data->getContext()["ignis.executor.storage"] = "rawMemory";
     executor_data->getContext()["ignis.executor.storage.compression"] = "6";
     executor_data->getContext()["ignis.executor.cores.chunk"] = "5";
     mapper_module = std::make_shared<IMapperModule>(executor_data);

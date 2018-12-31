@@ -6,7 +6,7 @@ using namespace ignis::executor::core::modules;
 
 void ISortModuleTest::setUp() {
     sort_module = std::make_shared<ISortModule>(executor_data);
-    executor_data->getContext()["ignis.executor.storage"] = "raw memory";
+    executor_data->getContext()["ignis.executor.storage"] = "rawMemory";
     executor_data->getContext()["ignis.executor.storage.compression"] = "6";
 }
 
