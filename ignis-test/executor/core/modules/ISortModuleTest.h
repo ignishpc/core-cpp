@@ -11,7 +11,7 @@ namespace ignis {
             namespace modules {
                 class ISortModuleTest : public IModuleTest {
                 CPPUNIT_TEST_SUITE(ISortModuleTest);
-                        //CPPUNIT_TEST(sequentialLocalSort);
+                        CPPUNIT_TEST(sequentialLocalSort);
                         CPPUNIT_TEST(parallelLocalSort);
                     CPPUNIT_TEST_SUITE_END();
                 public:
