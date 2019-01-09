@@ -9,9 +9,9 @@ namespace ignis {
             class IReadIterator {
             public:
 
-                virtual T &next() = 0;
+                virtual T &next() {};
 
-                virtual bool hasNext() = 0;
+                virtual bool hasNext() {};
 
                 virtual ~IReadIterator() {};
             };

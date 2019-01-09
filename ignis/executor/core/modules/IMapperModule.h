@@ -21,6 +21,10 @@ namespace ignis {
 
                     virtual void keyBy(const rpc::ISource &sf) override;
 
+                    virtual void mapPartition(const rpc::ISource &sf) override;
+
+                    virtual void mapPartitionWithIndex(const int64_t idx, const rpc::ISource &sf) override;
+
                     virtual void values() override;
 
                     virtual void streamingMap(const rpc::ISource &sf, bool ordered) override;

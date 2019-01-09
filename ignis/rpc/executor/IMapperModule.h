@@ -25,6 +25,8 @@ class IMapperModuleIf {
   virtual void flatmap(const  ::ignis::rpc::ISource& funct) = 0;
   virtual void filter(const  ::ignis::rpc::ISource& funct) = 0;
   virtual void keyBy(const  ::ignis::rpc::ISource& funct) = 0;
+  virtual void mapPartition(const  ::ignis::rpc::ISource& funct) = 0;
+  virtual void mapPartitionWithIndex(const int64_t idx, const  ::ignis::rpc::ISource& funct) = 0;
   virtual void values() = 0;
   virtual void streamingMap(const  ::ignis::rpc::ISource& funct, const bool ordered) = 0;
   virtual void streamingFlatmap(const  ::ignis::rpc::ISource& funct, const bool ordered) = 0;
@@ -69,6 +71,12 @@ class IMapperModuleNull : virtual public IMapperModuleIf {
     return;
   }
   void keyBy(const  ::ignis::rpc::ISource& /* funct */) {
+    return;
+  }
+  void mapPartition(const  ::ignis::rpc::ISource& /* funct */) {
+    return;
+  }
+  void mapPartitionWithIndex(const int64_t /* idx */, const  ::ignis::rpc::ISource& /* funct */) {
     return;
   }
   void values() {
@@ -499,6 +507,221 @@ class IMapperModule_keyBy_presult {
    ::ignis::rpc::IRemoteException ex;
 
   _IMapperModule_keyBy_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IMapperModule_mapPartition_args__isset {
+  _IMapperModule_mapPartition_args__isset() : funct(false) {}
+  bool funct :1;
+} _IMapperModule_mapPartition_args__isset;
+
+class IMapperModule_mapPartition_args {
+ public:
+
+  IMapperModule_mapPartition_args(const IMapperModule_mapPartition_args&);
+  IMapperModule_mapPartition_args& operator=(const IMapperModule_mapPartition_args&);
+  IMapperModule_mapPartition_args() {
+  }
+
+  virtual ~IMapperModule_mapPartition_args() throw();
+   ::ignis::rpc::ISource funct;
+
+  _IMapperModule_mapPartition_args__isset __isset;
+
+  void __set_funct(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IMapperModule_mapPartition_args & rhs) const
+  {
+    if (!(funct == rhs.funct))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_mapPartition_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_mapPartition_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMapperModule_mapPartition_pargs {
+ public:
+
+
+  virtual ~IMapperModule_mapPartition_pargs() throw();
+  const  ::ignis::rpc::ISource* funct;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_mapPartition_result__isset {
+  _IMapperModule_mapPartition_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_mapPartition_result__isset;
+
+class IMapperModule_mapPartition_result {
+ public:
+
+  IMapperModule_mapPartition_result(const IMapperModule_mapPartition_result&);
+  IMapperModule_mapPartition_result& operator=(const IMapperModule_mapPartition_result&);
+  IMapperModule_mapPartition_result() {
+  }
+
+  virtual ~IMapperModule_mapPartition_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_mapPartition_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IMapperModule_mapPartition_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_mapPartition_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_mapPartition_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_mapPartition_presult__isset {
+  _IMapperModule_mapPartition_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_mapPartition_presult__isset;
+
+class IMapperModule_mapPartition_presult {
+ public:
+
+
+  virtual ~IMapperModule_mapPartition_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_mapPartition_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IMapperModule_mapPartitionWithIndex_args__isset {
+  _IMapperModule_mapPartitionWithIndex_args__isset() : idx(false), funct(false) {}
+  bool idx :1;
+  bool funct :1;
+} _IMapperModule_mapPartitionWithIndex_args__isset;
+
+class IMapperModule_mapPartitionWithIndex_args {
+ public:
+
+  IMapperModule_mapPartitionWithIndex_args(const IMapperModule_mapPartitionWithIndex_args&);
+  IMapperModule_mapPartitionWithIndex_args& operator=(const IMapperModule_mapPartitionWithIndex_args&);
+  IMapperModule_mapPartitionWithIndex_args() : idx(0) {
+  }
+
+  virtual ~IMapperModule_mapPartitionWithIndex_args() throw();
+  int64_t idx;
+   ::ignis::rpc::ISource funct;
+
+  _IMapperModule_mapPartitionWithIndex_args__isset __isset;
+
+  void __set_idx(const int64_t val);
+
+  void __set_funct(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IMapperModule_mapPartitionWithIndex_args & rhs) const
+  {
+    if (!(idx == rhs.idx))
+      return false;
+    if (!(funct == rhs.funct))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_mapPartitionWithIndex_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_mapPartitionWithIndex_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMapperModule_mapPartitionWithIndex_pargs {
+ public:
+
+
+  virtual ~IMapperModule_mapPartitionWithIndex_pargs() throw();
+  const int64_t* idx;
+  const  ::ignis::rpc::ISource* funct;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_mapPartitionWithIndex_result__isset {
+  _IMapperModule_mapPartitionWithIndex_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_mapPartitionWithIndex_result__isset;
+
+class IMapperModule_mapPartitionWithIndex_result {
+ public:
+
+  IMapperModule_mapPartitionWithIndex_result(const IMapperModule_mapPartitionWithIndex_result&);
+  IMapperModule_mapPartitionWithIndex_result& operator=(const IMapperModule_mapPartitionWithIndex_result&);
+  IMapperModule_mapPartitionWithIndex_result() {
+  }
+
+  virtual ~IMapperModule_mapPartitionWithIndex_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_mapPartitionWithIndex_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IMapperModule_mapPartitionWithIndex_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMapperModule_mapPartitionWithIndex_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMapperModule_mapPartitionWithIndex_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMapperModule_mapPartitionWithIndex_presult__isset {
+  _IMapperModule_mapPartitionWithIndex_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMapperModule_mapPartitionWithIndex_presult__isset;
+
+class IMapperModule_mapPartitionWithIndex_presult {
+ public:
+
+
+  virtual ~IMapperModule_mapPartitionWithIndex_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IMapperModule_mapPartitionWithIndex_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1077,6 +1300,12 @@ class IMapperModuleClient : virtual public IMapperModuleIf {
   void keyBy(const  ::ignis::rpc::ISource& funct);
   void send_keyBy(const  ::ignis::rpc::ISource& funct);
   void recv_keyBy();
+  void mapPartition(const  ::ignis::rpc::ISource& funct);
+  void send_mapPartition(const  ::ignis::rpc::ISource& funct);
+  void recv_mapPartition();
+  void mapPartitionWithIndex(const int64_t idx, const  ::ignis::rpc::ISource& funct);
+  void send_mapPartitionWithIndex(const int64_t idx, const  ::ignis::rpc::ISource& funct);
+  void recv_mapPartitionWithIndex();
   void values();
   void send_values();
   void recv_values();
@@ -1111,6 +1340,8 @@ class IMapperModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_keyBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mapPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mapPartitionWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_values(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_streamingFlatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1123,6 +1354,8 @@ class IMapperModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["flatmap"] = &IMapperModuleProcessor::process_flatmap;
     processMap_["filter"] = &IMapperModuleProcessor::process_filter;
     processMap_["keyBy"] = &IMapperModuleProcessor::process_keyBy;
+    processMap_["mapPartition"] = &IMapperModuleProcessor::process_mapPartition;
+    processMap_["mapPartitionWithIndex"] = &IMapperModuleProcessor::process_mapPartitionWithIndex;
     processMap_["values"] = &IMapperModuleProcessor::process_values;
     processMap_["streamingMap"] = &IMapperModuleProcessor::process_streamingMap;
     processMap_["streamingFlatmap"] = &IMapperModuleProcessor::process_streamingFlatmap;
@@ -1190,6 +1423,24 @@ class IMapperModuleMultiface : virtual public IMapperModuleIf {
       ifaces_[i]->keyBy(funct);
     }
     ifaces_[i]->keyBy(funct);
+  }
+
+  void mapPartition(const  ::ignis::rpc::ISource& funct) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->mapPartition(funct);
+    }
+    ifaces_[i]->mapPartition(funct);
+  }
+
+  void mapPartitionWithIndex(const int64_t idx, const  ::ignis::rpc::ISource& funct) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->mapPartitionWithIndex(idx, funct);
+    }
+    ifaces_[i]->mapPartitionWithIndex(idx, funct);
   }
 
   void values() {
@@ -1279,6 +1530,12 @@ class IMapperModuleConcurrentClient : virtual public IMapperModuleIf {
   void keyBy(const  ::ignis::rpc::ISource& funct);
   int32_t send_keyBy(const  ::ignis::rpc::ISource& funct);
   void recv_keyBy(const int32_t seqid);
+  void mapPartition(const  ::ignis::rpc::ISource& funct);
+  int32_t send_mapPartition(const  ::ignis::rpc::ISource& funct);
+  void recv_mapPartition(const int32_t seqid);
+  void mapPartitionWithIndex(const int64_t idx, const  ::ignis::rpc::ISource& funct);
+  int32_t send_mapPartitionWithIndex(const int64_t idx, const  ::ignis::rpc::ISource& funct);
+  void recv_mapPartitionWithIndex(const int32_t seqid);
   void values();
   int32_t send_values();
   void recv_values(const int32_t seqid);

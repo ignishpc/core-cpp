@@ -5,7 +5,9 @@
 #include "../ILog.h"
 #include "../IObjectLoader.h"
 #include "../../../exceptions/IInvalidArgument.h"
+#include "../../api/IReadIterator.h"
 #include "../../api/function/IFunction.h"
+#include "../../api/function/IFunction2.h"
 #include "../../api/function/IFlatFunction.h"
 #include "../storage/IMemoryObject.h"
 
@@ -319,6 +321,82 @@ void IMapperModule::values() {
             auto &pair = (std::pair<storage::IObject::Any, storage::IObject::Any> &) reader->next();
             writer->write(pair_manager->second(pair));
         }
+        executor_data->loadObject(object_out);
+        IGNIS_LOG(info) << "IMapperModule finished";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
+}
+
+void IMapperModule::mapPartition(const rpc::ISource &sf) {
+    try {
+        IGNIS_LOG(info) << "IMapperModule starting mapPartition";
+        auto object_in = executor_data->loadObject();
+        executor_data->deleteLoadObject();
+        auto function = loadSource<api::function::IFunction<
+                std::shared_ptr<api::IReadIterator<IObject::Any>>,
+                std::shared_ptr<api::IReadIterator<IObject::Any>>
+        >>(sf);
+        auto manager_t = function->type_t()->ptrManager()->elemManager();
+        auto manager_r = function->type_r()->ptrManager()->elemManager();
+        auto object_out = getIObject(manager_r);
+        object_in->setManager(manager_t);
+        auto &context = executor_data->getContext();
+        function->before(executor_data->getContext());
+        auto reader = std::static_pointer_cast<api::IReadIterator<IObject::Any>>(object_in->readIterator());
+        auto result = function->call(reader, context);
+        auto writer = object_out->writeIterator();
+        while(result->hasNext()){
+            writer->write((IObject::Any &&) result->next());
+        }
+        function->after(executor_data->getContext());
+        executor_data->loadObject(object_out);
+        IGNIS_LOG(info) << "IMapperModule finished";
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
+}
+
+void IMapperModule::mapPartitionWithIndex(const int64_t idx, const rpc::ISource &sf) {
+    try {
+        IGNIS_LOG(info) << "IMapperModule starting mapPartitionWithIndex";
+        auto object_in = executor_data->loadObject();
+        executor_data->deleteLoadObject();
+        auto function = loadSource<api::function::IFunction2<
+                int64_t,
+                std::shared_ptr<api::IReadIterator<IObject::Any>>,
+                std::shared_ptr<api::IReadIterator<IObject::Any>>
+        >>(sf);
+        auto manager_t = function->type_t2()->ptrManager()->elemManager();
+        auto manager_r = function->type_r()->ptrManager()->elemManager();
+        auto object_out = getIObject(manager_r);
+        object_in->setManager(manager_t);
+        auto &context = executor_data->getContext();
+        function->before(executor_data->getContext());
+        int64_t idx2 = idx;
+        auto reader = std::static_pointer_cast<api::IReadIterator<IObject::Any>>(object_in->readIterator());
+        auto result = function->call(idx2, reader, context);
+        auto writer = object_out->writeIterator();
+        while(result->hasNext()){
+            writer->write((IObject::Any &&) result->next());
+        }
+        function->after(executor_data->getContext());
         executor_data->loadObject(object_out);
         IGNIS_LOG(info) << "IMapperModule finished";
     } catch (exceptions::IException &ex) {

@@ -9,9 +9,9 @@ namespace ignis {
             class IWriteIterator {
             public:
 
-                virtual void write(T &obj) = 0;
+                virtual void write(T &obj) {};
 
-                virtual void write(T &&obj) = 0;
+                virtual void write(T &&obj) {};
 
                 virtual ~IWriteIterator(){};
             };

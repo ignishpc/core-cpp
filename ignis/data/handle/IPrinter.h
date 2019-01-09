@@ -417,11 +417,11 @@ namespace ignis {
             template<typename _Tp>
             struct IPrinterType<std::shared_ptr<_Tp>> {
                 inline void operator()(const std::shared_ptr<_Tp> &v, std::ostream &out, size_t level) {
-                    IPrinterType<_Tp *>()(*v, out, level);
+                    IPrinterType<_Tp>()(*v, out, level);
                 }
 
                 inline void printJson(const std::shared_ptr<_Tp> &v, JsonStream &out) {
-                    IPrinterType<_Tp *>().printJson(*v, out);
+                    IPrinterType<_Tp>().printJson(*v, out);
                 }
             };
 

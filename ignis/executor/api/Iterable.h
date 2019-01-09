@@ -13,6 +13,28 @@ namespace ignis {
             class Iterable {
             private:
 
+                class ValueIterator : public IReadIterator<T>{
+                public:
+                    ValueIterator(const T &v) : value(v),read(false){}
+
+                    ValueIterator(T &&v) : value(v),read(false){}
+
+                    virtual T &next() override {
+                        read = true;
+                        return value;
+                    }
+
+                    virtual bool hasNext() override {
+                        return !read;
+                    }
+
+                    virtual ~ValueIterator() override {}
+
+                private:
+                    T value;
+                    bool read;
+                };
+
                 template<typename C>
                 class IterableIterator : public IReadIterator<T>{
                 public:
@@ -51,6 +73,14 @@ namespace ignis {
                 template<typename C>
                 static Iterable<T> fromCollection(C&& c){
                     return Iterable<T>(std::make_shared<IterableIterator<typename std::remove_reference<C>::type>>(c));
+                }
+
+                static Iterable<T> fromValue(const T &v){
+                    return Iterable<T>(std::make_shared<ValueIterator>(v));
+                }
+
+                static Iterable<T> fromValue(T &&v){
+                    return Iterable<T>(std::make_shared<ValueIterator>(v));
                 }
 
                 std::shared_ptr<IReadIterator<T>> readIterator(){

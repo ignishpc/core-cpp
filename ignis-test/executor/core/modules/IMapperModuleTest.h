@@ -32,6 +32,8 @@ namespace ignis {
                         CPPUNIT_TEST(parallelStreamingFlatMapOrdered);
                         CPPUNIT_TEST(parallelStreamingFilterOrdered);
                         CPPUNIT_TEST(parallelStreamingKeyByOrdered);
+                        CPPUNIT_TEST(mapPartition);
+                        CPPUNIT_TEST(mapPartitionWithIndex);
                     CPPUNIT_TEST_SUITE_END();
                 public:
                     virtual void setUp();
@@ -75,6 +77,10 @@ namespace ignis {
                     virtual void parallelStreamingFilterOrdered();
 
                     virtual void parallelStreamingKeyByOrdered();
+
+                    virtual void mapPartition();
+
+                    virtual void mapPartitionWithIndex();
 
                     virtual void tearDown();
 

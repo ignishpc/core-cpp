@@ -345,3 +345,30 @@ void IMapperModuleTest::parallelStreamingKeyByOrdered() {
         CPPUNIT_ASSERT_EQUAL(std::to_string(elem), next.first);
     }
 }
+
+void IMapperModuleTest::mapPartition() {
+    rpc::ISource f;
+    f.__set_name(library + ":mapPartitionFunction");
+    mapper_module->mapPartition(f);
+
+    auto reader = executor_data->loadObject()->readIterator();
+    int sum = 0;
+    for (auto &elem:input) {
+        sum += elem;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sum, (int&)reader->next());
+}
+
+void IMapperModuleTest::mapPartitionWithIndex() {
+    rpc::ISource f;
+    f.__set_name(library + ":mapPartitionFunctionWithIndex");
+    mapper_module->mapPartitionWithIndex(0,f);
+
+    auto reader = executor_data->loadObject()->readIterator();
+
+    for (int i=1;i<input.size();i++) {
+        auto &elem = input[i];
+        CPPUNIT_ASSERT_EQUAL(elem, (int &) reader->next());
+    }
+}

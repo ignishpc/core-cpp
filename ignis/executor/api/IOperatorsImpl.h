@@ -10,6 +10,9 @@
 
 #include <functional>
 #include <boost/functional/hash/extensions.hpp>
+#include "IReadIterator.h"
+#include "IWriteIterator.h"
+
 
 #ifndef IGNIS_DISABLE_ALL
 namespace std {
@@ -138,4 +141,50 @@ namespace std {
 
 }
 #endif
+namespace std {
+
+    template<class T>
+    struct hash<ignis::executor::api::IReadIterator<T>> {
+        std::size_t operator()(ignis::executor::api::IReadIterator<T> const &i) const noexcept {
+            return hash_value(i);
+        }
+    };
+
+    template<class T>
+    struct hash<ignis::executor::api::IWriteIterator<T>> {
+        std::size_t operator()(ignis::executor::api::IWriteIterator<T> const &i) const noexcept {
+            return hash_value(i);
+        }
+    };
+}
+namespace ignis {
+    namespace executor {
+        namespace api {
+            template<class T>
+            inline bool operator==(const IReadIterator<T> &a, const IReadIterator<T> &b) {}
+
+            template<class T>
+            inline bool operator>(const IReadIterator<T> &a, const IReadIterator<T> &b) {}
+
+            template<class T>
+            inline bool operator<(const IReadIterator<T> &a, const IReadIterator<T> &b) {}
+
+            template<class T>
+            std::size_t hash_value(ignis::executor::api::IReadIterator<T> const &i) {}
+
+            template<class T>
+            inline bool operator==(const IWriteIterator<T> &a, const IWriteIterator<T> &b) {}
+
+            template<class T>
+            inline bool operator>(const IWriteIterator<T> &a, const IWriteIterator<T> &b) {}
+
+            template<class T>
+            inline bool operator<(const IWriteIterator<T> &a, const IWriteIterator<T> &b) {}
+
+            template<class T>
+            std::size_t hash_value(ignis::executor::api::IWriteIterator<T> const &i) {}
+        }
+    }
+}
+
 #endif

@@ -17,7 +17,6 @@ set(SOURCE_FILES
         data/handle/IDeleter.h
         data/handle/IEnumTypes.h
         data/handle/IOperators.h
-        data/handle/IOperatorsImpl.h
         data/handle/IPrinter.h
         data/handle/IReader.h
         data/handle/IWriter.h
@@ -43,6 +42,7 @@ set(SOURCE_FILES
 
         #Executor api
         executor/api/IManager.h
+        executor/api/IOperatorsImpl.h
         executor/api/IReadIterator.h
         executor/api/IWriteIterator.h
         executor/api/IContext.h

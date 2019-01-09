@@ -9,7 +9,9 @@
 #include "../../data/handle/IReader.h"
 #include "../../data/handle/IWriter.h"
 #include "../../data/handle/IDeleter.h"
+#include "IOperatorsImpl.h"
 #include "../../data/handle/IOperators.h"
+#include "IReadIterator.h"
 
 namespace ignis {
     namespace executor {
@@ -140,7 +142,8 @@ namespace ignis {
             };
 
             template<typename T>
-            class IManager : public IBaseManager<T>{};
+            class IManager : public IBaseManager<T> {
+            };
 
             template<typename T1, typename T2>
             class IManager<std::pair<T1, T2>> : public IBaseManager<std::pair<T1, T2>> {
@@ -174,8 +177,35 @@ namespace ignis {
 
             };
 
+            template<typename T>
+            class IManager<std::shared_ptr<T>> : public IBaseManager<std::shared_ptr<T>> {
+            public:
+                IManager() : ptr_manager(std::make_shared<IManager<T>>()) {}
+
+                virtual std::shared_ptr<IManager<T>> ptrManager() {
+                    return ptr_manager;
+                }
+
+            private:
+                std::shared_ptr<IManager<T>> ptr_manager;
+            };
+
+            template<typename T>
+            class IManager<IReadIterator<T>> : public IBaseManager<IReadIterator<T>> {
+            public:
+                IManager() : elem_manager(std::make_shared<IManager<T>>()) {}
+
+                virtual std::shared_ptr<IManager<T>> elemManager() {
+                    return elem_manager;
+                }
+
+            private:
+                std::shared_ptr<IManager<T>> elem_manager;
+            };
+
             template<typename T1, typename T2>
-            class IPairManager : public IManager<std::pair<T1, T2>>{};
+            class IPairManager : public IManager<std::pair<T1, T2>> {
+            };
 
         }
     }

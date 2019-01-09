@@ -1,7 +1,6 @@
 #ifndef IGNIS_IOPERATORS_H
 #define IGNIS_IOPERATORS_H
 
-#include "IOperatorsImpl.h"
 #include <functional>
 #include <memory>
 #include "IPrinter.h"
@@ -17,10 +16,6 @@ namespace ignis {
 
                 virtual inline bool equals(const T &a, const T &b) {
                     return a == b;
-                }
-
-                virtual bool notEquals(const T &a, const T &b) {
-                    return a != b;
                 }
 
                 virtual inline bool less(const T &a, const T &b) {
@@ -39,10 +34,6 @@ namespace ignis {
                     std::stringstream ss;
                     IPrinter<T>().operator()(a, ss);
                     return ss.str();
-                }
-
-                virtual std::shared_ptr<IOperator<T>> shared() const {
-                    return std::make_shared<IOperator<T>>();
                 }
 
             };

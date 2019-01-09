@@ -37,6 +37,8 @@ class IDataServiceIf {
   virtual void take(std::string& _return, const IDataId& data, const int64_t n, const bool light) = 0;
   virtual void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
   virtual void collect(std::string& _return, const IDataId& data, const bool light) = 0;
+  virtual void sortBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending) = 0;
+  virtual void sort(IDataId& _return, const IDataId& data, const bool ascending) = 0;
   virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
   virtual void saveAsJsonFile(const IDataId& data, const std::string& path, const bool join) = 0;
   virtual void cache(const IDataId& data) = 0;
@@ -116,6 +118,12 @@ class IDataServiceNull : virtual public IDataServiceIf {
     return;
   }
   void collect(std::string& /* _return */, const IDataId& /* data */, const bool /* light */) {
+    return;
+  }
+  void sortBy(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* funct */, const bool /* ascending */) {
+    return;
+  }
+  void sort(IDataId& /* _return */, const IDataId& /* data */, const bool /* ascending */) {
     return;
   }
   void saveAsTextFile(const IDataId& /* data */, const std::string& /* path */, const bool /* join */) {
@@ -2051,6 +2059,251 @@ class IDataService_collect_presult {
 
 };
 
+typedef struct _IDataService_sortBy_args__isset {
+  _IDataService_sortBy_args__isset() : data(false), funct(false), ascending(false) {}
+  bool data :1;
+  bool funct :1;
+  bool ascending :1;
+} _IDataService_sortBy_args__isset;
+
+class IDataService_sortBy_args {
+ public:
+
+  IDataService_sortBy_args(const IDataService_sortBy_args&);
+  IDataService_sortBy_args& operator=(const IDataService_sortBy_args&);
+  IDataService_sortBy_args() : ascending(0) {
+  }
+
+  virtual ~IDataService_sortBy_args() throw();
+  IDataId data;
+   ::ignis::rpc::ISource funct;
+  bool ascending;
+
+  _IDataService_sortBy_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set_funct(const  ::ignis::rpc::ISource& val);
+
+  void __set_ascending(const bool val);
+
+  bool operator == (const IDataService_sortBy_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(funct == rhs.funct))
+      return false;
+    if (!(ascending == rhs.ascending))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_sortBy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_sortBy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_sortBy_pargs {
+ public:
+
+
+  virtual ~IDataService_sortBy_pargs() throw();
+  const IDataId* data;
+  const  ::ignis::rpc::ISource* funct;
+  const bool* ascending;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_sortBy_result__isset {
+  _IDataService_sortBy_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_sortBy_result__isset;
+
+class IDataService_sortBy_result {
+ public:
+
+  IDataService_sortBy_result(const IDataService_sortBy_result&);
+  IDataService_sortBy_result& operator=(const IDataService_sortBy_result&);
+  IDataService_sortBy_result() {
+  }
+
+  virtual ~IDataService_sortBy_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_sortBy_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_sortBy_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_sortBy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_sortBy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_sortBy_presult__isset {
+  _IDataService_sortBy_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_sortBy_presult__isset;
+
+class IDataService_sortBy_presult {
+ public:
+
+
+  virtual ~IDataService_sortBy_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_sortBy_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataService_sort_args__isset {
+  _IDataService_sort_args__isset() : data(false), ascending(false) {}
+  bool data :1;
+  bool ascending :1;
+} _IDataService_sort_args__isset;
+
+class IDataService_sort_args {
+ public:
+
+  IDataService_sort_args(const IDataService_sort_args&);
+  IDataService_sort_args& operator=(const IDataService_sort_args&);
+  IDataService_sort_args() : ascending(0) {
+  }
+
+  virtual ~IDataService_sort_args() throw();
+  IDataId data;
+  bool ascending;
+
+  _IDataService_sort_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  void __set_ascending(const bool val);
+
+  bool operator == (const IDataService_sort_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    if (!(ascending == rhs.ascending))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_sort_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_sort_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_sort_pargs {
+ public:
+
+
+  virtual ~IDataService_sort_pargs() throw();
+  const IDataId* data;
+  const bool* ascending;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_sort_result__isset {
+  _IDataService_sort_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_sort_result__isset;
+
+class IDataService_sort_result {
+ public:
+
+  IDataService_sort_result(const IDataService_sort_result&);
+  IDataService_sort_result& operator=(const IDataService_sort_result&);
+  IDataService_sort_result() {
+  }
+
+  virtual ~IDataService_sort_result() throw();
+  IDataId success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_sort_result__isset __isset;
+
+  void __set_success(const IDataId& val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_sort_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_sort_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_sort_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_sort_presult__isset {
+  _IDataService_sort_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_sort_presult__isset;
+
+class IDataService_sort_presult {
+ public:
+
+
+  virtual ~IDataService_sort_presult() throw();
+  IDataId* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_sort_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IDataService_saveAsTextFile_args__isset {
   _IDataService_saveAsTextFile_args__isset() : data(false), path(false), join(false) {}
   bool data :1;
@@ -2568,6 +2821,12 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void collect(std::string& _return, const IDataId& data, const bool light);
   void send_collect(const IDataId& data, const bool light);
   void recv_collect(std::string& _return);
+  void sortBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
+  void send_sortBy(const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
+  void recv_sortBy(IDataId& _return);
+  void sort(IDataId& _return, const IDataId& data, const bool ascending);
+  void send_sort(const IDataId& data, const bool ascending);
+  void recv_sort(IDataId& _return);
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsTextFile();
@@ -2611,6 +2870,8 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_takeSample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_collect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sortBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_cache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2634,6 +2895,8 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["take"] = &IDataServiceProcessor::process_take;
     processMap_["takeSample"] = &IDataServiceProcessor::process_takeSample;
     processMap_["collect"] = &IDataServiceProcessor::process_collect;
+    processMap_["sortBy"] = &IDataServiceProcessor::process_sortBy;
+    processMap_["sort"] = &IDataServiceProcessor::process_sort;
     processMap_["saveAsTextFile"] = &IDataServiceProcessor::process_saveAsTextFile;
     processMap_["saveAsJsonFile"] = &IDataServiceProcessor::process_saveAsJsonFile;
     processMap_["cache"] = &IDataServiceProcessor::process_cache;
@@ -2825,6 +3088,26 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
+  void sortBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sortBy(_return, data, funct, ascending);
+    }
+    ifaces_[i]->sortBy(_return, data, funct, ascending);
+    return;
+  }
+
+  void sort(IDataId& _return, const IDataId& data, const bool ascending) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sort(_return, data, ascending);
+    }
+    ifaces_[i]->sort(_return, data, ascending);
+    return;
+  }
+
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -2939,6 +3222,12 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void collect(std::string& _return, const IDataId& data, const bool light);
   int32_t send_collect(const IDataId& data, const bool light);
   void recv_collect(std::string& _return, const int32_t seqid);
+  void sortBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
+  int32_t send_sortBy(const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
+  void recv_sortBy(IDataId& _return, const int32_t seqid);
+  void sort(IDataId& _return, const IDataId& data, const bool ascending);
+  int32_t send_sort(const IDataId& data, const bool ascending);
+  void recv_sort(IDataId& _return, const int32_t seqid);
   void saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   int32_t send_saveAsTextFile(const IDataId& data, const std::string& path, const bool join);
   void recv_saveAsTextFile(const int32_t seqid);
