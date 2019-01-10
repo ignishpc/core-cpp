@@ -117,6 +117,25 @@ void IStorageModule::loadContext(const int64_t id) {
     }
 }
 
+void IStorageModule::removeContext(const int64_t id) {
+    try {
+        if (objects_context.find(id) == objects_context.end()) {
+            throw exceptions::IInvalidArgument("IStorageModule context object not found");
+        }
+        objects_context.erase(id);
+    } catch (exceptions::IException &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack(ex.getStacktrace());
+        throw iex;
+    } catch (std::exception &ex) {
+        IRemoteException iex;
+        iex.__set_message(ex.what());
+        iex.__set_stack("UNKNOWN");
+        throw iex;
+    }
+}
+
 void IStorageModule::take(std::string &_return, const int64_t msg_id, const std::string &addr, const int64_t n,
                           const bool light) {
     IGNIS_LOG(info) << "IStorageModule starting take, msg_id: " << msg_id

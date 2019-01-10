@@ -25,6 +25,8 @@ namespace ignis {
 
                     virtual void loadContext(const int64_t id) override;
 
+                    virtual void removeContext(const int64_t id) override;
+
                     virtual void take(std::string &_return, const int64_t msg_id, const std::string &addr,
                                       const int64_t n, const bool light) override;
 

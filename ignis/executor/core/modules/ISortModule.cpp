@@ -245,10 +245,12 @@ void ISortModule::sampling(const int64_t sampleSize,const int64_t idx, const std
         auto reader = object_in->readIterator();
         auto writer = pivots->writeIterator();
         auto size = object_in->getSize();
-        auto step = size / sampleSize;
+        auto div = (size - sampleSize) / (sampleSize + 1);
+        auto mod = (size - sampleSize) % (sampleSize + 1);
+
         for (int64_t i = 0; i < sampleSize; i++) {
+            reader->skip(div + (i < mod ? 1 : 0));
             writer->write(reader->next());
-            reader->skip(step);
         }
         executor_data->getPostBox().newOutMessage(idx, IMessage(master, pivots));
         IGNIS_LOG(info) << "ISortModule sampled";

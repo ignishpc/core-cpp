@@ -27,6 +27,7 @@ class IStorageModuleIf {
   virtual void loadCache(const int64_t id) = 0;
   virtual void saveContext(const int64_t id) = 0;
   virtual void loadContext(const int64_t id) = 0;
+  virtual void removeContext(const int64_t id) = 0;
   virtual void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light) = 0;
   virtual void takeSample(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
   virtual void collect(std::string& _return, const int64_t msg_id, const std::string& addr, const bool light) = 0;
@@ -76,6 +77,9 @@ class IStorageModuleNull : virtual public IStorageModuleIf {
     return;
   }
   void loadContext(const int64_t /* id */) {
+    return;
+  }
+  void removeContext(const int64_t /* id */) {
     return;
   }
   void take(std::string& /* _return */, const int64_t /* msg_id */, const std::string& /* addr */, const int64_t /* n */, const bool /* light */) {
@@ -709,6 +713,110 @@ class IStorageModule_loadContext_presult {
 
 };
 
+typedef struct _IStorageModule_removeContext_args__isset {
+  _IStorageModule_removeContext_args__isset() : id(false) {}
+  bool id :1;
+} _IStorageModule_removeContext_args__isset;
+
+class IStorageModule_removeContext_args {
+ public:
+
+  IStorageModule_removeContext_args(const IStorageModule_removeContext_args&);
+  IStorageModule_removeContext_args& operator=(const IStorageModule_removeContext_args&);
+  IStorageModule_removeContext_args() : id(0) {
+  }
+
+  virtual ~IStorageModule_removeContext_args() throw();
+  int64_t id;
+
+  _IStorageModule_removeContext_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  bool operator == (const IStorageModule_removeContext_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_removeContext_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_removeContext_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IStorageModule_removeContext_pargs {
+ public:
+
+
+  virtual ~IStorageModule_removeContext_pargs() throw();
+  const int64_t* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_removeContext_result__isset {
+  _IStorageModule_removeContext_result__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_removeContext_result__isset;
+
+class IStorageModule_removeContext_result {
+ public:
+
+  IStorageModule_removeContext_result(const IStorageModule_removeContext_result&);
+  IStorageModule_removeContext_result& operator=(const IStorageModule_removeContext_result&);
+  IStorageModule_removeContext_result() {
+  }
+
+  virtual ~IStorageModule_removeContext_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_removeContext_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IStorageModule_removeContext_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IStorageModule_removeContext_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IStorageModule_removeContext_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IStorageModule_removeContext_presult__isset {
+  _IStorageModule_removeContext_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IStorageModule_removeContext_presult__isset;
+
+class IStorageModule_removeContext_presult {
+ public:
+
+
+  virtual ~IStorageModule_removeContext_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _IStorageModule_removeContext_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IStorageModule_take_args__isset {
   _IStorageModule_take_args__isset() : msg_id(false), addr(false), n(false), light(false) {}
   bool msg_id :1;
@@ -1158,6 +1266,9 @@ class IStorageModuleClient : virtual public IStorageModuleIf {
   void loadContext(const int64_t id);
   void send_loadContext(const int64_t id);
   void recv_loadContext();
+  void removeContext(const int64_t id);
+  void send_removeContext(const int64_t id);
+  void recv_removeContext();
   void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
   void send_take(const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
   void recv_take(std::string& _return);
@@ -1188,6 +1299,7 @@ class IStorageModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_loadCache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_removeContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_takeSample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_collect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1200,6 +1312,7 @@ class IStorageModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["loadCache"] = &IStorageModuleProcessor::process_loadCache;
     processMap_["saveContext"] = &IStorageModuleProcessor::process_saveContext;
     processMap_["loadContext"] = &IStorageModuleProcessor::process_loadContext;
+    processMap_["removeContext"] = &IStorageModuleProcessor::process_removeContext;
     processMap_["take"] = &IStorageModuleProcessor::process_take;
     processMap_["takeSample"] = &IStorageModuleProcessor::process_takeSample;
     processMap_["collect"] = &IStorageModuleProcessor::process_collect;
@@ -1285,6 +1398,15 @@ class IStorageModuleMultiface : virtual public IStorageModuleIf {
     ifaces_[i]->loadContext(id);
   }
 
+  void removeContext(const int64_t id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->removeContext(id);
+    }
+    ifaces_[i]->removeContext(id);
+  }
+
   void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1363,6 +1485,9 @@ class IStorageModuleConcurrentClient : virtual public IStorageModuleIf {
   void loadContext(const int64_t id);
   int32_t send_loadContext(const int64_t id);
   void recv_loadContext(const int32_t seqid);
+  void removeContext(const int64_t id);
+  int32_t send_removeContext(const int64_t id);
+  void recv_removeContext(const int32_t seqid);
   void take(std::string& _return, const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
   int32_t send_take(const int64_t msg_id, const std::string& addr, const int64_t n, const bool light);
   void recv_take(std::string& _return, const int32_t seqid);
