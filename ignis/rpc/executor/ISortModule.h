@@ -23,6 +23,11 @@ class ISortModuleIf {
   virtual ~ISortModuleIf() {}
   virtual void localCustomSort(const  ::ignis::rpc::ISource& funct, const bool ascending) = 0;
   virtual void localSort(const bool ascending) = 0;
+  virtual void sampling(const int64_t sampleSize, const int64_t idx, const std::string& master) = 0;
+  virtual void getPivots() = 0;
+  virtual void findPivots(const std::vector<std::string> & nodes) = 0;
+  virtual void exchangePartitions(const int64_t idx, const std::vector<std::string> & nodes) = 0;
+  virtual void mergePartitions() = 0;
 };
 
 class ISortModuleIfFactory {
@@ -56,6 +61,21 @@ class ISortModuleNull : virtual public ISortModuleIf {
     return;
   }
   void localSort(const bool /* ascending */) {
+    return;
+  }
+  void sampling(const int64_t /* sampleSize */, const int64_t /* idx */, const std::string& /* master */) {
+    return;
+  }
+  void getPivots() {
+    return;
+  }
+  void findPivots(const std::vector<std::string> & /* nodes */) {
+    return;
+  }
+  void exchangePartitions(const int64_t /* idx */, const std::vector<std::string> & /* nodes */) {
+    return;
+  }
+  void mergePartitions() {
     return;
   }
 };
@@ -275,6 +295,523 @@ class ISortModule_localSort_presult {
 
 };
 
+typedef struct _ISortModule_sampling_args__isset {
+  _ISortModule_sampling_args__isset() : sampleSize(false), idx(false), master(false) {}
+  bool sampleSize :1;
+  bool idx :1;
+  bool master :1;
+} _ISortModule_sampling_args__isset;
+
+class ISortModule_sampling_args {
+ public:
+
+  ISortModule_sampling_args(const ISortModule_sampling_args&);
+  ISortModule_sampling_args& operator=(const ISortModule_sampling_args&);
+  ISortModule_sampling_args() : sampleSize(0), idx(0), master() {
+  }
+
+  virtual ~ISortModule_sampling_args() throw();
+  int64_t sampleSize;
+  int64_t idx;
+  std::string master;
+
+  _ISortModule_sampling_args__isset __isset;
+
+  void __set_sampleSize(const int64_t val);
+
+  void __set_idx(const int64_t val);
+
+  void __set_master(const std::string& val);
+
+  bool operator == (const ISortModule_sampling_args & rhs) const
+  {
+    if (!(sampleSize == rhs.sampleSize))
+      return false;
+    if (!(idx == rhs.idx))
+      return false;
+    if (!(master == rhs.master))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_sampling_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_sampling_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ISortModule_sampling_pargs {
+ public:
+
+
+  virtual ~ISortModule_sampling_pargs() throw();
+  const int64_t* sampleSize;
+  const int64_t* idx;
+  const std::string* master;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_sampling_result__isset {
+  _ISortModule_sampling_result__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_sampling_result__isset;
+
+class ISortModule_sampling_result {
+ public:
+
+  ISortModule_sampling_result(const ISortModule_sampling_result&);
+  ISortModule_sampling_result& operator=(const ISortModule_sampling_result&);
+  ISortModule_sampling_result() {
+  }
+
+  virtual ~ISortModule_sampling_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_sampling_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const ISortModule_sampling_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_sampling_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_sampling_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_sampling_presult__isset {
+  _ISortModule_sampling_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_sampling_presult__isset;
+
+class ISortModule_sampling_presult {
+ public:
+
+
+  virtual ~ISortModule_sampling_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_sampling_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class ISortModule_getPivots_args {
+ public:
+
+  ISortModule_getPivots_args(const ISortModule_getPivots_args&);
+  ISortModule_getPivots_args& operator=(const ISortModule_getPivots_args&);
+  ISortModule_getPivots_args() {
+  }
+
+  virtual ~ISortModule_getPivots_args() throw();
+
+  bool operator == (const ISortModule_getPivots_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const ISortModule_getPivots_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_getPivots_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ISortModule_getPivots_pargs {
+ public:
+
+
+  virtual ~ISortModule_getPivots_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_getPivots_result__isset {
+  _ISortModule_getPivots_result__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_getPivots_result__isset;
+
+class ISortModule_getPivots_result {
+ public:
+
+  ISortModule_getPivots_result(const ISortModule_getPivots_result&);
+  ISortModule_getPivots_result& operator=(const ISortModule_getPivots_result&);
+  ISortModule_getPivots_result() {
+  }
+
+  virtual ~ISortModule_getPivots_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_getPivots_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const ISortModule_getPivots_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_getPivots_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_getPivots_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_getPivots_presult__isset {
+  _ISortModule_getPivots_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_getPivots_presult__isset;
+
+class ISortModule_getPivots_presult {
+ public:
+
+
+  virtual ~ISortModule_getPivots_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_getPivots_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ISortModule_findPivots_args__isset {
+  _ISortModule_findPivots_args__isset() : nodes(false) {}
+  bool nodes :1;
+} _ISortModule_findPivots_args__isset;
+
+class ISortModule_findPivots_args {
+ public:
+
+  ISortModule_findPivots_args(const ISortModule_findPivots_args&);
+  ISortModule_findPivots_args& operator=(const ISortModule_findPivots_args&);
+  ISortModule_findPivots_args() {
+  }
+
+  virtual ~ISortModule_findPivots_args() throw();
+  std::vector<std::string>  nodes;
+
+  _ISortModule_findPivots_args__isset __isset;
+
+  void __set_nodes(const std::vector<std::string> & val);
+
+  bool operator == (const ISortModule_findPivots_args & rhs) const
+  {
+    if (!(nodes == rhs.nodes))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_findPivots_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_findPivots_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ISortModule_findPivots_pargs {
+ public:
+
+
+  virtual ~ISortModule_findPivots_pargs() throw();
+  const std::vector<std::string> * nodes;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_findPivots_result__isset {
+  _ISortModule_findPivots_result__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_findPivots_result__isset;
+
+class ISortModule_findPivots_result {
+ public:
+
+  ISortModule_findPivots_result(const ISortModule_findPivots_result&);
+  ISortModule_findPivots_result& operator=(const ISortModule_findPivots_result&);
+  ISortModule_findPivots_result() {
+  }
+
+  virtual ~ISortModule_findPivots_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_findPivots_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const ISortModule_findPivots_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_findPivots_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_findPivots_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_findPivots_presult__isset {
+  _ISortModule_findPivots_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_findPivots_presult__isset;
+
+class ISortModule_findPivots_presult {
+ public:
+
+
+  virtual ~ISortModule_findPivots_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_findPivots_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ISortModule_exchangePartitions_args__isset {
+  _ISortModule_exchangePartitions_args__isset() : idx(false), nodes(false) {}
+  bool idx :1;
+  bool nodes :1;
+} _ISortModule_exchangePartitions_args__isset;
+
+class ISortModule_exchangePartitions_args {
+ public:
+
+  ISortModule_exchangePartitions_args(const ISortModule_exchangePartitions_args&);
+  ISortModule_exchangePartitions_args& operator=(const ISortModule_exchangePartitions_args&);
+  ISortModule_exchangePartitions_args() : idx(0) {
+  }
+
+  virtual ~ISortModule_exchangePartitions_args() throw();
+  int64_t idx;
+  std::vector<std::string>  nodes;
+
+  _ISortModule_exchangePartitions_args__isset __isset;
+
+  void __set_idx(const int64_t val);
+
+  void __set_nodes(const std::vector<std::string> & val);
+
+  bool operator == (const ISortModule_exchangePartitions_args & rhs) const
+  {
+    if (!(idx == rhs.idx))
+      return false;
+    if (!(nodes == rhs.nodes))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_exchangePartitions_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_exchangePartitions_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ISortModule_exchangePartitions_pargs {
+ public:
+
+
+  virtual ~ISortModule_exchangePartitions_pargs() throw();
+  const int64_t* idx;
+  const std::vector<std::string> * nodes;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_exchangePartitions_result__isset {
+  _ISortModule_exchangePartitions_result__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_exchangePartitions_result__isset;
+
+class ISortModule_exchangePartitions_result {
+ public:
+
+  ISortModule_exchangePartitions_result(const ISortModule_exchangePartitions_result&);
+  ISortModule_exchangePartitions_result& operator=(const ISortModule_exchangePartitions_result&);
+  ISortModule_exchangePartitions_result() {
+  }
+
+  virtual ~ISortModule_exchangePartitions_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_exchangePartitions_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const ISortModule_exchangePartitions_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_exchangePartitions_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_exchangePartitions_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_exchangePartitions_presult__isset {
+  _ISortModule_exchangePartitions_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_exchangePartitions_presult__isset;
+
+class ISortModule_exchangePartitions_presult {
+ public:
+
+
+  virtual ~ISortModule_exchangePartitions_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_exchangePartitions_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class ISortModule_mergePartitions_args {
+ public:
+
+  ISortModule_mergePartitions_args(const ISortModule_mergePartitions_args&);
+  ISortModule_mergePartitions_args& operator=(const ISortModule_mergePartitions_args&);
+  ISortModule_mergePartitions_args() {
+  }
+
+  virtual ~ISortModule_mergePartitions_args() throw();
+
+  bool operator == (const ISortModule_mergePartitions_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const ISortModule_mergePartitions_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_mergePartitions_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ISortModule_mergePartitions_pargs {
+ public:
+
+
+  virtual ~ISortModule_mergePartitions_pargs() throw();
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_mergePartitions_result__isset {
+  _ISortModule_mergePartitions_result__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_mergePartitions_result__isset;
+
+class ISortModule_mergePartitions_result {
+ public:
+
+  ISortModule_mergePartitions_result(const ISortModule_mergePartitions_result&);
+  ISortModule_mergePartitions_result& operator=(const ISortModule_mergePartitions_result&);
+  ISortModule_mergePartitions_result() {
+  }
+
+  virtual ~ISortModule_mergePartitions_result() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_mergePartitions_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const ISortModule_mergePartitions_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ISortModule_mergePartitions_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ISortModule_mergePartitions_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ISortModule_mergePartitions_presult__isset {
+  _ISortModule_mergePartitions_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ISortModule_mergePartitions_presult__isset;
+
+class ISortModule_mergePartitions_presult {
+ public:
+
+
+  virtual ~ISortModule_mergePartitions_presult() throw();
+   ::ignis::rpc::IRemoteException ex;
+
+  _ISortModule_mergePartitions_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class ISortModuleClient : virtual public ISortModuleIf {
  public:
   ISortModuleClient(apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -306,6 +843,21 @@ class ISortModuleClient : virtual public ISortModuleIf {
   void localSort(const bool ascending);
   void send_localSort(const bool ascending);
   void recv_localSort();
+  void sampling(const int64_t sampleSize, const int64_t idx, const std::string& master);
+  void send_sampling(const int64_t sampleSize, const int64_t idx, const std::string& master);
+  void recv_sampling();
+  void getPivots();
+  void send_getPivots();
+  void recv_getPivots();
+  void findPivots(const std::vector<std::string> & nodes);
+  void send_findPivots(const std::vector<std::string> & nodes);
+  void recv_findPivots();
+  void exchangePartitions(const int64_t idx, const std::vector<std::string> & nodes);
+  void send_exchangePartitions(const int64_t idx, const std::vector<std::string> & nodes);
+  void recv_exchangePartitions();
+  void mergePartitions();
+  void send_mergePartitions();
+  void recv_mergePartitions();
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -323,11 +875,21 @@ class ISortModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   ProcessMap processMap_;
   void process_localCustomSort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_localSort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sampling(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getPivots(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_findPivots(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_exchangePartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mergePartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ISortModuleProcessor(::apache::thrift::stdcxx::shared_ptr<ISortModuleIf> iface) :
     iface_(iface) {
     processMap_["localCustomSort"] = &ISortModuleProcessor::process_localCustomSort;
     processMap_["localSort"] = &ISortModuleProcessor::process_localSort;
+    processMap_["sampling"] = &ISortModuleProcessor::process_sampling;
+    processMap_["getPivots"] = &ISortModuleProcessor::process_getPivots;
+    processMap_["findPivots"] = &ISortModuleProcessor::process_findPivots;
+    processMap_["exchangePartitions"] = &ISortModuleProcessor::process_exchangePartitions;
+    processMap_["mergePartitions"] = &ISortModuleProcessor::process_mergePartitions;
   }
 
   virtual ~ISortModuleProcessor() {}
@@ -374,6 +936,51 @@ class ISortModuleMultiface : virtual public ISortModuleIf {
     ifaces_[i]->localSort(ascending);
   }
 
+  void sampling(const int64_t sampleSize, const int64_t idx, const std::string& master) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sampling(sampleSize, idx, master);
+    }
+    ifaces_[i]->sampling(sampleSize, idx, master);
+  }
+
+  void getPivots() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getPivots();
+    }
+    ifaces_[i]->getPivots();
+  }
+
+  void findPivots(const std::vector<std::string> & nodes) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->findPivots(nodes);
+    }
+    ifaces_[i]->findPivots(nodes);
+  }
+
+  void exchangePartitions(const int64_t idx, const std::vector<std::string> & nodes) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->exchangePartitions(idx, nodes);
+    }
+    ifaces_[i]->exchangePartitions(idx, nodes);
+  }
+
+  void mergePartitions() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->mergePartitions();
+    }
+    ifaces_[i]->mergePartitions();
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -410,6 +1017,21 @@ class ISortModuleConcurrentClient : virtual public ISortModuleIf {
   void localSort(const bool ascending);
   int32_t send_localSort(const bool ascending);
   void recv_localSort(const int32_t seqid);
+  void sampling(const int64_t sampleSize, const int64_t idx, const std::string& master);
+  int32_t send_sampling(const int64_t sampleSize, const int64_t idx, const std::string& master);
+  void recv_sampling(const int32_t seqid);
+  void getPivots();
+  int32_t send_getPivots();
+  void recv_getPivots(const int32_t seqid);
+  void findPivots(const std::vector<std::string> & nodes);
+  int32_t send_findPivots(const std::vector<std::string> & nodes);
+  void recv_findPivots(const int32_t seqid);
+  void exchangePartitions(const int64_t idx, const std::vector<std::string> & nodes);
+  int32_t send_exchangePartitions(const int64_t idx, const std::vector<std::string> & nodes);
+  void recv_exchangePartitions(const int32_t seqid);
+  void mergePartitions();
+  int32_t send_mergePartitions();
+  void recv_mergePartitions(const int32_t seqid);
  protected:
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   apache::thrift::stdcxx::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

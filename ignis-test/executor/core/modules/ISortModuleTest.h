@@ -13,6 +13,7 @@ namespace ignis {
                 CPPUNIT_TEST_SUITE(ISortModuleTest);
                         CPPUNIT_TEST(sequentialLocalSort);
                         CPPUNIT_TEST(parallelLocalSort);
+                        CPPUNIT_TEST(sort);
                     CPPUNIT_TEST_SUITE_END();
                 public:
                     virtual void setUp();
@@ -20,6 +21,8 @@ namespace ignis {
                     virtual void sequentialLocalSort();
 
                     virtual void parallelLocalSort();
+
+                    virtual void sort();
 
                     virtual void tearDown();
 
