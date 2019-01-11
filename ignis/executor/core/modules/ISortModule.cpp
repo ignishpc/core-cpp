@@ -241,7 +241,6 @@ void ISortModule::sampling(const int64_t sampleSize,const int64_t idx, const std
         auto object_in = executor_data->loadObject();
         auto manager = getManager(*executor_data->loadObject());
         auto pivots = getIObject(manager, sampleSize, 0, "memory");
-        manager = getManager(*object_in);
         auto reader = object_in->readIterator();
         auto writer = pivots->writeIterator();
         auto size = object_in->getSize();
