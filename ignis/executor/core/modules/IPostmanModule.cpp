@@ -92,7 +92,7 @@ void IPostmanModule::start() {
         if (!started && !thread_server) {
             IGNIS_THREAD_LOG(info) << "IPostmanModule starting";
             started = true;
-            auto port = executor_data->getParser().getNumber("ignis.executor.transport.port");
+            auto port = executor_data->getParser().getNumber("ignis.transport.port");
             server = std::make_shared<transport::TServerSocket>(port);
             thread_server = std::make_shared<std::thread>(&IPostmanModule::threadServer, this);
         }
@@ -211,13 +211,13 @@ void IPostmanModule::sendAll() {
     try {
         auto msgs = executor_data->getPostBox().popOutBox();
         size_t threads;
-        if (executor_data->getParser().getString("ignis.executor.transport.threads") == "cores") {
+        if (executor_data->getParser().getString("ignis.transport.threads") == "cores") {
             threads = executor_data->getParser().getNumber("ignis.executor.cores");
         } else {
-            threads = executor_data->getParser().getNumber("ignis.executor.transport.threads");
+            threads = executor_data->getParser().getNumber("ignis.transport.threads");
         }
-        int8_t compression = executor_data->getParser().getNumber("ignis.executor.transport.compression");
-        int8_t reconnections = executor_data->getParser().getNumber("ignis.executor.transport.reconnections");
+        int8_t compression = executor_data->getParser().getNumber("ignis.transport.compression");
+        int8_t reconnections = executor_data->getParser().getNumber("ignis.transport.reconnections");
         int errors = 0;
         if (threads == 1) {
             for (auto &entry: msgs) {
