@@ -7,10 +7,10 @@ void IPostmanModuleTest::setUp() {
     postman_module = std::make_shared<IPostmanModule>(executor_data);
     executor_data->getContext()["ignis.executor.storage"] = "rawMemory";
     executor_data->getContext()["ignis.executor.storage.compression"] = "6";
-    executor_data->getContext()["ignis.executor.transport.port"] = "54321";
-    executor_data->getContext()["ignis.executor.transport.threads"] = "4";
-    executor_data->getContext()["ignis.executor.transport.compression"] = "1";
-    executor_data->getContext()["ignis.executor.transport.reconnections"] = "0";
+    executor_data->getContext()["ignis.transport.port"] = "54321";
+    executor_data->getContext()["ignis.transport.threads"] = "4";
+    executor_data->getContext()["ignis.transport.compression"] = "1";
+    executor_data->getContext()["ignis.transport.reconnections"] = "0";
 }
 
 void IPostmanModuleTest::tearDown() {
@@ -56,7 +56,7 @@ void IPostmanModuleTest::localTest() {
 }
 
 void IPostmanModuleTest::socketTest() {
-    test("socket!localhost!" + executor_data->getContext()["ignis.executor.transport.port"]);
+    test("socket!localhost!" + executor_data->getContext()["ignis.transport.port"]);
 }
 
 void IPostmanModuleTest::unixSocketTest() {
@@ -66,6 +66,6 @@ void IPostmanModuleTest::unixSocketTest() {
 void IPostmanModuleTest::memoryBufferTest() {
     std::string path = "./";
     std::string block_size = std::to_string(10 * 1024);
-    test("memoryBuffer!localhost!" + executor_data->getContext()["ignis.executor.transport.port"] + "!" + path + "!" +
+    test("memoryBuffer!localhost!" + executor_data->getContext()["ignis.transport.port"] + "!" + path + "!" +
          block_size);
 }
