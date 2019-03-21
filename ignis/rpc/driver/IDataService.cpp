@@ -2490,6 +2490,213 @@ uint32_t IDataService_values_presult::read(::apache::thrift::protocol::TProtocol
 }
 
 
+IDataService_count_args::~IDataService_count_args() throw() {
+}
+
+
+uint32_t IDataService_count_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->data.read(iprot);
+          this->__isset.data = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataService_count_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataService_count_args");
+
+  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->data.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataService_count_pargs::~IDataService_count_pargs() throw() {
+}
+
+
+uint32_t IDataService_count_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataService_count_pargs");
+
+  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->data)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataService_count_result::~IDataService_count_result() throw() {
+}
+
+
+uint32_t IDataService_count_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataService_count_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IDataService_count_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
+    xfer += oprot->writeI64(this->success);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataService_count_presult::~IDataService_count_presult() throw() {
+}
+
+
+uint32_t IDataService_count_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
 IDataService_shuffle_args::~IDataService_shuffle_args() throw() {
 }
 
@@ -3020,8 +3227,20 @@ uint32_t IDataService_take_result::read(::apache::thrift::protocol::TProtocol* i
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->success);
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->success.clear();
+            uint32_t _size2;
+            ::apache::thrift::protocol::TType _etype5;
+            xfer += iprot->readListBegin(_etype5, _size2);
+            this->success.resize(_size2);
+            uint32_t _i6;
+            for (_i6 = 0; _i6 < _size2; ++_i6)
+            {
+              xfer += iprot->readBinary(this->success[_i6]);
+            }
+            xfer += iprot->readListEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3054,8 +3273,16 @@ uint32_t IDataService_take_result::write(::apache::thrift::protocol::TProtocol* 
   xfer += oprot->writeStructBegin("IDataService_take_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
-    xfer += oprot->writeBinary(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
+    {
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
+      std::vector<std::string> ::const_iterator _iter7;
+      for (_iter7 = this->success.begin(); _iter7 != this->success.end(); ++_iter7)
+      {
+        xfer += oprot->writeBinary((*_iter7));
+      }
+      xfer += oprot->writeListEnd();
+    }
     xfer += oprot->writeFieldEnd();
   } else if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -3094,8 +3321,20 @@ uint32_t IDataService_take_presult::read(::apache::thrift::protocol::TProtocol* 
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size8;
+            ::apache::thrift::protocol::TType _etype11;
+            xfer += iprot->readListBegin(_etype11, _size8);
+            (*(this->success)).resize(_size8);
+            uint32_t _i12;
+            for (_i12 = 0; _i12 < _size8; ++_i12)
+            {
+              xfer += iprot->readBinary((*(this->success))[_i12]);
+            }
+            xfer += iprot->readListEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3291,8 +3530,20 @@ uint32_t IDataService_takeSample_result::read(::apache::thrift::protocol::TProto
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->success);
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->success.clear();
+            uint32_t _size13;
+            ::apache::thrift::protocol::TType _etype16;
+            xfer += iprot->readListBegin(_etype16, _size13);
+            this->success.resize(_size13);
+            uint32_t _i17;
+            for (_i17 = 0; _i17 < _size13; ++_i17)
+            {
+              xfer += iprot->readBinary(this->success[_i17]);
+            }
+            xfer += iprot->readListEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3325,8 +3576,16 @@ uint32_t IDataService_takeSample_result::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeStructBegin("IDataService_takeSample_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
-    xfer += oprot->writeBinary(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
+    {
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
+      std::vector<std::string> ::const_iterator _iter18;
+      for (_iter18 = this->success.begin(); _iter18 != this->success.end(); ++_iter18)
+      {
+        xfer += oprot->writeBinary((*_iter18));
+      }
+      xfer += oprot->writeListEnd();
+    }
     xfer += oprot->writeFieldEnd();
   } else if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -3365,8 +3624,20 @@ uint32_t IDataService_takeSample_presult::read(::apache::thrift::protocol::TProt
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size19;
+            ::apache::thrift::protocol::TType _etype22;
+            xfer += iprot->readListBegin(_etype22, _size19);
+            (*(this->success)).resize(_size19);
+            uint32_t _i23;
+            for (_i23 = 0; _i23 < _size19; ++_i23)
+            {
+              xfer += iprot->readBinary((*(this->success))[_i23]);
+            }
+            xfer += iprot->readListEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3514,8 +3785,20 @@ uint32_t IDataService_collect_result::read(::apache::thrift::protocol::TProtocol
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary(this->success);
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->success.clear();
+            uint32_t _size24;
+            ::apache::thrift::protocol::TType _etype27;
+            xfer += iprot->readListBegin(_etype27, _size24);
+            this->success.resize(_size24);
+            uint32_t _i28;
+            for (_i28 = 0; _i28 < _size24; ++_i28)
+            {
+              xfer += iprot->readBinary(this->success[_i28]);
+            }
+            xfer += iprot->readListEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -3548,8 +3831,16 @@ uint32_t IDataService_collect_result::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeStructBegin("IDataService_collect_result");
 
   if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRING, 0);
-    xfer += oprot->writeBinary(this->success);
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_LIST, 0);
+    {
+      xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->success.size()));
+      std::vector<std::string> ::const_iterator _iter29;
+      for (_iter29 = this->success.begin(); _iter29 != this->success.end(); ++_iter29)
+      {
+        xfer += oprot->writeBinary((*_iter29));
+      }
+      xfer += oprot->writeListEnd();
+    }
     xfer += oprot->writeFieldEnd();
   } else if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -3588,8 +3879,20 @@ uint32_t IDataService_collect_presult::read(::apache::thrift::protocol::TProtoco
     switch (fid)
     {
       case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readBinary((*(this->success)));
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            (*(this->success)).clear();
+            uint32_t _size30;
+            ::apache::thrift::protocol::TType _etype33;
+            xfer += iprot->readListBegin(_etype33, _size30);
+            (*(this->success)).resize(_size30);
+            uint32_t _i34;
+            for (_i34 = 0; _i34 < _size30; ++_i34)
+            {
+              xfer += iprot->readBinary((*(this->success))[_i34]);
+            }
+            xfer += iprot->readListEnd();
+          }
           this->__isset.success = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -5569,6 +5872,67 @@ void IDataServiceClient::recv_values(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "values failed: unknown result");
 }
 
+int64_t IDataServiceClient::count(const IDataId& data)
+{
+  send_count(data);
+  return recv_count();
+}
+
+void IDataServiceClient::send_count(const IDataId& data)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("count", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataService_count_pargs args;
+  args.data = &data;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int64_t IDataServiceClient::recv_count()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("count") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int64_t _return;
+  IDataService_count_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "count failed: unknown result");
+}
+
 void IDataServiceClient::shuffle(IDataId& _return, const IDataId& data)
 {
   send_shuffle(data);
@@ -5690,7 +6054,7 @@ void IDataServiceClient::recv_parallelize(IDataId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "parallelize failed: unknown result");
 }
 
-void IDataServiceClient::take(std::string& _return, const IDataId& data, const int64_t n, const bool light)
+void IDataServiceClient::take(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool light)
 {
   send_take(data, n, light);
   recv_take(_return);
@@ -5712,7 +6076,7 @@ void IDataServiceClient::send_take(const IDataId& data, const int64_t n, const b
   oprot_->getTransport()->flush();
 }
 
-void IDataServiceClient::recv_take(std::string& _return)
+void IDataServiceClient::recv_take(std::vector<std::string> & _return)
 {
 
   int32_t rseqid = 0;
@@ -5753,7 +6117,7 @@ void IDataServiceClient::recv_take(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "take failed: unknown result");
 }
 
-void IDataServiceClient::takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
+void IDataServiceClient::takeSample(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
 {
   send_takeSample(data, n, withRemplacement, seed, light);
   recv_takeSample(_return);
@@ -5777,7 +6141,7 @@ void IDataServiceClient::send_takeSample(const IDataId& data, const int64_t n, c
   oprot_->getTransport()->flush();
 }
 
-void IDataServiceClient::recv_takeSample(std::string& _return)
+void IDataServiceClient::recv_takeSample(std::vector<std::string> & _return)
 {
 
   int32_t rseqid = 0;
@@ -5818,7 +6182,7 @@ void IDataServiceClient::recv_takeSample(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "takeSample failed: unknown result");
 }
 
-void IDataServiceClient::collect(std::string& _return, const IDataId& data, const bool light)
+void IDataServiceClient::collect(std::vector<std::string> & _return, const IDataId& data, const bool light)
 {
   send_collect(data, light);
   recv_collect(_return);
@@ -5839,7 +6203,7 @@ void IDataServiceClient::send_collect(const IDataId& data, const bool light)
   oprot_->getTransport()->flush();
 }
 
-void IDataServiceClient::recv_collect(std::string& _return)
+void IDataServiceClient::recv_collect(std::vector<std::string> & _return)
 {
 
   int32_t rseqid = 0;
@@ -6875,6 +7239,63 @@ void IDataServiceProcessor::process_values(int32_t seqid, ::apache::thrift::prot
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "IDataService.values", bytes);
+  }
+}
+
+void IDataServiceProcessor::process_count(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IDataService.count", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataService.count");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IDataService.count");
+  }
+
+  IDataService_count_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IDataService.count", bytes);
+  }
+
+  IDataService_count_result result;
+  try {
+    result.success = iface_->count(args.data);
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::IRemoteException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IDataService.count");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("count", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IDataService.count");
+  }
+
+  oprot->writeMessageBegin("count", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IDataService.count", bytes);
   }
 }
 
@@ -8484,6 +8905,94 @@ void IDataServiceConcurrentClient::recv_values(IDataId& _return, const int32_t s
   } // end while(true)
 }
 
+int64_t IDataServiceConcurrentClient::count(const IDataId& data)
+{
+  int32_t seqid = send_count(data);
+  return recv_count(seqid);
+}
+
+int32_t IDataServiceConcurrentClient::send_count(const IDataId& data)
+{
+  int32_t cseqid = this->sync_.generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
+  oprot_->writeMessageBegin("count", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataService_count_pargs args;
+  args.data = &data;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int64_t IDataServiceConcurrentClient::recv_count(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(&this->sync_, seqid);
+
+  while(true) {
+    if(!this->sync_.getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("count") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int64_t _return;
+      IDataService_count_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "count failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_.updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_.waitForWork(seqid);
+  } // end while(true)
+}
+
 void IDataServiceConcurrentClient::shuffle(IDataId& _return, const IDataId& data)
 {
   int32_t seqid = send_shuffle(data);
@@ -8659,7 +9168,7 @@ void IDataServiceConcurrentClient::recv_parallelize(IDataId& _return, const int3
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::take(std::string& _return, const IDataId& data, const int64_t n, const bool light)
+void IDataServiceConcurrentClient::take(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool light)
 {
   int32_t seqid = send_take(data, n, light);
   recv_take(_return, seqid);
@@ -8685,7 +9194,7 @@ int32_t IDataServiceConcurrentClient::send_take(const IDataId& data, const int64
   return cseqid;
 }
 
-void IDataServiceConcurrentClient::recv_take(std::string& _return, const int32_t seqid)
+void IDataServiceConcurrentClient::recv_take(std::vector<std::string> & _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -8749,7 +9258,7 @@ void IDataServiceConcurrentClient::recv_take(std::string& _return, const int32_t
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
+void IDataServiceConcurrentClient::takeSample(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light)
 {
   int32_t seqid = send_takeSample(data, n, withRemplacement, seed, light);
   recv_takeSample(_return, seqid);
@@ -8777,7 +9286,7 @@ int32_t IDataServiceConcurrentClient::send_takeSample(const IDataId& data, const
   return cseqid;
 }
 
-void IDataServiceConcurrentClient::recv_takeSample(std::string& _return, const int32_t seqid)
+void IDataServiceConcurrentClient::recv_takeSample(std::vector<std::string> & _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -8841,7 +9350,7 @@ void IDataServiceConcurrentClient::recv_takeSample(std::string& _return, const i
   } // end while(true)
 }
 
-void IDataServiceConcurrentClient::collect(std::string& _return, const IDataId& data, const bool light)
+void IDataServiceConcurrentClient::collect(std::vector<std::string> & _return, const IDataId& data, const bool light)
 {
   int32_t seqid = send_collect(data, light);
   recv_collect(_return, seqid);
@@ -8866,7 +9375,7 @@ int32_t IDataServiceConcurrentClient::send_collect(const IDataId& data, const bo
   return cseqid;
 }
 
-void IDataServiceConcurrentClient::recv_collect(std::string& _return, const int32_t seqid)
+void IDataServiceConcurrentClient::recv_collect(std::vector<std::string> & _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;

@@ -20,12 +20,14 @@ ISource::~ISource() throw() {
 
 void ISource::__set_name(const std::string& val) {
   this->name = val;
-__isset.name = true;
 }
 
 void ISource::__set_bytes(const std::string& val) {
   this->bytes = val;
-__isset.bytes = true;
+}
+
+void ISource::__set__args(const std::map<std::string, std::string> & val) {
+  this->_args = val;
 }
 std::ostream& operator<<(std::ostream& out, const ISource& obj)
 {
@@ -71,6 +73,29 @@ uint32_t ISource::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            this->_args.clear();
+            uint32_t _size0;
+            ::apache::thrift::protocol::TType _ktype1;
+            ::apache::thrift::protocol::TType _vtype2;
+            xfer += iprot->readMapBegin(_ktype1, _vtype2, _size0);
+            uint32_t _i4;
+            for (_i4 = 0; _i4 < _size0; ++_i4)
+            {
+              std::string _key5;
+              xfer += iprot->readString(_key5);
+              std::string& _val6 = this->_args[_key5];
+              xfer += iprot->readBinary(_val6);
+            }
+            xfer += iprot->readMapEnd();
+          }
+          this->__isset._args = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -88,16 +113,27 @@ uint32_t ISource::write(::apache::thrift::protocol::TProtocol* oprot) const {
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("ISource");
 
-  if (this->__isset.name) {
-    xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
-    xfer += oprot->writeString(this->name);
-    xfer += oprot->writeFieldEnd();
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->name);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("bytes", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeBinary(this->bytes);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("_args", ::apache::thrift::protocol::T_MAP, 3);
+  {
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->_args.size()));
+    std::map<std::string, std::string> ::const_iterator _iter7;
+    for (_iter7 = this->_args.begin(); _iter7 != this->_args.end(); ++_iter7)
+    {
+      xfer += oprot->writeString(_iter7->first);
+      xfer += oprot->writeBinary(_iter7->second);
+    }
+    xfer += oprot->writeMapEnd();
   }
-  if (this->__isset.bytes) {
-    xfer += oprot->writeFieldBegin("bytes", ::apache::thrift::protocol::T_STRING, 2);
-    xfer += oprot->writeBinary(this->bytes);
-    xfer += oprot->writeFieldEnd();
-  }
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -107,25 +143,29 @@ void swap(ISource &a, ISource &b) {
   using ::std::swap;
   swap(a.name, b.name);
   swap(a.bytes, b.bytes);
+  swap(a._args, b._args);
   swap(a.__isset, b.__isset);
 }
 
-ISource::ISource(const ISource& other0) {
-  name = other0.name;
-  bytes = other0.bytes;
-  __isset = other0.__isset;
+ISource::ISource(const ISource& other8) {
+  name = other8.name;
+  bytes = other8.bytes;
+  _args = other8._args;
+  __isset = other8.__isset;
 }
-ISource& ISource::operator=(const ISource& other1) {
-  name = other1.name;
-  bytes = other1.bytes;
-  __isset = other1.__isset;
+ISource& ISource::operator=(const ISource& other9) {
+  name = other9.name;
+  bytes = other9.bytes;
+  _args = other9._args;
+  __isset = other9.__isset;
   return *this;
 }
 void ISource::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
   out << "ISource(";
-  out << "name="; (__isset.name ? (out << to_string(name)) : (out << "<null>"));
-  out << ", " << "bytes="; (__isset.bytes ? (out << to_string(bytes)) : (out << "<null>"));
+  out << "name=" << to_string(name);
+  out << ", " << "bytes=" << to_string(bytes);
+  out << ", " << "_args=" << to_string(_args);
   out << ")";
 }
 

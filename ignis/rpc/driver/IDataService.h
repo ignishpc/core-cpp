@@ -32,11 +32,12 @@ class IDataServiceIf {
   virtual void streamingKeyBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function, const bool ordered) = 0;
   virtual void reduceByKey(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& _function) = 0;
   virtual void values(IDataId& _return, const IDataId& data) = 0;
+  virtual int64_t count(const IDataId& data) = 0;
   virtual void shuffle(IDataId& _return, const IDataId& data) = 0;
   virtual void parallelize(IDataId& _return) = 0;
-  virtual void take(std::string& _return, const IDataId& data, const int64_t n, const bool light) = 0;
-  virtual void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
-  virtual void collect(std::string& _return, const IDataId& data, const bool light) = 0;
+  virtual void take(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool light) = 0;
+  virtual void takeSample(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) = 0;
+  virtual void collect(std::vector<std::string> & _return, const IDataId& data, const bool light) = 0;
   virtual void sortBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending) = 0;
   virtual void sort(IDataId& _return, const IDataId& data, const bool ascending) = 0;
   virtual void saveAsTextFile(const IDataId& data, const std::string& path, const bool join) = 0;
@@ -105,19 +106,23 @@ class IDataServiceNull : virtual public IDataServiceIf {
   void values(IDataId& /* _return */, const IDataId& /* data */) {
     return;
   }
+  int64_t count(const IDataId& /* data */) {
+    int64_t _return = 0;
+    return _return;
+  }
   void shuffle(IDataId& /* _return */, const IDataId& /* data */) {
     return;
   }
   void parallelize(IDataId& /* _return */) {
     return;
   }
-  void take(std::string& /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* light */) {
+  void take(std::vector<std::string> & /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* light */) {
     return;
   }
-  void takeSample(std::string& /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* light */) {
+  void takeSample(std::vector<std::string> & /* _return */, const IDataId& /* data */, const int64_t /* n */, const bool /* withRemplacement */, const int32_t /* seed */, const bool /* light */) {
     return;
   }
-  void collect(std::string& /* _return */, const IDataId& /* data */, const bool /* light */) {
+  void collect(std::vector<std::string> & /* _return */, const IDataId& /* data */, const bool /* light */) {
     return;
   }
   void sortBy(IDataId& /* _return */, const IDataId& /* data */, const  ::ignis::rpc::ISource& /* funct */, const bool /* ascending */) {
@@ -1462,6 +1467,118 @@ class IDataService_values_presult {
 
 };
 
+typedef struct _IDataService_count_args__isset {
+  _IDataService_count_args__isset() : data(false) {}
+  bool data :1;
+} _IDataService_count_args__isset;
+
+class IDataService_count_args {
+ public:
+
+  IDataService_count_args(const IDataService_count_args&);
+  IDataService_count_args& operator=(const IDataService_count_args&);
+  IDataService_count_args() {
+  }
+
+  virtual ~IDataService_count_args() throw();
+  IDataId data;
+
+  _IDataService_count_args__isset __isset;
+
+  void __set_data(const IDataId& val);
+
+  bool operator == (const IDataService_count_args & rhs) const
+  {
+    if (!(data == rhs.data))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_count_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_count_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataService_count_pargs {
+ public:
+
+
+  virtual ~IDataService_count_pargs() throw();
+  const IDataId* data;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_count_result__isset {
+  _IDataService_count_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_count_result__isset;
+
+class IDataService_count_result {
+ public:
+
+  IDataService_count_result(const IDataService_count_result&);
+  IDataService_count_result& operator=(const IDataService_count_result&);
+  IDataService_count_result() : success(0) {
+  }
+
+  virtual ~IDataService_count_result() throw();
+  int64_t success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_count_result__isset __isset;
+
+  void __set_success(const int64_t val);
+
+  void __set_ex(const  ::ignis::rpc::IRemoteException& val);
+
+  bool operator == (const IDataService_count_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataService_count_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataService_count_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataService_count_presult__isset {
+  _IDataService_count_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataService_count_presult__isset;
+
+class IDataService_count_presult {
+ public:
+
+
+  virtual ~IDataService_count_presult() throw();
+  int64_t* success;
+   ::ignis::rpc::IRemoteException ex;
+
+  _IDataService_count_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IDataService_shuffle_args__isset {
   _IDataService_shuffle_args__isset() : data(false) {}
   bool data :1;
@@ -1748,16 +1865,16 @@ class IDataService_take_result {
 
   IDataService_take_result(const IDataService_take_result&);
   IDataService_take_result& operator=(const IDataService_take_result&);
-  IDataService_take_result() : success() {
+  IDataService_take_result() {
   }
 
   virtual ~IDataService_take_result() throw();
-  std::string success;
+  std::vector<std::string>  success;
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_take_result__isset __isset;
 
-  void __set_success(const std::string& val);
+  void __set_success(const std::vector<std::string> & val);
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
@@ -1791,7 +1908,7 @@ class IDataService_take_presult {
 
 
   virtual ~IDataService_take_presult() throw();
-  std::string* success;
+  std::vector<std::string> * success;
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_take_presult__isset __isset;
@@ -1888,16 +2005,16 @@ class IDataService_takeSample_result {
 
   IDataService_takeSample_result(const IDataService_takeSample_result&);
   IDataService_takeSample_result& operator=(const IDataService_takeSample_result&);
-  IDataService_takeSample_result() : success() {
+  IDataService_takeSample_result() {
   }
 
   virtual ~IDataService_takeSample_result() throw();
-  std::string success;
+  std::vector<std::string>  success;
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_takeSample_result__isset __isset;
 
-  void __set_success(const std::string& val);
+  void __set_success(const std::vector<std::string> & val);
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
@@ -1931,7 +2048,7 @@ class IDataService_takeSample_presult {
 
 
   virtual ~IDataService_takeSample_presult() throw();
-  std::string* success;
+  std::vector<std::string> * success;
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_takeSample_presult__isset __isset;
@@ -2007,16 +2124,16 @@ class IDataService_collect_result {
 
   IDataService_collect_result(const IDataService_collect_result&);
   IDataService_collect_result& operator=(const IDataService_collect_result&);
-  IDataService_collect_result() : success() {
+  IDataService_collect_result() {
   }
 
   virtual ~IDataService_collect_result() throw();
-  std::string success;
+  std::vector<std::string>  success;
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_collect_result__isset __isset;
 
-  void __set_success(const std::string& val);
+  void __set_success(const std::vector<std::string> & val);
 
   void __set_ex(const  ::ignis::rpc::IRemoteException& val);
 
@@ -2050,7 +2167,7 @@ class IDataService_collect_presult {
 
 
   virtual ~IDataService_collect_presult() throw();
-  std::string* success;
+  std::vector<std::string> * success;
    ::ignis::rpc::IRemoteException ex;
 
   _IDataService_collect_presult__isset __isset;
@@ -2806,21 +2923,24 @@ class IDataServiceClient : virtual public IDataServiceIf {
   void values(IDataId& _return, const IDataId& data);
   void send_values(const IDataId& data);
   void recv_values(IDataId& _return);
+  int64_t count(const IDataId& data);
+  void send_count(const IDataId& data);
+  int64_t recv_count();
   void shuffle(IDataId& _return, const IDataId& data);
   void send_shuffle(const IDataId& data);
   void recv_shuffle(IDataId& _return);
   void parallelize(IDataId& _return);
   void send_parallelize();
   void recv_parallelize(IDataId& _return);
-  void take(std::string& _return, const IDataId& data, const int64_t n, const bool light);
+  void take(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool light);
   void send_take(const IDataId& data, const int64_t n, const bool light);
-  void recv_take(std::string& _return);
-  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void recv_take(std::vector<std::string> & _return);
+  void takeSample(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
   void send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
-  void recv_takeSample(std::string& _return);
-  void collect(std::string& _return, const IDataId& data, const bool light);
+  void recv_takeSample(std::vector<std::string> & _return);
+  void collect(std::vector<std::string> & _return, const IDataId& data, const bool light);
   void send_collect(const IDataId& data, const bool light);
-  void recv_collect(std::string& _return);
+  void recv_collect(std::vector<std::string> & _return);
   void sortBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
   void send_sortBy(const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
   void recv_sortBy(IDataId& _return);
@@ -2865,6 +2985,7 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_streamingKeyBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_values(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_count(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_shuffle(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_parallelize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2890,6 +3011,7 @@ class IDataServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["streamingKeyBy"] = &IDataServiceProcessor::process_streamingKeyBy;
     processMap_["reduceByKey"] = &IDataServiceProcessor::process_reduceByKey;
     processMap_["values"] = &IDataServiceProcessor::process_values;
+    processMap_["count"] = &IDataServiceProcessor::process_count;
     processMap_["shuffle"] = &IDataServiceProcessor::process_shuffle;
     processMap_["parallelize"] = &IDataServiceProcessor::process_parallelize;
     processMap_["take"] = &IDataServiceProcessor::process_take;
@@ -3038,6 +3160,15 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
+  int64_t count(const IDataId& data) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->count(data);
+    }
+    return ifaces_[i]->count(data);
+  }
+
   void shuffle(IDataId& _return, const IDataId& data) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -3058,7 +3189,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void take(std::string& _return, const IDataId& data, const int64_t n, const bool light) {
+  void take(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -3068,7 +3199,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
+  void takeSample(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -3078,7 +3209,7 @@ class IDataServiceMultiface : virtual public IDataServiceIf {
     return;
   }
 
-  void collect(std::string& _return, const IDataId& data, const bool light) {
+  void collect(std::vector<std::string> & _return, const IDataId& data, const bool light) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -3207,21 +3338,24 @@ class IDataServiceConcurrentClient : virtual public IDataServiceIf {
   void values(IDataId& _return, const IDataId& data);
   int32_t send_values(const IDataId& data);
   void recv_values(IDataId& _return, const int32_t seqid);
+  int64_t count(const IDataId& data);
+  int32_t send_count(const IDataId& data);
+  int64_t recv_count(const int32_t seqid);
   void shuffle(IDataId& _return, const IDataId& data);
   int32_t send_shuffle(const IDataId& data);
   void recv_shuffle(IDataId& _return, const int32_t seqid);
   void parallelize(IDataId& _return);
   int32_t send_parallelize();
   void recv_parallelize(IDataId& _return, const int32_t seqid);
-  void take(std::string& _return, const IDataId& data, const int64_t n, const bool light);
+  void take(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool light);
   int32_t send_take(const IDataId& data, const int64_t n, const bool light);
-  void recv_take(std::string& _return, const int32_t seqid);
-  void takeSample(std::string& _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
+  void recv_take(std::vector<std::string> & _return, const int32_t seqid);
+  void takeSample(std::vector<std::string> & _return, const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
   int32_t send_takeSample(const IDataId& data, const int64_t n, const bool withRemplacement, const int32_t seed, const bool light);
-  void recv_takeSample(std::string& _return, const int32_t seqid);
-  void collect(std::string& _return, const IDataId& data, const bool light);
+  void recv_takeSample(std::vector<std::string> & _return, const int32_t seqid);
+  void collect(std::vector<std::string> & _return, const IDataId& data, const bool light);
   int32_t send_collect(const IDataId& data, const bool light);
-  void recv_collect(std::string& _return, const int32_t seqid);
+  void recv_collect(std::vector<std::string> & _return, const int32_t seqid);
   void sortBy(IDataId& _return, const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
   int32_t send_sortBy(const IDataId& data, const  ::ignis::rpc::ISource& funct, const bool ascending);
   void recv_sortBy(IDataId& _return, const int32_t seqid);

@@ -7,6 +7,7 @@
 #include <thrift/protocol/TProtocolDecorator.h>
 #include <thrift/protocol/TCompactProtocol.h>
 #include "handle/IReader.h"
+#include "handle/IDeleter.h"
 #include "handle/IWriter.h"
 #include "../exceptions/IInvalidArgument.h"
 
@@ -18,6 +19,13 @@ namespace ignis {
 
             IObjectProtocol(const std::shared_ptr<apache::thrift::transport::TTransport> &trans) :
                     TProtocolDecorator(std::make_shared<apache::thrift::protocol::TCompactProtocol>(trans)) {
+            }
+
+            std::shared_ptr<void> readObject(handle::IReader<void> &reader);//Protect void template implementation
+
+            template<typename T>
+            std::shared_ptr<T> readObject(handle::IReader<T> &reader, std::shared_ptr<handle::IDeleter<T>> deleter) {
+                return std::shared_ptr<T>(readPtrObject(reader),[deleter](T* ptr){(*deleter)(ptr);});
             }
 
             template<typename T>

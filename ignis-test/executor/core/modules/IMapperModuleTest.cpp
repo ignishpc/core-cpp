@@ -1,5 +1,8 @@
 
 #include "IMapperModuleTest.h"
+#include "../../../../ignis/data/IMemoryBuffer.h"
+#include "../../../../ignis/data/IObjectProtocol.h"
+#include "../../../../ignis/executor/api/IManager.h"
 #include <vector>
 
 using namespace ignis::executor::core::modules;
@@ -370,5 +373,26 @@ void IMapperModuleTest::mapPartitionWithIndex() {
     for (int i=1;i<input.size();i++) {
         auto &elem = input[i];
         CPPUNIT_ASSERT_EQUAL(elem, (int &) reader->next());
+    }
+}
+
+void IMapperModuleTest::mapWithVariables() {
+    std::string test_var = "test";
+    auto buffer = std::make_shared<data::IMemoryBuffer>();
+    data::IObjectProtocol proto(buffer);
+    data::handle::IWriter<std::string> writer;
+    proto.writeObject(test_var, writer);
+    std::map<std::string,std::string> args;
+    args["test_var"] = buffer->getBufferAsString();
+    executor_data->getContext()["ignis.executor.cores"] = "1";
+    rpc::ISource f;
+    f.__set_name(library + ":mapFunctionWithArgs");
+    f.__set__args(args);
+    mapper_module->_map(f);
+
+    auto reader = executor_data->loadObject()->readIterator();
+
+    for (auto &elem:input) {
+        CPPUNIT_ASSERT_EQUAL(std::to_string(elem) + test_var, (std::string &) reader->next());
     }
 }

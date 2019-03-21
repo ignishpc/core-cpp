@@ -23,9 +23,10 @@ namespace ignis { namespace rpc {
 class ISource;
 
 typedef struct _ISource__isset {
-  _ISource__isset() : name(false), bytes(false) {}
+  _ISource__isset() : name(false), bytes(false), _args(false) {}
   bool name :1;
   bool bytes :1;
+  bool _args :1;
 } _ISource__isset;
 
 class ISource : public virtual ::apache::thrift::TBase {
@@ -39,6 +40,7 @@ class ISource : public virtual ::apache::thrift::TBase {
   virtual ~ISource() throw();
   std::string name;
   std::string bytes;
+  std::map<std::string, std::string>  _args;
 
   _ISource__isset __isset;
 
@@ -46,15 +48,15 @@ class ISource : public virtual ::apache::thrift::TBase {
 
   void __set_bytes(const std::string& val);
 
+  void __set__args(const std::map<std::string, std::string> & val);
+
   bool operator == (const ISource & rhs) const
   {
-    if (__isset.name != rhs.__isset.name)
+    if (!(name == rhs.name))
       return false;
-    else if (__isset.name && !(name == rhs.name))
+    if (!(bytes == rhs.bytes))
       return false;
-    if (__isset.bytes != rhs.__isset.bytes)
-      return false;
-    else if (__isset.bytes && !(bytes == rhs.bytes))
+    if (!(_args == rhs._args))
       return false;
     return true;
   }

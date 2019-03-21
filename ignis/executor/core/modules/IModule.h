@@ -43,13 +43,13 @@ namespace ignis {
                         if (source.__isset.bytes) {
                             throw exceptions::IInvalidArgument("C++ not support function handle");
                         }
-                        auto cache = executor_data->libraries.find(source.name);
-                        std::shared_ptr<T> result;
-                        if (cache != executor_data->libraries.end()) {
-                            result = std::static_pointer_cast<T>(cache->second);
-                        } else {
-                            result = IObjectLoader::load<T>(source.name);
-                            executor_data->libraries[source.name] = result;
+                        auto result = executor_data->getObjectLoader().load<T>(source.name);
+                        if(source._args.size()> 0){
+                            IGNIS_LOG(info) << "IModule loading arguments";
+                            for(auto& entry: source._args){
+                                auto var = std::static_pointer_cast<void>(std::make_shared<std::string>(entry.second));
+                                executor_data->getContext().getVariables()[entry.first] = std::make_pair(false,var);
+                            }
                         }
                         IGNIS_LOG(info) << "IModule function loaded";
                         return result;

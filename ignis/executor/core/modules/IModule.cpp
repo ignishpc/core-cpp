@@ -47,17 +47,24 @@ IgnisModule::getIObject(const std::shared_ptr<api::IManager<IObject::Any>> &m, s
 std::shared_ptr<ignis::executor::api::IManager<IObject::Any>> IgnisModule::getManager(IObject &object) {
     auto manager = object.getManager();
     if (!manager) {
-        IGNIS_LOG(warning) << "IModule binary data has not type, trying to compile it";
-        ICompileManager cm(object);
-        auto lib = cm.compile();
-        if (lib.length() > 0) {
-            IGNIS_LOG(info) << "IModule binary data type compiled successfully";
-            rpc::ISource source;
-            source.__set_name(lib);
-            auto value = loadSource<api::IValue<IObject::Any>>(source);
-            return value->type_t();
+        IGNIS_LOG(warning) << "IModule binary data has not type, trying to parse";
+        auto id = executor_data->getObjectLoader().parseId(object);
+        if(id.size() > 0){
+            IGNIS_LOG(warning) << "IModule binary data has a type id: " << id << ", trying to find in precompiled types";
+            if(executor_data->getObjectLoader().containsManager(id)){
+                IGNIS_LOG(warning) << "IModule binary data has a precompiled type";
+                return executor_data->getObjectLoader().getManager(id);
+            }
+            IGNIS_LOG(warning) << "IModule binary data has not a precompiled type, trying to compile it";
+            manager = executor_data->getObjectLoader().compileManager(id);
+            if(manager){
+                IGNIS_LOG(info) << "IModule binary data type compiled successfully";
+                return manager;
+            }
+            IGNIS_LOG(error) << "IModule binary data type compiled fails";
+        }else{
+            IGNIS_LOG(warning) << "IModule binary data parsing fails, unknown type detected";
         }
-        IGNIS_LOG(error) << "IModule binary data type compiled fails";
         throw exceptions::IInvalidArgument("C++ requires type this data before using it");
     }
     return manager;

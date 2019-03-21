@@ -3,7 +3,8 @@
 
 using namespace ignis::executor::core;
 
-IExecutorData::IExecutorData() : properties_parser(core::IPropertiesParser(context.getProperties())) {}
+IExecutorData::IExecutorData() : properties_parser(core::IPropertiesParser(context.getProperties())),
+        context(api::IContext((void*)&object_loader)) {}
 
 
 std::shared_ptr<storage::IObject> IExecutorData::loadObject(std::shared_ptr<storage::IObject> object) {
@@ -40,8 +41,11 @@ int64_t IExecutorData::getThreads() {
     }
 }
 
+IObjectLoader &IExecutorData::getObjectLoader() {
+    return object_loader;
+}
+
 IExecutorData::~IExecutorData() {
 
 }
-
 

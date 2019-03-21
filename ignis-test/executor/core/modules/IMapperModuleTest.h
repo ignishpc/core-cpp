@@ -34,6 +34,7 @@ namespace ignis {
                         CPPUNIT_TEST(parallelStreamingKeyByOrdered);
                         CPPUNIT_TEST(mapPartition);
                         CPPUNIT_TEST(mapPartitionWithIndex);
+                        CPPUNIT_TEST(mapWithVariables);
                     CPPUNIT_TEST_SUITE_END();
                 public:
                     virtual void setUp();
@@ -81,6 +82,8 @@ namespace ignis {
                     virtual void mapPartition();
 
                     virtual void mapPartitionWithIndex();
+
+                    virtual void mapWithVariables();
 
                     virtual void tearDown();
 

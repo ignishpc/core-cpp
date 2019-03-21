@@ -77,7 +77,7 @@ class mapPartitionFunctionWithIndex :
 
     std::shared_ptr<api::IReadIterator<int>>
     call(int64_t &t1, std::shared_ptr<api::IReadIterator<int>> &t2, ignis::executor::api::IContext &context) override {
-        if(t1==0 && t2->hasNext()){
+        if (t1 == 0 && t2->hasNext()) {
             t2->next();
         }
         return t2;
@@ -86,3 +86,14 @@ class mapPartitionFunctionWithIndex :
 };
 
 ignis_register_class(mapPartitionFunctionWithIndex, mapPartitionFunctionWithIndex);
+
+class mapFunctionWithArgs : public function::IFunction<int, std::string> {
+public:
+
+    std::string call(int &t, ignis::executor::api::IContext &context) override {
+        return std::to_string(t) + *context.getVariable<std::string>("test_var");
+    }
+
+};
+
+ignis_register_class(mapFunctionWithArgs, mapFunctionWithArgs);

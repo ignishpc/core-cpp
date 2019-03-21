@@ -3,15 +3,22 @@
 #include <dlfcn.h>
 #include <boost/filesystem.hpp>
 #include "../../exceptions/IInvalidArgument.h"
+#include "../../data/IMemoryBuffer.h"
+#include "../../data/IObjectProtocol.h"
 
-std::shared_ptr<void> ignis::executor::core::IObjectLoader::innerload(const std::string &name){
+using namespace ignis::executor::api;
+using namespace ignis::executor::core;
+
+std::shared_ptr<void> IObjectLoader::vload(const std::string &name){
     int sep = name.find(':');
-
     if (sep < -1) {
         throw exceptions::IInvalidArgument(name + " is not a valid c++ class");
     }
     std::string path = name.substr(0, sep);
     std::string class_name = name.substr(sep + 1, name.size());
+    if(libraries.find(path) != libraries.end()){
+        return libraries[path];
+    }
 
     if(!boost::filesystem::exists(path)){
         throw exceptions::IInvalidArgument(path + " was not found");
@@ -33,8 +40,43 @@ std::shared_ptr<void> ignis::executor::core::IObjectLoader::innerload(const std:
 
     auto object = (*constructor)();
 
-    return std::shared_ptr<void>(object, [library,destructor](void* object){
+    return libraries[path] = std::shared_ptr<void>(object, [library,destructor](void* object){
         (*destructor)(object);
         dlclose(library);
     });
 }
+
+
+std::shared_ptr<storage::IObject::Any> IObjectLoader::loadVariable(const std::string &bytes,
+                                                    std::shared_ptr<executor::api::IManager<storage::IObject::Any>> manager){
+
+    auto buffer = std::make_shared<data::IMemoryBuffer>((uint8_t*)bytes.c_str(), (size_t)(bytes.end()-bytes.begin()));
+    data::IObjectProtocol proto(buffer);
+    return proto.readObject(*manager->reader(), manager->deleter());
+}
+
+
+std::shared_ptr<IManager<storage::IObject::Any>> IObjectLoader::getManager(const std::string &id){
+
+}
+
+std::shared_ptr<IManager<storage::IObject::Any>> IObjectLoader::compileManager(const std::string &id){
+
+}
+
+void IObjectLoader::registermanager(std::shared_ptr<executor::api::IManager<storage::IObject::Any>> manager){
+
+}
+
+bool IObjectLoader::containsManager(const std::string &id){
+    return false;
+}
+
+std::string IObjectLoader::parseId(storage::IObject &obj){
+    return "";
+}
+
+std::string IObjectLoader::parseId(api::IManager<storage::IObject::Any> &manager){
+
+}
+
