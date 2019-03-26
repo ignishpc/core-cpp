@@ -5,7 +5,6 @@
 #include "../../exceptions/IInvalidArgument.h"
 #include "../../data/IMemoryBuffer.h"
 #include "../../data/IObjectProtocol.h"
-#include <iostream>
 
 using namespace ignis::executor::api;
 using namespace ignis::executor::core;
@@ -53,12 +52,6 @@ std::shared_ptr<storage::IObject::Any> IObjectLoader::loadVariable(const std::st
                                                                    std::shared_ptr<executor::api::IManager<storage::IObject::Any>> manager) {
 
     auto buffer = std::make_shared<data::IMemoryBuffer>((uint8_t *) bytes.c_str(), bytes.size());
-    std::cout << "->";
-    for (int i = 0; i < bytes.size(); i++) {
-        std::cout << *((uint8_t *) (&bytes.c_str()[i])) << " ";
-    }
-    std::cout << std::endl;
-
     data::IObjectProtocol proto(buffer);
     return proto.readObject(*manager->reader(), manager->deleter());
 }
