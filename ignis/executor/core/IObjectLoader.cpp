@@ -14,6 +14,10 @@ std::shared_ptr<void> IObjectLoader::vload(const std::string &name) {
     if (sep < -1) {
         throw exceptions::IInvalidArgument(name + " is not a valid c++ class");
     }
+    if (libraries.find(name) != libraries.end()) {
+        return libraries[name];
+    }
+
     std::string path = name.substr(0, sep);
     std::string class_name = name.substr(sep + 1, name.size());
 
@@ -21,14 +25,7 @@ std::shared_ptr<void> IObjectLoader::vload(const std::string &name) {
         throw exceptions::IInvalidArgument(path + " was not found");
     }
 
-    void *library;
-
-    if (libraries.find(path) != libraries.end()) {
-        library = libraries[path].get();
-    } else {
-        library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
-        libraries[path] = std::shared_ptr<void>(library, [](void *library) { dlclose(library); });
-    }
+    void *library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
 
     if (!library) {
         throw exceptions::IInvalidArgument(path + " could not be loaded");
@@ -44,8 +41,9 @@ std::shared_ptr<void> IObjectLoader::vload(const std::string &name) {
 
     auto object = (*constructor)();
 
-    return std::shared_ptr<void>(object, [library, destructor](void *object) {
+    return libraries[path] = std::shared_ptr<void>(object, [library, destructor](void *object) {
         (*destructor)(object);
+        dlclose(library);
     });
 }
 
