@@ -40,13 +40,13 @@ namespace ignis {
                     template<typename T>
                     std::shared_ptr<T> loadSource(const rpc::ISource &source) {
                         IGNIS_LOG(info) << "IModule loading function";
-                        if (source.__isset.bytes) {
+                        if (source.obj.__isset.bytes) {
                             throw exceptions::IInvalidArgument("C++ not support function handle");
                         }
-                        auto result = executor_data->getObjectLoader().load<T>(source.name);
-                        if(source._args.size()> 0){
+                        auto result = executor_data->getObjectLoader().load<T>(source.obj.name);
+                        if(source.params.size()> 0){
                             IGNIS_LOG(info) << "IModule loading arguments";
-                            for(auto& entry: source._args){
+                            for(auto& entry: source.params){
                                 auto var = std::static_pointer_cast<void>(std::make_shared<std::string>(entry.second));
                                 executor_data->getContext().getVariables()[entry.first] = std::make_pair(false,var);
                             }

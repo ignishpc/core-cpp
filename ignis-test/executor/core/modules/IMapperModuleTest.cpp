@@ -33,7 +33,7 @@ void IMapperModuleTest::tearDown() {
 void IMapperModuleTest::sequentialMap() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->_map(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -46,7 +46,7 @@ void IMapperModuleTest::sequentialMap() {
 void IMapperModuleTest::sequentialFlatMap() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":flatmapFunction");
+    f.obj.__set_name(library + ":flatmapFunction");
     mapper_module->flatmap(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -61,7 +61,7 @@ void IMapperModuleTest::sequentialFlatMap() {
 void IMapperModuleTest::sequentialFilter() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":filterFunction");
+    f.obj.__set_name(library + ":filterFunction");
     mapper_module->filter(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -77,7 +77,7 @@ void IMapperModuleTest::sequentialFilter() {
 void IMapperModuleTest::sequentialKeyBy() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->keyBy(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -92,7 +92,7 @@ void IMapperModuleTest::sequentialKeyBy() {
 void IMapperModuleTest::parallelMap() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->_map(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -105,7 +105,7 @@ void IMapperModuleTest::parallelMap() {
 void IMapperModuleTest::parallelFlatMap() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":flatmapFunction");
+    f.obj.__set_name(library + ":flatmapFunction");
     mapper_module->flatmap(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -120,7 +120,7 @@ void IMapperModuleTest::parallelFlatMap() {
 void IMapperModuleTest::parallelFilter() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":filterFunction");
+    f.obj.__set_name(library + ":filterFunction");
     mapper_module->filter(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -135,7 +135,7 @@ void IMapperModuleTest::parallelFilter() {
 void IMapperModuleTest::parallelKeyBy() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->keyBy(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -150,7 +150,7 @@ void IMapperModuleTest::parallelKeyBy() {
 void IMapperModuleTest::sequentialStreamingMap() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->streamingMap(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -163,7 +163,7 @@ void IMapperModuleTest::sequentialStreamingMap() {
 void IMapperModuleTest::sequentialStreamingFlatMap() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":flatmapFunction");
+    f.obj.__set_name(library + ":flatmapFunction");
     mapper_module->streamingFlatmap(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -178,7 +178,7 @@ void IMapperModuleTest::sequentialStreamingFlatMap() {
 void IMapperModuleTest::sequentialStreamingFilter() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":filterFunction");
+    f.obj.__set_name(library + ":filterFunction");
     mapper_module->streamingFilter(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -193,7 +193,7 @@ void IMapperModuleTest::sequentialStreamingFilter() {
 void IMapperModuleTest::sequentialStreamingKeyBy() {
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->streamingKeyBy(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -208,7 +208,7 @@ void IMapperModuleTest::sequentialStreamingKeyBy() {
 void IMapperModuleTest::parallelStreamingMap() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->streamingMap(f, false);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -228,7 +228,7 @@ void IMapperModuleTest::parallelStreamingMap() {
 void IMapperModuleTest::parallelStreamingFlatMap() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":flatmapFunction");
+    f.obj.__set_name(library + ":flatmapFunction");
     mapper_module->streamingFlatmap(f, false);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -250,7 +250,7 @@ void IMapperModuleTest::parallelStreamingFlatMap() {
 void IMapperModuleTest::parallelStreamingFilter() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":filterFunction");
+    f.obj.__set_name(library + ":filterFunction");
     mapper_module->streamingFilter(f, false);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -272,7 +272,7 @@ void IMapperModuleTest::parallelStreamingFilter() {
 void IMapperModuleTest::parallelStreamingKeyBy() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->streamingKeyBy(f, false);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -294,7 +294,7 @@ void IMapperModuleTest::parallelStreamingKeyBy() {
 void IMapperModuleTest::parallelStreamingMapOrdered() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->streamingMap(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -307,7 +307,7 @@ void IMapperModuleTest::parallelStreamingMapOrdered() {
 void IMapperModuleTest::parallelStreamingFlatMapOrdered() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":flatmapFunction");
+    f.obj.__set_name(library + ":flatmapFunction");
     mapper_module->streamingFlatmap(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -322,7 +322,7 @@ void IMapperModuleTest::parallelStreamingFlatMapOrdered() {
 void IMapperModuleTest::parallelStreamingFilterOrdered() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":filterFunction");
+    f.obj.__set_name(library + ":filterFunction");
     mapper_module->streamingFilter(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -337,7 +337,7 @@ void IMapperModuleTest::parallelStreamingFilterOrdered() {
 void IMapperModuleTest::parallelStreamingKeyByOrdered() {
     executor_data->getContext()["ignis.executor.cores"] = "8";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunction");
+    f.obj.__set_name(library + ":mapFunction");
     mapper_module->streamingKeyBy(f, true);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -351,7 +351,7 @@ void IMapperModuleTest::parallelStreamingKeyByOrdered() {
 
 void IMapperModuleTest::mapPartition() {
     rpc::ISource f;
-    f.__set_name(library + ":mapPartitionFunction");
+    f.obj.__set_name(library + ":mapPartitionFunction");
     mapper_module->mapPartition(f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -365,7 +365,7 @@ void IMapperModuleTest::mapPartition() {
 
 void IMapperModuleTest::mapPartitionWithIndex() {
     rpc::ISource f;
-    f.__set_name(library + ":mapPartitionFunctionWithIndex");
+    f.obj.__set_name(library + ":mapPartitionFunctionWithIndex");
     mapper_module->mapPartitionWithIndex(0,f);
 
     auto reader = executor_data->loadObject()->readIterator();
@@ -386,8 +386,8 @@ void IMapperModuleTest::mapWithVariables() {
     args["test_var"] = buffer->getBufferAsString();
     executor_data->getContext()["ignis.executor.cores"] = "1";
     rpc::ISource f;
-    f.__set_name(library + ":mapFunctionWithArgs");
-    f.__set__args(args);
+    f.obj.__set_name(library + ":mapFunctionWithArgs");
+    f.__set_params(args);
     mapper_module->_map(f);
 
     auto reader = executor_data->loadObject()->readIterator();

@@ -20,13 +20,65 @@
 
 namespace ignis { namespace rpc {
 
+class IEncoded;
+
 class ISource;
 
-typedef struct _ISource__isset {
-  _ISource__isset() : name(false), bytes(false), _args(true) {}
+typedef struct _IEncoded__isset {
+  _IEncoded__isset() : name(false), bytes(false) {}
   bool name :1;
   bool bytes :1;
-  bool _args :1;
+} _IEncoded__isset;
+
+class IEncoded : public virtual ::apache::thrift::TBase {
+ public:
+
+  IEncoded(const IEncoded&);
+  IEncoded& operator=(const IEncoded&);
+  IEncoded() : name(), bytes() {
+  }
+
+  virtual ~IEncoded() throw();
+  std::string name;
+  std::string bytes;
+
+  _IEncoded__isset __isset;
+
+  void __set_name(const std::string& val);
+
+  void __set_bytes(const std::string& val);
+
+  bool operator == (const IEncoded & rhs) const
+  {
+    if (__isset.name != rhs.__isset.name)
+      return false;
+    else if (__isset.name && !(name == rhs.name))
+      return false;
+    if (__isset.bytes != rhs.__isset.bytes)
+      return false;
+    else if (__isset.bytes && !(bytes == rhs.bytes))
+      return false;
+    return true;
+  }
+  bool operator != (const IEncoded &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IEncoded & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+  virtual void printTo(std::ostream& out) const;
+};
+
+void swap(IEncoded &a, IEncoded &b);
+
+std::ostream& operator<<(std::ostream& out, const IEncoded& obj);
+
+typedef struct _ISource__isset {
+  _ISource__isset() : params(true) {}
+  bool params :1;
 } _ISource__isset;
 
 class ISource : public virtual ::apache::thrift::TBase {
@@ -34,30 +86,25 @@ class ISource : public virtual ::apache::thrift::TBase {
 
   ISource(const ISource&);
   ISource& operator=(const ISource&);
-  ISource() : name(), bytes() {
+  ISource() {
 
   }
 
   virtual ~ISource() throw();
-  std::string name;
-  std::string bytes;
-  std::map<std::string, std::string>  _args;
+  IEncoded obj;
+  std::map<std::string, std::string>  params;
 
   _ISource__isset __isset;
 
-  void __set_name(const std::string& val);
+  void __set_obj(const IEncoded& val);
 
-  void __set_bytes(const std::string& val);
-
-  void __set__args(const std::map<std::string, std::string> & val);
+  void __set_params(const std::map<std::string, std::string> & val);
 
   bool operator == (const ISource & rhs) const
   {
-    if (!(name == rhs.name))
+    if (!(obj == rhs.obj))
       return false;
-    if (!(bytes == rhs.bytes))
-      return false;
-    if (!(_args == rhs._args))
+    if (!(params == rhs.params))
       return false;
     return true;
   }

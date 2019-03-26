@@ -34,6 +34,14 @@ void IContext::vregisterManager(std::shared_ptr<void> manager) {
 
 IContext::IContext(void *loader) : loader(loader) {}
 
+void IContext::removeVariable(const std::string &name) {
+    variables.erase(name);
+}
+
+void IContext::removeVariables() {
+    variables.clear();
+}
+
 IContext::~IContext() {
 
 }

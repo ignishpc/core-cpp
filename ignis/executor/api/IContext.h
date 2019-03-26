@@ -32,9 +32,15 @@ namespace ignis {
                     }
                 }
 
+                void removeVariable(const std::string &name);
+
                 bool containsVariable(const std::string &name);
 
                 std::unordered_map<std::string, std::pair<bool, std::shared_ptr<void>>> &getVariables();
+
+                void removeVariables();
+
+
 
                 template<typename T>
                 void registerManager() {

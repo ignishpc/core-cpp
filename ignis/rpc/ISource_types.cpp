@@ -14,29 +14,27 @@
 namespace ignis { namespace rpc {
 
 
-ISource::~ISource() throw() {
+IEncoded::~IEncoded() throw() {
 }
 
 
-void ISource::__set_name(const std::string& val) {
+void IEncoded::__set_name(const std::string& val) {
   this->name = val;
+__isset.name = true;
 }
 
-void ISource::__set_bytes(const std::string& val) {
+void IEncoded::__set_bytes(const std::string& val) {
   this->bytes = val;
+__isset.bytes = true;
 }
-
-void ISource::__set__args(const std::map<std::string, std::string> & val) {
-  this->_args = val;
-}
-std::ostream& operator<<(std::ostream& out, const ISource& obj)
+std::ostream& operator<<(std::ostream& out, const IEncoded& obj)
 {
   obj.printTo(out);
   return out;
 }
 
 
-uint32_t ISource::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IEncoded::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -73,25 +71,132 @@ uint32_t ISource::read(::apache::thrift::protocol::TProtocol* iprot) {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IEncoded::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IEncoded");
+
+  if (this->__isset.name) {
+    xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+    xfer += oprot->writeString(this->name);
+    xfer += oprot->writeFieldEnd();
+  }
+  if (this->__isset.bytes) {
+    xfer += oprot->writeFieldBegin("bytes", ::apache::thrift::protocol::T_STRING, 2);
+    xfer += oprot->writeBinary(this->bytes);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+void swap(IEncoded &a, IEncoded &b) {
+  using ::std::swap;
+  swap(a.name, b.name);
+  swap(a.bytes, b.bytes);
+  swap(a.__isset, b.__isset);
+}
+
+IEncoded::IEncoded(const IEncoded& other0) {
+  name = other0.name;
+  bytes = other0.bytes;
+  __isset = other0.__isset;
+}
+IEncoded& IEncoded::operator=(const IEncoded& other1) {
+  name = other1.name;
+  bytes = other1.bytes;
+  __isset = other1.__isset;
+  return *this;
+}
+void IEncoded::printTo(std::ostream& out) const {
+  using ::apache::thrift::to_string;
+  out << "IEncoded(";
+  out << "name="; (__isset.name ? (out << to_string(name)) : (out << "<null>"));
+  out << ", " << "bytes="; (__isset.bytes ? (out << to_string(bytes)) : (out << "<null>"));
+  out << ")";
+}
+
+
+ISource::~ISource() throw() {
+}
+
+
+void ISource::__set_obj(const IEncoded& val) {
+  this->obj = val;
+}
+
+void ISource::__set_params(const std::map<std::string, std::string> & val) {
+  this->params = val;
+}
+std::ostream& operator<<(std::ostream& out, const ISource& obj)
+{
+  obj.printTo(out);
+  return out;
+}
+
+
+uint32_t ISource::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+  bool isset_obj = false;
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->obj.read(iprot);
+          isset_obj = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
-            this->_args.clear();
-            uint32_t _size0;
-            ::apache::thrift::protocol::TType _ktype1;
-            ::apache::thrift::protocol::TType _vtype2;
-            xfer += iprot->readMapBegin(_ktype1, _vtype2, _size0);
-            uint32_t _i4;
-            for (_i4 = 0; _i4 < _size0; ++_i4)
+            this->params.clear();
+            uint32_t _size2;
+            ::apache::thrift::protocol::TType _ktype3;
+            ::apache::thrift::protocol::TType _vtype4;
+            xfer += iprot->readMapBegin(_ktype3, _vtype4, _size2);
+            uint32_t _i6;
+            for (_i6 = 0; _i6 < _size2; ++_i6)
             {
-              std::string _key5;
-              xfer += iprot->readString(_key5);
-              std::string& _val6 = this->_args[_key5];
-              xfer += iprot->readBinary(_val6);
+              std::string _key7;
+              xfer += iprot->readString(_key7);
+              std::string& _val8 = this->params[_key7];
+              xfer += iprot->readBinary(_val8);
             }
             xfer += iprot->readMapEnd();
           }
-          this->__isset._args = true;
+          this->__isset.params = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -105,6 +210,8 @@ uint32_t ISource::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   xfer += iprot->readStructEnd();
 
+  if (!isset_obj)
+    throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
 
@@ -113,22 +220,18 @@ uint32_t ISource::write(::apache::thrift::protocol::TProtocol* oprot) const {
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("ISource");
 
-  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->name);
+  xfer += oprot->writeFieldBegin("obj", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->obj.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("bytes", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeBinary(this->bytes);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("_args", ::apache::thrift::protocol::T_MAP, 3);
+  xfer += oprot->writeFieldBegin("params", ::apache::thrift::protocol::T_MAP, 2);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->_args.size()));
-    std::map<std::string, std::string> ::const_iterator _iter7;
-    for (_iter7 = this->_args.begin(); _iter7 != this->_args.end(); ++_iter7)
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->params.size()));
+    std::map<std::string, std::string> ::const_iterator _iter9;
+    for (_iter9 = this->params.begin(); _iter9 != this->params.end(); ++_iter9)
     {
-      xfer += oprot->writeString(_iter7->first);
-      xfer += oprot->writeBinary(_iter7->second);
+      xfer += oprot->writeString(_iter9->first);
+      xfer += oprot->writeBinary(_iter9->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -141,31 +244,27 @@ uint32_t ISource::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
 void swap(ISource &a, ISource &b) {
   using ::std::swap;
-  swap(a.name, b.name);
-  swap(a.bytes, b.bytes);
-  swap(a._args, b._args);
+  swap(a.obj, b.obj);
+  swap(a.params, b.params);
   swap(a.__isset, b.__isset);
 }
 
-ISource::ISource(const ISource& other8) {
-  name = other8.name;
-  bytes = other8.bytes;
-  _args = other8._args;
-  __isset = other8.__isset;
+ISource::ISource(const ISource& other10) {
+  obj = other10.obj;
+  params = other10.params;
+  __isset = other10.__isset;
 }
-ISource& ISource::operator=(const ISource& other9) {
-  name = other9.name;
-  bytes = other9.bytes;
-  _args = other9._args;
-  __isset = other9.__isset;
+ISource& ISource::operator=(const ISource& other11) {
+  obj = other11.obj;
+  params = other11.params;
+  __isset = other11.__isset;
   return *this;
 }
 void ISource::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
   out << "ISource(";
-  out << "name=" << to_string(name);
-  out << ", " << "bytes=" << to_string(bytes);
-  out << ", " << "_args=" << to_string(_args);
+  out << "obj=" << to_string(obj);
+  out << ", " << "params=" << to_string(params);
   out << ")";
 }
 

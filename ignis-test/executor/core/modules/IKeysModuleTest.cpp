@@ -18,7 +18,7 @@ void IKeysModuleTest::reduceByKeyTest() {
     auto manager = std::make_shared<api::IManager<std::pair<std::string, int>>>();
     auto object = keys_module->getIObject((std::shared_ptr<api::IManager<storage::IObject::Any>> &) manager);
     rpc::ISource f;
-    f.__set_name(library + ":reduceByKeyFunction");
+    f.obj.__set_name(library + ":reduceByKeyFunction");
 
     auto writer = object->writeIterator();
     std::unordered_map<std::string, int> reduction;
