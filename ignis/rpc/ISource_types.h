@@ -23,7 +23,7 @@ namespace ignis { namespace rpc {
 class ISource;
 
 typedef struct _ISource__isset {
-  _ISource__isset() : name(false), bytes(false), _args(false) {}
+  _ISource__isset() : name(false), bytes(false), _args(true) {}
   bool name :1;
   bool bytes :1;
   bool _args :1;
@@ -35,6 +35,7 @@ class ISource : public virtual ::apache::thrift::TBase {
   ISource(const ISource&);
   ISource& operator=(const ISource&);
   ISource() : name(), bytes() {
+
   }
 
   virtual ~ISource() throw();
