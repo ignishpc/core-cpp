@@ -52,10 +52,10 @@ std::shared_ptr<void> IObjectLoader::vload(const std::string &name) {
 std::shared_ptr<storage::IObject::Any> IObjectLoader::loadVariable(const std::string &bytes,
                                                                    std::shared_ptr<executor::api::IManager<storage::IObject::Any>> manager) {
 
-    auto buffer = std::make_shared<data::IMemoryBuffer>((uint8_t *) bytes.c_str(),
-                                                        (size_t) (bytes.end() - bytes.begin()));
-    for (int i = 0; i < (size_t) (bytes.end() - bytes.begin()); i++) {
-        std::cout << *((uint8_t *)(&bytes.c_str()[i])) << " ";
+    auto buffer = std::make_shared<data::IMemoryBuffer>((uint8_t *) bytes.c_str(), bytes.size());
+    std::cout << "->";
+    for (int i = 0; i < bytes.size(); i++) {
+        std::cout << *((uint8_t *) (&bytes.c_str()[i])) << " ";
     }
     std::cout << std::endl;
 
