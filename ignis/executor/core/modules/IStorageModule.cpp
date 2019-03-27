@@ -181,8 +181,51 @@ void IStorageModule::takeSample(std::string &_return, const int64_t msg_id, cons
         auto loaded = executor_data->loadObject();
         executor_data->deleteLoadObject();
         auto object = getIObject(loaded->getManager(), n);
+        auto size = loaded->getSize();
 
-        // TODO
+        auto reader = loaded->readIterator();
+        auto writer = object->writeIterator();
+        srand(seed);
+
+        if (withRemplacement) {
+            std::vector<size_t> index;
+            for (size_t i = 0; i < n; i++) {
+                for (size_t j = 0; j < n; j++) {
+                    double prob = ((double) n) / (size - j);
+                    double random = ((double) rand() / (RAND_MAX));
+                    if (random < prob) {
+                        index.push_back(j);
+                        break;
+                    }
+                }
+            }
+            sort(index.begin(), index.end());
+            size_t last_i = 0;
+            storage::IObject::Any *last_elem = NULL;
+            for (size_t i : index) {
+                if (i == last_i && last_elem != NULL) {
+                    writer->write(*last_elem);
+                }else{
+                    reader->skip(i - last_i);
+                    last_elem = &reader->next();
+                    writer->write(*last_elem);
+                    last_i = i;
+                }
+            }
+        } else {
+            size_t picked = 0;
+            for (size_t i = 0; i < size; i++) {
+                double prob = ((double) (n - picked)) / (size - i);
+                double random = ((double) rand() / (RAND_MAX));
+                if (random < prob) {
+                    writer->write(reader->next());
+                    picked += 1;
+                } else {
+                    reader->skip(1);
+                }
+            }
+        }
+
         if (light) {
             auto buffer = std::make_shared<data::IMemoryBuffer>();
             object->write(buffer, 0);//rpc already has compression

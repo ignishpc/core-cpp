@@ -17,6 +17,7 @@
 #include "executor/core/modules/IPostmanModuleTest.h"
 #include "executor/core/modules/IKeysModuleTest.h"
 #include "executor/core/modules/ISortModuleTest.h"
+#include "executor/core/modules/IStorageModuleTest.h"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::storage::IMemoryObjectTest);
@@ -27,6 +28,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IShuffleModuleTe
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IPostmanModuleTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IKeysModuleTest);
 CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::ISortModuleTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ignis::executor::core::modules::IStorageModuleTest);
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();

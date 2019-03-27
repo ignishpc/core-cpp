@@ -20,7 +20,9 @@ set(SOURCE_FILES
         executor/core/modules/IKeysModuleTest.h
         executor/core/modules/IKeysModuleTest.cpp
         executor/core/modules/ISortModuleTest.h
-        executor/core/modules/ISortModuleTest.cpp)
+        executor/core/modules/ISortModuleTest.cpp
+        executor/core/modules/IStorageModuleTest.h
+        executor/core/modules/IStorageModuleTest.cpp)
 
 set(CMAKE_CXX_FLAGS "-g -O0")
 
