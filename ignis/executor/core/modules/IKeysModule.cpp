@@ -185,6 +185,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         typedef IPairManager<IFunction2_Type::Any, storage::IObject::Any> M_arg;
 
 //Reduce values with same key
+        function->before(context);
 #pragma omp parallel for schedule(dynamic) num_threads(threads)
         for (int i = 0; i < keys.size(); i++) {
             auto &object_key = keys[i];
@@ -202,6 +203,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
             }
             object_key.reset();
         }
+        function->after(context);
         object_out->fit();
         executor_data->loadObject(object_out);
         IGNIS_LOG(info) << "IKeysModule reduceByKey ready";
