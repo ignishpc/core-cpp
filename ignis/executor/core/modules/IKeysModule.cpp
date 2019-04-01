@@ -122,7 +122,9 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
         auto object = executor_data->loadObject();
         auto manager = getManager(*object);
         auto pair_manager = (std::shared_ptr<api::IPairManager<storage::IObject::Any, storage::IObject::Any>> &) manager;
-        auto op = pair_manager->firstManager()->_operator();
+        auto first_manager = pair_manager->firstManager();
+        auto second_manager = pair_manager->secondManager();
+        auto op = first_manager->_operator();
         size_t threads = executor_data->getThreads();
         size_t size = object->getSize();
         hashes = std::shared_ptr<int64_t>(new ssize_t[size], std::default_delete<int64_t[]>());
@@ -181,8 +183,7 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
 
         auto object_out = getIObject(manager, keys.size());
         auto writer_out = object_out->writeIterator();
-        typedef typename IPairManager<IFunction2_Type::Any, storage::IObject::Any>::Class F_arg;
-        typedef IPairManager<IFunction2_Type::Any, storage::IObject::Any> M_arg;
+        typedef typename IPairManager<storage::IObject::Any, storage::IObject::Any>::Class F_arg;
 
 //Reduce values with same key
         function->before(context);
@@ -191,17 +192,19 @@ void IKeysModule::reduceByKey(const rpc::ISource &funct) {
             auto &object_key = keys[i];
             auto reader = object_key->readIterator();
             auto size = object_key->getSize();
-            storage::iterator::IElementIterator base(manager);
-            base.write((storage::IObject::Any &&) reader->next());
+            storage::iterator::IElementIterator key(first_manager);
+            storage::iterator::IElementIterator value(second_manager);
+            auto &elem = reader->next();
+            key.write(pair_manager->first((F_arg &) elem));
+            value.write(pair_manager->second((F_arg &) elem));
             for (size_t j = 0; j < size - 1; j++) {
-                function->writeReduceByKey((F_arg &) reader->next(), (F_arg &) base.next(), context,
-                                              (M_arg &) *manager);
-            }
-#pragma omp critical
-            {
-                writer_out->write((storage::IObject::Any &&) base.next());
+                function->write(value.next(), pair_manager->second((F_arg &) reader->next()), context, value);
             }
             object_key.reset();
+#pragma omp critical
+            {
+                pair_manager->writeAsPair(key.next(), value.next(), (IWriteIterator<F_arg> &) *writer_out);
+            }
         }
         function->after(context);
         object_out->fit();

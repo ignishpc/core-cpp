@@ -25,21 +25,10 @@ namespace ignis {
 
                     decltype(var_type_r) type_r() { return var_type_r; }
 
-                    typedef char Any;
-
                     virtual R call(T1 &t1, T2 &t2, IContext &context) = 0;
 
                     virtual void write(T1 &t1, T2 &t2, IContext &context, IWriteIterator <R> &writer) {
                         writer.write(call(t1, t2, context));
-                    }
-
-                    virtual void writeReduceByKey(typename IPairManager<Any, T1>::Class &p1,
-                                                  typename IPairManager<Any, T2>::Class &p2,
-                                                  IContext &context,
-                                                  IPairManager <Any, T2> &m2) {
-                        T1 &s1 = ((IPairManager <Any, T1> &)m2).second(p1);
-                        T2 &s2 = m2.second(p2);
-                        s2 = call(s1, s2, context);
                     }
 
                 };

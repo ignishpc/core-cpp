@@ -171,6 +171,10 @@ namespace ignis {
                     return second_manager;
                 }
 
+                virtual void writeAsPair(T1 &first, T2 &second, IWriteIterator<Class> &writer) {
+                    writer.write(std::pair<T1,T2>(first,second));
+                }
+
             private:
                 std::shared_ptr<IManager<T1>> first_manager;
                 std::shared_ptr<IManager<T2>> second_manager;
