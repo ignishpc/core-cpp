@@ -6,10 +6,10 @@
 #include <thrift/transport/TTransport.h>
 #include <thrift/protocol/TProtocolDecorator.h>
 #include <thrift/protocol/TCompactProtocol.h>
-#include "handle/IReader.h"
+#include "executor/core/data/io/IReader.h"
 #include "handle/IDeleter.h"
-#include "handle/IWriter.h"
-#include "../exceptions/IInvalidArgument.h"
+#include "executor/core/data/io/IWriter.h"
+#include "executor/core/exceptions/IInvalidArgument.h"
 
 namespace ignis {
     namespace data {

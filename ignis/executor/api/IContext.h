@@ -2,65 +2,52 @@
 #ifndef IGNIS_IGNISCONTEXT_H
 #define IGNIS_IGNISCONTEXT_H
 
-#include "../../IHeaders.h"
-#include "IManager.h"
 #include <unordered_map>
+#include <memory>
+#include <mpi.h>
+#include "executor/core/protocol/IObjectProtocol.h"
 
 namespace ignis {
     namespace executor {
+        namespace core{
+            class IExecutorData;
+        }
         namespace api {
             class IContext {
             public:
 
-                IContext(void *loader);
+                IContext();
 
-                std::string &operator[](const std::string &key);
+                int cores();
 
-                std::unordered_map<std::string, std::string> &getProperties();
+                int executors();
 
-                template<typename T>
-                std::shared_ptr<T> getVariable(const std::string &name) {
-                    if (containsVariable(name)) {
-                        auto &var = variables[name];
-                        if (!var.first) {
-                            var.second = decodeVariable(var.second,
-                                                        std::static_pointer_cast<void>(
-                                                                std::make_shared<IManager<T>>()));
-                            var.first = true;
-                        }
-                        return std::static_pointer_cast<T>(var.second);
-                    }
-                }
+                int executorId();
 
-                void removeVariable(const std::string &name);
+                int threadId();
 
-                bool containsVariable(const std::string &name);
+                MPI::Intracomm& mpiGroup();
 
-                std::unordered_map<std::string, std::pair<bool, std::shared_ptr<void>>> &getVariables();
-
-                void removeVariables();
-
-
+                std::unordered_map<std::string, std::string> &props();
 
                 template<typename T>
-                void registerManager() {
-                    vregisterManager(std::static_pointer_cast<void>(std::make_shared<IManager<T>>()));
-                }
+                std::shared_ptr<T> &var(const std::string &name);
+
+                bool rmVar(const std::string &name);
 
                 virtual ~IContext();
 
             private:
+                friend class core::IExecutorData;
+                std::shared_ptr<core::protocol::IObjectProtocol> varProtocol(std::shared_ptr<void> &var);
+
                 std::unordered_map<std::string, std::string> properties;
                 std::unordered_map<std::string, std::pair<bool, std::shared_ptr<void>>> variables;
-
-                std::shared_ptr<void> decodeVariable(std::shared_ptr<void> var, std::shared_ptr<void> manager);
-
-                void vregisterManager(std::shared_ptr<void> manager);
-
-                void *loader;
+                MPI::Intracomm mpi_group;
             };
         }
     }
 }
 
+#include "IContext.tcc"
 #endif

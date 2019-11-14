@@ -12,119 +12,138 @@ FILE(GLOB rpc
         rpc/executor/*.cpp)
 
 set(SOURCE_FILES
-        IHeaders.h
-        #Data
-        data/handle/IDeleter.h
-        data/handle/IEnumTypes.h
-        data/handle/IOperators.h
-        data/handle/IPrinter.h
-        data/handle/IReader.h
-        data/handle/IWriter.h
-        data/IMemoryBuffer.h
-        data/IMemoryBuffer.cpp
-        data/IZlibTransport.h
-        data/IZlibTransport.cpp
-        data/IFileTransport.h
-        data/IFileTransport.cpp
-        data/IObjectProtocol.h
-        data/RTTInfo.h
-        data/RTTInfo.cpp
-
         #Driver
         driver/api/IgnisException.h
         driver/api/IgnisException.cpp
 
-        #Exception
-        exceptions/IException.h
-        exceptions/IException.cpp
-        exceptions/ILogicError.h
-        exceptions/IInvalidArgument.h
+        #Executor api function
+        executor/api/function/IFlatMapFunction.h
+        executor/api/function/IFunction.h
+        executor/api/function/IFunction0.h
+        executor/api/function/IFunction2.h
+        executor/api/function/IFunctionImport.h
+        executor/api/function/IVoidFunction.h
+        executor/api/function/IVoidFunction2.h
 
         #Executor api
-        executor/api/IManager.h
-        executor/api/IOperatorsImpl.h
-        executor/api/IReadIterator.h
-        executor/api/IWriteIterator.h
-        executor/api/IContext.h
         executor/api/IContext.cpp
-        executor/api/IRegister.h
-        executor/api/Iterable.h
-        executor/api/IValueBase.h
-        executor/api/IValue.h
-        executor/api/IExecute.h
-        executor/api/function/IFunctionBase.h
-        executor/api/function/IFunction.h
-        executor/api/function/IFunction2Base.h
-        executor/api/function/IFunction2.h
-        executor/api/function/IFlatFunctionBase.h
-        executor/api/function/IFlatFunction.h
+        executor/api/IContext.h
+        executor/api/IContext.tcc
+        executor/api/IReadIterator.h
+        executor/api/IVector.h
+        executor/api/IWriteIterator.h
 
-        #Executor core
-        executor/core/ICompileManager.h
-        executor/core/ICompileManager.cpp
-        executor/core/ILog.h
-        executor/core/ILog.cpp
-        executor/core/IExecutorData.h
-        executor/core/IExecutorData.cpp
-        executor/core/IObjectLoader.h
-        executor/core/IObjectLoader.cpp
-        executor/core/IPropertiesParser.h
-        executor/core/IPropertiesParser.cpp
+        #Exception
+        executor/core/exception/ICompatibilityException.h
+        executor/core/exception/IException.h
+        executor/core/exception/IException.cpp
+        executor/core/exception/IInvalidArgument.h
+        executor/core/exception/ILogicError.h
+
+        #IO
+        executor/core/io/IEnumTypes.h
+        executor/core/io/IJsonPrinter.h
+        executor/core/io/IJsonPrinter.tcc
+        executor/core/io/IPrinter.h
+        executor/core/io/IPrinter.tcc
+        executor/core/io/IReader.h
+        executor/core/io/IReader.tcc
+        executor/core/io/IWriter.h
+        executor/core/io/IWriter.tcc
+
+        #Modules Impl
+        executor/core/modules/impl/IBaseImpl.cpp
+        executor/core/modules/impl/IBaseImpl.h
+        executor/core/modules/impl/IBaseImpl.tcc
+        executor/core/modules/impl/IGroupByImpl.cpp
+        executor/core/modules/impl/IGroupByImpl.h
+        executor/core/modules/impl/IGroupByImpl.tcc
+        executor/core/modules/impl/IIOImpl.cpp
+        executor/core/modules/impl/IIOImpl.h
+        executor/core/modules/impl/IIOImpl.tcc
+        executor/core/modules/impl/IPipeImpl.cpp
+        executor/core/modules/impl/IPipeImpl.h
+        executor/core/modules/impl/IPipeImpl.tcc
+        executor/core/modules/impl/IReduceImpl.cpp
+        executor/core/modules/impl/IReduceImpl.h
+        executor/core/modules/impl/IReduceImpl.tcc
+        executor/core/modules/impl/ISortImpl.cpp
+        executor/core/modules/impl/ISortImpl.h
+        executor/core/modules/impl/ISortImpl.tcc
 
         #Modules
-        executor/core/modules/IModule.h
+        executor/core/modules/ICommModule.cpp
+        executor/core/modules/ICommModule.h
+        executor/core/modules/IGeneralActionModule.cpp
+        executor/core/modules/IGeneralActionModule.h
+        executor/core/modules/IGeneralModule.cpp
+        executor/core/modules/IGeneralModule.h
+        executor/core/modules/IIOModule.cpp
+        executor/core/modules/IIOModule.h
         executor/core/modules/IModule.cpp
-        executor/core/modules/IServerModule.h
-        executor/core/modules/IServerModule.cpp
-        executor/core/modules/IMapperModule.h
-        executor/core/modules/IMapperModule.cpp
-        executor/core/modules/IReducerModule.h
-        executor/core/modules/IReducerModule.cpp
-        executor/core/modules/IPostmanModule.h
-        executor/core/modules/IPostmanModule.cpp
-        executor/core/modules/IFilesModule.h
-        executor/core/modules/IFilesModule.cpp
-        executor/core/modules/IStorageModule.h
-        executor/core/modules/IStorageModule.cpp
-        executor/core/modules/IKeysModule.h
-        executor/core/modules/IKeysModule.cpp
-        executor/core/modules/ISortModule.h
-        executor/core/modules/ISortModule.cpp
-        executor/core/modules/IShuffleModule.h
-        executor/core/modules/IShuffleModule.cpp
+        executor/core/modules/IModule.h
+
+        #Protocol
+        executor/core/protocol/IObjectProtocol.h
+        executor/core/protocol/IProtocol.h
+
+        #Selector
+        executor/core/selector/IArgsExtractor.h
+        executor/core/selector/IGeneralActionSelector.h
+        executor/core/selector/IGeneralSelector.h
+        executor/core/selector/ISelector.h
 
         #Storage
-        executor/core/IPostBox.h
-        executor/core/IMessage.h
-        executor/core/IPostBox.cpp
-        executor/core/storage/IObject.h
-        executor/core/storage/IRawObject.h
-        executor/core/storage/IRawObject.cpp
-        executor/core/storage/IMemoryObject.h
-        executor/core/storage/IMemoryObject.cpp
-        executor/core/storage/IRawMemoryObject.h
-        executor/core/storage/IRawMemoryObject.cpp
-        executor/core/storage/iterator/ICoreIterator.h
-        executor/core/storage/iterator/IElementIterator.h
-        executor/core/storage/iterator/IElementIterator.cpp
-        executor/core/storage/iterator/ITransportIterator.h
-        executor/core/storage/iterator/ITransportIterator.cpp
-        executor/core/storage/iterator/IMemoryIterator.h
-        executor/core/storage/iterator/IMemoryIterator.cpp
+        executor/core/storage/IDiskPartition.h
+        executor/core/storage/IDiskPartition.tcc
+        executor/core/storage/IMemoryPartition.h
+        executor/core/storage/IMemoryPartition.tcc
+        executor/core/storage/IPartition.h
+        executor/core/storage/IRawMemoryPartition.h
+        executor/core/storage/IRawMemoryPartition.tcc
+        executor/core/storage/IRawPartition.h
+        executor/core/storage/IRawPartition.tcc
+
+        #Transport
+        executor/core/transport/IHeaderTransport.cpp
+        executor/core/transport/IHeaderTransport.h
+        executor/core/transport/IMemoryBuffer.cpp
+        executor/core/transport/IMemoryBuffer.h
+        executor/core/transport/ITransport.h
+        executor/core/transport/IZlibTransport.cpp
+        executor/core/transport/IZlibTransport.h
+
+        #Executor core
+        executor/core/IExecutorData.cpp
+        executor/core/IExecutorData.h
+        executor/core/ILibraryLoader.cpp
+        executor/core/ILibraryLoader.h
+        executor/core/ILog.cpp
+        executor/core/ILog.h
+        executor/core/IMpi.cpp
+        executor/core/IMpi.tcc
+        executor/core/IMpi.h
+        executor/core/IPropertyParser.cpp
+        executor/core/IPropertyParser.h
+        executor/core/RTTInfo.cpp
+        executor/core/RTTInfo.h
 
         #RPC
-        ${rpc})
+        ${rpc} )
 
-set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -DBOOST_ALL_DYN_LINK -g -O3")
+add_definitions(-DBOOST_ALL_DYN_LINK)
+
+set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -g")
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(igniscore SHARED ${SOURCE_FILES})
-add_executable(ignis-cpp main.cpp ${SOURCE_FILES})
+add_executable(ignis-cpp main.cpp ${SOURCE_FILES} )
 
-TARGET_LINK_LIBRARIES(igniscore thrift boost_system boost_filesystem dl thriftz z boost_log boost_thread)
-TARGET_LINK_LIBRARIES(ignis-cpp thrift boost_system boost_filesystem dl thriftz z boost_log boost_thread)
+TARGET_LINK_LIBRARIES(igniscore thrift dl backtrace thriftz z boost_log boost_thread boost_system boost_filesystem)
+TARGET_LINK_LIBRARIES(ignis-cpp igniscore)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
 install(DIRECTORY ../ignis
         DESTINATION include/
-        FILES_MATCHING PATTERN "*.h"
-        PATTERN executor/core EXCLUDE)
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")

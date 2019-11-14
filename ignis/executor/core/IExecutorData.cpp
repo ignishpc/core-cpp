@@ -1,49 +1,71 @@
 
 #include "IExecutorData.h"
+#include "selector/ISelector.h"
+#include <omp.h>
 
 using namespace ignis::executor::core;
 
-IExecutorData::IExecutorData() : properties_parser(core::IPropertiesParser(context.getProperties())),
-        context(api::IContext((void*)&object_loader)) {}
+IExecutorData::IExecutorData() : properties(context.props()), _mpi(properties, context.mpiGroup()) {}
 
+void IExecutorData::deletePartitions() { partitions.reset(); }
 
-std::shared_ptr<storage::IObject> IExecutorData::loadObject(std::shared_ptr<storage::IObject> object) {
-    auto aux = loaded_object;
-    loaded_object = object;
-    return aux;
+int64_t IExecutorData::clearVariables() {
+    int64_t n = variables.size();
+    variables.clear();
+    return n;
 }
 
-void IExecutorData::deleteLoadObject() {
-    loaded_object.reset();
+int64_t IExecutorData::nextPartititonId() {
+    return partition_id_gen++;
 }
 
-std::shared_ptr<storage::IObject> IExecutorData::loadObject() {
-    return loaded_object;
+IPropertyParser &IExecutorData::getProperties() {
+    return properties;
+}
+
+IMpi IExecutorData::mpi() {
+    return _mpi;
+}
+
+void IExecutorData::setCores(int cores){
+    omp_set_num_threads(cores);
+}
+
+std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source) {
+    IGNIS_LOG(info) << "Loading function";
+    if (source.obj.__isset.bytes) {
+        throw exception::IInvalidArgument("C++ not support function serialization");
+    }
+    auto lib = library_loader.load<selector::ISelectorGroup>(source.obj.name);
+    for (auto &tp: lib->args) {
+        if (types.find(tp.first) == types.end()) {
+            types[tp.first] = std::make_pair(tp.second, lib);
+        }
+    }
+
+    if (source.params.size() > 0) {
+        IGNIS_LOG(info) << "Loading user variables";
+        for (auto &entry: source.params) {
+            context.variables[entry.first] = std::make_pair(false,
+                                                            std::make_shared<std::string>(std::move(entry.second)));
+        }
+    }
+    IGNIS_LOG(info) << "Function loaded";
+    return lib;
+}
+
+std::shared_ptr<selector::IArgsType> IExecutorData::getType(const std::string &id) {
+    auto result = types.find(id);
+    if (result != types.end()) {
+        return result->second.first;
+    }
+    return std::shared_ptr<selector::IArgsType>();
 }
 
 ignis::executor::api::IContext &IExecutorData::getContext() {
     return context;
 }
 
-IPropertiesParser &IExecutorData::getParser() {
-    return properties_parser;
-}
-
-IPostBox &IExecutorData::getPostBox() {
-    return post_box;
-}
-
-int64_t IExecutorData::getThreads() {
-    try {
-        return properties_parser.getNumber("ignis.executor.cores");
-    } catch (...) {
-        return 1;
-    }
-}
-
-IObjectLoader &IExecutorData::getObjectLoader() {
-    return object_loader;
-}
 
 IExecutorData::~IExecutorData() {
 

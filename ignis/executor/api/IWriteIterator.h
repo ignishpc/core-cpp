@@ -5,15 +5,14 @@
 namespace ignis {
     namespace executor {
         namespace api {
-            template<typename T>
+            template<typename Tp>
             class IWriteIterator {
             public:
+                typedef IReadIterator<Tp> _IWriteIterator_type;
 
-                virtual void write(T &obj) {};
+                virtual void write(Tp &obj) = 0;
 
-                virtual void write(T &&obj) {};
-
-                virtual ~IWriteIterator(){};
+                virtual void write(Tp &&obj) = 0;
             };
         }
     }

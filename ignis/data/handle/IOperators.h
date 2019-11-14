@@ -3,7 +3,7 @@
 
 #include <functional>
 #include <memory>
-#include "IPrinter.h"
+#include "executor/core/data/io/IPrinter.h"
 #include <sstream>
 
 namespace ignis {

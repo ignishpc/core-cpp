@@ -889,7 +889,7 @@ class ISortModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getPivots"] = &ISortModuleProcessor::process_getPivots;
     processMap_["findPivots"] = &ISortModuleProcessor::process_findPivots;
     processMap_["exchangePartitions"] = &ISortModuleProcessor::process_exchangePartitions;
-    processMap_["mergePartitions"] = &ISortModuleProcessor::process_mergePartitions;
+    processMap_["mergeGroupPartitions"] = &ISortModuleProcessor::process_mergePartitions;
   }
 
   virtual ~ISortModuleProcessor() {}

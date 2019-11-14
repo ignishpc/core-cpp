@@ -2767,12 +2767,12 @@ void IMapperModuleProcessor::process__map(int32_t seqid, ::apache::thrift::proto
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule._map", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule._map", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule._map");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule._map");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule._map");
+    this->eventHandler_->preRead(ctx, "IGeneralModule._map");
   }
 
   IMapperModule__map_args args;
@@ -2781,7 +2781,7 @@ void IMapperModuleProcessor::process__map(int32_t seqid, ::apache::thrift::proto
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule._map", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule._map", bytes);
   }
 
   IMapperModule__map_result result;
@@ -2792,7 +2792,7 @@ void IMapperModuleProcessor::process__map(int32_t seqid, ::apache::thrift::proto
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule._map");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule._map");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -2805,7 +2805,7 @@ void IMapperModuleProcessor::process__map(int32_t seqid, ::apache::thrift::proto
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule._map");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule._map");
   }
 
   oprot->writeMessageBegin("_map", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -2815,7 +2815,7 @@ void IMapperModuleProcessor::process__map(int32_t seqid, ::apache::thrift::proto
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule._map", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule._map", bytes);
   }
 }
 
@@ -2823,12 +2823,12 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.flatmap", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.flatmap", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.flatmap");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.flatmap");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.flatmap");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.flatmap");
   }
 
   IMapperModule_flatmap_args args;
@@ -2837,7 +2837,7 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.flatmap", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.flatmap", bytes);
   }
 
   IMapperModule_flatmap_result result;
@@ -2848,7 +2848,7 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.flatmap");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.flatmap");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -2861,7 +2861,7 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.flatmap");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.flatmap");
   }
 
   oprot->writeMessageBegin("flatmap", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -2871,7 +2871,7 @@ void IMapperModuleProcessor::process_flatmap(int32_t seqid, ::apache::thrift::pr
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.flatmap", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.flatmap", bytes);
   }
 }
 
@@ -2879,12 +2879,12 @@ void IMapperModuleProcessor::process_filter(int32_t seqid, ::apache::thrift::pro
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.filter", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.filter", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.filter");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.filter");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.filter");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.filter");
   }
 
   IMapperModule_filter_args args;
@@ -2893,7 +2893,7 @@ void IMapperModuleProcessor::process_filter(int32_t seqid, ::apache::thrift::pro
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.filter", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.filter", bytes);
   }
 
   IMapperModule_filter_result result;
@@ -2904,7 +2904,7 @@ void IMapperModuleProcessor::process_filter(int32_t seqid, ::apache::thrift::pro
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.filter");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.filter");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -2917,7 +2917,7 @@ void IMapperModuleProcessor::process_filter(int32_t seqid, ::apache::thrift::pro
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.filter");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.filter");
   }
 
   oprot->writeMessageBegin("filter", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -2927,7 +2927,7 @@ void IMapperModuleProcessor::process_filter(int32_t seqid, ::apache::thrift::pro
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.filter", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.filter", bytes);
   }
 }
 
@@ -2935,12 +2935,12 @@ void IMapperModuleProcessor::process_keyBy(int32_t seqid, ::apache::thrift::prot
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.keyBy", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.keyBy", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.keyBy");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.keyBy");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.keyBy");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.keyBy");
   }
 
   IMapperModule_keyBy_args args;
@@ -2949,7 +2949,7 @@ void IMapperModuleProcessor::process_keyBy(int32_t seqid, ::apache::thrift::prot
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.keyBy", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.keyBy", bytes);
   }
 
   IMapperModule_keyBy_result result;
@@ -2960,7 +2960,7 @@ void IMapperModuleProcessor::process_keyBy(int32_t seqid, ::apache::thrift::prot
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.keyBy");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.keyBy");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -2973,7 +2973,7 @@ void IMapperModuleProcessor::process_keyBy(int32_t seqid, ::apache::thrift::prot
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.keyBy");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.keyBy");
   }
 
   oprot->writeMessageBegin("keyBy", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -2983,7 +2983,7 @@ void IMapperModuleProcessor::process_keyBy(int32_t seqid, ::apache::thrift::prot
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.keyBy", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.keyBy", bytes);
   }
 }
 
@@ -2991,12 +2991,12 @@ void IMapperModuleProcessor::process_mapPartition(int32_t seqid, ::apache::thrif
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.mapPartition", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.mapPartition", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.mapPartition");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.mapPartition");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.mapPartition");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.mapPartition");
   }
 
   IMapperModule_mapPartition_args args;
@@ -3005,7 +3005,7 @@ void IMapperModuleProcessor::process_mapPartition(int32_t seqid, ::apache::thrif
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.mapPartition", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.mapPartition", bytes);
   }
 
   IMapperModule_mapPartition_result result;
@@ -3016,7 +3016,7 @@ void IMapperModuleProcessor::process_mapPartition(int32_t seqid, ::apache::thrif
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.mapPartition");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.mapPartition");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -3029,7 +3029,7 @@ void IMapperModuleProcessor::process_mapPartition(int32_t seqid, ::apache::thrif
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.mapPartition");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.mapPartition");
   }
 
   oprot->writeMessageBegin("mapPartition", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -3039,7 +3039,7 @@ void IMapperModuleProcessor::process_mapPartition(int32_t seqid, ::apache::thrif
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.mapPartition", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.mapPartition", bytes);
   }
 }
 
@@ -3047,12 +3047,12 @@ void IMapperModuleProcessor::process_mapPartitionWithIndex(int32_t seqid, ::apac
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.mapPartitionWithIndex", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.mapPartitionWithIndex", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.mapPartitionWithIndex");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.mapPartitionWithIndex");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.mapPartitionWithIndex");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.mapPartitionWithIndex");
   }
 
   IMapperModule_mapPartitionWithIndex_args args;
@@ -3061,7 +3061,7 @@ void IMapperModuleProcessor::process_mapPartitionWithIndex(int32_t seqid, ::apac
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.mapPartitionWithIndex", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.mapPartitionWithIndex", bytes);
   }
 
   IMapperModule_mapPartitionWithIndex_result result;
@@ -3072,7 +3072,7 @@ void IMapperModuleProcessor::process_mapPartitionWithIndex(int32_t seqid, ::apac
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.mapPartitionWithIndex");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.mapPartitionWithIndex");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -3085,7 +3085,7 @@ void IMapperModuleProcessor::process_mapPartitionWithIndex(int32_t seqid, ::apac
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.mapPartitionWithIndex");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.mapPartitionWithIndex");
   }
 
   oprot->writeMessageBegin("mapPartitionWithIndex", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -3095,7 +3095,7 @@ void IMapperModuleProcessor::process_mapPartitionWithIndex(int32_t seqid, ::apac
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.mapPartitionWithIndex", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.mapPartitionWithIndex", bytes);
   }
 }
 
@@ -3103,12 +3103,12 @@ void IMapperModuleProcessor::process_values(int32_t seqid, ::apache::thrift::pro
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.values", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.values", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.values");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.values");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.values");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.values");
   }
 
   IMapperModule_values_args args;
@@ -3117,7 +3117,7 @@ void IMapperModuleProcessor::process_values(int32_t seqid, ::apache::thrift::pro
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.values", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.values", bytes);
   }
 
   IMapperModule_values_result result;
@@ -3128,7 +3128,7 @@ void IMapperModuleProcessor::process_values(int32_t seqid, ::apache::thrift::pro
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.values");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.values");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -3141,7 +3141,7 @@ void IMapperModuleProcessor::process_values(int32_t seqid, ::apache::thrift::pro
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.values");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.values");
   }
 
   oprot->writeMessageBegin("values", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -3151,7 +3151,7 @@ void IMapperModuleProcessor::process_values(int32_t seqid, ::apache::thrift::pro
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.values", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.values", bytes);
   }
 }
 
@@ -3159,12 +3159,12 @@ void IMapperModuleProcessor::process_streamingMap(int32_t seqid, ::apache::thrif
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.streamingMap", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.streamingMap", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.streamingMap");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.streamingMap");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.streamingMap");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.streamingMap");
   }
 
   IMapperModule_streamingMap_args args;
@@ -3173,7 +3173,7 @@ void IMapperModuleProcessor::process_streamingMap(int32_t seqid, ::apache::thrif
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.streamingMap", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.streamingMap", bytes);
   }
 
   IMapperModule_streamingMap_result result;
@@ -3184,7 +3184,7 @@ void IMapperModuleProcessor::process_streamingMap(int32_t seqid, ::apache::thrif
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.streamingMap");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.streamingMap");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -3197,7 +3197,7 @@ void IMapperModuleProcessor::process_streamingMap(int32_t seqid, ::apache::thrif
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.streamingMap");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.streamingMap");
   }
 
   oprot->writeMessageBegin("streamingMap", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -3207,7 +3207,7 @@ void IMapperModuleProcessor::process_streamingMap(int32_t seqid, ::apache::thrif
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.streamingMap", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.streamingMap", bytes);
   }
 }
 
@@ -3215,12 +3215,12 @@ void IMapperModuleProcessor::process_streamingFlatmap(int32_t seqid, ::apache::t
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.streamingFlatmap", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.streamingFlatmap", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.streamingFlatmap");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.streamingFlatmap");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.streamingFlatmap");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.streamingFlatmap");
   }
 
   IMapperModule_streamingFlatmap_args args;
@@ -3229,7 +3229,7 @@ void IMapperModuleProcessor::process_streamingFlatmap(int32_t seqid, ::apache::t
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.streamingFlatmap", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.streamingFlatmap", bytes);
   }
 
   IMapperModule_streamingFlatmap_result result;
@@ -3240,7 +3240,7 @@ void IMapperModuleProcessor::process_streamingFlatmap(int32_t seqid, ::apache::t
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.streamingFlatmap");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.streamingFlatmap");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -3253,7 +3253,7 @@ void IMapperModuleProcessor::process_streamingFlatmap(int32_t seqid, ::apache::t
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.streamingFlatmap");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.streamingFlatmap");
   }
 
   oprot->writeMessageBegin("streamingFlatmap", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -3263,7 +3263,7 @@ void IMapperModuleProcessor::process_streamingFlatmap(int32_t seqid, ::apache::t
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.streamingFlatmap", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.streamingFlatmap", bytes);
   }
 }
 
@@ -3271,12 +3271,12 @@ void IMapperModuleProcessor::process_streamingFilter(int32_t seqid, ::apache::th
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.streamingFilter", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.streamingFilter", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.streamingFilter");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.streamingFilter");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.streamingFilter");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.streamingFilter");
   }
 
   IMapperModule_streamingFilter_args args;
@@ -3285,7 +3285,7 @@ void IMapperModuleProcessor::process_streamingFilter(int32_t seqid, ::apache::th
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.streamingFilter", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.streamingFilter", bytes);
   }
 
   IMapperModule_streamingFilter_result result;
@@ -3296,7 +3296,7 @@ void IMapperModuleProcessor::process_streamingFilter(int32_t seqid, ::apache::th
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.streamingFilter");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.streamingFilter");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -3309,7 +3309,7 @@ void IMapperModuleProcessor::process_streamingFilter(int32_t seqid, ::apache::th
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.streamingFilter");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.streamingFilter");
   }
 
   oprot->writeMessageBegin("streamingFilter", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -3319,7 +3319,7 @@ void IMapperModuleProcessor::process_streamingFilter(int32_t seqid, ::apache::th
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.streamingFilter", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.streamingFilter", bytes);
   }
 }
 
@@ -3327,12 +3327,12 @@ void IMapperModuleProcessor::process_streamingKeyBy(int32_t seqid, ::apache::thr
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMapperModule.streamingKeyBy", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.streamingKeyBy", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMapperModule.streamingKeyBy");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.streamingKeyBy");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMapperModule.streamingKeyBy");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.streamingKeyBy");
   }
 
   IMapperModule_streamingKeyBy_args args;
@@ -3341,7 +3341,7 @@ void IMapperModuleProcessor::process_streamingKeyBy(int32_t seqid, ::apache::thr
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMapperModule.streamingKeyBy", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.streamingKeyBy", bytes);
   }
 
   IMapperModule_streamingKeyBy_result result;
@@ -3352,7 +3352,7 @@ void IMapperModuleProcessor::process_streamingKeyBy(int32_t seqid, ::apache::thr
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMapperModule.streamingKeyBy");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.streamingKeyBy");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
@@ -3365,7 +3365,7 @@ void IMapperModuleProcessor::process_streamingKeyBy(int32_t seqid, ::apache::thr
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMapperModule.streamingKeyBy");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.streamingKeyBy");
   }
 
   oprot->writeMessageBegin("streamingKeyBy", ::apache::thrift::protocol::T_REPLY, seqid);
@@ -3375,7 +3375,7 @@ void IMapperModuleProcessor::process_streamingKeyBy(int32_t seqid, ::apache::thr
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMapperModule.streamingKeyBy", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.streamingKeyBy", bytes);
   }
 }
 

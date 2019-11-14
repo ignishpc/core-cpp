@@ -2,18 +2,21 @@
 #ifndef IGNIS_IREADITERATOR_H
 #define IGNIS_IREADITERATOR_H
 
+#include <memory>
+
 namespace ignis {
     namespace executor {
         namespace api {
-            template<typename T>
+            template<typename Tp>
             class IReadIterator {
             public:
+                typedef IReadIterator<Tp> _IReadIterator_type;
 
-                virtual T &next() {};
+                virtual Tp &next() = 0;
 
-                virtual bool hasNext() {};
+                virtual std::shared_ptr<Tp> nextShared() = 0;
 
-                virtual ~IReadIterator() {};
+                virtual bool hasNext() = 0;
             };
         }
     }

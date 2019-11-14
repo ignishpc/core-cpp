@@ -4,31 +4,38 @@ project(ignistest)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-        main.cpp
-        executor/core/storage/IObjectTest.h
-        executor/core/storage/IObjectTest.cpp
-        executor/core/storage/IMemoryObjectTest.h
-        executor/core/storage/IRawMemoryObjectTest.h
-        executor/core/modules/IModuleTest.h
+        executor/core/IElements.h
+        executor/core/IElements.tcc
+
+        #Modules Tests
+        executor/core/modules/IGeneralActionModuleTest.h
+        executor/core/modules/IGeneralActionModuleTest.tcc
+        executor/core/modules/IGeneralModuleTest.h
+        executor/core/modules/IGeneralModuleTest.tcc
         executor/core/modules/IModuleTest.cpp
-        executor/core/modules/IMapperModuleTest.h
-        executor/core/modules/IMapperModuleTest.cpp
-        executor/core/modules/IShuffleModuleTest.h
-        executor/core/modules/IShuffleModuleTest.cpp
-        executor/core/modules/IPostmanModuleTest.h
-        executor/core/modules/IPostmanModuleTest.cpp
-        executor/core/modules/IKeysModuleTest.h
-        executor/core/modules/IKeysModuleTest.cpp
-        executor/core/modules/ISortModuleTest.h
-        executor/core/modules/ISortModuleTest.cpp
-        executor/core/modules/IStorageModuleTest.h
-        executor/core/modules/IStorageModuleTest.cpp)
+        executor/core/modules/IModuleTest.h
+        executor/core/modules/IModuleTest.tcc
+
+        #Mpi Tests
+        executor/core/IMpiTest.tcc
+        executor/core/IMpiTest.h
+
+        #Partition Tests
+        executor/core/storage/IDiskPartitionTest.h
+        executor/core/storage/IDiskPartitionTest.tcc
+        executor/core/storage/IMemoryPartitionTest.h
+        executor/core/storage/IPartitionTest.tcc
+        executor/core/storage/IPartitionTest.h
+        executor/core/storage/IRawMemoryPartitionTest.h
+
+        main.cpp)
 
 set(CMAKE_CXX_FLAGS "-g -O0")
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ../ignis)
 
 add_executable(ignistest ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)
 
-add_library(testfunctions SHARED executor/core/modules/TestFunctions.cpp)
-SET_TARGET_PROPERTIES(testfunctions PROPERTIES LINKER_LANGUAGE CXX)
-TARGET_LINK_LIBRARIES(testfunctions igniscore)
+set (CMAKE_CXX_FLAGS "-g -O0 -rdynamic -fPIC")
+add_library(testfunctions SHARED executor/TestFunctions.cpp )

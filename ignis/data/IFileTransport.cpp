@@ -17,7 +17,7 @@ IFileTransport::IFileTransport(std::string &read_file, std::string &write_file, 
     buffer[write_flag].open(write_file, std::ios::in | std::ios::out | std::ios::binary | std::ios::trunc);
 }
 
-bool IFileTransport::isOpen() {
+bool IFileTransport::isOpen() const{
     return sync_trans->isOpen();
 }
 

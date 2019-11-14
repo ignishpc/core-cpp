@@ -2,18 +2,33 @@
 
 #include <thrift/processor/TMultiplexedProcessor.h>
 #include "executor/core/IExecutorData.h"
-#include "executor/core/modules/IFilesModule.h"
-#include "executor/core/modules/IKeysModule.h"
-#include "executor/core/modules/IMapperModule.h"
-#include "executor/core/modules/IPostmanModule.h"
-#include "executor/core/modules/IReducerModule.h"
-#include "executor/core/modules/IServerModule.h"
-#include "executor/core/modules/IShuffleModule.h"
-#include "executor/core/modules/ISortModule.h"
-#include "executor/core/modules/IStorageModule.h"
+#include "executor/core/modules/IGeneralModule.h"
+#include "executor/core/modules/IGeneralActionModule.h"
+/*
+#include "executor/core/modules_old/IFilesModule.h"
+#include "executor/core/modules_old/IKeysModule.h"
+#include "executor/core/modules_old/IMapperModule.h"
+#include "executor/core/modules_old/IPostmanModule.h"
+#include "executor/core/modules_old/IReducerModule.h"
+#include "executor/core/modules_old/IServerModule.h"
+#include "executor/core/modules_old/IShuffleModule.h"
+#include "executor/core/modules_old/ISortModule.h"
+#include "executor/core/modules_old/IStorageModule.h"*/
+#include "executor/api/function/IFunction2.h"
+#include <vector>
 
+
+using namespace ignis::executor::core;
 using namespace ignis::executor::core::modules;
-using namespace ignis::rpc::executor;
+using namespace ignis::executor::core::transport;
+//using namespace ignis::rpc::executor;
+
+
+class MyFuntion2 : public ignis::executor::api::function::IFunction2<int, int, int> {
+};
+
+
+ignis_export(test, MyFuntion2);
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();
@@ -21,6 +36,15 @@ int main(int argc, char *argv[]) {
     auto processor = std::make_shared<apache::thrift::TMultiplexedProcessor>();
     auto executor_data = std::make_shared<ignis::executor::core::IExecutorData>();
 
+
+    impl::IReduceImpl reduce(executor_data);
+    test_constructor()->general_action->reduce(reduce);
+
+    exit(0);
+
+
+    auto general = std::make_shared<ignis::executor::core::modules::IGeneralModule>(executor_data);
+    /*processor->registerProcessor("general", std::make_shared<IMapperModuleProcessor>(general));
     auto files = std::make_shared<IFilesModule>(executor_data);
     processor->registerProcessor("files", std::make_shared<IFilesModuleProcessor>(files));
     auto keys = std::make_shared<IKeysModule>(executor_data);
@@ -37,8 +61,8 @@ int main(int argc, char *argv[]) {
     processor->registerProcessor("shuffle", std::make_shared<IShuffleModuleProcessor>(shuffle));;
     auto sort = std::make_shared<ISortModule>(executor_data);
     processor->registerProcessor("sort", std::make_shared<ISortModuleProcessor>(sort));;
-    auto storage = std::make_shared<IStorageModule>(executor_data);
-    processor->registerProcessor("storage", std::make_shared<IStorageModuleProcessor>(storage));
+    auto storage_old = std::make_shared<IStorageModule>(executor_data);
+    processor->registerProcessor("storage_old", std::make_shared<IStorageModuleProcessor>(storage_old));*/
 
     if (argc == 1) {
         IGNIS_LOG(error) << "Executor need a server port as argument";
@@ -51,7 +75,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    server->start(processor, port);
+    //server->start(processor, port);
 
     return EXIT_SUCCESS;
 }

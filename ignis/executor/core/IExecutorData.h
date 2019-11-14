@@ -2,45 +2,90 @@
 #ifndef IGNIS_EXECUTORDATA_H
 #define IGNIS_EXECUTORDATA_H
 
-#include "../../IHeaders.h"
-#include "IObjectLoader.h"
-#include "../api/IContext.h"
-#include "IPropertiesParser.h"
-#include "storage/IObject.h"
-#include "IPostBox.h"
+#include "storage/IPartition.h"
+#include "ILibraryLoader.h"
+#include "IPropertyParser.h"
+#include "executor/api/IContext.h"
+#include "rpc/ISource_types.h"
+#include "ILog.h"
+#include "IMpi.h"
+#include <map>
 
 namespace ignis {
     namespace executor {
         namespace core {
+            namespace selector {
+                class ISelectorGroup;
+
+                class IArgsType;
+            }
+
             class IExecutorData {
             public:
-
                 IExecutorData();
 
-                std::shared_ptr<storage::IObject> loadObject(std::shared_ptr<storage::IObject> object);
+                template<typename Tp>
+                std::shared_ptr<storage::IPartitionGroup<Tp>> getPartitions() {
+                    return std::static_pointer_cast<storage::IPartitionGroup<Tp>>(partitions);
+                }
 
-                std::shared_ptr<storage::IObject> loadObject();
+                template<typename Tp>
+                std::shared_ptr<storage::IPartitionGroup<Tp>>
+                setPartitions(std::shared_ptr<storage::IPartitionGroup<Tp>> &group) {
+                    auto old = partitions;
+                    partitions = std::static_pointer_cast<void>(group);
+                    return std::static_pointer_cast<storage::IPartitionGroup<Tp>>(old);
+                }
 
-                void deleteLoadObject();
+                void deletePartitions();
+
+                template<typename Tp>
+                void setVariable(const std::string key, const std::shared_ptr<Tp> &value) {
+                    variables[key] = std::static_pointer_cast<std::shared_ptr<Tp>>(value);
+                }
+
+                template<typename Tp>
+                std::shared_ptr<Tp> &getVariable(const std::string key) {
+                    return std::static_pointer_cast<std::shared_ptr<Tp>>(variables[key]);
+                }
+
+                template<typename Tp>
+                std::shared_ptr<Tp> removeVariable(const std::string key) {
+                    auto value = variables[key];
+                    variables.erase(key);
+                    return std::static_pointer_cast<std::shared_ptr<Tp>>(value);
+                }
+
+                int64_t clearVariables();
+
+                int64_t nextPartititonId();
+
+                std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
+
+                std::shared_ptr<selector::IArgsType> getType(const std::string &id);
 
                 api::IContext &getContext();
 
-                core::IPropertiesParser &getParser();
+                IPropertyParser &getProperties();
 
-                IPostBox &getPostBox();
+                IMpi mpi();
 
-                int64_t getThreads();
-
-                IObjectLoader &getObjectLoader();
+                void setCores(int cores);
 
                 virtual ~IExecutorData();
 
             private:
-                std::shared_ptr<storage::IObject> loaded_object;
-                IObjectLoader object_loader;
-                IPostBox post_box;
+                std::shared_ptr<void> partitions;
+                std::map<std::string, std::shared_ptr<void>> variables;
+                std::map<std::string, std::pair<
+                        std::shared_ptr<selector::IArgsType>,
+                        std::shared_ptr<selector::ISelectorGroup>>
+                > types;
+                ILibraryLoader library_loader;
+                IPropertyParser properties;
+                IMpi _mpi;
                 api::IContext context;
-                core::IPropertiesParser properties_parser;
+                int partition_id_gen;
             };
         }
     }

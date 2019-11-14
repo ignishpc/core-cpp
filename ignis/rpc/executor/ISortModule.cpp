@@ -1743,7 +1743,7 @@ void ISortModuleClient::mergePartitions()
 void ISortModuleClient::send_mergePartitions()
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("mergePartitions", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("mergeGroupPartitions", ::apache::thrift::protocol::T_CALL, cseqid);
 
   ISortModule_mergePartitions_pargs args;
   args.write(oprot_);
@@ -1773,7 +1773,7 @@ void ISortModuleClient::recv_mergePartitions()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("mergePartitions") != 0) {
+  if (fname.compare("mergeGroupPartitions") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
@@ -2148,12 +2148,12 @@ void ISortModuleProcessor::process_mergePartitions(int32_t seqid, ::apache::thri
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("ISortModule.mergePartitions", callContext);
+    ctx = this->eventHandler_->getContext("ISortModule.mergeGroupPartitions", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ISortModule.mergePartitions");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ISortModule.mergeGroupPartitions");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "ISortModule.mergePartitions");
+    this->eventHandler_->preRead(ctx, "ISortModule.mergeGroupPartitions");
   }
 
   ISortModule_mergePartitions_args args;
@@ -2162,7 +2162,7 @@ void ISortModuleProcessor::process_mergePartitions(int32_t seqid, ::apache::thri
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "ISortModule.mergePartitions", bytes);
+    this->eventHandler_->postRead(ctx, "ISortModule.mergeGroupPartitions", bytes);
   }
 
   ISortModule_mergePartitions_result result;
@@ -2173,11 +2173,11 @@ void ISortModuleProcessor::process_mergePartitions(int32_t seqid, ::apache::thri
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "ISortModule.mergePartitions");
+      this->eventHandler_->handlerError(ctx, "ISortModule.mergeGroupPartitions");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("mergePartitions", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("mergeGroupPartitions", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -2186,17 +2186,17 @@ void ISortModuleProcessor::process_mergePartitions(int32_t seqid, ::apache::thri
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "ISortModule.mergePartitions");
+    this->eventHandler_->preWrite(ctx, "ISortModule.mergeGroupPartitions");
   }
 
-  oprot->writeMessageBegin("mergePartitions", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("mergeGroupPartitions", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "ISortModule.mergePartitions", bytes);
+    this->eventHandler_->postWrite(ctx, "ISortModule.mergeGroupPartitions", bytes);
   }
 }
 
@@ -2712,7 +2712,7 @@ int32_t ISortModuleConcurrentClient::send_mergePartitions()
 {
   int32_t cseqid = this->sync_.generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(&this->sync_);
-  oprot_->writeMessageBegin("mergePartitions", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("mergeGroupPartitions", ::apache::thrift::protocol::T_CALL, cseqid);
 
   ISortModule_mergePartitions_pargs args;
   args.write(oprot_);
@@ -2754,7 +2754,7 @@ void ISortModuleConcurrentClient::recv_mergePartitions(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("mergePartitions") != 0) {
+      if (fname.compare("mergeGroupPartitions") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();

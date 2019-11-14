@@ -19,7 +19,7 @@ namespace ignis {
             IFileTransport(std::string &read_file, std::string &write_file, std::shared_ptr<TTransport> &sync_trans,
                            size_t block_size = 50 * 1024 * 1024);
 
-            bool isOpen() override;
+            bool isOpen() const override;
 
             void open() override;
 

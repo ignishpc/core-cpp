@@ -56,8 +56,6 @@ namespace ignis {
             private:
                 ILog() {}
 
-                static void safeDumpRegister();
-
             };
         }
     }
