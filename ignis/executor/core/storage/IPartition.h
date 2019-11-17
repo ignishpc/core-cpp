@@ -85,6 +85,14 @@ namespace ignis {
                         return newGroup;
                     }
 
+                    std::shared_ptr<IPartitionGroup<Tp>> shadowCopy() {
+                        auto newGroup = std::make_shared<IPartitionGroup<Tp>>();
+                        for (auto &p : *this) {
+                            newGroup->add(p);
+                        }
+                        return newGroup;
+                    }
+
                     bool &cache() { return _cache; }
 
                 private:

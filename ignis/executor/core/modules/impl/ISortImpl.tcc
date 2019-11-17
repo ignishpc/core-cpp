@@ -1,13 +1,14 @@
 
 #include "ISortImpl.h"
 #include <algorithm>
+#include <cmath>
 
 #define ISortImplClass ignis::executor::core::modules::impl::ISortImpl
 
 
 template<typename Tp>
 void ISortImplClass::sort(bool ascending) {
-    sort < Tp > (ascending, executor_data->getPartitions<Tp>()->partitions());
+    sort < Tp > (ascending, -1);
 }
 
 template<typename Tp>
@@ -20,7 +21,7 @@ void ISortImplClass::sort(bool ascending, int64_t partitions) {
 
 template<typename Function>
 void ISortImplClass::sortBy(bool ascending) {
-    sortBy < Function > (ascending, executor_data->getPartitions<typename Function::_T_type>()->partitions());
+    sortBy < Function > (ascending, -1);
 }
 
 template<typename Function>
@@ -28,12 +29,12 @@ void ISortImplClass::sortBy(bool ascending, int64_t partitions) {
     auto &context = executor_data->getContext();
     Function function;
     function.before(context);
-    sort_impl<Function::_T_type>(
-            [&context, &function, ascending](const typename Function::_T_type &lhs,
-                                             const typename Function::_T_type &rhs) {
+    sort_impl<typename Function::_T1_type>(
+            [&context, &function, ascending](const typename Function::_T1_type &lhs,
+                                             const typename Function::_T2_type &rhs) {
                 return function.call(
-                        const_cast<typename Function::_T_type>(lhs),
-                        const_cast<typename Function::_T_type>(rhs), context
+                        const_cast<typename Function::_T1_type &>(lhs),
+                        const_cast<typename Function::_T2_type &>(rhs), context
                 ) == ascending;
             }, partitions);
     function.after(context);
@@ -41,147 +42,86 @@ void ISortImplClass::sortBy(bool ascending, int64_t partitions) {
 
 template<typename Tp, typename Cmp>
 void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
-    bool native = true;
-    int8_t comp = 0;
     try {
-//        auto input = executor_data->getPartitions<Tp>();
-//        decltype(input) output;
-//        bool inMemory = false;
-//        /*Work directly on the array to improve performance*/
-//        if (isMemory(*input)) {
-//            /*Copy the data if they are reused*/
-//            if (input->cache()) {
-//                output = input->clone();
-//            } else {
-//                output = input;
-//            }
-//            executor_data->setPartitions(output);
-//            inMemory = true;
-//        } else {
-//            auto output = newPartitionGroup<Tp>();
-//        }
-//
-//        /*Sort each partition*/
-//        parallelSort(*output, comparator, inMemory);
-//
-//        auto my_pivots = newMemoryPartition<Tp>();
-//        auto n_ranges = executor_data->getContext().executors() - 1;
-//        auto ranges = newMemoryPartition<Tp>(n_ranges);
-//        auto writer = std::static_pointer_cast<storage::IMemoryWriteIterator < Tp>>
-//        (my_pivots->writeIterator());
-//
-//        /*Generates pivots to separate the elements in order*/
-//        if (inMemory) {
-//            selectPivotsWithIndex(*output, *writer, executor_data->getProperties().sortSamples());
-//        } else {
-//            selectPivots(*output, *writer, executor_data->getProperties().sortSamples());
-//        }
-//
-//        auto pivots_out = my_pivots->createMessage(native);
-//        std::vector<int> sizes;
-//        int my_size = pivots_out->size();
-//        int rank = executor_data->getContext().mpiGroup().Get_rank();
-//        if (rank == 0) {
-//            sizes.resize(executor_data->getContext().executors());
-//        }
-//
-//        /*Collect pivots size from every executor*/
-//        executor_data->getContext().mpiGroup().Gather(&my_size, 1, MPI::INT,
-//                                                      &sizes[0], 1, MPI::INT, 0);
-//        /*Collect pivots*/
-//        int all_size = 0;
-//        std::vector<int> displs;
-//        decltype(my_pivots) all_pivots;
-//        decltype(pivots_out) pivots_in;
-//        if (rank == 0) {
-//            displs.push_back(sizes[0]);
-//            for (int i = 1; i < sizes.size(); i++) {
-//                displs[i] += sizes[i - 1] + displs[i - 1];
-//            }
-//            all_pivots = newMemoryPartition<Tp>();
-//            pivots_in = all_pivots->createMessage(native);
-//            pivots_in->resize(displs.back());
-//        } else {
-//            pivots_in = std::make_shared<storage::IVoidMessage>();
-//        }
-//
-//        executor_data->getContext().mpiGroup().Gatherv(pivots_out->ptr(comp), pivots_out->size(), MPI::BYTE,
-//                                                       pivots_in->ptr(comp), &sizes[0], &displs[0], MPI::BYTE, 0);
-//        pivots_out.reset();
-//        pivots_in.reset();
-//        my_pivots->clear();
-//
-//        if (rank == 0) {
-//            pivots_in->flush();
-//
-//            /*Sort pivots*/
-//            sortIndexedPartition(*all_pivots, comparator);
-//
-//
-//            writer = std::static_pointer_cast<storage::IMemoryWriteIterator < Tp>>
-//            (ranges->writeIterator());
-//
-//            auto tmp_group = newPartitionGroup<Tp>(0);
-//            auto tmp_part = std::static_pointer_cast<storage::IPartition < Tp>>
-//            (all_pivots);
-//            tmp_group->add(tmp_part);
-//            selectPivotsWithIndex(*tmp_group, *writer, n_ranges);
-//        }
-//
-//
-//        auto ranges_msg = all_pivots->createMessage(native);
-//        ranges_msg->resize(n_ranges);
-//
-//        /*Broadcast ranges*/
-//        executor_data->getContext().mpiGroup().Bcast(ranges_msg->ptr(comp), ranges_msg->size(), MPI::BYTE, 0);
-//        ranges_msg->flush();
-//
-//        /*Repartition*/
-//        decltype(output) range_group;
-//        if (inMemory) {
-//            range_group = generateRanges(*output, *all_pivots);
-//        } else {
-//            range_group = generateRangesWithIndex(*output, *all_pivots);
-//        }
-//
-//        for (int i = 0; i < executor_data->getContext().executors(); i++) {
-//            //TODO
-//        }
-//        /*Generate final partitions*/
-//
-//
-//        if (inMemory) {
-//            output = generateRanges(*output, *my_pivots);
-//        } else {
-//            output = generateRangesWithIndex(*output, *my_pivots);
-//        }
-//
-//        /*Sort final partitions*/
-//        parallelSort(*output, comparator, inMemory);
+        auto input = executor_data->getPartitions<Tp>();
+        auto executors = executor_data->mpi().executors();
+        /*Copy the data if they are reused*/
+        if (input->cache()) {
+            /*Work directly on the array to improve performance*/
+            if (isMemory(*input)) {
+                input = input->clone();
+            } else {
+                /*Only group will be affected*/
+                input = input->shadowCopy();
+            }
+        }
 
+        /*Sort each partition*/
+        parallelLocalSort(*input, comparator);
 
+        /*Generates pivots to separate the elements in order*/
+        int64_t samples = executor_data->getProperties().sortSamples();
+        if (partitions > 0) {
+            samples *= partitions / input->partitions() + 1;
+        }
+        auto pivots = selectPivots(*input, samples);
+
+        executor_data->mpi().gather(*pivots, 0);
+
+        if (executor_data->mpi().isRoot(0)) {
+            auto group = newPartitionGroup<Tp>(0);
+            group->add(pivots);
+            parallelLocalSort(*group, comparator);
+            if (partitions > 0) {
+                samples = partitions;
+            } else {
+                samples = pivots->size() / executor_data->getProperties().sortSamples();
+            }
+
+            pivots = selectPivots(*group, samples - 1);
+        }
+
+        executor_data->mpi().bcast(*pivots, 0);
+
+        decltype(input) ranges = generateRanges(*input, *pivots);
+        decltype(input) output = newPartitionGroup<Tp>();
+        auto executor_ranges = (int64_t) std::ceil(ranges->partitions() / (double) executors);
+        int target = -1;
+        for (int p = 0; p < ranges->partitions(); p++) {
+            if (p % executor_ranges == 0) { target++; }
+            executor_data->mpi().gather(*(*ranges)[p], target);
+            if (executor_data->mpi().isRoot(target)) {
+                output->add((*ranges)[p]);
+            } else {
+                (*ranges)[p].reset();
+            }
+        }
+
+        /*Sort final partitions*/
+        parallelLocalSort(*output, comparator);
+        executor_data->setPartitions(output);
     } catch (std::exception &ex) {
         throw exception::IException(ex);
     }
 }
 
 template<typename Tp, typename Cmp>
-void ISortImplClass::parallelSort(storage::IPartitionGroup <Tp> &group, Cmp comparator, bool inMemory) {
+void ISortImplClass::parallelLocalSort(storage::IPartitionGroup <Tp> &group, Cmp comparator) {
+    bool inMemory = isMemory(group);
     IGNIS_OMP_EXCEPTION_INIT()
-    #pragma omp parallel num_threads(executor_data->getContext().cores())
+    #pragma omp parallel
     {
         IGNIS_OMP_TRY()
             /*Sort each partition locally*/
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < group.partitions(); p++) {
                 if (inMemory) {
-                    sortIndexedPartition<Tp>(reinterpret_cast<storage::IMemoryPartition <Tp> &>(*group[p]),
-                                             comparator);
+                    sortMemoryPartition<Tp>(reinterpret_cast<storage::IMemoryPartition <Tp> &>(*group[p]),
+                                            comparator);
                 } else {
                     #pragma omp critical
                     {
-                        auto sorted = sortPartition<Tp>(*group[p], comparator);
-                        group.add(sorted);
+                        group[p] = sortPartition<Tp>(*group[p], comparator);
                     }
                 }
             }
@@ -190,8 +130,82 @@ void ISortImplClass::parallelSort(storage::IPartitionGroup <Tp> &group, Cmp comp
     IGNIS_OMP_EXCEPTION_END()
 }
 
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
+ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, int64_t samples) {
+    if (isMemory(group)) {
+        return selectMemoryPivots(group, samples);
+    }
+    auto pivots = newMemoryPartition<Tp>();
+    auto writer = pivots->writeIterator();
+    IGNIS_OMP_EXCEPTION_INIT()
+    #pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+            #pragma omp for schedule(dynamic)
+            for (int64_t p = 0; p < group.partitions(); p++) {
+                auto skip = (group[p]->size() - samples) / (samples + 1);
+                auto reader = group[p]->readIterator();
+                for (int n = 0; n < samples; n++) {
+                    for (int i = 0; i < skip; i++) {
+                        reader->next();
+                    }
+                    if (!reader->hasNext()) {
+                        break;
+                    }
+                    #pragma omp critical
+                    {
+                        writer->write(reader->next());
+                    }
+                }
+            }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    return pivots;
+}
+
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
+ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
+    if (isMemory(group)) {
+        return generateMemoryRanges(group, pivots);
+    }
+    auto ranges = newPartitionGroup<Tp>(pivots.size() + 1);
+
+    IGNIS_OMP_EXCEPTION_INIT()
+    //#pragma omp parallel
+    {
+        auto thread_ranges = newPartitionGroup<Tp>(ranges->partitions());
+        std::vector<std::shared_ptr<api::IWriteIterator < Tp>> > writers;
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+            writers.push_back((*thread_ranges)[p]->writeIterator());
+        }
+
+        IGNIS_OMP_TRY()
+            //#pragma omp for schedule(dynamic)
+            for (int64_t p = 0; p < group.partitions(); p++) {
+                auto reader = group[p]->readIterator();
+                while (reader->hasNext()) {
+                    auto &elem = reader->next();
+                    writers[searchRange(elem, pivots)]->write(elem);
+                }
+                group[p]->clear();
+            }
+            #pragma omp critical
+            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+                (*thread_ranges)[p]->moveTo(*((*ranges)[p]));
+            }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    group.clear();
+    return ranges;
+}
+
+
 template<typename Tp, typename Cmp>
-void ISortImplClass::sortIndexedPartition(storage::IMemoryPartition <Tp> &part, Cmp comparator) {
+void ISortImplClass::sortMemoryPartition(storage::IMemoryPartition <Tp> &part, Cmp comparator) {
     std::stable_sort(part.begin(), part.end(), comparator);
 }
 
@@ -257,30 +271,79 @@ std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> ISortImplClass::
 }
 
 template<typename Tp>
-void
-ISortImplClass::selectPivotsWithIndex(storage::IPartitionGroup <Tp> &group,
-                                      storage::IMemoryWriteIterator <Tp> &pivots,
-                                      int samples) {
+std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
+ISortImplClass::selectMemoryPivots(storage::IPartitionGroup <Tp> &group, int64_t samples) {
+    auto pivots = newMemoryPartition<Tp>();
+    auto writer = pivots->writeIterator();
+    auto &men_writer = toMemory(*writer);
 
-}
-
-template<typename Tp>
-void ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, storage::IMemoryWriteIterator <Tp> &pivots,
-                                  int samples) {
-
+    for (int64_t p = 0; p < group.partitions(); p++) {
+        auto skip = (group[p]->size() - samples) / (samples + 1);
+        auto &part = toMemory(*group[p]);
+        auto pos = skip;
+        for (int n = 0; n < samples; n++) {
+            men_writer.write(part[pos++]);
+            pos += skip;
+        }
+    }
+    return pivots;
 }
 
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
+ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
+    auto ranges = newPartitionGroup<Tp>(pivots.size() + 1);
 
+    IGNIS_OMP_EXCEPTION_INIT()
+    #pragma omp parallel
+    {
+        auto thread_ranges = newPartitionGroup<Tp>(ranges->partitions());
+        std::vector<std::shared_ptr<storage::IMemoryWriteIterator < Tp>> > writers(ranges->partitions());
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+            auto it = (*thread_ranges)[p]->writeIterator();
+            writers[p] = toMemory(it);
+        }
+
+        IGNIS_OMP_TRY()
+            #pragma omp for schedule(dynamic)
+            for (int64_t p = 0; p < group.partitions(); p++) {
+                auto &part = toMemory(*group[p]);
+                for (int64_t i = 0; i < group[p]->size(); i++) {
+                    writers[searchRange(part[i], pivots)]->write(std::move(part[i]));
+                }
+                group[p]->clear();
+            }
+            #pragma omp critical
+            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+                (*thread_ranges)[p]->moveTo(*((*ranges)[p]));
+            }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    group.clear();
+    return ranges;
 }
 
 template<typename Tp>
-std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-ISortImplClass::generateRangesWithIndex(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
-
+int64_t ISortImplClass::searchRange(Tp &elem, storage::IMemoryPartition <Tp> &pivots) {
+    int64_t start = 0;
+    int64_t end = pivots.size() - 1;
+    int64_t mid;
+    while (start < end) {
+        mid = (start + end) / 2;
+        if (elem < pivots[mid]) {
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    if (elem < pivots[start]) {
+        return start;
+    } else {
+        return start + 1;
+    }
 }
+
 
 #undef ISortImplClass

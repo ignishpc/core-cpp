@@ -164,10 +164,30 @@ ignis::executor::core::storage::IMemoryWriteIterator<Tp> &IBaseImplClass::toMemo
     return reinterpret_cast<storage::IMemoryWriteIterator <Tp> &>(it);
 }
 
-template<typename Sp>
-std::shared_ptr<Sp> &IBaseImplClass::toMemory(std::shared_ptr<Sp> &it) {
-    return reinterpret_cast<std::shared_ptr<typename std::remove_reference<decltype(toMemory(*it))>::type> &>(it);
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>> &
+IBaseImplClass::toMemory(std::shared_ptr<storage::IPartition < Tp>>
+
+&st){
+return reinterpret_cast<std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>> &>(st);
 }
+
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IMemoryReadIterator<Tp> > &
+IBaseImplClass::toMemory(std::shared_ptr<api::IReadIterator < Tp>>
+
+&it){
+return reinterpret_cast<std::shared_ptr<ignis::executor::core::storage::IMemoryReadIterator<Tp> > &>(it);
+}
+
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IMemoryWriteIterator<Tp>> &
+IBaseImplClass::toMemory(std::shared_ptr<api::IWriteIterator < Tp>>
+
+&it){
+return reinterpret_cast<std::shared_ptr<ignis::executor::core::storage::IMemoryWriteIterator<Tp>> &>(it);
+}
+
 
 
 #undef IBaseImplClass

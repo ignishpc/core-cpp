@@ -49,13 +49,12 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
             comm.Gatherv(buffer->getWritePtr(sz), sz, MPI::BYTE,
                          buffer->getWritePtr(sz), &szv[0], &displs[0], MPI::BYTE, root);
             if (isRoot(root)) {
-                buffer->wroteBytes(displs.back());
-                auto ptr = buffer->getWritePtr(sz) - buffer->writeEnd();
+                auto ptr = buffer->getWritePtr(sz);
                 storage::IMemoryPartition<Tp> rcv;
                 for (int i = 0; i < executors(); i++) {
                     if (i != root) {
                         auto view = std::make_shared<transport::IMemoryBuffer>(ptr + displs[i], szv[i]);
-                        rcv.read((std::shared_ptr<transport::ITransport> &) buffer);
+                        rcv.read((std::shared_ptr<transport::ITransport> &) view);
                     } else {
                         //Avoid serialization own elements
                         part.moveTo(rcv);
@@ -143,6 +142,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
             comm.Bcast(buffer->getWritePtr(sz), sz, MPI::BYTE, root);
             if (!isRoot(root)) {
                 buffer->wroteBytes(sz);
+                part.clear();
                 part.read((std::shared_ptr<transport::ITransport> &) buffer);
             }
         }

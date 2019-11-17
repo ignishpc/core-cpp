@@ -84,8 +84,20 @@ namespace ignis {
                         template<typename Tp>
                         storage::IMemoryWriteIterator <Tp> &toMemory(api::IWriteIterator <Tp> &it);
 
-                        template<typename Sp>
-                        std::shared_ptr<Sp> &toMemory(std::shared_ptr<Sp> &it);
+                        template<typename Tp>
+                        std::shared_ptr<storage::IMemoryPartition < Tp>> &
+                        toMemory(std::shared_ptr<storage::IPartition < Tp>>
+                        &st);
+
+                        template<typename Tp>
+                        std::shared_ptr<storage::IMemoryReadIterator < Tp> >&
+                        toMemory(std::shared_ptr<api::IReadIterator < Tp>>
+                        &it);
+
+                        template<typename Tp>
+                        std::shared_ptr<storage::IMemoryWriteIterator < Tp>> &
+                        toMemory(std::shared_ptr<api::IWriteIterator < Tp>>
+                        &it);
 
                         virtual ~IBaseImpl();
 

@@ -172,20 +172,20 @@ namespace ignis {
                     }
 
                     template<typename Function>
-                    void sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction_type *val,
+                    void sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val,
                                       bool ascending) {
                         sortBy_check<Function>(impl, val, (typename Function::_R_type *) nullptr, ascending);
                     }
 
                     template<typename Function>
                     void
-                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction_type *val, int64_t *val2,
+                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, bool *val2,
                                  bool ascending) {
                         impl.sortBy<Function>(ascending);
                     }
 
                     template<typename Function>
-                    void sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction_type *val,
+                    void sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val,
                                       bool ascending, int64_t numPartitions) {
                         sortBy_check<Function>(impl, val, (typename Function::_R_type *) nullptr, ascending,
                                                numPartitions);
@@ -193,9 +193,9 @@ namespace ignis {
 
                     template<typename Function>
                     void
-                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction_type *val, int64_t *val2,
+                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, bool *val2,
                                  bool ascending, int64_t numPartitions) {
-                        impl.sortBy<Function>(ascending);
+                        impl.sortBy<Function>(ascending, numPartitions);
                     }
 
                     template<typename Function>

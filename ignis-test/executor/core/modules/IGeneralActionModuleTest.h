@@ -11,7 +11,7 @@ namespace ignis {
                 class IGeneralActionModuleTest : public IModuleTest {
                 CPPUNIT_TEST_SUITE(IGeneralActionModuleTest);
                         CPPUNIT_TEST(reduceIntTest);
-                        //CPPUNIT_TEST(reduceStringTest);
+                        CPPUNIT_TEST(reduceStringTest);
                     CPPUNIT_TEST_SUITE_END();
                 public:
                     IGeneralActionModuleTest();

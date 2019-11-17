@@ -49,7 +49,7 @@ template<typename Ps>
 void IMpiTestClass<Ps>::tearDown() {}
 
 template<typename Ps>
-void IMpiTestClass<Ps>::gatherTest() {
+void IMpiTestClass<Ps>::gatherTest(int root) {
     int n = 100;
     int rank = executor_data->getContext().mpiGroup().Get_rank();
     int size = executor_data->getContext().mpiGroup().Get_size();
@@ -57,8 +57,8 @@ void IMpiTestClass<Ps>::gatherTest() {
     api::IVector <Tp> local_elems(elems.begin() + n * rank, elems.begin() + n * (rank + 1));
     auto part = create();
     insert(local_elems, *part);
-    executor_data->mpi().gather(*part, 0);
-    if(rank == 0){
+    executor_data->mpi().gather(*part, root);
+    if(rank == root){
         api::IVector <Tp> result;
         get(result, *part);
         CPPUNIT_ASSERT(elems == result);
@@ -74,6 +74,9 @@ void IMpiTestClass<Ps>::bcastTest() {
     auto part = create();
     if (rank == 0) {
         insert(elems, *part);
+    } else{
+        /*Ensures that the partition will be cleaned*/
+        part->writeIterator()->write(elems.back());
     }
     executor_data->mpi().bcast(*part, 0);
     api::IVector <Tp> result;

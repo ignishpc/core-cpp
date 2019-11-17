@@ -28,15 +28,24 @@ namespace ignis {
                         void sortBy(bool ascending, int64_t partitions);
 
                     private:
-
+                        /*Primary Functions*/
                         template<typename Tp, typename Cmp>
                         void sort_impl(Cmp comparator, int64_t partitions);
 
                         template<typename Tp, typename Cmp>
-                        void parallelSort(storage::IPartitionGroup<Tp> &group, Cmp comparator, bool inMemory);
+                        void parallelLocalSort(storage::IPartitionGroup<Tp> &group, Cmp comparator);
 
+                        template<typename Tp>
+                        std::shared_ptr<storage::IMemoryPartition<Tp>>
+                        selectPivots(storage::IPartitionGroup<Tp> &group, int64_t samples);
+
+                        template<typename Tp>
+                        std::shared_ptr<storage::IPartitionGroup<Tp>>
+                        generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots);
+
+                        /*Auxiliary functions*/
                         template<typename Tp, typename Cmp>
-                        void sortIndexedPartition(storage::IMemoryPartition<Tp> &part, Cmp comparator);
+                        void sortMemoryPartition(storage::IMemoryPartition<Tp> &part, Cmp comparator);
 
                         template<typename Tp, typename Cmp>
                         std::shared_ptr<storage::IPartition<Tp>>
@@ -47,23 +56,16 @@ namespace ignis {
                         mergePartitions(storage::IPartition<Tp> &p1, storage::IPartition<Tp> &p2, Cmp comparator);
 
                         template<typename Tp>
-                        void selectPivotsWithIndex(storage::IPartitionGroup<Tp> &group,
-                                                   storage::IMemoryWriteIterator<Tp> &pivots, int samples);
-
-                        template<typename Tp>
-                        void
-                        selectPivots(storage::IPartitionGroup<Tp> &group, storage::IMemoryWriteIterator<Tp> &pivots,
-                                     int samples);
+                        std::shared_ptr<storage::IMemoryPartition<Tp>>
+                        selectMemoryPivots(storage::IPartitionGroup<Tp> &group, int64_t samples);
 
                         template<typename Tp>
                         std::shared_ptr<storage::IPartitionGroup<Tp>>
-                        generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots);
+                        generateMemoryRanges(storage::IPartitionGroup<Tp> &group,
+                                             storage::IMemoryPartition<Tp> &pivots);
 
                         template<typename Tp>
-                        std::shared_ptr<storage::IPartitionGroup<Tp>>
-                        generateRangesWithIndex(storage::IPartitionGroup<Tp> &group,
-                                                storage::IMemoryPartition<Tp> &pivots);
-
+                        int64_t searchRange(Tp& elem, storage::IMemoryPartition<Tp> &pivots);
                     };
                 }
             }

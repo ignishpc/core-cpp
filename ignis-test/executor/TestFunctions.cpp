@@ -21,3 +21,22 @@ public:
 };
 
 ignis_export(ReduceString, ReduceString)
+
+class SortInt : public function::IFunction2<int, int, bool> {
+public:
+    bool call(int &v1, int &v2, IContext &context) override {
+        return v1 < v2;
+    }
+};
+
+ignis_export(SortInt, SortInt)
+
+
+class SortString : public function::IFunction2<std::string, std::string, bool> {
+public:
+    bool call(std::string &v1, std::string &v2, IContext &context) override {
+        return v1 < v2;
+    }
+};
+
+ignis_export(SortString, SortString)

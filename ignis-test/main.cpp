@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     MPI::Init(argc, argv);
     int rank = MPI::COMM_WORLD.Get_rank();
     bool parallel = MPI::COMM_WORLD.Get_size() > 1;
-    if (parallel) {
+    if(parallel) {
         std::string wd = "np" + std::to_string(rank);
         ::mkdir(wd.c_str(), 0);
         ::chdir(wd.c_str());
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     results.addListener(&result_collector);
     results.addListener(&progress);
     runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry(PARTITION_TEST).makeTest());
-    if (parallel || true) {
+    if (parallel) {
         runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry(MPI_TEST).makeTest());
     }
     runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry(MODULE_TEST).makeTest());

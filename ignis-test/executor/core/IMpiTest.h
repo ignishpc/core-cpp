@@ -18,7 +18,8 @@ namespace ignis {
             template<typename Ps>
             class IMpiTest : public CPPUNIT_NS::TestCase {
             CPPUNIT_TEST_SUITE(IMpiTest<Ps>);
-                    CPPUNIT_TEST(gatherTest);
+                    CPPUNIT_TEST(gather0Test);
+                    CPPUNIT_TEST(gather1Test);
                     CPPUNIT_TEST(bcastTest);
                 CPPUNIT_TEST_SUITE_END();
             public:
@@ -26,13 +27,17 @@ namespace ignis {
 
                 void setUp();
 
-                void gatherTest();
+                void gather0Test() { gatherTest(0); }
+
+                void gather1Test() { gatherTest(1); }
 
                 void bcastTest();
 
                 void tearDown();
 
             private:
+                void gatherTest(int root);
+
                 void insert(api::IVector<Tp> &v, storage::IPartition<Tp> &part);
 
                 void get(api::IVector<Tp> &v, storage::IPartition<Tp> &part);
