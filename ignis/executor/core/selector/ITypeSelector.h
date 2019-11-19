@@ -21,6 +21,8 @@ namespace ignis {
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
+                    virtual void sort(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
+
                     virtual void openPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
                                                          int64_t first, int64_t partitions) = 0;
 
@@ -49,6 +51,10 @@ namespace ignis {
                         sort_check<Tp>(impl, nullptr, ascending);
                     }
 
+                    virtual void sort(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) {
+                        sort_check<Tp>(impl, nullptr, ascending, numPartitions);
+                    }
+
                     virtual void openPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
                                                          int64_t first, int64_t partitions) {
                         impl.openPartitionObjectFile<Tp>(path, first, partitions);
@@ -72,6 +78,12 @@ namespace ignis {
                     template<typename C>
                     void sort_check(modules::impl::ISortImpl &impl, decltype(&C::operator<) *val, bool ascending) {
                         impl.sort<Tp>(ascending);
+                    }
+
+                    template<typename C>
+                    void sort_check(modules::impl::ISortImpl &impl, decltype(&C::operator<) *val, bool ascending,
+                                    int64_t numPartitions) {
+                        impl.sort<Tp>(ascending, numPartitions);
                     }
 
                     template<typename C>

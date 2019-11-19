@@ -5,6 +5,7 @@
 #include "executor/core/selector/ISelector.h"
 #include "executor/core/IExecutorData.h"
 #include "executor/core/ILog.h"
+#include "rpc/IExecutorException_types.h"
 
 namespace ignis {
     namespace executor {

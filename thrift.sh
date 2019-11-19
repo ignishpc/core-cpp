@@ -15,4 +15,3 @@ for file in `cd $1 && find ignis -name "*thrift"`; do
     thrift --gen cpp:no_skeleton,include_prefix -out $out/`dirname $file` `basename $file` &
 done
 wait
-rm -fr ignis/rpc/manager

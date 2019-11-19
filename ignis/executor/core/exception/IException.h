@@ -68,6 +68,21 @@ namespace ignis {
         throw ignis::executor::core::exception::IException(ex); \
     }
 
+#define IGNIS_RPC_TRY()  try {
+
+#define IGNIS_RPC_CATCH()  \
+    } catch (ignis::executor::core::exception::IException &ex) { \
+        ignis::rpc::IExecutorException eex; \
+        eex.__set_message(ex.what());\
+        eex.__set_cause(ex.toString());\
+        throw eex; \
+    } catch (std::exception &ex) { \
+        ignis::rpc::IExecutorException eex; \
+        eex.__set_message(ex.what());\
+        eex.__set_cause("");\
+        throw eex; \
+    }
+
 #define IGNIS_OMP_EXCEPTION_INIT() \
     std::shared_ptr<ignis::executor::core::exception::IException> ignis_parallel_exception;
 

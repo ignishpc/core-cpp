@@ -17,7 +17,6 @@ set(SOURCE_FILES
         driver/api/IgnisException.cpp
 
         #Executor api function
-        executor/api/function/IFlatMapFunction.h
         executor/api/function/IFunction.h
         executor/api/function/IFunction0.h
         executor/api/function/IFunction2.h
@@ -74,6 +73,8 @@ set(SOURCE_FILES
         #Modules
         executor/core/modules/ICommModule.cpp
         executor/core/modules/ICommModule.h
+        executor/core/modules/IExecutorServerModule.cpp
+        executor/core/modules/IExecutorServerModule.h
         executor/core/modules/IGeneralActionModule.cpp
         executor/core/modules/IGeneralActionModule.h
         executor/core/modules/IGeneralModule.cpp
@@ -138,7 +139,7 @@ set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -g")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(igniscore SHARED ${SOURCE_FILES})
-add_executable(ignis-cpp main.cpp ${SOURCE_FILES} )
+add_executable(ignis-cpp main.cpp ${SOURCE_FILES})
 
 TARGET_LINK_LIBRARIES(igniscore thrift dl backtrace thriftz z boost_log boost_thread boost_system boost_filesystem)
 TARGET_LINK_LIBRARIES(ignis-cpp igniscore)

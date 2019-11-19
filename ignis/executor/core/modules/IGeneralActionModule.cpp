@@ -11,11 +11,15 @@ IGeneralActionModule::IGeneralActionModule(std::shared_ptr<IExecutorData> &execu
 IGeneralActionModule::~IGeneralActionModule() {}
 
 void IGeneralActionModule::reduce(const rpc::ISource &function) {
-    executor_data->loadLibrary(function)->general_action->reduce(reduce_impl);
+    IGNIS_RPC_TRY()
+        executor_data->loadLibrary(function)->general_action->reduce(reduce_impl);
+    IGNIS_RPC_CATCH()
 }
 
 void IGeneralActionModule::treeReduce(const rpc::ISource &function, int64_t depth) {
-    executor_data->loadLibrary(function)->general_action->treeReduce(reduce_impl, depth);
+    IGNIS_RPC_TRY()
+        executor_data->loadLibrary(function)->general_action->treeReduce(reduce_impl, depth);
+    IGNIS_RPC_CATCH()
 }
 
 void IGeneralActionModule::collect() {}
@@ -28,10 +32,10 @@ void IGeneralActionModule::fold(const rpc::ISource &function) {}
 
 void IGeneralActionModule::take(int64_t num) {}
 
-void IGeneralActionModule::foreach(const rpc::ISource &function) {}
+void IGeneralActionModule::foreach_(const rpc::ISource &function) {}
 
 void IGeneralActionModule::foreachPartition(const rpc::ISource &function) {}
 
 void IGeneralActionModule::top(int64_t num) {}
 
-void IGeneralActionModule::top(int64_t num, const rpc::ISource &comp) {}
+void IGeneralActionModule::top2(int64_t num, const rpc::ISource &comp) {}

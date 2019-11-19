@@ -28,7 +28,7 @@ namespace ignis {
                 template<typename T>
                 class IJsonPrinter {
                 public:
-                          virtual void operator()(const T &b, std::ostream &out, bool pretty = true) {
+                    virtual void operator()(const T &b, std::ostream &out, bool pretty = true) {
                         rapidjson::OStreamWrapper wrapper(out);
                         if (pretty) {
                             rapidjson::PrettyWriter<rapidjson::OStreamWrapper> writer(wrapper);
@@ -41,7 +41,7 @@ namespace ignis {
                     }
 
                 private:
-                    IJsonPrinterType <T> printer;
+                    IJsonPrinterType<T> printer;
                 };
             }
         }
@@ -49,4 +49,5 @@ namespace ignis {
 }
 
 #include "IJsonPrinter.tcc"
+
 #endif
