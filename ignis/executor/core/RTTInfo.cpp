@@ -112,3 +112,11 @@ const std::type_info &RTTInfo::getClassMemberPointed() const {
     const abi::__pointer_to_member_type_info *class_info = (const abi::__pointer_to_member_type_info *) &this->info;
     return (std::type_info &) *class_info->__context;
 }
+
+bool ignis::executor::core::operator==(const RTTInfo &lhs, const RTTInfo &rhs) {
+    return lhs.info == rhs.info;
+}
+
+bool ignis::executor::core::operator!=(const RTTInfo &lhs, const RTTInfo &rhs) {
+    return !(rhs == lhs);
+}

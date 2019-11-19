@@ -2,11 +2,11 @@
 #ifndef IGNIS_IJSONPRINTER_H
 #define IGNIS_IJSONPRINTER_H
 
-#include "IEnumTypes.h"
-#include "../RTTInfo.h"
-#include "../protocol/IProtocol.h"
-#include "../exceptions/ILogicError.h"
 #include <ostream>
+#include "IEnumTypes.h"
+#include "executor/core/RTTInfo.h"
+#include "executor/core/protocol/IProtocol.h"
+#include "executor/core/exception/ILogicError.h"
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/ostreamwrapper.h>
 
@@ -20,7 +20,7 @@ namespace ignis {
                 template<typename T>
                 struct IJsonPrinterType {
                     virtual void operator()(const T &b, JsonStream &out) {
-                        throw exceptions::ILogicError(
+                        throw exception::ILogicError(
                                 "IJsonPrinterType not implemented for " + RTTInfo::from<T>().getStandardName());
                     }
                 };

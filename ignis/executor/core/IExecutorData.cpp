@@ -54,12 +54,12 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
     return lib;
 }
 
-std::shared_ptr<selector::IArgsType> IExecutorData::getType(const std::string &id) {
+std::shared_ptr<selector::ITypeSelector> IExecutorData::getType(const std::string &id) {
     auto result = types.find(id);
     if (result != types.end()) {
         return result->second.first;
     }
-    return std::shared_ptr<selector::IArgsType>();
+    return std::shared_ptr<selector::ITypeSelector>();
 }
 
 ignis::executor::api::IContext &IExecutorData::getContext() {

@@ -15,7 +15,9 @@ namespace ignis {
                 public:
                     IModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    std::shared_ptr<selector::IArgsType> typeFromPartition();
+                    std::shared_ptr<selector::ITypeSelector> typeFromPartition();
+
+                    std::shared_ptr<selector::ITypeSelector> typeFromHeader(std::string &header);
 
                     virtual ~IModule();
 

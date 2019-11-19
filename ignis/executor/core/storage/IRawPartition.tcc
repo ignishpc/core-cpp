@@ -2,6 +2,7 @@
 #include "IRawPartition.h"
 
 #define IRawPartitionClass ignis::executor::core::storage::IRawPartition
+#define IHeaderClass ignis::executor::core::storage::IHeader
 #define IRawReadIteratorClass ignis::executor::core::storage::IRawReadIterator
 #define IRawWriteIteratorClass ignis::executor::core::storage::IRawWriteIterator
 
@@ -101,23 +102,6 @@ template<typename Tp>
 IRawPartitionClass<Tp>::~IRawPartition() {}
 
 template<typename Tp>
-template<typename H>
-size_t IRawPartitionClass<Tp>::IHeader<H>::read(protocol::IProtocol &proto) {
-    io::IReader<std::vector<H>>().readType(proto);
-    auto sz = io::readSizeAux(proto);
-    io::IReader<H>().readType(proto);
-    return sz;
-}
-
-template<typename Tp>
-template<typename H>
-void IRawPartitionClass<Tp>::IHeader<H>::write(protocol::IProtocol &proto, size_t elems) {
-    io::IWriter<std::vector<H>>().writeType(proto);
-    io::writeSizeAux(proto, elems);
-    io::IWriter<H>().writeType(proto);
-}
-
-template<typename Tp>
 void IRawPartitionClass<Tp>::copyFrom(IPartition <Tp> &source) {
     if (source.type() == "disk" || source.type() == "rawMemory") {
         auto &raw_source = reinterpret_cast<IRawPartition <Tp> &>(source);
@@ -160,9 +144,23 @@ void IRawPartitionClass<Tp>::moveFrom(IPartition <Tp> &source) {
     source.clear();
 }
 
+template<typename H>
+size_t IHeaderClass<H>::read(protocol::IProtocol &proto) {
+    io::IReader<std::vector<H>>().readType(proto);
+    auto sz = io::readSizeAux(proto);
+    io::IReader<H>().readType(proto);
+    return sz;
+}
+
+template<typename H>
+void IHeaderClass<H>::write(protocol::IProtocol &proto, size_t elems) {
+    io::IWriter<std::vector<H>>().writeType(proto);
+    io::writeSizeAux(proto, elems);
+    io::IWriter<H>().writeType(proto);
+}
+
 template<>
-template<>
-struct IRawPartitionClass<uint8_t>::IHeader<uint8_t> {
+struct IHeaderClass<uint8_t> {
     size_t read(protocol::IProtocol &proto) {
         io::IReader<std::vector<uint8_t>>().readType(proto);
         return io::readSizeAux(proto);
@@ -174,9 +172,8 @@ struct IRawPartitionClass<uint8_t>::IHeader<uint8_t> {
     }
 };
 
-template<typename Tp>
 template<typename H1, typename H2>
-struct IRawPartitionClass<Tp>::IHeader<std::pair<H1, H2>> {
+struct IHeaderClass<std::pair<H1, H2>> {
     size_t read(protocol::IProtocol &proto) {
         io::IReader<std::vector<std::pair<H1, H2>>>().readType(proto);
         auto sz = io::readSizeAux(proto);
@@ -192,7 +189,6 @@ struct IRawPartitionClass<Tp>::IHeader<std::pair<H1, H2>> {
         io::IWriter<H2>().writeType(proto);
     }
 };
-
 
 template<typename Tp>
 IRawReadIteratorClass<Tp>::IRawReadIterator(std::shared_ptr<protocol::IProtocol> proto, size_t &elems) :

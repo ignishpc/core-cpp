@@ -114,7 +114,16 @@ namespace ignis {
                  * Type of class of pointed to member
                  */
                 const std::type_info &getClassMemberPointed() const;
+
+                friend bool operator==(const RTTInfo &lhs, const RTTInfo &rhs);
+
+                friend bool operator!=(const RTTInfo &lhs, const RTTInfo &rhs);
             };
+
+            bool operator==(const RTTInfo &lhs, const RTTInfo &rhs);
+
+            bool operator!=(const RTTInfo &lhs, const RTTInfo &rhs);
+
         }
     }
 }

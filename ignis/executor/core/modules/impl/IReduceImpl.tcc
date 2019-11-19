@@ -5,13 +5,13 @@
 
 template<typename Function>
 void IReduceImplClass::reduce() {
-    try {
+    IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_R_type>();
         auto partial_reduce = newPartition<typename Function::_R_type>();
         auto output = newPartitionGroup<typename Function::_R_type>();
         auto &context = executor_data->getContext();
         Function function;
-
+        IGNIS_LOG(info) << "Reduce: reducing " << input->partitions() << " partitions locally";
         function.before(context);
         IGNIS_OMP_EXCEPTION_INIT()
         #pragma omp parallel
@@ -32,22 +32,23 @@ void IReduceImplClass::reduce() {
         }
         IGNIS_OMP_EXCEPTION_END()
 
+        IGNIS_LOG(info) << "Reduce: reducing all elements in the executor";
         auto elem_part = newMemoryPartition<typename Function::_R_type>(1);
         if (partial_reduce->size() > 0) {
             elem_part->writeIterator()->write(reducePartition(function, *partial_reduce));
         }
         partial_reduce.reset();
+        IGNIS_LOG(info) << "Reduce: gathering elements for an executor";
         executor_data->mpi().gather(*elem_part, 0);
         if (executor_data->mpi().isRoot(0)) {
+            IGNIS_LOG(info) << "Reduce: gathering elements for an executor";
             auto result = newMemoryPartition<typename Function::_R_type>(1);
             result->writeIterator()->write(reducePartition(function, *elem_part));
             output->add(result);
         }
         executor_data->setPartitions(output);
         function.after(context);
-    } catch (std::exception &ex) {
-        throw exception::IException(ex);
-    }
+    IGNIS_CATCH()
 }
 
 template<typename Function>

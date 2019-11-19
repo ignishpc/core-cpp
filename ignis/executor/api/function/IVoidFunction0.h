@@ -1,6 +1,6 @@
 
-#ifndef IGNIS_IFUNCTIONIMPORT_H
-#define IGNIS_IFUNCTIONIMPORT_H
+#ifndef IGNIS_IVOIDFUNCTION0_H
+#define IGNIS_IVOIDFUNCTION0_H
 
 #include "executor/core/selector/ISelector.h"
 #include "executor/api/IContext.h"
@@ -10,9 +10,9 @@ namespace ignis {
         namespace api {
             namespace function {
                 template<typename T>
-                class IFunctionImport {
+                class IVoidFunction0 {
                 public:
-                    typedef IFunctionImport<T> _IFunctionImport_type;
+                    typedef IVoidFunction0<T> _IVoidFunction0_type;
                     typedef T _T_type;
 
                     virtual void before(IContext &context) {}

@@ -16,23 +16,23 @@ namespace ignis {
 
                 class IGeneralSelector {
                 public:
-                    virtual void map(modules::impl::IPipeImpl &impl)= 0;
+                    virtual void map(modules::impl::IPipeImpl &impl) = 0;
 
-                    virtual void filter(modules::impl::IPipeImpl &impl)= 0;
+                    virtual void filter(modules::impl::IPipeImpl &impl) = 0;
 
-                    virtual void flatmap(modules::impl::IPipeImpl &impl)= 0;
+                    virtual void flatmap(modules::impl::IPipeImpl &impl) = 0;
 
-                    virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning)= 0;
+                    virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning) = 0;
 
-                    virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning)= 0;
+                    virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) = 0;
 
-                    virtual void applyPartition(modules::impl::IPipeImpl &impl)= 0;
+                    virtual void applyPartition(modules::impl::IPipeImpl &impl) = 0;
 
-                    virtual void groupBy(modules::impl::IGroupByImpl &impl)= 0;
+                    virtual void groupBy(modules::impl::IGroupByImpl &impl) = 0;
 
-                    virtual void groupBy(modules::impl::IGroupByImpl &impl, int64_t numPartitions)= 0;
+                    virtual void groupBy(modules::impl::IGroupByImpl &impl, int64_t numPartitions) = 0;
 
-                    virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending)= 0;
+                    virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
                 };
@@ -45,14 +45,14 @@ namespace ignis {
 
                     virtual void filter(modules::impl::IPipeImpl &impl) { filter_check<Tp>(impl, nullptr); }
 
-                    virtual void flatmap(modules::impl::IPipeImpl &impl) { flatmap_check<Tp>(impl, nullptr); }
+                    virtual void flatmap(modules::impl::IPipeImpl &impl) { flatmap_check<Tp>(impl, nullptr, nullptr); }
 
                     virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
-                        mapPartitions_check<Tp>(impl, nullptr, preservesPartitioning);
+                        mapPartitions_check<Tp>(impl, nullptr, nullptr, nullptr, preservesPartitioning);
                     }
 
                     virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
-                        mapPartitionsWithIndex_check<Tp>(impl, nullptr, preservesPartitioning);
+                        mapPartitionsWithIndex_check<Tp>(impl, nullptr, nullptr, nullptr, preservesPartitioning);
                     }
 
                     virtual void applyPartition(modules::impl::IPipeImpl &impl) {
@@ -103,7 +103,8 @@ namespace ignis {
 
                     template<typename Function>
                     void flatmap_check(modules::impl::IPipeImpl &impl,
-                                       typename Function::_IFlatMapFunction_type::_R_type::iterator *val) {
+                                       typename Function::_IFunction_type::_R_type::iterator *val,
+                                       typename Function::_IFunction_type::_R_type::value_type *val2) {
                         impl.flatmap<Function>();
                     }
 
@@ -114,7 +115,9 @@ namespace ignis {
 
                     template<typename Function>
                     void mapPartitions_check(modules::impl::IPipeImpl &impl,
-                                             typename Function::_IFunction_type::_T_type::_IReadIterator_type *val,
+                                             typename Function::_IFunction_type::_R_type::iterator *val,
+                                             typename Function::_IFunction_type::_R_type::value_type *val2,
+                                             typename Function::_IFunction_type::_T_type::_IReadIterator_type *val3,
                                              bool preservesPartitioning) {
                         impl.mapPartitions<Function>(preservesPartitioning);
                     }
@@ -126,15 +129,17 @@ namespace ignis {
 
                     template<typename Function>
                     void mapPartitionsWithIndex_check(modules::impl::IPipeImpl &impl,
-                                                      typename Function::_IFunction2_type::_T2_type::_IReadIterator_type *val,
+                                                      typename Function::_IFunction2_type::_R_type::iterator *val,
+                                                      typename Function::_IFunction2_type::_R_type::value_type *val2,
+                                                      typename Function::_IFunction2_type::_T2_type::_IReadIterator_type *val3,
                                                       bool preservesPartitioning) {
-                        mapPartitionsWithIndex_check<Function>(impl, val, (typename Function::_T2_type *) nullptr);
+                        mapPartitionsWithIndex_check<Function>(impl, (typename Function::_T1_type *) nullptr,
+                                                               preservesPartitioning);
                     }
 
                     template<typename Function>
                     void mapPartitionsWithIndex_check(modules::impl::IPipeImpl &impl,
-                                                      typename Function::_IFunction2_type::_T2_type::_IReadIterator_type *val,
-                                                      int64_t *val2,
+                                                      int64_t *val,
                                                       bool preservesPartitioning) {
                         impl.mapPartitionsWithIndex<Function>(preservesPartitioning);
                     }

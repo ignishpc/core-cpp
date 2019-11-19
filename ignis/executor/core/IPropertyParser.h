@@ -19,6 +19,10 @@ namespace ignis {
 
                 int64_t sortSamples() { return getNumber("ignis.modules.sort.samples"); }
 
+                int64_t ioOverwrite() { return getBoolean("ignis.modules.io.overwrite"); }
+
+                int8_t ioCompression() { return getNumber("ignis.modules.io.compression"); }
+
                 int8_t msgCompression() { return getNumber("ignis.transport.compression"); }
 
                 int8_t partitionCompression() { return getNumber("ignis.partition.compression"); }

@@ -1,49 +1,87 @@
 
-#ifndef IGNIS_IARGSEXTRACTOR_H
-#define IGNIS_IARGSEXTRACTOR_H
+#ifndef IGNIS_ITYPESELECTOR_H
+#define IGNIS_ITYPESELECTOR_H
 
 #include <map>
 #include <memory>
 #include <functional>
+#include <type_traits>
 #include "executor/core/RTTInfo.h"
+#include "executor/core/modules/impl/IIOImpl.h"
 #include "executor/core/modules/impl/ISortImpl.h"
+#include "executor/core/exception/ICompatibilityException.h"
 
 namespace ignis {
     namespace executor {
         namespace core {
             namespace selector {
-                class IArgsType {
+                class ITypeSelector {
                 public:
                     virtual RTTInfo info() = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
+                    virtual void openPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                         int64_t first, int64_t partitions) = 0;
+
+                    virtual void saveAsPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                           int8_t compression, int64_t first) = 0;
+
+                    virtual void
+                    saveAsTextFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) = 0;
+
+                    virtual void
+                    saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) = 0;
+
                 };
 
                 template<typename Tp>
-                class IArgsTypeImpl : public IArgsType {
+                class ITypeSelectorImpl : public ITypeSelector {
                 public:
+
+                    virtual void checkAbstract() {
+                        static_assert(!(std::is_abstract<Tp>::value), "abstract classes are not allowed");
+                    }
+
                     virtual RTTInfo info() { return RTTInfo::from<Tp>(); };
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {
                         sort_check<Tp>(impl, nullptr, ascending);
                     }
 
+                    virtual void openPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                         int64_t first, int64_t partitions) {
+                        impl.openPartitionObjectFile<Tp>(path, first, partitions);
+                    }
+
+                    virtual void saveAsPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                           int8_t compression, int64_t first) {
+                        impl.saveAsPartitionObjectFile<Tp>(path, compression, first);
+                    }
+
+                    virtual void saveAsTextFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) {
+                        impl.saveAsTextFile<Tp>(path, first);
+                    }
+
+                    virtual void saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) {
+                        impl.saveAsJsonFile<Tp>(path, first);
+                    }
+
                 private:
 
                     template<typename C>
-                    void sort_check(modules::impl::ISortImpl &impl, std::less<C> *val, bool ascending) {
+                    void sort_check(modules::impl::ISortImpl &impl, decltype(&C::operator<) *val, bool ascending) {
                         impl.sort<Tp>(ascending);
                     }
 
                     template<typename C>
-                    void sort_check(...) { /**/ }
+                    void sort_check(...) { throw exception::ICompatibilyException("sort", RTTInfo::from<C>()); }
 
                 };
 
-                class IArgsExtractor {
+                class ITypeSelectorExtractor {
                 public:
-                    typedef std::map<std::string, std::shared_ptr<IArgsType>> Args;
+                    typedef std::map<std::string, std::shared_ptr<ITypeSelector>> Args;
 
                     template<typename Tp>
                     Args extract() {
@@ -56,8 +94,8 @@ namespace ignis {
 
                     template<typename Type>
                     void registerType() {
-                        auto type = std::make_shared<IArgsTypeImpl<Type>>();
-                        types[RTTInfo::from<Type>().getStandardName()] = std::static_pointer_cast<IArgsType>(type);
+                        auto type = std::make_shared<ITypeSelectorImpl<Type>>();
+                        types[RTTInfo::from<Type>().getStandardName()] = std::static_pointer_cast<ITypeSelector>(type);
                     }
 
                     template<typename IFlatMapFunction>
@@ -82,6 +120,11 @@ namespace ignis {
                         registerType<typename IFunction2::_T1_type>();
                         registerType<typename IFunction2::_T2_type>();
                         registerType<typename IFunction2::_R_type>();
+                    }
+
+                    template<typename IVoidFunction0>
+                    void add(typename IVoidFunction0::_IVoidFunction0_type *f) {
+                        registerType<typename IVoidFunction0::_T_type>();
                     }
 
                     template<typename IVoidFunction>

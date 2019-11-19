@@ -115,7 +115,7 @@ void IDiskPartitionClass<Tp>::writeHeader() {
     protocol::IObjectProtocol proto(zlib_buffer);
     bool native;
     proto.writeBool(native);
-    typename IDiskPartitionClass<Tp>::template IHeader<Tp>().write(proto, this->elems);
+    IHeader<Tp>().write(proto, this->elems);
     zlib_buffer->flush();
     header = buffer->getBufferAsString();
     this->header_size = header.size();

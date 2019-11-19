@@ -38,5 +38,5 @@ namespace ignis {
     }
 }
 
-#include "IJsonPrinter.tcc"
+#include "IPrinter.tcc"
 #endif

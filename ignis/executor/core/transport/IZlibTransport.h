@@ -2,6 +2,7 @@
 #ifndef IGNIS_IZLIBTRANSPORT_H
 #define IGNIS_IZLIBTRANSPORT_H
 
+#include "ITransport.h"
 #include <thrift/transport/TZlibTransport.h>
 
 namespace ignis {

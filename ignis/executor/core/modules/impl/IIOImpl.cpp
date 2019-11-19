@@ -2,6 +2,7 @@
 #include "IIOImpl.h"
 #include <boost/filesystem.hpp>
 #include <fstream>
+#include <algorithm>
 
 using namespace ignis::executor::core::modules::impl;
 
@@ -9,19 +10,50 @@ IIOImpl::IIOImpl(std::shared_ptr<IExecutorData> &executorData) : IBaseImpl(execu
 
 IIOImpl::~IIOImpl() {}
 
+std::string IIOImpl::partitionFileName(const std::string &path, int64_t index) {
+    auto str_index = std::to_string(index);
+    auto zeros = std::max(5 - (int) str_index.size(), 0);
+    auto name_path = path + ".part" + std::string(zeros, '0') + str_index;
+
+}
+
+std::ifstream IIOImpl::openFileRead(const std::string &path){
+    IGNIS_LOG(info) << "IO: opening file " << path;
+    if (!boost::filesystem::exists(path)) {
+        throw exception::IInvalidArgument(path + " was not found");
+    }
+
+    std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
+    if (!file.good()) {
+        throw exception::IInvalidArgument(path + " cannot be opened");
+    }
+    IGNIS_LOG(info) << "IO: file opening successful";
+    return std::move(file);
+}
+
+std::ofstream IIOImpl::openFileWrite(const std::string &path){
+    IGNIS_LOG(info) << "IO: opening file " << path;
+    if (boost::filesystem::exists(path)) {
+        if (executor_data->getProperties().ioOverwrite()) {
+            IGNIS_LOG(warning) << "IO: " << path << " already exists";
+            if (!boost::filesystem::remove(path)) {
+                throw exception::ILogicError(path + " can not be removed");
+            }
+        } else {
+            throw exception::IInvalidArgument(path + " already exists");
+        }
+    }
+    std::ofstream file(path, std::ifstream::out | std::ifstream::binary | std::fstream::trunc);
+    if (!file.good()) {
+        throw exception::IInvalidArgument(path + " cannot be opened");
+    }
+    IGNIS_LOG(info) << "IO: file opening successful";
+    return std::move(file);
+}
+
 void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
-    try {
-        IGNIS_LOG(info) << "IO: opening file";
-        if (!boost::filesystem::exists(path)) {
-            throw exception::IInvalidArgument(path + " was not found");
-        }
-
-        std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
-        if (!file.good()) {
-            throw exception::IInvalidArgument(path + " cannot be opened");
-        }
-        IGNIS_LOG(info) << "IO: file opening successful";
-
+    IGNIS_TRY()
+        auto file = openFileRead(path);
         auto size = boost::filesystem::file_size(path);
         auto executorId = executor_data->getContext().executorId();
         auto executors = executor_data->getContext().executors();;
@@ -69,7 +101,9 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
                         elements << " lines and " << ex_chunk_end - ex_chunk_init << " Bytes read ";
 
         executor_data->setPartitions(partitionGroup);
-    } catch (std::exception &ex) {
-        throw exception::IException(ex);
-    }
+    IGNIS_CATCH()
+}
+
+void IIOImpl::openPartitionObjectFileUnknown(const std::string &path, int64_t first, int64_t partitions) {
+    //TODO
 }

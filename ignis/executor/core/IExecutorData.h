@@ -6,6 +6,7 @@
 #include "ILibraryLoader.h"
 #include "IPropertyParser.h"
 #include "executor/api/IContext.h"
+#include "executor/core/exception/IInvalidArgument.h"
 #include "rpc/ISource_types.h"
 #include "ILog.h"
 #include "IMpi.h"
@@ -17,7 +18,7 @@ namespace ignis {
             namespace selector {
                 class ISelectorGroup;
 
-                class IArgsType;
+                class ITypeSelector;
             }
 
             class IExecutorData {
@@ -25,8 +26,14 @@ namespace ignis {
                 IExecutorData();
 
                 template<typename Tp>
-                std::shared_ptr<storage::IPartitionGroup<Tp>> getPartitions() {
-                    return std::static_pointer_cast<storage::IPartitionGroup<Tp>>(partitions);
+                std::shared_ptr<storage::IPartitionGroup<Tp>> getPartitions(bool no_check = false) {
+                    auto group = std::static_pointer_cast<storage::IPartitionGroup<Tp>>(partitions);
+                    if (!no_check && group->elemType() != RTTInfo::from<Tp>()) {
+                        throw exception::IInvalidArgument(
+                                "Error: " + group->elemType().getStandardName() + " cannot be cast to " +
+                                RTTInfo::from<Tp>().getStandardName());
+                    }
+                    return group;
                 }
 
                 template<typename Tp>
@@ -62,7 +69,7 @@ namespace ignis {
 
                 std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
 
-                std::shared_ptr<selector::IArgsType> getType(const std::string &id);
+                std::shared_ptr<selector::ITypeSelector> getType(const std::string &id);
 
                 api::IContext &getContext();
 
@@ -78,7 +85,7 @@ namespace ignis {
                 std::shared_ptr<void> partitions;
                 std::map<std::string, std::shared_ptr<void>> variables;
                 std::map<std::string, std::pair<
-                        std::shared_ptr<selector::IArgsType>,
+                        std::shared_ptr<selector::ITypeSelector>,
                         std::shared_ptr<selector::ISelectorGroup>>
                 > types;
                 ILibraryLoader library_loader;

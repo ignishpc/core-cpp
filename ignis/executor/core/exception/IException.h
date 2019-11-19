@@ -59,5 +59,31 @@ namespace ignis {
     }
 }
 
+#define IGNIS_TRY()  try {
+
+#define IGNIS_CATCH() \
+    } catch (ignis::executor::core::exception::IException &ex) { \
+        throw ex; \
+    } catch (std::exception &ex) { \
+        throw ignis::executor::core::exception::IException(ex); \
+    }
+
+#define IGNIS_OMP_EXCEPTION_INIT() \
+    std::shared_ptr<ignis::executor::core::exception::IException> ignis_parallel_exception;
+
+#define IGNIS_OMP_TRY() try {
+
+#define IGNIS_OMP_CATCH() \
+    } catch (ignis::executor::core::exception::IException &ex) { \
+        ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(ex); \
+    } catch (std::exception &ex) { \
+        ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(ex); \
+    }
+
+#define IGNIS_OMP_EXCEPTION_END() \
+    if(ignis_parallel_exception) { \
+        throw ignis::executor::core::exception::IException(*ignis_parallel_exception);\
+    }
+
 #endif
 

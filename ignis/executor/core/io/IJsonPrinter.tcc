@@ -102,7 +102,7 @@ struct ignis::executor::core::io::IJsonPrinterType<std::vector<_Tp, _Alloc>> {
 inline void operator()(const std::vector<_Tp, _Alloc> &v, JsonStream &out) {
     out.StartArray();
     for (const auto &elem:v) {
-        IJsonPrinterType<_Tp>().printJson(elem, out);
+        IJsonPrinterType<_Tp>()(elem, out);
     }
     out.EndArray();
 }
@@ -113,7 +113,7 @@ struct ignis::executor::core::io::IJsonPrinterType<std::list<_Tp, _Alloc>> {
 inline void operator()(const std::list<_Tp, _Alloc> &l, JsonStream &out) {
     out.StartArray();
     for (const auto &elem:l) {
-        IJsonPrinterType<_Tp>().printJson(elem, out);
+        IJsonPrinterType<_Tp>()(elem, out);
     }
     out.EndArray();
 }
@@ -124,7 +124,7 @@ struct ignis::executor::core::io::IJsonPrinterType<std::forward_list<_Tp, _Alloc
 inline void operator()(const std::forward_list<_Tp, _Alloc> &fl, JsonStream &out) {
     out.StartArray();
     for (const auto &elem:fl) {
-        IJsonPrinterType<_Tp>().printJson(elem, out);
+        IJsonPrinterType<_Tp>()(elem, out);
     }
     out.EndArray();
 }
@@ -135,7 +135,7 @@ struct ignis::executor::core::io::IJsonPrinterType<std::set<_Key, _Compare>> {
 inline void operator()(const std::set<_Key, _Compare> &s, JsonStream &out) {
     out.StartArray();
     for (const auto &elem:s) {
-        IJsonPrinterType<_Key>().printJson(elem, out);
+        IJsonPrinterType<_Key>()(elem, out);
     }
     out.EndArray();
 }
@@ -146,7 +146,7 @@ struct ignis::executor::core::io::IJsonPrinterType<std::unordered_set<_Value, _H
 inline void operator()(const std::unordered_set<_Value, _Hash, _Pred, _Alloc> &us, JsonStream &out) {
     out.StartArray();
     for (const auto &elem:us) {
-        IJsonPrinterType<_Value>().printJson(elem, out);
+        IJsonPrinterType<_Value>()(elem, out);
     }
     out.EndArray();
 }
@@ -159,14 +159,14 @@ inline void operator()(const std::map<_Key, _Tp, _Compare, _Alloc> &m, JsonStrea
     if (std::is_convertible<_Key, std::string>()) {
         for (const auto &elem:m) {
             out.Key(((std::string &) elem.first).data());
-            IJsonPrinterType<_Tp>().printJson(elem.second, out);
+            IJsonPrinterType<_Tp>()(elem.second, out);
         }
     } else {
         for (const auto &elem:m) {
             out.Key("key");
-            IJsonPrinterType<_Key>().printJson(elem.first, out);
+            IJsonPrinterType<_Key>()(elem.first, out);
             out.Key("value");
-            IJsonPrinterType<_Tp>().printJson(elem.second, out);
+            IJsonPrinterType<_Tp>()(elem.second, out);
         }
     }
     out.EndObject();
@@ -181,14 +181,14 @@ operator()(const std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> &um, JsonSt
     if (std::is_convertible<_Key, std::string>()) {
         for (const auto &elem:um) {
             out.Key(((std::string &) elem.first).data());
-            IJsonPrinterType<_Tp>().printJson(elem.second, out);
+            IJsonPrinterType<_Tp>()(elem.second, out);
         }
     } else {
         for (const auto &elem:um) {
             out.Key("key");
-            IJsonPrinterType<_Key>().printJson(elem.first, out);
+            IJsonPrinterType<_Key>()(elem.first, out);
             out.Key("value");
-            IJsonPrinterType<_Tp>().printJson(elem.second, out);
+            IJsonPrinterType<_Tp>()(elem.second, out);
         }
     }
     out.EndObject();
@@ -202,13 +202,13 @@ inline void operator()(const std::pair<_T1, _T2> &p, JsonStream &out) {
     out.StartObject();
     if (std::is_convertible<_T1, std::string>()) {
         out.Key(((std::string &) p.first).data());
-        IJsonPrinterType<_T2>().printJson(p.second, out);
+        IJsonPrinterType<_T2>()(p.second, out);
 
     } else {
         out.Key("first");
-        IJsonPrinterType<_T1>().printJson(p.first, out);
+        IJsonPrinterType<_T1>()(p.first, out);
         out.Key("second");
-        IJsonPrinterType<_T2>().printJson(p.second, out);
+        IJsonPrinterType<_T2>()(p.second, out);
     }
     out.EndObject();
 }
@@ -217,13 +217,13 @@ inline void operator()(const std::pair<_T1, _T2> &p, JsonStream &out) {
 template<typename _Tp>
 struct ignis::executor::core::io::IJsonPrinterType<_Tp *> {
     inline void operator()(const _Tp *&v, JsonStream &out) {
-        IJsonPrinterType<_Tp *>().printJson(*v, out);
+        IJsonPrinterType<_Tp *>()(*v, out);
     }
 };
 
 template<typename _Tp>
 struct ignis::executor::core::io::IJsonPrinterType<std::shared_ptr<_Tp>> {
 inline void operator()(const std::shared_ptr<_Tp> &v, JsonStream &out) {
-    IJsonPrinterType<_Tp>().printJson(*v, out);
+    IJsonPrinterType<_Tp>()(*v, out);
 }
 };

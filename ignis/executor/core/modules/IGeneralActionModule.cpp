@@ -1,5 +1,6 @@
 
 #include "IGeneralActionModule.h"
+#include "executor/core/selector/ISelector.h"
 
 using namespace ignis::executor::core::modules;
 

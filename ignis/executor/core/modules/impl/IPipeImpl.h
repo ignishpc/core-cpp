@@ -29,7 +29,7 @@ namespace ignis {
                         void mapPartitionsWithIndex(bool preservesPartitioning);
 
                         template <typename Function>
-                        void applyPartition();
+                        void applyPartition();//TODO
 
                         virtual ~IPipeImpl();
                     };

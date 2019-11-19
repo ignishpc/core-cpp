@@ -54,13 +54,6 @@ namespace ignis {
                     size_t elems;
                     int8_t compression;
 
-                    template<typename H>
-                    struct IHeader {
-                        size_t read(protocol::IProtocol &proto);
-
-                        void write(protocol::IProtocol &proto, size_t elems);
-                    };
-
                     virtual std::shared_ptr<transport::ITransport> readTransport() = 0;
 
                     virtual std::shared_ptr<transport::ITransport> &transport() = 0;
@@ -68,6 +61,13 @@ namespace ignis {
                     void readHeader(std::shared_ptr<transport::ITransport> &trans);
 
                     virtual void writeHeader() = 0;
+                };
+
+                template<typename H>
+                struct IHeader {
+                    size_t read(protocol::IProtocol &proto);
+
+                    void write(protocol::IProtocol &proto, size_t elems);
                 };
 
                 template<typename Tp>

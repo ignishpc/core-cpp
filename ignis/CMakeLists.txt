@@ -21,7 +21,7 @@ set(SOURCE_FILES
         executor/api/function/IFunction.h
         executor/api/function/IFunction0.h
         executor/api/function/IFunction2.h
-        executor/api/function/IFunctionImport.h
+        executor/api/function/IVoidFunction0.h
         executor/api/function/IVoidFunction.h
         executor/api/function/IVoidFunction2.h
 
@@ -88,10 +88,10 @@ set(SOURCE_FILES
         executor/core/protocol/IProtocol.h
 
         #Selector
-        executor/core/selector/IArgsExtractor.h
         executor/core/selector/IGeneralActionSelector.h
         executor/core/selector/IGeneralSelector.h
         executor/core/selector/ISelector.h
+        executor/core/selector/ITypeSelector.h
 
         #Storage
         executor/core/storage/IDiskPartition.h

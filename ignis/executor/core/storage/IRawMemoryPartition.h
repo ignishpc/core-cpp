@@ -34,11 +34,11 @@ namespace ignis {
                 private:
                     friend class core::IMpi;
 
-                    virtual uint8_t *begin(bool header);
+                    uint8_t *begin(bool header);
 
-                    virtual uint8_t *end();
+                    uint8_t *end();
 
-                    virtual void resize(size_t elems, size_t bytes);
+                    void resize(size_t elems, size_t bytes);
 
                     IRawMemoryPartition(std::shared_ptr<transport::IMemoryBuffer> &&bb, int8_t compression);
 

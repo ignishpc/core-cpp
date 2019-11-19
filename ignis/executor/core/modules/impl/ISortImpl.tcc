@@ -42,7 +42,7 @@ void ISortImplClass::sortBy(bool ascending, int64_t partitions) {
 
 template<typename Tp, typename Cmp>
 void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
-    try {
+    IGNIS_TRY()
         auto input = executor_data->getPartitions<Tp>();
         auto executors = executor_data->mpi().executors();
         /*Copy the data if they are reused*/
@@ -57,6 +57,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         }
 
         /*Sort each partition*/
+        IGNIS_LOG(info) << "Sort: sorting " << input->partitions() << " partitions locally";
         parallelLocalSort(*input, comparator);
 
         /*Generates pivots to separate the elements in order*/
@@ -64,8 +65,10 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         if (partitions > 0) {
             samples *= partitions / input->partitions() + 1;
         }
+        IGNIS_LOG(info) << "Sort: selecting pivots";
         auto pivots = selectPivots(*input, samples);
 
+        IGNIS_LOG(info) << "Sort: collecting pivots";
         executor_data->mpi().gather(*pivots, 0);
 
         if (executor_data->mpi().isRoot(0)) {
@@ -78,15 +81,18 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
                 samples = pivots->size() / executor_data->getProperties().sortSamples();
             }
 
+            IGNIS_LOG(info) << "Sort: selecting pivots ranges";
             pivots = selectPivots(*group, samples - 1);
         }
 
+        IGNIS_LOG(info) << "Sort: broadcasting pivots ranges";
         executor_data->mpi().bcast(*pivots, 0);
 
         decltype(input) ranges = generateRanges(*input, *pivots);
         decltype(input) output = newPartitionGroup<Tp>();
         auto executor_ranges = (int64_t) std::ceil(ranges->partitions() / (double) executors);
         int target = -1;
+        IGNIS_LOG(info) << "Sort: exchanging ranges";
         for (int p = 0; p < ranges->partitions(); p++) {
             if (p % executor_ranges == 0) { target++; }
             executor_data->mpi().gather(*(*ranges)[p], target);
@@ -98,11 +104,10 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         }
 
         /*Sort final partitions*/
+        IGNIS_LOG(info) << "Sort: sorting again" << output->partitions() << " partitions locally";
         parallelLocalSort(*output, comparator);
         executor_data->setPartitions(output);
-    } catch (std::exception &ex) {
-        throw exception::IException(ex);
-    }
+    IGNIS_CATCH()
 }
 
 template<typename Tp, typename Cmp>

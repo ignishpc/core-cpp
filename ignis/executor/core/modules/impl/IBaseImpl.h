@@ -4,6 +4,8 @@
 
 #include <memory>
 #include "executor/core/IMpi.h"
+#include "executor/core/exception/IInvalidArgument.h"
+#include "executor/core/exception/ILogicError.h"
 #include "executor/core/storage/IMemoryPartition.h"
 #include "executor/core/storage/IRawMemoryPartition.h"
 #include "executor/core/storage/IDiskPartition.h"

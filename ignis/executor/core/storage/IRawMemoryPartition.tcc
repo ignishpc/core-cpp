@@ -98,7 +98,7 @@ void IRawMemoryPartitionClass<Tp>::writeHeader() {
     auto ptr = buffer->getWritePtr(0);
     bool native;
     proto.writeBool(native);
-    typename IRawMemoryPartitionClass<Tp>::template IHeader<Tp>().write(proto, this->elems);
+    IHeader<Tp>().write(proto, this->elems);
     this->zlib->flush();
     /*Align header to the left*/
     this->header_size = (int) buffer->writeEnd();

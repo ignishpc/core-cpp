@@ -3,7 +3,7 @@
 #define IGNIS_ISELECTOR_H
 
 
-#include "IArgsExtractor.h"
+#include "ITypeSelector.h"
 #include "IGeneralSelector.h"
 #include "IGeneralActionSelector.h"
 
@@ -23,7 +23,9 @@ namespace ignis {
 
                 class ISelectorGroup {
                 public:
-                    typename IArgsExtractor::Args args;
+                    virtual RTTInfo info() = 0;
+
+                    typename ITypeSelectorExtractor::Args args;
                     std::shared_ptr<IGeneralSelector> general;
                     std::shared_ptr<IGeneralActionSelector> general_action;
                 };
@@ -31,8 +33,10 @@ namespace ignis {
                 template<typename Tp>
                 class ISelectorGroupImpl : public ISelectorGroup {
                 public:
+                    virtual RTTInfo info() { return RTTInfo::from<Tp>(); }
+
                     ISelectorGroupImpl() {
-                        args = IArgsExtractor().extract<Tp>();
+                        args = ITypeSelectorExtractor().extract<Tp>();
                         general = std::make_shared<IGeneralSelectorImpl<Tp>>();
                         general_action = std::make_shared<IGeneralActionSelectorImpl<Tp>>();
                     }
