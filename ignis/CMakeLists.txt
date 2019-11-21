@@ -145,6 +145,7 @@ TARGET_LINK_LIBRARIES(igniscore thrift dl backtrace thriftz z boost_log boost_th
 TARGET_LINK_LIBRARIES(ignis-cpp igniscore)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
+install(TARGETS ignis-cpp RUNTIME DESTINATION bin)
 install(DIRECTORY ../ignis
         DESTINATION include/
         FILES_MATCHING PATTERN "*.h" PATTERN "*.tcc")
