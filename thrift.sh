@@ -6,8 +6,8 @@ if [ $# -ne 1 ] || [ ! -d "$1"/ignis/rpc/ ] || [ ! -f $(find "$1"/ignis/rpc/ -na
     exit
 fi
 
-rm -fr ignis/rpc
-out=`realpath $(dirname "$0")`
+rm -fr src/ignis/rpc
+out=`realpath $(dirname "$0")`/src
 rpc=`realpath "$1"`
 for file in `cd $1 && find ignis -name "*thrift"`; do
     cd `dirname $rpc/$file` &&
