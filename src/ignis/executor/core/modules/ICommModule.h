@@ -3,30 +3,40 @@
 #define IGNIS_ICOMMMODULE_H
 
 #include "IModule.h"
+#include "ignis/rpc/executor/ICommModule.h"
 
 namespace ignis {
     namespace executor {
         namespace core {
             namespace modules {
-                class ICommModule : public modules::IModule {
+                class ICommModule : public modules::IModule, public rpc::executor::ICommModuleIf {
                 public:
 
                     ICommModule(std::shared_ptr<IExecutorData> &executor_data);
-/*
-                    virtual void startServer(std::string &_return);
 
-                    virtual void stopServer();
+                    void createGroup(std::string &_return) override;
 
-                    virtual void recvPartitions() {}//TODO
+                    void joinGroupMembers(const std::string &group, const int64_t size) override;
 
-                    virtual void createGroup();
+                    void joinToGroup(const std::string &group, const std::string &id) override;
 
-                    virtual void joinGroup(std::string& server);*/
+                    bool hasGroup(const std::string &id) override;
+
+                    void destroyGroup(const std::string &id) override;
+
+                    void destroyGroups() override;
+
+                    void getPartitions(std::vector<std::string> &_return) override;
+
+                    void setPartitions(const std::vector<std::string> &partitions) override;
+
+                    void driverGather(const std::string &id) override;
+
+                    void driverGather0(const std::string &id) override;
+
+                    void driverScatter(const std::string &id) override;
 
                     virtual ~ICommModule();
-
-                private:
-
 
                 };
             }

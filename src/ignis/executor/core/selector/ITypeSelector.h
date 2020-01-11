@@ -23,17 +23,23 @@ namespace ignis {
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
 
-                    virtual void openPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
-                                                         int64_t first, int64_t partitions) = 0;
+                    virtual int64_t partitionApproxSize(modules::impl::IIOImpl &impl) = 0;
 
-                    virtual void saveAsPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
-                                                           int8_t compression, int64_t first) = 0;
+                    virtual void partitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                     int64_t first, int64_t partitions) = 0;
+
+                    virtual void partitionJsonFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                   int64_t first, int64_t partitions) = 0;
+
+                    virtual void saveAsObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                  int8_t compression, int64_t first) = 0;
 
                     virtual void
                     saveAsTextFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) = 0;
 
                     virtual void
-                    saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) = 0;
+                    saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first,
+                                   bool pretty) = 0;
 
                 };
 
@@ -55,22 +61,32 @@ namespace ignis {
                         sort_check<Tp>(impl, nullptr, ascending, numPartitions);
                     }
 
-                    virtual void openPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
-                                                         int64_t first, int64_t partitions) {
-                        impl.openPartitionObjectFile<Tp>(path, first, partitions);
+                    virtual int64_t partitionApproxSize(modules::impl::IIOImpl &impl) {
+                        return impl.partitionApproxSize<Tp>();
                     }
 
-                    virtual void saveAsPartitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
-                                                           int8_t compression, int64_t first) {
-                        impl.saveAsPartitionObjectFile<Tp>(path, compression, first);
+                    virtual void partitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                     int64_t first, int64_t partitions) {
+                        impl.partitionObjectFile<Tp>(path, first, partitions);
+                    }
+
+                    virtual void partitionJsonFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                   int64_t first, int64_t partitions) {
+                        impl.partitionJsonFile<Tp>(path, first, partitions);
+                    }
+
+                    virtual void saveAsObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                  int8_t compression, int64_t first) {
+                        impl.saveAsObjectFile<Tp>(path, compression, first);
                     }
 
                     virtual void saveAsTextFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) {
                         impl.saveAsTextFile<Tp>(path, first);
                     }
 
-                    virtual void saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) {
-                        impl.saveAsJsonFile<Tp>(path, first);
+                    virtual void
+                    saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first, bool pretty) {
+                        impl.saveAsJsonFile<Tp>(path, first, pretty);
                     }
 
                 private:

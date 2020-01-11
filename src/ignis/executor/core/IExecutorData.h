@@ -3,8 +3,10 @@
 #define IGNIS_EXECUTORDATA_H
 
 #include "storage/IPartition.h"
+#include "storage/IVoidPartition.h"
 #include "ILibraryLoader.h"
 #include "IPropertyParser.h"
+#include "IPartitionTools.h"
 #include "ignis/executor/api/IContext.h"
 #include "ignis/executor/core/exception/IInvalidArgument.h"
 #include "ignis/rpc/ISource_types.h"
@@ -28,10 +30,20 @@ namespace ignis {
                 template<typename Tp>
                 std::shared_ptr<storage::IPartitionGroup<Tp>> getPartitions(bool no_check = false) {
                     auto group = std::static_pointer_cast<storage::IPartitionGroup<Tp>>(partitions);
-                    if (!no_check && group->elemType() != RTTInfo::from<Tp>()) {
-                        throw exception::IInvalidArgument(
-                                "Error: " + group->elemType().getStandardName() + " cannot be cast to " +
-                                RTTInfo::from<Tp>().getStandardName());
+                    if (!no_check) {
+                        if (group->partitions() > 0 && (*group)[0]->type() == storage::IVoidPartition::TYPE) {
+                            IGNIS_LOG(info) << "Creating real partitions from void partitions";
+                            auto new_group = partition_tools.newPartitionGroup<Tp>(group->partitions());
+                            for (int64_t i = 0; i < new_group->partitions(); i++) {
+                                auto &void_partition = reinterpret_cast<storage::IVoidPartition &>(*(*group)[i]);
+                                void_partition.write(*(*new_group)[i]);
+                            }
+                            std::swap(*new_group, *group);
+                        }else if (group->elemType() != RTTInfo::from<Tp>()) {
+                            throw exception::IInvalidArgument(
+                                    "Error: " + group->elemType().getStandardName() + " cannot be cast to " +
+                                    RTTInfo::from<Tp>().getStandardName());
+                        }
                     }
                     return group;
                 }
@@ -65,8 +77,6 @@ namespace ignis {
 
                 int64_t clearVariables();
 
-                int64_t nextPartititonId();
-
                 std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
 
                 std::shared_ptr<selector::ITypeSelector> getType(const std::string &id);
@@ -74,6 +84,8 @@ namespace ignis {
                 api::IContext &getContext();
 
                 IPropertyParser &getProperties();
+
+                IPartitionTools &getPartitionTools();
 
                 IMpi mpi();
 
@@ -90,9 +102,9 @@ namespace ignis {
                 > types;
                 ILibraryLoader library_loader;
                 IPropertyParser properties;
+                IPartitionTools partition_tools;
                 IMpi _mpi;
                 api::IContext context;
-                int partition_id_gen;
             };
         }
     }

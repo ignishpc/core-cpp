@@ -34,17 +34,17 @@ namespace ignis {
                 template<typename T>
                 struct IReaderType {
 
-                    virtual bool readType(protocol::IProtocol &protocol) {
+                    inline bool readType(protocol::IProtocol &protocol) {
                         throw exception::ILogicError(
                                 "IReaderType not implemented for " + RTTInfo(typeid(T)).getStandardName());
                     }
 
-                    virtual void operator()(protocol::IProtocol &protocol, T& obj){
+                    inline void operator()(protocol::IProtocol &protocol, T& obj){
                         throw exception::ILogicError(
                                 "IReaderType not implemented for " + RTTInfo(typeid(T)).getStandardName());
                     }
 
-                    virtual T operator()(protocol::IProtocol &protocol) {
+                    inline T operator()(protocol::IProtocol &protocol) {
                         throw exception::ILogicError(
                                 "IReaderType not implemented for " + RTTInfo(typeid(T)).getStandardName());
                     }

@@ -15,18 +15,29 @@ namespace ignis {
 
                     IIOModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void textFile(const std::string &path, const int64_t partitions);
+                    int64_t partitionCount() override;
 
-                    void openPartitionObjectFile(const std::string &path, int64_t first, int64_t partitions) override;
+                    int64_t partitionApproxSize() override;
 
-                    void openPartitionObjectFileFunction(const rpc::ISource &function, const std::string &path,
-                                                         int64_t first, int64_t partitions) override;
+                    void textFile(const std::string& path) override;
 
-                    void saveAsPartitionObjectFile(const std::string &path, int8_t compression, int64_t first) override;
+                    void textFile2(const std::string& path, const int64_t minPartitions) override;
 
-                    void saveAsTextFile(const std::string &path, int64_t first) override;
+                    void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) override;
 
-                    void saveAsJsonFile(const std::string &path, int64_t first) override;
+                    void partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  rpc::ISource& src) override;
+
+                    void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions) override;
+
+                    void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions) override;
+
+                    void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  rpc::ISource& src) override;
+
+                    void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first) override;
+
+                    void saveAsTextFile(const std::string& path, const int64_t first) override;
+
+                    void saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty) override;
 
                     virtual ~IIOModule();
 

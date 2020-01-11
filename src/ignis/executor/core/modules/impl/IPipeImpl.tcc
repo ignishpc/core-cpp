@@ -7,7 +7,7 @@ template<typename Function>
 void IPipeImplCLass::map() {
     IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto output = newPartitionGroup<typename Function::_R_type>(input->partitions());
+        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>(input->partitions());
         auto &context = executor_data->getContext();
         Function function;
 
@@ -21,9 +21,9 @@ void IPipeImplCLass::map() {
                 for (int64_t p = 0; p < input->partitions(); p++) {
                     auto writer = (*output)[p]->writeIterator();
                     auto sz = (*input)[p]->size();
-                    if (isMemory(*(*input)[p]) && isMemory(*(*output)[p])) {
-                        auto &men_writer = toMemory(*writer);
-                        auto &men_part = toMemory(*(*input)[p]);
+                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) && executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                         for (size_t i = 0; i < sz; i++) {
                             men_writer.write(function.call(men_part[i], context));
                         }
@@ -46,8 +46,8 @@ template<typename Function>
 void IPipeImplCLass::filter() {
     IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto output = newPartitionGroup<typename Function::_T_type>(input->partitions());
-        bool cache = input->cache() && isMemory(*input);
+        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_T_type>(input->partitions());
+        bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
         auto &context = executor_data->getContext();
         Function function;
 
@@ -61,9 +61,9 @@ void IPipeImplCLass::filter() {
                 for (int64_t p = 0; p < input->partitions(); p++) {
                     auto writer = (*output)[p]->writeIterator();
                     auto sz = (*input)[p]->size();
-                    if (isMemory(*input) && isMemory(*output)) {
-                        auto &men_writer = toMemory(*writer);
-                        auto &men_part = toMemory(*(*input)[p]);
+                    if (executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output)) {
+                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                         if (cache) {
                             for (size_t i = 0; i < sz; i++) {
                                 if (function.call(men_part[i], context)) {
@@ -101,7 +101,7 @@ template<typename Function>
 void IPipeImplCLass::flatmap() {
     IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto output = newPartitionGroup<typename Function::_R_type::value_type>(input->partitions());
+        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(input->partitions());
         auto &context = executor_data->getContext();
         Function function;
 
@@ -115,9 +115,9 @@ void IPipeImplCLass::flatmap() {
                 for (int64_t p = 0; p < input->partitions(); p++) {
                     auto writer = (*output)[p]->writeIterator();
                     auto sz = (*input)[p]->size();
-                    if (isMemory(*(*input)[p]) && isMemory(*(*output)[p])) {
-                        auto &men_writer = toMemory(*writer);
-                        auto &men_part = toMemory(*(*input)[p]);
+                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) && executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                         for (size_t i = 0; i < sz; i++) {
                             auto result = function.call(men_part[i], context);
                             for (auto it = result.begin(); it != result.end(); it++) {
@@ -146,7 +146,7 @@ template<typename Function>
 void IPipeImplCLass::mapPartitions(bool preservesPartitioning) {
     IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
-        auto output = newPartitionGroup<typename Function::_R_type::value_type>(input->partitions());
+        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(input->partitions());
         auto &context = executor_data->getContext();
         Function function;
 
@@ -177,7 +177,7 @@ template<typename Function>
 void IPipeImplCLass::mapPartitionsWithIndex(bool preservesPartitioning) {
     IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_T2_type::value_type>();
-        auto output = newPartitionGroup<typename Function::_R_type::value_type>(input->partitions());
+        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(input->partitions());
         auto &context = executor_data->getContext();
         Function function;
 

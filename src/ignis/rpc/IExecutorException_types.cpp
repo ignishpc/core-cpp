@@ -22,8 +22,8 @@ void IExecutorException::__set_message(const std::string& val) {
   this->message = val;
 }
 
-void IExecutorException::__set_cause(const std::string& val) {
-  this->cause = val;
+void IExecutorException::__set__cause(const std::string& val) {
+  this->_cause = val;
 }
 std::ostream& operator<<(std::ostream& out, const IExecutorException& obj)
 {
@@ -45,7 +45,7 @@ uint32_t IExecutorException::read(::apache::thrift::protocol::TProtocol* iprot) 
   using ::apache::thrift::protocol::TProtocolException;
 
   bool isset_message = false;
-  bool isset_cause = false;
+  bool isset__cause = false;
 
   while (true)
   {
@@ -65,8 +65,8 @@ uint32_t IExecutorException::read(::apache::thrift::protocol::TProtocol* iprot) 
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->cause);
-          isset_cause = true;
+          xfer += iprot->readString(this->_cause);
+          isset__cause = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -82,7 +82,7 @@ uint32_t IExecutorException::read(::apache::thrift::protocol::TProtocol* iprot) 
 
   if (!isset_message)
     throw TProtocolException(TProtocolException::INVALID_DATA);
-  if (!isset_cause)
+  if (!isset__cause)
     throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
@@ -96,8 +96,8 @@ uint32_t IExecutorException::write(::apache::thrift::protocol::TProtocol* oprot)
   xfer += oprot->writeString(this->message);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("cause", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->cause);
+  xfer += oprot->writeFieldBegin("_cause", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->_cause);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -108,23 +108,23 @@ uint32_t IExecutorException::write(::apache::thrift::protocol::TProtocol* oprot)
 void swap(IExecutorException &a, IExecutorException &b) {
   using ::std::swap;
   swap(a.message, b.message);
-  swap(a.cause, b.cause);
+  swap(a._cause, b._cause);
 }
 
 IExecutorException::IExecutorException(const IExecutorException& other0) : TException() {
   message = other0.message;
-  cause = other0.cause;
+  _cause = other0._cause;
 }
 IExecutorException& IExecutorException::operator=(const IExecutorException& other1) {
   message = other1.message;
-  cause = other1.cause;
+  _cause = other1._cause;
   return *this;
 }
 void IExecutorException::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
   out << "IExecutorException(";
   out << "message=" << to_string(message);
-  out << ", " << "cause=" << to_string(cause);
+  out << ", " << "_cause=" << to_string(_cause);
   out << ")";
 }
 

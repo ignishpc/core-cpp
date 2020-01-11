@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     auto server = std::make_shared<IExecutorServerModule>(executor_data);
     processor->registerProcessor("server", std::make_shared<IExecutorServerModuleProcessor>(server));
     auto general_action = std::make_shared<IGeneralActionModule>(executor_data);
-    processor->registerProcessor("general", std::make_shared<IGeneralActionModuleProcessor>(general_action));
+    processor->registerProcessor("generalaction", std::make_shared<IGeneralActionModuleProcessor>(general_action));
     auto general = std::make_shared<IGeneralModule>(executor_data);
     processor->registerProcessor("general", std::make_shared<IGeneralModuleProcessor>(general));
     auto io = std::make_shared<IIOModule>(executor_data);

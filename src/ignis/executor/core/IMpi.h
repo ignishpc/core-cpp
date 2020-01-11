@@ -27,6 +27,9 @@ namespace ignis {
 
                 int executors();
 
+                template<typename Tp>
+                bool isPrimitiveType();
+
             private:
 
                 std::vector<int> szVector(const std::vector<std::pair<int,int>> &elems_szv);

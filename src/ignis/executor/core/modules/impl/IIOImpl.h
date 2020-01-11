@@ -14,21 +14,31 @@ namespace ignis {
                     public:
                         IIOImpl(std::shared_ptr<IExecutorData> &executorData);
 
+                        template<typename Tp>
+                        int64_t partitionApproxSize();
+
                         void textFile(const std::string &path, int64_t minPartitions);
 
-                        void openPartitionObjectFileUnknown(const std::string &path, int64_t first, int64_t partitions);
+                        void partitionObjectFileVoid(const std::string &path, int64_t first, int64_t partitions);
+
+                        void partitionJsonFileVoid(const std::string &path, int64_t first, int64_t partitions);
 
                         template<typename Tp>
-                        void openPartitionObjectFile(const std::string &path, int64_t first, int64_t partitions);
+                        void partitionObjectFile(const std::string &path, int64_t first, int64_t partitions);
+
+                        void partitionTextFile(const std::string &path, int64_t first, int64_t partitions);
 
                         template<typename Tp>
-                        void saveAsPartitionObjectFile(const std::string &path, int8_t compression, int64_t first);
+                        void partitionJsonFile(const std::string &path, int64_t first, int64_t partitions);
+
+                        template<typename Tp>
+                        void saveAsObjectFile(const std::string &path, int8_t compression, int64_t first);
 
                         template<typename Tp>
                         void saveAsTextFile(const std::string &path, int64_t first);
 
                         template<typename Tp>
-                        void saveAsJsonFile(const std::string &path, int64_t first);
+                        void saveAsJsonFile(const std::string &path, int64_t first, bool pretty);
 
                         std::string partitionFileName(const std::string &path, int64_t index);
 

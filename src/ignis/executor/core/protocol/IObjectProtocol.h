@@ -42,7 +42,7 @@ namespace ignis {
                         io::IWriter<Tp> writer;
                         this->writeBool(false);
                         writer.writeType(*this);
-                        writer(obj, *this);
+                        writer(*this, obj);
                     }
 
                     virtual ~IObjectProtocol() {}

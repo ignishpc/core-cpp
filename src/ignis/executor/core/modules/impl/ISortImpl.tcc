@@ -48,7 +48,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         /*Copy the data if they are reused*/
         if (input->cache()) {
             /*Work directly on the array to improve performance*/
-            if (isMemory(*input)) {
+            if (executor_data->getPartitionTools().isMemory(*input)) {
                 input = input->clone();
             } else {
                 /*Only group will be affected*/
@@ -72,7 +72,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         executor_data->mpi().gather(*pivots, 0);
 
         if (executor_data->mpi().isRoot(0)) {
-            auto group = newPartitionGroup<Tp>(0);
+            auto group = executor_data->getPartitionTools().newPartitionGroup<Tp>(0);
             group->add(pivots);
             parallelLocalSort(*group, comparator);
             if (partitions > 0) {
@@ -89,7 +89,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         executor_data->mpi().bcast(*pivots, 0);
 
         decltype(input) ranges = generateRanges(*input, *pivots);
-        decltype(input) output = newPartitionGroup<Tp>();
+        decltype(input) output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
         auto executor_ranges = (int64_t) std::ceil(ranges->partitions() / (double) executors);
         int target = -1;
         IGNIS_LOG(info) << "Sort: exchanging ranges";
@@ -112,7 +112,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
 
 template<typename Tp, typename Cmp>
 void ISortImplClass::parallelLocalSort(storage::IPartitionGroup <Tp> &group, Cmp comparator) {
-    bool inMemory = isMemory(group);
+    bool inMemory = executor_data->getPartitionTools().isMemory(group);
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
     {
@@ -138,10 +138,10 @@ void ISortImplClass::parallelLocalSort(storage::IPartitionGroup <Tp> &group, Cmp
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
 ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, int64_t samples) {
-    if (isMemory(group)) {
+    if (executor_data->getPartitionTools().isMemory(group)) {
         return selectMemoryPivots(group, samples);
     }
-    auto pivots = newMemoryPartition<Tp>();
+    auto pivots = executor_data->getPartitionTools().newMemoryPartition<Tp>();
     auto writer = pivots->writeIterator();
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
@@ -173,22 +173,22 @@ ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, int64_t sampl
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
 ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
-    if (isMemory(group)) {
+    if (executor_data->getPartitionTools().isMemory(group)) {
         return generateMemoryRanges(group, pivots);
     }
-    auto ranges = newPartitionGroup<Tp>(pivots.size() + 1);
+    auto ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(pivots.size() + 1);
 
     IGNIS_OMP_EXCEPTION_INIT()
-    //#pragma omp parallel
+    #pragma omp parallel
     {
-        auto thread_ranges = newPartitionGroup<Tp>(ranges->partitions());
+        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
         std::vector<std::shared_ptr<api::IWriteIterator < Tp>> > writers;
         for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
             writers.push_back((*thread_ranges)[p]->writeIterator());
         }
 
         IGNIS_OMP_TRY()
-            //#pragma omp for schedule(dynamic)
+            #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < group.partitions(); p++) {
                 auto reader = group[p]->readIterator();
                 while (reader->hasNext()) {
@@ -223,7 +223,7 @@ ISortImplClass::sortPartition(storage::IPartition <Tp> &part, Cmp comparator) {
     int64_t i = 0;
     while (true) {
         while (i < part.size() && (stack.size() < 2 || stack.back()->size() != stack[stack.size() - 2]->size())) {
-            stack.push_back(newPartition<Tp>());
+            stack.push_back(executor_data->getPartitionTools().newPartition<Tp>());
             stack.back()->writeIterator()->write(read->next());
             i++;
         }
@@ -244,7 +244,7 @@ ISortImplClass::sortPartition(storage::IPartition <Tp> &part, Cmp comparator) {
 template<typename Tp, typename Cmp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> ISortImplClass::mergePartitions(
         storage::IPartition <Tp> &p1, storage::IPartition <Tp> &p2, Cmp comparator) {
-    auto sorted = newPartition<Tp>();
+    auto sorted = executor_data->getPartitionTools().newPartition<Tp>();
     auto sw = sorted->writeIterator();
     auto r1 = p1.readIterator();
     auto r2 = p2.readIterator();
@@ -278,13 +278,13 @@ std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> ISortImplClass::
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
 ISortImplClass::selectMemoryPivots(storage::IPartitionGroup <Tp> &group, int64_t samples) {
-    auto pivots = newMemoryPartition<Tp>();
+    auto pivots = executor_data->getPartitionTools().newMemoryPartition<Tp>();
     auto writer = pivots->writeIterator();
-    auto &men_writer = toMemory(*writer);
+    auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
 
     for (int64_t p = 0; p < group.partitions(); p++) {
         auto skip = (group[p]->size() - samples) / (samples + 1);
-        auto &part = toMemory(*group[p]);
+        auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
         auto pos = skip;
         for (int n = 0; n < samples; n++) {
             men_writer.write(part[pos++]);
@@ -298,22 +298,22 @@ ISortImplClass::selectMemoryPivots(storage::IPartitionGroup <Tp> &group, int64_t
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
 ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
-    auto ranges = newPartitionGroup<Tp>(pivots.size() + 1);
+    auto ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(pivots.size() + 1);
 
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
     {
-        auto thread_ranges = newPartitionGroup<Tp>(ranges->partitions());
+        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
         std::vector<std::shared_ptr<storage::IMemoryWriteIterator < Tp>> > writers(ranges->partitions());
         for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
             auto it = (*thread_ranges)[p]->writeIterator();
-            writers[p] = toMemory(it);
+            writers[p] = executor_data->getPartitionTools().toMemory(it);
         }
 
         IGNIS_OMP_TRY()
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < group.partitions(); p++) {
-                auto &part = toMemory(*group[p]);
+                auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
                 for (int64_t i = 0; i < group[p]->size(); i++) {
                     writers[searchRange(part[i], pivots)]->write(std::move(part[i]));
                 }

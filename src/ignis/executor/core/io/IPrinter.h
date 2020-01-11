@@ -17,7 +17,7 @@ namespace ignis {
 
                 template<typename T>
                 struct IPrinterType {
-                    virtual void operator()(const T &b, std::ostream &out, size_t level) {
+                    inline void operator()(const T &b, std::ostream &out, size_t level) {
                         throw exception::ILogicError(
                                 "IPrinterType not implemented for " + RTTInfo::from<T>().getStandardName());
                     }

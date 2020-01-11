@@ -333,13 +333,13 @@ struct ignis::executor::core::io::IReaderType<std::forward_list<_Tp, _Alloc>> {
     }
 };
 
-template<typename _Key, typename _Compare>
-struct ignis::executor::core::io::IReaderType<std::set<_Key, _Compare>> {
+template<typename _Key, typename _Compare, typename _Alloc>
+struct ignis::executor::core::io::IReaderType<std::set<_Key, _Compare, _Alloc>> {
     inline bool readType(protocol::IProtocol &protocol) {
         return IEnumTypes::I_SET == readTypeAux(protocol);
     }
 
-    inline void operator()(protocol::IProtocol &protocol, std::set<_Key, _Compare> &obj) {
+    inline void operator()(protocol::IProtocol &protocol, std::set<_Key, _Compare, _Alloc> &obj) {
         auto size = readSizeAux(protocol);
         auto reader = IReaderType<_Key>();
         checkTypeAux<_Key>(reader.readType(protocol));
@@ -348,8 +348,8 @@ struct ignis::executor::core::io::IReaderType<std::set<_Key, _Compare>> {
         }
     }
 
-    inline std::set<_Key, _Compare> operator()(protocol::IProtocol &protocol) {
-        std::set<_Key, _Compare> obj;
+    inline std::set<_Key, _Compare, _Alloc> operator()(protocol::IProtocol &protocol) {
+        std::set<_Key, _Compare, _Alloc> obj;
         (*this)(protocol, obj);
         return std::move(obj);
     }
@@ -431,7 +431,7 @@ template<typename _T1, typename _T2>
 struct ignis::executor::core::io::IReaderType<std::pair<_T1, _T2>> {
     inline bool readType(protocol::IProtocol &protocol) {
         return IEnumTypes::I_PAIR == readTypeAux(protocol) &&
-               first_reader.readType(protocol) &&  second_reader.readType(protocol);
+               first_reader.readType(protocol) && second_reader.readType(protocol);
     }
 
     inline void operator()(protocol::IProtocol &protocol, std::pair<_T1, _T2> &obj) {

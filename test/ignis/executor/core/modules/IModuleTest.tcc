@@ -12,7 +12,7 @@ ignis::executor::api::IVector<Tp> IModuleTestClass::rankVector(const api::IVecto
 
 template<typename Tp>
 void IModuleTestClass::loadToPartitions(const api::IVector <Tp> &elems, int partitions) {
-    auto group = base_impl->newPartitionGroup<Tp>(partitions);
+    auto group = executor_data->getPartitionTools().newPartitionGroup<Tp>(partitions);
     executor_data->setPartitions(group);
     int part_size = elems.size() / partitions;
     for (int p = 0; p < partitions; p++) {

@@ -28,6 +28,8 @@ set(SOURCE_FILES
         ignis/executor/api/IContext.cpp
         ignis/executor/api/IContext.h
         ignis/executor/api/IContext.tcc
+        ignis/executor/api/IJsonValue.cpp
+        ignis/executor/api/IJsonValue.h
         ignis/executor/api/IReadIterator.h
         ignis/executor/api/IVector.h
         ignis/executor/api/IWriteIterator.h
@@ -41,8 +43,10 @@ set(SOURCE_FILES
 
         #IO
         ignis/executor/core/io/IEnumTypes.h
-        ignis/executor/core/io/IJsonPrinter.h
-        ignis/executor/core/io/IJsonPrinter.tcc
+        ignis/executor/core/io/IJsonReader.h
+        ignis/executor/core/io/IJsonReader.tcc
+        ignis/executor/core/io/IJsonWriter.h
+        ignis/executor/core/io/IJsonWriter.tcc
         ignis/executor/core/io/IPrinter.h
         ignis/executor/core/io/IPrinter.tcc
         ignis/executor/core/io/IReader.h
@@ -53,7 +57,6 @@ set(SOURCE_FILES
         #Modules Impl
         ignis/executor/core/modules/impl/IBaseImpl.cpp
         ignis/executor/core/modules/impl/IBaseImpl.h
-        ignis/executor/core/modules/impl/IBaseImpl.tcc
         ignis/executor/core/modules/impl/IGroupByImpl.cpp
         ignis/executor/core/modules/impl/IGroupByImpl.h
         ignis/executor/core/modules/impl/IGroupByImpl.tcc
@@ -81,6 +84,8 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IGeneralModule.h
         ignis/executor/core/modules/IIOModule.cpp
         ignis/executor/core/modules/IIOModule.h
+        ignis/executor/core/modules/IMathModule.cpp
+        ignis/executor/core/modules/IMathModule.h
         ignis/executor/core/modules/IModule.cpp
         ignis/executor/core/modules/IModule.h
 
@@ -104,6 +109,8 @@ set(SOURCE_FILES
         ignis/executor/core/storage/IRawMemoryPartition.tcc
         ignis/executor/core/storage/IRawPartition.h
         ignis/executor/core/storage/IRawPartition.tcc
+        ignis/executor/core/storage/IVoidPartition.h
+        ignis/executor/core/storage/IVoidPartition.cpp
 
         #Transport
         ignis/executor/core/transport/IHeaderTransport.cpp
@@ -124,6 +131,9 @@ set(SOURCE_FILES
         ignis/executor/core/IMpi.cpp
         ignis/executor/core/IMpi.tcc
         ignis/executor/core/IMpi.h
+        ignis/executor/core/IPartitionTools.cpp
+        ignis/executor/core/IPartitionTools.tcc
+        ignis/executor/core/IPartitionTools.h
         ignis/executor/core/IPropertyParser.cpp
         ignis/executor/core/IPropertyParser.h
         ignis/executor/core/RTTInfo.cpp

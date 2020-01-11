@@ -221,13 +221,13 @@ IRawWriteIteratorClass<Tp>::IRawWriteIterator(std::shared_ptr<protocol::IProtoco
 
 template<typename Tp>
 void IRawWriteIteratorClass<Tp>::write(Tp &obj) {
-    writer(obj, *proto);
+    writer(*proto, obj);
     elems++;
 }
 
 template<typename Tp>
 void IRawWriteIteratorClass<Tp>::write(Tp &&obj) {
-    writer(obj, *proto);
+    writer(*proto, std::forward<Tp>(obj));
     elems++;
 }
 

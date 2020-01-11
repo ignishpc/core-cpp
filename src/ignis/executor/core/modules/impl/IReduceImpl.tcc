@@ -7,8 +7,8 @@ template<typename Function>
 void IReduceImplClass::reduce() {
     IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_R_type>();
-        auto partial_reduce = newPartition<typename Function::_R_type>();
-        auto output = newPartitionGroup<typename Function::_R_type>();
+        auto partial_reduce = executor_data->getPartitionTools().newPartition<typename Function::_R_type>();
+        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>();
         auto &context = executor_data->getContext();
         Function function;
         IGNIS_LOG(info) << "Reduce: reducing " << input->partitions() << " partitions locally";
@@ -33,7 +33,7 @@ void IReduceImplClass::reduce() {
         IGNIS_OMP_EXCEPTION_END()
 
         IGNIS_LOG(info) << "Reduce: reducing all elements in the executor";
-        auto elem_part = newMemoryPartition<typename Function::_R_type>(1);
+        auto elem_part = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(1);
         if (partial_reduce->size() > 0) {
             elem_part->writeIterator()->write(reducePartition(function, *partial_reduce));
         }
@@ -42,7 +42,7 @@ void IReduceImplClass::reduce() {
         executor_data->mpi().gather(*elem_part, 0);
         if (executor_data->mpi().isRoot(0)) {
             IGNIS_LOG(info) << "Reduce: gathering elements for an executor";
-            auto result = newMemoryPartition<typename Function::_R_type>(1);
+            auto result = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(1);
             result->writeIterator()->write(reducePartition(function, *elem_part));
             output->add(result);
         }
@@ -59,8 +59,8 @@ void IReduceImplClass::treeReduce(int64_t depth) {
 template<typename Function, typename Tp>
 inline Tp IReduceImplClass::reducePartition(Function &f, storage::IPartition <Tp> &part) {
     auto &context = executor_data->getContext();
-    if (isMemory(part)) {
-        auto men_part = toMemory(part);
+    if (executor_data->getPartitionTools().isMemory(part)) {
+        auto men_part = executor_data->getPartitionTools().toMemory(part);
         auto acum = men_part[0];
         for (int64_t i = 1; i < men_part.size(); i++) {
             acum = f.call(acum, men_part[i], context);

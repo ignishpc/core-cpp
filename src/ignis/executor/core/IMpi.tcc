@@ -170,6 +170,10 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
     }
 }
 
+template<typename Tp>
+bool IMpiClass::isPrimitiveType(){
+    return isPrimitive<Tp>()();
+}
 
 template<typename Tp>
 struct IMpiClass::isPrimitive {

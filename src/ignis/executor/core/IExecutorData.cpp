@@ -5,7 +5,9 @@
 
 using namespace ignis::executor::core;
 
-IExecutorData::IExecutorData() : properties(context.props()), _mpi(properties, context.mpiGroup()) {}
+IExecutorData::IExecutorData() : properties(context.props()),
+                                 _mpi(properties, context.mpiGroup()),
+                                 partition_tools(properties, context) {}
 
 void IExecutorData::deletePartitions() { partitions.reset(); }
 
@@ -15,19 +17,19 @@ int64_t IExecutorData::clearVariables() {
     return n;
 }
 
-int64_t IExecutorData::nextPartititonId() {
-    return partition_id_gen++;
-}
-
 IPropertyParser &IExecutorData::getProperties() {
     return properties;
+}
+
+IPartitionTools &IExecutorData::getPartitionTools() {
+    return partition_tools;
 }
 
 IMpi IExecutorData::mpi() {
     return _mpi;
 }
 
-void IExecutorData::setCores(int cores){
+void IExecutorData::setCores(int cores) {
     omp_set_num_threads(cores);
 }
 

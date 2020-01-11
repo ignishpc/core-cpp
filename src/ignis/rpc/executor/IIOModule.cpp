@@ -9,6 +9,378 @@
 namespace ignis { namespace rpc { namespace executor {
 
 
+IIOModule_partitionCount_args::~IIOModule_partitionCount_args() noexcept {
+}
+
+
+uint32_t IIOModule_partitionCount_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionCount_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionCount_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionCount_pargs::~IIOModule_partitionCount_pargs() noexcept {
+}
+
+
+uint32_t IIOModule_partitionCount_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionCount_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionCount_result::~IIOModule_partitionCount_result() noexcept {
+}
+
+
+uint32_t IIOModule_partitionCount_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionCount_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IIOModule_partitionCount_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
+    xfer += oprot->writeI64(this->success);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionCount_presult::~IIOModule_partitionCount_presult() noexcept {
+}
+
+
+uint32_t IIOModule_partitionCount_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IIOModule_partitionApproxSize_args::~IIOModule_partitionApproxSize_args() noexcept {
+}
+
+
+uint32_t IIOModule_partitionApproxSize_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionApproxSize_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionApproxSize_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionApproxSize_pargs::~IIOModule_partitionApproxSize_pargs() noexcept {
+}
+
+
+uint32_t IIOModule_partitionApproxSize_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionApproxSize_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionApproxSize_result::~IIOModule_partitionApproxSize_result() noexcept {
+}
+
+
+uint32_t IIOModule_partitionApproxSize_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionApproxSize_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IIOModule_partitionApproxSize_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
+    xfer += oprot->writeI64(this->success);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionApproxSize_presult::~IIOModule_partitionApproxSize_presult() noexcept {
+}
+
+
+uint32_t IIOModule_partitionApproxSize_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
 IIOModule_textFile_args::~IIOModule_textFile_args() noexcept {
 }
 
@@ -42,14 +414,6 @@ uint32_t IIOModule_textFile_args::read(::apache::thrift::protocol::TProtocol* ip
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->partitions);
-          this->__isset.partitions = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -71,10 +435,6 @@ uint32_t IIOModule_textFile_args::write(::apache::thrift::protocol::TProtocol* o
   xfer += oprot->writeString(this->path);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->partitions);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -92,10 +452,6 @@ uint32_t IIOModule_textFile_pargs::write(::apache::thrift::protocol::TProtocol* 
 
   xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->path)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->partitions)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -127,7 +483,20 @@ uint32_t IIOModule_textFile_result::read(::apache::thrift::protocol::TProtocol* 
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -142,6 +511,11 @@ uint32_t IIOModule_textFile_result::write(::apache::thrift::protocol::TProtocol*
 
   xfer += oprot->writeStructBegin("IIOModule_textFile_result");
 
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -171,7 +545,20 @@ uint32_t IIOModule_textFile_presult::read(::apache::thrift::protocol::TProtocol*
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    xfer += iprot->skip(ftype);
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
     xfer += iprot->readFieldEnd();
   }
 
@@ -181,11 +568,214 @@ uint32_t IIOModule_textFile_presult::read(::apache::thrift::protocol::TProtocol*
 }
 
 
-IIOModule_openPartitionObjectFile_args::~IIOModule_openPartitionObjectFile_args() noexcept {
+IIOModule_textFile2_args::~IIOModule_textFile2_args() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_textFile2_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->path);
+          this->__isset.path = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->minPartitions);
+          this->__isset.minPartitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_textFile2_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_textFile2_args");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->path);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("minPartitions", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->minPartitions);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_textFile2_pargs::~IIOModule_textFile2_pargs() noexcept {
+}
+
+
+uint32_t IIOModule_textFile2_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_textFile2_pargs");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->path)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("minPartitions", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->minPartitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_textFile2_result::~IIOModule_textFile2_result() noexcept {
+}
+
+
+uint32_t IIOModule_textFile2_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_textFile2_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IIOModule_textFile2_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_textFile2_presult::~IIOModule_textFile2_presult() noexcept {
+}
+
+
+uint32_t IIOModule_textFile2_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IIOModule_partitionObjectFile_args::~IIOModule_partitionObjectFile_args() noexcept {
+}
+
+
+uint32_t IIOModule_partitionObjectFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -242,10 +832,10 @@ uint32_t IIOModule_openPartitionObjectFile_args::read(::apache::thrift::protocol
   return xfer;
 }
 
-uint32_t IIOModule_openPartitionObjectFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_partitionObjectFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IIOModule_openPartitionObjectFile_args");
+  xfer += oprot->writeStructBegin("IIOModule_partitionObjectFile_args");
 
   xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->path);
@@ -265,14 +855,14 @@ uint32_t IIOModule_openPartitionObjectFile_args::write(::apache::thrift::protoco
 }
 
 
-IIOModule_openPartitionObjectFile_pargs::~IIOModule_openPartitionObjectFile_pargs() noexcept {
+IIOModule_partitionObjectFile_pargs::~IIOModule_partitionObjectFile_pargs() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_partitionObjectFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IIOModule_openPartitionObjectFile_pargs");
+  xfer += oprot->writeStructBegin("IIOModule_partitionObjectFile_pargs");
 
   xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->path)));
@@ -292,11 +882,11 @@ uint32_t IIOModule_openPartitionObjectFile_pargs::write(::apache::thrift::protoc
 }
 
 
-IIOModule_openPartitionObjectFile_result::~IIOModule_openPartitionObjectFile_result() noexcept {
+IIOModule_partitionObjectFile_result::~IIOModule_partitionObjectFile_result() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_partitionObjectFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -337,11 +927,11 @@ uint32_t IIOModule_openPartitionObjectFile_result::read(::apache::thrift::protoc
   return xfer;
 }
 
-uint32_t IIOModule_openPartitionObjectFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_partitionObjectFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IIOModule_openPartitionObjectFile_result");
+  xfer += oprot->writeStructBegin("IIOModule_partitionObjectFile_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -354,11 +944,11 @@ uint32_t IIOModule_openPartitionObjectFile_result::write(::apache::thrift::proto
 }
 
 
-IIOModule_openPartitionObjectFile_presult::~IIOModule_openPartitionObjectFile_presult() noexcept {
+IIOModule_partitionObjectFile_presult::~IIOModule_partitionObjectFile_presult() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_partitionObjectFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -400,11 +990,11 @@ uint32_t IIOModule_openPartitionObjectFile_presult::read(::apache::thrift::proto
 }
 
 
-IIOModule_openPartitionObjectFileFunction_args::~IIOModule_openPartitionObjectFileFunction_args() noexcept {
+IIOModule_partitionObjectFile4_args::~IIOModule_partitionObjectFile4_args() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFileFunction_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_partitionObjectFile4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -426,6 +1016,30 @@ uint32_t IIOModule_openPartitionObjectFileFunction_args::read(::apache::thrift::
     switch (fid)
     {
       case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->path);
+          this->__isset.path = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->first);
+          this->__isset.first = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->partitions);
+          this->__isset.partitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->src.read(iprot);
           this->__isset.src = true;
@@ -433,7 +1047,210 @@ uint32_t IIOModule_openPartitionObjectFileFunction_args::read(::apache::thrift::
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionObjectFile4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionObjectFile4_args");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->path);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->first);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->partitions);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionObjectFile4_pargs::~IIOModule_partitionObjectFile4_pargs() noexcept {
+}
+
+
+uint32_t IIOModule_partitionObjectFile4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionObjectFile4_pargs");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->path)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->first)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64((*(this->partitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionObjectFile4_result::~IIOModule_partitionObjectFile4_result() noexcept {
+}
+
+
+uint32_t IIOModule_partitionObjectFile4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionObjectFile4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IIOModule_partitionObjectFile4_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionObjectFile4_presult::~IIOModule_partitionObjectFile4_presult() noexcept {
+}
+
+
+uint32_t IIOModule_partitionObjectFile4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IIOModule_partitionTextFile_args::~IIOModule_partitionTextFile_args() noexcept {
+}
+
+
+uint32_t IIOModule_partitionTextFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->path);
           this->__isset.path = true;
@@ -441,7 +1258,7 @@ uint32_t IIOModule_openPartitionObjectFileFunction_args::read(::apache::thrift::
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
+      case 2:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->first);
           this->__isset.first = true;
@@ -449,7 +1266,7 @@ uint32_t IIOModule_openPartitionObjectFileFunction_args::read(::apache::thrift::
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->partitions);
           this->__isset.partitions = true;
@@ -469,24 +1286,20 @@ uint32_t IIOModule_openPartitionObjectFileFunction_args::read(::apache::thrift::
   return xfer;
 }
 
-uint32_t IIOModule_openPartitionObjectFileFunction_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_partitionTextFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IIOModule_openPartitionObjectFileFunction_args");
+  xfer += oprot->writeStructBegin("IIOModule_partitionTextFile_args");
 
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += this->src.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->path);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64(this->first);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 4);
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64(this->partitions);
   xfer += oprot->writeFieldEnd();
 
@@ -496,28 +1309,24 @@ uint32_t IIOModule_openPartitionObjectFileFunction_args::write(::apache::thrift:
 }
 
 
-IIOModule_openPartitionObjectFileFunction_pargs::~IIOModule_openPartitionObjectFileFunction_pargs() noexcept {
+IIOModule_partitionTextFile_pargs::~IIOModule_partitionTextFile_pargs() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFileFunction_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_partitionTextFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IIOModule_openPartitionObjectFileFunction_pargs");
+  xfer += oprot->writeStructBegin("IIOModule_partitionTextFile_pargs");
 
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += (*(this->src)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->path)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64((*(this->first)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 4);
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64((*(this->partitions)));
   xfer += oprot->writeFieldEnd();
 
@@ -527,11 +1336,11 @@ uint32_t IIOModule_openPartitionObjectFileFunction_pargs::write(::apache::thrift
 }
 
 
-IIOModule_openPartitionObjectFileFunction_result::~IIOModule_openPartitionObjectFileFunction_result() noexcept {
+IIOModule_partitionTextFile_result::~IIOModule_partitionTextFile_result() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFileFunction_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_partitionTextFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -572,11 +1381,11 @@ uint32_t IIOModule_openPartitionObjectFileFunction_result::read(::apache::thrift
   return xfer;
 }
 
-uint32_t IIOModule_openPartitionObjectFileFunction_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_partitionTextFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IIOModule_openPartitionObjectFileFunction_result");
+  xfer += oprot->writeStructBegin("IIOModule_partitionTextFile_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -589,11 +1398,11 @@ uint32_t IIOModule_openPartitionObjectFileFunction_result::write(::apache::thrif
 }
 
 
-IIOModule_openPartitionObjectFileFunction_presult::~IIOModule_openPartitionObjectFileFunction_presult() noexcept {
+IIOModule_partitionTextFile_presult::~IIOModule_partitionTextFile_presult() noexcept {
 }
 
 
-uint32_t IIOModule_openPartitionObjectFileFunction_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_partitionTextFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -635,11 +1444,465 @@ uint32_t IIOModule_openPartitionObjectFileFunction_presult::read(::apache::thrif
 }
 
 
-IIOModule_saveAsPartitionObjectFile_args::~IIOModule_saveAsPartitionObjectFile_args() noexcept {
+IIOModule_partitionJsonFile_args::~IIOModule_partitionJsonFile_args() noexcept {
 }
 
 
-uint32_t IIOModule_saveAsPartitionObjectFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_partitionJsonFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->path);
+          this->__isset.path = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->first);
+          this->__isset.first = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->partitions);
+          this->__isset.partitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionJsonFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionJsonFile_args");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->path);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->first);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->partitions);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionJsonFile_pargs::~IIOModule_partitionJsonFile_pargs() noexcept {
+}
+
+
+uint32_t IIOModule_partitionJsonFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionJsonFile_pargs");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->path)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->first)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64((*(this->partitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionJsonFile_result::~IIOModule_partitionJsonFile_result() noexcept {
+}
+
+
+uint32_t IIOModule_partitionJsonFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionJsonFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IIOModule_partitionJsonFile_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionJsonFile_presult::~IIOModule_partitionJsonFile_presult() noexcept {
+}
+
+
+uint32_t IIOModule_partitionJsonFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IIOModule_partitionJsonFile4_args::~IIOModule_partitionJsonFile4_args() noexcept {
+}
+
+
+uint32_t IIOModule_partitionJsonFile4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->path);
+          this->__isset.path = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->first);
+          this->__isset.first = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->partitions);
+          this->__isset.partitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionJsonFile4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionJsonFile4_args");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->path);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->first);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->partitions);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionJsonFile4_pargs::~IIOModule_partitionJsonFile4_pargs() noexcept {
+}
+
+
+uint32_t IIOModule_partitionJsonFile4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IIOModule_partitionJsonFile4_pargs");
+
+  xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->path)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->first)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64((*(this->partitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionJsonFile4_result::~IIOModule_partitionJsonFile4_result() noexcept {
+}
+
+
+uint32_t IIOModule_partitionJsonFile4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IIOModule_partitionJsonFile4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IIOModule_partitionJsonFile4_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IIOModule_partitionJsonFile4_presult::~IIOModule_partitionJsonFile4_presult() noexcept {
+}
+
+
+uint32_t IIOModule_partitionJsonFile4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IIOModule_saveAsObjectFile_args::~IIOModule_saveAsObjectFile_args() noexcept {
+}
+
+
+uint32_t IIOModule_saveAsObjectFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -676,7 +1939,7 @@ uint32_t IIOModule_saveAsPartitionObjectFile_args::read(::apache::thrift::protoc
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->first);
           this->__isset.first = true;
@@ -696,10 +1959,10 @@ uint32_t IIOModule_saveAsPartitionObjectFile_args::read(::apache::thrift::protoc
   return xfer;
 }
 
-uint32_t IIOModule_saveAsPartitionObjectFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_saveAsObjectFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IIOModule_saveAsPartitionObjectFile_args");
+  xfer += oprot->writeStructBegin("IIOModule_saveAsObjectFile_args");
 
   xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->path);
@@ -709,7 +1972,7 @@ uint32_t IIOModule_saveAsPartitionObjectFile_args::write(::apache::thrift::proto
   xfer += oprot->writeByte(this->compression);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 4);
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64(this->first);
   xfer += oprot->writeFieldEnd();
 
@@ -719,14 +1982,14 @@ uint32_t IIOModule_saveAsPartitionObjectFile_args::write(::apache::thrift::proto
 }
 
 
-IIOModule_saveAsPartitionObjectFile_pargs::~IIOModule_saveAsPartitionObjectFile_pargs() noexcept {
+IIOModule_saveAsObjectFile_pargs::~IIOModule_saveAsObjectFile_pargs() noexcept {
 }
 
 
-uint32_t IIOModule_saveAsPartitionObjectFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_saveAsObjectFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IIOModule_saveAsPartitionObjectFile_pargs");
+  xfer += oprot->writeStructBegin("IIOModule_saveAsObjectFile_pargs");
 
   xfer += oprot->writeFieldBegin("path", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->path)));
@@ -736,7 +1999,7 @@ uint32_t IIOModule_saveAsPartitionObjectFile_pargs::write(::apache::thrift::prot
   xfer += oprot->writeByte((*(this->compression)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 4);
+  xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64((*(this->first)));
   xfer += oprot->writeFieldEnd();
 
@@ -746,11 +2009,11 @@ uint32_t IIOModule_saveAsPartitionObjectFile_pargs::write(::apache::thrift::prot
 }
 
 
-IIOModule_saveAsPartitionObjectFile_result::~IIOModule_saveAsPartitionObjectFile_result() noexcept {
+IIOModule_saveAsObjectFile_result::~IIOModule_saveAsObjectFile_result() noexcept {
 }
 
 
-uint32_t IIOModule_saveAsPartitionObjectFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_saveAsObjectFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -791,11 +2054,11 @@ uint32_t IIOModule_saveAsPartitionObjectFile_result::read(::apache::thrift::prot
   return xfer;
 }
 
-uint32_t IIOModule_saveAsPartitionObjectFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IIOModule_saveAsObjectFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IIOModule_saveAsPartitionObjectFile_result");
+  xfer += oprot->writeStructBegin("IIOModule_saveAsObjectFile_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -808,11 +2071,11 @@ uint32_t IIOModule_saveAsPartitionObjectFile_result::write(::apache::thrift::pro
 }
 
 
-IIOModule_saveAsPartitionObjectFile_presult::~IIOModule_saveAsPartitionObjectFile_presult() noexcept {
+IIOModule_saveAsObjectFile_presult::~IIOModule_saveAsObjectFile_presult() noexcept {
 }
 
 
-uint32_t IIOModule_saveAsPartitionObjectFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IIOModule_saveAsObjectFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1098,6 +2361,14 @@ uint32_t IIOModule_saveAsJsonFile_args::read(::apache::thrift::protocol::TProtoc
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->pretty);
+          this->__isset.pretty = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -1123,6 +2394,10 @@ uint32_t IIOModule_saveAsJsonFile_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeI64(this->first);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("pretty", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool(this->pretty);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -1144,6 +2419,10 @@ uint32_t IIOModule_saveAsJsonFile_pargs::write(::apache::thrift::protocol::TProt
 
   xfer += oprot->writeFieldBegin("first", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64((*(this->first)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("pretty", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool((*(this->pretty)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1259,20 +2538,139 @@ uint32_t IIOModule_saveAsJsonFile_presult::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-void IIOModuleClient::textFile(const std::string& path, const int64_t partitions)
+int64_t IIOModuleClient::partitionCount()
 {
-  send_textFile(path, partitions);
+  send_partitionCount();
+  return recv_partitionCount();
+}
+
+void IIOModuleClient::send_partitionCount()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("partitionCount", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionCount_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int64_t IIOModuleClient::recv_partitionCount()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("partitionCount") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int64_t _return;
+  IIOModule_partitionCount_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionCount failed: unknown result");
+}
+
+int64_t IIOModuleClient::partitionApproxSize()
+{
+  send_partitionApproxSize();
+  return recv_partitionApproxSize();
+}
+
+void IIOModuleClient::send_partitionApproxSize()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("partitionApproxSize", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionApproxSize_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int64_t IIOModuleClient::recv_partitionApproxSize()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("partitionApproxSize") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int64_t _return;
+  IIOModule_partitionApproxSize_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionApproxSize failed: unknown result");
+}
+
+void IIOModuleClient::textFile(const std::string& path)
+{
+  send_textFile(path);
   recv_textFile();
 }
 
-void IIOModuleClient::send_textFile(const std::string& path, const int64_t partitions)
+void IIOModuleClient::send_textFile(const std::string& path)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("textFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IIOModule_textFile_pargs args;
   args.path = &path;
-  args.partitions = &partitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1310,24 +2708,26 @@ void IIOModuleClient::recv_textFile()
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
 
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
   return;
 }
 
-void IIOModuleClient::openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
+void IIOModuleClient::textFile2(const std::string& path, const int64_t minPartitions)
 {
-  send_openPartitionObjectFile(path, first, partitions);
-  recv_openPartitionObjectFile();
+  send_textFile2(path, minPartitions);
+  recv_textFile2();
 }
 
-void IIOModuleClient::send_openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
+void IIOModuleClient::send_textFile2(const std::string& path, const int64_t minPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("openPartitionObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("textFile2", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IIOModule_openPartitionObjectFile_pargs args;
+  IIOModule_textFile2_pargs args;
   args.path = &path;
-  args.first = &first;
-  args.partitions = &partitions;
+  args.minPartitions = &minPartitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1335,7 +2735,7 @@ void IIOModuleClient::send_openPartitionObjectFile(const std::string& path, cons
   oprot_->getTransport()->flush();
 }
 
-void IIOModuleClient::recv_openPartitionObjectFile()
+void IIOModuleClient::recv_textFile2()
 {
 
   int32_t rseqid = 0;
@@ -1355,12 +2755,12 @@ void IIOModuleClient::recv_openPartitionObjectFile()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("openPartitionObjectFile") != 0) {
+  if (fname.compare("textFile2") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IIOModule_openPartitionObjectFile_presult result;
+  IIOModule_textFile2_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -1371,22 +2771,80 @@ void IIOModuleClient::recv_openPartitionObjectFile()
   return;
 }
 
-void IIOModuleClient::openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions)
+void IIOModuleClient::partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
-  send_openPartitionObjectFileFunction(src, path, first, partitions);
-  recv_openPartitionObjectFileFunction();
+  send_partitionObjectFile(path, first, partitions);
+  recv_partitionObjectFile();
 }
 
-void IIOModuleClient::send_openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions)
+void IIOModuleClient::send_partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("openPartitionObjectFileFunction", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IIOModule_openPartitionObjectFileFunction_pargs args;
+  IIOModule_partitionObjectFile_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IIOModuleClient::recv_partitionObjectFile()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("partitionObjectFile") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IIOModule_partitionObjectFile_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IIOModuleClient::partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  send_partitionObjectFile4(path, first, partitions, src);
+  recv_partitionObjectFile4();
+}
+
+void IIOModuleClient::send_partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("partitionObjectFile4", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionObjectFile4_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
   args.src = &src;
-  args.path = &path;
-  args.first = &first;
-  args.partitions = &partitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1394,7 +2852,7 @@ void IIOModuleClient::send_openPartitionObjectFileFunction(const  ::ignis::rpc::
   oprot_->getTransport()->flush();
 }
 
-void IIOModuleClient::recv_openPartitionObjectFileFunction()
+void IIOModuleClient::recv_partitionObjectFile4()
 {
 
   int32_t rseqid = 0;
@@ -1414,12 +2872,12 @@ void IIOModuleClient::recv_openPartitionObjectFileFunction()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("openPartitionObjectFileFunction") != 0) {
+  if (fname.compare("partitionObjectFile4") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IIOModule_openPartitionObjectFileFunction_presult result;
+  IIOModule_partitionObjectFile4_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -1430,18 +2888,193 @@ void IIOModuleClient::recv_openPartitionObjectFileFunction()
   return;
 }
 
-void IIOModuleClient::saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+void IIOModuleClient::partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
-  send_saveAsPartitionObjectFile(path, compression, first);
-  recv_saveAsPartitionObjectFile();
+  send_partitionTextFile(path, first, partitions);
+  recv_partitionTextFile();
 }
 
-void IIOModuleClient::send_saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+void IIOModuleClient::send_partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("saveAsPartitionObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionTextFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IIOModule_saveAsPartitionObjectFile_pargs args;
+  IIOModule_partitionTextFile_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IIOModuleClient::recv_partitionTextFile()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("partitionTextFile") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IIOModule_partitionTextFile_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IIOModuleClient::partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions)
+{
+  send_partitionJsonFile(path, first, partitions);
+  recv_partitionJsonFile();
+}
+
+void IIOModuleClient::send_partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionJsonFile_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IIOModuleClient::recv_partitionJsonFile()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("partitionJsonFile") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IIOModule_partitionJsonFile_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IIOModuleClient::partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  send_partitionJsonFile4(path, first, partitions, src);
+  recv_partitionJsonFile4();
+}
+
+void IIOModuleClient::send_partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("partitionJsonFile4", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionJsonFile4_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IIOModuleClient::recv_partitionJsonFile4()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("partitionJsonFile4") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IIOModule_partitionJsonFile4_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IIOModuleClient::saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+{
+  send_saveAsObjectFile(path, compression, first);
+  recv_saveAsObjectFile();
+}
+
+void IIOModuleClient::send_saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("saveAsObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_saveAsObjectFile_pargs args;
   args.path = &path;
   args.compression = &compression;
   args.first = &first;
@@ -1452,7 +3085,7 @@ void IIOModuleClient::send_saveAsPartitionObjectFile(const std::string& path, co
   oprot_->getTransport()->flush();
 }
 
-void IIOModuleClient::recv_saveAsPartitionObjectFile()
+void IIOModuleClient::recv_saveAsObjectFile()
 {
 
   int32_t rseqid = 0;
@@ -1472,12 +3105,12 @@ void IIOModuleClient::recv_saveAsPartitionObjectFile()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("saveAsPartitionObjectFile") != 0) {
+  if (fname.compare("saveAsObjectFile") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IIOModule_saveAsPartitionObjectFile_presult result;
+  IIOModule_saveAsObjectFile_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -1545,13 +3178,13 @@ void IIOModuleClient::recv_saveAsTextFile()
   return;
 }
 
-void IIOModuleClient::saveAsJsonFile(const std::string& path, const int64_t first)
+void IIOModuleClient::saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty)
 {
-  send_saveAsJsonFile(path, first);
+  send_saveAsJsonFile(path, first, pretty);
   recv_saveAsJsonFile();
 }
 
-void IIOModuleClient::send_saveAsJsonFile(const std::string& path, const int64_t first)
+void IIOModuleClient::send_saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("saveAsJsonFile", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -1559,6 +3192,7 @@ void IIOModuleClient::send_saveAsJsonFile(const std::string& path, const int64_t
   IIOModule_saveAsJsonFile_pargs args;
   args.path = &path;
   args.first = &first;
+  args.pretty = &pretty;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1621,6 +3255,120 @@ bool IIOModuleProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* ipr
   return true;
 }
 
+void IIOModuleProcessor::process_partitionCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IIOModule.partitionCount", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.partitionCount");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IIOModule.partitionCount");
+  }
+
+  IIOModule_partitionCount_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IIOModule.partitionCount", bytes);
+  }
+
+  IIOModule_partitionCount_result result;
+  try {
+    result.success = iface_->partitionCount();
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IIOModule.partitionCount");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("partitionCount", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IIOModule.partitionCount");
+  }
+
+  oprot->writeMessageBegin("partitionCount", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IIOModule.partitionCount", bytes);
+  }
+}
+
+void IIOModuleProcessor::process_partitionApproxSize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IIOModule.partitionApproxSize", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.partitionApproxSize");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IIOModule.partitionApproxSize");
+  }
+
+  IIOModule_partitionApproxSize_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IIOModule.partitionApproxSize", bytes);
+  }
+
+  IIOModule_partitionApproxSize_result result;
+  try {
+    result.success = iface_->partitionApproxSize();
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IIOModule.partitionApproxSize");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("partitionApproxSize", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IIOModule.partitionApproxSize");
+  }
+
+  oprot->writeMessageBegin("partitionApproxSize", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IIOModule.partitionApproxSize", bytes);
+  }
+}
+
 void IIOModuleProcessor::process_textFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
@@ -1644,7 +3392,10 @@ void IIOModuleProcessor::process_textFile(int32_t seqid, ::apache::thrift::proto
 
   IIOModule_textFile_result result;
   try {
-    iface_->textFile(args.path, args.partitions);
+    iface_->textFile(args.path);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
       this->eventHandler_->handlerError(ctx, "IIOModule.textFile");
@@ -1674,40 +3425,40 @@ void IIOModuleProcessor::process_textFile(int32_t seqid, ::apache::thrift::proto
   }
 }
 
-void IIOModuleProcessor::process_openPartitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IIOModuleProcessor::process_textFile2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IIOModule.openPartitionObjectFile", callContext);
+    ctx = this->eventHandler_->getContext("IIOModule.textFile2", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.openPartitionObjectFile");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.textFile2");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IIOModule.openPartitionObjectFile");
+    this->eventHandler_->preRead(ctx, "IIOModule.textFile2");
   }
 
-  IIOModule_openPartitionObjectFile_args args;
+  IIOModule_textFile2_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IIOModule.openPartitionObjectFile", bytes);
+    this->eventHandler_->postRead(ctx, "IIOModule.textFile2", bytes);
   }
 
-  IIOModule_openPartitionObjectFile_result result;
+  IIOModule_textFile2_result result;
   try {
-    iface_->openPartitionObjectFile(args.path, args.first, args.partitions);
+    iface_->textFile2(args.path, args.minPartitions);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IIOModule.openPartitionObjectFile");
+      this->eventHandler_->handlerError(ctx, "IIOModule.textFile2");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("openPartitionObjectFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("textFile2", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1716,54 +3467,54 @@ void IIOModuleProcessor::process_openPartitionObjectFile(int32_t seqid, ::apache
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IIOModule.openPartitionObjectFile");
+    this->eventHandler_->preWrite(ctx, "IIOModule.textFile2");
   }
 
-  oprot->writeMessageBegin("openPartitionObjectFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("textFile2", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IIOModule.openPartitionObjectFile", bytes);
+    this->eventHandler_->postWrite(ctx, "IIOModule.textFile2", bytes);
   }
 }
 
-void IIOModuleProcessor::process_openPartitionObjectFileFunction(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IIOModuleProcessor::process_partitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IIOModule.openPartitionObjectFileFunction", callContext);
+    ctx = this->eventHandler_->getContext("IIOModule.partitionObjectFile", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.openPartitionObjectFileFunction");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.partitionObjectFile");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IIOModule.openPartitionObjectFileFunction");
+    this->eventHandler_->preRead(ctx, "IIOModule.partitionObjectFile");
   }
 
-  IIOModule_openPartitionObjectFileFunction_args args;
+  IIOModule_partitionObjectFile_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IIOModule.openPartitionObjectFileFunction", bytes);
+    this->eventHandler_->postRead(ctx, "IIOModule.partitionObjectFile", bytes);
   }
 
-  IIOModule_openPartitionObjectFileFunction_result result;
+  IIOModule_partitionObjectFile_result result;
   try {
-    iface_->openPartitionObjectFileFunction(args.src, args.path, args.first, args.partitions);
+    iface_->partitionObjectFile(args.path, args.first, args.partitions);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IIOModule.openPartitionObjectFileFunction");
+      this->eventHandler_->handlerError(ctx, "IIOModule.partitionObjectFile");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("openPartitionObjectFileFunction", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionObjectFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1772,54 +3523,54 @@ void IIOModuleProcessor::process_openPartitionObjectFileFunction(int32_t seqid, 
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IIOModule.openPartitionObjectFileFunction");
+    this->eventHandler_->preWrite(ctx, "IIOModule.partitionObjectFile");
   }
 
-  oprot->writeMessageBegin("openPartitionObjectFileFunction", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionObjectFile", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IIOModule.openPartitionObjectFileFunction", bytes);
+    this->eventHandler_->postWrite(ctx, "IIOModule.partitionObjectFile", bytes);
   }
 }
 
-void IIOModuleProcessor::process_saveAsPartitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IIOModuleProcessor::process_partitionObjectFile4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IIOModule.saveAsPartitionObjectFile", callContext);
+    ctx = this->eventHandler_->getContext("IIOModule.partitionObjectFile4", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.saveAsPartitionObjectFile");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.partitionObjectFile4");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IIOModule.saveAsPartitionObjectFile");
+    this->eventHandler_->preRead(ctx, "IIOModule.partitionObjectFile4");
   }
 
-  IIOModule_saveAsPartitionObjectFile_args args;
+  IIOModule_partitionObjectFile4_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IIOModule.saveAsPartitionObjectFile", bytes);
+    this->eventHandler_->postRead(ctx, "IIOModule.partitionObjectFile4", bytes);
   }
 
-  IIOModule_saveAsPartitionObjectFile_result result;
+  IIOModule_partitionObjectFile4_result result;
   try {
-    iface_->saveAsPartitionObjectFile(args.path, args.compression, args.first);
+    iface_->partitionObjectFile4(args.path, args.first, args.partitions, args.src);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IIOModule.saveAsPartitionObjectFile");
+      this->eventHandler_->handlerError(ctx, "IIOModule.partitionObjectFile4");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("saveAsPartitionObjectFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionObjectFile4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1828,17 +3579,241 @@ void IIOModuleProcessor::process_saveAsPartitionObjectFile(int32_t seqid, ::apac
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IIOModule.saveAsPartitionObjectFile");
+    this->eventHandler_->preWrite(ctx, "IIOModule.partitionObjectFile4");
   }
 
-  oprot->writeMessageBegin("saveAsPartitionObjectFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionObjectFile4", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IIOModule.saveAsPartitionObjectFile", bytes);
+    this->eventHandler_->postWrite(ctx, "IIOModule.partitionObjectFile4", bytes);
+  }
+}
+
+void IIOModuleProcessor::process_partitionTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IIOModule.partitionTextFile", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.partitionTextFile");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IIOModule.partitionTextFile");
+  }
+
+  IIOModule_partitionTextFile_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IIOModule.partitionTextFile", bytes);
+  }
+
+  IIOModule_partitionTextFile_result result;
+  try {
+    iface_->partitionTextFile(args.path, args.first, args.partitions);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IIOModule.partitionTextFile");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("partitionTextFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IIOModule.partitionTextFile");
+  }
+
+  oprot->writeMessageBegin("partitionTextFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IIOModule.partitionTextFile", bytes);
+  }
+}
+
+void IIOModuleProcessor::process_partitionJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IIOModule.partitionJsonFile", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.partitionJsonFile");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IIOModule.partitionJsonFile");
+  }
+
+  IIOModule_partitionJsonFile_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IIOModule.partitionJsonFile", bytes);
+  }
+
+  IIOModule_partitionJsonFile_result result;
+  try {
+    iface_->partitionJsonFile(args.path, args.first, args.partitions);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IIOModule.partitionJsonFile");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IIOModule.partitionJsonFile");
+  }
+
+  oprot->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IIOModule.partitionJsonFile", bytes);
+  }
+}
+
+void IIOModuleProcessor::process_partitionJsonFile4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IIOModule.partitionJsonFile4", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.partitionJsonFile4");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IIOModule.partitionJsonFile4");
+  }
+
+  IIOModule_partitionJsonFile4_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IIOModule.partitionJsonFile4", bytes);
+  }
+
+  IIOModule_partitionJsonFile4_result result;
+  try {
+    iface_->partitionJsonFile4(args.path, args.first, args.partitions, args.src);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IIOModule.partitionJsonFile4");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("partitionJsonFile4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IIOModule.partitionJsonFile4");
+  }
+
+  oprot->writeMessageBegin("partitionJsonFile4", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IIOModule.partitionJsonFile4", bytes);
+  }
+}
+
+void IIOModuleProcessor::process_saveAsObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IIOModule.saveAsObjectFile", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IIOModule.saveAsObjectFile");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IIOModule.saveAsObjectFile");
+  }
+
+  IIOModule_saveAsObjectFile_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IIOModule.saveAsObjectFile", bytes);
+  }
+
+  IIOModule_saveAsObjectFile_result result;
+  try {
+    iface_->saveAsObjectFile(args.path, args.compression, args.first);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IIOModule.saveAsObjectFile");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("saveAsObjectFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IIOModule.saveAsObjectFile");
+  }
+
+  oprot->writeMessageBegin("saveAsObjectFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IIOModule.saveAsObjectFile", bytes);
   }
 }
 
@@ -1921,7 +3896,7 @@ void IIOModuleProcessor::process_saveAsJsonFile(int32_t seqid, ::apache::thrift:
 
   IIOModule_saveAsJsonFile_result result;
   try {
-    iface_->saveAsJsonFile(args.path, args.first);
+    iface_->saveAsJsonFile(args.path, args.first, args.pretty);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -1961,13 +3936,187 @@ void IIOModuleProcessor::process_saveAsJsonFile(int32_t seqid, ::apache::thrift:
   return processor;
 }
 
-void IIOModuleConcurrentClient::textFile(const std::string& path, const int64_t partitions)
+int64_t IIOModuleConcurrentClient::partitionCount()
 {
-  int32_t seqid = send_textFile(path, partitions);
+  int32_t seqid = send_partitionCount();
+  return recv_partitionCount(seqid);
+}
+
+int32_t IIOModuleConcurrentClient::send_partitionCount()
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("partitionCount", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionCount_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int64_t IIOModuleConcurrentClient::recv_partitionCount(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("partitionCount") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int64_t _return;
+      IIOModule_partitionCount_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionCount failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+int64_t IIOModuleConcurrentClient::partitionApproxSize()
+{
+  int32_t seqid = send_partitionApproxSize();
+  return recv_partitionApproxSize(seqid);
+}
+
+int32_t IIOModuleConcurrentClient::send_partitionApproxSize()
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("partitionApproxSize", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionApproxSize_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int64_t IIOModuleConcurrentClient::recv_partitionApproxSize(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("partitionApproxSize") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int64_t _return;
+      IIOModule_partitionApproxSize_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionApproxSize failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IIOModuleConcurrentClient::textFile(const std::string& path)
+{
+  int32_t seqid = send_textFile(path);
   recv_textFile(seqid);
 }
 
-int32_t IIOModuleConcurrentClient::send_textFile(const std::string& path, const int64_t partitions)
+int32_t IIOModuleConcurrentClient::send_textFile(const std::string& path)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -1975,7 +4124,6 @@ int32_t IIOModuleConcurrentClient::send_textFile(const std::string& path, const 
 
   IIOModule_textFile_pargs args;
   args.path = &path;
-  args.partitions = &partitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2029,6 +4177,10 @@ void IIOModuleConcurrentClient::recv_textFile(const int32_t seqid)
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
 
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
       sentry.commit();
       return;
     }
@@ -2040,22 +4192,21 @@ void IIOModuleConcurrentClient::recv_textFile(const int32_t seqid)
   } // end while(true)
 }
 
-void IIOModuleConcurrentClient::openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
+void IIOModuleConcurrentClient::textFile2(const std::string& path, const int64_t minPartitions)
 {
-  int32_t seqid = send_openPartitionObjectFile(path, first, partitions);
-  recv_openPartitionObjectFile(seqid);
+  int32_t seqid = send_textFile2(path, minPartitions);
+  recv_textFile2(seqid);
 }
 
-int32_t IIOModuleConcurrentClient::send_openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
+int32_t IIOModuleConcurrentClient::send_textFile2(const std::string& path, const int64_t minPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("openPartitionObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("textFile2", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IIOModule_openPartitionObjectFile_pargs args;
+  IIOModule_textFile2_pargs args;
   args.path = &path;
-  args.first = &first;
-  args.partitions = &partitions;
+  args.minPartitions = &minPartitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2066,7 +4217,7 @@ int32_t IIOModuleConcurrentClient::send_openPartitionObjectFile(const std::strin
   return cseqid;
 }
 
-void IIOModuleConcurrentClient::recv_openPartitionObjectFile(const int32_t seqid)
+void IIOModuleConcurrentClient::recv_textFile2(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2095,7 +4246,7 @@ void IIOModuleConcurrentClient::recv_openPartitionObjectFile(const int32_t seqid
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("openPartitionObjectFile") != 0) {
+      if (fname.compare("textFile2") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2104,7 +4255,7 @@ void IIOModuleConcurrentClient::recv_openPartitionObjectFile(const int32_t seqid
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IIOModule_openPartitionObjectFile_presult result;
+      IIOModule_textFile2_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -2124,23 +4275,107 @@ void IIOModuleConcurrentClient::recv_openPartitionObjectFile(const int32_t seqid
   } // end while(true)
 }
 
-void IIOModuleConcurrentClient::openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions)
+void IIOModuleConcurrentClient::partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
-  int32_t seqid = send_openPartitionObjectFileFunction(src, path, first, partitions);
-  recv_openPartitionObjectFileFunction(seqid);
+  int32_t seqid = send_partitionObjectFile(path, first, partitions);
+  recv_partitionObjectFile(seqid);
 }
 
-int32_t IIOModuleConcurrentClient::send_openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions)
+int32_t IIOModuleConcurrentClient::send_partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("openPartitionObjectFileFunction", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IIOModule_openPartitionObjectFileFunction_pargs args;
+  IIOModule_partitionObjectFile_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IIOModuleConcurrentClient::recv_partitionObjectFile(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("partitionObjectFile") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IIOModule_partitionObjectFile_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IIOModuleConcurrentClient::partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_partitionObjectFile4(path, first, partitions, src);
+  recv_partitionObjectFile4(seqid);
+}
+
+int32_t IIOModuleConcurrentClient::send_partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("partitionObjectFile4", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionObjectFile4_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
   args.src = &src;
-  args.path = &path;
-  args.first = &first;
-  args.partitions = &partitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2151,7 +4386,7 @@ int32_t IIOModuleConcurrentClient::send_openPartitionObjectFileFunction(const  :
   return cseqid;
 }
 
-void IIOModuleConcurrentClient::recv_openPartitionObjectFileFunction(const int32_t seqid)
+void IIOModuleConcurrentClient::recv_partitionObjectFile4(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2180,7 +4415,7 @@ void IIOModuleConcurrentClient::recv_openPartitionObjectFileFunction(const int32
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("openPartitionObjectFileFunction") != 0) {
+      if (fname.compare("partitionObjectFile4") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2189,7 +4424,7 @@ void IIOModuleConcurrentClient::recv_openPartitionObjectFileFunction(const int32
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IIOModule_openPartitionObjectFileFunction_presult result;
+      IIOModule_partitionObjectFile4_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -2209,19 +4444,272 @@ void IIOModuleConcurrentClient::recv_openPartitionObjectFileFunction(const int32
   } // end while(true)
 }
 
-void IIOModuleConcurrentClient::saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+void IIOModuleConcurrentClient::partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
-  int32_t seqid = send_saveAsPartitionObjectFile(path, compression, first);
-  recv_saveAsPartitionObjectFile(seqid);
+  int32_t seqid = send_partitionTextFile(path, first, partitions);
+  recv_partitionTextFile(seqid);
 }
 
-int32_t IIOModuleConcurrentClient::send_saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+int32_t IIOModuleConcurrentClient::send_partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("saveAsPartitionObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionTextFile", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IIOModule_saveAsPartitionObjectFile_pargs args;
+  IIOModule_partitionTextFile_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IIOModuleConcurrentClient::recv_partitionTextFile(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("partitionTextFile") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IIOModule_partitionTextFile_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IIOModuleConcurrentClient::partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions)
+{
+  int32_t seqid = send_partitionJsonFile(path, first, partitions);
+  recv_partitionJsonFile(seqid);
+}
+
+int32_t IIOModuleConcurrentClient::send_partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionJsonFile_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IIOModuleConcurrentClient::recv_partitionJsonFile(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("partitionJsonFile") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IIOModule_partitionJsonFile_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IIOModuleConcurrentClient::partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_partitionJsonFile4(path, first, partitions, src);
+  recv_partitionJsonFile4(seqid);
+}
+
+int32_t IIOModuleConcurrentClient::send_partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("partitionJsonFile4", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_partitionJsonFile4_pargs args;
+  args.path = &path;
+  args.first = &first;
+  args.partitions = &partitions;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IIOModuleConcurrentClient::recv_partitionJsonFile4(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("partitionJsonFile4") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IIOModule_partitionJsonFile4_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IIOModuleConcurrentClient::saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+{
+  int32_t seqid = send_saveAsObjectFile(path, compression, first);
+  recv_saveAsObjectFile(seqid);
+}
+
+int32_t IIOModuleConcurrentClient::send_saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("saveAsObjectFile", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IIOModule_saveAsObjectFile_pargs args;
   args.path = &path;
   args.compression = &compression;
   args.first = &first;
@@ -2235,7 +4723,7 @@ int32_t IIOModuleConcurrentClient::send_saveAsPartitionObjectFile(const std::str
   return cseqid;
 }
 
-void IIOModuleConcurrentClient::recv_saveAsPartitionObjectFile(const int32_t seqid)
+void IIOModuleConcurrentClient::recv_saveAsObjectFile(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2264,7 +4752,7 @@ void IIOModuleConcurrentClient::recv_saveAsPartitionObjectFile(const int32_t seq
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("saveAsPartitionObjectFile") != 0) {
+      if (fname.compare("saveAsObjectFile") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2273,7 +4761,7 @@ void IIOModuleConcurrentClient::recv_saveAsPartitionObjectFile(const int32_t seq
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IIOModule_saveAsPartitionObjectFile_presult result;
+      IIOModule_saveAsObjectFile_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -2376,13 +4864,13 @@ void IIOModuleConcurrentClient::recv_saveAsTextFile(const int32_t seqid)
   } // end while(true)
 }
 
-void IIOModuleConcurrentClient::saveAsJsonFile(const std::string& path, const int64_t first)
+void IIOModuleConcurrentClient::saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty)
 {
-  int32_t seqid = send_saveAsJsonFile(path, first);
+  int32_t seqid = send_saveAsJsonFile(path, first, pretty);
   recv_saveAsJsonFile(seqid);
 }
 
-int32_t IIOModuleConcurrentClient::send_saveAsJsonFile(const std::string& path, const int64_t first)
+int32_t IIOModuleConcurrentClient::send_saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -2391,6 +4879,7 @@ int32_t IIOModuleConcurrentClient::send_saveAsJsonFile(const std::string& path, 
   IIOModule_saveAsJsonFile_pargs args;
   args.path = &path;
   args.first = &first;
+  args.pretty = &pretty;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

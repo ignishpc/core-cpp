@@ -22,12 +22,18 @@ namespace ignis { namespace rpc { namespace executor {
 class IIOModuleIf {
  public:
   virtual ~IIOModuleIf() {}
-  virtual void textFile(const std::string& path, const int64_t partitions) = 0;
-  virtual void openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
-  virtual void openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions) = 0;
-  virtual void saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first) = 0;
+  virtual int64_t partitionCount() = 0;
+  virtual int64_t partitionApproxSize() = 0;
+  virtual void textFile(const std::string& path) = 0;
+  virtual void textFile2(const std::string& path, const int64_t minPartitions) = 0;
+  virtual void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
+  virtual void partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
+  virtual void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
+  virtual void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first) = 0;
   virtual void saveAsTextFile(const std::string& path, const int64_t first) = 0;
-  virtual void saveAsJsonFile(const std::string& path, const int64_t first) = 0;
+  virtual void saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty) = 0;
 };
 
 class IIOModuleIfFactory {
@@ -57,30 +63,249 @@ class IIOModuleIfSingletonFactory : virtual public IIOModuleIfFactory {
 class IIOModuleNull : virtual public IIOModuleIf {
  public:
   virtual ~IIOModuleNull() {}
-  void textFile(const std::string& /* path */, const int64_t /* partitions */) {
+  int64_t partitionCount() {
+    int64_t _return = 0;
+    return _return;
+  }
+  int64_t partitionApproxSize() {
+    int64_t _return = 0;
+    return _return;
+  }
+  void textFile(const std::string& /* path */) {
     return;
   }
-  void openPartitionObjectFile(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */) {
+  void textFile2(const std::string& /* path */, const int64_t /* minPartitions */) {
     return;
   }
-  void openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& /* src */, const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */) {
+  void partitionObjectFile(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */) {
     return;
   }
-  void saveAsPartitionObjectFile(const std::string& /* path */, const int8_t /* compression */, const int64_t /* first */) {
+  void partitionObjectFile4(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void partitionTextFile(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */) {
+    return;
+  }
+  void partitionJsonFile(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */) {
+    return;
+  }
+  void partitionJsonFile4(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void saveAsObjectFile(const std::string& /* path */, const int8_t /* compression */, const int64_t /* first */) {
     return;
   }
   void saveAsTextFile(const std::string& /* path */, const int64_t /* first */) {
     return;
   }
-  void saveAsJsonFile(const std::string& /* path */, const int64_t /* first */) {
+  void saveAsJsonFile(const std::string& /* path */, const int64_t /* first */, const bool /* pretty */) {
     return;
   }
 };
 
+
+class IIOModule_partitionCount_args {
+ public:
+
+  IIOModule_partitionCount_args(const IIOModule_partitionCount_args&);
+  IIOModule_partitionCount_args& operator=(const IIOModule_partitionCount_args&);
+  IIOModule_partitionCount_args() {
+  }
+
+  virtual ~IIOModule_partitionCount_args() noexcept;
+
+  bool operator == (const IIOModule_partitionCount_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IIOModule_partitionCount_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionCount_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_partitionCount_pargs {
+ public:
+
+
+  virtual ~IIOModule_partitionCount_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionCount_result__isset {
+  _IIOModule_partitionCount_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IIOModule_partitionCount_result__isset;
+
+class IIOModule_partitionCount_result {
+ public:
+
+  IIOModule_partitionCount_result(const IIOModule_partitionCount_result&);
+  IIOModule_partitionCount_result& operator=(const IIOModule_partitionCount_result&);
+  IIOModule_partitionCount_result() : success(0) {
+  }
+
+  virtual ~IIOModule_partitionCount_result() noexcept;
+  int64_t success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionCount_result__isset __isset;
+
+  void __set_success(const int64_t val);
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_partitionCount_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionCount_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionCount_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionCount_presult__isset {
+  _IIOModule_partitionCount_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IIOModule_partitionCount_presult__isset;
+
+class IIOModule_partitionCount_presult {
+ public:
+
+
+  virtual ~IIOModule_partitionCount_presult() noexcept;
+  int64_t* success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionCount_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IIOModule_partitionApproxSize_args {
+ public:
+
+  IIOModule_partitionApproxSize_args(const IIOModule_partitionApproxSize_args&);
+  IIOModule_partitionApproxSize_args& operator=(const IIOModule_partitionApproxSize_args&);
+  IIOModule_partitionApproxSize_args() {
+  }
+
+  virtual ~IIOModule_partitionApproxSize_args() noexcept;
+
+  bool operator == (const IIOModule_partitionApproxSize_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IIOModule_partitionApproxSize_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionApproxSize_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_partitionApproxSize_pargs {
+ public:
+
+
+  virtual ~IIOModule_partitionApproxSize_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionApproxSize_result__isset {
+  _IIOModule_partitionApproxSize_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IIOModule_partitionApproxSize_result__isset;
+
+class IIOModule_partitionApproxSize_result {
+ public:
+
+  IIOModule_partitionApproxSize_result(const IIOModule_partitionApproxSize_result&);
+  IIOModule_partitionApproxSize_result& operator=(const IIOModule_partitionApproxSize_result&);
+  IIOModule_partitionApproxSize_result() : success(0) {
+  }
+
+  virtual ~IIOModule_partitionApproxSize_result() noexcept;
+  int64_t success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionApproxSize_result__isset __isset;
+
+  void __set_success(const int64_t val);
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_partitionApproxSize_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionApproxSize_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionApproxSize_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionApproxSize_presult__isset {
+  _IIOModule_partitionApproxSize_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IIOModule_partitionApproxSize_presult__isset;
+
+class IIOModule_partitionApproxSize_presult {
+ public:
+
+
+  virtual ~IIOModule_partitionApproxSize_presult() noexcept;
+  int64_t* success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionApproxSize_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IIOModule_textFile_args__isset {
-  _IIOModule_textFile_args__isset() : path(false), partitions(false) {}
+  _IIOModule_textFile_args__isset() : path(false) {}
   bool path :1;
-  bool partitions :1;
 } _IIOModule_textFile_args__isset;
 
 class IIOModule_textFile_args {
@@ -88,24 +313,19 @@ class IIOModule_textFile_args {
 
   IIOModule_textFile_args(const IIOModule_textFile_args&);
   IIOModule_textFile_args& operator=(const IIOModule_textFile_args&);
-  IIOModule_textFile_args() : path(), partitions(0) {
+  IIOModule_textFile_args() : path() {
   }
 
   virtual ~IIOModule_textFile_args() noexcept;
   std::string path;
-  int64_t partitions;
 
   _IIOModule_textFile_args__isset __isset;
 
   void __set_path(const std::string& val);
 
-  void __set_partitions(const int64_t val);
-
   bool operator == (const IIOModule_textFile_args & rhs) const
   {
     if (!(path == rhs.path))
-      return false;
-    if (!(partitions == rhs.partitions))
       return false;
     return true;
   }
@@ -127,12 +347,15 @@ class IIOModule_textFile_pargs {
 
   virtual ~IIOModule_textFile_pargs() noexcept;
   const std::string* path;
-  const int64_t* partitions;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
+typedef struct _IIOModule_textFile_result__isset {
+  _IIOModule_textFile_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_textFile_result__isset;
 
 class IIOModule_textFile_result {
  public:
@@ -143,9 +366,16 @@ class IIOModule_textFile_result {
   }
 
   virtual ~IIOModule_textFile_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
 
-  bool operator == (const IIOModule_textFile_result & /* rhs */) const
+  _IIOModule_textFile_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_textFile_result & rhs) const
   {
+    if (!(ex == rhs.ex))
+      return false;
     return true;
   }
   bool operator != (const IIOModule_textFile_result &rhs) const {
@@ -159,38 +389,156 @@ class IIOModule_textFile_result {
 
 };
 
+typedef struct _IIOModule_textFile_presult__isset {
+  _IIOModule_textFile_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_textFile_presult__isset;
 
 class IIOModule_textFile_presult {
  public:
 
 
   virtual ~IIOModule_textFile_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_textFile_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IIOModule_openPartitionObjectFile_args__isset {
-  _IIOModule_openPartitionObjectFile_args__isset() : path(false), first(false), partitions(false) {}
+typedef struct _IIOModule_textFile2_args__isset {
+  _IIOModule_textFile2_args__isset() : path(false), minPartitions(false) {}
+  bool path :1;
+  bool minPartitions :1;
+} _IIOModule_textFile2_args__isset;
+
+class IIOModule_textFile2_args {
+ public:
+
+  IIOModule_textFile2_args(const IIOModule_textFile2_args&);
+  IIOModule_textFile2_args& operator=(const IIOModule_textFile2_args&);
+  IIOModule_textFile2_args() : path(), minPartitions(0) {
+  }
+
+  virtual ~IIOModule_textFile2_args() noexcept;
+  std::string path;
+  int64_t minPartitions;
+
+  _IIOModule_textFile2_args__isset __isset;
+
+  void __set_path(const std::string& val);
+
+  void __set_minPartitions(const int64_t val);
+
+  bool operator == (const IIOModule_textFile2_args & rhs) const
+  {
+    if (!(path == rhs.path))
+      return false;
+    if (!(minPartitions == rhs.minPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_textFile2_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_textFile2_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_textFile2_pargs {
+ public:
+
+
+  virtual ~IIOModule_textFile2_pargs() noexcept;
+  const std::string* path;
+  const int64_t* minPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_textFile2_result__isset {
+  _IIOModule_textFile2_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_textFile2_result__isset;
+
+class IIOModule_textFile2_result {
+ public:
+
+  IIOModule_textFile2_result(const IIOModule_textFile2_result&);
+  IIOModule_textFile2_result& operator=(const IIOModule_textFile2_result&);
+  IIOModule_textFile2_result() {
+  }
+
+  virtual ~IIOModule_textFile2_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_textFile2_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_textFile2_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_textFile2_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_textFile2_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_textFile2_presult__isset {
+  _IIOModule_textFile2_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_textFile2_presult__isset;
+
+class IIOModule_textFile2_presult {
+ public:
+
+
+  virtual ~IIOModule_textFile2_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_textFile2_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IIOModule_partitionObjectFile_args__isset {
+  _IIOModule_partitionObjectFile_args__isset() : path(false), first(false), partitions(false) {}
   bool path :1;
   bool first :1;
   bool partitions :1;
-} _IIOModule_openPartitionObjectFile_args__isset;
+} _IIOModule_partitionObjectFile_args__isset;
 
-class IIOModule_openPartitionObjectFile_args {
+class IIOModule_partitionObjectFile_args {
  public:
 
-  IIOModule_openPartitionObjectFile_args(const IIOModule_openPartitionObjectFile_args&);
-  IIOModule_openPartitionObjectFile_args& operator=(const IIOModule_openPartitionObjectFile_args&);
-  IIOModule_openPartitionObjectFile_args() : path(), first(0), partitions(0) {
+  IIOModule_partitionObjectFile_args(const IIOModule_partitionObjectFile_args&);
+  IIOModule_partitionObjectFile_args& operator=(const IIOModule_partitionObjectFile_args&);
+  IIOModule_partitionObjectFile_args() : path(), first(0), partitions(0) {
   }
 
-  virtual ~IIOModule_openPartitionObjectFile_args() noexcept;
+  virtual ~IIOModule_partitionObjectFile_args() noexcept;
   std::string path;
   int64_t first;
   int64_t partitions;
 
-  _IIOModule_openPartitionObjectFile_args__isset __isset;
+  _IIOModule_partitionObjectFile_args__isset __isset;
 
   void __set_path(const std::string& val);
 
@@ -198,7 +546,7 @@ class IIOModule_openPartitionObjectFile_args {
 
   void __set_partitions(const int64_t val);
 
-  bool operator == (const IIOModule_openPartitionObjectFile_args & rhs) const
+  bool operator == (const IIOModule_partitionObjectFile_args & rhs) const
   {
     if (!(path == rhs.path))
       return false;
@@ -208,11 +556,11 @@ class IIOModule_openPartitionObjectFile_args {
       return false;
     return true;
   }
-  bool operator != (const IIOModule_openPartitionObjectFile_args &rhs) const {
+  bool operator != (const IIOModule_partitionObjectFile_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_openPartitionObjectFile_args & ) const;
+  bool operator < (const IIOModule_partitionObjectFile_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -220,11 +568,11 @@ class IIOModule_openPartitionObjectFile_args {
 };
 
 
-class IIOModule_openPartitionObjectFile_pargs {
+class IIOModule_partitionObjectFile_pargs {
  public:
 
 
-  virtual ~IIOModule_openPartitionObjectFile_pargs() noexcept;
+  virtual ~IIOModule_partitionObjectFile_pargs() noexcept;
   const std::string* path;
   const int64_t* first;
   const int64_t* partitions;
@@ -233,97 +581,216 @@ class IIOModule_openPartitionObjectFile_pargs {
 
 };
 
-typedef struct _IIOModule_openPartitionObjectFile_result__isset {
-  _IIOModule_openPartitionObjectFile_result__isset() : ex(false) {}
+typedef struct _IIOModule_partitionObjectFile_result__isset {
+  _IIOModule_partitionObjectFile_result__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_openPartitionObjectFile_result__isset;
+} _IIOModule_partitionObjectFile_result__isset;
 
-class IIOModule_openPartitionObjectFile_result {
+class IIOModule_partitionObjectFile_result {
  public:
 
-  IIOModule_openPartitionObjectFile_result(const IIOModule_openPartitionObjectFile_result&);
-  IIOModule_openPartitionObjectFile_result& operator=(const IIOModule_openPartitionObjectFile_result&);
-  IIOModule_openPartitionObjectFile_result() {
+  IIOModule_partitionObjectFile_result(const IIOModule_partitionObjectFile_result&);
+  IIOModule_partitionObjectFile_result& operator=(const IIOModule_partitionObjectFile_result&);
+  IIOModule_partitionObjectFile_result() {
   }
 
-  virtual ~IIOModule_openPartitionObjectFile_result() noexcept;
+  virtual ~IIOModule_partitionObjectFile_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_openPartitionObjectFile_result__isset __isset;
+  _IIOModule_partitionObjectFile_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const IIOModule_openPartitionObjectFile_result & rhs) const
+  bool operator == (const IIOModule_partitionObjectFile_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IIOModule_openPartitionObjectFile_result &rhs) const {
+  bool operator != (const IIOModule_partitionObjectFile_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_openPartitionObjectFile_result & ) const;
+  bool operator < (const IIOModule_partitionObjectFile_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IIOModule_openPartitionObjectFile_presult__isset {
-  _IIOModule_openPartitionObjectFile_presult__isset() : ex(false) {}
+typedef struct _IIOModule_partitionObjectFile_presult__isset {
+  _IIOModule_partitionObjectFile_presult__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_openPartitionObjectFile_presult__isset;
+} _IIOModule_partitionObjectFile_presult__isset;
 
-class IIOModule_openPartitionObjectFile_presult {
+class IIOModule_partitionObjectFile_presult {
  public:
 
 
-  virtual ~IIOModule_openPartitionObjectFile_presult() noexcept;
+  virtual ~IIOModule_partitionObjectFile_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_openPartitionObjectFile_presult__isset __isset;
+  _IIOModule_partitionObjectFile_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IIOModule_openPartitionObjectFileFunction_args__isset {
-  _IIOModule_openPartitionObjectFileFunction_args__isset() : src(false), path(false), first(false), partitions(false) {}
-  bool src :1;
+typedef struct _IIOModule_partitionObjectFile4_args__isset {
+  _IIOModule_partitionObjectFile4_args__isset() : path(false), first(false), partitions(false), src(false) {}
   bool path :1;
   bool first :1;
   bool partitions :1;
-} _IIOModule_openPartitionObjectFileFunction_args__isset;
+  bool src :1;
+} _IIOModule_partitionObjectFile4_args__isset;
 
-class IIOModule_openPartitionObjectFileFunction_args {
+class IIOModule_partitionObjectFile4_args {
  public:
 
-  IIOModule_openPartitionObjectFileFunction_args(const IIOModule_openPartitionObjectFileFunction_args&);
-  IIOModule_openPartitionObjectFileFunction_args& operator=(const IIOModule_openPartitionObjectFileFunction_args&);
-  IIOModule_openPartitionObjectFileFunction_args() : path(), first(0), partitions(0) {
+  IIOModule_partitionObjectFile4_args(const IIOModule_partitionObjectFile4_args&);
+  IIOModule_partitionObjectFile4_args& operator=(const IIOModule_partitionObjectFile4_args&);
+  IIOModule_partitionObjectFile4_args() : path(), first(0), partitions(0) {
   }
 
-  virtual ~IIOModule_openPartitionObjectFileFunction_args() noexcept;
-   ::ignis::rpc::ISource src;
+  virtual ~IIOModule_partitionObjectFile4_args() noexcept;
   std::string path;
   int64_t first;
   int64_t partitions;
+   ::ignis::rpc::ISource src;
 
-  _IIOModule_openPartitionObjectFileFunction_args__isset __isset;
+  _IIOModule_partitionObjectFile4_args__isset __isset;
+
+  void __set_path(const std::string& val);
+
+  void __set_first(const int64_t val);
+
+  void __set_partitions(const int64_t val);
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
+  bool operator == (const IIOModule_partitionObjectFile4_args & rhs) const
+  {
+    if (!(path == rhs.path))
+      return false;
+    if (!(first == rhs.first))
+      return false;
+    if (!(partitions == rhs.partitions))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionObjectFile4_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionObjectFile4_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_partitionObjectFile4_pargs {
+ public:
+
+
+  virtual ~IIOModule_partitionObjectFile4_pargs() noexcept;
+  const std::string* path;
+  const int64_t* first;
+  const int64_t* partitions;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionObjectFile4_result__isset {
+  _IIOModule_partitionObjectFile4_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_partitionObjectFile4_result__isset;
+
+class IIOModule_partitionObjectFile4_result {
+ public:
+
+  IIOModule_partitionObjectFile4_result(const IIOModule_partitionObjectFile4_result&);
+  IIOModule_partitionObjectFile4_result& operator=(const IIOModule_partitionObjectFile4_result&);
+  IIOModule_partitionObjectFile4_result() {
+  }
+
+  virtual ~IIOModule_partitionObjectFile4_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionObjectFile4_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_partitionObjectFile4_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionObjectFile4_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionObjectFile4_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionObjectFile4_presult__isset {
+  _IIOModule_partitionObjectFile4_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_partitionObjectFile4_presult__isset;
+
+class IIOModule_partitionObjectFile4_presult {
+ public:
+
+
+  virtual ~IIOModule_partitionObjectFile4_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionObjectFile4_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IIOModule_partitionTextFile_args__isset {
+  _IIOModule_partitionTextFile_args__isset() : path(false), first(false), partitions(false) {}
+  bool path :1;
+  bool first :1;
+  bool partitions :1;
+} _IIOModule_partitionTextFile_args__isset;
+
+class IIOModule_partitionTextFile_args {
+ public:
+
+  IIOModule_partitionTextFile_args(const IIOModule_partitionTextFile_args&);
+  IIOModule_partitionTextFile_args& operator=(const IIOModule_partitionTextFile_args&);
+  IIOModule_partitionTextFile_args() : path(), first(0), partitions(0) {
+  }
+
+  virtual ~IIOModule_partitionTextFile_args() noexcept;
+  std::string path;
+  int64_t first;
+  int64_t partitions;
+
+  _IIOModule_partitionTextFile_args__isset __isset;
+
   void __set_path(const std::string& val);
 
   void __set_first(const int64_t val);
 
   void __set_partitions(const int64_t val);
 
-  bool operator == (const IIOModule_openPartitionObjectFileFunction_args & rhs) const
+  bool operator == (const IIOModule_partitionTextFile_args & rhs) const
   {
-    if (!(src == rhs.src))
-      return false;
     if (!(path == rhs.path))
       return false;
     if (!(first == rhs.first))
@@ -332,11 +799,11 @@ class IIOModule_openPartitionObjectFileFunction_args {
       return false;
     return true;
   }
-  bool operator != (const IIOModule_openPartitionObjectFileFunction_args &rhs) const {
+  bool operator != (const IIOModule_partitionTextFile_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_openPartitionObjectFileFunction_args & ) const;
+  bool operator < (const IIOModule_partitionTextFile_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -344,12 +811,11 @@ class IIOModule_openPartitionObjectFileFunction_args {
 };
 
 
-class IIOModule_openPartitionObjectFileFunction_pargs {
+class IIOModule_partitionTextFile_pargs {
  public:
 
 
-  virtual ~IIOModule_openPartitionObjectFileFunction_pargs() noexcept;
-  const  ::ignis::rpc::ISource* src;
+  virtual ~IIOModule_partitionTextFile_pargs() noexcept;
   const std::string* path;
   const int64_t* first;
   const int64_t* partitions;
@@ -358,82 +824,325 @@ class IIOModule_openPartitionObjectFileFunction_pargs {
 
 };
 
-typedef struct _IIOModule_openPartitionObjectFileFunction_result__isset {
-  _IIOModule_openPartitionObjectFileFunction_result__isset() : ex(false) {}
+typedef struct _IIOModule_partitionTextFile_result__isset {
+  _IIOModule_partitionTextFile_result__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_openPartitionObjectFileFunction_result__isset;
+} _IIOModule_partitionTextFile_result__isset;
 
-class IIOModule_openPartitionObjectFileFunction_result {
+class IIOModule_partitionTextFile_result {
  public:
 
-  IIOModule_openPartitionObjectFileFunction_result(const IIOModule_openPartitionObjectFileFunction_result&);
-  IIOModule_openPartitionObjectFileFunction_result& operator=(const IIOModule_openPartitionObjectFileFunction_result&);
-  IIOModule_openPartitionObjectFileFunction_result() {
+  IIOModule_partitionTextFile_result(const IIOModule_partitionTextFile_result&);
+  IIOModule_partitionTextFile_result& operator=(const IIOModule_partitionTextFile_result&);
+  IIOModule_partitionTextFile_result() {
   }
 
-  virtual ~IIOModule_openPartitionObjectFileFunction_result() noexcept;
+  virtual ~IIOModule_partitionTextFile_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_openPartitionObjectFileFunction_result__isset __isset;
+  _IIOModule_partitionTextFile_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const IIOModule_openPartitionObjectFileFunction_result & rhs) const
+  bool operator == (const IIOModule_partitionTextFile_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IIOModule_openPartitionObjectFileFunction_result &rhs) const {
+  bool operator != (const IIOModule_partitionTextFile_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_openPartitionObjectFileFunction_result & ) const;
+  bool operator < (const IIOModule_partitionTextFile_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IIOModule_openPartitionObjectFileFunction_presult__isset {
-  _IIOModule_openPartitionObjectFileFunction_presult__isset() : ex(false) {}
+typedef struct _IIOModule_partitionTextFile_presult__isset {
+  _IIOModule_partitionTextFile_presult__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_openPartitionObjectFileFunction_presult__isset;
+} _IIOModule_partitionTextFile_presult__isset;
 
-class IIOModule_openPartitionObjectFileFunction_presult {
+class IIOModule_partitionTextFile_presult {
  public:
 
 
-  virtual ~IIOModule_openPartitionObjectFileFunction_presult() noexcept;
+  virtual ~IIOModule_partitionTextFile_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_openPartitionObjectFileFunction_presult__isset __isset;
+  _IIOModule_partitionTextFile_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IIOModule_saveAsPartitionObjectFile_args__isset {
-  _IIOModule_saveAsPartitionObjectFile_args__isset() : path(false), compression(false), first(false) {}
+typedef struct _IIOModule_partitionJsonFile_args__isset {
+  _IIOModule_partitionJsonFile_args__isset() : path(false), first(false), partitions(false) {}
+  bool path :1;
+  bool first :1;
+  bool partitions :1;
+} _IIOModule_partitionJsonFile_args__isset;
+
+class IIOModule_partitionJsonFile_args {
+ public:
+
+  IIOModule_partitionJsonFile_args(const IIOModule_partitionJsonFile_args&);
+  IIOModule_partitionJsonFile_args& operator=(const IIOModule_partitionJsonFile_args&);
+  IIOModule_partitionJsonFile_args() : path(), first(0), partitions(0) {
+  }
+
+  virtual ~IIOModule_partitionJsonFile_args() noexcept;
+  std::string path;
+  int64_t first;
+  int64_t partitions;
+
+  _IIOModule_partitionJsonFile_args__isset __isset;
+
+  void __set_path(const std::string& val);
+
+  void __set_first(const int64_t val);
+
+  void __set_partitions(const int64_t val);
+
+  bool operator == (const IIOModule_partitionJsonFile_args & rhs) const
+  {
+    if (!(path == rhs.path))
+      return false;
+    if (!(first == rhs.first))
+      return false;
+    if (!(partitions == rhs.partitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionJsonFile_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionJsonFile_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_partitionJsonFile_pargs {
+ public:
+
+
+  virtual ~IIOModule_partitionJsonFile_pargs() noexcept;
+  const std::string* path;
+  const int64_t* first;
+  const int64_t* partitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionJsonFile_result__isset {
+  _IIOModule_partitionJsonFile_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_partitionJsonFile_result__isset;
+
+class IIOModule_partitionJsonFile_result {
+ public:
+
+  IIOModule_partitionJsonFile_result(const IIOModule_partitionJsonFile_result&);
+  IIOModule_partitionJsonFile_result& operator=(const IIOModule_partitionJsonFile_result&);
+  IIOModule_partitionJsonFile_result() {
+  }
+
+  virtual ~IIOModule_partitionJsonFile_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionJsonFile_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_partitionJsonFile_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionJsonFile_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionJsonFile_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionJsonFile_presult__isset {
+  _IIOModule_partitionJsonFile_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_partitionJsonFile_presult__isset;
+
+class IIOModule_partitionJsonFile_presult {
+ public:
+
+
+  virtual ~IIOModule_partitionJsonFile_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionJsonFile_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IIOModule_partitionJsonFile4_args__isset {
+  _IIOModule_partitionJsonFile4_args__isset() : path(false), first(false), partitions(false), src(false) {}
+  bool path :1;
+  bool first :1;
+  bool partitions :1;
+  bool src :1;
+} _IIOModule_partitionJsonFile4_args__isset;
+
+class IIOModule_partitionJsonFile4_args {
+ public:
+
+  IIOModule_partitionJsonFile4_args(const IIOModule_partitionJsonFile4_args&);
+  IIOModule_partitionJsonFile4_args& operator=(const IIOModule_partitionJsonFile4_args&);
+  IIOModule_partitionJsonFile4_args() : path(), first(0), partitions(0) {
+  }
+
+  virtual ~IIOModule_partitionJsonFile4_args() noexcept;
+  std::string path;
+  int64_t first;
+  int64_t partitions;
+   ::ignis::rpc::ISource src;
+
+  _IIOModule_partitionJsonFile4_args__isset __isset;
+
+  void __set_path(const std::string& val);
+
+  void __set_first(const int64_t val);
+
+  void __set_partitions(const int64_t val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IIOModule_partitionJsonFile4_args & rhs) const
+  {
+    if (!(path == rhs.path))
+      return false;
+    if (!(first == rhs.first))
+      return false;
+    if (!(partitions == rhs.partitions))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionJsonFile4_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionJsonFile4_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_partitionJsonFile4_pargs {
+ public:
+
+
+  virtual ~IIOModule_partitionJsonFile4_pargs() noexcept;
+  const std::string* path;
+  const int64_t* first;
+  const int64_t* partitions;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionJsonFile4_result__isset {
+  _IIOModule_partitionJsonFile4_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_partitionJsonFile4_result__isset;
+
+class IIOModule_partitionJsonFile4_result {
+ public:
+
+  IIOModule_partitionJsonFile4_result(const IIOModule_partitionJsonFile4_result&);
+  IIOModule_partitionJsonFile4_result& operator=(const IIOModule_partitionJsonFile4_result&);
+  IIOModule_partitionJsonFile4_result() {
+  }
+
+  virtual ~IIOModule_partitionJsonFile4_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionJsonFile4_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_partitionJsonFile4_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_partitionJsonFile4_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_partitionJsonFile4_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_partitionJsonFile4_presult__isset {
+  _IIOModule_partitionJsonFile4_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_partitionJsonFile4_presult__isset;
+
+class IIOModule_partitionJsonFile4_presult {
+ public:
+
+
+  virtual ~IIOModule_partitionJsonFile4_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_partitionJsonFile4_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IIOModule_saveAsObjectFile_args__isset {
+  _IIOModule_saveAsObjectFile_args__isset() : path(false), compression(false), first(false) {}
   bool path :1;
   bool compression :1;
   bool first :1;
-} _IIOModule_saveAsPartitionObjectFile_args__isset;
+} _IIOModule_saveAsObjectFile_args__isset;
 
-class IIOModule_saveAsPartitionObjectFile_args {
+class IIOModule_saveAsObjectFile_args {
  public:
 
-  IIOModule_saveAsPartitionObjectFile_args(const IIOModule_saveAsPartitionObjectFile_args&);
-  IIOModule_saveAsPartitionObjectFile_args& operator=(const IIOModule_saveAsPartitionObjectFile_args&);
-  IIOModule_saveAsPartitionObjectFile_args() : path(), compression(0), first(0) {
+  IIOModule_saveAsObjectFile_args(const IIOModule_saveAsObjectFile_args&);
+  IIOModule_saveAsObjectFile_args& operator=(const IIOModule_saveAsObjectFile_args&);
+  IIOModule_saveAsObjectFile_args() : path(), compression(0), first(0) {
   }
 
-  virtual ~IIOModule_saveAsPartitionObjectFile_args() noexcept;
+  virtual ~IIOModule_saveAsObjectFile_args() noexcept;
   std::string path;
   int8_t compression;
   int64_t first;
 
-  _IIOModule_saveAsPartitionObjectFile_args__isset __isset;
+  _IIOModule_saveAsObjectFile_args__isset __isset;
 
   void __set_path(const std::string& val);
 
@@ -441,7 +1150,7 @@ class IIOModule_saveAsPartitionObjectFile_args {
 
   void __set_first(const int64_t val);
 
-  bool operator == (const IIOModule_saveAsPartitionObjectFile_args & rhs) const
+  bool operator == (const IIOModule_saveAsObjectFile_args & rhs) const
   {
     if (!(path == rhs.path))
       return false;
@@ -451,11 +1160,11 @@ class IIOModule_saveAsPartitionObjectFile_args {
       return false;
     return true;
   }
-  bool operator != (const IIOModule_saveAsPartitionObjectFile_args &rhs) const {
+  bool operator != (const IIOModule_saveAsObjectFile_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_saveAsPartitionObjectFile_args & ) const;
+  bool operator < (const IIOModule_saveAsObjectFile_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -463,11 +1172,11 @@ class IIOModule_saveAsPartitionObjectFile_args {
 };
 
 
-class IIOModule_saveAsPartitionObjectFile_pargs {
+class IIOModule_saveAsObjectFile_pargs {
  public:
 
 
-  virtual ~IIOModule_saveAsPartitionObjectFile_pargs() noexcept;
+  virtual ~IIOModule_saveAsObjectFile_pargs() noexcept;
   const std::string* path;
   const int8_t* compression;
   const int64_t* first;
@@ -476,56 +1185,56 @@ class IIOModule_saveAsPartitionObjectFile_pargs {
 
 };
 
-typedef struct _IIOModule_saveAsPartitionObjectFile_result__isset {
-  _IIOModule_saveAsPartitionObjectFile_result__isset() : ex(false) {}
+typedef struct _IIOModule_saveAsObjectFile_result__isset {
+  _IIOModule_saveAsObjectFile_result__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_saveAsPartitionObjectFile_result__isset;
+} _IIOModule_saveAsObjectFile_result__isset;
 
-class IIOModule_saveAsPartitionObjectFile_result {
+class IIOModule_saveAsObjectFile_result {
  public:
 
-  IIOModule_saveAsPartitionObjectFile_result(const IIOModule_saveAsPartitionObjectFile_result&);
-  IIOModule_saveAsPartitionObjectFile_result& operator=(const IIOModule_saveAsPartitionObjectFile_result&);
-  IIOModule_saveAsPartitionObjectFile_result() {
+  IIOModule_saveAsObjectFile_result(const IIOModule_saveAsObjectFile_result&);
+  IIOModule_saveAsObjectFile_result& operator=(const IIOModule_saveAsObjectFile_result&);
+  IIOModule_saveAsObjectFile_result() {
   }
 
-  virtual ~IIOModule_saveAsPartitionObjectFile_result() noexcept;
+  virtual ~IIOModule_saveAsObjectFile_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_saveAsPartitionObjectFile_result__isset __isset;
+  _IIOModule_saveAsObjectFile_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const IIOModule_saveAsPartitionObjectFile_result & rhs) const
+  bool operator == (const IIOModule_saveAsObjectFile_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IIOModule_saveAsPartitionObjectFile_result &rhs) const {
+  bool operator != (const IIOModule_saveAsObjectFile_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_saveAsPartitionObjectFile_result & ) const;
+  bool operator < (const IIOModule_saveAsObjectFile_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IIOModule_saveAsPartitionObjectFile_presult__isset {
-  _IIOModule_saveAsPartitionObjectFile_presult__isset() : ex(false) {}
+typedef struct _IIOModule_saveAsObjectFile_presult__isset {
+  _IIOModule_saveAsObjectFile_presult__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_saveAsPartitionObjectFile_presult__isset;
+} _IIOModule_saveAsObjectFile_presult__isset;
 
-class IIOModule_saveAsPartitionObjectFile_presult {
+class IIOModule_saveAsObjectFile_presult {
  public:
 
 
-  virtual ~IIOModule_saveAsPartitionObjectFile_presult() noexcept;
+  virtual ~IIOModule_saveAsObjectFile_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_saveAsPartitionObjectFile_presult__isset __isset;
+  _IIOModule_saveAsObjectFile_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -643,9 +1352,10 @@ class IIOModule_saveAsTextFile_presult {
 };
 
 typedef struct _IIOModule_saveAsJsonFile_args__isset {
-  _IIOModule_saveAsJsonFile_args__isset() : path(false), first(false) {}
+  _IIOModule_saveAsJsonFile_args__isset() : path(false), first(false), pretty(false) {}
   bool path :1;
   bool first :1;
+  bool pretty :1;
 } _IIOModule_saveAsJsonFile_args__isset;
 
 class IIOModule_saveAsJsonFile_args {
@@ -653,12 +1363,13 @@ class IIOModule_saveAsJsonFile_args {
 
   IIOModule_saveAsJsonFile_args(const IIOModule_saveAsJsonFile_args&);
   IIOModule_saveAsJsonFile_args& operator=(const IIOModule_saveAsJsonFile_args&);
-  IIOModule_saveAsJsonFile_args() : path(), first(0) {
+  IIOModule_saveAsJsonFile_args() : path(), first(0), pretty(0) {
   }
 
   virtual ~IIOModule_saveAsJsonFile_args() noexcept;
   std::string path;
   int64_t first;
+  bool pretty;
 
   _IIOModule_saveAsJsonFile_args__isset __isset;
 
@@ -666,11 +1377,15 @@ class IIOModule_saveAsJsonFile_args {
 
   void __set_first(const int64_t val);
 
+  void __set_pretty(const bool val);
+
   bool operator == (const IIOModule_saveAsJsonFile_args & rhs) const
   {
     if (!(path == rhs.path))
       return false;
     if (!(first == rhs.first))
+      return false;
+    if (!(pretty == rhs.pretty))
       return false;
     return true;
   }
@@ -693,6 +1408,7 @@ class IIOModule_saveAsJsonFile_pargs {
   virtual ~IIOModule_saveAsJsonFile_pargs() noexcept;
   const std::string* path;
   const int64_t* first;
+  const bool* pretty;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -778,23 +1494,41 @@ class IIOModuleClient : virtual public IIOModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void textFile(const std::string& path, const int64_t partitions);
-  void send_textFile(const std::string& path, const int64_t partitions);
+  int64_t partitionCount();
+  void send_partitionCount();
+  int64_t recv_partitionCount();
+  int64_t partitionApproxSize();
+  void send_partitionApproxSize();
+  int64_t recv_partitionApproxSize();
+  void textFile(const std::string& path);
+  void send_textFile(const std::string& path);
   void recv_textFile();
-  void openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
-  void send_openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
-  void recv_openPartitionObjectFile();
-  void openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions);
-  void send_openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions);
-  void recv_openPartitionObjectFileFunction();
-  void saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first);
-  void send_saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first);
-  void recv_saveAsPartitionObjectFile();
+  void textFile2(const std::string& path, const int64_t minPartitions);
+  void send_textFile2(const std::string& path, const int64_t minPartitions);
+  void recv_textFile2();
+  void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void send_partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void recv_partitionObjectFile();
+  void partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void send_partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_partitionObjectFile4();
+  void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void send_partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void recv_partitionTextFile();
+  void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void send_partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void recv_partitionJsonFile();
+  void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void send_partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_partitionJsonFile4();
+  void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
+  void send_saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
+  void recv_saveAsObjectFile();
   void saveAsTextFile(const std::string& path, const int64_t first);
   void send_saveAsTextFile(const std::string& path, const int64_t first);
   void recv_saveAsTextFile();
-  void saveAsJsonFile(const std::string& path, const int64_t first);
-  void send_saveAsJsonFile(const std::string& path, const int64_t first);
+  void saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty);
+  void send_saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty);
   void recv_saveAsJsonFile();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -811,19 +1545,31 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IIOModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_partitionCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionApproxSize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_openPartitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_openPartitionObjectFileFunction(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_saveAsPartitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_textFile2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionObjectFile4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionJsonFile4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_saveAsObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IIOModuleProcessor(::std::shared_ptr<IIOModuleIf> iface) :
     iface_(iface) {
+    processMap_["partitionCount"] = &IIOModuleProcessor::process_partitionCount;
+    processMap_["partitionApproxSize"] = &IIOModuleProcessor::process_partitionApproxSize;
     processMap_["textFile"] = &IIOModuleProcessor::process_textFile;
-    processMap_["openPartitionObjectFile"] = &IIOModuleProcessor::process_openPartitionObjectFile;
-    processMap_["openPartitionObjectFileFunction"] = &IIOModuleProcessor::process_openPartitionObjectFileFunction;
-    processMap_["saveAsPartitionObjectFile"] = &IIOModuleProcessor::process_saveAsPartitionObjectFile;
+    processMap_["textFile2"] = &IIOModuleProcessor::process_textFile2;
+    processMap_["partitionObjectFile"] = &IIOModuleProcessor::process_partitionObjectFile;
+    processMap_["partitionObjectFile4"] = &IIOModuleProcessor::process_partitionObjectFile4;
+    processMap_["partitionTextFile"] = &IIOModuleProcessor::process_partitionTextFile;
+    processMap_["partitionJsonFile"] = &IIOModuleProcessor::process_partitionJsonFile;
+    processMap_["partitionJsonFile4"] = &IIOModuleProcessor::process_partitionJsonFile4;
+    processMap_["saveAsObjectFile"] = &IIOModuleProcessor::process_saveAsObjectFile;
     processMap_["saveAsTextFile"] = &IIOModuleProcessor::process_saveAsTextFile;
     processMap_["saveAsJsonFile"] = &IIOModuleProcessor::process_saveAsJsonFile;
   }
@@ -854,40 +1600,94 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void textFile(const std::string& path, const int64_t partitions) {
+  int64_t partitionCount() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->textFile(path, partitions);
+      ifaces_[i]->partitionCount();
     }
-    ifaces_[i]->textFile(path, partitions);
+    return ifaces_[i]->partitionCount();
   }
 
-  void openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) {
+  int64_t partitionApproxSize() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->openPartitionObjectFile(path, first, partitions);
+      ifaces_[i]->partitionApproxSize();
     }
-    ifaces_[i]->openPartitionObjectFile(path, first, partitions);
+    return ifaces_[i]->partitionApproxSize();
   }
 
-  void openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions) {
+  void textFile(const std::string& path) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->openPartitionObjectFileFunction(src, path, first, partitions);
+      ifaces_[i]->textFile(path);
     }
-    ifaces_[i]->openPartitionObjectFileFunction(src, path, first, partitions);
+    ifaces_[i]->textFile(path);
   }
 
-  void saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first) {
+  void textFile2(const std::string& path, const int64_t minPartitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->saveAsPartitionObjectFile(path, compression, first);
+      ifaces_[i]->textFile2(path, minPartitions);
     }
-    ifaces_[i]->saveAsPartitionObjectFile(path, compression, first);
+    ifaces_[i]->textFile2(path, minPartitions);
+  }
+
+  void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->partitionObjectFile(path, first, partitions);
+    }
+    ifaces_[i]->partitionObjectFile(path, first, partitions);
+  }
+
+  void partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->partitionObjectFile4(path, first, partitions, src);
+    }
+    ifaces_[i]->partitionObjectFile4(path, first, partitions, src);
+  }
+
+  void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->partitionTextFile(path, first, partitions);
+    }
+    ifaces_[i]->partitionTextFile(path, first, partitions);
+  }
+
+  void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->partitionJsonFile(path, first, partitions);
+    }
+    ifaces_[i]->partitionJsonFile(path, first, partitions);
+  }
+
+  void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->partitionJsonFile4(path, first, partitions, src);
+    }
+    ifaces_[i]->partitionJsonFile4(path, first, partitions, src);
+  }
+
+  void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->saveAsObjectFile(path, compression, first);
+    }
+    ifaces_[i]->saveAsObjectFile(path, compression, first);
   }
 
   void saveAsTextFile(const std::string& path, const int64_t first) {
@@ -899,13 +1699,13 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
     ifaces_[i]->saveAsTextFile(path, first);
   }
 
-  void saveAsJsonFile(const std::string& path, const int64_t first) {
+  void saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->saveAsJsonFile(path, first);
+      ifaces_[i]->saveAsJsonFile(path, first, pretty);
     }
-    ifaces_[i]->saveAsJsonFile(path, first);
+    ifaces_[i]->saveAsJsonFile(path, first, pretty);
   }
 
 };
@@ -940,23 +1740,41 @@ class IIOModuleConcurrentClient : virtual public IIOModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void textFile(const std::string& path, const int64_t partitions);
-  int32_t send_textFile(const std::string& path, const int64_t partitions);
+  int64_t partitionCount();
+  int32_t send_partitionCount();
+  int64_t recv_partitionCount(const int32_t seqid);
+  int64_t partitionApproxSize();
+  int32_t send_partitionApproxSize();
+  int64_t recv_partitionApproxSize(const int32_t seqid);
+  void textFile(const std::string& path);
+  int32_t send_textFile(const std::string& path);
   void recv_textFile(const int32_t seqid);
-  void openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
-  int32_t send_openPartitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
-  void recv_openPartitionObjectFile(const int32_t seqid);
-  void openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions);
-  int32_t send_openPartitionObjectFileFunction(const  ::ignis::rpc::ISource& src, const std::string& path, const int64_t first, const int64_t partitions);
-  void recv_openPartitionObjectFileFunction(const int32_t seqid);
-  void saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first);
-  int32_t send_saveAsPartitionObjectFile(const std::string& path, const int8_t compression, const int64_t first);
-  void recv_saveAsPartitionObjectFile(const int32_t seqid);
+  void textFile2(const std::string& path, const int64_t minPartitions);
+  int32_t send_textFile2(const std::string& path, const int64_t minPartitions);
+  void recv_textFile2(const int32_t seqid);
+  void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
+  int32_t send_partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void recv_partitionObjectFile(const int32_t seqid);
+  void partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_partitionObjectFile4(const int32_t seqid);
+  void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
+  int32_t send_partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void recv_partitionTextFile(const int32_t seqid);
+  void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
+  int32_t send_partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
+  void recv_partitionJsonFile(const int32_t seqid);
+  void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_partitionJsonFile4(const int32_t seqid);
+  void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
+  int32_t send_saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
+  void recv_saveAsObjectFile(const int32_t seqid);
   void saveAsTextFile(const std::string& path, const int64_t first);
   int32_t send_saveAsTextFile(const std::string& path, const int64_t first);
   void recv_saveAsTextFile(const int32_t seqid);
-  void saveAsJsonFile(const std::string& path, const int64_t first);
-  int32_t send_saveAsJsonFile(const std::string& path, const int64_t first);
+  void saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty);
+  int32_t send_saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty);
   void recv_saveAsJsonFile(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

@@ -21,6 +21,7 @@ namespace ignis {
                     I_PAIR = 0xb,
                     I_BINARY = 0xc,
                     I_PAIR_LIST = 0xd,
+                    I_JSON = 0xe,
                 };
             }
         }

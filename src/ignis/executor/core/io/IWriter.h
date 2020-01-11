@@ -24,12 +24,12 @@ namespace ignis {
                 template<typename T>
                 struct IWriterType {
 
-                    void writeType(protocol::IProtocol &protocol) {
+                    inline void writeType(protocol::IProtocol &protocol) {
                         throw exception::ILogicError(
                                 "IWriterType not implemented for " + RTTInfo::from<T>().getStandardName());
                     }
 
-                    void operator()(const T &obj, protocol::IProtocol &protocol) {
+                    inline void operator()(protocol::IProtocol &protocol, const T &obj) {
                         throw exception::ILogicError(
                                 "IWriterType not implemented for " + RTTInfo::from<T>().getStandardName());
                     }
@@ -42,8 +42,8 @@ namespace ignis {
                         writer.writeType(protocol);
                     }
 
-                    virtual void operator()(const T &obj, protocol::IProtocol &protocol) {
-                        writer(obj, protocol);
+                    virtual void operator()(protocol::IProtocol &protocol, const T &obj) {
+                        writer(protocol, obj);
                     }
 
                 private:

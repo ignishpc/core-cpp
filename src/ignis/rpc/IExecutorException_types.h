@@ -29,22 +29,22 @@ class IExecutorException : public ::apache::thrift::TException {
 
   IExecutorException(const IExecutorException&);
   IExecutorException& operator=(const IExecutorException&);
-  IExecutorException() : message(), cause() {
+  IExecutorException() : message(), _cause() {
   }
 
   virtual ~IExecutorException() noexcept;
   std::string message;
-  std::string cause;
+  std::string _cause;
 
   void __set_message(const std::string& val);
 
-  void __set_cause(const std::string& val);
+  void __set__cause(const std::string& val);
 
   bool operator == (const IExecutorException & rhs) const
   {
     if (!(message == rhs.message))
       return false;
-    if (!(cause == rhs.cause))
+    if (!(_cause == rhs._cause))
       return false;
     return true;
   }

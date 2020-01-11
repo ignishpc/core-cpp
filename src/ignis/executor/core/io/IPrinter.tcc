@@ -151,9 +151,9 @@ struct ignis::executor::core::io::IPrinterType<std::forward_list<_Tp, _Alloc>> {
     }
 };
 
-template<typename _Key, typename _Compare>
-struct ignis::executor::core::io::IPrinterType<std::set<_Key, _Compare>> {
-    inline void operator()(const std::set<_Key, _Compare> &s, std::ostream &out, size_t level) {
+template<typename _Key, typename _Compare, typename _Alloc>
+struct ignis::executor::core::io::IPrinterType<std::set<_Key, _Compare, _Alloc>> {
+    inline void operator()(const std::set<_Key, _Compare, _Alloc> &s, std::ostream &out, size_t level) {
         auto begin = s.begin();
         auto end = s.end();
         if (begin != end) {
