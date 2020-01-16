@@ -2818,7 +2818,7 @@ void IPropertiesServiceProcessor::process_newInstance(int32_t seqid, ::apache::t
   try {
     result.success = iface_->newInstance();
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2875,7 +2875,7 @@ void IPropertiesServiceProcessor::process_newInstance2(int32_t seqid, ::apache::
   try {
     result.success = iface_->newInstance2(args.id);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2932,7 +2932,7 @@ void IPropertiesServiceProcessor::process_setProperty(int32_t seqid, ::apache::t
   try {
     iface_->setProperty(result.success, args.id, args.key, args.value);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2989,7 +2989,7 @@ void IPropertiesServiceProcessor::process_getProperty(int32_t seqid, ::apache::t
   try {
     iface_->getProperty(result.success, args.id, args.key);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -3046,7 +3046,7 @@ void IPropertiesServiceProcessor::process_contains(int32_t seqid, ::apache::thri
   try {
     result.success = iface_->contains(args.id, args.key);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -3103,7 +3103,7 @@ void IPropertiesServiceProcessor::process_toMap(int32_t seqid, ::apache::thrift:
   try {
     iface_->toMap(result.success, args.id, args.defaults);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -3159,7 +3159,7 @@ void IPropertiesServiceProcessor::process_fromMap(int32_t seqid, ::apache::thrif
   IPropertiesService_fromMap_result result;
   try {
     iface_->fromMap(args.id, args._map);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -3215,7 +3215,7 @@ void IPropertiesServiceProcessor::process_load(int32_t seqid, ::apache::thrift::
   IPropertiesService_load_result result;
   try {
     iface_->load(args.id, args.path);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -3271,7 +3271,7 @@ void IPropertiesServiceProcessor::process_store(int32_t seqid, ::apache::thrift:
   IPropertiesService_store_result result;
   try {
     iface_->store(args.id, args.path);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -3327,7 +3327,7 @@ void IPropertiesServiceProcessor::process_clear(int32_t seqid, ::apache::thrift:
   IPropertiesService_clear_result result;
   try {
     iface_->clear(args.id);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {

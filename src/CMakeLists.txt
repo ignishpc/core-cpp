@@ -12,9 +12,30 @@ FILE(GLOB rpc
         ignis/rpc/executor/*.cpp)
 
 set(SOURCE_FILES
-        #Driver
-        ignis/driver/api/IgnisException.h
-        ignis/driver/api/IgnisException.cpp
+        #Driver api
+        ignis/driver/api/ICluster.cpp
+        ignis/driver/api/ICluster.h
+        ignis/driver/api/IDataFrame.cpp
+        ignis/driver/api/IDataFrame.h
+        ignis/driver/api/Ignis.cpp
+        ignis/driver/api/Ignis.h
+        ignis/driver/api/IDriverException.cpp
+        ignis/driver/api/IDriverException.h
+        ignis/driver/api/IProperties.cpp
+        ignis/driver/api/IProperties.h
+        ignis/driver/api/ISource.h
+        ignis/driver/api/IWorker.cpp
+        ignis/driver/api/IWorker.h
+
+        #Driver core
+        ignis/driver/core/ICallBack.cpp
+        ignis/driver/core/ICallBack.h
+        ignis/driver/core/IClient.cpp
+        ignis/driver/core/IClient.h
+        ignis/driver/core/IClientPool.cpp
+        ignis/driver/core/IClientPool.h
+        ignis/driver/core/IDriverPartition.tcc
+        ignis/driver/core/IDriverContext.h
 
         #Executor api function
         ignis/executor/api/function/IFunction.h
@@ -57,6 +78,9 @@ set(SOURCE_FILES
         #Modules Impl
         ignis/executor/core/modules/impl/IBaseImpl.cpp
         ignis/executor/core/modules/impl/IBaseImpl.h
+        ignis/executor/core/modules/impl/ICacheImpl.cpp
+        ignis/executor/core/modules/impl/ICacheImpl.h
+        ignis/executor/core/modules/impl/ICacheImpl.tcc
         ignis/executor/core/modules/impl/IGroupByImpl.cpp
         ignis/executor/core/modules/impl/IGroupByImpl.h
         ignis/executor/core/modules/impl/IGroupByImpl.tcc
@@ -74,6 +98,8 @@ set(SOURCE_FILES
         ignis/executor/core/modules/impl/ISortImpl.tcc
 
         #Modules
+        ignis/executor/core/modules/ICacheContextModule.cpp
+        ignis/executor/core/modules/ICacheContextModule.h
         ignis/executor/core/modules/ICommModule.cpp
         ignis/executor/core/modules/ICommModule.h
         ignis/executor/core/modules/IExecutorServerModule.cpp

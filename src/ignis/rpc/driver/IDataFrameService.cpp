@@ -5115,6 +5115,14 @@ uint32_t IDataFrameService_reduce_args::read(::apache::thrift::protocol::TProtoc
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -5140,6 +5148,10 @@ uint32_t IDataFrameService_reduce_args::write(::apache::thrift::protocol::TProto
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -5161,6 +5173,10 @@ uint32_t IDataFrameService_reduce_pargs::write(::apache::thrift::protocol::TProt
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -5338,6 +5354,14 @@ uint32_t IDataFrameService_treeReduce_args::read(::apache::thrift::protocol::TPr
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -5363,6 +5387,10 @@ uint32_t IDataFrameService_treeReduce_args::write(::apache::thrift::protocol::TP
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -5384,6 +5412,10 @@ uint32_t IDataFrameService_treeReduce_pargs::write(::apache::thrift::protocol::T
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -5520,11 +5552,11 @@ uint32_t IDataFrameService_treeReduce_presult::read(::apache::thrift::protocol::
 }
 
 
-IDataFrameService_treeReduce3_args::~IDataFrameService_treeReduce3_args() noexcept {
+IDataFrameService_treeReduce4_args::~IDataFrameService_treeReduce4_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeReduce3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_treeReduce4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -5569,6 +5601,14 @@ uint32_t IDataFrameService_treeReduce3_args::read(::apache::thrift::protocol::TP
           xfer += iprot->skip(ftype);
         }
         break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -5581,10 +5621,10 @@ uint32_t IDataFrameService_treeReduce3_args::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-uint32_t IDataFrameService_treeReduce3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_treeReduce4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_treeReduce3_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_treeReduce4_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -5598,20 +5638,24 @@ uint32_t IDataFrameService_treeReduce3_args::write(::apache::thrift::protocol::T
   xfer += oprot->writeI64(this->depth);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IDataFrameService_treeReduce3_pargs::~IDataFrameService_treeReduce3_pargs() noexcept {
+IDataFrameService_treeReduce4_pargs::~IDataFrameService_treeReduce4_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeReduce3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_treeReduce4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_treeReduce3_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_treeReduce4_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -5625,17 +5669,21 @@ uint32_t IDataFrameService_treeReduce3_pargs::write(::apache::thrift::protocol::
   xfer += oprot->writeI64((*(this->depth)));
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += (*(this->tp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IDataFrameService_treeReduce3_result::~IDataFrameService_treeReduce3_result() noexcept {
+IDataFrameService_treeReduce4_result::~IDataFrameService_treeReduce4_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeReduce3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_treeReduce4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -5684,11 +5732,11 @@ uint32_t IDataFrameService_treeReduce3_result::read(::apache::thrift::protocol::
   return xfer;
 }
 
-uint32_t IDataFrameService_treeReduce3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_treeReduce4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_treeReduce3_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_treeReduce4_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
@@ -5705,11 +5753,11 @@ uint32_t IDataFrameService_treeReduce3_result::write(::apache::thrift::protocol:
 }
 
 
-IDataFrameService_treeReduce3_presult::~IDataFrameService_treeReduce3_presult() noexcept {
+IDataFrameService_treeReduce4_presult::~IDataFrameService_treeReduce4_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeReduce3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_treeReduce4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -5792,6 +5840,14 @@ uint32_t IDataFrameService_collect_args::read(::apache::thrift::protocol::TProto
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -5813,6 +5869,10 @@ uint32_t IDataFrameService_collect_args::write(::apache::thrift::protocol::TProt
   xfer += this->id.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -5830,6 +5890,10 @@ uint32_t IDataFrameService_collect_pargs::write(::apache::thrift::protocol::TPro
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -6015,6 +6079,14 @@ uint32_t IDataFrameService_aggregate_args::read(::apache::thrift::protocol::TPro
           xfer += iprot->skip(ftype);
         }
         break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -6044,6 +6116,10 @@ uint32_t IDataFrameService_aggregate_args::write(::apache::thrift::protocol::TPr
   xfer += this->combOp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -6069,6 +6145,10 @@ uint32_t IDataFrameService_aggregate_pargs::write(::apache::thrift::protocol::TP
 
   xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += (*(this->combOp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -6254,6 +6334,14 @@ uint32_t IDataFrameService_treeAggregate_args::read(::apache::thrift::protocol::
           xfer += iprot->skip(ftype);
         }
         break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -6283,6 +6371,10 @@ uint32_t IDataFrameService_treeAggregate_args::write(::apache::thrift::protocol:
   xfer += this->combOp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -6308,6 +6400,10 @@ uint32_t IDataFrameService_treeAggregate_pargs::write(::apache::thrift::protocol
 
   xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += (*(this->combOp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -6444,11 +6540,11 @@ uint32_t IDataFrameService_treeAggregate_presult::read(::apache::thrift::protoco
 }
 
 
-IDataFrameService_treeAggregate3_args::~IDataFrameService_treeAggregate3_args() noexcept {
+IDataFrameService_treeAggregate5_args::~IDataFrameService_treeAggregate5_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeAggregate3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_treeAggregate5_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6501,6 +6597,14 @@ uint32_t IDataFrameService_treeAggregate3_args::read(::apache::thrift::protocol:
           xfer += iprot->skip(ftype);
         }
         break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -6513,10 +6617,10 @@ uint32_t IDataFrameService_treeAggregate3_args::read(::apache::thrift::protocol:
   return xfer;
 }
 
-uint32_t IDataFrameService_treeAggregate3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_treeAggregate5_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_treeAggregate3_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_treeAggregate5_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -6534,20 +6638,24 @@ uint32_t IDataFrameService_treeAggregate3_args::write(::apache::thrift::protocol
   xfer += oprot->writeI64(this->depth);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 5);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IDataFrameService_treeAggregate3_pargs::~IDataFrameService_treeAggregate3_pargs() noexcept {
+IDataFrameService_treeAggregate5_pargs::~IDataFrameService_treeAggregate5_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeAggregate3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_treeAggregate5_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_treeAggregate3_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_treeAggregate5_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -6565,17 +6673,21 @@ uint32_t IDataFrameService_treeAggregate3_pargs::write(::apache::thrift::protoco
   xfer += oprot->writeI64((*(this->depth)));
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 5);
+  xfer += (*(this->tp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IDataFrameService_treeAggregate3_result::~IDataFrameService_treeAggregate3_result() noexcept {
+IDataFrameService_treeAggregate5_result::~IDataFrameService_treeAggregate5_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeAggregate3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_treeAggregate5_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6624,11 +6736,11 @@ uint32_t IDataFrameService_treeAggregate3_result::read(::apache::thrift::protoco
   return xfer;
 }
 
-uint32_t IDataFrameService_treeAggregate3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_treeAggregate5_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_treeAggregate3_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_treeAggregate5_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
@@ -6645,11 +6757,11 @@ uint32_t IDataFrameService_treeAggregate3_result::write(::apache::thrift::protoc
 }
 
 
-IDataFrameService_treeAggregate3_presult::~IDataFrameService_treeAggregate3_presult() noexcept {
+IDataFrameService_treeAggregate5_presult::~IDataFrameService_treeAggregate5_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_treeAggregate3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_treeAggregate5_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6740,6 +6852,14 @@ uint32_t IDataFrameService_fold_args::read(::apache::thrift::protocol::TProtocol
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -6765,6 +6885,10 @@ uint32_t IDataFrameService_fold_args::write(::apache::thrift::protocol::TProtoco
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -6786,6 +6910,10 @@ uint32_t IDataFrameService_fold_pargs::write(::apache::thrift::protocol::TProtoc
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -6963,6 +7091,14 @@ uint32_t IDataFrameService_take_args::read(::apache::thrift::protocol::TProtocol
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -6988,6 +7124,10 @@ uint32_t IDataFrameService_take_args::write(::apache::thrift::protocol::TProtoco
   xfer += oprot->writeI64(this->num);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -7009,6 +7149,10 @@ uint32_t IDataFrameService_take_pargs::write(::apache::thrift::protocol::TProtoc
 
   xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64((*(this->num)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -7592,6 +7736,14 @@ uint32_t IDataFrameService_top_args::read(::apache::thrift::protocol::TProtocol*
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -7617,6 +7769,10 @@ uint32_t IDataFrameService_top_args::write(::apache::thrift::protocol::TProtocol
   xfer += oprot->writeI64(this->num);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -7638,6 +7794,10 @@ uint32_t IDataFrameService_top_pargs::write(::apache::thrift::protocol::TProtoco
 
   xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64((*(this->num)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -7774,11 +7934,11 @@ uint32_t IDataFrameService_top_presult::read(::apache::thrift::protocol::TProtoc
 }
 
 
-IDataFrameService_top2_args::~IDataFrameService_top2_args() noexcept {
+IDataFrameService_top4_args::~IDataFrameService_top4_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_top2_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_top4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -7823,6 +7983,14 @@ uint32_t IDataFrameService_top2_args::read(::apache::thrift::protocol::TProtocol
           xfer += iprot->skip(ftype);
         }
         break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -7835,10 +8003,10 @@ uint32_t IDataFrameService_top2_args::read(::apache::thrift::protocol::TProtocol
   return xfer;
 }
 
-uint32_t IDataFrameService_top2_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_top4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_top2_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_top4_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -7852,20 +8020,24 @@ uint32_t IDataFrameService_top2_args::write(::apache::thrift::protocol::TProtoco
   xfer += this->cmp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IDataFrameService_top2_pargs::~IDataFrameService_top2_pargs() noexcept {
+IDataFrameService_top4_pargs::~IDataFrameService_top4_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_top2_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_top4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_top2_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_top4_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -7879,17 +8051,21 @@ uint32_t IDataFrameService_top2_pargs::write(::apache::thrift::protocol::TProtoc
   xfer += (*(this->cmp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += (*(this->tp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IDataFrameService_top2_result::~IDataFrameService_top2_result() noexcept {
+IDataFrameService_top4_result::~IDataFrameService_top4_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_top2_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_top4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -7938,11 +8114,11 @@ uint32_t IDataFrameService_top2_result::read(::apache::thrift::protocol::TProtoc
   return xfer;
 }
 
-uint32_t IDataFrameService_top2_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_top4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_top2_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_top4_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
@@ -7959,11 +8135,11 @@ uint32_t IDataFrameService_top2_result::write(::apache::thrift::protocol::TProto
 }
 
 
-IDataFrameService_top2_presult::~IDataFrameService_top2_presult() noexcept {
+IDataFrameService_top4_presult::~IDataFrameService_top4_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_top2_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_top4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -8325,6 +8501,14 @@ uint32_t IDataFrameService_takeSample_args::read(::apache::thrift::protocol::TPr
           xfer += iprot->skip(ftype);
         }
         break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -8358,6 +8542,10 @@ uint32_t IDataFrameService_takeSample_args::write(::apache::thrift::protocol::TP
   xfer += oprot->writeI32(this->seed);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 5);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -8387,6 +8575,10 @@ uint32_t IDataFrameService_takeSample_pargs::write(::apache::thrift::protocol::T
 
   xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 4);
   xfer += oprot->writeI32((*(this->seed)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 5);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -8771,6 +8963,14 @@ uint32_t IDataFrameService_max_args::read(::apache::thrift::protocol::TProtocol*
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -8796,6 +8996,10 @@ uint32_t IDataFrameService_max_args::write(::apache::thrift::protocol::TProtocol
   xfer += this->cmp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -8817,6 +9021,10 @@ uint32_t IDataFrameService_max_pargs::write(::apache::thrift::protocol::TProtoco
 
   xfer += oprot->writeFieldBegin("cmp", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->cmp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -8994,6 +9202,14 @@ uint32_t IDataFrameService_min_args::read(::apache::thrift::protocol::TProtocol*
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -9019,6 +9235,10 @@ uint32_t IDataFrameService_min_args::write(::apache::thrift::protocol::TProtocol
   xfer += this->cmp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -9040,6 +9260,10 @@ uint32_t IDataFrameService_min_pargs::write(::apache::thrift::protocol::TProtoco
 
   xfer += oprot->writeFieldBegin("cmp", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->cmp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -10567,13 +10791,13 @@ void IDataFrameServiceClient::recv_sortBy3(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "sortBy3 failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int64_t IDataFrameServiceClient::reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
-  send_reduce(id, src);
+  send_reduce(id, src, tp);
   return recv_reduce();
 }
 
-void IDataFrameServiceClient::send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+void IDataFrameServiceClient::send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("reduce", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -10581,6 +10805,7 @@ void IDataFrameServiceClient::send_reduce(const IDataFrameId& id, const  ::ignis
   IDataFrameService_reduce_pargs args;
   args.id = &id;
   args.src = &src;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10629,13 +10854,13 @@ int64_t IDataFrameServiceClient::recv_reduce()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "reduce failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int64_t IDataFrameServiceClient::treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
-  send_treeReduce(id, src);
+  send_treeReduce(id, src, tp);
   return recv_treeReduce();
 }
 
-void IDataFrameServiceClient::send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+void IDataFrameServiceClient::send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("treeReduce", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -10643,6 +10868,7 @@ void IDataFrameServiceClient::send_treeReduce(const IDataFrameId& id, const  ::i
   IDataFrameService_treeReduce_pargs args;
   args.id = &id;
   args.src = &src;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10691,21 +10917,22 @@ int64_t IDataFrameServiceClient::recv_treeReduce()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeReduce failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth)
+int64_t IDataFrameServiceClient::treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
-  send_treeReduce3(id, src, depth);
-  return recv_treeReduce3();
+  send_treeReduce4(id, src, depth, tp);
+  return recv_treeReduce4();
 }
 
-void IDataFrameServiceClient::send_treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth)
+void IDataFrameServiceClient::send_treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("treeReduce3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("treeReduce4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_treeReduce3_pargs args;
+  IDataFrameService_treeReduce4_pargs args;
   args.id = &id;
   args.src = &src;
   args.depth = &depth;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10713,7 +10940,7 @@ void IDataFrameServiceClient::send_treeReduce3(const IDataFrameId& id, const  ::
   oprot_->getTransport()->flush();
 }
 
-int64_t IDataFrameServiceClient::recv_treeReduce3()
+int64_t IDataFrameServiceClient::recv_treeReduce4()
 {
 
   int32_t rseqid = 0;
@@ -10733,13 +10960,13 @@ int64_t IDataFrameServiceClient::recv_treeReduce3()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("treeReduce3") != 0) {
+  if (fname.compare("treeReduce4") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
   int64_t _return;
-  IDataFrameService_treeReduce3_presult result;
+  IDataFrameService_treeReduce4_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -10751,22 +10978,23 @@ int64_t IDataFrameServiceClient::recv_treeReduce3()
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeReduce3 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeReduce4 failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::collect(const IDataFrameId& id)
+int64_t IDataFrameServiceClient::collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
-  send_collect(id);
+  send_collect(id, tp);
   return recv_collect();
 }
 
-void IDataFrameServiceClient::send_collect(const IDataFrameId& id)
+void IDataFrameServiceClient::send_collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("collect", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IDataFrameService_collect_pargs args;
   args.id = &id;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10815,13 +11043,13 @@ int64_t IDataFrameServiceClient::recv_collect()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "collect failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+int64_t IDataFrameServiceClient::aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
-  send_aggregate(id, seqOp, combOp);
+  send_aggregate(id, seqOp, combOp, tp);
   return recv_aggregate();
 }
 
-void IDataFrameServiceClient::send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+void IDataFrameServiceClient::send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("aggregate", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -10830,6 +11058,7 @@ void IDataFrameServiceClient::send_aggregate(const IDataFrameId& id, const  ::ig
   args.id = &id;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10878,13 +11107,13 @@ int64_t IDataFrameServiceClient::recv_aggregate()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "aggregate failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+int64_t IDataFrameServiceClient::treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
-  send_treeAggregate(id, seqOp, combOp);
+  send_treeAggregate(id, seqOp, combOp, tp);
   return recv_treeAggregate();
 }
 
-void IDataFrameServiceClient::send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+void IDataFrameServiceClient::send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("treeAggregate", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -10893,6 +11122,7 @@ void IDataFrameServiceClient::send_treeAggregate(const IDataFrameId& id, const  
   args.id = &id;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10941,22 +11171,23 @@ int64_t IDataFrameServiceClient::recv_treeAggregate()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeAggregate failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+int64_t IDataFrameServiceClient::treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
-  send_treeAggregate3(id, seqOp, combOp, depth);
-  return recv_treeAggregate3();
+  send_treeAggregate5(id, seqOp, combOp, depth, tp);
+  return recv_treeAggregate5();
 }
 
-void IDataFrameServiceClient::send_treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+void IDataFrameServiceClient::send_treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("treeAggregate3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("treeAggregate5", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_treeAggregate3_pargs args;
+  IDataFrameService_treeAggregate5_pargs args;
   args.id = &id;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
   args.depth = &depth;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -10964,7 +11195,7 @@ void IDataFrameServiceClient::send_treeAggregate3(const IDataFrameId& id, const 
   oprot_->getTransport()->flush();
 }
 
-int64_t IDataFrameServiceClient::recv_treeAggregate3()
+int64_t IDataFrameServiceClient::recv_treeAggregate5()
 {
 
   int32_t rseqid = 0;
@@ -10984,13 +11215,13 @@ int64_t IDataFrameServiceClient::recv_treeAggregate3()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("treeAggregate3") != 0) {
+  if (fname.compare("treeAggregate5") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
   int64_t _return;
-  IDataFrameService_treeAggregate3_presult result;
+  IDataFrameService_treeAggregate5_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -11002,16 +11233,16 @@ int64_t IDataFrameServiceClient::recv_treeAggregate3()
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeAggregate3 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeAggregate5 failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int64_t IDataFrameServiceClient::fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
-  send_fold(id, src);
+  send_fold(id, src, tp);
   return recv_fold();
 }
 
-void IDataFrameServiceClient::send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+void IDataFrameServiceClient::send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("fold", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -11019,6 +11250,7 @@ void IDataFrameServiceClient::send_fold(const IDataFrameId& id, const  ::ignis::
   IDataFrameService_fold_pargs args;
   args.id = &id;
   args.src = &src;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -11067,13 +11299,13 @@ int64_t IDataFrameServiceClient::recv_fold()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "fold failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::take(const IDataFrameId& id, const int64_t num)
+int64_t IDataFrameServiceClient::take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
-  send_take(id, num);
+  send_take(id, num, tp);
   return recv_take();
 }
 
-void IDataFrameServiceClient::send_take(const IDataFrameId& id, const int64_t num)
+void IDataFrameServiceClient::send_take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("take", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -11081,6 +11313,7 @@ void IDataFrameServiceClient::send_take(const IDataFrameId& id, const int64_t nu
   IDataFrameService_take_pargs args;
   args.id = &id;
   args.num = &num;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -11243,13 +11476,13 @@ void IDataFrameServiceClient::recv_foreachPartition()
   return;
 }
 
-int64_t IDataFrameServiceClient::top(const IDataFrameId& id, const int64_t num)
+int64_t IDataFrameServiceClient::top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
-  send_top(id, num);
+  send_top(id, num, tp);
   return recv_top();
 }
 
-void IDataFrameServiceClient::send_top(const IDataFrameId& id, const int64_t num)
+void IDataFrameServiceClient::send_top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("top", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -11257,6 +11490,7 @@ void IDataFrameServiceClient::send_top(const IDataFrameId& id, const int64_t num
   IDataFrameService_top_pargs args;
   args.id = &id;
   args.num = &num;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -11305,21 +11539,22 @@ int64_t IDataFrameServiceClient::recv_top()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "top failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp)
+int64_t IDataFrameServiceClient::top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
-  send_top2(id, num, cmp);
-  return recv_top2();
+  send_top4(id, num, cmp, tp);
+  return recv_top4();
 }
 
-void IDataFrameServiceClient::send_top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp)
+void IDataFrameServiceClient::send_top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("top2", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("top4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_top2_pargs args;
+  IDataFrameService_top4_pargs args;
   args.id = &id;
   args.num = &num;
   args.cmp = &cmp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -11327,7 +11562,7 @@ void IDataFrameServiceClient::send_top2(const IDataFrameId& id, const int64_t nu
   oprot_->getTransport()->flush();
 }
 
-int64_t IDataFrameServiceClient::recv_top2()
+int64_t IDataFrameServiceClient::recv_top4()
 {
 
   int32_t rseqid = 0;
@@ -11347,13 +11582,13 @@ int64_t IDataFrameServiceClient::recv_top2()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("top2") != 0) {
+  if (fname.compare("top4") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
   int64_t _return;
-  IDataFrameService_top2_presult result;
+  IDataFrameService_top4_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -11365,7 +11600,7 @@ int64_t IDataFrameServiceClient::recv_top2()
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "top2 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "top4 failed: unknown result");
 }
 
 void IDataFrameServiceClient::sample(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const double fraction, const int32_t seed)
@@ -11432,13 +11667,13 @@ void IDataFrameServiceClient::recv_sample(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "sample failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed)
+int64_t IDataFrameServiceClient::takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp)
 {
-  send_takeSample(id, withReplacement, num, seed);
+  send_takeSample(id, withReplacement, num, seed, tp);
   return recv_takeSample();
 }
 
-void IDataFrameServiceClient::send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed)
+void IDataFrameServiceClient::send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("takeSample", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -11448,6 +11683,7 @@ void IDataFrameServiceClient::send_takeSample(const IDataFrameId& id, const bool
   args.withReplacement = &withReplacement;
   args.num = &num;
   args.seed = &seed;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -11557,13 +11793,13 @@ int64_t IDataFrameServiceClient::recv_count()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "count failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+int64_t IDataFrameServiceClient::max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
-  send_max(id, cmp);
+  send_max(id, cmp, tp);
   return recv_max();
 }
 
-void IDataFrameServiceClient::send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+void IDataFrameServiceClient::send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("max", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -11571,6 +11807,7 @@ void IDataFrameServiceClient::send_max(const IDataFrameId& id, const  ::ignis::r
   IDataFrameService_max_pargs args;
   args.id = &id;
   args.cmp = &cmp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -11619,13 +11856,13 @@ int64_t IDataFrameServiceClient::recv_max()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "max failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+int64_t IDataFrameServiceClient::min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
-  send_min(id, cmp);
+  send_min(id, cmp, tp);
   return recv_min();
 }
 
-void IDataFrameServiceClient::send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+void IDataFrameServiceClient::send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("min", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -11633,6 +11870,7 @@ void IDataFrameServiceClient::send_min(const IDataFrameId& id, const  ::ignis::r
   IDataFrameService_min_pargs args;
   args.id = &id;
   args.cmp = &cmp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -11724,7 +11962,7 @@ void IDataFrameServiceProcessor::process_setName(int32_t seqid, ::apache::thrift
   IDataFrameService_setName_result result;
   try {
     iface_->setName(args.id, args.name);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -11780,7 +12018,7 @@ void IDataFrameServiceProcessor::process_persist(int32_t seqid, ::apache::thrift
   IDataFrameService_persist_result result;
   try {
     iface_->persist(args.id, args.level);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -11836,7 +12074,7 @@ void IDataFrameServiceProcessor::process_cache(int32_t seqid, ::apache::thrift::
   IDataFrameService_cache_result result;
   try {
     iface_->cache(args.id);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -11892,7 +12130,7 @@ void IDataFrameServiceProcessor::process_unpersist(int32_t seqid, ::apache::thri
   IDataFrameService_unpersist_result result;
   try {
     iface_->unpersist(args.id);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -11948,7 +12186,7 @@ void IDataFrameServiceProcessor::process_uncache(int32_t seqid, ::apache::thrift
   IDataFrameService_uncache_result result;
   try {
     iface_->uncache(args.id);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12005,7 +12243,7 @@ void IDataFrameServiceProcessor::process_repartition(int32_t seqid, ::apache::th
   try {
     iface_->repartition(result.success, args.id, args.numPartitions);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12062,7 +12300,7 @@ void IDataFrameServiceProcessor::process_coalesce(int32_t seqid, ::apache::thrif
   try {
     iface_->coalesce(result.success, args.id, args.numPartitions, args.shuffle);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12119,7 +12357,7 @@ void IDataFrameServiceProcessor::process_partitions(int32_t seqid, ::apache::thr
   try {
     result.success = iface_->partitions(args.id);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12175,7 +12413,7 @@ void IDataFrameServiceProcessor::process_saveAsObjectFile(int32_t seqid, ::apach
   IDataFrameService_saveAsObjectFile_result result;
   try {
     iface_->saveAsObjectFile(args.id, args.path, args.compression);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12231,7 +12469,7 @@ void IDataFrameServiceProcessor::process_saveAsTextFile(int32_t seqid, ::apache:
   IDataFrameService_saveAsTextFile_result result;
   try {
     iface_->saveAsTextFile(args.id, args.path);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12287,7 +12525,7 @@ void IDataFrameServiceProcessor::process_saveAsJsonFile(int32_t seqid, ::apache:
   IDataFrameService_saveAsJsonFile_result result;
   try {
     iface_->saveAsJsonFile(args.id, args.path, args.pretty);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12344,7 +12582,7 @@ void IDataFrameServiceProcessor::process_map_(int32_t seqid, ::apache::thrift::p
   try {
     iface_->map_(result.success, args.id, args.src);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12401,7 +12639,7 @@ void IDataFrameServiceProcessor::process_filter(int32_t seqid, ::apache::thrift:
   try {
     iface_->filter(result.success, args.id, args.src);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12458,7 +12696,7 @@ void IDataFrameServiceProcessor::process_flatmap(int32_t seqid, ::apache::thrift
   try {
     iface_->flatmap(result.success, args.id, args.src);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12515,7 +12753,7 @@ void IDataFrameServiceProcessor::process_mapPartitions(int32_t seqid, ::apache::
   try {
     iface_->mapPartitions(result.success, args.id, args.src, args.preservesPartitioning);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12572,7 +12810,7 @@ void IDataFrameServiceProcessor::process_mapPartitionsWithIndex(int32_t seqid, :
   try {
     iface_->mapPartitionsWithIndex(result.success, args.id, args.src, args.preservesPartitioning);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12629,7 +12867,7 @@ void IDataFrameServiceProcessor::process_applyPartition(int32_t seqid, ::apache:
   try {
     iface_->applyPartition(result.success, args.id, args.src);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12686,7 +12924,7 @@ void IDataFrameServiceProcessor::process_groupBy(int32_t seqid, ::apache::thrift
   try {
     iface_->groupBy(result.success, args.id, args.src);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12743,7 +12981,7 @@ void IDataFrameServiceProcessor::process_groupBy2(int32_t seqid, ::apache::thrif
   try {
     iface_->groupBy2(result.success, args.id, args.src, args.numPartitions);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12800,7 +13038,7 @@ void IDataFrameServiceProcessor::process_sort(int32_t seqid, ::apache::thrift::p
   try {
     iface_->sort(result.success, args.id, args.ascending);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12857,7 +13095,7 @@ void IDataFrameServiceProcessor::process_sort2(int32_t seqid, ::apache::thrift::
   try {
     iface_->sort2(result.success, args.id, args.ascending, args.numPartitions);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12914,7 +13152,7 @@ void IDataFrameServiceProcessor::process_sortBy(int32_t seqid, ::apache::thrift:
   try {
     iface_->sortBy(result.success, args.id, args.src, args.ascending);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -12971,7 +13209,7 @@ void IDataFrameServiceProcessor::process_sortBy3(int32_t seqid, ::apache::thrift
   try {
     iface_->sortBy3(result.success, args.id, args.src, args.ascending, args.numPartitions);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13026,9 +13264,9 @@ void IDataFrameServiceProcessor::process_reduce(int32_t seqid, ::apache::thrift:
 
   IDataFrameService_reduce_result result;
   try {
-    result.success = iface_->reduce(args.id, args.src);
+    result.success = iface_->reduce(args.id, args.src, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13083,9 +13321,9 @@ void IDataFrameServiceProcessor::process_treeReduce(int32_t seqid, ::apache::thr
 
   IDataFrameService_treeReduce_result result;
   try {
-    result.success = iface_->treeReduce(args.id, args.src);
+    result.success = iface_->treeReduce(args.id, args.src, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13117,41 +13355,41 @@ void IDataFrameServiceProcessor::process_treeReduce(int32_t seqid, ::apache::thr
   }
 }
 
-void IDataFrameServiceProcessor::process_treeReduce3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_treeReduce4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.treeReduce3", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.treeReduce4", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.treeReduce3");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.treeReduce4");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.treeReduce3");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.treeReduce4");
   }
 
-  IDataFrameService_treeReduce3_args args;
+  IDataFrameService_treeReduce4_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.treeReduce3", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.treeReduce4", bytes);
   }
 
-  IDataFrameService_treeReduce3_result result;
+  IDataFrameService_treeReduce4_result result;
   try {
-    result.success = iface_->treeReduce3(args.id, args.src, args.depth);
+    result.success = iface_->treeReduce4(args.id, args.src, args.depth, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.treeReduce3");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.treeReduce4");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("treeReduce3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("treeReduce4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -13160,17 +13398,17 @@ void IDataFrameServiceProcessor::process_treeReduce3(int32_t seqid, ::apache::th
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.treeReduce3");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.treeReduce4");
   }
 
-  oprot->writeMessageBegin("treeReduce3", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("treeReduce4", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.treeReduce3", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.treeReduce4", bytes);
   }
 }
 
@@ -13197,9 +13435,9 @@ void IDataFrameServiceProcessor::process_collect(int32_t seqid, ::apache::thrift
 
   IDataFrameService_collect_result result;
   try {
-    result.success = iface_->collect(args.id);
+    result.success = iface_->collect(args.id, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13254,9 +13492,9 @@ void IDataFrameServiceProcessor::process_aggregate(int32_t seqid, ::apache::thri
 
   IDataFrameService_aggregate_result result;
   try {
-    result.success = iface_->aggregate(args.id, args.seqOp, args.combOp);
+    result.success = iface_->aggregate(args.id, args.seqOp, args.combOp, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13311,9 +13549,9 @@ void IDataFrameServiceProcessor::process_treeAggregate(int32_t seqid, ::apache::
 
   IDataFrameService_treeAggregate_result result;
   try {
-    result.success = iface_->treeAggregate(args.id, args.seqOp, args.combOp);
+    result.success = iface_->treeAggregate(args.id, args.seqOp, args.combOp, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13345,41 +13583,41 @@ void IDataFrameServiceProcessor::process_treeAggregate(int32_t seqid, ::apache::
   }
 }
 
-void IDataFrameServiceProcessor::process_treeAggregate3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_treeAggregate5(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.treeAggregate3", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.treeAggregate5", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.treeAggregate3");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.treeAggregate5");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.treeAggregate3");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.treeAggregate5");
   }
 
-  IDataFrameService_treeAggregate3_args args;
+  IDataFrameService_treeAggregate5_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.treeAggregate3", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.treeAggregate5", bytes);
   }
 
-  IDataFrameService_treeAggregate3_result result;
+  IDataFrameService_treeAggregate5_result result;
   try {
-    result.success = iface_->treeAggregate3(args.id, args.seqOp, args.combOp, args.depth);
+    result.success = iface_->treeAggregate5(args.id, args.seqOp, args.combOp, args.depth, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.treeAggregate3");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.treeAggregate5");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("treeAggregate3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("treeAggregate5", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -13388,17 +13626,17 @@ void IDataFrameServiceProcessor::process_treeAggregate3(int32_t seqid, ::apache:
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.treeAggregate3");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.treeAggregate5");
   }
 
-  oprot->writeMessageBegin("treeAggregate3", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("treeAggregate5", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.treeAggregate3", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.treeAggregate5", bytes);
   }
 }
 
@@ -13425,9 +13663,9 @@ void IDataFrameServiceProcessor::process_fold(int32_t seqid, ::apache::thrift::p
 
   IDataFrameService_fold_result result;
   try {
-    result.success = iface_->fold(args.id, args.src);
+    result.success = iface_->fold(args.id, args.src, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13482,9 +13720,9 @@ void IDataFrameServiceProcessor::process_take(int32_t seqid, ::apache::thrift::p
 
   IDataFrameService_take_result result;
   try {
-    result.success = iface_->take(args.id, args.num);
+    result.success = iface_->take(args.id, args.num, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13540,7 +13778,7 @@ void IDataFrameServiceProcessor::process_foreach_(int32_t seqid, ::apache::thrif
   IDataFrameService_foreach__result result;
   try {
     iface_->foreach_(args.id, args.src);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13596,7 +13834,7 @@ void IDataFrameServiceProcessor::process_foreachPartition(int32_t seqid, ::apach
   IDataFrameService_foreachPartition_result result;
   try {
     iface_->foreachPartition(args.id, args.src);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13651,9 +13889,9 @@ void IDataFrameServiceProcessor::process_top(int32_t seqid, ::apache::thrift::pr
 
   IDataFrameService_top_result result;
   try {
-    result.success = iface_->top(args.id, args.num);
+    result.success = iface_->top(args.id, args.num, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13685,41 +13923,41 @@ void IDataFrameServiceProcessor::process_top(int32_t seqid, ::apache::thrift::pr
   }
 }
 
-void IDataFrameServiceProcessor::process_top2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_top4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.top2", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.top4", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.top2");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.top4");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.top2");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.top4");
   }
 
-  IDataFrameService_top2_args args;
+  IDataFrameService_top4_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.top2", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.top4", bytes);
   }
 
-  IDataFrameService_top2_result result;
+  IDataFrameService_top4_result result;
   try {
-    result.success = iface_->top2(args.id, args.num, args.cmp);
+    result.success = iface_->top4(args.id, args.num, args.cmp, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.top2");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.top4");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("top2", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("top4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -13728,17 +13966,17 @@ void IDataFrameServiceProcessor::process_top2(int32_t seqid, ::apache::thrift::p
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.top2");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.top4");
   }
 
-  oprot->writeMessageBegin("top2", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("top4", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.top2", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.top4", bytes);
   }
 }
 
@@ -13767,7 +14005,7 @@ void IDataFrameServiceProcessor::process_sample(int32_t seqid, ::apache::thrift:
   try {
     iface_->sample(result.success, args.id, args.withReplacement, args.fraction, args.seed);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13822,9 +14060,9 @@ void IDataFrameServiceProcessor::process_takeSample(int32_t seqid, ::apache::thr
 
   IDataFrameService_takeSample_result result;
   try {
-    result.success = iface_->takeSample(args.id, args.withReplacement, args.num, args.seed);
+    result.success = iface_->takeSample(args.id, args.withReplacement, args.num, args.seed, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13881,7 +14119,7 @@ void IDataFrameServiceProcessor::process_count(int32_t seqid, ::apache::thrift::
   try {
     result.success = iface_->count(args.id);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13936,9 +14174,9 @@ void IDataFrameServiceProcessor::process_max(int32_t seqid, ::apache::thrift::pr
 
   IDataFrameService_max_result result;
   try {
-    result.success = iface_->max(args.id, args.cmp);
+    result.success = iface_->max(args.id, args.cmp, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -13993,9 +14231,9 @@ void IDataFrameServiceProcessor::process_min(int32_t seqid, ::apache::thrift::pr
 
   IDataFrameService_min_result result;
   try {
-    result.success = iface_->min(args.id, args.cmp);
+    result.success = iface_->min(args.id, args.cmp, args.tp);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -16039,13 +16277,13 @@ void IDataFrameServiceConcurrentClient::recv_sortBy3(IDataFrameId& _return, cons
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int64_t IDataFrameServiceConcurrentClient::reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_reduce(id, src);
+  int32_t seqid = send_reduce(id, src, tp);
   return recv_reduce(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int32_t IDataFrameServiceConcurrentClient::send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -16054,6 +16292,7 @@ int32_t IDataFrameServiceConcurrentClient::send_reduce(const IDataFrameId& id, c
   IDataFrameService_reduce_pargs args;
   args.id = &id;
   args.src = &src;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16128,13 +16367,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_reduce(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int64_t IDataFrameServiceConcurrentClient::treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_treeReduce(id, src);
+  int32_t seqid = send_treeReduce(id, src, tp);
   return recv_treeReduce(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int32_t IDataFrameServiceConcurrentClient::send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -16143,6 +16382,7 @@ int32_t IDataFrameServiceConcurrentClient::send_treeReduce(const IDataFrameId& i
   IDataFrameService_treeReduce_pargs args;
   args.id = &id;
   args.src = &src;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16217,22 +16457,23 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeReduce(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth)
+int64_t IDataFrameServiceConcurrentClient::treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_treeReduce3(id, src, depth);
-  return recv_treeReduce3(seqid);
+  int32_t seqid = send_treeReduce4(id, src, depth, tp);
+  return recv_treeReduce4(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth)
+int32_t IDataFrameServiceConcurrentClient::send_treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("treeReduce3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("treeReduce4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_treeReduce3_pargs args;
+  IDataFrameService_treeReduce4_pargs args;
   args.id = &id;
   args.src = &src;
   args.depth = &depth;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16243,7 +16484,7 @@ int32_t IDataFrameServiceConcurrentClient::send_treeReduce3(const IDataFrameId& 
   return cseqid;
 }
 
-int64_t IDataFrameServiceConcurrentClient::recv_treeReduce3(const int32_t seqid)
+int64_t IDataFrameServiceConcurrentClient::recv_treeReduce4(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -16272,7 +16513,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeReduce3(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("treeReduce3") != 0) {
+      if (fname.compare("treeReduce4") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -16282,7 +16523,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeReduce3(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       int64_t _return;
-      IDataFrameService_treeReduce3_presult result;
+      IDataFrameService_treeReduce4_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -16297,7 +16538,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeReduce3(const int32_t seqid)
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeReduce3 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeReduce4 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -16307,13 +16548,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeReduce3(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::collect(const IDataFrameId& id)
+int64_t IDataFrameServiceConcurrentClient::collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_collect(id);
+  int32_t seqid = send_collect(id, tp);
   return recv_collect(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_collect(const IDataFrameId& id)
+int32_t IDataFrameServiceConcurrentClient::send_collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -16321,6 +16562,7 @@ int32_t IDataFrameServiceConcurrentClient::send_collect(const IDataFrameId& id)
 
   IDataFrameService_collect_pargs args;
   args.id = &id;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16395,13 +16637,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_collect(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+int64_t IDataFrameServiceConcurrentClient::aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_aggregate(id, seqOp, combOp);
+  int32_t seqid = send_aggregate(id, seqOp, combOp, tp);
   return recv_aggregate(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+int32_t IDataFrameServiceConcurrentClient::send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -16411,6 +16653,7 @@ int32_t IDataFrameServiceConcurrentClient::send_aggregate(const IDataFrameId& id
   args.id = &id;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16485,13 +16728,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_aggregate(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+int64_t IDataFrameServiceConcurrentClient::treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_treeAggregate(id, seqOp, combOp);
+  int32_t seqid = send_treeAggregate(id, seqOp, combOp, tp);
   return recv_treeAggregate(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+int32_t IDataFrameServiceConcurrentClient::send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -16501,6 +16744,7 @@ int32_t IDataFrameServiceConcurrentClient::send_treeAggregate(const IDataFrameId
   args.id = &id;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16575,23 +16819,24 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeAggregate(const int32_t seqi
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+int64_t IDataFrameServiceConcurrentClient::treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_treeAggregate3(id, seqOp, combOp, depth);
-  return recv_treeAggregate3(seqid);
+  int32_t seqid = send_treeAggregate5(id, seqOp, combOp, depth, tp);
+  return recv_treeAggregate5(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+int32_t IDataFrameServiceConcurrentClient::send_treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("treeAggregate3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("treeAggregate5", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_treeAggregate3_pargs args;
+  IDataFrameService_treeAggregate5_pargs args;
   args.id = &id;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
   args.depth = &depth;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16602,7 +16847,7 @@ int32_t IDataFrameServiceConcurrentClient::send_treeAggregate3(const IDataFrameI
   return cseqid;
 }
 
-int64_t IDataFrameServiceConcurrentClient::recv_treeAggregate3(const int32_t seqid)
+int64_t IDataFrameServiceConcurrentClient::recv_treeAggregate5(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -16631,7 +16876,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeAggregate3(const int32_t seq
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("treeAggregate3") != 0) {
+      if (fname.compare("treeAggregate5") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -16641,7 +16886,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeAggregate3(const int32_t seq
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       int64_t _return;
-      IDataFrameService_treeAggregate3_presult result;
+      IDataFrameService_treeAggregate5_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -16656,7 +16901,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeAggregate3(const int32_t seq
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeAggregate3 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "treeAggregate5 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -16666,13 +16911,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_treeAggregate3(const int32_t seq
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int64_t IDataFrameServiceConcurrentClient::fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_fold(id, src);
+  int32_t seqid = send_fold(id, src, tp);
   return recv_fold(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+int32_t IDataFrameServiceConcurrentClient::send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -16681,6 +16926,7 @@ int32_t IDataFrameServiceConcurrentClient::send_fold(const IDataFrameId& id, con
   IDataFrameService_fold_pargs args;
   args.id = &id;
   args.src = &src;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -16755,13 +17001,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_fold(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::take(const IDataFrameId& id, const int64_t num)
+int64_t IDataFrameServiceConcurrentClient::take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_take(id, num);
+  int32_t seqid = send_take(id, num, tp);
   return recv_take(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_take(const IDataFrameId& id, const int64_t num)
+int32_t IDataFrameServiceConcurrentClient::send_take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -16770,6 +17016,7 @@ int32_t IDataFrameServiceConcurrentClient::send_take(const IDataFrameId& id, con
   IDataFrameService_take_pargs args;
   args.id = &id;
   args.num = &num;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -17010,13 +17257,13 @@ void IDataFrameServiceConcurrentClient::recv_foreachPartition(const int32_t seqi
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::top(const IDataFrameId& id, const int64_t num)
+int64_t IDataFrameServiceConcurrentClient::top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_top(id, num);
+  int32_t seqid = send_top(id, num, tp);
   return recv_top(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_top(const IDataFrameId& id, const int64_t num)
+int32_t IDataFrameServiceConcurrentClient::send_top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -17025,6 +17272,7 @@ int32_t IDataFrameServiceConcurrentClient::send_top(const IDataFrameId& id, cons
   IDataFrameService_top_pargs args;
   args.id = &id;
   args.num = &num;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -17099,22 +17347,23 @@ int64_t IDataFrameServiceConcurrentClient::recv_top(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp)
+int64_t IDataFrameServiceConcurrentClient::top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_top2(id, num, cmp);
-  return recv_top2(seqid);
+  int32_t seqid = send_top4(id, num, cmp, tp);
+  return recv_top4(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp)
+int32_t IDataFrameServiceConcurrentClient::send_top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("top2", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("top4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_top2_pargs args;
+  IDataFrameService_top4_pargs args;
   args.id = &id;
   args.num = &num;
   args.cmp = &cmp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -17125,7 +17374,7 @@ int32_t IDataFrameServiceConcurrentClient::send_top2(const IDataFrameId& id, con
   return cseqid;
 }
 
-int64_t IDataFrameServiceConcurrentClient::recv_top2(const int32_t seqid)
+int64_t IDataFrameServiceConcurrentClient::recv_top4(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -17154,7 +17403,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_top2(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("top2") != 0) {
+      if (fname.compare("top4") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -17164,7 +17413,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_top2(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       int64_t _return;
-      IDataFrameService_top2_presult result;
+      IDataFrameService_top4_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -17179,7 +17428,7 @@ int64_t IDataFrameServiceConcurrentClient::recv_top2(const int32_t seqid)
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "top2 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "top4 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -17280,13 +17529,13 @@ void IDataFrameServiceConcurrentClient::recv_sample(IDataFrameId& _return, const
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed)
+int64_t IDataFrameServiceConcurrentClient::takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_takeSample(id, withReplacement, num, seed);
+  int32_t seqid = send_takeSample(id, withReplacement, num, seed, tp);
   return recv_takeSample(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed)
+int32_t IDataFrameServiceConcurrentClient::send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -17297,6 +17546,7 @@ int32_t IDataFrameServiceConcurrentClient::send_takeSample(const IDataFrameId& i
   args.withReplacement = &withReplacement;
   args.num = &num;
   args.seed = &seed;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -17459,13 +17709,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_count(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+int64_t IDataFrameServiceConcurrentClient::max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_max(id, cmp);
+  int32_t seqid = send_max(id, cmp, tp);
   return recv_max(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+int32_t IDataFrameServiceConcurrentClient::send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -17474,6 +17724,7 @@ int32_t IDataFrameServiceConcurrentClient::send_max(const IDataFrameId& id, cons
   IDataFrameService_max_pargs args;
   args.id = &id;
   args.cmp = &cmp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -17548,13 +17799,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_max(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+int64_t IDataFrameServiceConcurrentClient::min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_min(id, cmp);
+  int32_t seqid = send_min(id, cmp, tp);
   return recv_min(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp)
+int32_t IDataFrameServiceConcurrentClient::send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -17563,6 +17814,7 @@ int32_t IDataFrameServiceConcurrentClient::send_min(const IDataFrameId& id, cons
   IDataFrameService_min_pargs args;
   args.id = &id;
   args.cmp = &cmp;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

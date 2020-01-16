@@ -75,11 +75,13 @@ namespace ignis {
         ignis::rpc::IExecutorException eex; \
         eex.__set_message(ex.what());\
         eex.__set__cause(ex.toString());\
+        IGNIS_LOG(error) << ex.toString(); \
         throw eex; \
     } catch (std::exception &ex) { \
         ignis::rpc::IExecutorException eex; \
         eex.__set_message(ex.what());\
         eex.__set__cause("");\
+        IGNIS_LOG(error) << ex.what(); \
         throw eex; \
     }
 

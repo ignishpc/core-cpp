@@ -22,7 +22,9 @@ namespace ignis { namespace rpc { namespace driver {
 class IClusterServiceIf {
  public:
   virtual ~IClusterServiceIf() {}
-  virtual int64_t newInstance(const int64_t properties) = 0;
+  virtual int64_t newInstance0() = 0;
+  virtual int64_t newInstance1a(const std::string& name) = 0;
+  virtual int64_t newInstance1b(const int64_t properties) = 0;
   virtual int64_t newInstance2(const std::string& name, const int64_t properties) = 0;
   virtual void setName(const int64_t id, const std::string& name) = 0;
   virtual void execute(const int64_t id, const std::vector<std::string> & cmd) = 0;
@@ -58,7 +60,15 @@ class IClusterServiceIfSingletonFactory : virtual public IClusterServiceIfFactor
 class IClusterServiceNull : virtual public IClusterServiceIf {
  public:
   virtual ~IClusterServiceNull() {}
-  int64_t newInstance(const int64_t /* properties */) {
+  int64_t newInstance0() {
+    int64_t _return = 0;
+    return _return;
+  }
+  int64_t newInstance1a(const std::string& /* name */) {
+    int64_t _return = 0;
+    return _return;
+  }
+  int64_t newInstance1b(const int64_t /* properties */) {
     int64_t _return = 0;
     return _return;
   }
@@ -83,37 +93,26 @@ class IClusterServiceNull : virtual public IClusterServiceIf {
   }
 };
 
-typedef struct _IClusterService_newInstance_args__isset {
-  _IClusterService_newInstance_args__isset() : properties(false) {}
-  bool properties :1;
-} _IClusterService_newInstance_args__isset;
 
-class IClusterService_newInstance_args {
+class IClusterService_newInstance0_args {
  public:
 
-  IClusterService_newInstance_args(const IClusterService_newInstance_args&);
-  IClusterService_newInstance_args& operator=(const IClusterService_newInstance_args&);
-  IClusterService_newInstance_args() : properties(0) {
+  IClusterService_newInstance0_args(const IClusterService_newInstance0_args&);
+  IClusterService_newInstance0_args& operator=(const IClusterService_newInstance0_args&);
+  IClusterService_newInstance0_args() {
   }
 
-  virtual ~IClusterService_newInstance_args() noexcept;
-  int64_t properties;
+  virtual ~IClusterService_newInstance0_args() noexcept;
 
-  _IClusterService_newInstance_args__isset __isset;
-
-  void __set_properties(const int64_t val);
-
-  bool operator == (const IClusterService_newInstance_args & rhs) const
+  bool operator == (const IClusterService_newInstance0_args & /* rhs */) const
   {
-    if (!(properties == rhs.properties))
-      return false;
     return true;
   }
-  bool operator != (const IClusterService_newInstance_args &rhs) const {
+  bool operator != (const IClusterService_newInstance0_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IClusterService_newInstance_args & ) const;
+  bool operator < (const IClusterService_newInstance0_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -121,42 +120,41 @@ class IClusterService_newInstance_args {
 };
 
 
-class IClusterService_newInstance_pargs {
+class IClusterService_newInstance0_pargs {
  public:
 
 
-  virtual ~IClusterService_newInstance_pargs() noexcept;
-  const int64_t* properties;
+  virtual ~IClusterService_newInstance0_pargs() noexcept;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IClusterService_newInstance_result__isset {
-  _IClusterService_newInstance_result__isset() : success(false), ex(false) {}
+typedef struct _IClusterService_newInstance0_result__isset {
+  _IClusterService_newInstance0_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IClusterService_newInstance_result__isset;
+} _IClusterService_newInstance0_result__isset;
 
-class IClusterService_newInstance_result {
+class IClusterService_newInstance0_result {
  public:
 
-  IClusterService_newInstance_result(const IClusterService_newInstance_result&);
-  IClusterService_newInstance_result& operator=(const IClusterService_newInstance_result&);
-  IClusterService_newInstance_result() : success(0) {
+  IClusterService_newInstance0_result(const IClusterService_newInstance0_result&);
+  IClusterService_newInstance0_result& operator=(const IClusterService_newInstance0_result&);
+  IClusterService_newInstance0_result() : success(0) {
   }
 
-  virtual ~IClusterService_newInstance_result() noexcept;
+  virtual ~IClusterService_newInstance0_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IClusterService_newInstance_result__isset __isset;
+  _IClusterService_newInstance0_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IClusterService_newInstance_result & rhs) const
+  bool operator == (const IClusterService_newInstance0_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -164,32 +162,256 @@ class IClusterService_newInstance_result {
       return false;
     return true;
   }
-  bool operator != (const IClusterService_newInstance_result &rhs) const {
+  bool operator != (const IClusterService_newInstance0_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IClusterService_newInstance_result & ) const;
+  bool operator < (const IClusterService_newInstance0_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IClusterService_newInstance_presult__isset {
-  _IClusterService_newInstance_presult__isset() : success(false), ex(false) {}
+typedef struct _IClusterService_newInstance0_presult__isset {
+  _IClusterService_newInstance0_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IClusterService_newInstance_presult__isset;
+} _IClusterService_newInstance0_presult__isset;
 
-class IClusterService_newInstance_presult {
+class IClusterService_newInstance0_presult {
  public:
 
 
-  virtual ~IClusterService_newInstance_presult() noexcept;
+  virtual ~IClusterService_newInstance0_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IClusterService_newInstance_presult__isset __isset;
+  _IClusterService_newInstance0_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IClusterService_newInstance1a_args__isset {
+  _IClusterService_newInstance1a_args__isset() : name(false) {}
+  bool name :1;
+} _IClusterService_newInstance1a_args__isset;
+
+class IClusterService_newInstance1a_args {
+ public:
+
+  IClusterService_newInstance1a_args(const IClusterService_newInstance1a_args&);
+  IClusterService_newInstance1a_args& operator=(const IClusterService_newInstance1a_args&);
+  IClusterService_newInstance1a_args() : name() {
+  }
+
+  virtual ~IClusterService_newInstance1a_args() noexcept;
+  std::string name;
+
+  _IClusterService_newInstance1a_args__isset __isset;
+
+  void __set_name(const std::string& val);
+
+  bool operator == (const IClusterService_newInstance1a_args & rhs) const
+  {
+    if (!(name == rhs.name))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_newInstance1a_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_newInstance1a_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_newInstance1a_pargs {
+ public:
+
+
+  virtual ~IClusterService_newInstance1a_pargs() noexcept;
+  const std::string* name;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IClusterService_newInstance1a_result__isset {
+  _IClusterService_newInstance1a_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IClusterService_newInstance1a_result__isset;
+
+class IClusterService_newInstance1a_result {
+ public:
+
+  IClusterService_newInstance1a_result(const IClusterService_newInstance1a_result&);
+  IClusterService_newInstance1a_result& operator=(const IClusterService_newInstance1a_result&);
+  IClusterService_newInstance1a_result() : success(0) {
+  }
+
+  virtual ~IClusterService_newInstance1a_result() noexcept;
+  int64_t success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IClusterService_newInstance1a_result__isset __isset;
+
+  void __set_success(const int64_t val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IClusterService_newInstance1a_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_newInstance1a_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_newInstance1a_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IClusterService_newInstance1a_presult__isset {
+  _IClusterService_newInstance1a_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IClusterService_newInstance1a_presult__isset;
+
+class IClusterService_newInstance1a_presult {
+ public:
+
+
+  virtual ~IClusterService_newInstance1a_presult() noexcept;
+  int64_t* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IClusterService_newInstance1a_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IClusterService_newInstance1b_args__isset {
+  _IClusterService_newInstance1b_args__isset() : properties(false) {}
+  bool properties :1;
+} _IClusterService_newInstance1b_args__isset;
+
+class IClusterService_newInstance1b_args {
+ public:
+
+  IClusterService_newInstance1b_args(const IClusterService_newInstance1b_args&);
+  IClusterService_newInstance1b_args& operator=(const IClusterService_newInstance1b_args&);
+  IClusterService_newInstance1b_args() : properties(0) {
+  }
+
+  virtual ~IClusterService_newInstance1b_args() noexcept;
+  int64_t properties;
+
+  _IClusterService_newInstance1b_args__isset __isset;
+
+  void __set_properties(const int64_t val);
+
+  bool operator == (const IClusterService_newInstance1b_args & rhs) const
+  {
+    if (!(properties == rhs.properties))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_newInstance1b_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_newInstance1b_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_newInstance1b_pargs {
+ public:
+
+
+  virtual ~IClusterService_newInstance1b_pargs() noexcept;
+  const int64_t* properties;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IClusterService_newInstance1b_result__isset {
+  _IClusterService_newInstance1b_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IClusterService_newInstance1b_result__isset;
+
+class IClusterService_newInstance1b_result {
+ public:
+
+  IClusterService_newInstance1b_result(const IClusterService_newInstance1b_result&);
+  IClusterService_newInstance1b_result& operator=(const IClusterService_newInstance1b_result&);
+  IClusterService_newInstance1b_result() : success(0) {
+  }
+
+  virtual ~IClusterService_newInstance1b_result() noexcept;
+  int64_t success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IClusterService_newInstance1b_result__isset __isset;
+
+  void __set_success(const int64_t val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IClusterService_newInstance1b_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_newInstance1b_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_newInstance1b_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IClusterService_newInstance1b_presult__isset {
+  _IClusterService_newInstance1b_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IClusterService_newInstance1b_presult__isset;
+
+class IClusterService_newInstance1b_presult {
+ public:
+
+
+  virtual ~IClusterService_newInstance1b_presult() noexcept;
+  int64_t* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IClusterService_newInstance1b_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -267,13 +489,13 @@ class IClusterService_newInstance2_result {
 
   virtual ~IClusterService_newInstance2_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_newInstance2_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IClusterService_newInstance2_result & rhs) const
   {
@@ -306,7 +528,7 @@ class IClusterService_newInstance2_presult {
 
   virtual ~IClusterService_newInstance2_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_newInstance2_presult__isset __isset;
 
@@ -384,11 +606,11 @@ class IClusterService_setName_result {
   }
 
   virtual ~IClusterService_setName_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_setName_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IClusterService_setName_result & rhs) const
   {
@@ -417,7 +639,7 @@ class IClusterService_setName_presult {
 
 
   virtual ~IClusterService_setName_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_setName_presult__isset __isset;
 
@@ -495,11 +717,11 @@ class IClusterService_execute_result {
   }
 
   virtual ~IClusterService_execute_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_execute_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IClusterService_execute_result & rhs) const
   {
@@ -528,7 +750,7 @@ class IClusterService_execute_presult {
 
 
   virtual ~IClusterService_execute_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_execute_presult__isset __isset;
 
@@ -606,11 +828,11 @@ class IClusterService_executeScript_result {
   }
 
   virtual ~IClusterService_executeScript_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_executeScript_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IClusterService_executeScript_result & rhs) const
   {
@@ -639,7 +861,7 @@ class IClusterService_executeScript_presult {
 
 
   virtual ~IClusterService_executeScript_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_executeScript_presult__isset __isset;
 
@@ -724,11 +946,11 @@ class IClusterService_sendFile_result {
   }
 
   virtual ~IClusterService_sendFile_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_sendFile_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IClusterService_sendFile_result & rhs) const
   {
@@ -757,7 +979,7 @@ class IClusterService_sendFile_presult {
 
 
   virtual ~IClusterService_sendFile_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_sendFile_presult__isset __isset;
 
@@ -842,11 +1064,11 @@ class IClusterService_sendCompressedFile_result {
   }
 
   virtual ~IClusterService_sendCompressedFile_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_sendCompressedFile_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IClusterService_sendCompressedFile_result & rhs) const
   {
@@ -875,7 +1097,7 @@ class IClusterService_sendCompressedFile_presult {
 
 
   virtual ~IClusterService_sendCompressedFile_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IClusterService_sendCompressedFile_presult__isset __isset;
 
@@ -908,9 +1130,15 @@ class IClusterServiceClient : virtual public IClusterServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  int64_t newInstance(const int64_t properties);
-  void send_newInstance(const int64_t properties);
-  int64_t recv_newInstance();
+  int64_t newInstance0();
+  void send_newInstance0();
+  int64_t recv_newInstance0();
+  int64_t newInstance1a(const std::string& name);
+  void send_newInstance1a(const std::string& name);
+  int64_t recv_newInstance1a();
+  int64_t newInstance1b(const int64_t properties);
+  void send_newInstance1b(const int64_t properties);
+  int64_t recv_newInstance1b();
   int64_t newInstance2(const std::string& name, const int64_t properties);
   void send_newInstance2(const std::string& name, const int64_t properties);
   int64_t recv_newInstance2();
@@ -944,7 +1172,9 @@ class IClusterServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IClusterServiceProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_newInstance(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_newInstance0(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_newInstance1a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_newInstance1b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_execute(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -954,7 +1184,9 @@ class IClusterServiceProcessor : public ::apache::thrift::TDispatchProcessor {
  public:
   IClusterServiceProcessor(::std::shared_ptr<IClusterServiceIf> iface) :
     iface_(iface) {
-    processMap_["newInstance"] = &IClusterServiceProcessor::process_newInstance;
+    processMap_["newInstance0"] = &IClusterServiceProcessor::process_newInstance0;
+    processMap_["newInstance1a"] = &IClusterServiceProcessor::process_newInstance1a;
+    processMap_["newInstance1b"] = &IClusterServiceProcessor::process_newInstance1b;
     processMap_["newInstance2"] = &IClusterServiceProcessor::process_newInstance2;
     processMap_["setName"] = &IClusterServiceProcessor::process_setName;
     processMap_["execute"] = &IClusterServiceProcessor::process_execute;
@@ -989,13 +1221,31 @@ class IClusterServiceMultiface : virtual public IClusterServiceIf {
     ifaces_.push_back(iface);
   }
  public:
-  int64_t newInstance(const int64_t properties) {
+  int64_t newInstance0() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->newInstance(properties);
+      ifaces_[i]->newInstance0();
     }
-    return ifaces_[i]->newInstance(properties);
+    return ifaces_[i]->newInstance0();
+  }
+
+  int64_t newInstance1a(const std::string& name) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->newInstance1a(name);
+    }
+    return ifaces_[i]->newInstance1a(name);
+  }
+
+  int64_t newInstance1b(const int64_t properties) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->newInstance1b(properties);
+    }
+    return ifaces_[i]->newInstance1b(properties);
   }
 
   int64_t newInstance2(const std::string& name, const int64_t properties) {
@@ -1084,9 +1334,15 @@ class IClusterServiceConcurrentClient : virtual public IClusterServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  int64_t newInstance(const int64_t properties);
-  int32_t send_newInstance(const int64_t properties);
-  int64_t recv_newInstance(const int32_t seqid);
+  int64_t newInstance0();
+  int32_t send_newInstance0();
+  int64_t recv_newInstance0(const int32_t seqid);
+  int64_t newInstance1a(const std::string& name);
+  int32_t send_newInstance1a(const std::string& name);
+  int64_t recv_newInstance1a(const int32_t seqid);
+  int64_t newInstance1b(const int64_t properties);
+  int32_t send_newInstance1b(const int64_t properties);
+  int64_t recv_newInstance1b(const int32_t seqid);
   int64_t newInstance2(const std::string& name, const int64_t properties);
   int32_t send_newInstance2(const std::string& name, const int64_t properties);
   int64_t recv_newInstance2(const int32_t seqid);

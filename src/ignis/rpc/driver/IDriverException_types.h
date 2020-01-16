@@ -19,7 +19,7 @@
 #include <memory>
 
 
-namespace ignis { namespace rpc {
+namespace ignis { namespace rpc { namespace driver {
 
 class IDriverException;
 
@@ -66,6 +66,6 @@ void swap(IDriverException &a, IDriverException &b);
 
 std::ostream& operator<<(std::ostream& out, const IDriverException& obj);
 
-}} // namespace
+}}} // namespace
 
 #endif

@@ -16,7 +16,7 @@ namespace ignis {
         namespace core {
             class IPartitionTools {
             public:
-                IPartitionTools(IPropertyParser &properties, api::IContext& context);
+                IPartitionTools(IPropertyParser &properties, api::IContext &context);
 
                 template<typename Tp>
                 std::shared_ptr<storage::IPartition<Tp>> newPartition();
@@ -28,7 +28,8 @@ namespace ignis {
                 std::shared_ptr<storage::IPartitionGroup<Tp>> newPartitionGroup(int partitions = 0);
 
                 template<typename Tp>
-                std::shared_ptr<storage::IPartitionGroup<Tp>> newPartitionGroup(storage::IPartitionGroup<Tp> &partitions);
+                std::shared_ptr<storage::IPartitionGroup<Tp>>
+                newPartitionGroup(storage::IPartitionGroup<Tp> &partitions);
 
                 template<typename Tp>
                 std::shared_ptr<storage::IMemoryPartition<Tp>> newMemoryPartition(int64_t elems = 1000);
@@ -80,9 +81,11 @@ namespace ignis {
                 std::shared_ptr<storage::IMemoryWriteIterator<Tp>> &
                 toMemory(std::shared_ptr<api::IWriteIterator<Tp>> &it);
 
+                void createDirectoryIfNotExists(const std::string &path);
+
             private:
                 IPropertyParser &properties;
-                api::IContext& context;
+                api::IContext &context;
                 int partition_id_gen;
             };
         }

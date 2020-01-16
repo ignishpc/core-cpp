@@ -108,11 +108,11 @@ class IBackendService_stop_result {
   }
 
   virtual ~IBackendService_stop_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IBackendService_stop_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IBackendService_stop_result & rhs) const
   {
@@ -141,7 +141,7 @@ class IBackendService_stop_presult {
 
 
   virtual ~IBackendService_stop_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IBackendService_stop_presult__isset __isset;
 

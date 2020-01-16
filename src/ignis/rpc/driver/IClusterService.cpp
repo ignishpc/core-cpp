@@ -9,11 +9,11 @@
 namespace ignis { namespace rpc { namespace driver {
 
 
-IClusterService_newInstance_args::~IClusterService_newInstance_args() noexcept {
+IClusterService_newInstance0_args::~IClusterService_newInstance0_args() noexcept {
 }
 
 
-uint32_t IClusterService_newInstance_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IClusterService_newInstance0_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -32,20 +32,7 @@ uint32_t IClusterService_newInstance_args::read(::apache::thrift::protocol::TPro
     if (ftype == ::apache::thrift::protocol::T_STOP) {
       break;
     }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->properties);
-          this->__isset.properties = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
+    xfer += iprot->skip(ftype);
     xfer += iprot->readFieldEnd();
   }
 
@@ -54,14 +41,10 @@ uint32_t IClusterService_newInstance_args::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-uint32_t IClusterService_newInstance_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IClusterService_newInstance0_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IClusterService_newInstance_args");
-
-  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64(this->properties);
-  xfer += oprot->writeFieldEnd();
+  xfer += oprot->writeStructBegin("IClusterService_newInstance0_args");
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -69,18 +52,14 @@ uint32_t IClusterService_newInstance_args::write(::apache::thrift::protocol::TPr
 }
 
 
-IClusterService_newInstance_pargs::~IClusterService_newInstance_pargs() noexcept {
+IClusterService_newInstance0_pargs::~IClusterService_newInstance0_pargs() noexcept {
 }
 
 
-uint32_t IClusterService_newInstance_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IClusterService_newInstance0_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IClusterService_newInstance_pargs");
-
-  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64((*(this->properties)));
-  xfer += oprot->writeFieldEnd();
+  xfer += oprot->writeStructBegin("IClusterService_newInstance0_pargs");
 
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
@@ -88,11 +67,11 @@ uint32_t IClusterService_newInstance_pargs::write(::apache::thrift::protocol::TP
 }
 
 
-IClusterService_newInstance_result::~IClusterService_newInstance_result() noexcept {
+IClusterService_newInstance0_result::~IClusterService_newInstance0_result() noexcept {
 }
 
 
-uint32_t IClusterService_newInstance_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IClusterService_newInstance0_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -141,11 +120,11 @@ uint32_t IClusterService_newInstance_result::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-uint32_t IClusterService_newInstance_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IClusterService_newInstance0_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IClusterService_newInstance_result");
+  xfer += oprot->writeStructBegin("IClusterService_newInstance0_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
@@ -162,11 +141,425 @@ uint32_t IClusterService_newInstance_result::write(::apache::thrift::protocol::T
 }
 
 
-IClusterService_newInstance_presult::~IClusterService_newInstance_presult() noexcept {
+IClusterService_newInstance0_presult::~IClusterService_newInstance0_presult() noexcept {
 }
 
 
-uint32_t IClusterService_newInstance_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IClusterService_newInstance0_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IClusterService_newInstance1a_args::~IClusterService_newInstance1a_args() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1a_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          this->__isset.name = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IClusterService_newInstance1a_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IClusterService_newInstance1a_args");
+
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->name);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IClusterService_newInstance1a_pargs::~IClusterService_newInstance1a_pargs() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1a_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IClusterService_newInstance1a_pargs");
+
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->name)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IClusterService_newInstance1a_result::~IClusterService_newInstance1a_result() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1a_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IClusterService_newInstance1a_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IClusterService_newInstance1a_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
+    xfer += oprot->writeI64(this->success);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IClusterService_newInstance1a_presult::~IClusterService_newInstance1a_presult() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1a_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64((*(this->success)));
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IClusterService_newInstance1b_args::~IClusterService_newInstance1b_args() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1b_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->properties);
+          this->__isset.properties = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IClusterService_newInstance1b_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IClusterService_newInstance1b_args");
+
+  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->properties);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IClusterService_newInstance1b_pargs::~IClusterService_newInstance1b_pargs() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1b_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IClusterService_newInstance1b_pargs");
+
+  xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->properties)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IClusterService_newInstance1b_result::~IClusterService_newInstance1b_result() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1b_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->success);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IClusterService_newInstance1b_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IClusterService_newInstance1b_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I64, 0);
+    xfer += oprot->writeI64(this->success);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IClusterService_newInstance1b_presult::~IClusterService_newInstance1b_presult() noexcept {
+}
+
+
+uint32_t IClusterService_newInstance1b_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1513,19 +1906,18 @@ uint32_t IClusterService_sendCompressedFile_presult::read(::apache::thrift::prot
   return xfer;
 }
 
-int64_t IClusterServiceClient::newInstance(const int64_t properties)
+int64_t IClusterServiceClient::newInstance0()
 {
-  send_newInstance(properties);
-  return recv_newInstance();
+  send_newInstance0();
+  return recv_newInstance0();
 }
 
-void IClusterServiceClient::send_newInstance(const int64_t properties)
+void IClusterServiceClient::send_newInstance0()
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("newInstance", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("newInstance0", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IClusterService_newInstance_pargs args;
-  args.properties = &properties;
+  IClusterService_newInstance0_pargs args;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -1533,7 +1925,7 @@ void IClusterServiceClient::send_newInstance(const int64_t properties)
   oprot_->getTransport()->flush();
 }
 
-int64_t IClusterServiceClient::recv_newInstance()
+int64_t IClusterServiceClient::recv_newInstance0()
 {
 
   int32_t rseqid = 0;
@@ -1553,13 +1945,13 @@ int64_t IClusterServiceClient::recv_newInstance()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("newInstance") != 0) {
+  if (fname.compare("newInstance0") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
   int64_t _return;
-  IClusterService_newInstance_presult result;
+  IClusterService_newInstance0_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -1571,7 +1963,129 @@ int64_t IClusterServiceClient::recv_newInstance()
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance0 failed: unknown result");
+}
+
+int64_t IClusterServiceClient::newInstance1a(const std::string& name)
+{
+  send_newInstance1a(name);
+  return recv_newInstance1a();
+}
+
+void IClusterServiceClient::send_newInstance1a(const std::string& name)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("newInstance1a", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IClusterService_newInstance1a_pargs args;
+  args.name = &name;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int64_t IClusterServiceClient::recv_newInstance1a()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("newInstance1a") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int64_t _return;
+  IClusterService_newInstance1a_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance1a failed: unknown result");
+}
+
+int64_t IClusterServiceClient::newInstance1b(const int64_t properties)
+{
+  send_newInstance1b(properties);
+  return recv_newInstance1b();
+}
+
+void IClusterServiceClient::send_newInstance1b(const int64_t properties)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("newInstance1b", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IClusterService_newInstance1b_pargs args;
+  args.properties = &properties;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+int64_t IClusterServiceClient::recv_newInstance1b()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("newInstance1b") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  int64_t _return;
+  IClusterService_newInstance1b_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    return _return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance1b failed: unknown result");
 }
 
 int64_t IClusterServiceClient::newInstance2(const std::string& name, const int64_t properties)
@@ -1942,41 +2456,41 @@ bool IClusterServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtoco
   return true;
 }
 
-void IClusterServiceProcessor::process_newInstance(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IClusterServiceProcessor::process_newInstance0(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IClusterService.newInstance", callContext);
+    ctx = this->eventHandler_->getContext("IClusterService.newInstance0", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IClusterService.newInstance");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IClusterService.newInstance0");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IClusterService.newInstance");
+    this->eventHandler_->preRead(ctx, "IClusterService.newInstance0");
   }
 
-  IClusterService_newInstance_args args;
+  IClusterService_newInstance0_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IClusterService.newInstance", bytes);
+    this->eventHandler_->postRead(ctx, "IClusterService.newInstance0", bytes);
   }
 
-  IClusterService_newInstance_result result;
+  IClusterService_newInstance0_result result;
   try {
-    result.success = iface_->newInstance(args.properties);
+    result.success = iface_->newInstance0();
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IClusterService.newInstance");
+      this->eventHandler_->handlerError(ctx, "IClusterService.newInstance0");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("newInstance", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("newInstance0", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -1985,17 +2499,131 @@ void IClusterServiceProcessor::process_newInstance(int32_t seqid, ::apache::thri
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IClusterService.newInstance");
+    this->eventHandler_->preWrite(ctx, "IClusterService.newInstance0");
   }
 
-  oprot->writeMessageBegin("newInstance", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("newInstance0", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IClusterService.newInstance", bytes);
+    this->eventHandler_->postWrite(ctx, "IClusterService.newInstance0", bytes);
+  }
+}
+
+void IClusterServiceProcessor::process_newInstance1a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IClusterService.newInstance1a", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IClusterService.newInstance1a");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IClusterService.newInstance1a");
+  }
+
+  IClusterService_newInstance1a_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IClusterService.newInstance1a", bytes);
+  }
+
+  IClusterService_newInstance1a_result result;
+  try {
+    result.success = iface_->newInstance1a(args.name);
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IClusterService.newInstance1a");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("newInstance1a", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IClusterService.newInstance1a");
+  }
+
+  oprot->writeMessageBegin("newInstance1a", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IClusterService.newInstance1a", bytes);
+  }
+}
+
+void IClusterServiceProcessor::process_newInstance1b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IClusterService.newInstance1b", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IClusterService.newInstance1b");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IClusterService.newInstance1b");
+  }
+
+  IClusterService_newInstance1b_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IClusterService.newInstance1b", bytes);
+  }
+
+  IClusterService_newInstance1b_result result;
+  try {
+    result.success = iface_->newInstance1b(args.properties);
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IClusterService.newInstance1b");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("newInstance1b", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IClusterService.newInstance1b");
+  }
+
+  oprot->writeMessageBegin("newInstance1b", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IClusterService.newInstance1b", bytes);
   }
 }
 
@@ -2024,7 +2652,7 @@ void IClusterServiceProcessor::process_newInstance2(int32_t seqid, ::apache::thr
   try {
     result.success = iface_->newInstance2(args.name, args.properties);
     result.__isset.success = true;
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2080,7 +2708,7 @@ void IClusterServiceProcessor::process_setName(int32_t seqid, ::apache::thrift::
   IClusterService_setName_result result;
   try {
     iface_->setName(args.id, args.name);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2136,7 +2764,7 @@ void IClusterServiceProcessor::process_execute(int32_t seqid, ::apache::thrift::
   IClusterService_execute_result result;
   try {
     iface_->execute(args.id, args.cmd);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2192,7 +2820,7 @@ void IClusterServiceProcessor::process_executeScript(int32_t seqid, ::apache::th
   IClusterService_executeScript_result result;
   try {
     iface_->executeScript(args.id, args.script);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2248,7 +2876,7 @@ void IClusterServiceProcessor::process_sendFile(int32_t seqid, ::apache::thrift:
   IClusterService_sendFile_result result;
   try {
     iface_->sendFile(args.id, args.source, args.target);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2304,7 +2932,7 @@ void IClusterServiceProcessor::process_sendCompressedFile(int32_t seqid, ::apach
   IClusterService_sendCompressedFile_result result;
   try {
     iface_->sendCompressedFile(args.id, args.source, args.target);
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
@@ -2343,20 +2971,19 @@ void IClusterServiceProcessor::process_sendCompressedFile(int32_t seqid, ::apach
   return processor;
 }
 
-int64_t IClusterServiceConcurrentClient::newInstance(const int64_t properties)
+int64_t IClusterServiceConcurrentClient::newInstance0()
 {
-  int32_t seqid = send_newInstance(properties);
-  return recv_newInstance(seqid);
+  int32_t seqid = send_newInstance0();
+  return recv_newInstance0(seqid);
 }
 
-int32_t IClusterServiceConcurrentClient::send_newInstance(const int64_t properties)
+int32_t IClusterServiceConcurrentClient::send_newInstance0()
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("newInstance", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("newInstance0", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IClusterService_newInstance_pargs args;
-  args.properties = &properties;
+  IClusterService_newInstance0_pargs args;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2367,7 +2994,7 @@ int32_t IClusterServiceConcurrentClient::send_newInstance(const int64_t properti
   return cseqid;
 }
 
-int64_t IClusterServiceConcurrentClient::recv_newInstance(const int32_t seqid)
+int64_t IClusterServiceConcurrentClient::recv_newInstance0(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -2396,7 +3023,7 @@ int64_t IClusterServiceConcurrentClient::recv_newInstance(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("newInstance") != 0) {
+      if (fname.compare("newInstance0") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -2406,7 +3033,7 @@ int64_t IClusterServiceConcurrentClient::recv_newInstance(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       int64_t _return;
-      IClusterService_newInstance_presult result;
+      IClusterService_newInstance0_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -2421,7 +3048,183 @@ int64_t IClusterServiceConcurrentClient::recv_newInstance(const int32_t seqid)
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance0 failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+int64_t IClusterServiceConcurrentClient::newInstance1a(const std::string& name)
+{
+  int32_t seqid = send_newInstance1a(name);
+  return recv_newInstance1a(seqid);
+}
+
+int32_t IClusterServiceConcurrentClient::send_newInstance1a(const std::string& name)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("newInstance1a", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IClusterService_newInstance1a_pargs args;
+  args.name = &name;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int64_t IClusterServiceConcurrentClient::recv_newInstance1a(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("newInstance1a") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int64_t _return;
+      IClusterService_newInstance1a_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance1a failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+int64_t IClusterServiceConcurrentClient::newInstance1b(const int64_t properties)
+{
+  int32_t seqid = send_newInstance1b(properties);
+  return recv_newInstance1b(seqid);
+}
+
+int32_t IClusterServiceConcurrentClient::send_newInstance1b(const int64_t properties)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("newInstance1b", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IClusterService_newInstance1b_pargs args;
+  args.properties = &properties;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+int64_t IClusterServiceConcurrentClient::recv_newInstance1b(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("newInstance1b") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      int64_t _return;
+      IClusterService_newInstance1b_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        sentry.commit();
+        return _return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance1b failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

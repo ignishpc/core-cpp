@@ -6,12 +6,12 @@
  */
 #include "IDriverException_constants.h"
 
-namespace ignis { namespace rpc {
+namespace ignis { namespace rpc { namespace driver {
 
 const IDriverExceptionConstants g_IDriverException_constants;
 
 IDriverExceptionConstants::IDriverExceptionConstants() {
 }
 
-}} // namespace
+}}} // namespace
 

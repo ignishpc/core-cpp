@@ -35,7 +35,7 @@ namespace ignis {
 
                 std::string jobName() { return getString("ignis.job.name"); }
 
-                std::string partitionDirectory() { return getString("ignis.partition.directory"); }
+                std::string JobDirectory() { return getString("ignis.job.directory"); }
 
                 //Auxiliary functions
 

@@ -27,8 +27,8 @@ class IWorkerServiceIf {
   virtual void newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores) = 0;
   virtual void newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores) = 0;
   virtual void setName(const IWorkerId& id, const std::string& name) = 0;
-  virtual void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id) = 0;
-  virtual void parallelize2( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId) = 0;
+  virtual void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) = 0;
   virtual void importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data) = 0;
   virtual void importDataFrame3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions) = 0;
   virtual void importDataFrame3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) = 0;
@@ -84,10 +84,10 @@ class IWorkerServiceNull : virtual public IWorkerServiceIf {
   void setName(const IWorkerId& /* id */, const std::string& /* name */) {
     return;
   }
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */) {
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const int64_t /* dataId */) {
     return;
   }
-  void parallelize2( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+  void parallelize3( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const int64_t /* dataId */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void importDataFrame( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const  ::ignis::rpc::driver::IDataFrameId& /* data */) {
@@ -197,13 +197,13 @@ class IWorkerService_newInstance_result {
 
   virtual ~IWorkerService_newInstance_result() noexcept;
   IWorkerId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance_result__isset __isset;
 
   void __set_success(const IWorkerId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_newInstance_result & rhs) const
   {
@@ -236,7 +236,7 @@ class IWorkerService_newInstance_presult {
 
   virtual ~IWorkerService_newInstance_presult() noexcept;
   IWorkerId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance_presult__isset __isset;
 
@@ -323,13 +323,13 @@ class IWorkerService_newInstance3a_result {
 
   virtual ~IWorkerService_newInstance3a_result() noexcept;
   IWorkerId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance3a_result__isset __isset;
 
   void __set_success(const IWorkerId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_newInstance3a_result & rhs) const
   {
@@ -362,7 +362,7 @@ class IWorkerService_newInstance3a_presult {
 
   virtual ~IWorkerService_newInstance3a_presult() noexcept;
   IWorkerId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance3a_presult__isset __isset;
 
@@ -449,13 +449,13 @@ class IWorkerService_newInstance3b_result {
 
   virtual ~IWorkerService_newInstance3b_result() noexcept;
   IWorkerId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance3b_result__isset __isset;
 
   void __set_success(const IWorkerId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_newInstance3b_result & rhs) const
   {
@@ -488,7 +488,7 @@ class IWorkerService_newInstance3b_presult {
 
   virtual ~IWorkerService_newInstance3b_presult() noexcept;
   IWorkerId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance3b_presult__isset __isset;
 
@@ -582,13 +582,13 @@ class IWorkerService_newInstance4_result {
 
   virtual ~IWorkerService_newInstance4_result() noexcept;
   IWorkerId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance4_result__isset __isset;
 
   void __set_success(const IWorkerId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_newInstance4_result & rhs) const
   {
@@ -621,7 +621,7 @@ class IWorkerService_newInstance4_presult {
 
   virtual ~IWorkerService_newInstance4_presult() noexcept;
   IWorkerId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance4_presult__isset __isset;
 
@@ -699,11 +699,11 @@ class IWorkerService_setName_result {
   }
 
   virtual ~IWorkerService_setName_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_setName_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_setName_result & rhs) const
   {
@@ -732,7 +732,7 @@ class IWorkerService_setName_presult {
 
 
   virtual ~IWorkerService_setName_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_setName_presult__isset __isset;
 
@@ -741,8 +741,9 @@ class IWorkerService_setName_presult {
 };
 
 typedef struct _IWorkerService_parallelize_args__isset {
-  _IWorkerService_parallelize_args__isset() : id(false) {}
+  _IWorkerService_parallelize_args__isset() : id(false), dataId(false) {}
   bool id :1;
+  bool dataId :1;
 } _IWorkerService_parallelize_args__isset;
 
 class IWorkerService_parallelize_args {
@@ -750,19 +751,24 @@ class IWorkerService_parallelize_args {
 
   IWorkerService_parallelize_args(const IWorkerService_parallelize_args&);
   IWorkerService_parallelize_args& operator=(const IWorkerService_parallelize_args&);
-  IWorkerService_parallelize_args() {
+  IWorkerService_parallelize_args() : dataId(0) {
   }
 
   virtual ~IWorkerService_parallelize_args() noexcept;
   IWorkerId id;
+  int64_t dataId;
 
   _IWorkerService_parallelize_args__isset __isset;
 
   void __set_id(const IWorkerId& val);
 
+  void __set_dataId(const int64_t val);
+
   bool operator == (const IWorkerService_parallelize_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(dataId == rhs.dataId))
       return false;
     return true;
   }
@@ -784,6 +790,7 @@ class IWorkerService_parallelize_pargs {
 
   virtual ~IWorkerService_parallelize_pargs() noexcept;
   const IWorkerId* id;
+  const int64_t* dataId;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -805,13 +812,13 @@ class IWorkerService_parallelize_result {
 
   virtual ~IWorkerService_parallelize_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_parallelize_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_parallelize_result & rhs) const
   {
@@ -844,7 +851,7 @@ class IWorkerService_parallelize_presult {
 
   virtual ~IWorkerService_parallelize_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_parallelize_presult__isset __isset;
 
@@ -852,43 +859,49 @@ class IWorkerService_parallelize_presult {
 
 };
 
-typedef struct _IWorkerService_parallelize2_args__isset {
-  _IWorkerService_parallelize2_args__isset() : id(false), src(false) {}
+typedef struct _IWorkerService_parallelize3_args__isset {
+  _IWorkerService_parallelize3_args__isset() : id(false), dataId(false), src(false) {}
   bool id :1;
+  bool dataId :1;
   bool src :1;
-} _IWorkerService_parallelize2_args__isset;
+} _IWorkerService_parallelize3_args__isset;
 
-class IWorkerService_parallelize2_args {
+class IWorkerService_parallelize3_args {
  public:
 
-  IWorkerService_parallelize2_args(const IWorkerService_parallelize2_args&);
-  IWorkerService_parallelize2_args& operator=(const IWorkerService_parallelize2_args&);
-  IWorkerService_parallelize2_args() {
+  IWorkerService_parallelize3_args(const IWorkerService_parallelize3_args&);
+  IWorkerService_parallelize3_args& operator=(const IWorkerService_parallelize3_args&);
+  IWorkerService_parallelize3_args() : dataId(0) {
   }
 
-  virtual ~IWorkerService_parallelize2_args() noexcept;
+  virtual ~IWorkerService_parallelize3_args() noexcept;
   IWorkerId id;
+  int64_t dataId;
    ::ignis::rpc::ISource src;
 
-  _IWorkerService_parallelize2_args__isset __isset;
+  _IWorkerService_parallelize3_args__isset __isset;
 
   void __set_id(const IWorkerId& val);
 
+  void __set_dataId(const int64_t val);
+
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  bool operator == (const IWorkerService_parallelize2_args & rhs) const
+  bool operator == (const IWorkerService_parallelize3_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(dataId == rhs.dataId))
       return false;
     if (!(src == rhs.src))
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_parallelize2_args &rhs) const {
+  bool operator != (const IWorkerService_parallelize3_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_parallelize2_args & ) const;
+  bool operator < (const IWorkerService_parallelize3_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -896,43 +909,44 @@ class IWorkerService_parallelize2_args {
 };
 
 
-class IWorkerService_parallelize2_pargs {
+class IWorkerService_parallelize3_pargs {
  public:
 
 
-  virtual ~IWorkerService_parallelize2_pargs() noexcept;
+  virtual ~IWorkerService_parallelize3_pargs() noexcept;
   const IWorkerId* id;
+  const int64_t* dataId;
   const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_parallelize2_result__isset {
-  _IWorkerService_parallelize2_result__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_parallelize3_result__isset {
+  _IWorkerService_parallelize3_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_parallelize2_result__isset;
+} _IWorkerService_parallelize3_result__isset;
 
-class IWorkerService_parallelize2_result {
+class IWorkerService_parallelize3_result {
  public:
 
-  IWorkerService_parallelize2_result(const IWorkerService_parallelize2_result&);
-  IWorkerService_parallelize2_result& operator=(const IWorkerService_parallelize2_result&);
-  IWorkerService_parallelize2_result() {
+  IWorkerService_parallelize3_result(const IWorkerService_parallelize3_result&);
+  IWorkerService_parallelize3_result& operator=(const IWorkerService_parallelize3_result&);
+  IWorkerService_parallelize3_result() {
   }
 
-  virtual ~IWorkerService_parallelize2_result() noexcept;
+  virtual ~IWorkerService_parallelize3_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_parallelize2_result__isset __isset;
+  _IWorkerService_parallelize3_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IWorkerService_parallelize2_result & rhs) const
+  bool operator == (const IWorkerService_parallelize3_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -940,32 +954,32 @@ class IWorkerService_parallelize2_result {
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_parallelize2_result &rhs) const {
+  bool operator != (const IWorkerService_parallelize3_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_parallelize2_result & ) const;
+  bool operator < (const IWorkerService_parallelize3_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_parallelize2_presult__isset {
-  _IWorkerService_parallelize2_presult__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_parallelize3_presult__isset {
+  _IWorkerService_parallelize3_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_parallelize2_presult__isset;
+} _IWorkerService_parallelize3_presult__isset;
 
-class IWorkerService_parallelize2_presult {
+class IWorkerService_parallelize3_presult {
  public:
 
 
-  virtual ~IWorkerService_parallelize2_presult() noexcept;
+  virtual ~IWorkerService_parallelize3_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_parallelize2_presult__isset __isset;
+  _IWorkerService_parallelize3_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1043,13 +1057,13 @@ class IWorkerService_importDataFrame_result {
 
   virtual ~IWorkerService_importDataFrame_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_importDataFrame_result & rhs) const
   {
@@ -1082,7 +1096,7 @@ class IWorkerService_importDataFrame_presult {
 
   virtual ~IWorkerService_importDataFrame_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame_presult__isset __isset;
 
@@ -1169,13 +1183,13 @@ class IWorkerService_importDataFrame3a_result {
 
   virtual ~IWorkerService_importDataFrame3a_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame3a_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_importDataFrame3a_result & rhs) const
   {
@@ -1208,7 +1222,7 @@ class IWorkerService_importDataFrame3a_presult {
 
   virtual ~IWorkerService_importDataFrame3a_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame3a_presult__isset __isset;
 
@@ -1295,13 +1309,13 @@ class IWorkerService_importDataFrame3b_result {
 
   virtual ~IWorkerService_importDataFrame3b_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame3b_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_importDataFrame3b_result & rhs) const
   {
@@ -1334,7 +1348,7 @@ class IWorkerService_importDataFrame3b_presult {
 
   virtual ~IWorkerService_importDataFrame3b_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame3b_presult__isset __isset;
 
@@ -1428,13 +1442,13 @@ class IWorkerService_importDataFrame4_result {
 
   virtual ~IWorkerService_importDataFrame4_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame4_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_importDataFrame4_result & rhs) const
   {
@@ -1467,7 +1481,7 @@ class IWorkerService_importDataFrame4_presult {
 
   virtual ~IWorkerService_importDataFrame4_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame4_presult__isset __isset;
 
@@ -1547,13 +1561,13 @@ class IWorkerService_textFile_result {
 
   virtual ~IWorkerService_textFile_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_textFile_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_textFile_result & rhs) const
   {
@@ -1586,7 +1600,7 @@ class IWorkerService_textFile_presult {
 
   virtual ~IWorkerService_textFile_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_textFile_presult__isset __isset;
 
@@ -1673,13 +1687,13 @@ class IWorkerService_textFile3_result {
 
   virtual ~IWorkerService_textFile3_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_textFile3_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_textFile3_result & rhs) const
   {
@@ -1712,7 +1726,7 @@ class IWorkerService_textFile3_presult {
 
   virtual ~IWorkerService_textFile3_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_textFile3_presult__isset __isset;
 
@@ -1792,13 +1806,13 @@ class IWorkerService_partitionObjectFile_result {
 
   virtual ~IWorkerService_partitionObjectFile_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionObjectFile_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_partitionObjectFile_result & rhs) const
   {
@@ -1831,7 +1845,7 @@ class IWorkerService_partitionObjectFile_presult {
 
   virtual ~IWorkerService_partitionObjectFile_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionObjectFile_presult__isset __isset;
 
@@ -1918,13 +1932,13 @@ class IWorkerService_partitionObjectFile3_result {
 
   virtual ~IWorkerService_partitionObjectFile3_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionObjectFile3_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_partitionObjectFile3_result & rhs) const
   {
@@ -1957,7 +1971,7 @@ class IWorkerService_partitionObjectFile3_presult {
 
   virtual ~IWorkerService_partitionObjectFile3_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionObjectFile3_presult__isset __isset;
 
@@ -2037,13 +2051,13 @@ class IWorkerService_partitionTextFile_result {
 
   virtual ~IWorkerService_partitionTextFile_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionTextFile_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_partitionTextFile_result & rhs) const
   {
@@ -2076,7 +2090,7 @@ class IWorkerService_partitionTextFile_presult {
 
   virtual ~IWorkerService_partitionTextFile_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionTextFile_presult__isset __isset;
 
@@ -2156,13 +2170,13 @@ class IWorkerService_partitionJsonFile_result {
 
   virtual ~IWorkerService_partitionJsonFile_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionJsonFile_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_partitionJsonFile_result & rhs) const
   {
@@ -2195,7 +2209,7 @@ class IWorkerService_partitionJsonFile_presult {
 
   virtual ~IWorkerService_partitionJsonFile_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionJsonFile_presult__isset __isset;
 
@@ -2282,13 +2296,13 @@ class IWorkerService_partitionJsonFile3_result {
 
   virtual ~IWorkerService_partitionJsonFile3_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionJsonFile3_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IWorkerService_partitionJsonFile3_result & rhs) const
   {
@@ -2321,7 +2335,7 @@ class IWorkerService_partitionJsonFile3_presult {
 
   virtual ~IWorkerService_partitionJsonFile3_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_partitionJsonFile3_presult__isset __isset;
 
@@ -2369,12 +2383,12 @@ class IWorkerServiceClient : virtual public IWorkerServiceIf {
   void setName(const IWorkerId& id, const std::string& name);
   void send_setName(const IWorkerId& id, const std::string& name);
   void recv_setName();
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id);
-  void send_parallelize(const IWorkerId& id);
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId);
+  void send_parallelize(const IWorkerId& id, const int64_t dataId);
   void recv_parallelize( ::ignis::rpc::driver::IDataFrameId& _return);
-  void parallelize2( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src);
-  void send_parallelize2(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
-  void recv_parallelize2( ::ignis::rpc::driver::IDataFrameId& _return);
+  void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void send_parallelize3(const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void recv_parallelize3( ::ignis::rpc::driver::IDataFrameId& _return);
   void importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   void send_importDataFrame(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   void recv_importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return);
@@ -2429,7 +2443,7 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_newInstance4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_parallelize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_parallelize2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_parallelize3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2450,7 +2464,7 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["newInstance4"] = &IWorkerServiceProcessor::process_newInstance4;
     processMap_["setName"] = &IWorkerServiceProcessor::process_setName;
     processMap_["parallelize"] = &IWorkerServiceProcessor::process_parallelize;
-    processMap_["parallelize2"] = &IWorkerServiceProcessor::process_parallelize2;
+    processMap_["parallelize3"] = &IWorkerServiceProcessor::process_parallelize3;
     processMap_["importDataFrame"] = &IWorkerServiceProcessor::process_importDataFrame;
     processMap_["importDataFrame3a"] = &IWorkerServiceProcessor::process_importDataFrame3a;
     processMap_["importDataFrame3b"] = &IWorkerServiceProcessor::process_importDataFrame3b;
@@ -2539,23 +2553,23 @@ class IWorkerServiceMultiface : virtual public IWorkerServiceIf {
     ifaces_[i]->setName(id, name);
   }
 
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id) {
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->parallelize(_return, id);
+      ifaces_[i]->parallelize(_return, id, dataId);
     }
-    ifaces_[i]->parallelize(_return, id);
+    ifaces_[i]->parallelize(_return, id, dataId);
     return;
   }
 
-  void parallelize2( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src) {
+  void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->parallelize2(_return, id, src);
+      ifaces_[i]->parallelize3(_return, id, dataId, src);
     }
-    ifaces_[i]->parallelize2(_return, id, src);
+    ifaces_[i]->parallelize3(_return, id, dataId, src);
     return;
   }
 
@@ -2716,12 +2730,12 @@ class IWorkerServiceConcurrentClient : virtual public IWorkerServiceIf {
   void setName(const IWorkerId& id, const std::string& name);
   int32_t send_setName(const IWorkerId& id, const std::string& name);
   void recv_setName(const int32_t seqid);
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id);
-  int32_t send_parallelize(const IWorkerId& id);
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId);
+  int32_t send_parallelize(const IWorkerId& id, const int64_t dataId);
   void recv_parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
-  void parallelize2( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src);
-  int32_t send_parallelize2(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
-  void recv_parallelize2( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  int32_t send_parallelize3(const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void recv_parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
   void importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   int32_t send_importDataFrame(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   void recv_importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);

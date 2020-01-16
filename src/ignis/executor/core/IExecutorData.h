@@ -50,7 +50,7 @@ namespace ignis {
 
                 template<typename Tp>
                 std::shared_ptr<storage::IPartitionGroup<Tp>>
-                setPartitions(std::shared_ptr<storage::IPartitionGroup<Tp>> &group) {
+                setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group) {
                     auto old = partitions;
                     partitions = std::static_pointer_cast<void>(group);
                     return std::static_pointer_cast<storage::IPartitionGroup<Tp>>(old);
@@ -76,6 +76,8 @@ namespace ignis {
                 }
 
                 int64_t clearVariables();
+
+                std::string infoDirectory();
 
                 std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
 

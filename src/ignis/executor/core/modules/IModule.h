@@ -18,7 +18,11 @@ namespace ignis {
 
                     std::shared_ptr<selector::ITypeSelector> typeFromPartition();
 
-                    std::shared_ptr<selector::ITypeSelector> typeFromHeader(std::string &header);
+                    std::shared_ptr<selector::ITypeSelector> typeFromHeader(const std::string &header);
+
+                    std::shared_ptr<selector::ITypeSelector> typeFromName(const std::string &name);
+
+                    std::shared_ptr<selector::ITypeSelector> typeFromSource(const rpc::ISource &source);
 
                     virtual ~IModule();
 

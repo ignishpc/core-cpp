@@ -45,24 +45,24 @@ class IDataFrameServiceIf {
   virtual void sort2(IDataFrameId& _return, const IDataFrameId& id, const bool ascending, const int64_t numPartitions) = 0;
   virtual void sortBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending) = 0;
   virtual void sortBy3(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions) = 0;
-  virtual int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
-  virtual int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
-  virtual int64_t treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth) = 0;
-  virtual int64_t collect(const IDataFrameId& id) = 0;
-  virtual int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) = 0;
-  virtual int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) = 0;
-  virtual int64_t treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth) = 0;
-  virtual int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
-  virtual int64_t take(const IDataFrameId& id, const int64_t num) = 0;
+  virtual int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) = 0;
   virtual void foreach_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
-  virtual int64_t top(const IDataFrameId& id, const int64_t num) = 0;
-  virtual int64_t top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp) = 0;
+  virtual int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp) = 0;
   virtual void sample(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const double fraction, const int32_t seed) = 0;
-  virtual int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed) = 0;
+  virtual int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp) = 0;
   virtual int64_t count(const IDataFrameId& id) = 0;
-  virtual int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp) = 0;
-  virtual int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp) = 0;
+  virtual int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp) = 0;
 };
 
 class IDataFrameServiceIfFactory {
@@ -162,39 +162,39 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void sortBy3(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const bool /* ascending */, const int64_t /* numPartitions */) {
     return;
   }
-  int64_t reduce(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+  int64_t reduce(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t treeReduce(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+  int64_t treeReduce(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t treeReduce3(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const int64_t /* depth */) {
+  int64_t treeReduce4(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const int64_t /* depth */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t collect(const IDataFrameId& /* id */) {
+  int64_t collect(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t aggregate(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */) {
+  int64_t aggregate(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t treeAggregate(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */) {
+  int64_t treeAggregate(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t treeAggregate3(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */, const int64_t /* depth */) {
+  int64_t treeAggregate5(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */, const int64_t /* depth */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t fold(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+  int64_t fold(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t take(const IDataFrameId& /* id */, const int64_t /* num */) {
+  int64_t take(const IDataFrameId& /* id */, const int64_t /* num */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
@@ -204,18 +204,18 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void foreachPartition(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
-  int64_t top(const IDataFrameId& /* id */, const int64_t /* num */) {
+  int64_t top(const IDataFrameId& /* id */, const int64_t /* num */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t top2(const IDataFrameId& /* id */, const int64_t /* num */, const  ::ignis::rpc::ISource& /* cmp */) {
+  int64_t top4(const IDataFrameId& /* id */, const int64_t /* num */, const  ::ignis::rpc::ISource& /* cmp */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
   void sample(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const bool /* withReplacement */, const double /* fraction */, const int32_t /* seed */) {
     return;
   }
-  int64_t takeSample(const IDataFrameId& /* id */, const bool /* withReplacement */, const int64_t /* num */, const int32_t /* seed */) {
+  int64_t takeSample(const IDataFrameId& /* id */, const bool /* withReplacement */, const int64_t /* num */, const int32_t /* seed */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
@@ -223,11 +223,11 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
     int64_t _return = 0;
     return _return;
   }
-  int64_t max(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* cmp */) {
+  int64_t max(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* cmp */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t min(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* cmp */) {
+  int64_t min(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* cmp */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
@@ -303,11 +303,11 @@ class IDataFrameService_setName_result {
   }
 
   virtual ~IDataFrameService_setName_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_setName_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_setName_result & rhs) const
   {
@@ -336,7 +336,7 @@ class IDataFrameService_setName_presult {
 
 
   virtual ~IDataFrameService_setName_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_setName_presult__isset __isset;
 
@@ -414,11 +414,11 @@ class IDataFrameService_persist_result {
   }
 
   virtual ~IDataFrameService_persist_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_persist_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_persist_result & rhs) const
   {
@@ -447,7 +447,7 @@ class IDataFrameService_persist_presult {
 
 
   virtual ~IDataFrameService_persist_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_persist_presult__isset __isset;
 
@@ -518,11 +518,11 @@ class IDataFrameService_cache_result {
   }
 
   virtual ~IDataFrameService_cache_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_cache_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_cache_result & rhs) const
   {
@@ -551,7 +551,7 @@ class IDataFrameService_cache_presult {
 
 
   virtual ~IDataFrameService_cache_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_cache_presult__isset __isset;
 
@@ -622,11 +622,11 @@ class IDataFrameService_unpersist_result {
   }
 
   virtual ~IDataFrameService_unpersist_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_unpersist_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_unpersist_result & rhs) const
   {
@@ -655,7 +655,7 @@ class IDataFrameService_unpersist_presult {
 
 
   virtual ~IDataFrameService_unpersist_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_unpersist_presult__isset __isset;
 
@@ -726,11 +726,11 @@ class IDataFrameService_uncache_result {
   }
 
   virtual ~IDataFrameService_uncache_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_uncache_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_uncache_result & rhs) const
   {
@@ -759,7 +759,7 @@ class IDataFrameService_uncache_presult {
 
 
   virtual ~IDataFrameService_uncache_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_uncache_presult__isset __isset;
 
@@ -839,13 +839,13 @@ class IDataFrameService_repartition_result {
 
   virtual ~IDataFrameService_repartition_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_repartition_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_repartition_result & rhs) const
   {
@@ -878,7 +878,7 @@ class IDataFrameService_repartition_presult {
 
   virtual ~IDataFrameService_repartition_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_repartition_presult__isset __isset;
 
@@ -965,13 +965,13 @@ class IDataFrameService_coalesce_result {
 
   virtual ~IDataFrameService_coalesce_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_coalesce_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_coalesce_result & rhs) const
   {
@@ -1004,7 +1004,7 @@ class IDataFrameService_coalesce_presult {
 
   virtual ~IDataFrameService_coalesce_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_coalesce_presult__isset __isset;
 
@@ -1077,13 +1077,13 @@ class IDataFrameService_partitions_result {
 
   virtual ~IDataFrameService_partitions_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_partitions_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_partitions_result & rhs) const
   {
@@ -1116,7 +1116,7 @@ class IDataFrameService_partitions_presult {
 
   virtual ~IDataFrameService_partitions_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_partitions_presult__isset __isset;
 
@@ -1201,11 +1201,11 @@ class IDataFrameService_saveAsObjectFile_result {
   }
 
   virtual ~IDataFrameService_saveAsObjectFile_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_saveAsObjectFile_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_saveAsObjectFile_result & rhs) const
   {
@@ -1234,7 +1234,7 @@ class IDataFrameService_saveAsObjectFile_presult {
 
 
   virtual ~IDataFrameService_saveAsObjectFile_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_saveAsObjectFile_presult__isset __isset;
 
@@ -1312,11 +1312,11 @@ class IDataFrameService_saveAsTextFile_result {
   }
 
   virtual ~IDataFrameService_saveAsTextFile_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_saveAsTextFile_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_saveAsTextFile_result & rhs) const
   {
@@ -1345,7 +1345,7 @@ class IDataFrameService_saveAsTextFile_presult {
 
 
   virtual ~IDataFrameService_saveAsTextFile_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_saveAsTextFile_presult__isset __isset;
 
@@ -1430,11 +1430,11 @@ class IDataFrameService_saveAsJsonFile_result {
   }
 
   virtual ~IDataFrameService_saveAsJsonFile_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_saveAsJsonFile_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_saveAsJsonFile_result & rhs) const
   {
@@ -1463,7 +1463,7 @@ class IDataFrameService_saveAsJsonFile_presult {
 
 
   virtual ~IDataFrameService_saveAsJsonFile_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_saveAsJsonFile_presult__isset __isset;
 
@@ -1543,13 +1543,13 @@ class IDataFrameService_map__result {
 
   virtual ~IDataFrameService_map__result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_map__result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_map__result & rhs) const
   {
@@ -1582,7 +1582,7 @@ class IDataFrameService_map__presult {
 
   virtual ~IDataFrameService_map__presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_map__presult__isset __isset;
 
@@ -1662,13 +1662,13 @@ class IDataFrameService_filter_result {
 
   virtual ~IDataFrameService_filter_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_filter_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_filter_result & rhs) const
   {
@@ -1701,7 +1701,7 @@ class IDataFrameService_filter_presult {
 
   virtual ~IDataFrameService_filter_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_filter_presult__isset __isset;
 
@@ -1781,13 +1781,13 @@ class IDataFrameService_flatmap_result {
 
   virtual ~IDataFrameService_flatmap_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_flatmap_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_flatmap_result & rhs) const
   {
@@ -1820,7 +1820,7 @@ class IDataFrameService_flatmap_presult {
 
   virtual ~IDataFrameService_flatmap_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_flatmap_presult__isset __isset;
 
@@ -1907,13 +1907,13 @@ class IDataFrameService_mapPartitions_result {
 
   virtual ~IDataFrameService_mapPartitions_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_mapPartitions_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_mapPartitions_result & rhs) const
   {
@@ -1946,7 +1946,7 @@ class IDataFrameService_mapPartitions_presult {
 
   virtual ~IDataFrameService_mapPartitions_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_mapPartitions_presult__isset __isset;
 
@@ -2033,13 +2033,13 @@ class IDataFrameService_mapPartitionsWithIndex_result {
 
   virtual ~IDataFrameService_mapPartitionsWithIndex_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_mapPartitionsWithIndex_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_mapPartitionsWithIndex_result & rhs) const
   {
@@ -2072,7 +2072,7 @@ class IDataFrameService_mapPartitionsWithIndex_presult {
 
   virtual ~IDataFrameService_mapPartitionsWithIndex_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_mapPartitionsWithIndex_presult__isset __isset;
 
@@ -2152,13 +2152,13 @@ class IDataFrameService_applyPartition_result {
 
   virtual ~IDataFrameService_applyPartition_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_applyPartition_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_applyPartition_result & rhs) const
   {
@@ -2191,7 +2191,7 @@ class IDataFrameService_applyPartition_presult {
 
   virtual ~IDataFrameService_applyPartition_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_applyPartition_presult__isset __isset;
 
@@ -2271,13 +2271,13 @@ class IDataFrameService_groupBy_result {
 
   virtual ~IDataFrameService_groupBy_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_groupBy_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_groupBy_result & rhs) const
   {
@@ -2310,7 +2310,7 @@ class IDataFrameService_groupBy_presult {
 
   virtual ~IDataFrameService_groupBy_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_groupBy_presult__isset __isset;
 
@@ -2397,13 +2397,13 @@ class IDataFrameService_groupBy2_result {
 
   virtual ~IDataFrameService_groupBy2_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_groupBy2_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_groupBy2_result & rhs) const
   {
@@ -2436,7 +2436,7 @@ class IDataFrameService_groupBy2_presult {
 
   virtual ~IDataFrameService_groupBy2_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_groupBy2_presult__isset __isset;
 
@@ -2516,13 +2516,13 @@ class IDataFrameService_sort_result {
 
   virtual ~IDataFrameService_sort_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sort_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_sort_result & rhs) const
   {
@@ -2555,7 +2555,7 @@ class IDataFrameService_sort_presult {
 
   virtual ~IDataFrameService_sort_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sort_presult__isset __isset;
 
@@ -2642,13 +2642,13 @@ class IDataFrameService_sort2_result {
 
   virtual ~IDataFrameService_sort2_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sort2_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_sort2_result & rhs) const
   {
@@ -2681,7 +2681,7 @@ class IDataFrameService_sort2_presult {
 
   virtual ~IDataFrameService_sort2_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sort2_presult__isset __isset;
 
@@ -2768,13 +2768,13 @@ class IDataFrameService_sortBy_result {
 
   virtual ~IDataFrameService_sortBy_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sortBy_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_sortBy_result & rhs) const
   {
@@ -2807,7 +2807,7 @@ class IDataFrameService_sortBy_presult {
 
   virtual ~IDataFrameService_sortBy_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sortBy_presult__isset __isset;
 
@@ -2901,13 +2901,13 @@ class IDataFrameService_sortBy3_result {
 
   virtual ~IDataFrameService_sortBy3_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sortBy3_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_sortBy3_result & rhs) const
   {
@@ -2940,7 +2940,7 @@ class IDataFrameService_sortBy3_presult {
 
   virtual ~IDataFrameService_sortBy3_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sortBy3_presult__isset __isset;
 
@@ -2949,9 +2949,10 @@ class IDataFrameService_sortBy3_presult {
 };
 
 typedef struct _IDataFrameService_reduce_args__isset {
-  _IDataFrameService_reduce_args__isset() : id(false), src(false) {}
+  _IDataFrameService_reduce_args__isset() : id(false), src(false), tp(false) {}
   bool id :1;
   bool src :1;
+  bool tp :1;
 } _IDataFrameService_reduce_args__isset;
 
 class IDataFrameService_reduce_args {
@@ -2965,6 +2966,7 @@ class IDataFrameService_reduce_args {
   virtual ~IDataFrameService_reduce_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource src;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_reduce_args__isset __isset;
 
@@ -2972,11 +2974,15 @@ class IDataFrameService_reduce_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_reduce_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(src == rhs.src))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -2999,6 +3005,7 @@ class IDataFrameService_reduce_pargs {
   virtual ~IDataFrameService_reduce_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* src;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3020,13 +3027,13 @@ class IDataFrameService_reduce_result {
 
   virtual ~IDataFrameService_reduce_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_reduce_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_reduce_result & rhs) const
   {
@@ -3059,7 +3066,7 @@ class IDataFrameService_reduce_presult {
 
   virtual ~IDataFrameService_reduce_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_reduce_presult__isset __isset;
 
@@ -3068,9 +3075,10 @@ class IDataFrameService_reduce_presult {
 };
 
 typedef struct _IDataFrameService_treeReduce_args__isset {
-  _IDataFrameService_treeReduce_args__isset() : id(false), src(false) {}
+  _IDataFrameService_treeReduce_args__isset() : id(false), src(false), tp(false) {}
   bool id :1;
   bool src :1;
+  bool tp :1;
 } _IDataFrameService_treeReduce_args__isset;
 
 class IDataFrameService_treeReduce_args {
@@ -3084,6 +3092,7 @@ class IDataFrameService_treeReduce_args {
   virtual ~IDataFrameService_treeReduce_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource src;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_treeReduce_args__isset __isset;
 
@@ -3091,11 +3100,15 @@ class IDataFrameService_treeReduce_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_treeReduce_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(src == rhs.src))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -3118,6 +3131,7 @@ class IDataFrameService_treeReduce_pargs {
   virtual ~IDataFrameService_treeReduce_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* src;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3139,13 +3153,13 @@ class IDataFrameService_treeReduce_result {
 
   virtual ~IDataFrameService_treeReduce_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_treeReduce_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_treeReduce_result & rhs) const
   {
@@ -3178,7 +3192,7 @@ class IDataFrameService_treeReduce_presult {
 
   virtual ~IDataFrameService_treeReduce_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_treeReduce_presult__isset __isset;
 
@@ -3186,27 +3200,29 @@ class IDataFrameService_treeReduce_presult {
 
 };
 
-typedef struct _IDataFrameService_treeReduce3_args__isset {
-  _IDataFrameService_treeReduce3_args__isset() : id(false), src(false), depth(false) {}
+typedef struct _IDataFrameService_treeReduce4_args__isset {
+  _IDataFrameService_treeReduce4_args__isset() : id(false), src(false), depth(false), tp(false) {}
   bool id :1;
   bool src :1;
   bool depth :1;
-} _IDataFrameService_treeReduce3_args__isset;
+  bool tp :1;
+} _IDataFrameService_treeReduce4_args__isset;
 
-class IDataFrameService_treeReduce3_args {
+class IDataFrameService_treeReduce4_args {
  public:
 
-  IDataFrameService_treeReduce3_args(const IDataFrameService_treeReduce3_args&);
-  IDataFrameService_treeReduce3_args& operator=(const IDataFrameService_treeReduce3_args&);
-  IDataFrameService_treeReduce3_args() : depth(0) {
+  IDataFrameService_treeReduce4_args(const IDataFrameService_treeReduce4_args&);
+  IDataFrameService_treeReduce4_args& operator=(const IDataFrameService_treeReduce4_args&);
+  IDataFrameService_treeReduce4_args() : depth(0) {
   }
 
-  virtual ~IDataFrameService_treeReduce3_args() noexcept;
+  virtual ~IDataFrameService_treeReduce4_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource src;
   int64_t depth;
+   ::ignis::rpc::ISource tp;
 
-  _IDataFrameService_treeReduce3_args__isset __isset;
+  _IDataFrameService_treeReduce4_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
@@ -3214,7 +3230,9 @@ class IDataFrameService_treeReduce3_args {
 
   void __set_depth(const int64_t val);
 
-  bool operator == (const IDataFrameService_treeReduce3_args & rhs) const
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_treeReduce4_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -3222,13 +3240,15 @@ class IDataFrameService_treeReduce3_args {
       return false;
     if (!(depth == rhs.depth))
       return false;
+    if (!(tp == rhs.tp))
+      return false;
     return true;
   }
-  bool operator != (const IDataFrameService_treeReduce3_args &rhs) const {
+  bool operator != (const IDataFrameService_treeReduce4_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_treeReduce3_args & ) const;
+  bool operator < (const IDataFrameService_treeReduce4_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3236,44 +3256,45 @@ class IDataFrameService_treeReduce3_args {
 };
 
 
-class IDataFrameService_treeReduce3_pargs {
+class IDataFrameService_treeReduce4_pargs {
  public:
 
 
-  virtual ~IDataFrameService_treeReduce3_pargs() noexcept;
+  virtual ~IDataFrameService_treeReduce4_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* src;
   const int64_t* depth;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_treeReduce3_result__isset {
-  _IDataFrameService_treeReduce3_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_treeReduce4_result__isset {
+  _IDataFrameService_treeReduce4_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_treeReduce3_result__isset;
+} _IDataFrameService_treeReduce4_result__isset;
 
-class IDataFrameService_treeReduce3_result {
+class IDataFrameService_treeReduce4_result {
  public:
 
-  IDataFrameService_treeReduce3_result(const IDataFrameService_treeReduce3_result&);
-  IDataFrameService_treeReduce3_result& operator=(const IDataFrameService_treeReduce3_result&);
-  IDataFrameService_treeReduce3_result() : success(0) {
+  IDataFrameService_treeReduce4_result(const IDataFrameService_treeReduce4_result&);
+  IDataFrameService_treeReduce4_result& operator=(const IDataFrameService_treeReduce4_result&);
+  IDataFrameService_treeReduce4_result() : success(0) {
   }
 
-  virtual ~IDataFrameService_treeReduce3_result() noexcept;
+  virtual ~IDataFrameService_treeReduce4_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_treeReduce3_result__isset __isset;
+  _IDataFrameService_treeReduce4_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_treeReduce3_result & rhs) const
+  bool operator == (const IDataFrameService_treeReduce4_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -3281,40 +3302,41 @@ class IDataFrameService_treeReduce3_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_treeReduce3_result &rhs) const {
+  bool operator != (const IDataFrameService_treeReduce4_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_treeReduce3_result & ) const;
+  bool operator < (const IDataFrameService_treeReduce4_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_treeReduce3_presult__isset {
-  _IDataFrameService_treeReduce3_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_treeReduce4_presult__isset {
+  _IDataFrameService_treeReduce4_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_treeReduce3_presult__isset;
+} _IDataFrameService_treeReduce4_presult__isset;
 
-class IDataFrameService_treeReduce3_presult {
+class IDataFrameService_treeReduce4_presult {
  public:
 
 
-  virtual ~IDataFrameService_treeReduce3_presult() noexcept;
+  virtual ~IDataFrameService_treeReduce4_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_treeReduce3_presult__isset __isset;
+  _IDataFrameService_treeReduce4_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
 typedef struct _IDataFrameService_collect_args__isset {
-  _IDataFrameService_collect_args__isset() : id(false) {}
+  _IDataFrameService_collect_args__isset() : id(false), tp(false) {}
   bool id :1;
+  bool tp :1;
 } _IDataFrameService_collect_args__isset;
 
 class IDataFrameService_collect_args {
@@ -3327,14 +3349,19 @@ class IDataFrameService_collect_args {
 
   virtual ~IDataFrameService_collect_args() noexcept;
   IDataFrameId id;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_collect_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_collect_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -3356,6 +3383,7 @@ class IDataFrameService_collect_pargs {
 
   virtual ~IDataFrameService_collect_pargs() noexcept;
   const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3377,13 +3405,13 @@ class IDataFrameService_collect_result {
 
   virtual ~IDataFrameService_collect_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_collect_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_collect_result & rhs) const
   {
@@ -3416,7 +3444,7 @@ class IDataFrameService_collect_presult {
 
   virtual ~IDataFrameService_collect_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_collect_presult__isset __isset;
 
@@ -3425,10 +3453,11 @@ class IDataFrameService_collect_presult {
 };
 
 typedef struct _IDataFrameService_aggregate_args__isset {
-  _IDataFrameService_aggregate_args__isset() : id(false), seqOp(false), combOp(false) {}
+  _IDataFrameService_aggregate_args__isset() : id(false), seqOp(false), combOp(false), tp(false) {}
   bool id :1;
   bool seqOp :1;
   bool combOp :1;
+  bool tp :1;
 } _IDataFrameService_aggregate_args__isset;
 
 class IDataFrameService_aggregate_args {
@@ -3443,6 +3472,7 @@ class IDataFrameService_aggregate_args {
   IDataFrameId id;
    ::ignis::rpc::ISource seqOp;
    ::ignis::rpc::ISource combOp;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_aggregate_args__isset __isset;
 
@@ -3452,6 +3482,8 @@ class IDataFrameService_aggregate_args {
 
   void __set_combOp(const  ::ignis::rpc::ISource& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_aggregate_args & rhs) const
   {
     if (!(id == rhs.id))
@@ -3459,6 +3491,8 @@ class IDataFrameService_aggregate_args {
     if (!(seqOp == rhs.seqOp))
       return false;
     if (!(combOp == rhs.combOp))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -3482,6 +3516,7 @@ class IDataFrameService_aggregate_pargs {
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* seqOp;
   const  ::ignis::rpc::ISource* combOp;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3503,13 +3538,13 @@ class IDataFrameService_aggregate_result {
 
   virtual ~IDataFrameService_aggregate_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_aggregate_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_aggregate_result & rhs) const
   {
@@ -3542,7 +3577,7 @@ class IDataFrameService_aggregate_presult {
 
   virtual ~IDataFrameService_aggregate_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_aggregate_presult__isset __isset;
 
@@ -3551,10 +3586,11 @@ class IDataFrameService_aggregate_presult {
 };
 
 typedef struct _IDataFrameService_treeAggregate_args__isset {
-  _IDataFrameService_treeAggregate_args__isset() : id(false), seqOp(false), combOp(false) {}
+  _IDataFrameService_treeAggregate_args__isset() : id(false), seqOp(false), combOp(false), tp(false) {}
   bool id :1;
   bool seqOp :1;
   bool combOp :1;
+  bool tp :1;
 } _IDataFrameService_treeAggregate_args__isset;
 
 class IDataFrameService_treeAggregate_args {
@@ -3569,6 +3605,7 @@ class IDataFrameService_treeAggregate_args {
   IDataFrameId id;
    ::ignis::rpc::ISource seqOp;
    ::ignis::rpc::ISource combOp;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_treeAggregate_args__isset __isset;
 
@@ -3578,6 +3615,8 @@ class IDataFrameService_treeAggregate_args {
 
   void __set_combOp(const  ::ignis::rpc::ISource& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_treeAggregate_args & rhs) const
   {
     if (!(id == rhs.id))
@@ -3585,6 +3624,8 @@ class IDataFrameService_treeAggregate_args {
     if (!(seqOp == rhs.seqOp))
       return false;
     if (!(combOp == rhs.combOp))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -3608,6 +3649,7 @@ class IDataFrameService_treeAggregate_pargs {
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* seqOp;
   const  ::ignis::rpc::ISource* combOp;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3629,13 +3671,13 @@ class IDataFrameService_treeAggregate_result {
 
   virtual ~IDataFrameService_treeAggregate_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_treeAggregate_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_treeAggregate_result & rhs) const
   {
@@ -3668,7 +3710,7 @@ class IDataFrameService_treeAggregate_presult {
 
   virtual ~IDataFrameService_treeAggregate_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_treeAggregate_presult__isset __isset;
 
@@ -3676,29 +3718,31 @@ class IDataFrameService_treeAggregate_presult {
 
 };
 
-typedef struct _IDataFrameService_treeAggregate3_args__isset {
-  _IDataFrameService_treeAggregate3_args__isset() : id(false), seqOp(false), combOp(false), depth(false) {}
+typedef struct _IDataFrameService_treeAggregate5_args__isset {
+  _IDataFrameService_treeAggregate5_args__isset() : id(false), seqOp(false), combOp(false), depth(false), tp(false) {}
   bool id :1;
   bool seqOp :1;
   bool combOp :1;
   bool depth :1;
-} _IDataFrameService_treeAggregate3_args__isset;
+  bool tp :1;
+} _IDataFrameService_treeAggregate5_args__isset;
 
-class IDataFrameService_treeAggregate3_args {
+class IDataFrameService_treeAggregate5_args {
  public:
 
-  IDataFrameService_treeAggregate3_args(const IDataFrameService_treeAggregate3_args&);
-  IDataFrameService_treeAggregate3_args& operator=(const IDataFrameService_treeAggregate3_args&);
-  IDataFrameService_treeAggregate3_args() : depth(0) {
+  IDataFrameService_treeAggregate5_args(const IDataFrameService_treeAggregate5_args&);
+  IDataFrameService_treeAggregate5_args& operator=(const IDataFrameService_treeAggregate5_args&);
+  IDataFrameService_treeAggregate5_args() : depth(0) {
   }
 
-  virtual ~IDataFrameService_treeAggregate3_args() noexcept;
+  virtual ~IDataFrameService_treeAggregate5_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource seqOp;
    ::ignis::rpc::ISource combOp;
   int64_t depth;
+   ::ignis::rpc::ISource tp;
 
-  _IDataFrameService_treeAggregate3_args__isset __isset;
+  _IDataFrameService_treeAggregate5_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
@@ -3708,7 +3752,9 @@ class IDataFrameService_treeAggregate3_args {
 
   void __set_depth(const int64_t val);
 
-  bool operator == (const IDataFrameService_treeAggregate3_args & rhs) const
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_treeAggregate5_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -3718,13 +3764,15 @@ class IDataFrameService_treeAggregate3_args {
       return false;
     if (!(depth == rhs.depth))
       return false;
+    if (!(tp == rhs.tp))
+      return false;
     return true;
   }
-  bool operator != (const IDataFrameService_treeAggregate3_args &rhs) const {
+  bool operator != (const IDataFrameService_treeAggregate5_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_treeAggregate3_args & ) const;
+  bool operator < (const IDataFrameService_treeAggregate5_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3732,45 +3780,46 @@ class IDataFrameService_treeAggregate3_args {
 };
 
 
-class IDataFrameService_treeAggregate3_pargs {
+class IDataFrameService_treeAggregate5_pargs {
  public:
 
 
-  virtual ~IDataFrameService_treeAggregate3_pargs() noexcept;
+  virtual ~IDataFrameService_treeAggregate5_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* seqOp;
   const  ::ignis::rpc::ISource* combOp;
   const int64_t* depth;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_treeAggregate3_result__isset {
-  _IDataFrameService_treeAggregate3_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_treeAggregate5_result__isset {
+  _IDataFrameService_treeAggregate5_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_treeAggregate3_result__isset;
+} _IDataFrameService_treeAggregate5_result__isset;
 
-class IDataFrameService_treeAggregate3_result {
+class IDataFrameService_treeAggregate5_result {
  public:
 
-  IDataFrameService_treeAggregate3_result(const IDataFrameService_treeAggregate3_result&);
-  IDataFrameService_treeAggregate3_result& operator=(const IDataFrameService_treeAggregate3_result&);
-  IDataFrameService_treeAggregate3_result() : success(0) {
+  IDataFrameService_treeAggregate5_result(const IDataFrameService_treeAggregate5_result&);
+  IDataFrameService_treeAggregate5_result& operator=(const IDataFrameService_treeAggregate5_result&);
+  IDataFrameService_treeAggregate5_result() : success(0) {
   }
 
-  virtual ~IDataFrameService_treeAggregate3_result() noexcept;
+  virtual ~IDataFrameService_treeAggregate5_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_treeAggregate3_result__isset __isset;
+  _IDataFrameService_treeAggregate5_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_treeAggregate3_result & rhs) const
+  bool operator == (const IDataFrameService_treeAggregate5_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -3778,41 +3827,42 @@ class IDataFrameService_treeAggregate3_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_treeAggregate3_result &rhs) const {
+  bool operator != (const IDataFrameService_treeAggregate5_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_treeAggregate3_result & ) const;
+  bool operator < (const IDataFrameService_treeAggregate5_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_treeAggregate3_presult__isset {
-  _IDataFrameService_treeAggregate3_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_treeAggregate5_presult__isset {
+  _IDataFrameService_treeAggregate5_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_treeAggregate3_presult__isset;
+} _IDataFrameService_treeAggregate5_presult__isset;
 
-class IDataFrameService_treeAggregate3_presult {
+class IDataFrameService_treeAggregate5_presult {
  public:
 
 
-  virtual ~IDataFrameService_treeAggregate3_presult() noexcept;
+  virtual ~IDataFrameService_treeAggregate5_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_treeAggregate3_presult__isset __isset;
+  _IDataFrameService_treeAggregate5_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
 typedef struct _IDataFrameService_fold_args__isset {
-  _IDataFrameService_fold_args__isset() : id(false), src(false) {}
+  _IDataFrameService_fold_args__isset() : id(false), src(false), tp(false) {}
   bool id :1;
   bool src :1;
+  bool tp :1;
 } _IDataFrameService_fold_args__isset;
 
 class IDataFrameService_fold_args {
@@ -3826,6 +3876,7 @@ class IDataFrameService_fold_args {
   virtual ~IDataFrameService_fold_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource src;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_fold_args__isset __isset;
 
@@ -3833,11 +3884,15 @@ class IDataFrameService_fold_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_fold_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(src == rhs.src))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -3860,6 +3915,7 @@ class IDataFrameService_fold_pargs {
   virtual ~IDataFrameService_fold_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* src;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -3881,13 +3937,13 @@ class IDataFrameService_fold_result {
 
   virtual ~IDataFrameService_fold_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_fold_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_fold_result & rhs) const
   {
@@ -3920,7 +3976,7 @@ class IDataFrameService_fold_presult {
 
   virtual ~IDataFrameService_fold_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_fold_presult__isset __isset;
 
@@ -3929,9 +3985,10 @@ class IDataFrameService_fold_presult {
 };
 
 typedef struct _IDataFrameService_take_args__isset {
-  _IDataFrameService_take_args__isset() : id(false), num(false) {}
+  _IDataFrameService_take_args__isset() : id(false), num(false), tp(false) {}
   bool id :1;
   bool num :1;
+  bool tp :1;
 } _IDataFrameService_take_args__isset;
 
 class IDataFrameService_take_args {
@@ -3945,6 +4002,7 @@ class IDataFrameService_take_args {
   virtual ~IDataFrameService_take_args() noexcept;
   IDataFrameId id;
   int64_t num;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_take_args__isset __isset;
 
@@ -3952,11 +4010,15 @@ class IDataFrameService_take_args {
 
   void __set_num(const int64_t val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_take_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(num == rhs.num))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -3979,6 +4041,7 @@ class IDataFrameService_take_pargs {
   virtual ~IDataFrameService_take_pargs() noexcept;
   const IDataFrameId* id;
   const int64_t* num;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -4000,13 +4063,13 @@ class IDataFrameService_take_result {
 
   virtual ~IDataFrameService_take_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_take_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_take_result & rhs) const
   {
@@ -4039,7 +4102,7 @@ class IDataFrameService_take_presult {
 
   virtual ~IDataFrameService_take_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_take_presult__isset __isset;
 
@@ -4117,11 +4180,11 @@ class IDataFrameService_foreach__result {
   }
 
   virtual ~IDataFrameService_foreach__result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_foreach__result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_foreach__result & rhs) const
   {
@@ -4150,7 +4213,7 @@ class IDataFrameService_foreach__presult {
 
 
   virtual ~IDataFrameService_foreach__presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_foreach__presult__isset __isset;
 
@@ -4228,11 +4291,11 @@ class IDataFrameService_foreachPartition_result {
   }
 
   virtual ~IDataFrameService_foreachPartition_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_foreachPartition_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_foreachPartition_result & rhs) const
   {
@@ -4261,7 +4324,7 @@ class IDataFrameService_foreachPartition_presult {
 
 
   virtual ~IDataFrameService_foreachPartition_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_foreachPartition_presult__isset __isset;
 
@@ -4270,9 +4333,10 @@ class IDataFrameService_foreachPartition_presult {
 };
 
 typedef struct _IDataFrameService_top_args__isset {
-  _IDataFrameService_top_args__isset() : id(false), num(false) {}
+  _IDataFrameService_top_args__isset() : id(false), num(false), tp(false) {}
   bool id :1;
   bool num :1;
+  bool tp :1;
 } _IDataFrameService_top_args__isset;
 
 class IDataFrameService_top_args {
@@ -4286,6 +4350,7 @@ class IDataFrameService_top_args {
   virtual ~IDataFrameService_top_args() noexcept;
   IDataFrameId id;
   int64_t num;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_top_args__isset __isset;
 
@@ -4293,11 +4358,15 @@ class IDataFrameService_top_args {
 
   void __set_num(const int64_t val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_top_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(num == rhs.num))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -4320,6 +4389,7 @@ class IDataFrameService_top_pargs {
   virtual ~IDataFrameService_top_pargs() noexcept;
   const IDataFrameId* id;
   const int64_t* num;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -4341,13 +4411,13 @@ class IDataFrameService_top_result {
 
   virtual ~IDataFrameService_top_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_top_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_top_result & rhs) const
   {
@@ -4380,7 +4450,7 @@ class IDataFrameService_top_presult {
 
   virtual ~IDataFrameService_top_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_top_presult__isset __isset;
 
@@ -4388,27 +4458,29 @@ class IDataFrameService_top_presult {
 
 };
 
-typedef struct _IDataFrameService_top2_args__isset {
-  _IDataFrameService_top2_args__isset() : id(false), num(false), cmp(false) {}
+typedef struct _IDataFrameService_top4_args__isset {
+  _IDataFrameService_top4_args__isset() : id(false), num(false), cmp(false), tp(false) {}
   bool id :1;
   bool num :1;
   bool cmp :1;
-} _IDataFrameService_top2_args__isset;
+  bool tp :1;
+} _IDataFrameService_top4_args__isset;
 
-class IDataFrameService_top2_args {
+class IDataFrameService_top4_args {
  public:
 
-  IDataFrameService_top2_args(const IDataFrameService_top2_args&);
-  IDataFrameService_top2_args& operator=(const IDataFrameService_top2_args&);
-  IDataFrameService_top2_args() : num(0) {
+  IDataFrameService_top4_args(const IDataFrameService_top4_args&);
+  IDataFrameService_top4_args& operator=(const IDataFrameService_top4_args&);
+  IDataFrameService_top4_args() : num(0) {
   }
 
-  virtual ~IDataFrameService_top2_args() noexcept;
+  virtual ~IDataFrameService_top4_args() noexcept;
   IDataFrameId id;
   int64_t num;
    ::ignis::rpc::ISource cmp;
+   ::ignis::rpc::ISource tp;
 
-  _IDataFrameService_top2_args__isset __isset;
+  _IDataFrameService_top4_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
@@ -4416,7 +4488,9 @@ class IDataFrameService_top2_args {
 
   void __set_cmp(const  ::ignis::rpc::ISource& val);
 
-  bool operator == (const IDataFrameService_top2_args & rhs) const
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_top4_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -4424,13 +4498,15 @@ class IDataFrameService_top2_args {
       return false;
     if (!(cmp == rhs.cmp))
       return false;
+    if (!(tp == rhs.tp))
+      return false;
     return true;
   }
-  bool operator != (const IDataFrameService_top2_args &rhs) const {
+  bool operator != (const IDataFrameService_top4_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_top2_args & ) const;
+  bool operator < (const IDataFrameService_top4_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -4438,44 +4514,45 @@ class IDataFrameService_top2_args {
 };
 
 
-class IDataFrameService_top2_pargs {
+class IDataFrameService_top4_pargs {
  public:
 
 
-  virtual ~IDataFrameService_top2_pargs() noexcept;
+  virtual ~IDataFrameService_top4_pargs() noexcept;
   const IDataFrameId* id;
   const int64_t* num;
   const  ::ignis::rpc::ISource* cmp;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_top2_result__isset {
-  _IDataFrameService_top2_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_top4_result__isset {
+  _IDataFrameService_top4_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_top2_result__isset;
+} _IDataFrameService_top4_result__isset;
 
-class IDataFrameService_top2_result {
+class IDataFrameService_top4_result {
  public:
 
-  IDataFrameService_top2_result(const IDataFrameService_top2_result&);
-  IDataFrameService_top2_result& operator=(const IDataFrameService_top2_result&);
-  IDataFrameService_top2_result() : success(0) {
+  IDataFrameService_top4_result(const IDataFrameService_top4_result&);
+  IDataFrameService_top4_result& operator=(const IDataFrameService_top4_result&);
+  IDataFrameService_top4_result() : success(0) {
   }
 
-  virtual ~IDataFrameService_top2_result() noexcept;
+  virtual ~IDataFrameService_top4_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_top2_result__isset __isset;
+  _IDataFrameService_top4_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_top2_result & rhs) const
+  bool operator == (const IDataFrameService_top4_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -4483,32 +4560,32 @@ class IDataFrameService_top2_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_top2_result &rhs) const {
+  bool operator != (const IDataFrameService_top4_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_top2_result & ) const;
+  bool operator < (const IDataFrameService_top4_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_top2_presult__isset {
-  _IDataFrameService_top2_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_top4_presult__isset {
+  _IDataFrameService_top4_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_top2_presult__isset;
+} _IDataFrameService_top4_presult__isset;
 
-class IDataFrameService_top2_presult {
+class IDataFrameService_top4_presult {
  public:
 
 
-  virtual ~IDataFrameService_top2_presult() noexcept;
+  virtual ~IDataFrameService_top4_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_top2_presult__isset __isset;
+  _IDataFrameService_top4_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -4600,13 +4677,13 @@ class IDataFrameService_sample_result {
 
   virtual ~IDataFrameService_sample_result() noexcept;
   IDataFrameId success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sample_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_sample_result & rhs) const
   {
@@ -4639,7 +4716,7 @@ class IDataFrameService_sample_presult {
 
   virtual ~IDataFrameService_sample_presult() noexcept;
   IDataFrameId* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_sample_presult__isset __isset;
 
@@ -4648,11 +4725,12 @@ class IDataFrameService_sample_presult {
 };
 
 typedef struct _IDataFrameService_takeSample_args__isset {
-  _IDataFrameService_takeSample_args__isset() : id(false), withReplacement(false), num(false), seed(false) {}
+  _IDataFrameService_takeSample_args__isset() : id(false), withReplacement(false), num(false), seed(false), tp(false) {}
   bool id :1;
   bool withReplacement :1;
   bool num :1;
   bool seed :1;
+  bool tp :1;
 } _IDataFrameService_takeSample_args__isset;
 
 class IDataFrameService_takeSample_args {
@@ -4668,6 +4746,7 @@ class IDataFrameService_takeSample_args {
   bool withReplacement;
   int64_t num;
   int32_t seed;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_takeSample_args__isset __isset;
 
@@ -4679,6 +4758,8 @@ class IDataFrameService_takeSample_args {
 
   void __set_seed(const int32_t val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_takeSample_args & rhs) const
   {
     if (!(id == rhs.id))
@@ -4688,6 +4769,8 @@ class IDataFrameService_takeSample_args {
     if (!(num == rhs.num))
       return false;
     if (!(seed == rhs.seed))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -4712,6 +4795,7 @@ class IDataFrameService_takeSample_pargs {
   const bool* withReplacement;
   const int64_t* num;
   const int32_t* seed;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -4733,13 +4817,13 @@ class IDataFrameService_takeSample_result {
 
   virtual ~IDataFrameService_takeSample_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_takeSample_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_takeSample_result & rhs) const
   {
@@ -4772,7 +4856,7 @@ class IDataFrameService_takeSample_presult {
 
   virtual ~IDataFrameService_takeSample_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_takeSample_presult__isset __isset;
 
@@ -4845,13 +4929,13 @@ class IDataFrameService_count_result {
 
   virtual ~IDataFrameService_count_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_count_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_count_result & rhs) const
   {
@@ -4884,7 +4968,7 @@ class IDataFrameService_count_presult {
 
   virtual ~IDataFrameService_count_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_count_presult__isset __isset;
 
@@ -4893,9 +4977,10 @@ class IDataFrameService_count_presult {
 };
 
 typedef struct _IDataFrameService_max_args__isset {
-  _IDataFrameService_max_args__isset() : id(false), cmp(false) {}
+  _IDataFrameService_max_args__isset() : id(false), cmp(false), tp(false) {}
   bool id :1;
   bool cmp :1;
+  bool tp :1;
 } _IDataFrameService_max_args__isset;
 
 class IDataFrameService_max_args {
@@ -4909,6 +4994,7 @@ class IDataFrameService_max_args {
   virtual ~IDataFrameService_max_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource cmp;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_max_args__isset __isset;
 
@@ -4916,11 +5002,15 @@ class IDataFrameService_max_args {
 
   void __set_cmp(const  ::ignis::rpc::ISource& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_max_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(cmp == rhs.cmp))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -4943,6 +5033,7 @@ class IDataFrameService_max_pargs {
   virtual ~IDataFrameService_max_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* cmp;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -4964,13 +5055,13 @@ class IDataFrameService_max_result {
 
   virtual ~IDataFrameService_max_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_max_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_max_result & rhs) const
   {
@@ -5003,7 +5094,7 @@ class IDataFrameService_max_presult {
 
   virtual ~IDataFrameService_max_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_max_presult__isset __isset;
 
@@ -5012,9 +5103,10 @@ class IDataFrameService_max_presult {
 };
 
 typedef struct _IDataFrameService_min_args__isset {
-  _IDataFrameService_min_args__isset() : id(false), cmp(false) {}
+  _IDataFrameService_min_args__isset() : id(false), cmp(false), tp(false) {}
   bool id :1;
   bool cmp :1;
+  bool tp :1;
 } _IDataFrameService_min_args__isset;
 
 class IDataFrameService_min_args {
@@ -5028,6 +5120,7 @@ class IDataFrameService_min_args {
   virtual ~IDataFrameService_min_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource cmp;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_min_args__isset __isset;
 
@@ -5035,11 +5128,15 @@ class IDataFrameService_min_args {
 
   void __set_cmp(const  ::ignis::rpc::ISource& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_min_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(cmp == rhs.cmp))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -5062,6 +5159,7 @@ class IDataFrameService_min_pargs {
   virtual ~IDataFrameService_min_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* cmp;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -5083,13 +5181,13 @@ class IDataFrameService_min_result {
 
   virtual ~IDataFrameService_min_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_min_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IDataFrameService_min_result & rhs) const
   {
@@ -5122,7 +5220,7 @@ class IDataFrameService_min_presult {
 
   virtual ~IDataFrameService_min_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_min_presult__isset __isset;
 
@@ -5224,32 +5322,32 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void sortBy3(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void send_sortBy3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void recv_sortBy3(IDataFrameId& _return);
-  int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
-  void send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
+  void send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
   int64_t recv_reduce();
-  int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
-  void send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
+  void send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
   int64_t recv_treeReduce();
-  int64_t treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth);
-  void send_treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth);
-  int64_t recv_treeReduce3();
-  int64_t collect(const IDataFrameId& id);
-  void send_collect(const IDataFrameId& id);
+  int64_t treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  void send_treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  int64_t recv_treeReduce4();
+  int64_t collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
+  void send_collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
   int64_t recv_collect();
-  int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
-  void send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
+  void send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_aggregate();
-  int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
-  void send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
+  void send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_treeAggregate();
-  int64_t treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
-  void send_treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
-  int64_t recv_treeAggregate3();
-  int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
-  void send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int64_t treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  void send_treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  int64_t recv_treeAggregate5();
+  int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
+  void send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
   int64_t recv_fold();
-  int64_t take(const IDataFrameId& id, const int64_t num);
-  void send_take(const IDataFrameId& id, const int64_t num);
+  int64_t take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
+  void send_take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   int64_t recv_take();
   void foreach_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void send_foreach_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
@@ -5257,26 +5355,26 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void send_foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_foreachPartition();
-  int64_t top(const IDataFrameId& id, const int64_t num);
-  void send_top(const IDataFrameId& id, const int64_t num);
+  int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
+  void send_top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   int64_t recv_top();
-  int64_t top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp);
-  void send_top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp);
-  int64_t recv_top2();
+  int64_t top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  void send_top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  int64_t recv_top4();
   void sample(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const double fraction, const int32_t seed);
   void send_sample(const IDataFrameId& id, const bool withReplacement, const double fraction, const int32_t seed);
   void recv_sample(IDataFrameId& _return);
-  int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed);
-  void send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed);
+  int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp);
+  void send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp);
   int64_t recv_takeSample();
   int64_t count(const IDataFrameId& id);
   void send_count(const IDataFrameId& id);
   int64_t recv_count();
-  int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
-  void send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
+  int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  void send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_max();
-  int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
-  void send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
+  int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  void send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_min();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -5318,17 +5416,17 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_sortBy3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduce(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_treeReduce(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_treeReduce3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_treeReduce4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_collect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_aggregate(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_treeAggregate(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_treeAggregate3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_treeAggregate5(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_fold(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreach_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreachPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_top(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_top2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_top4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_takeSample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_count(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -5362,17 +5460,17 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["sortBy3"] = &IDataFrameServiceProcessor::process_sortBy3;
     processMap_["reduce"] = &IDataFrameServiceProcessor::process_reduce;
     processMap_["treeReduce"] = &IDataFrameServiceProcessor::process_treeReduce;
-    processMap_["treeReduce3"] = &IDataFrameServiceProcessor::process_treeReduce3;
+    processMap_["treeReduce4"] = &IDataFrameServiceProcessor::process_treeReduce4;
     processMap_["collect"] = &IDataFrameServiceProcessor::process_collect;
     processMap_["aggregate"] = &IDataFrameServiceProcessor::process_aggregate;
     processMap_["treeAggregate"] = &IDataFrameServiceProcessor::process_treeAggregate;
-    processMap_["treeAggregate3"] = &IDataFrameServiceProcessor::process_treeAggregate3;
+    processMap_["treeAggregate5"] = &IDataFrameServiceProcessor::process_treeAggregate5;
     processMap_["fold"] = &IDataFrameServiceProcessor::process_fold;
     processMap_["take"] = &IDataFrameServiceProcessor::process_take;
     processMap_["foreach_"] = &IDataFrameServiceProcessor::process_foreach_;
     processMap_["foreachPartition"] = &IDataFrameServiceProcessor::process_foreachPartition;
     processMap_["top"] = &IDataFrameServiceProcessor::process_top;
-    processMap_["top2"] = &IDataFrameServiceProcessor::process_top2;
+    processMap_["top4"] = &IDataFrameServiceProcessor::process_top4;
     processMap_["sample"] = &IDataFrameServiceProcessor::process_sample;
     processMap_["takeSample"] = &IDataFrameServiceProcessor::process_takeSample;
     processMap_["count"] = &IDataFrameServiceProcessor::process_count;
@@ -5627,85 +5725,85 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
+  int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->reduce(id, src);
+      ifaces_[i]->reduce(id, src, tp);
     }
-    return ifaces_[i]->reduce(id, src);
+    return ifaces_[i]->reduce(id, src, tp);
   }
 
-  int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
+  int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->treeReduce(id, src);
+      ifaces_[i]->treeReduce(id, src, tp);
     }
-    return ifaces_[i]->treeReduce(id, src);
+    return ifaces_[i]->treeReduce(id, src, tp);
   }
 
-  int64_t treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth) {
+  int64_t treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->treeReduce3(id, src, depth);
+      ifaces_[i]->treeReduce4(id, src, depth, tp);
     }
-    return ifaces_[i]->treeReduce3(id, src, depth);
+    return ifaces_[i]->treeReduce4(id, src, depth, tp);
   }
 
-  int64_t collect(const IDataFrameId& id) {
+  int64_t collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->collect(id);
+      ifaces_[i]->collect(id, tp);
     }
-    return ifaces_[i]->collect(id);
+    return ifaces_[i]->collect(id, tp);
   }
 
-  int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) {
+  int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->aggregate(id, seqOp, combOp);
+      ifaces_[i]->aggregate(id, seqOp, combOp, tp);
     }
-    return ifaces_[i]->aggregate(id, seqOp, combOp);
+    return ifaces_[i]->aggregate(id, seqOp, combOp, tp);
   }
 
-  int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) {
+  int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->treeAggregate(id, seqOp, combOp);
+      ifaces_[i]->treeAggregate(id, seqOp, combOp, tp);
     }
-    return ifaces_[i]->treeAggregate(id, seqOp, combOp);
+    return ifaces_[i]->treeAggregate(id, seqOp, combOp, tp);
   }
 
-  int64_t treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth) {
+  int64_t treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->treeAggregate3(id, seqOp, combOp, depth);
+      ifaces_[i]->treeAggregate5(id, seqOp, combOp, depth, tp);
     }
-    return ifaces_[i]->treeAggregate3(id, seqOp, combOp, depth);
+    return ifaces_[i]->treeAggregate5(id, seqOp, combOp, depth, tp);
   }
 
-  int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
+  int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->fold(id, src);
+      ifaces_[i]->fold(id, src, tp);
     }
-    return ifaces_[i]->fold(id, src);
+    return ifaces_[i]->fold(id, src, tp);
   }
 
-  int64_t take(const IDataFrameId& id, const int64_t num) {
+  int64_t take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->take(id, num);
+      ifaces_[i]->take(id, num, tp);
     }
-    return ifaces_[i]->take(id, num);
+    return ifaces_[i]->take(id, num, tp);
   }
 
   void foreach_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
@@ -5726,22 +5824,22 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     ifaces_[i]->foreachPartition(id, src);
   }
 
-  int64_t top(const IDataFrameId& id, const int64_t num) {
+  int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->top(id, num);
+      ifaces_[i]->top(id, num, tp);
     }
-    return ifaces_[i]->top(id, num);
+    return ifaces_[i]->top(id, num, tp);
   }
 
-  int64_t top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp) {
+  int64_t top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->top2(id, num, cmp);
+      ifaces_[i]->top4(id, num, cmp, tp);
     }
-    return ifaces_[i]->top2(id, num, cmp);
+    return ifaces_[i]->top4(id, num, cmp, tp);
   }
 
   void sample(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const double fraction, const int32_t seed) {
@@ -5754,13 +5852,13 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed) {
+  int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->takeSample(id, withReplacement, num, seed);
+      ifaces_[i]->takeSample(id, withReplacement, num, seed, tp);
     }
-    return ifaces_[i]->takeSample(id, withReplacement, num, seed);
+    return ifaces_[i]->takeSample(id, withReplacement, num, seed, tp);
   }
 
   int64_t count(const IDataFrameId& id) {
@@ -5772,22 +5870,22 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return ifaces_[i]->count(id);
   }
 
-  int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp) {
+  int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->max(id, cmp);
+      ifaces_[i]->max(id, cmp, tp);
     }
-    return ifaces_[i]->max(id, cmp);
+    return ifaces_[i]->max(id, cmp, tp);
   }
 
-  int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp) {
+  int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->min(id, cmp);
+      ifaces_[i]->min(id, cmp, tp);
     }
-    return ifaces_[i]->min(id, cmp);
+    return ifaces_[i]->min(id, cmp, tp);
   }
 
 };
@@ -5891,32 +5989,32 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void sortBy3(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   int32_t send_sortBy3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void recv_sortBy3(IDataFrameId& _return, const int32_t seqid);
-  int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
-  int32_t send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int64_t reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
+  int32_t send_reduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
   int64_t recv_reduce(const int32_t seqid);
-  int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
-  int32_t send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int64_t treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
+  int32_t send_treeReduce(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
   int64_t recv_treeReduce(const int32_t seqid);
-  int64_t treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth);
-  int32_t send_treeReduce3(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth);
-  int64_t recv_treeReduce3(const int32_t seqid);
-  int64_t collect(const IDataFrameId& id);
-  int32_t send_collect(const IDataFrameId& id);
+  int64_t treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  int32_t send_treeReduce4(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  int64_t recv_treeReduce4(const int32_t seqid);
+  int64_t collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
+  int32_t send_collect(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
   int64_t recv_collect(const int32_t seqid);
-  int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
-  int32_t send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  int64_t aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
+  int32_t send_aggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_aggregate(const int32_t seqid);
-  int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
-  int32_t send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  int64_t treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
+  int32_t send_treeAggregate(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_treeAggregate(const int32_t seqid);
-  int64_t treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
-  int32_t send_treeAggregate3(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
-  int64_t recv_treeAggregate3(const int32_t seqid);
-  int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
-  int32_t send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int64_t treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  int32_t send_treeAggregate5(const IDataFrameId& id, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth, const  ::ignis::rpc::ISource& tp);
+  int64_t recv_treeAggregate5(const int32_t seqid);
+  int64_t fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
+  int32_t send_fold(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const  ::ignis::rpc::ISource& tp);
   int64_t recv_fold(const int32_t seqid);
-  int64_t take(const IDataFrameId& id, const int64_t num);
-  int32_t send_take(const IDataFrameId& id, const int64_t num);
+  int64_t take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
+  int32_t send_take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   int64_t recv_take(const int32_t seqid);
   void foreach_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   int32_t send_foreach_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
@@ -5924,26 +6022,26 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   int32_t send_foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_foreachPartition(const int32_t seqid);
-  int64_t top(const IDataFrameId& id, const int64_t num);
-  int32_t send_top(const IDataFrameId& id, const int64_t num);
+  int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
+  int32_t send_top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   int64_t recv_top(const int32_t seqid);
-  int64_t top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp);
-  int32_t send_top2(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp);
-  int64_t recv_top2(const int32_t seqid);
+  int64_t top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  int32_t send_top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  int64_t recv_top4(const int32_t seqid);
   void sample(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const double fraction, const int32_t seed);
   int32_t send_sample(const IDataFrameId& id, const bool withReplacement, const double fraction, const int32_t seed);
   void recv_sample(IDataFrameId& _return, const int32_t seqid);
-  int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed);
-  int32_t send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed);
+  int64_t takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp);
+  int32_t send_takeSample(const IDataFrameId& id, const bool withReplacement, const int64_t num, const int32_t seed, const  ::ignis::rpc::ISource& tp);
   int64_t recv_takeSample(const int32_t seqid);
   int64_t count(const IDataFrameId& id);
   int32_t send_count(const IDataFrameId& id);
   int64_t recv_count(const int32_t seqid);
-  int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
-  int32_t send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
+  int64_t max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  int32_t send_max(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_max(const int32_t seqid);
-  int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
-  int32_t send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp);
+  int64_t min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
+  int32_t send_min(const IDataFrameId& id, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp);
   int64_t recv_min(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

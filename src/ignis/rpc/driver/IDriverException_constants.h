@@ -9,7 +9,7 @@
 
 #include "IDriverException_types.h"
 
-namespace ignis { namespace rpc {
+namespace ignis { namespace rpc { namespace driver {
 
 class IDriverExceptionConstants {
  public:
@@ -19,6 +19,6 @@ class IDriverExceptionConstants {
 
 extern const IDriverExceptionConstants g_IDriverException_constants;
 
-}} // namespace
+}}} // namespace
 
 #endif

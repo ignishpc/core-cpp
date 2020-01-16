@@ -149,13 +149,13 @@ class IPropertiesService_newInstance_result {
 
   virtual ~IPropertiesService_newInstance_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_newInstance_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_newInstance_result & rhs) const
   {
@@ -188,7 +188,7 @@ class IPropertiesService_newInstance_presult {
 
   virtual ~IPropertiesService_newInstance_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_newInstance_presult__isset __isset;
 
@@ -261,13 +261,13 @@ class IPropertiesService_newInstance2_result {
 
   virtual ~IPropertiesService_newInstance2_result() noexcept;
   int64_t success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_newInstance2_result__isset __isset;
 
   void __set_success(const int64_t val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_newInstance2_result & rhs) const
   {
@@ -300,7 +300,7 @@ class IPropertiesService_newInstance2_presult {
 
   virtual ~IPropertiesService_newInstance2_presult() noexcept;
   int64_t* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_newInstance2_presult__isset __isset;
 
@@ -387,13 +387,13 @@ class IPropertiesService_setProperty_result {
 
   virtual ~IPropertiesService_setProperty_result() noexcept;
   std::string success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_setProperty_result__isset __isset;
 
   void __set_success(const std::string& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_setProperty_result & rhs) const
   {
@@ -426,7 +426,7 @@ class IPropertiesService_setProperty_presult {
 
   virtual ~IPropertiesService_setProperty_presult() noexcept;
   std::string* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_setProperty_presult__isset __isset;
 
@@ -506,13 +506,13 @@ class IPropertiesService_getProperty_result {
 
   virtual ~IPropertiesService_getProperty_result() noexcept;
   std::string success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_getProperty_result__isset __isset;
 
   void __set_success(const std::string& val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_getProperty_result & rhs) const
   {
@@ -545,7 +545,7 @@ class IPropertiesService_getProperty_presult {
 
   virtual ~IPropertiesService_getProperty_presult() noexcept;
   std::string* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_getProperty_presult__isset __isset;
 
@@ -625,13 +625,13 @@ class IPropertiesService_contains_result {
 
   virtual ~IPropertiesService_contains_result() noexcept;
   bool success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_contains_result__isset __isset;
 
   void __set_success(const bool val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_contains_result & rhs) const
   {
@@ -664,7 +664,7 @@ class IPropertiesService_contains_presult {
 
   virtual ~IPropertiesService_contains_presult() noexcept;
   bool* success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_contains_presult__isset __isset;
 
@@ -744,13 +744,13 @@ class IPropertiesService_toMap_result {
 
   virtual ~IPropertiesService_toMap_result() noexcept;
   std::map<std::string, std::string>  success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_toMap_result__isset __isset;
 
   void __set_success(const std::map<std::string, std::string> & val);
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_toMap_result & rhs) const
   {
@@ -783,7 +783,7 @@ class IPropertiesService_toMap_presult {
 
   virtual ~IPropertiesService_toMap_presult() noexcept;
   std::map<std::string, std::string> * success;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_toMap_presult__isset __isset;
 
@@ -861,11 +861,11 @@ class IPropertiesService_fromMap_result {
   }
 
   virtual ~IPropertiesService_fromMap_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_fromMap_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_fromMap_result & rhs) const
   {
@@ -894,7 +894,7 @@ class IPropertiesService_fromMap_presult {
 
 
   virtual ~IPropertiesService_fromMap_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_fromMap_presult__isset __isset;
 
@@ -972,11 +972,11 @@ class IPropertiesService_load_result {
   }
 
   virtual ~IPropertiesService_load_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_load_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_load_result & rhs) const
   {
@@ -1005,7 +1005,7 @@ class IPropertiesService_load_presult {
 
 
   virtual ~IPropertiesService_load_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_load_presult__isset __isset;
 
@@ -1083,11 +1083,11 @@ class IPropertiesService_store_result {
   }
 
   virtual ~IPropertiesService_store_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_store_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_store_result & rhs) const
   {
@@ -1116,7 +1116,7 @@ class IPropertiesService_store_presult {
 
 
   virtual ~IPropertiesService_store_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_store_presult__isset __isset;
 
@@ -1187,11 +1187,11 @@ class IPropertiesService_clear_result {
   }
 
   virtual ~IPropertiesService_clear_result() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_clear_result__isset __isset;
 
-  void __set_ex(const  ::ignis::rpc::IDriverException& val);
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
   bool operator == (const IPropertiesService_clear_result & rhs) const
   {
@@ -1220,7 +1220,7 @@ class IPropertiesService_clear_presult {
 
 
   virtual ~IPropertiesService_clear_presult() noexcept;
-   ::ignis::rpc::IDriverException ex;
+   ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_clear_presult__isset __isset;
 

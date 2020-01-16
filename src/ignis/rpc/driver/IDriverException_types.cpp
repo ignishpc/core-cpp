@@ -11,7 +11,7 @@
 
 #include <thrift/TToString.h>
 
-namespace ignis { namespace rpc {
+namespace ignis { namespace rpc { namespace driver {
 
 
 IDriverException::~IDriverException() noexcept {
@@ -139,4 +139,4 @@ const char* IDriverException::what() const noexcept {
   }
 }
 
-}} // namespace
+}}} // namespace

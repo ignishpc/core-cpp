@@ -56,11 +56,7 @@ void IIOModule::partitionObjectFile(const std::string &path, int64_t first, int6
 void IIOModule::partitionObjectFile4(const std::string &path, const int64_t first, const int64_t partitions,
                                      const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        auto lib = executor_data->loadLibrary(src);
-        if (lib->args.size() != 1) {
-            throw exception::ICompatibilyException("partitionObjectFile", lib->info());
-        }
-        lib->args.begin()->second->partitionObjectFile(impl, path, first, partitions);
+        typeFromSource(src)->partitionObjectFile(impl, path, first, partitions);
     IGNIS_RPC_CATCH()
 }
 
@@ -92,11 +88,7 @@ void IIOModule::partitionJsonFile(const std::string &path, const int64_t first, 
 void IIOModule::partitionJsonFile4(const std::string &path, const int64_t first, const int64_t partitions,
                                    const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        auto lib = executor_data->loadLibrary(src);
-        if (lib->args.size() != 1) {
-            throw exception::ICompatibilyException("partitionJsonFile", lib->info());
-        }
-        lib->args.begin()->second->partitionJsonFile(impl, path, first, partitions);
+        typeFromSource(src)->partitionJsonFile(impl, path, first, partitions);
     IGNIS_RPC_CATCH()
 }
 

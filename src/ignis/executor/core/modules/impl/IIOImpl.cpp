@@ -21,8 +21,8 @@ std::string IIOImpl::partitionFileName(const std::string &path, int64_t index) {
     if (!boost::filesystem::is_directory(path)) {
         boost::system::error_code error;
         boost::filesystem::create_directories(path, error);
-        if (error) {
-            throw exception::IInvalidArgument("Unable to create directory "+path + " " + error.message());
+        if (!boost::filesystem::is_directory(path)) {
+            throw exception::IInvalidArgument("Unable to create directory " + path + " " + error.message());
         }
     }
 
@@ -103,9 +103,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
         std::string buffer;
 
         while (file.tellg() < ex_chunk_end) {
-            if (!std::getline(file, buffer, '\n')) {
-                break;
-            }
+            std::getline(file, buffer, '\n');
             if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
                 partition = executor_data->getPartitionTools().newPartition<std::string>();
                 write_iterator = partition->writeIterator();
@@ -135,7 +133,8 @@ void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t 
             auto partition = executor_data->getPartitionTools().newPartition<std::string>();
             auto write_iterator = partition->writeIterator();
             std::string buffer;
-            while (std::getline(file, buffer, '\n')) {
+            while (!file.eof()) {
+                std::getline(file, buffer, '\n');
                 write_iterator->write(buffer);
             }
             group->add(partition);
@@ -151,9 +150,10 @@ void IIOImpl::partitionObjectFileVoid(const std::string &path, int64_t first, in
         for (int64_t p = 0; p < partitions; p++) {
             auto file_name = partitionFileName(path, first + p);
             openFileRead(file_name);//Only to check
-            auto transport =std::make_shared<transport::IFileTransport>(file_name);
+            auto transport = std::make_shared<transport::IFileTransport>(file_name);
 
-            auto partition = executor_data->getPartitionTools().newVoidPartition(boost::filesystem::file_size(file_name));
+            auto partition = executor_data->getPartitionTools().newVoidPartition(
+                    boost::filesystem::file_size(file_name));
             partition->read(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(transport));
 
             group->add(partition);

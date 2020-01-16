@@ -35,10 +35,9 @@ std::string BASIC_NAMED_TYPES[]{
 
 int N_NAMED_TYPES = 8;
 
-std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromHeader(std::string &header) {
+std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromHeader(const std::string &header) {
     IGNIS_LOG(info) << "Cheeking incoming partition type";
-    std::string named_type = "";
-    std::shared_ptr<ignis::executor::core::selector::ITypeSelector> type;
+    std::string type_name = "";
     try {
         auto buffer = std::make_shared<transport::IMemoryBuffer>((uint8_t *) const_cast<char *>(header.c_str()),
                                                                  header.size());
@@ -51,35 +50,54 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
         if (tp == io::IEnumTypes::I_LIST) {
             auto elem_tp = io::readTypeAux(*proto);
             if (0 < elem_tp && elem_tp < N_NAMED_TYPES) {
-                named_type = BASIC_NAMED_TYPES[elem_tp];
+                type_name = BASIC_NAMED_TYPES[elem_tp];
             }
         } else if (tp == io::IEnumTypes::I_PAIR_LIST) {
             auto first_tp = io::readTypeAux(*proto);
             auto second_tp = io::readTypeAux(*proto);
             if (0 < first_tp && first_tp < N_NAMED_TYPES && 0 < second_tp && second_tp < N_NAMED_TYPES) {
-                named_type = "std::pair<" + BASIC_NAMED_TYPES[first_tp] + "" + BASIC_NAMED_TYPES[second_tp] + ">";
+                type_name = "std::pair<" + BASIC_NAMED_TYPES[first_tp] + "" + BASIC_NAMED_TYPES[second_tp] + ">";
             }
         } else if (tp == io::IEnumTypes::I_BINARY) {
-            named_type = RTTInfo::from<uint8_t>().getStandardName();
+            type_name = RTTInfo::from<uint8_t>().getStandardName();
         }
     } catch (std::exception &ex) {
         IGNIS_LOG(warning) << "exception: " << ex.what();
     }
 
-    if (named_type.empty()) {
-        IGNIS_LOG(warning) << "Incoming partition type not found or is too complex.";
-        return type;
+    if (type_name.empty()) {
+        throw exception::ILogicError("Incoming partition type not found or is too complex.");
     } else {
-        IGNIS_LOG(info) << "Partition type found: " << named_type;
+        IGNIS_LOG(info) << "Partition type found: " << type_name;
     }
 
-    type = executor_data->getType(named_type);
+    return typeFromName(type_name);
+}
+
+std::shared_ptr<selector::ITypeSelector> IModule::typeFromName(const std::string &name) {
+    auto type = executor_data->getType(name);
     if (!type) {
-        IGNIS_LOG(warning) << "Type '" + named_type +
-                              "' is not in the registry, that means  that the type is not compiled in the executor. "
-                              "By default only the combinations of the most used types are compiled, the rest are loaded "
-                              "from the libraries used by the user.";
+        throw exception::ILogicError("Type '" + name +
+                                     "' is not in the registry, that means  that the type is not compiled in the executor. "
+                                     "By default only the combinations of the most used types are compiled, the rest are loaded "
+                                     "from the libraries used by the user.");
     }
 
+    return type;
+}
+
+std::shared_ptr<selector::ITypeSelector> IModule::typeFromSource(const ignis::rpc::ISource &source) {
+    auto &name = source.obj.name;
+    if (!name.empty() && name[0] == ':') {
+        return typeFromName(name.substr(1));
+    }
+    auto lib = executor_data->loadLibrary(source);
+    if (lib->args.empty()) {
+        throw exception::ILogicError("Function " + name + " has not type to use");
+    }
+    auto type = lib->args.begin()->second;
+    if (lib->args.size() > 1) {
+        IGNIS_LOG(warning) << "Function " << name << " has more than one type, using" << type->info().getStandardName();
+    }
     return type;
 }

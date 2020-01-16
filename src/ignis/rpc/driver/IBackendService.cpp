@@ -272,7 +272,7 @@ void IBackendServiceProcessor::process_stop(int32_t seqid, ::apache::thrift::pro
   IBackendService_stop_result result;
   try {
     iface_->stop();
-  } catch ( ::ignis::rpc::IDriverException &ex) {
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {

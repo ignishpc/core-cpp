@@ -8,6 +8,7 @@
 #include <type_traits>
 #include "ignis/executor/core/RTTInfo.h"
 #include "ignis/executor/core/modules/impl/IIOImpl.h"
+#include "ignis/executor/core/modules/impl/ICacheImpl.h"
 #include "ignis/executor/core/modules/impl/ISortImpl.h"
 #include "ignis/executor/core/exception/ICompatibilityException.h"
 
@@ -18,6 +19,11 @@ namespace ignis {
                 class ITypeSelector {
                 public:
                     virtual RTTInfo info() = 0;
+
+                    virtual void cache(modules::impl::ICacheImpl &impl, const int64_t id, const int8_t level) = 0;
+
+                    virtual void
+                    loadFromDisk(modules::impl::ICacheImpl &impl, const std::vector<std::string> &group) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
@@ -52,6 +58,14 @@ namespace ignis {
                     }
 
                     virtual RTTInfo info() { return RTTInfo::from<Tp>(); };
+
+                    virtual void cache(modules::impl::ICacheImpl &impl, const int64_t id, const int8_t level) {
+                        impl.cache<Tp>(id, level);
+                    }
+
+                    virtual void loadFromDisk(modules::impl::ICacheImpl &impl, const std::vector<std::string> &group){
+                        impl.loadFromDisk<Tp>(group);
+                    }
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {
                         sort_check<Tp>(impl, nullptr, ascending);
