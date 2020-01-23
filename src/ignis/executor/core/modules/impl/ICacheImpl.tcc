@@ -102,14 +102,14 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
                 }
             } else {
                 for (auto &part: *group_cache) {
-                    auto &disk = static_cast<storage::IDiskPartition <Tp>>(*part);
+                    auto &disk = static_cast<storage::IDiskPartition <Tp>&>(*part);
                     disk.persist(true);
                 }
             }
             std::ofstream file_cache(fileCache(), std::ios_base::app);
             file_cache << std::to_string(id) << 0 << group_cache->elemType().getStandardName();
             for (auto &part: *group_cache) {
-                auto &disk = static_cast<storage::IDiskPartition <Tp>>(*part);
+                auto &disk = static_cast<storage::IDiskPartition <Tp>&>(*part);
                 file_cache << 0 << disk.getPath();
             }
             file_cache << "\n";
@@ -123,14 +123,14 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
 }
 
 template<typename Tp>
-void ICacheImplClass::loadFromDisk(const std::vector<std::string> &group) {
+void ICacheImplClass::loadFromDisk(const std::vector<std::string> &groupInfo) {
     IGNIS_TRY()
         auto group = executor_data->getPartitionTools().newPartitionGroup<Tp>();
         auto cmp = executor_data->getProperties().partitionCompression();
-        int64_t id = std::stol(group[0]);
-        for (int64_t i = 2; i < group.size(); i++) {
+        int64_t id = std::stol(groupInfo[0]);
+        for (int64_t i = 2; i < groupInfo.size(); i++) {
             group->add(std::make_shared<storage::IDiskPartition < Tp>>
-            (group[i], cmp, true, true));
+            (groupInfo[i], cmp, true, true));
         }
         _cache[id] = std::static_pointer_cast<void>(group);
     IGNIS_CATCH()

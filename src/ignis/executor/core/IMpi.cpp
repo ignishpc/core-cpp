@@ -4,7 +4,7 @@
 
 using namespace ignis::executor::core;
 
-IMpi::IMpi(IPropertyParser &properties, MPI::Intracomm &comm) : properties(properties), comm(comm) {}
+IMpi::IMpi(IPropertyParser &properties, const MPI::Intracomm &comm) : properties(properties), comm(comm) {}
 
 bool IMpi::isRoot(int root) { return comm.Get_rank() == root; }
 

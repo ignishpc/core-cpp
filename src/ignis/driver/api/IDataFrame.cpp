@@ -9,7 +9,7 @@ using ignis::rpc::driver::IDataFrameId;
 IAbstractDataFrame::IAbstractDataFrame(const IDataFrameId &id) : id(id) {}
 
 ignis::driver::core::IDriverContext &IAbstractDataFrame::driverPartition() {
-    return *Ignis::driverContext;
+    return Ignis::driverContext();
 }
 
 void IAbstractDataFrame::setName(const std::string &name) {

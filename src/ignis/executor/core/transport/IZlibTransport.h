@@ -33,6 +33,18 @@ namespace ignis {
                     void flushToTransport(int flush);
 
                 };
+
+                class IZlibTransportFactory : public apache::thrift::transport::TTransportFactory {
+                public:
+                    IZlibTransportFactory(int compression);
+
+                    std::shared_ptr<ITransport> getTransport(std::shared_ptr<ITransport> trans) override;
+
+                    virtual ~IZlibTransportFactory();
+
+                private:
+                    int compression;
+                };
             }
         }
     }

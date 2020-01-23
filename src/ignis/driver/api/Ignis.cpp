@@ -8,15 +8,14 @@
 using namespace ignis::driver::api;
 std::mutex mutex;
 std::shared_ptr<ignis::driver::core::IClientPool> Ignis::clientPool;
-std::shared_ptr<ignis::driver::core::IDriverContext> Ignis::driverContext;
 std::shared_ptr<boost::process::child> backend;
 std::shared_ptr<boost::process::ipstream> backend_out;
 std::shared_ptr<boost::process::opstream> backend_in;
 std::shared_ptr<ignis::driver::core::ICallBack> callback;
 
-int parseInt(std::shared_ptr<boost::process::ipstream>& in){
+int parseInt(std::shared_ptr<boost::process::ipstream> &in) {
     char buffer[10];
-    in->getline(buffer,10,'\n');
+    in->getline(buffer, 10, '\n');
     return std::atoi(buffer);
 }
 
@@ -53,4 +52,8 @@ void Ignis::stop() {
     backend_out.reset();
     backend_in.reset();
     callback.reset();
+}
+
+ignis::driver::core::IDriverContext &Ignis::driverContext(){
+    return callback->getDriverContext();
 }

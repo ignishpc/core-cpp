@@ -2,12 +2,31 @@
 #include "IExecutorData.h"
 #include "selector/ISelector.h"
 #include <omp.h>
+#include <fstream>
+#include <boost/filesystem.hpp>
 
 using namespace ignis::executor::core;
 
 IExecutorData::IExecutorData() : properties(context.props()),
                                  _mpi(properties, context.mpiGroup()),
-                                 partition_tools(properties, context) {}
+                                 partition_tools(properties, context) {
+    auto backup_path = infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak";
+    if (boost::filesystem::exists(backup_path)) {
+        IGNIS_LOG(info) << "Function backup found, loading";
+        std::ifstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak");
+        rpc::ISource source;
+        while (!backup.eof()) {
+            std::getline(backup, source.obj.name, '\n');
+            try {
+                loadLibrary(source);
+            } catch (exception::IException &ex) {
+                IGNIS_LOG(error) << ex.toString();
+            } catch (std::exception &ex) {
+                IGNIS_LOG(error) << ex.what();
+            }
+        }
+    }
+}
 
 void IExecutorData::deletePartitions() { partitions.reset(); }
 
@@ -59,6 +78,8 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
         }
     }
     IGNIS_LOG(info) << "Function loaded";
+    std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak", std::ios::app);
+    backup << source.obj.name << "\n";
     return lib;
 }
 
@@ -74,6 +95,20 @@ ignis::executor::api::IContext &IExecutorData::getContext() {
     return context;
 }
 
+void IExecutorData::registerType(const std::shared_ptr<selector::ITypeSelector>&type){
+    types[type->info().getStandardName()] = std::make_pair(type, std::shared_ptr<selector::ISelectorGroup>());
+}
+
+bool IExecutorData::hasVariable(const std::string key){
+    return variables.find(key) != variables.end();
+}
+
+void IExecutorData::removeVariable(const std::string key){
+    auto entry = variables.find(key);
+    if(entry != variables.end()){
+        variables.erase(entry);
+    }
+}
 
 IExecutorData::~IExecutorData() {
 

@@ -27,14 +27,15 @@ namespace ignis {
                 void setName(const std::string &name);
 
                 template<typename C>
-                std::shared_ptr<IDataFrame<typename C::value_type>> parallelize(const C &data) {
-                    auto data_id = Ignis::driverContext->template parallelize<C>(data);
+                std::shared_ptr<IDataFrame<typename C::value_type>> parallelize(const C &data, int64_t partitions) {
+                    auto data_id = Ignis::driverContext->template parallelize<C>(data, partitions);
                     return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id));
                 }
 
                 template<typename C>
-                std::shared_ptr<IDataFrame<typename C::value_type>> parallelize(const C &data, const ISource &src) {
-                    auto data_id = Ignis::driverContext->template parallelize<C>(data);
+                std::shared_ptr<IDataFrame<typename C::value_type>>
+                parallelize(const C &data, int64_t partitions, const ISource &src) {
+                    auto data_id = Ignis::driverContext->template parallelize<C>(data, partitions);
                     return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, src));
                 }
 

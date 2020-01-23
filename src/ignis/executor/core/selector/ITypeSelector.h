@@ -9,6 +9,7 @@
 #include "ignis/executor/core/RTTInfo.h"
 #include "ignis/executor/core/modules/impl/IIOImpl.h"
 #include "ignis/executor/core/modules/impl/ICacheImpl.h"
+#include "ignis/executor/core/modules/impl/ICommImpl.h"
 #include "ignis/executor/core/modules/impl/ISortImpl.h"
 #include "ignis/executor/core/exception/ICompatibilityException.h"
 
@@ -24,6 +25,18 @@ namespace ignis {
 
                     virtual void
                     loadFromDisk(modules::impl::ICacheImpl &impl, const std::vector<std::string> &group) = 0;
+
+                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl) = 0;
+
+                    virtual void
+                    setPartitions(modules::impl::ICommImpl &impl, const std::vector<std::string> &partitions) = 0;
+
+                    virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id) = 0;
+
+                    virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id) = 0;
+
+                    virtual void
+                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, const int64_t dataId) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
@@ -63,8 +76,28 @@ namespace ignis {
                         impl.cache<Tp>(id, level);
                     }
 
-                    virtual void loadFromDisk(modules::impl::ICacheImpl &impl, const std::vector<std::string> &group){
+                    virtual void loadFromDisk(modules::impl::ICacheImpl &impl, const std::vector<std::string> &group) {
                         impl.loadFromDisk<Tp>(group);
+                    }
+
+                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl){
+                        return impl.getPartitions<Tp>();
+                    }
+
+                    virtual void setPartitions(modules::impl::ICommImpl &impl, const std::vector<std::string> &partitions){
+                        impl.setPartitions<Tp>(partitions);
+                    }
+
+                    virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id){
+                        impl.driverGather<Tp>(id);
+                    }
+
+                    virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id){
+                        impl.driverGather0<Tp>(id);
+                    }
+
+                    virtual void driverScatter(modules::impl::ICommImpl &impl, const std::string &id, const int64_t dataId){
+                        impl.driverScatter<Tp>(id,dataId);
                     }
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {

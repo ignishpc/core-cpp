@@ -15,6 +15,8 @@ namespace ignis {
 
                 //All properties
 
+                int cores() { return getNumber("ignis.executor.cores"); }
+
                 int64_t minPartitionSize() { return getNumber("ignis.partition.minSize"); }
 
                 int64_t sortSamples() { return getNumber("ignis.modules.sort.samples"); }
@@ -30,8 +32,6 @@ namespace ignis {
                 bool nativeSerialization() { return getString("ignis.partition.serialization") == "native"; }
 
                 std::string partitionType() { return getString("ignis.partition.type"); }
-
-                std::string workingDirectory() { return getString("ignis.job.directory"); }
 
                 std::string jobName() { return getString("ignis.job.name"); }
 

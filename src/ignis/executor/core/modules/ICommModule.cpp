@@ -3,72 +3,84 @@
 
 using namespace ignis::executor::core::modules;
 
-ICommModule::ICommModule(std::shared_ptr<IExecutorData> &executorData) : IModule(executorData) {}
+ICommModule::ICommModule(std::shared_ptr<IExecutorData> &executorData) : IModule(executorData), impl(executor_data) {}
 
 ICommModule::~ICommModule() {}
 
-void ICommModule::createGroup(std::string &_return){
+void ICommModule::createGroup(std::string &_return) {
     IGNIS_RPC_TRY()
-    //TODO
+        _return = impl.createGroup();
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::joinGroupMembers(const std::string &group, const int64_t size){
+void ICommModule::joinGroupMembers(const std::string &group, const int64_t id, const int64_t size) {
     IGNIS_RPC_TRY()
-        //TODO
+        impl.joinGroupMembers(group, id, size);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::joinToGroup(const std::string &group, const std::string &id){
+void ICommModule::joinToGroup(const std::string &group, const std::string &id) {
     IGNIS_RPC_TRY()
-        //TODO
+        impl.joinToGroup(group, id);
     IGNIS_RPC_CATCH()
 }
 
-bool ICommModule::hasGroup(const std::string &id){
+bool ICommModule::hasGroup(const std::string &id) {
     IGNIS_RPC_TRY()
-        //TODO
+        return impl.hasGroup(id);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::destroyGroup(const std::string &id){
+void ICommModule::destroyGroup(const std::string &id) {
     IGNIS_RPC_TRY()
-        //TODO
+        impl.destroyGroup(id);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::destroyGroups(){
+void ICommModule::destroyGroups() {
     IGNIS_RPC_TRY()
-        //TODO
+        impl.destroyGroups();
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::getPartitions(std::vector<std::string> &_return){
+void ICommModule::getPartitions(std::vector<std::string> &_return) {
     IGNIS_RPC_TRY()
-        //TODO
+        _return = typeFromPartition()->getPartitions(impl);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::setPartitions(const std::vector<std::string> &partitions){
+void ICommModule::setPartitions(const std::vector<std::string> &partitions) {
     IGNIS_RPC_TRY()
-        //TODO
+        impl.setPartitionsVoid(partitions);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverGather(const std::string &id){
+void ICommModule::setPartitions2(const std::vector<std::string> &partitions, const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        //TODO
+        typeFromSource(src)->setPartitions(impl, partitions);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverGather0(const std::string &id){
+void ICommModule::driverGather(const std::string &id, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        //TODO
+        typeFromSource(src)->driverGather(impl, id);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverScatter(const std::string &id){
+void ICommModule::driverGather0(const std::string &id, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        //TODO
+        typeFromSource(src)->driverGather0(impl, id);
+    IGNIS_RPC_CATCH()
+}
+
+void ICommModule::driverScatter(const std::string &id, const int64_t dataId) {
+    IGNIS_RPC_TRY()
+        impl.driverScatterVoid(id, dataId);
+    IGNIS_RPC_CATCH()
+}
+
+void ICommModule::driverScatter3(const std::string &id, const int64_t dataId, const ignis::rpc::ISource &src) {
+    IGNIS_RPC_TRY()
+        typeFromSource(src)->driverScatter(impl, id, dataId);
     IGNIS_RPC_CATCH()
 }

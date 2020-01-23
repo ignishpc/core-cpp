@@ -93,3 +93,11 @@ inline void IZlibTransport::checkZlibRv(int status, const char *message) {
     }
 }
 
+IZlibTransportFactory::IZlibTransportFactory(int compression) : compression(compression) {}
+
+std::shared_ptr<ITransport> IZlibTransportFactory::getTransport(std::shared_ptr<ITransport> trans) {
+    return std::make_shared<IZlibTransport>(trans, 128, 1024, 128, 1024, compression);
+}
+
+IZlibTransportFactory::~IZlibTransportFactory() {}
+

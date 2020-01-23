@@ -9,9 +9,13 @@ namespace ignis {
     namespace driver {
         namespace api {
             class IProperties;
+
             class ICluster;
+
             class IWorker;
+
             class IAbstractDataFrame;
+
             class Ignis {
             public:
 
@@ -24,10 +28,12 @@ namespace ignis {
                 friend ICluster;
                 friend IWorker;
                 friend IAbstractDataFrame;
+
                 Ignis() {}
 
+                static core::IDriverContext &driverContext();
+
                 static std::shared_ptr<core::IClientPool> clientPool;
-                static std::shared_ptr<core::IDriverContext> driverContext;
 
             };
         }

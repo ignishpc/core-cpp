@@ -53,6 +53,7 @@ int64_t ICacheImpl::saveContext() {
 
 void ICacheImpl::loadContext(const int64_t id) {
     IGNIS_TRY()
+        executor_data->clearVariables();
         auto value = context.find(id);
         if (value != context.end() && value->second.get() == executor_data->getPartitions<char>(true).get()) {
             return;

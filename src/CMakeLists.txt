@@ -34,8 +34,9 @@ set(SOURCE_FILES
         ignis/driver/core/IClient.h
         ignis/driver/core/IClientPool.cpp
         ignis/driver/core/IClientPool.h
-        ignis/driver/core/IDriverPartition.tcc
+        ignis/driver/core/IDriverContext.cpp
         ignis/driver/core/IDriverContext.h
+        ignis/driver/core/IDriverContext.tcc
 
         #Executor api function
         ignis/executor/api/function/IFunction.h
@@ -81,6 +82,9 @@ set(SOURCE_FILES
         ignis/executor/core/modules/impl/ICacheImpl.cpp
         ignis/executor/core/modules/impl/ICacheImpl.h
         ignis/executor/core/modules/impl/ICacheImpl.tcc
+        ignis/executor/core/modules/impl/ICommImpl.cpp
+        ignis/executor/core/modules/impl/ICommImpl.h
+        ignis/executor/core/modules/impl/ICommImpl.tcc
         ignis/executor/core/modules/impl/IGroupByImpl.cpp
         ignis/executor/core/modules/impl/IGroupByImpl.h
         ignis/executor/core/modules/impl/IGroupByImpl.tcc
@@ -150,6 +154,7 @@ set(SOURCE_FILES
         #ignis/executor core
         ignis/executor/core/IExecutorData.cpp
         ignis/executor/core/IExecutorData.h
+        ignis/executor/core/IExecutorData.tcc
         ignis/executor/core/ILibraryLoader.cpp
         ignis/executor/core/ILibraryLoader.h
         ignis/executor/core/ILog.cpp

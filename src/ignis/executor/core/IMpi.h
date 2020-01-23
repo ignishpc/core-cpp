@@ -11,7 +11,7 @@ namespace ignis {
         namespace core {
             class IMpi {
             public:
-                IMpi(IPropertyParser &properties, MPI::Intracomm &comm);
+                IMpi(IPropertyParser &properties, const MPI::Intracomm &comm);
 
                 template<typename Tp>
                 void gather(storage::IPartition<Tp> &part, int root);
@@ -44,7 +44,7 @@ namespace ignis {
                 struct isPrimitive;
 
                 IPropertyParser &properties;
-                MPI::Intracomm &comm;
+                const MPI::Intracomm &comm;
             };
         }
     }

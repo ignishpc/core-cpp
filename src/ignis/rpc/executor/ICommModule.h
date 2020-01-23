@@ -23,16 +23,18 @@ class ICommModuleIf {
  public:
   virtual ~ICommModuleIf() {}
   virtual void createGroup(std::string& _return) = 0;
-  virtual void joinGroupMembers(const std::string& group, const int64_t size) = 0;
+  virtual void joinGroupMembers(const std::string& group, const int64_t id, const int64_t size) = 0;
   virtual void joinToGroup(const std::string& group, const std::string& id) = 0;
   virtual bool hasGroup(const std::string& id) = 0;
   virtual void destroyGroup(const std::string& id) = 0;
   virtual void destroyGroups() = 0;
   virtual void getPartitions(std::vector<std::string> & _return) = 0;
   virtual void setPartitions(const std::vector<std::string> & partitions) = 0;
-  virtual void driverGather(const std::string& id) = 0;
-  virtual void driverGather0(const std::string& id) = 0;
-  virtual void driverScatter(const std::string& id) = 0;
+  virtual void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void driverGather(const std::string& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void driverScatter(const std::string& id, const int64_t dataId) = 0;
+  virtual void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) = 0;
 };
 
 class ICommModuleIfFactory {
@@ -65,7 +67,7 @@ class ICommModuleNull : virtual public ICommModuleIf {
   void createGroup(std::string& /* _return */) {
     return;
   }
-  void joinGroupMembers(const std::string& /* group */, const int64_t /* size */) {
+  void joinGroupMembers(const std::string& /* group */, const int64_t /* id */, const int64_t /* size */) {
     return;
   }
   void joinToGroup(const std::string& /* group */, const std::string& /* id */) {
@@ -87,13 +89,19 @@ class ICommModuleNull : virtual public ICommModuleIf {
   void setPartitions(const std::vector<std::string> & /* partitions */) {
     return;
   }
-  void driverGather(const std::string& /* id */) {
+  void setPartitions2(const std::vector<std::string> & /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
-  void driverGather0(const std::string& /* id */) {
+  void driverGather(const std::string& /* id */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
-  void driverScatter(const std::string& /* id */) {
+  void driverGather0(const std::string& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void driverScatter(const std::string& /* id */, const int64_t /* dataId */) {
+    return;
+  }
+  void driverScatter3(const std::string& /* id */, const int64_t /* dataId */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
 };
@@ -199,8 +207,9 @@ class ICommModule_createGroup_presult {
 };
 
 typedef struct _ICommModule_joinGroupMembers_args__isset {
-  _ICommModule_joinGroupMembers_args__isset() : group(false), size(false) {}
+  _ICommModule_joinGroupMembers_args__isset() : group(false), id(false), size(false) {}
   bool group :1;
+  bool id :1;
   bool size :1;
 } _ICommModule_joinGroupMembers_args__isset;
 
@@ -209,22 +218,27 @@ class ICommModule_joinGroupMembers_args {
 
   ICommModule_joinGroupMembers_args(const ICommModule_joinGroupMembers_args&);
   ICommModule_joinGroupMembers_args& operator=(const ICommModule_joinGroupMembers_args&);
-  ICommModule_joinGroupMembers_args() : group(), size(0) {
+  ICommModule_joinGroupMembers_args() : group(), id(0), size(0) {
   }
 
   virtual ~ICommModule_joinGroupMembers_args() noexcept;
   std::string group;
+  int64_t id;
   int64_t size;
 
   _ICommModule_joinGroupMembers_args__isset __isset;
 
   void __set_group(const std::string& val);
 
+  void __set_id(const int64_t val);
+
   void __set_size(const int64_t val);
 
   bool operator == (const ICommModule_joinGroupMembers_args & rhs) const
   {
     if (!(group == rhs.group))
+      return false;
+    if (!(id == rhs.id))
       return false;
     if (!(size == rhs.size))
       return false;
@@ -248,6 +262,7 @@ class ICommModule_joinGroupMembers_pargs {
 
   virtual ~ICommModule_joinGroupMembers_pargs() noexcept;
   const std::string* group;
+  const int64_t* id;
   const int64_t* size;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -932,9 +947,121 @@ class ICommModule_setPartitions_presult {
 
 };
 
+typedef struct _ICommModule_setPartitions2_args__isset {
+  _ICommModule_setPartitions2_args__isset() : partitions(false), src(false) {}
+  bool partitions :1;
+  bool src :1;
+} _ICommModule_setPartitions2_args__isset;
+
+class ICommModule_setPartitions2_args {
+ public:
+
+  ICommModule_setPartitions2_args(const ICommModule_setPartitions2_args&);
+  ICommModule_setPartitions2_args& operator=(const ICommModule_setPartitions2_args&);
+  ICommModule_setPartitions2_args() {
+  }
+
+  virtual ~ICommModule_setPartitions2_args() noexcept;
+  std::vector<std::string>  partitions;
+   ::ignis::rpc::ISource src;
+
+  _ICommModule_setPartitions2_args__isset __isset;
+
+  void __set_partitions(const std::vector<std::string> & val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const ICommModule_setPartitions2_args & rhs) const
+  {
+    if (!(partitions == rhs.partitions))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_setPartitions2_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_setPartitions2_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_setPartitions2_pargs {
+ public:
+
+
+  virtual ~ICommModule_setPartitions2_pargs() noexcept;
+  const std::vector<std::string> * partitions;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_setPartitions2_result__isset {
+  _ICommModule_setPartitions2_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_setPartitions2_result__isset;
+
+class ICommModule_setPartitions2_result {
+ public:
+
+  ICommModule_setPartitions2_result(const ICommModule_setPartitions2_result&);
+  ICommModule_setPartitions2_result& operator=(const ICommModule_setPartitions2_result&);
+  ICommModule_setPartitions2_result() {
+  }
+
+  virtual ~ICommModule_setPartitions2_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_setPartitions2_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_setPartitions2_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_setPartitions2_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_setPartitions2_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_setPartitions2_presult__isset {
+  _ICommModule_setPartitions2_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_setPartitions2_presult__isset;
+
+class ICommModule_setPartitions2_presult {
+ public:
+
+
+  virtual ~ICommModule_setPartitions2_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_setPartitions2_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _ICommModule_driverGather_args__isset {
-  _ICommModule_driverGather_args__isset() : id(false) {}
+  _ICommModule_driverGather_args__isset() : id(false), src(false) {}
   bool id :1;
+  bool src :1;
 } _ICommModule_driverGather_args__isset;
 
 class ICommModule_driverGather_args {
@@ -947,14 +1074,19 @@ class ICommModule_driverGather_args {
 
   virtual ~ICommModule_driverGather_args() noexcept;
   std::string id;
+   ::ignis::rpc::ISource src;
 
   _ICommModule_driverGather_args__isset __isset;
 
   void __set_id(const std::string& val);
 
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const ICommModule_driverGather_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
       return false;
     return true;
   }
@@ -976,6 +1108,7 @@ class ICommModule_driverGather_pargs {
 
   virtual ~ICommModule_driverGather_pargs() noexcept;
   const std::string* id;
+  const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1037,8 +1170,9 @@ class ICommModule_driverGather_presult {
 };
 
 typedef struct _ICommModule_driverGather0_args__isset {
-  _ICommModule_driverGather0_args__isset() : id(false) {}
+  _ICommModule_driverGather0_args__isset() : id(false), src(false) {}
   bool id :1;
+  bool src :1;
 } _ICommModule_driverGather0_args__isset;
 
 class ICommModule_driverGather0_args {
@@ -1051,14 +1185,19 @@ class ICommModule_driverGather0_args {
 
   virtual ~ICommModule_driverGather0_args() noexcept;
   std::string id;
+   ::ignis::rpc::ISource src;
 
   _ICommModule_driverGather0_args__isset __isset;
 
   void __set_id(const std::string& val);
 
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const ICommModule_driverGather0_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
       return false;
     return true;
   }
@@ -1080,6 +1219,7 @@ class ICommModule_driverGather0_pargs {
 
   virtual ~ICommModule_driverGather0_pargs() noexcept;
   const std::string* id;
+  const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1141,8 +1281,9 @@ class ICommModule_driverGather0_presult {
 };
 
 typedef struct _ICommModule_driverScatter_args__isset {
-  _ICommModule_driverScatter_args__isset() : id(false) {}
+  _ICommModule_driverScatter_args__isset() : id(false), dataId(false) {}
   bool id :1;
+  bool dataId :1;
 } _ICommModule_driverScatter_args__isset;
 
 class ICommModule_driverScatter_args {
@@ -1150,19 +1291,24 @@ class ICommModule_driverScatter_args {
 
   ICommModule_driverScatter_args(const ICommModule_driverScatter_args&);
   ICommModule_driverScatter_args& operator=(const ICommModule_driverScatter_args&);
-  ICommModule_driverScatter_args() : id() {
+  ICommModule_driverScatter_args() : id(), dataId(0) {
   }
 
   virtual ~ICommModule_driverScatter_args() noexcept;
   std::string id;
+  int64_t dataId;
 
   _ICommModule_driverScatter_args__isset __isset;
 
   void __set_id(const std::string& val);
 
+  void __set_dataId(const int64_t val);
+
   bool operator == (const ICommModule_driverScatter_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(dataId == rhs.dataId))
       return false;
     return true;
   }
@@ -1184,6 +1330,7 @@ class ICommModule_driverScatter_pargs {
 
   virtual ~ICommModule_driverScatter_pargs() noexcept;
   const std::string* id;
+  const int64_t* dataId;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1244,6 +1391,124 @@ class ICommModule_driverScatter_presult {
 
 };
 
+typedef struct _ICommModule_driverScatter3_args__isset {
+  _ICommModule_driverScatter3_args__isset() : id(false), dataId(false), src(false) {}
+  bool id :1;
+  bool dataId :1;
+  bool src :1;
+} _ICommModule_driverScatter3_args__isset;
+
+class ICommModule_driverScatter3_args {
+ public:
+
+  ICommModule_driverScatter3_args(const ICommModule_driverScatter3_args&);
+  ICommModule_driverScatter3_args& operator=(const ICommModule_driverScatter3_args&);
+  ICommModule_driverScatter3_args() : id(), dataId(0) {
+  }
+
+  virtual ~ICommModule_driverScatter3_args() noexcept;
+  std::string id;
+  int64_t dataId;
+   ::ignis::rpc::ISource src;
+
+  _ICommModule_driverScatter3_args__isset __isset;
+
+  void __set_id(const std::string& val);
+
+  void __set_dataId(const int64_t val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const ICommModule_driverScatter3_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(dataId == rhs.dataId))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_driverScatter3_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_driverScatter3_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_driverScatter3_pargs {
+ public:
+
+
+  virtual ~ICommModule_driverScatter3_pargs() noexcept;
+  const std::string* id;
+  const int64_t* dataId;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_driverScatter3_result__isset {
+  _ICommModule_driverScatter3_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_driverScatter3_result__isset;
+
+class ICommModule_driverScatter3_result {
+ public:
+
+  ICommModule_driverScatter3_result(const ICommModule_driverScatter3_result&);
+  ICommModule_driverScatter3_result& operator=(const ICommModule_driverScatter3_result&);
+  ICommModule_driverScatter3_result() {
+  }
+
+  virtual ~ICommModule_driverScatter3_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_driverScatter3_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_driverScatter3_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_driverScatter3_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_driverScatter3_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_driverScatter3_presult__isset {
+  _ICommModule_driverScatter3_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_driverScatter3_presult__isset;
+
+class ICommModule_driverScatter3_presult {
+ public:
+
+
+  virtual ~ICommModule_driverScatter3_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_driverScatter3_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class ICommModuleClient : virtual public ICommModuleIf {
  public:
   ICommModuleClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1272,8 +1537,8 @@ class ICommModuleClient : virtual public ICommModuleIf {
   void createGroup(std::string& _return);
   void send_createGroup();
   void recv_createGroup(std::string& _return);
-  void joinGroupMembers(const std::string& group, const int64_t size);
-  void send_joinGroupMembers(const std::string& group, const int64_t size);
+  void joinGroupMembers(const std::string& group, const int64_t id, const int64_t size);
+  void send_joinGroupMembers(const std::string& group, const int64_t id, const int64_t size);
   void recv_joinGroupMembers();
   void joinToGroup(const std::string& group, const std::string& id);
   void send_joinToGroup(const std::string& group, const std::string& id);
@@ -1293,15 +1558,21 @@ class ICommModuleClient : virtual public ICommModuleIf {
   void setPartitions(const std::vector<std::string> & partitions);
   void send_setPartitions(const std::vector<std::string> & partitions);
   void recv_setPartitions();
-  void driverGather(const std::string& id);
-  void send_driverGather(const std::string& id);
+  void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
+  void send_setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
+  void recv_setPartitions2();
+  void driverGather(const std::string& id, const  ::ignis::rpc::ISource& src);
+  void send_driverGather(const std::string& id, const  ::ignis::rpc::ISource& src);
   void recv_driverGather();
-  void driverGather0(const std::string& id);
-  void send_driverGather0(const std::string& id);
+  void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
+  void send_driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
   void recv_driverGather0();
-  void driverScatter(const std::string& id);
-  void send_driverScatter(const std::string& id);
+  void driverScatter(const std::string& id, const int64_t dataId);
+  void send_driverScatter(const std::string& id, const int64_t dataId);
   void recv_driverScatter();
+  void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void send_driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void recv_driverScatter3();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1325,9 +1596,11 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_destroyGroups(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_setPartitions2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverGather(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverGather0(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverScatter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_driverScatter3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ICommModuleProcessor(::std::shared_ptr<ICommModuleIf> iface) :
     iface_(iface) {
@@ -1339,9 +1612,11 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["destroyGroups"] = &ICommModuleProcessor::process_destroyGroups;
     processMap_["getPartitions"] = &ICommModuleProcessor::process_getPartitions;
     processMap_["setPartitions"] = &ICommModuleProcessor::process_setPartitions;
+    processMap_["setPartitions2"] = &ICommModuleProcessor::process_setPartitions2;
     processMap_["driverGather"] = &ICommModuleProcessor::process_driverGather;
     processMap_["driverGather0"] = &ICommModuleProcessor::process_driverGather0;
     processMap_["driverScatter"] = &ICommModuleProcessor::process_driverScatter;
+    processMap_["driverScatter3"] = &ICommModuleProcessor::process_driverScatter3;
   }
 
   virtual ~ICommModuleProcessor() {}
@@ -1380,13 +1655,13 @@ class ICommModuleMultiface : virtual public ICommModuleIf {
     return;
   }
 
-  void joinGroupMembers(const std::string& group, const int64_t size) {
+  void joinGroupMembers(const std::string& group, const int64_t id, const int64_t size) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->joinGroupMembers(group, size);
+      ifaces_[i]->joinGroupMembers(group, id, size);
     }
-    ifaces_[i]->joinGroupMembers(group, size);
+    ifaces_[i]->joinGroupMembers(group, id, size);
   }
 
   void joinToGroup(const std::string& group, const std::string& id) {
@@ -1444,31 +1719,49 @@ class ICommModuleMultiface : virtual public ICommModuleIf {
     ifaces_[i]->setPartitions(partitions);
   }
 
-  void driverGather(const std::string& id) {
+  void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->driverGather(id);
+      ifaces_[i]->setPartitions2(partitions, src);
     }
-    ifaces_[i]->driverGather(id);
+    ifaces_[i]->setPartitions2(partitions, src);
   }
 
-  void driverGather0(const std::string& id) {
+  void driverGather(const std::string& id, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->driverGather0(id);
+      ifaces_[i]->driverGather(id, src);
     }
-    ifaces_[i]->driverGather0(id);
+    ifaces_[i]->driverGather(id, src);
   }
 
-  void driverScatter(const std::string& id) {
+  void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->driverScatter(id);
+      ifaces_[i]->driverGather0(id, src);
     }
-    ifaces_[i]->driverScatter(id);
+    ifaces_[i]->driverGather0(id, src);
+  }
+
+  void driverScatter(const std::string& id, const int64_t dataId) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->driverScatter(id, dataId);
+    }
+    ifaces_[i]->driverScatter(id, dataId);
+  }
+
+  void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->driverScatter3(id, dataId, src);
+    }
+    ifaces_[i]->driverScatter3(id, dataId, src);
   }
 
 };
@@ -1506,8 +1799,8 @@ class ICommModuleConcurrentClient : virtual public ICommModuleIf {
   void createGroup(std::string& _return);
   int32_t send_createGroup();
   void recv_createGroup(std::string& _return, const int32_t seqid);
-  void joinGroupMembers(const std::string& group, const int64_t size);
-  int32_t send_joinGroupMembers(const std::string& group, const int64_t size);
+  void joinGroupMembers(const std::string& group, const int64_t id, const int64_t size);
+  int32_t send_joinGroupMembers(const std::string& group, const int64_t id, const int64_t size);
   void recv_joinGroupMembers(const int32_t seqid);
   void joinToGroup(const std::string& group, const std::string& id);
   int32_t send_joinToGroup(const std::string& group, const std::string& id);
@@ -1527,15 +1820,21 @@ class ICommModuleConcurrentClient : virtual public ICommModuleIf {
   void setPartitions(const std::vector<std::string> & partitions);
   int32_t send_setPartitions(const std::vector<std::string> & partitions);
   void recv_setPartitions(const int32_t seqid);
-  void driverGather(const std::string& id);
-  int32_t send_driverGather(const std::string& id);
+  void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
+  void recv_setPartitions2(const int32_t seqid);
+  void driverGather(const std::string& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_driverGather(const std::string& id, const  ::ignis::rpc::ISource& src);
   void recv_driverGather(const int32_t seqid);
-  void driverGather0(const std::string& id);
-  int32_t send_driverGather0(const std::string& id);
+  void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
   void recv_driverGather0(const int32_t seqid);
-  void driverScatter(const std::string& id);
-  int32_t send_driverScatter(const std::string& id);
+  void driverScatter(const std::string& id, const int64_t dataId);
+  int32_t send_driverScatter(const std::string& id, const int64_t dataId);
   void recv_driverScatter(const int32_t seqid);
+  void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  int32_t send_driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void recv_driverScatter3(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

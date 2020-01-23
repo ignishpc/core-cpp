@@ -16,7 +16,7 @@ namespace ignis {
 
                     IExecutorServerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void start(apache::thrift::TProcessor &procesor, int port);
+                    void start(apache::thrift::TProcessor &procesor, int port, int compression);
 
                     void updateProperties(const std::map<std::string, std::string> &properties) override;
 

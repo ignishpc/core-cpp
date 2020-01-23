@@ -4,7 +4,6 @@
 
 #include <stdexcept>
 #include <ostream>
-#include "ignis/rpc/driver/IDriverException_types.h"
 
 namespace ignis {
     namespace driver {

@@ -28,58 +28,34 @@ namespace ignis {
                 IExecutorData();
 
                 template<typename Tp>
-                std::shared_ptr<storage::IPartitionGroup<Tp>> getPartitions(bool no_check = false) {
-                    auto group = std::static_pointer_cast<storage::IPartitionGroup<Tp>>(partitions);
-                    if (!no_check) {
-                        if (group->partitions() > 0 && (*group)[0]->type() == storage::IVoidPartition::TYPE) {
-                            IGNIS_LOG(info) << "Creating real partitions from void partitions";
-                            auto new_group = partition_tools.newPartitionGroup<Tp>(group->partitions());
-                            for (int64_t i = 0; i < new_group->partitions(); i++) {
-                                auto &void_partition = reinterpret_cast<storage::IVoidPartition &>(*(*group)[i]);
-                                void_partition.write(*(*new_group)[i]);
-                            }
-                            std::swap(*new_group, *group);
-                        }else if (group->elemType() != RTTInfo::from<Tp>()) {
-                            throw exception::IInvalidArgument(
-                                    "Error: " + group->elemType().getStandardName() + " cannot be cast to " +
-                                    RTTInfo::from<Tp>().getStandardName());
-                        }
-                    }
-                    return group;
-                }
+                std::shared_ptr<storage::IPartitionGroup<Tp>> getPartitions(bool no_check = false);
 
                 template<typename Tp>
                 std::shared_ptr<storage::IPartitionGroup<Tp>>
-                setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group) {
-                    auto old = partitions;
-                    partitions = std::static_pointer_cast<void>(group);
-                    return std::static_pointer_cast<storage::IPartitionGroup<Tp>>(old);
-                }
+                setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group);
 
                 void deletePartitions();
 
                 template<typename Tp>
-                void setVariable(const std::string key, const std::shared_ptr<Tp> &value) {
-                    variables[key] = std::static_pointer_cast<std::shared_ptr<Tp>>(value);
-                }
+                void setVariable(const std::string key, const Tp &value);
 
                 template<typename Tp>
-                std::shared_ptr<Tp> &getVariable(const std::string key) {
-                    return std::static_pointer_cast<std::shared_ptr<Tp>>(variables[key]);
-                }
+                void setVariable(const std::string key, Tp &&value);
 
                 template<typename Tp>
-                std::shared_ptr<Tp> removeVariable(const std::string key) {
-                    auto value = variables[key];
-                    variables.erase(key);
-                    return std::static_pointer_cast<std::shared_ptr<Tp>>(value);
-                }
+                Tp &getVariable(const std::string key);
+
+                bool hasVariable(const std::string key);
+
+                void removeVariable(const std::string key);
 
                 int64_t clearVariables();
 
                 std::string infoDirectory();
 
                 std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
+
+                void registerType(const std::shared_ptr<selector::ITypeSelector>&type);
 
                 std::shared_ptr<selector::ITypeSelector> getType(const std::string &id);
 
@@ -111,5 +87,7 @@ namespace ignis {
         }
     }
 }
+
+#include "IExecutorData.tcc"
 
 #endif

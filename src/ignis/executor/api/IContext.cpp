@@ -21,7 +21,7 @@ int IContext::executorId() { mpi_group.Get_rank(); }
 
 int IContext::threadId(){ omp_get_thread_num();}
 
-MPI::Intracomm &IContext::mpiGroup() { return mpi_group; }
+const MPI::Intracomm &IContext::mpiGroup() { return mpi_group; }
 
 std::unordered_map<std::string, std::string> &IContext::props() {
     return properties;
@@ -33,6 +33,10 @@ std::shared_ptr<ignis::executor::core::protocol::IObjectProtocol> IContext::varP
     auto buffer = std::make_shared<core::transport::IMemoryBuffer>((uint8_t *) cbytes, bytes.size());
     auto zlib = std::make_shared<core::transport::IZlibTransport>(buffer);
     return std::make_shared<core::protocol::IObjectProtocol>(zlib);
+}
+
+bool IContext::isVar(const std::string &name){
+    return variables.find(name) != variables.end();
 }
 
 bool IContext::rmVar(const std::string &name) {

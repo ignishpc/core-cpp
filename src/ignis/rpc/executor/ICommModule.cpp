@@ -230,6 +230,14 @@ uint32_t ICommModule_joinGroupMembers_args::read(::apache::thrift::protocol::TPr
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
           xfer += iprot->readI64(this->size);
           this->__isset.size = true;
         } else {
@@ -257,7 +265,11 @@ uint32_t ICommModule_joinGroupMembers_args::write(::apache::thrift::protocol::TP
   xfer += oprot->writeString(this->group);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("size", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("size", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64(this->size);
   xfer += oprot->writeFieldEnd();
 
@@ -280,7 +292,11 @@ uint32_t ICommModule_joinGroupMembers_pargs::write(::apache::thrift::protocol::T
   xfer += oprot->writeString((*(this->group)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("size", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("size", ::apache::thrift::protocol::T_I64, 3);
   xfer += oprot->writeI64((*(this->size)));
   xfer += oprot->writeFieldEnd();
 
@@ -1594,6 +1610,237 @@ uint32_t ICommModule_setPartitions_presult::read(::apache::thrift::protocol::TPr
 }
 
 
+ICommModule_setPartitions2_args::~ICommModule_setPartitions2_args() noexcept {
+}
+
+
+uint32_t ICommModule_setPartitions2_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->partitions.clear();
+            uint32_t _size18;
+            ::apache::thrift::protocol::TType _etype21;
+            xfer += iprot->readListBegin(_etype21, _size18);
+            this->partitions.resize(_size18);
+            uint32_t _i22;
+            for (_i22 = 0; _i22 < _size18; ++_i22)
+            {
+              xfer += iprot->readBinary(this->partitions[_i22]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.partitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ICommModule_setPartitions2_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ICommModule_setPartitions2_args");
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->partitions.size()));
+    std::vector<std::string> ::const_iterator _iter23;
+    for (_iter23 = this->partitions.begin(); _iter23 != this->partitions.end(); ++_iter23)
+    {
+      xfer += oprot->writeBinary((*_iter23));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_setPartitions2_pargs::~ICommModule_setPartitions2_pargs() noexcept {
+}
+
+
+uint32_t ICommModule_setPartitions2_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ICommModule_setPartitions2_pargs");
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_LIST, 1);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->partitions)).size()));
+    std::vector<std::string> ::const_iterator _iter24;
+    for (_iter24 = (*(this->partitions)).begin(); _iter24 != (*(this->partitions)).end(); ++_iter24)
+    {
+      xfer += oprot->writeBinary((*_iter24));
+    }
+    xfer += oprot->writeListEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_setPartitions2_result::~ICommModule_setPartitions2_result() noexcept {
+}
+
+
+uint32_t ICommModule_setPartitions2_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ICommModule_setPartitions2_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("ICommModule_setPartitions2_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_setPartitions2_presult::~ICommModule_setPartitions2_presult() noexcept {
+}
+
+
+uint32_t ICommModule_setPartitions2_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
 ICommModule_driverGather_args::~ICommModule_driverGather_args() noexcept {
 }
 
@@ -1627,6 +1874,14 @@ uint32_t ICommModule_driverGather_args::read(::apache::thrift::protocol::TProtoc
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -1648,6 +1903,10 @@ uint32_t ICommModule_driverGather_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeString(this->id);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -1665,6 +1924,10 @@ uint32_t ICommModule_driverGather_pargs::write(::apache::thrift::protocol::TProt
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->src)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1814,6 +2077,14 @@ uint32_t ICommModule_driverGather0_args::read(::apache::thrift::protocol::TProto
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -1835,6 +2106,10 @@ uint32_t ICommModule_driverGather0_args::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeString(this->id);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -1852,6 +2127,10 @@ uint32_t ICommModule_driverGather0_pargs::write(::apache::thrift::protocol::TPro
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->src)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -2001,6 +2280,14 @@ uint32_t ICommModule_driverScatter_args::read(::apache::thrift::protocol::TProto
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->dataId);
+          this->__isset.dataId = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -2022,6 +2309,10 @@ uint32_t ICommModule_driverScatter_args::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeString(this->id);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("dataId", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->dataId);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -2039,6 +2330,10 @@ uint32_t ICommModule_driverScatter_pargs::write(::apache::thrift::protocol::TPro
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("dataId", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->dataId)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -2154,6 +2449,225 @@ uint32_t ICommModule_driverScatter_presult::read(::apache::thrift::protocol::TPr
   return xfer;
 }
 
+
+ICommModule_driverScatter3_args::~ICommModule_driverScatter3_args() noexcept {
+}
+
+
+uint32_t ICommModule_driverScatter3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->dataId);
+          this->__isset.dataId = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ICommModule_driverScatter3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ICommModule_driverScatter3_args");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("dataId", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->dataId);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_driverScatter3_pargs::~ICommModule_driverScatter3_pargs() noexcept {
+}
+
+
+uint32_t ICommModule_driverScatter3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ICommModule_driverScatter3_pargs");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("dataId", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->dataId)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_driverScatter3_result::~ICommModule_driverScatter3_result() noexcept {
+}
+
+
+uint32_t ICommModule_driverScatter3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ICommModule_driverScatter3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("ICommModule_driverScatter3_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_driverScatter3_presult::~ICommModule_driverScatter3_presult() noexcept {
+}
+
+
+uint32_t ICommModule_driverScatter3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
 void ICommModuleClient::createGroup(std::string& _return)
 {
   send_createGroup();
@@ -2214,19 +2728,20 @@ void ICommModuleClient::recv_createGroup(std::string& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "createGroup failed: unknown result");
 }
 
-void ICommModuleClient::joinGroupMembers(const std::string& group, const int64_t size)
+void ICommModuleClient::joinGroupMembers(const std::string& group, const int64_t id, const int64_t size)
 {
-  send_joinGroupMembers(group, size);
+  send_joinGroupMembers(group, id, size);
   recv_joinGroupMembers();
 }
 
-void ICommModuleClient::send_joinGroupMembers(const std::string& group, const int64_t size)
+void ICommModuleClient::send_joinGroupMembers(const std::string& group, const int64_t id, const int64_t size)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("joinGroupMembers", ::apache::thrift::protocol::T_CALL, cseqid);
 
   ICommModule_joinGroupMembers_pargs args;
   args.group = &group;
+  args.id = &id;
   args.size = &size;
   args.write(oprot_);
 
@@ -2616,19 +3131,77 @@ void ICommModuleClient::recv_setPartitions()
   return;
 }
 
-void ICommModuleClient::driverGather(const std::string& id)
+void ICommModuleClient::setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src)
 {
-  send_driverGather(id);
+  send_setPartitions2(partitions, src);
+  recv_setPartitions2();
+}
+
+void ICommModuleClient::send_setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("setPartitions2", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  ICommModule_setPartitions2_pargs args;
+  args.partitions = &partitions;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ICommModuleClient::recv_setPartitions2()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("setPartitions2") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  ICommModule_setPartitions2_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void ICommModuleClient::driverGather(const std::string& id, const  ::ignis::rpc::ISource& src)
+{
+  send_driverGather(id, src);
   recv_driverGather();
 }
 
-void ICommModuleClient::send_driverGather(const std::string& id)
+void ICommModuleClient::send_driverGather(const std::string& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("driverGather", ::apache::thrift::protocol::T_CALL, cseqid);
 
   ICommModule_driverGather_pargs args;
   args.id = &id;
+  args.src = &src;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2672,19 +3245,20 @@ void ICommModuleClient::recv_driverGather()
   return;
 }
 
-void ICommModuleClient::driverGather0(const std::string& id)
+void ICommModuleClient::driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src)
 {
-  send_driverGather0(id);
+  send_driverGather0(id, src);
   recv_driverGather0();
 }
 
-void ICommModuleClient::send_driverGather0(const std::string& id)
+void ICommModuleClient::send_driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("driverGather0", ::apache::thrift::protocol::T_CALL, cseqid);
 
   ICommModule_driverGather0_pargs args;
   args.id = &id;
+  args.src = &src;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2728,19 +3302,20 @@ void ICommModuleClient::recv_driverGather0()
   return;
 }
 
-void ICommModuleClient::driverScatter(const std::string& id)
+void ICommModuleClient::driverScatter(const std::string& id, const int64_t dataId)
 {
-  send_driverScatter(id);
+  send_driverScatter(id, dataId);
   recv_driverScatter();
 }
 
-void ICommModuleClient::send_driverScatter(const std::string& id)
+void ICommModuleClient::send_driverScatter(const std::string& id, const int64_t dataId)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("driverScatter", ::apache::thrift::protocol::T_CALL, cseqid);
 
   ICommModule_driverScatter_pargs args;
   args.id = &id;
+  args.dataId = &dataId;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2774,6 +3349,64 @@ void ICommModuleClient::recv_driverScatter()
     iprot_->getTransport()->readEnd();
   }
   ICommModule_driverScatter_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void ICommModuleClient::driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+{
+  send_driverScatter3(id, dataId, src);
+  recv_driverScatter3();
+}
+
+void ICommModuleClient::send_driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("driverScatter3", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  ICommModule_driverScatter3_pargs args;
+  args.id = &id;
+  args.dataId = &dataId;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void ICommModuleClient::recv_driverScatter3()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("driverScatter3") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  ICommModule_driverScatter3_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -2883,7 +3516,7 @@ void ICommModuleProcessor::process_joinGroupMembers(int32_t seqid, ::apache::thr
 
   ICommModule_joinGroupMembers_result result;
   try {
-    iface_->joinGroupMembers(args.group, args.size);
+    iface_->joinGroupMembers(args.group, args.id, args.size);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -3254,6 +3887,62 @@ void ICommModuleProcessor::process_setPartitions(int32_t seqid, ::apache::thrift
   }
 }
 
+void ICommModuleProcessor::process_setPartitions2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("ICommModule.setPartitions2", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ICommModule.setPartitions2");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "ICommModule.setPartitions2");
+  }
+
+  ICommModule_setPartitions2_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "ICommModule.setPartitions2", bytes);
+  }
+
+  ICommModule_setPartitions2_result result;
+  try {
+    iface_->setPartitions2(args.partitions, args.src);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "ICommModule.setPartitions2");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("setPartitions2", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "ICommModule.setPartitions2");
+  }
+
+  oprot->writeMessageBegin("setPartitions2", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "ICommModule.setPartitions2", bytes);
+  }
+}
+
 void ICommModuleProcessor::process_driverGather(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
@@ -3277,7 +3966,7 @@ void ICommModuleProcessor::process_driverGather(int32_t seqid, ::apache::thrift:
 
   ICommModule_driverGather_result result;
   try {
-    iface_->driverGather(args.id);
+    iface_->driverGather(args.id, args.src);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -3333,7 +4022,7 @@ void ICommModuleProcessor::process_driverGather0(int32_t seqid, ::apache::thrift
 
   ICommModule_driverGather0_result result;
   try {
-    iface_->driverGather0(args.id);
+    iface_->driverGather0(args.id, args.src);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -3389,7 +4078,7 @@ void ICommModuleProcessor::process_driverScatter(int32_t seqid, ::apache::thrift
 
   ICommModule_driverScatter_result result;
   try {
-    iface_->driverScatter(args.id);
+    iface_->driverScatter(args.id, args.dataId);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -3419,6 +4108,62 @@ void ICommModuleProcessor::process_driverScatter(int32_t seqid, ::apache::thrift
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "ICommModule.driverScatter", bytes);
+  }
+}
+
+void ICommModuleProcessor::process_driverScatter3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("ICommModule.driverScatter3", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ICommModule.driverScatter3");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "ICommModule.driverScatter3");
+  }
+
+  ICommModule_driverScatter3_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "ICommModule.driverScatter3", bytes);
+  }
+
+  ICommModule_driverScatter3_result result;
+  try {
+    iface_->driverScatter3(args.id, args.dataId, args.src);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "ICommModule.driverScatter3");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("driverScatter3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "ICommModule.driverScatter3");
+  }
+
+  oprot->writeMessageBegin("driverScatter3", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "ICommModule.driverScatter3", bytes);
   }
 }
 
@@ -3516,13 +4261,13 @@ void ICommModuleConcurrentClient::recv_createGroup(std::string& _return, const i
   } // end while(true)
 }
 
-void ICommModuleConcurrentClient::joinGroupMembers(const std::string& group, const int64_t size)
+void ICommModuleConcurrentClient::joinGroupMembers(const std::string& group, const int64_t id, const int64_t size)
 {
-  int32_t seqid = send_joinGroupMembers(group, size);
+  int32_t seqid = send_joinGroupMembers(group, id, size);
   recv_joinGroupMembers(seqid);
 }
 
-int32_t ICommModuleConcurrentClient::send_joinGroupMembers(const std::string& group, const int64_t size)
+int32_t ICommModuleConcurrentClient::send_joinGroupMembers(const std::string& group, const int64_t id, const int64_t size)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -3530,6 +4275,7 @@ int32_t ICommModuleConcurrentClient::send_joinGroupMembers(const std::string& gr
 
   ICommModule_joinGroupMembers_pargs args;
   args.group = &group;
+  args.id = &id;
   args.size = &size;
   args.write(oprot_);
 
@@ -4102,13 +4848,96 @@ void ICommModuleConcurrentClient::recv_setPartitions(const int32_t seqid)
   } // end while(true)
 }
 
-void ICommModuleConcurrentClient::driverGather(const std::string& id)
+void ICommModuleConcurrentClient::setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_driverGather(id);
+  int32_t seqid = send_setPartitions2(partitions, src);
+  recv_setPartitions2(seqid);
+}
+
+int32_t ICommModuleConcurrentClient::send_setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("setPartitions2", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  ICommModule_setPartitions2_pargs args;
+  args.partitions = &partitions;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void ICommModuleConcurrentClient::recv_setPartitions2(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("setPartitions2") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      ICommModule_setPartitions2_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ICommModuleConcurrentClient::driverGather(const std::string& id, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_driverGather(id, src);
   recv_driverGather(seqid);
 }
 
-int32_t ICommModuleConcurrentClient::send_driverGather(const std::string& id)
+int32_t ICommModuleConcurrentClient::send_driverGather(const std::string& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -4116,6 +4945,7 @@ int32_t ICommModuleConcurrentClient::send_driverGather(const std::string& id)
 
   ICommModule_driverGather_pargs args;
   args.id = &id;
+  args.src = &src;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -4184,13 +5014,13 @@ void ICommModuleConcurrentClient::recv_driverGather(const int32_t seqid)
   } // end while(true)
 }
 
-void ICommModuleConcurrentClient::driverGather0(const std::string& id)
+void ICommModuleConcurrentClient::driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_driverGather0(id);
+  int32_t seqid = send_driverGather0(id, src);
   recv_driverGather0(seqid);
 }
 
-int32_t ICommModuleConcurrentClient::send_driverGather0(const std::string& id)
+int32_t ICommModuleConcurrentClient::send_driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -4198,6 +5028,7 @@ int32_t ICommModuleConcurrentClient::send_driverGather0(const std::string& id)
 
   ICommModule_driverGather0_pargs args;
   args.id = &id;
+  args.src = &src;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -4266,13 +5097,13 @@ void ICommModuleConcurrentClient::recv_driverGather0(const int32_t seqid)
   } // end while(true)
 }
 
-void ICommModuleConcurrentClient::driverScatter(const std::string& id)
+void ICommModuleConcurrentClient::driverScatter(const std::string& id, const int64_t dataId)
 {
-  int32_t seqid = send_driverScatter(id);
+  int32_t seqid = send_driverScatter(id, dataId);
   recv_driverScatter(seqid);
 }
 
-int32_t ICommModuleConcurrentClient::send_driverScatter(const std::string& id)
+int32_t ICommModuleConcurrentClient::send_driverScatter(const std::string& id, const int64_t dataId)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -4280,6 +5111,7 @@ int32_t ICommModuleConcurrentClient::send_driverScatter(const std::string& id)
 
   ICommModule_driverScatter_pargs args;
   args.id = &id;
+  args.dataId = &dataId;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -4329,6 +5161,90 @@ void ICommModuleConcurrentClient::recv_driverScatter(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       ICommModule_driverScatter_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void ICommModuleConcurrentClient::driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_driverScatter3(id, dataId, src);
+  recv_driverScatter3(seqid);
+}
+
+int32_t ICommModuleConcurrentClient::send_driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("driverScatter3", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  ICommModule_driverScatter3_pargs args;
+  args.id = &id;
+  args.dataId = &dataId;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void ICommModuleConcurrentClient::recv_driverScatter3(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("driverScatter3") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      ICommModule_driverScatter3_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

@@ -26,12 +26,14 @@ namespace ignis {
 
                 int threadId();
 
-                MPI::Intracomm& mpiGroup();
+                const MPI::Intracomm& mpiGroup();
 
                 std::unordered_map<std::string, std::string> &props();
 
                 template<typename T>
-                std::shared_ptr<T> &var(const std::string &name);
+                T &var(const std::string &name);
+
+                bool isVar(const std::string &name);
 
                 bool rmVar(const std::string &name);
 
