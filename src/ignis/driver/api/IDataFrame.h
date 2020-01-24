@@ -186,24 +186,20 @@ namespace ignis {
                     return IDataFrame<R>::make(groupByAbs(src, numPartitions));
                 }
 
-                template<typename R>
-                std::shared_ptr<IDataFrame<R>> sort(bool ascending) {
-                    return IDataFrame<R>::make(sortAbs(ascending));
+                std::shared_ptr<IDataFrame<Tp>> sort(bool ascending=true) {
+                    return IDataFrame<Tp>::make(sortAbs(ascending));
                 }
 
-                template<typename R>
-                std::shared_ptr<IDataFrame<R>> sort(bool ascending, int64_t numPartitions) {
-                    return IDataFrame<R>::make(sortAbs(ascending, numPartitions));
+                std::shared_ptr<IDataFrame<Tp>> sort(bool ascending, int64_t numPartitions) {
+                    return IDataFrame<Tp>::make(sortAbs(ascending, numPartitions));
                 }
 
-                template<typename R>
-                std::shared_ptr<IDataFrame<R>> sortBy(const ISource &src, bool ascending) {
-                    return IDataFrame<R>::make(sortByAbs(src, ascending));
+                std::shared_ptr<IDataFrame<Tp>> sortBy(const ISource &src, bool ascending) {
+                    return IDataFrame<Tp>::make(sortByAbs(src, ascending));
                 }
 
-                template<typename R>
-                std::shared_ptr<IDataFrame<R>> sortBy(const ISource &src, bool ascending, int64_t numPartitions) {
-                    return IDataFrame<R>::make(sortByAbs(src, ascending, numPartitions));
+                std::shared_ptr<IDataFrame<Tp>> sortBy(const ISource &src, bool ascending, int64_t numPartitions) {
+                    return IDataFrame<Tp>::make(sortByAbs(src, ascending, numPartitions));
                 }
 
                 /*General Action*/
