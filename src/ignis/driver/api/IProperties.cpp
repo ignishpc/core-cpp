@@ -41,6 +41,27 @@ std::string IProperties::getProperty(const std::string &key) {
     }
 }
 
+std::string IProperties::rmProperty(const std::string &key) {
+    try {
+        std::string _return;
+        Ignis::clientPool->getClient()->getPropertiesService().rmProperty(_return, id, key);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IProperties::Value IProperties::operator[](const std::string &key) {
+    return Value(*this, key, getProperty(key));
+}
+
+std::string IProperties::Value::operator=(const std::string &value) {
+    return properties.setProperty(key,value);
+}
+
+IProperties::Value::Value(IProperties &properties, const std::string &key, const std::string &value) :
+        properties(properties), key(key), value(value) {}
+
 bool IProperties::contains(const std::string &key) {
     try {
         return Ignis::clientPool->getClient()->getPropertiesService().contains(id, key);

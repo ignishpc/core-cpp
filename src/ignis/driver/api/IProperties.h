@@ -12,6 +12,18 @@ namespace ignis {
 
             class IProperties {
             public:
+                class Value {
+                public:
+                    std::string operator=(const std::string &value);
+
+                private:
+                    friend IProperties;
+                    Value(IProperties &properties,const std::string &key, const std::string &value);
+
+                    IProperties &properties;
+                    std::string key;
+                    std::string value;
+                };
 
                 IProperties();
 
@@ -20,6 +32,10 @@ namespace ignis {
                 std::string setProperty(const std::string &key, const std::string &value);
 
                 std::string getProperty(const std::string &key);
+
+                std::string rmProperty(const std::string &key);
+
+                Value operator[](const std::string &key);
 
                 bool contains(const std::string &key);
 

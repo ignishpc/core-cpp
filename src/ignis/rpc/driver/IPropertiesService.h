@@ -26,6 +26,7 @@ class IPropertiesServiceIf {
   virtual int64_t newInstance2(const int64_t id) = 0;
   virtual void setProperty(std::string& _return, const int64_t id, const std::string& key, const std::string& value) = 0;
   virtual void getProperty(std::string& _return, const int64_t id, const std::string& key) = 0;
+  virtual void rmProperty(std::string& _return, const int64_t id, const std::string& key) = 0;
   virtual bool contains(const int64_t id, const std::string& key) = 0;
   virtual void toMap(std::map<std::string, std::string> & _return, const int64_t id, const bool defaults) = 0;
   virtual void fromMap(const int64_t id, const std::map<std::string, std::string> & _map) = 0;
@@ -73,6 +74,9 @@ class IPropertiesServiceNull : virtual public IPropertiesServiceIf {
     return;
   }
   void getProperty(std::string& /* _return */, const int64_t /* id */, const std::string& /* key */) {
+    return;
+  }
+  void rmProperty(std::string& /* _return */, const int64_t /* id */, const std::string& /* key */) {
     return;
   }
   bool contains(const int64_t /* id */, const std::string& /* key */) {
@@ -548,6 +552,125 @@ class IPropertiesService_getProperty_presult {
    ::ignis::rpc::driver::IDriverException ex;
 
   _IPropertiesService_getProperty_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IPropertiesService_rmProperty_args__isset {
+  _IPropertiesService_rmProperty_args__isset() : id(false), key(false) {}
+  bool id :1;
+  bool key :1;
+} _IPropertiesService_rmProperty_args__isset;
+
+class IPropertiesService_rmProperty_args {
+ public:
+
+  IPropertiesService_rmProperty_args(const IPropertiesService_rmProperty_args&);
+  IPropertiesService_rmProperty_args& operator=(const IPropertiesService_rmProperty_args&);
+  IPropertiesService_rmProperty_args() : id(0), key() {
+  }
+
+  virtual ~IPropertiesService_rmProperty_args() noexcept;
+  int64_t id;
+  std::string key;
+
+  _IPropertiesService_rmProperty_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  void __set_key(const std::string& val);
+
+  bool operator == (const IPropertiesService_rmProperty_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(key == rhs.key))
+      return false;
+    return true;
+  }
+  bool operator != (const IPropertiesService_rmProperty_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPropertiesService_rmProperty_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IPropertiesService_rmProperty_pargs {
+ public:
+
+
+  virtual ~IPropertiesService_rmProperty_pargs() noexcept;
+  const int64_t* id;
+  const std::string* key;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPropertiesService_rmProperty_result__isset {
+  _IPropertiesService_rmProperty_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IPropertiesService_rmProperty_result__isset;
+
+class IPropertiesService_rmProperty_result {
+ public:
+
+  IPropertiesService_rmProperty_result(const IPropertiesService_rmProperty_result&);
+  IPropertiesService_rmProperty_result& operator=(const IPropertiesService_rmProperty_result&);
+  IPropertiesService_rmProperty_result() : success() {
+  }
+
+  virtual ~IPropertiesService_rmProperty_result() noexcept;
+  std::string success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IPropertiesService_rmProperty_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IPropertiesService_rmProperty_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IPropertiesService_rmProperty_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IPropertiesService_rmProperty_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IPropertiesService_rmProperty_presult__isset {
+  _IPropertiesService_rmProperty_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IPropertiesService_rmProperty_presult__isset;
+
+class IPropertiesService_rmProperty_presult {
+ public:
+
+
+  virtual ~IPropertiesService_rmProperty_presult() noexcept;
+  std::string* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IPropertiesService_rmProperty_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1265,6 +1388,9 @@ class IPropertiesServiceClient : virtual public IPropertiesServiceIf {
   void getProperty(std::string& _return, const int64_t id, const std::string& key);
   void send_getProperty(const int64_t id, const std::string& key);
   void recv_getProperty(std::string& _return);
+  void rmProperty(std::string& _return, const int64_t id, const std::string& key);
+  void send_rmProperty(const int64_t id, const std::string& key);
+  void recv_rmProperty(std::string& _return);
   bool contains(const int64_t id, const std::string& key);
   void send_contains(const int64_t id, const std::string& key);
   bool recv_contains();
@@ -1302,6 +1428,7 @@ class IPropertiesServiceProcessor : public ::apache::thrift::TDispatchProcessor 
   void process_newInstance2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setProperty(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getProperty(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_rmProperty(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_contains(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_toMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_fromMap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1315,6 +1442,7 @@ class IPropertiesServiceProcessor : public ::apache::thrift::TDispatchProcessor 
     processMap_["newInstance2"] = &IPropertiesServiceProcessor::process_newInstance2;
     processMap_["setProperty"] = &IPropertiesServiceProcessor::process_setProperty;
     processMap_["getProperty"] = &IPropertiesServiceProcessor::process_getProperty;
+    processMap_["rmProperty"] = &IPropertiesServiceProcessor::process_rmProperty;
     processMap_["contains"] = &IPropertiesServiceProcessor::process_contains;
     processMap_["toMap"] = &IPropertiesServiceProcessor::process_toMap;
     processMap_["fromMap"] = &IPropertiesServiceProcessor::process_fromMap;
@@ -1384,6 +1512,16 @@ class IPropertiesServiceMultiface : virtual public IPropertiesServiceIf {
       ifaces_[i]->getProperty(_return, id, key);
     }
     ifaces_[i]->getProperty(_return, id, key);
+    return;
+  }
+
+  void rmProperty(std::string& _return, const int64_t id, const std::string& key) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->rmProperty(_return, id, key);
+    }
+    ifaces_[i]->rmProperty(_return, id, key);
     return;
   }
 
@@ -1486,6 +1624,9 @@ class IPropertiesServiceConcurrentClient : virtual public IPropertiesServiceIf {
   void getProperty(std::string& _return, const int64_t id, const std::string& key);
   int32_t send_getProperty(const int64_t id, const std::string& key);
   void recv_getProperty(std::string& _return, const int32_t seqid);
+  void rmProperty(std::string& _return, const int64_t id, const std::string& key);
+  int32_t send_rmProperty(const int64_t id, const std::string& key);
+  void recv_rmProperty(std::string& _return, const int32_t seqid);
   bool contains(const int64_t id, const std::string& key);
   int32_t send_contains(const int64_t id, const std::string& key);
   bool recv_contains(const int32_t seqid);
