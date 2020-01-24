@@ -137,7 +137,7 @@ void ICommImpl::destroyGroups() {
 
 void ICommImpl::setPartitionsVoid(const std::vector<std::string> &partitions) {
     IGNIS_TRY()
-        auto group = executor_data->getPartitionTools().newPartitionGroup<IVoidPartition::VOID_TYPE>();
+        auto group = executor_data->getPartitionTools().newPartitionGroup<storage::IVoidPartition::VOID_TYPE>();
         for (int64_t i = 0; i < partitions.size(); i++) {
             auto &bytes = partitions[i];
             auto buffer = std::make_shared<transport::IMemoryBuffer>((uint8_t *) bytes.c_str(), bytes.size());
