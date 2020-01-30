@@ -17,6 +17,7 @@ using namespace ignis::rpc::executor;
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();
+    MPI::Init(argc, argv);
 
     auto processor = std::make_shared<apache::thrift::TMultiplexedProcessor>();
     auto executor_data = std::make_shared<IExecutorData>();
@@ -50,5 +51,6 @@ int main(int argc, char *argv[]) {
 
     server->start(*processor, port, compression);
 
+    MPI::Finalize();
     return EXIT_SUCCESS;
 }

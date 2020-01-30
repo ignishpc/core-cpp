@@ -20,6 +20,9 @@ int parseInt(std::shared_ptr<boost::process::ipstream> &in) {
 }
 
 void Ignis::start() {
+    if(!MPI::Is_initialized()){
+        MPI::Init();
+    }
     std::lock_guard<std::mutex> lock(mutex);
     if (clientPool) {
         return;
