@@ -55,6 +55,8 @@ namespace ignis {
 
                 std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
 
+                void reloadLibraries();
+
                 void registerType(const std::shared_ptr<selector::ITypeSelector>&type);
 
                 std::shared_ptr<selector::ITypeSelector> getType(const std::string &id);

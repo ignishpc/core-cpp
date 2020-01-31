@@ -21,12 +21,12 @@ int parseInt(std::shared_ptr<boost::process::ipstream> &in) {
 
 void Ignis::start() {
     try {
-        if (!MPI::Is_initialized()) {
-            MPI::Init();
-        }
         std::lock_guard<std::mutex> lock(mutex);
         if (clientPool) {
             return;
+        }
+        if (!MPI::Is_initialized()) {
+            MPI::Init();
         }
         backend_out = std::make_shared<boost::process::ipstream>();
         backend_in = std::make_shared<boost::process::opstream>();

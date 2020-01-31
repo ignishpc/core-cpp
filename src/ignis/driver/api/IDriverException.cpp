@@ -5,7 +5,7 @@ using namespace ignis::driver::api;
 
 IDriverException::IDriverException(const std::string &message) : IDriverException(message, "") {}
 
-IDriverException::IDriverException(const std::string &message, const std::string &stacktrace)
+IDriverException::IDriverException(const std::string &message, const std::string &cause)
         : runtime_error(message), cause(cause) {}
 
 
