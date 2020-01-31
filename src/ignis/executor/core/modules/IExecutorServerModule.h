@@ -4,7 +4,7 @@
 
 #include "IModule.h"
 #include "ignis/rpc/executor/IExecutorServerModule.h"
-#include <thrift/TProcessor.h>
+#include <thrift/processor/TMultiplexedProcessor.h>
 #include <thrift/server/TServer.h>
 
 namespace ignis {
@@ -16,9 +16,9 @@ namespace ignis {
 
                     IExecutorServerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void start(apache::thrift::TProcessor &procesor, int port, int compression);
+                    void serve(const std::string &name, int port, int compression);
 
-                    void updateProperties(const std::map<std::string, std::string> &properties) override;
+                    void start(const std::map<std::string, std::string> &properties) override;
 
                     void stop() override;
 
@@ -26,8 +26,12 @@ namespace ignis {
 
                     virtual ~IExecutorServerModule();
 
+                protected:
+                    virtual void createServices(apache::thrift::TMultiplexedProcessor &processor);
+
                 private:
                     std::shared_ptr<apache::thrift::server::TServer> server;
+                    std::shared_ptr<apache::thrift::TMultiplexedProcessor> processor;
                 };
             }
         }

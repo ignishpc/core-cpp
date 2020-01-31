@@ -22,7 +22,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IExecutorServerModuleIf {
  public:
   virtual ~IExecutorServerModuleIf() {}
-  virtual void updateProperties(const std::map<std::string, std::string> & properties) = 0;
+  virtual void start(const std::map<std::string, std::string> & properties) = 0;
   virtual void stop() = 0;
   virtual bool test() = 0;
 };
@@ -54,7 +54,7 @@ class IExecutorServerModuleIfSingletonFactory : virtual public IExecutorServerMo
 class IExecutorServerModuleNull : virtual public IExecutorServerModuleIf {
  public:
   virtual ~IExecutorServerModuleNull() {}
-  void updateProperties(const std::map<std::string, std::string> & /* properties */) {
+  void start(const std::map<std::string, std::string> & /* properties */) {
     return;
   }
   void stop() {
@@ -66,37 +66,37 @@ class IExecutorServerModuleNull : virtual public IExecutorServerModuleIf {
   }
 };
 
-typedef struct _IExecutorServerModule_updateProperties_args__isset {
-  _IExecutorServerModule_updateProperties_args__isset() : properties(false) {}
+typedef struct _IExecutorServerModule_start_args__isset {
+  _IExecutorServerModule_start_args__isset() : properties(false) {}
   bool properties :1;
-} _IExecutorServerModule_updateProperties_args__isset;
+} _IExecutorServerModule_start_args__isset;
 
-class IExecutorServerModule_updateProperties_args {
+class IExecutorServerModule_start_args {
  public:
 
-  IExecutorServerModule_updateProperties_args(const IExecutorServerModule_updateProperties_args&);
-  IExecutorServerModule_updateProperties_args& operator=(const IExecutorServerModule_updateProperties_args&);
-  IExecutorServerModule_updateProperties_args() {
+  IExecutorServerModule_start_args(const IExecutorServerModule_start_args&);
+  IExecutorServerModule_start_args& operator=(const IExecutorServerModule_start_args&);
+  IExecutorServerModule_start_args() {
   }
 
-  virtual ~IExecutorServerModule_updateProperties_args() noexcept;
+  virtual ~IExecutorServerModule_start_args() noexcept;
   std::map<std::string, std::string>  properties;
 
-  _IExecutorServerModule_updateProperties_args__isset __isset;
+  _IExecutorServerModule_start_args__isset __isset;
 
   void __set_properties(const std::map<std::string, std::string> & val);
 
-  bool operator == (const IExecutorServerModule_updateProperties_args & rhs) const
+  bool operator == (const IExecutorServerModule_start_args & rhs) const
   {
     if (!(properties == rhs.properties))
       return false;
     return true;
   }
-  bool operator != (const IExecutorServerModule_updateProperties_args &rhs) const {
+  bool operator != (const IExecutorServerModule_start_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IExecutorServerModule_updateProperties_args & ) const;
+  bool operator < (const IExecutorServerModule_start_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -104,67 +104,67 @@ class IExecutorServerModule_updateProperties_args {
 };
 
 
-class IExecutorServerModule_updateProperties_pargs {
+class IExecutorServerModule_start_pargs {
  public:
 
 
-  virtual ~IExecutorServerModule_updateProperties_pargs() noexcept;
+  virtual ~IExecutorServerModule_start_pargs() noexcept;
   const std::map<std::string, std::string> * properties;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IExecutorServerModule_updateProperties_result__isset {
-  _IExecutorServerModule_updateProperties_result__isset() : ex(false) {}
+typedef struct _IExecutorServerModule_start_result__isset {
+  _IExecutorServerModule_start_result__isset() : ex(false) {}
   bool ex :1;
-} _IExecutorServerModule_updateProperties_result__isset;
+} _IExecutorServerModule_start_result__isset;
 
-class IExecutorServerModule_updateProperties_result {
+class IExecutorServerModule_start_result {
  public:
 
-  IExecutorServerModule_updateProperties_result(const IExecutorServerModule_updateProperties_result&);
-  IExecutorServerModule_updateProperties_result& operator=(const IExecutorServerModule_updateProperties_result&);
-  IExecutorServerModule_updateProperties_result() {
+  IExecutorServerModule_start_result(const IExecutorServerModule_start_result&);
+  IExecutorServerModule_start_result& operator=(const IExecutorServerModule_start_result&);
+  IExecutorServerModule_start_result() {
   }
 
-  virtual ~IExecutorServerModule_updateProperties_result() noexcept;
+  virtual ~IExecutorServerModule_start_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IExecutorServerModule_updateProperties_result__isset __isset;
+  _IExecutorServerModule_start_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const IExecutorServerModule_updateProperties_result & rhs) const
+  bool operator == (const IExecutorServerModule_start_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IExecutorServerModule_updateProperties_result &rhs) const {
+  bool operator != (const IExecutorServerModule_start_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IExecutorServerModule_updateProperties_result & ) const;
+  bool operator < (const IExecutorServerModule_start_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IExecutorServerModule_updateProperties_presult__isset {
-  _IExecutorServerModule_updateProperties_presult__isset() : ex(false) {}
+typedef struct _IExecutorServerModule_start_presult__isset {
+  _IExecutorServerModule_start_presult__isset() : ex(false) {}
   bool ex :1;
-} _IExecutorServerModule_updateProperties_presult__isset;
+} _IExecutorServerModule_start_presult__isset;
 
-class IExecutorServerModule_updateProperties_presult {
+class IExecutorServerModule_start_presult {
  public:
 
 
-  virtual ~IExecutorServerModule_updateProperties_presult() noexcept;
+  virtual ~IExecutorServerModule_start_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IExecutorServerModule_updateProperties_presult__isset __isset;
+  _IExecutorServerModule_start_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -387,9 +387,9 @@ class IExecutorServerModuleClient : virtual public IExecutorServerModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void updateProperties(const std::map<std::string, std::string> & properties);
-  void send_updateProperties(const std::map<std::string, std::string> & properties);
-  void recv_updateProperties();
+  void start(const std::map<std::string, std::string> & properties);
+  void send_start(const std::map<std::string, std::string> & properties);
+  void recv_start();
   void stop();
   void send_stop();
   void recv_stop();
@@ -411,13 +411,13 @@ class IExecutorServerModuleProcessor : public ::apache::thrift::TDispatchProcess
   typedef  void (IExecutorServerModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
-  void process_updateProperties(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_start(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_stop(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_test(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IExecutorServerModuleProcessor(::std::shared_ptr<IExecutorServerModuleIf> iface) :
     iface_(iface) {
-    processMap_["updateProperties"] = &IExecutorServerModuleProcessor::process_updateProperties;
+    processMap_["start"] = &IExecutorServerModuleProcessor::process_start;
     processMap_["stop"] = &IExecutorServerModuleProcessor::process_stop;
     processMap_["test"] = &IExecutorServerModuleProcessor::process_test;
   }
@@ -448,13 +448,13 @@ class IExecutorServerModuleMultiface : virtual public IExecutorServerModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void updateProperties(const std::map<std::string, std::string> & properties) {
+  void start(const std::map<std::string, std::string> & properties) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->updateProperties(properties);
+      ifaces_[i]->start(properties);
     }
-    ifaces_[i]->updateProperties(properties);
+    ifaces_[i]->start(properties);
   }
 
   void stop() {
@@ -507,9 +507,9 @@ class IExecutorServerModuleConcurrentClient : virtual public IExecutorServerModu
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void updateProperties(const std::map<std::string, std::string> & properties);
-  int32_t send_updateProperties(const std::map<std::string, std::string> & properties);
-  void recv_updateProperties(const int32_t seqid);
+  void start(const std::map<std::string, std::string> & properties);
+  int32_t send_start(const std::map<std::string, std::string> & properties);
+  void recv_start(const int32_t seqid);
   void stop();
   int32_t send_stop();
   void recv_stop(const int32_t seqid);

@@ -20,25 +20,29 @@ int parseInt(std::shared_ptr<boost::process::ipstream> &in) {
 }
 
 void Ignis::start() {
-    if(!MPI::Is_initialized()){
-        MPI::Init();
+    try {
+        if (!MPI::Is_initialized()) {
+            MPI::Init();
+        }
+        std::lock_guard<std::mutex> lock(mutex);
+        if (clientPool) {
+            return;
+        }
+        backend_out = std::make_shared<boost::process::ipstream>();
+        backend_in = std::make_shared<boost::process::opstream>();
+        backend = std::make_shared<boost::process::child>(boost::process::search_path("ignis-backend"),
+                                                          boost::process::std_out > (*backend_out),
+                                                          boost::process::std_err > stderr,
+                                                          boost::process::std_in < (*backend_in));
+        int backend_port = parseInt(backend_out);
+        int backend_compression = parseInt(backend_out);
+        int callback_port = parseInt(backend_out);
+        int callback_compression = parseInt(backend_out);
+        callback = std::make_shared<ignis::driver::core::ICallBack>(callback_port, callback_compression);
+        clientPool = std::make_shared<core::IClientPool>(backend_port, backend_compression);
+    }catch (executor::core::exception::IException& ex){
+        throw IDriverException(ex.what(), ex.toString());
     }
-    std::lock_guard<std::mutex> lock(mutex);
-    if (clientPool) {
-        return;
-    }
-    backend_out = std::make_shared<boost::process::ipstream>();
-    backend_in = std::make_shared<boost::process::opstream>();
-    backend = std::make_shared<boost::process::child>(boost::process::search_path("ignis-backend"),
-                                                      boost::process::std_out > (*backend_out),
-                                                      boost::process::std_err > stderr,
-                                                      boost::process::std_in < (*backend_in));
-    int backend_port = parseInt(backend_out);
-    int backend_compression = parseInt(backend_out);
-    int callback_port = parseInt(backend_out);
-    int callback_compression = parseInt(backend_out);
-    clientPool = std::make_shared<core::IClientPool>(backend_port, backend_compression);
-    callback = std::make_shared<ignis::driver::core::ICallBack>(callback_port, callback_compression);
 }
 
 void Ignis::stop() {

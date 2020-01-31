@@ -13,7 +13,7 @@ IExecutorServerModule::IExecutorServerModule(std::shared_ptr<IExecutorData> &exe
 
 IExecutorServerModule::~IExecutorServerModule() {}
 
-void IExecutorServerModule::start(TProcessor &procesor, int port, int compression) {
+void IExecutorServerModule::serve(const std::string &name, int port, int compression) {
     if (!server) {
         auto threadManager = concurrency::ThreadManager::newSimpleThreadManager(1);
 
@@ -21,24 +21,30 @@ void IExecutorServerModule::start(TProcessor &procesor, int port, int compressio
         threadManager->start();
 
         server = std::make_shared<apache::thrift::server::TThreadPoolServer>(
-                std::shared_ptr<apache::thrift::TProcessor>(&procesor, [](apache::thrift::TProcessor *) {}),
+                processor = std::make_shared<apache::thrift::TMultiplexedProcessor>(),
                 std::make_shared<apache::thrift::transport::TServerSocket>(port),
                 std::make_shared<transport::IZlibTransportFactory>(compression),
                 std::make_shared<apache::thrift::protocol::TCompactProtocolFactory>(),
                 threadManager
         );
+        std::shared_ptr<IExecutorServerModule> this_shared(this, [](IExecutorServerModule *) {});
+        processor->registerProcessor(name,std::make_shared<rpc::executor::IExecutorServerModuleProcessor>(this_shared));
+
         server->serve();
         server.reset();
         threadManager->stop();
     }
 }
 
-void IExecutorServerModule::updateProperties(const std::map<std::string, std::string> &properties) {
+void IExecutorServerModule::start(const std::map<std::string, std::string> &properties) {
     IGNIS_RPC_TRY()
         executor_data->getContext().props().insert(properties.begin(), properties.end());
         executor_data->setCores(executor_data->getProperties().cores());
+        createServices(*processor);
     IGNIS_RPC_CATCH()
 }
+
+void IExecutorServerModule::createServices(TMultiplexedProcessor &processor) {}
 
 void IExecutorServerModule::stop() {
     IGNIS_RPC_TRY()
