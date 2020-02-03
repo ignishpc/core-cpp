@@ -3,10 +3,26 @@
 #include <thrift/transport/TSocket.h>
 #include <thrift/transport/TZlibTransport.h>
 #include <thrift/protocol/TMultiplexedProtocol.h>
+#include <thread>
+#include <chrono>
 
 using namespace ignis::driver::core;
 using namespace ignis::rpc::driver;
 using namespace apache::thrift;
+
+
+class DisableThriftLog {
+
+public:
+
+    static void nothing(const char *msg) {}
+
+    DisableThriftLog() { apache::thrift::GlobalOutput.setOutputFunction(&DisableThriftLog::nothing); }
+
+    virtual ~DisableThriftLog() {
+        apache::thrift::GlobalOutput.setOutputFunction(&apache::thrift::TOutput::errorTimeWrapper);
+    }
+};
 
 IClient::IClient(int port, int compression) :
         transport(std::make_shared<transport::TZlibTransport>(
@@ -29,6 +45,7 @@ IClient::IClient(int port, int compression) :
                 std::make_shared<protocol::TMultiplexedProtocol>(protocol, "IDataFrame")
         )) {
 
+    DisableThriftLog disable;
     for (int i = 0; i < 10; i++) {
         try {
             transport->open();
@@ -37,6 +54,7 @@ IClient::IClient(int port, int compression) :
             if (i == 9) {
                 throw ex;
             }
+            std::this_thread::sleep_for (std::chrono::seconds(i));
         }
     }
 }
