@@ -16,7 +16,7 @@ using namespace ignis::rpc::executor;
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();
-    if (argc != 2) {
+    if (argc < 3) {
         IGNIS_LOG(error) << "Executor need a server port and compression as argument";
         return EXIT_FAILURE;
     }
