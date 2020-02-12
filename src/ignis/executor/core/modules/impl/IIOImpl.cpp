@@ -76,7 +76,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
         size_t ex_chunk = size / executors;
         size_t ex_chunk_init = executorId * ex_chunk;
         size_t ex_chunk_end = ex_chunk_init + ex_chunk;
-        size_t minPartitionSize = executor_data->getProperties().minPartitionSize();
+        size_t minPartitionSize = executor_data->getProperties().partitionMinimal();
 
 
         IGNIS_LOG(info) << "IO: file has " << size << " Bytes";

@@ -17,7 +17,7 @@ namespace ignis {
 
                 int cores() { return getNumber("ignis.executor.cores"); }
 
-                int64_t minPartitionSize() { return getNumber("ignis.partition.minSize"); }
+                int64_t partitionMinimal() { return getNumber("ignis.partition.minimal"); }
 
                 int64_t sortSamples() { return getNumber("ignis.modules.sort.samples"); }
 
