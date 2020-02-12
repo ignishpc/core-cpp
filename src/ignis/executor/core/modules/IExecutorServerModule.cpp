@@ -29,8 +29,9 @@ void IExecutorServerModule::serve(const std::string &name, int port, int compres
         );
         std::shared_ptr<IExecutorServerModule> this_shared(this, [](IExecutorServerModule *) {});
         processor->registerProcessor(name,std::make_shared<rpc::executor::IExecutorServerModuleProcessor>(this_shared));
-
+        IGNIS_LOG(info) << "ServerModule: cpp executor started";
         server->serve();
+        IGNIS_LOG(info) << "ServerModule: cpp executor stopped";
         server.reset();
         threadManager->stop();
     }
@@ -41,6 +42,7 @@ void IExecutorServerModule::start(const std::map<std::string, std::string> &prop
         executor_data->getContext().props().insert(properties.begin(), properties.end());
         executor_data->setCores(executor_data->getProperties().cores());
         createServices(*processor);
+        IGNIS_LOG(info) << "ServerModule: cpp executor ready";
     IGNIS_RPC_CATCH()
 }
 
