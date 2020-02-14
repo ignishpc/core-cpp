@@ -17,7 +17,7 @@ namespace ignis {
 
                 int cores() { return getNumber("ignis.executor.cores"); }
 
-                int64_t partitionMinimal() { return getNumber("ignis.partition.minimal"); }
+                int64_t partitionMinimal() { return getSize("ignis.partition.minimal"); }
 
                 int64_t sortSamples() { return getNumber("ignis.modules.sort.samples"); }
 
@@ -48,6 +48,8 @@ namespace ignis {
                 bool getBoolean(const std::string &key);
 
             private:
+                void parserError(std::string key, std::string value, size_t pos);
+
                 std::unordered_map<std::string, std::string> &properties;
 
             };

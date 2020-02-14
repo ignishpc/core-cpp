@@ -15,11 +15,11 @@ IModule::~IModule() {}
 
 std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromPartition() {
     IGNIS_LOG(info) << "Cheeking partition type";
-    auto type = executor_data->getPartitions<int>()->elemType();
+    auto type = executor_data->getPartitions<int>(false)->elemType();
     if (type.isVoid()) {
         throw exception::ILogicError("The C ++ executor cannot identify the type of this partition");
     }
-    return executor_data->getType(type.getStandardName());
+    return typeFromName(type.getStandardName());
 }
 
 std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromHeader(const std::string &header) {
