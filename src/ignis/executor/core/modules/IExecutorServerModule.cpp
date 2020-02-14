@@ -57,5 +57,6 @@ void IExecutorServerModule::stop() {
 }
 
 bool IExecutorServerModule::test() {
+    IGNIS_LOG(info) << "ServerModule: test ok";
     return true;
 }
