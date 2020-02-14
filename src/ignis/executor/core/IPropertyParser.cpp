@@ -21,7 +21,7 @@ int64_t IPropertyParser::getNumber(const std::string &key) {
     std::string &value = getString(key);
     try {
         size_t end;
-        int64_t n = stol(value);
+        int64_t n = stol(value, &end);
         if(value.length() != end){
             parserError(key, value, end);
         }
