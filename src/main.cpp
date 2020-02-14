@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
             auto io = std::make_shared<IIOModule>(executor_data);
             processor.registerProcessor("IIO", std::make_shared<IIOModuleProcessor>(io));
             auto cache_context = std::make_shared<ICacheContextModule>(executor_data);
-            processor.registerProcessor("ICacheContex", std::make_shared<ICacheContextModuleProcessor>(cache_context));
+            processor.registerProcessor("ICacheContext", std::make_shared<ICacheContextModuleProcessor>(cache_context));
             auto comm = std::make_shared<ICommModule>(executor_data);
             processor.registerProcessor("IComm", std::make_shared<ICommModuleProcessor>(comm));
         }
