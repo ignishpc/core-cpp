@@ -15,7 +15,7 @@ IModule::~IModule() {}
 
 std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromPartition() {
     IGNIS_LOG(info) << "Cheeking partition type";
-    auto type = executor_data->getPartitions<int>(false)->elemType();
+    auto type = executor_data->getPartitions<int>(true)->elemType();
     if (type.isVoid()) {
         throw exception::ILogicError("The C ++ executor cannot identify the type of this partition");
     }
