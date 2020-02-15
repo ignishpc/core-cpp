@@ -48,7 +48,7 @@ size_t IPropertyParser::getSize(const std::string &key) {
     size_t len = value.length();
     while (i < len && value[i] <= ' ') {}
     while (i < len) {
-        if (value[i] >= '0' || value[i] <= '9') {
+        if (value[i] >= '0' && value[i] <= '9') {
             i++;
         } else if (!decimal && (value[i] == '.' || value[i] == ',')) {
             i++;
@@ -68,7 +68,7 @@ size_t IPropertyParser::getSize(const std::string &key) {
         }
     }
     if (i < len) {
-        exp = UNITS.find(tolower(value[i])) + 1;
+        exp = UNITS.find(toupper(value[i])) + 1;
         if (exp > 0) {
             i++;
         }
