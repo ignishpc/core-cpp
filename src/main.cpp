@@ -8,6 +8,7 @@
 #include "ignis/executor/core/modules/IIOModule.h"
 #include "ignis/executor/core/modules/ICacheContextModule.h"
 #include "ignis/executor/core/modules/ICommModule.h"
+#include "ignis/executor/core/ICoreTypes.h"
 
 
 using namespace ignis::executor::core;
@@ -46,6 +47,11 @@ int main(int argc, char *argv[]) {
             processor.registerProcessor("ICacheContext", std::make_shared<ICacheContextModuleProcessor>(cache_context));
             auto comm = std::make_shared<ICommModule>(executor_data);
             processor.registerProcessor("IComm", std::make_shared<ICommModuleProcessor>(comm));
+
+            for(auto& dtype : ICoreTypes::defaultTypes()){
+                executor_data->registerType(dtype);
+            }
+
         }
     };
 
