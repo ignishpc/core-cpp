@@ -139,12 +139,12 @@ namespace ignis {
                 private:
 
                     template<typename C>
-                    void sort_check(modules::impl::ISortImpl &impl, decltype(&C::operator<) *val, bool ascending) {
+                    void sort_check(modules::impl::ISortImpl &impl, std::less<C> *val, bool ascending) {
                         impl.sort<Tp>(ascending);
                     }
 
                     template<typename C>
-                    void sort_check(modules::impl::ISortImpl &impl, decltype(&C::operator<) *val, bool ascending,
+                    void sort_check(modules::impl::ISortImpl &impl, std::less<C> *val, bool ascending,
                                     int64_t numPartitions) {
                         impl.sort<Tp>(ascending, numPartitions);
                     }
