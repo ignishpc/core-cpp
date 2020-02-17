@@ -188,6 +188,7 @@ TARGET_LINK_LIBRARIES(igniscore_types igniscore)
 TARGET_LINK_LIBRARIES(ignis-cpp igniscore igniscore_types)
 
 install(TARGETS igniscore LIBRARY DESTINATION lib)
+install(TARGETS igniscore_types LIBRARY DESTINATION lib)
 install(TARGETS ignis-cpp RUNTIME DESTINATION bin)
 install(DIRECTORY ignis
         DESTINATION include/
