@@ -22,6 +22,10 @@ std::vector<int> IMpi::displs(const std::vector<int> &sz) {
     return std::move(d);
 }
 
+const MPI::Intracomm &IMpi::native(){
+    return comm;
+}
+
 std::vector<int> IMpi::szVector(const std::vector<std::pair<int, int>> &elems_szv) {
     std::vector<int> szv;
     szv.reserve(elems_szv.size());

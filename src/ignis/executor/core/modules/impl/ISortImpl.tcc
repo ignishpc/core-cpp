@@ -60,12 +60,20 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         IGNIS_LOG(info) << "Sort: sorting " << input->partitions() << " partitions locally";
         parallelLocalSort(*input, comparator);
 
+        int64_t localPartitions = input->partitions();
+        int64_t totalPartitions;
+        executor_data->mpi().native().Allreduce(&localPartitions, &totalPartitions, 1, MPI::LONG_INT, MPI::SUM);
+        if (totalPartitions < 2) {
+            executor_data->setPartitions(input);
+            return;
+        }
+
         /*Generates pivots to separate the elements in order*/
         int64_t samples = executor_data->getProperties().sortSamples();
         if (partitions > 0) {
             samples *= partitions / input->partitions() + 1;
         }
-        IGNIS_LOG(info) << "Sort: selecting pivots";
+        IGNIS_LOG(info) << "Sort: selecting " << samples << " pivots";
         auto pivots = selectPivots(*input, samples);
 
         IGNIS_LOG(info) << "Sort: collecting pivots";
@@ -76,13 +84,13 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
             group->add(pivots);
             parallelLocalSort(*group, comparator);
             if (partitions > 0) {
-                samples = partitions;
+                samples = partitions  - 1;
             } else {
-                samples = pivots->size() / executor_data->getProperties().sortSamples();
+                samples = totalPartitions  - 1;
             }
 
-            IGNIS_LOG(info) << "Sort: selecting pivots ranges";
-            pivots = selectPivots(*group, samples - 1);
+            IGNIS_LOG(info) << "Sort: selecting " << samples << " partition pivots";
+            pivots = selectPivots(*group, samples);
         }
 
         IGNIS_LOG(info) << "Sort: broadcasting pivots ranges";

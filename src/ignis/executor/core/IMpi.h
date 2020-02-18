@@ -27,6 +27,8 @@ namespace ignis {
 
                 int executors();
 
+                const MPI::Intracomm &native();
+
                 template<typename Tp>
                 bool isPrimitiveType();
 

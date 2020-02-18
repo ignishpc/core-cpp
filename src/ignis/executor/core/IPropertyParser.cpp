@@ -22,7 +22,7 @@ int64_t IPropertyParser::getNumber(const std::string &key) {
     try {
         size_t end;
         int64_t n = stol(value, &end);
-        if(value.length() != end){
+        if (value.length() != end) {
             parserError(key, value, end);
         }
         return n;
@@ -31,7 +31,37 @@ int64_t IPropertyParser::getNumber(const std::string &key) {
     }
 }
 
-void IPropertyParser::parserError(std::string key, std::string value, size_t pos) {
+int64_t IPropertyParser::getMinNumber(const std::string &key, const int64_t &min) {
+    auto value = getNumber(key);
+    if (value < min) {
+        std::stringstream ss;
+        ss << key << " error " << value << " is less than " << value;
+        throw exception::IInvalidArgument(ss.str());
+    }
+    return value;
+}
+
+int64_t IPropertyParser::getMaxNumber(const std::string &key, const int64_t &max) {
+    auto value = getNumber(key);
+    if (value > max) {
+        std::stringstream ss;
+        ss << key << " error " << value << " is greater than " << value;
+        throw exception::IInvalidArgument(ss.str());
+    }
+    return value;
+}
+
+int64_t IPropertyParser::getRangeNumber(const std::string &key, const int64_t &min, const int64_t &max) {
+    auto value = getMinNumber(key, min);
+    if (value > max) {
+        std::stringstream ss;
+        ss << key << " error " << value << " is greater than " << value;
+        throw exception::IInvalidArgument(ss.str());
+    }
+    return value;
+}
+
+void IPropertyParser::parserError(const std::string &key, const std::string &value, size_t pos) {
     std::stringstream ss;
     ss << key << " parsing error " << value[pos] << "(" << pos + 1 << ") in " << value;
     throw exception::IInvalidArgument(ss.str());

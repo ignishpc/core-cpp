@@ -3,6 +3,7 @@
 #define IGNIS_IPROPERTYPARSER_H
 
 #include <unordered_map>
+#include "exception/IInvalidArgument.h"
 
 namespace ignis {
     namespace executor {
@@ -19,15 +20,15 @@ namespace ignis {
 
                 int64_t partitionMinimal() { return getSize("ignis.partition.minimal"); }
 
-                int64_t sortSamples() { return getNumber("ignis.modules.sort.samples"); }
+                int64_t sortSamples() { return getMinNumber("ignis.modules.sort.samples", 1); }
 
                 int64_t ioOverwrite() { return getBoolean("ignis.modules.io.overwrite"); }
 
-                int8_t ioCompression() { return getNumber("ignis.modules.io.compression"); }
+                int8_t ioCompression() { return getRangeNumber("ignis.modules.io.compression", 0, 9); }
 
-                int8_t msgCompression() { return getNumber("ignis.transport.compression"); }
+                int8_t msgCompression() { return getRangeNumber("ignis.transport.compression", 0, 9); }
 
-                int8_t partitionCompression() { return getNumber("ignis.partition.compression"); }
+                int8_t partitionCompression() { return getRangeNumber("ignis.partition.compression", 0, 9); }
 
                 bool nativeSerialization() { return getString("ignis.partition.serialization") == "native"; }
 
@@ -43,12 +44,18 @@ namespace ignis {
 
                 int64_t getNumber(const std::string &key);
 
+                int64_t getMinNumber(const std::string &key, const int64_t &min);
+
+                int64_t getMaxNumber(const std::string &key, const int64_t &max);
+
+                int64_t getRangeNumber(const std::string &key, const int64_t &min, const int64_t &max);
+
                 size_t getSize(const std::string &key);
 
                 bool getBoolean(const std::string &key);
 
             private:
-                void parserError(std::string key, std::string value, size_t pos);
+                void parserError(const std::string &key, const std::string &value, size_t pos);
 
                 std::unordered_map<std::string, std::string> &properties;
 

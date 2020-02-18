@@ -80,24 +80,26 @@ namespace ignis {
                         impl.loadFromDisk<Tp>(group);
                     }
 
-                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl){
+                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl) {
                         return impl.getPartitions<Tp>();
                     }
 
-                    virtual void setPartitions(modules::impl::ICommImpl &impl, const std::vector<std::string> &partitions){
+                    virtual void
+                    setPartitions(modules::impl::ICommImpl &impl, const std::vector<std::string> &partitions) {
                         impl.setPartitions<Tp>(partitions);
                     }
 
-                    virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id){
+                    virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id) {
                         impl.driverGather<Tp>(id);
                     }
 
-                    virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id){
+                    virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id) {
                         impl.driverGather0<Tp>(id);
                     }
 
-                    virtual void driverScatter(modules::impl::ICommImpl &impl, const std::string &id, const int64_t dataId){
-                        impl.driverScatter<Tp>(id,dataId);
+                    virtual void
+                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, const int64_t dataId) {
+                        impl.driverScatter<Tp>(id, dataId);
                     }
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {
@@ -139,12 +141,12 @@ namespace ignis {
                 private:
 
                     template<typename C>
-                    void sort_check(modules::impl::ISortImpl &impl, std::less<C> *val, bool ascending) {
+                    void sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val, bool ascending) {
                         impl.sort<Tp>(ascending);
                     }
 
                     template<typename C>
-                    void sort_check(modules::impl::ISortImpl &impl, std::less<C> *val, bool ascending,
+                    void sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val, bool ascending,
                                     int64_t numPartitions) {
                         impl.sort<Tp>(ascending, numPartitions);
                     }
