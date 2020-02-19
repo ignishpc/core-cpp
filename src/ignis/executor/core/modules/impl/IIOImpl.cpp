@@ -28,8 +28,7 @@ std::string IIOImpl::partitionFileName(const std::string &path, int64_t index) {
 
     auto str_index = std::to_string(index);
     auto zeros = std::max(6 - (int) str_index.size(), 0);
-    auto name_path = path + "/part" + std::string(zeros, '0') + str_index;
-
+    return path + "/part" + std::string(zeros, '0') + str_index;
 }
 
 std::ifstream IIOImpl::openFileRead(const std::string &path) {
