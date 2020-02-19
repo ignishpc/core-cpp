@@ -10,89 +10,90 @@
 #include <map>
 #include <unordered_map>
 #include <memory>
+#include "ignis/executor/api/IReadIterator.h"
 
 
 template<>
 struct ignis::executor::core::io::IPrinterType<bool> {
     inline void operator()(const bool &b, std::ostream &out, size_t level) {
-        out << b;
+        out << tab(level) << b;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<int8_t> {
     inline void operator()(const int8_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<uint8_t> {
     inline void operator()(const uint8_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<int16_t> {
     inline void operator()(const int16_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<uint16_t> {
     inline void operator()(const uint16_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<int32_t> {
     inline void operator()(const int32_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<uint32_t> {
     inline void operator()(const uint32_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<int64_t> {
     inline void operator()(const int64_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<uint64_t> {
     inline void operator()(const uint64_t &i, std::ostream &out, size_t level) {
-        out << i;
+        out << tab(level) << i;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<float> {
     inline void operator()(const float &d, std::ostream &out, size_t level) {
-        out << d;
+        out << tab(level) << d;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<double> {
     inline void operator()(const double &d, std::ostream &out, size_t level) {
-        out << d;
+        out << tab(level) << d;
     }
 };
 
 template<>
 struct ignis::executor::core::io::IPrinterType<std::string> {
     inline void operator()(const std::string &s, std::ostream &out, size_t level) {
-        out << s;
+        out << tab(level) << s;
     }
 };
 
@@ -230,9 +231,9 @@ template<typename _T1, typename _T2>
 struct ignis::executor::core::io::IPrinterType<std::pair<_T1, _T2>> {
     inline void operator()(const std::pair<_T1, _T2> &p, std::ostream &out, size_t level) {
         out << tab(level) << "(";
-        IPrinterType<_T1>()(p.first, out, level + 1);
+        IPrinterType<_T1>()(p.first, out, level);
         out << ", ";
-        IPrinterType<_T2>()(p.second, out, level + 1);
+        IPrinterType<_T2>()(p.second, out, level);
         out << ")";
     }
 };
@@ -250,3 +251,19 @@ struct ignis::executor::core::io::IPrinterType<std::shared_ptr<_Tp>> {
         IPrinterType<_Tp>()(*v, out, level);
     }
 };
+
+template<typename _Tp>
+struct ignis::executor::core::io::IPrinterType<ignis::executor::api::IReadIterator<_Tp>> {
+    inline void operator()(const ignis::executor::api::IReadIterator<_Tp> &it, std::ostream &out, size_t level) {
+        auto &noconst_it = const_cast<ignis::executor::api::IReadIterator<_Tp> &>(it);
+        if (noconst_it.hasNext()) {
+            IPrinterType<_Tp>()(noconst_it.next(), out, level + 1);
+        }
+
+        while (noconst_it.hasNext()) {
+            out << std::endl;
+            IPrinterType<_Tp>()(noconst_it.next(), out, level + 1);
+        }
+    }
+};
+

@@ -109,11 +109,8 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
             auto file = openFileWrite(file_name);
             IGNIS_LOG(info) << "IO: saving text file " << file_name;
             auto &part = *(*group)[p];
-            auto reader = part.readIterator();
-            io::IPrinter<Tp> printer;
-            for (int64_t i = 0; i < part.size(); i++) {
-                printer(reader->next(), file);
-            }
+            io::IPrinter<api::IReadIterator<Tp>> printer;
+            printer(*part.readIterator(), file);
         }
     IGNIS_CATCH()
 }
@@ -129,7 +126,6 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
             auto file = openFileWrite(file_name + ".json");
             IGNIS_LOG(info) << "IO: saving json file " << file_name;
             auto &part = *(*group)[p];
-            auto reader = part.readIterator();
             io::IJsonWriter<api::IReadIterator<Tp>> writer;
             writer(file, *part.readIterator(), pretty);
         }
