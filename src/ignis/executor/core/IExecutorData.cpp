@@ -72,10 +72,14 @@ void IExecutorData::reloadLibraries(){
         IGNIS_LOG(info) << "Function backup found, loading";
         std::ifstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak");
         rpc::ISource source;
+        std::set<std::string> loaded;
         while (!backup.eof()) {
             std::getline(backup, source.obj.name, '\n');
             try {
-                loadLibrary(source);
+                if(loaded.find(source.obj.name) == loaded.end()){
+                    loadLibrary(source);
+                    loaded.insert(source.obj.name);
+                }
             } catch (exception::IException &ex) {
                 IGNIS_LOG(error) << ex.toString();
             } catch (std::exception &ex) {
