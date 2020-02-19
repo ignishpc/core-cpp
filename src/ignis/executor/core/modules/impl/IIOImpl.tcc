@@ -110,7 +110,7 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
             IGNIS_LOG(info) << "IO: saving text file " << file_name;
             auto &part = *(*group)[p];
             io::IPrinter<api::IReadIterator<Tp>> printer;
-            printer(*part.readIterator(), file);
+            printer(file, *part.readIterator());
         }
     IGNIS_CATCH()
 }

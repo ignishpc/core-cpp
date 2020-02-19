@@ -13,11 +13,11 @@ namespace ignis {
         namespace core {
             namespace io {
 
-                std::string inline tab(size_t n) { return std::string(n, '\t'); }
+                std::string inline tab(int64_t n) { return std::string(n > 0 ? n : 0 , '\t'); }
 
                 template<typename T>
                 struct IPrinterType {
-                    inline void operator()(const T &b, std::ostream &out, size_t level) {
+                    inline void operator()(std::ostream &out, const T &b, int64_t level) {
                         throw exception::ILogicError(
                                 "IPrinterType not implemented for " + RTTInfo::from<T>().getStandardName());
                     }
@@ -26,8 +26,8 @@ namespace ignis {
                 template<typename T>
                 class IPrinter {
                 public:
-                    virtual void operator()(const T &b, std::ostream &out) {
-                        printer(b, out, 0);
+                    virtual void operator()(std::ostream &out, const T &b) {
+                        printer(out, b, -1);//-1 no ident first array
                     }
 
                 private:
