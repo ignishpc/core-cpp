@@ -46,7 +46,7 @@ std::ifstream IIOImpl::openFileRead(const std::string &path) {
 }
 
 std::ofstream IIOImpl::openFileWrite(const std::string &path) {
-    IGNIS_LOG(info) << "IO: opening file " << path;
+    IGNIS_LOG(info) << "IO: creating file " << path;
     if (boost::filesystem::exists(path)) {
         if (executor_data->getProperties().ioOverwrite()) {
             IGNIS_LOG(warning) << "IO: " << path << " already exists";
@@ -61,7 +61,7 @@ std::ofstream IIOImpl::openFileWrite(const std::string &path) {
     if (!file.good()) {
         throw exception::IInvalidArgument(path + " cannot be opened");
     }
-    IGNIS_LOG(info) << "IO: file opening successful";
+    IGNIS_LOG(info) << "IO: file created successful";
     return std::move(file);
 }
 
