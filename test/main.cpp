@@ -1,6 +1,7 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <boost/filesystem.hpp>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/BriefTestProgressListener.h>
@@ -51,14 +52,16 @@ int main(int argc, char *argv[]) {
     MPI::Init(argc, argv);
     int rank = MPI::COMM_WORLD.Get_rank();
     bool parallel = MPI::COMM_WORLD.Get_size() > 1;
+    std::ofstream logFile;
+    std::streambuf* bak[2] = {std::cerr.rdbuf(), std::cout.rdbuf()};
     if(parallel) {
         std::string wd = "np" + std::to_string(rank);
-        ::mkdir(wd.c_str(), 0);
+        boost::filesystem::create_directory(wd);
         ::chdir(wd.c_str());
         if (rank > 0) {
-            int fout = ::open("test.log", O_RDWR | O_CREAT | O_TRUNC);
-            ::dup2(fout, STDOUT_FILENO);
-            ::dup2(fout, STDERR_FILENO);
+            logFile.open("test.log", std::ofstream::trunc);
+            std::cerr.rdbuf(logFile.rdbuf());
+            std::cout.rdbuf(logFile.rdbuf());
         }
     }
     IGNIS_LOG_INIT();
@@ -79,10 +82,12 @@ int main(int argc, char *argv[]) {
     runner.run(results);
     compileroutputter.write();
     MPI::Finalize();
+
     if (!parallel) {
         std::cerr << "WARNING: mpi test skipped" << std::endl;
     }
-    if (rank > 0) { close(STDOUT_FILENO); }
+    std::cerr.rdbuf(bak[0]);
+    std::cout.rdbuf(bak[1]);
     return result_collector.wasSuccessful() ? 0 : 1;
 }
 

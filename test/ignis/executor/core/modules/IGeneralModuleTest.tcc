@@ -16,7 +16,6 @@ void IGeneralModuleTestClass::tearDown() {}
 template<typename Tp>
 void IGeneralModuleTestClass::map(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
-    auto np = executor_data->getContext().executors();
     executor_data->setCores(cores);
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);
@@ -32,7 +31,6 @@ void IGeneralModuleTestClass::map(const std::string &name, int cores, const std:
 template<typename Tp>
 void IGeneralModuleTestClass::filter(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
-    auto np = executor_data->getContext().executors();
     executor_data->setCores(cores);
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);
@@ -50,7 +48,6 @@ void IGeneralModuleTestClass::filter(const std::string &name, int cores, const s
 template<typename Tp>
 void IGeneralModuleTestClass::flatmap(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
-    auto np = executor_data->getContext().executors();
     executor_data->setCores(cores);
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);
@@ -67,7 +64,6 @@ void IGeneralModuleTestClass::flatmap(const std::string &name, int cores, const 
 template<typename Tp>
 void IGeneralModuleTestClass::mapPartitions(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
-    auto np = executor_data->getContext().executors();
     executor_data->setCores(cores);
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);
@@ -84,7 +80,6 @@ template<typename Tp>
 void
 IGeneralModuleTestClass::mapPartitionsWithIndex(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
-    auto np = executor_data->getContext().executors();
     executor_data->setCores(cores);
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);

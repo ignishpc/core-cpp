@@ -13,6 +13,7 @@ IModuleTest::IModuleTest() : executor_data(std::make_shared<IExecutorData>()), l
     props["ignis.transport.compression"] = "6";
     props["ignis.partition.compression"] = "6";
     props["ignis.partition.serialization"] = "native";
+    props["ignis.job.directory"] = "./";
 }
 
 ignis::rpc::ISource IModuleTest::newSource(const std::string &name) {

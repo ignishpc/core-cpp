@@ -62,7 +62,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
 
         int64_t localPartitions = input->partitions();
         int64_t totalPartitions;
-        executor_data->mpi().native().Allreduce(&localPartitions, &totalPartitions, 1, MPI::LONG_INT, MPI::SUM);
+        executor_data->mpi().native().Allreduce(&localPartitions, &totalPartitions, 1, MPI::LONG_LONG, MPI::SUM);
         if (totalPartitions < 2) {
             executor_data->setPartitions(input);
             return;
