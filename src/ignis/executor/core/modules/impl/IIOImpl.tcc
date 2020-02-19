@@ -82,6 +82,7 @@ void IIOImplClass::partitionJsonFile(const std::string &path, int64_t first, int
 template<typename Tp>
 void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression, int64_t first) {
     IGNIS_TRY()
+        IGNIS_LOG(info) << "IO: saving as object file";
         auto group = executor_data->getPartitions<Tp>();
 
         for (int64_t p = 0; p < group->partitions(); p++) {
@@ -100,6 +101,7 @@ void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression,
 template<typename Tp>
 void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
     IGNIS_TRY()
+        IGNIS_LOG(info) << "IO: saving as text file";
         auto group = executor_data->getPartitions<Tp>();
 
         for (int64_t p = 0; p < group->partitions(); p++) {
@@ -119,6 +121,7 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
 template<typename Tp>
 void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool pretty) {
     IGNIS_TRY()
+        IGNIS_LOG(info) << "IO: saving as json file";
         auto group = executor_data->getPartitions<Tp>();
 
         for (int64_t p = 0; p < group->partitions(); p++) {

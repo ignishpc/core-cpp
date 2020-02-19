@@ -5,10 +5,10 @@
 using namespace ignis::executor::core::modules::impl;
 
 
-ICacheImpl::ICacheImpl(std::shared_ptr<IExecutorData> &executorData) : IBaseImpl(executorData) {}
+ICacheImpl::ICacheImpl(std::shared_ptr<IExecutorData> &executorData) : IBaseImpl(executorData), next_context_id(11) {}
 
-std::vector<std::vector<std::string>> ICacheImpl::getCacheFromDisk(){
-     auto cache = fileCache();
+std::vector<std::vector<std::string>> ICacheImpl::getCacheFromDisk() {
+    auto cache = fileCache();
     std::vector<std::vector<std::string>> groups;
     if (boost::filesystem::exists(cache)) {
         IGNIS_LOG(info) << "CacheContext: cache file found, loading";
@@ -55,15 +55,19 @@ void ICacheImpl::loadContext(const int64_t id) {
     IGNIS_TRY()
         executor_data->clearVariables();
         auto value = context.find(id);
-        if (value != context.end() && value->second.get() == executor_data->getPartitions<char>(true).get()) {
+        bool found = value != context.end();
+
+        if (found && value->second.get() == executor_data->getPartitions<char>(true).get()) {
+            context.erase(value);
             return;
         }
         IGNIS_LOG(info) << "CacheContext: loading context " << id;
 
-        if (value == context.end()) {
+        if (!found) {
             throw exception::IInvalidArgument("context " + std::to_string(id) + " not found");
         }
         executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
+        context.erase(value);
     IGNIS_CATCH()
 }
 
