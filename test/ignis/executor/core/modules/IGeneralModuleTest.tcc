@@ -106,6 +106,20 @@ void  IGeneralModuleTestClass::sortTest(const std::string &name, int cores, cons
     for (int i = 1; i < result.size(); i++) {
         CPPUNIT_ASSERT_GREATEREQUAL(result[i - 1], result[i]);
     }
+
+    loadToPartitions(result, 1);
+
+    executor_data->mpi().gather(*((*executor_data->getPartitions<Tp>())[0]), 0);
+
+    result = getFromPartitions<Tp>();
+
+    if(executor_data->mpi().isRoot(0)){
+        CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());
+        std::sort (elems.begin(), elems.end());
+        for (int i = 0; i < result.size(); i++) {
+            CPPUNIT_ASSERT_EQUAL(elems[i], result[i]);
+        }
+    }
 }
 
 #undef IGeneralModuleTestClass

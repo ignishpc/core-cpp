@@ -19,6 +19,7 @@
 
 #include "ignis/executor/core/modules/IGeneralModuleTest.h"
 #include "ignis/executor/core/modules/IGeneralActionModuleTest.h"
+#include "ignis/executor/core/modules/IIOModuleTest.h"
 
 
 #define MPI_TEST "mpi_test"
@@ -46,6 +47,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IMpiTest<storage::IDiskPartition<int>>, MP
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::IGeneralModuleTest, MODULE_TEST);
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::IGeneralActionModuleTest, MODULE_TEST);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::IIOModuleTest, MODULE_TEST);
 
 
 int main(int argc, char *argv[]) {

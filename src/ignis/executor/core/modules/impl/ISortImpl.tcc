@@ -112,7 +112,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         }
 
         /*Sort final partitions*/
-        IGNIS_LOG(info) << "Sort: sorting again" << output->partitions() << " partitions locally";
+        IGNIS_LOG(info) << "Sort: sorting again " << output->partitions() << " partitions locally";
         parallelLocalSort(*output, comparator);
         executor_data->setPartitions(output);
     IGNIS_CATCH()

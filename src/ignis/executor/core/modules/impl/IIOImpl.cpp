@@ -80,13 +80,14 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
 
         IGNIS_LOG(info) << "IO: file has " << size << " Bytes";
 
-        if (executorId == executors - 1) {
-            ex_chunk_end = size;
-        } else {
-            file.seekg(ex_chunk_init);
+        if(executorId > 0) {
+            file.seekg(ex_chunk_init > 0 ? ex_chunk_init - 1: ex_chunk_init);
             int value;
             while ((value = file.get()) != '\n' && value != EOF);
             ex_chunk_init = file.tellg();
+            if (executorId == executors - 1) {
+                ex_chunk_end = size;
+            }
         }
 
         if (ex_chunk / minPartitionSize < minPartitions) {
@@ -100,15 +101,15 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
         size_t partitionInit = ex_chunk_init;
         size_t elements = 0;
         std::string buffer;
-
+        
         while (file.tellg() < ex_chunk_end) {
-            std::getline(file, buffer, '\n');
             if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
                 partition = executor_data->getPartitionTools().newPartition<std::string>();
                 write_iterator = partition->writeIterator();
                 partitionGroup->add(partition);
                 partitionInit = file.tellg();
             }
+            std::getline(file, buffer, '\n');
             elements++;
             write_iterator->write(buffer);
         }

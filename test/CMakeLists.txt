@@ -12,6 +12,9 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IGeneralActionModuleTest.tcc
         ignis/executor/core/modules/IGeneralModuleTest.h
         ignis/executor/core/modules/IGeneralModuleTest.tcc
+        ignis/executor/core/modules/IIOModuleTest.h
+        ignis/executor/core/modules/IIOModuleTest.tcc
+        ignis/executor/core/modules/IIOModuleTest.cpp
         ignis/executor/core/modules/IModuleTest.cpp
         ignis/executor/core/modules/IModuleTest.h
         ignis/executor/core/modules/IModuleTest.tcc
