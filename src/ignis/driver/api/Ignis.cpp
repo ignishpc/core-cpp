@@ -55,6 +55,7 @@ void Ignis::stop() {
         client->getBackendService().stop();
     }
     clientPool.reset();
+    backend->wait();
     backend.reset();
     backend_out.reset();
     backend_in.reset();
