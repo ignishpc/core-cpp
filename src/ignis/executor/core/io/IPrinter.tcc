@@ -103,14 +103,10 @@ struct ignis::executor::core::io::IPrinterType<std::vector<_Tp, _Alloc>> {
     inline void operator()(std::ostream &out, const std::vector<_Tp, _Alloc> &v, int64_t level) {
         auto begin = v.begin();
         auto end = v.end();
-        if (begin != end) {
-            IPrinterType<_Tp>()(out, *begin, level + 1);
-            begin++;
-        }
 
         while (begin != end) {
-            out << std::endl;
             IPrinterType<_Tp>()(out, *begin, level + 1);
+            out << std::endl;
             begin++;
         }
     }
@@ -121,14 +117,10 @@ struct ignis::executor::core::io::IPrinterType<std::list<_Tp, _Alloc>> {
     inline void operator()(std::ostream &out, const std::list<_Tp, _Alloc> &l, int64_t level) {
         auto begin = l.begin();
         auto end = l.end();
-        if (begin != end) {
-            IPrinterType<_Tp>()(out, *begin, level + 1);
-            begin++;
-        }
 
         while (begin != end) {
-            out << std::endl;
             IPrinterType<_Tp>()(out, *begin, level + 1);
+            out << std::endl;
             begin++;
         }
     }
@@ -139,14 +131,10 @@ struct ignis::executor::core::io::IPrinterType<std::forward_list<_Tp, _Alloc>> {
     inline void operator()(std::ostream &out, const std::forward_list<_Tp, _Alloc> &fl, int64_t level) {
         auto begin = fl.begin();
         auto end = fl.end();
-        if (begin != end) {
-            IPrinterType<_Tp>()(out, *begin, level + 1);
-            begin++;
-        }
 
         while (begin != end) {
-            out << std::endl;
             IPrinterType<_Tp>()(out, *begin, level + 1);
+            out << std::endl;
             begin++;
         }
     }
@@ -157,14 +145,10 @@ struct ignis::executor::core::io::IPrinterType<std::set<_Key, _Compare, _Alloc>>
     inline void operator()(std::ostream &out, const std::set<_Key, _Compare, _Alloc> &s, int64_t level) {
         auto begin = s.begin();
         auto end = s.end();
-        if (begin != end) {
-            IPrinterType<_Key>()(out, *begin, level + 1);
-            begin++;
-        }
 
         while (begin != end) {
-            out << std::endl;
             IPrinterType<_Key>()(out, *begin, level + 1);
+            out << std::endl;
             begin++;
         }
     }
@@ -175,14 +159,10 @@ struct ignis::executor::core::io::IPrinterType<std::unordered_set<_Value, _Hash,
     inline void operator()(std::ostream &out, const std::unordered_set<_Value> &us, int64_t level) {
         auto begin = us.begin();
         auto end = us.end();
-        if (begin != end) {
-            IPrinterType<_Value>()(out, *begin, level + 1);
-            begin++;
-        }
 
         while (begin != end) {
-            out << std::endl;
             IPrinterType<_Value>()(out, *begin, level + 1);
+            out << std::endl;
             begin++;
         }
     }
@@ -194,14 +174,10 @@ struct ignis::executor::core::io::IPrinterType<std::map<_Key, _Tp, _Compare, _Al
     operator()(std::ostream &out, const std::map<_Key, _Tp, _Compare, _Alloc> &m, int64_t level) {
         auto begin = m.begin();
         auto end = m.end();
-        if (begin != end) {
-            IPrinterType<std::pair<_Key, _Tp>>()(out, *begin, level + 1);
-            begin++;
-        }
 
         while (begin != end) {
-            out << std::endl;
             IPrinterType<std::pair<_Key, _Tp>>()(out, *begin, level + 1);
+            out << std::endl;
             begin++;
         }
     }
@@ -213,14 +189,10 @@ struct ignis::executor::core::io::IPrinterType<std::unordered_map<_Key, _Tp, _Ha
                            int64_t level) {
         auto begin = um.begin();
         auto end = um.end();
-        if (begin != end) {
-            IPrinterType<std::pair<_Key, _Tp>>()(out, *begin, level + 1);
-            begin++;
-        }
 
         while (begin != end) {
-            out << std::endl;
             IPrinterType<std::pair<_Key, _Tp>>()(out, *begin, level + 1);
+            out << std::endl;
             begin++;
         }
     }
@@ -256,13 +228,10 @@ template<typename _Tp>
 struct ignis::executor::core::io::IPrinterType<ignis::executor::api::IReadIterator<_Tp>> {
     inline void operator()(std::ostream &out, const ignis::executor::api::IReadIterator<_Tp> &it, int64_t level) {
         auto &noconst_it = const_cast<ignis::executor::api::IReadIterator<_Tp> &>(it);
-        if (noconst_it.hasNext()) {
-            IPrinterType<_Tp>()(out, noconst_it.next(), level + 1);
-        }
 
         while (noconst_it.hasNext()) {
-            out << std::endl;
             IPrinterType<_Tp>()(out, noconst_it.next(), level + 1);
+            out << std::endl;
         }
     }
 };
