@@ -84,6 +84,7 @@ void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression,
     IGNIS_TRY()
         IGNIS_LOG(info) << "IO: saving as object file";
         auto group = executor_data->getPartitions<Tp>();
+        executor_data->deletePartitions();
 
         for (int64_t p = 0; p < group->partitions(); p++) {
             auto file_name = partitionFileName(path, first + p);
@@ -103,6 +104,7 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
     IGNIS_TRY()
         IGNIS_LOG(info) << "IO: saving as text file";
         auto group = executor_data->getPartitions<Tp>();
+        executor_data->deletePartitions();
 
         for (int64_t p = 0; p < group->partitions(); p++) {
             auto file_name = partitionFileName(path, first + p);
@@ -120,6 +122,7 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
     IGNIS_TRY()
         IGNIS_LOG(info) << "IO: saving as json file";
         auto group = executor_data->getPartitions<Tp>();
+        executor_data->deletePartitions();
 
         for (int64_t p = 0; p < group->partitions(); p++) {
             auto file_name = partitionFileName(path, first + p);

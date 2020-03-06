@@ -8,7 +8,7 @@ using ignis::rpc::driver::IDataFrameId;
 
 IAbstractDataFrame::IAbstractDataFrame(const IDataFrameId &id) : id(id) {}
 
-ignis::driver::core::IDriverContext &IAbstractDataFrame::driverPartition() {
+ignis::driver::core::IDriverContext &IAbstractDataFrame::driverContext() {
     return Ignis::driverContext();
 }
 

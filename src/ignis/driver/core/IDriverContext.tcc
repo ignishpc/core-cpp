@@ -63,6 +63,7 @@ std::vector<Tp> IDriverContextClass::collect(int64_t id) {
             std::lock_guard<std::mutex> lock(mutex);
             this->loadContext(id);
             group = executor_data->getPartitions<Tp>();
+            executor_data->deletePartitions();
         }
         int64_t elems = 0;
         for(auto& tp: *group){

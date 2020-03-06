@@ -178,7 +178,7 @@ IDataFrameId IWorker::partitionJsonFileAbs(const std::string &path) {
 IDataFrameId IWorker::partitionJsonFileAbs(const std::string &path, const ISource &src) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().partitionJsonFile(_return, id, path);
+        Ignis::clientPool->getClient()->getWorkerService().partitionJsonFile3(_return, id, path, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);

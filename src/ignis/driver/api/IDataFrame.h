@@ -26,7 +26,7 @@ namespace ignis {
 
                 IAbstractDataFrame(const rpc::driver::IDataFrameId &id);
 
-                core::IDriverContext &driverPartition();
+                core::IDriverContext &driverContext();
 
                 void setName(const std::string &name);
 
@@ -45,7 +45,7 @@ namespace ignis {
 
                 int64_t partitions();
 
-                void saveAsObjectFile(const std::string &path, int compression);
+                void saveAsObjectFile(const std::string &path, int compression = 6);
 
                 void saveAsTextFile(const std::string &path);
 
@@ -162,12 +162,13 @@ namespace ignis {
                 }
 
                 template<typename R>
-                std::shared_ptr<IDataFrame<R>> mapPartitions(const ISource &src, bool preservesPartitioning) {
+                std::shared_ptr<IDataFrame<R>> mapPartitions(const ISource &src, bool preservesPartitioning = true) {
                     return IDataFrame<R>::make(mapPartitionsAbs(src, preservesPartitioning));
                 }
 
                 template<typename R>
-                std::shared_ptr<IDataFrame<R>> mapPartitionsWithIndex(const ISource &src, bool preservesPartitioning) {
+                std::shared_ptr<IDataFrame<R>>
+                mapPartitionsWithIndex(const ISource &src, bool preservesPartitioning = true) {
                     return IDataFrame<R>::make(mapPartitionsWithIndexAbs(src, preservesPartitioning));
                 }
 
@@ -186,7 +187,7 @@ namespace ignis {
                     return IDataFrame<R>::make(groupByAbs(src, numPartitions));
                 }
 
-                std::shared_ptr<IDataFrame<Tp>> sort(bool ascending=true) {
+                std::shared_ptr<IDataFrame<Tp>> sort(bool ascending = true) {
                     return IDataFrame<Tp>::make(sortAbs(ascending));
                 }
 
@@ -204,61 +205,61 @@ namespace ignis {
 
                 /*General Action*/
                 Tp reduce(const ISource &src) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(reduceAbs(src, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(reduceAbs(src, tp));
                 }
 
                 Tp treeReduce(const ISource &src) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(treeReduceAbs(src, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(treeReduceAbs(src, tp));
                 }
 
                 Tp treeReduce(const ISource &src, int64_t depth) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(treeReduceAbs(src, depth, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(treeReduceAbs(src, depth, tp));
                 }
 
                 std::vector<Tp> collect() {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect<Tp>(collectAbs(tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect<Tp>(collectAbs(tp));
                 }
 
                 Tp aggregate(const ISource &seqOp, const ISource &combOp) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(aggregateAbs(seqOp, combOp, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(aggregateAbs(seqOp, combOp, tp));
                 }
 
                 Tp treeAggregate(const ISource &seqOp, const ISource &combOp) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(treeAggregateAbs(seqOp, combOp, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(treeAggregateAbs(seqOp, combOp, tp));
                 }
 
                 Tp treeAggregate(const ISource &seqOp, const ISource &combOp, int64_t depth) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(treeAggregateAbs(seqOp, combOp, depth, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(treeAggregateAbs(seqOp, combOp, depth, tp));
                 }
 
                 Tp fold(const ISource &src) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(foldAbs(src, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(foldAbs(src, tp));
                 }
 
                 Tp take(int64_t num) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(takeAbs(num, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(takeAbs(num, tp));
                 }
 
                 using IAbstractDataFrame::foreach;
                 using IAbstractDataFrame::foreachPartition;
 
                 Tp top(int64_t num) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect1<Tp>(topAbs(num, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect1<Tp>(topAbs(num, tp));
                 }
 
                 Tp top(int64_t num, const ISource &cmp) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().collect1(topAbs(num, cmp, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().collect1(topAbs(num, cmp, tp));
                 }
 
                 /*Math*/
@@ -267,20 +268,20 @@ namespace ignis {
                 }
 
                 std::vector<Tp> takeSample(bool withReplacement, int64_t num, int seed) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect<Tp>(takeSampleAbs(withReplacement, num, seed, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect<Tp>(takeSampleAbs(withReplacement, num, seed, tp));
                 };
 
                 using IAbstractDataFrame::count;
 
                 Tp max(const ISource &cmp) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect<Tp>(maxAbs(cmp, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect<Tp>(maxAbs(cmp, tp));
                 }
 
                 Tp min(const ISource &cmp) {
-                    auto tp = driverPartition().template registerType<Tp>();
-                    return driverPartition().template collect<Tp>(minAbs(cmp, tp));
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect<Tp>(minAbs(cmp, tp));
                 }
 
             private:
