@@ -9,12 +9,14 @@ ICommImpl::~ICommImpl() {}
 
 std::string ICommImpl::createGroup() {
     IGNIS_TRY()
+        IGNIS_LOG(info) << "Comm: creating group";
         char port_name[MPI_MAX_PORT_NAME];
         MPI::Open_port(MPI::INFO_NULL, port_name);
         auto handle = std::shared_ptr<std::string>(new std::string(port_name), [](const std::string *group_name) {
             MPI::Close_port(group_name->c_str());//Close port on context clear
             delete group_name;
         });
+        IGNIS_LOG(info) << "Comm: group created on " << port_name;
         executor_data->setVariable<std::shared_ptr<std::string>>("server", handle);
         return port_name;
     IGNIS_CATCH()
@@ -22,6 +24,7 @@ std::string ICommImpl::createGroup() {
 
 void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id, const int64_t size) {
     IGNIS_TRY()
+        IGNIS_LOG(info) << "Comm: member " << id << " of " << size << " preparing to join group " << group_name;
         MPI::Intracomm group = MPI::COMM_SELF;
         MPI::Intercomm client_comm;
         MPI::Intercomm info_comm;
@@ -40,35 +43,44 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
                 client_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
                 int64_t pos;
                 client_comm.Recv(&pos, 1, MPI::LONG_LONG_INT, 1, 1963);
+                IGNIS_LOG(info) << "Comm: member " << id << " found";
                 client_comms[pos] = client_comm;
             }
+            IGNIS_LOG(info) << "Comm: all members found";
 
             for (int64_t i = 1; i < size; i++) {
                 client_comm = client_comms[i];
                 client_comm.Send(&flag, 1, MPI::BOOL, 1, 1963);
                 info_comm = group.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
                 group = addComm(group, client_comm, MPI::COMM_SELF, true);
+                IGNIS_LOG(info) << "Comm: new member added to the group";
                 client_comm.Free();
                 info_comm.Free();
             }
+            IGNIS_LOG(info) << "Comm: all members added to the group";
 
         } else {
             group = MPI::COMM_NULL;
-            client_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
+            IGNIS_LOG(info) << "Comm: connecting to the group " << group_name;
+            client_comm = MPI::COMM_SELF.Connect(group_name.c_str(), MPI::INFO_NULL, 0);
+            IGNIS_LOG(info) << "Comm: connected to the group, waiting for my turn";
             client_comm.Send(&id, 1, MPI::LONG_LONG_INT, 0, 1963);
             client_comm.Recv(&flag, 1, MPI::BOOL, 1, 1963);
             info_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
             group = addComm(group, client_comm, MPI::COMM_SELF, false);
+            IGNIS_LOG(info) << "Comm: joined to the group";
             client_comm.Free();
             info_comm.Free();
             client_comm = MPI::COMM_NULL;
 
             for (int64_t i = id + 1; i < size; i++) {
                 group.Accept(group_name.c_str(), MPI::INFO_NULL, 0).Free();
+                IGNIS_LOG(info) << "Comm: new member added to the group";
                 group = addComm(group, client_comm, MPI::COMM_SELF, true);
             }
         }
         const_cast<MPI::Intracomm &>(executor_data->getContext().mpiGroup()) = group;
+        IGNIS_LOG(info) << "Comm: group ready with " << group.Get_size() << " members";
     IGNIS_CATCH()
 }
 
