@@ -66,7 +66,7 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
             IGNIS_LOG(info) << "Comm: connected to the group, waiting for my turn";
             client_comm.Send(&id, 1, MPI::LONG_LONG_INT, 0, 1963);
             client_comm.Recv(&flag, 1, MPI::BOOL, 0, 1963);
-            info_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
+            info_comm = MPI::COMM_SELF.Connect(group_name.c_str(), MPI::INFO_NULL, 0);
             group = addComm(group, client_comm, MPI::COMM_SELF, false);
             IGNIS_LOG(info) << "Comm: joined to the group";
             client_comm.Free();
