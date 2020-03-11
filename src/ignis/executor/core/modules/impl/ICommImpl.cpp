@@ -24,7 +24,7 @@ std::string ICommImpl::createGroup() {
 
 void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id, const int64_t size) {
     IGNIS_TRY()
-        IGNIS_LOG(info) << "Comm: member " << id << " of " << size << " preparing to join group " << group_name;
+        IGNIS_LOG(info) << "Comm: member id " << id << " preparing to join group " << group_name << ", total " << size;
         MPI::Intracomm group = MPI::COMM_SELF;
         MPI::Intercomm client_comm;
         MPI::Intercomm info_comm;
@@ -52,7 +52,7 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
                 client_comm = client_comms[i];
                 client_comm.Send(&flag, 1, MPI::BOOL, 0, 1963);
                 info_comm = group.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
-                group = addComm(group, client_comm, MPI::COMM_SELF, true);
+                group = addComm(group, client_comm, MPI::COMM_SELF, group != MPI::COMM_SELF);
                 IGNIS_LOG(info) << "Comm: new member added to the group";
                 client_comm.Free();
                 info_comm.Free();
@@ -87,6 +87,7 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
 void ICommImpl::joinToGroup(const std::string &group_name, const std::string &id) {
     IGNIS_TRY()
         MPI::Intracomm group = executor_data->getContext().mpiGroup();
+        bool permanent = group == MPI::COMM_SELF || group == MPI::COMM_WORLD;
         MPI::Intracomm new_group = group;
         MPI::Intercomm client_comm;
         bool member = executor_data->hasVariable("server");
@@ -96,14 +97,14 @@ void ICommImpl::joinToGroup(const std::string &group_name, const std::string &id
             if (member) {
                 info_comm = group.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
                 client_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
-                new_group = addComm(group, client_comm, MPI::COMM_SELF, false);
+                new_group = addComm(group, client_comm, MPI::COMM_SELF, !permanent);
                 client_comm.Free();
                 info_comm.Free();
             } else {
                 new_group = MPI::COMM_NULL;
-                info_comm = group.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
+                info_comm = group.Connect(group_name.c_str(), MPI::INFO_NULL, 0);
                 client_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
-                group = addComm(group, client_comm, MPI::COMM_SELF, false);
+                group = addComm(group, client_comm, MPI::COMM_SELF, !permanent);
                 client_comm.Free();
                 info_comm.Free();
             }
