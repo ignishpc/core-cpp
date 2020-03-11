@@ -55,6 +55,7 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
                 group = addComm(group, client_comm, MPI::COMM_SELF, group != MPI::COMM_SELF);
                 IGNIS_LOG(info) << "Comm: new member added to the group";
                 client_comm.Free();
+                client_comms[i] = MPI::COMM_NULL;
                 info_comm.Free();
             }
             IGNIS_LOG(info) << "Comm: all members added to the group";
