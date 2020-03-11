@@ -178,9 +178,9 @@ ICommImpl::addComm(MPI::Intracomm &group, MPI::Intercomm &comm, MPI::Intracomm &
     }
 
     if (up) {//new member
-        new_comm = local.Create_intercomm(0, peer, 1, 1963);
+        new_comm = local.Create_intercomm(0, peer, 0, 1963);
     } else {
-        new_comm = group.Create_intercomm(0, peer, 0, 1963);
+        new_comm = group.Create_intercomm(0, peer, 1, 1963);
     }
 
     new_group = new_comm.Merge(up);
