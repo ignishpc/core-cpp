@@ -94,61 +94,6 @@ class IBackendService_stop_pargs {
 
 };
 
-typedef struct _IBackendService_stop_result__isset {
-  _IBackendService_stop_result__isset() : ex(false) {}
-  bool ex :1;
-} _IBackendService_stop_result__isset;
-
-class IBackendService_stop_result {
- public:
-
-  IBackendService_stop_result(const IBackendService_stop_result&);
-  IBackendService_stop_result& operator=(const IBackendService_stop_result&);
-  IBackendService_stop_result() {
-  }
-
-  virtual ~IBackendService_stop_result() noexcept;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IBackendService_stop_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
-
-  bool operator == (const IBackendService_stop_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IBackendService_stop_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IBackendService_stop_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IBackendService_stop_presult__isset {
-  _IBackendService_stop_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IBackendService_stop_presult__isset;
-
-class IBackendService_stop_presult {
- public:
-
-
-  virtual ~IBackendService_stop_presult() noexcept;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IBackendService_stop_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
 class IBackendServiceClient : virtual public IBackendServiceIf {
  public:
   IBackendServiceClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -176,7 +121,6 @@ class IBackendServiceClient : virtual public IBackendServiceIf {
   }
   void stop();
   void send_stop();
-  void recv_stop();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -267,8 +211,7 @@ class IBackendServiceConcurrentClient : virtual public IBackendServiceIf {
     return poprot_;
   }
   void stop();
-  int32_t send_stop();
-  void recv_stop(const int32_t seqid);
+  void send_stop();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
