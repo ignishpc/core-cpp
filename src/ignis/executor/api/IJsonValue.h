@@ -87,8 +87,15 @@ namespace ignis {
                 int getTypeId() const;
 
             private:
-                std::shared_ptr<void> elem;
-                int type;
+                inline void reset();
+
+                union {
+                    bool boolean;
+                    int64_t integer;
+                    double floating;
+                    void *pointer;
+                } elem;
+                int8_t type;
             };
         }
         namespace core {

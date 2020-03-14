@@ -43,6 +43,7 @@ IJsonValue::IJsonValue() {
 }
 
 void IJsonValue::setNull() {
+    reset();
     type = IEnumTypes::I_VOID;
 }
 
@@ -51,12 +52,13 @@ IJsonValue::IJsonValue(bool value) {
 }
 
 void IJsonValue::setBoolean(bool value) {
+    reset();
     type = IEnumTypes::I_BOOL;
-    elem = std::make_shared<bool>(value);
+    elem.boolean = value;
 }
 
 bool IJsonValue::getBoolean() const {
-    return *reinterpret_cast<bool *>(elem.get());
+    return elem.boolean;
 }
 
 IJsonValue::IJsonValue(int64_t value) {
@@ -64,16 +66,13 @@ IJsonValue::IJsonValue(int64_t value) {
 }
 
 void IJsonValue::setInteger(int64_t value) {
+    reset();
     type = IEnumTypes::I_I64;
-    elem = std::make_shared<int64_t>(value);
+    elem.integer = value;
 }
 
 int64_t IJsonValue::getInteger() const {
-    return *reinterpret_cast<int64_t *>(elem.get());
-}
-
-double IJsonValue::getDouble() const {
-    return *reinterpret_cast<double *>(elem.get());
+    return elem.integer;
 }
 
 IJsonValue::IJsonValue(double value) {
@@ -81,8 +80,13 @@ IJsonValue::IJsonValue(double value) {
 }
 
 void IJsonValue::setDouble(double value) {
+    reset();
     type = IEnumTypes::I_DOUBLE;
-    elem = std::make_shared<double>(value);
+    elem.floating = value;
+}
+
+double IJsonValue::getDouble() const {
+    return elem.floating;
 }
 
 double IJsonValue::getNumber() const {
@@ -102,17 +106,19 @@ IJsonValue::IJsonValue(std::string &&value) {
 }
 
 void IJsonValue::setString(const std::string &value) {
+    reset();
     type = IEnumTypes::I_STRING;
-    elem = std::make_shared<std::string>(value);
+    elem.pointer = new std::string(value);
 }
 
 void IJsonValue::setString(std::string &&value) {
+    reset();
     type = IEnumTypes::I_STRING;
-    elem = std::make_shared<std::string>(value);
+    elem.pointer = new std::string(std::forward<std::string>(value));
 }
 
 const std::string &IJsonValue::getString() const {
-    return *reinterpret_cast<const std::string *>(elem.get());
+    return *reinterpret_cast<const std::string *>(elem.pointer);
 }
 
 IJsonValue::IJsonValue(const std::vector<IJsonValue> &value) {
@@ -124,17 +130,19 @@ IJsonValue::IJsonValue(std::vector<IJsonValue> &&value) {
 }
 
 void IJsonValue::setArray(const std::vector<IJsonValue> &value) {
+    reset();
     type = IEnumTypes::I_LIST;
-    elem = std::make_shared<std::vector<IJsonValue>>(value);
+    elem.pointer = new std::vector<IJsonValue>(value);
 }
 
 void IJsonValue::setArray(std::vector<IJsonValue> &&value) {
+    reset();
     type = IEnumTypes::I_LIST;
-    elem = std::make_shared<std::vector<IJsonValue>>(value);
+    elem.pointer = new std::vector<IJsonValue>(std::forward<std::vector<IJsonValue>>(value));
 }
 
 const std::vector<IJsonValue> &IJsonValue::getArray() const {
-    return *reinterpret_cast<const std::vector<IJsonValue> *>(elem.get());
+    return *reinterpret_cast<const std::vector<IJsonValue> *>(elem.pointer);
 }
 
 IJsonValue::IJsonValue(const std::unordered_map<std::string, IJsonValue> &value) {
@@ -146,21 +154,39 @@ IJsonValue::IJsonValue(std::unordered_map<std::string, IJsonValue> &&value) {
 }
 
 void IJsonValue::setMap(const std::unordered_map<std::string, IJsonValue> &value) {
+    reset();
     type = IEnumTypes::I_MAP;
-    elem = std::make_shared<std::unordered_map<std::string, IJsonValue>>(value);
+    elem.pointer = new std::unordered_map<std::string, IJsonValue>(value);
 }
 
 void IJsonValue::setMap(std::unordered_map<std::string, IJsonValue> &&value) {
+    reset();
     type = IEnumTypes::I_MAP;
-    elem = std::make_shared<std::unordered_map<std::string, IJsonValue>>(value);
+    elem.pointer = new std::unordered_map<std::string, IJsonValue>(
+            std::forward<std::unordered_map<std::string, IJsonValue>>(value)
+    );
 }
 
 const std::unordered_map<std::string, IJsonValue> &IJsonValue::getMap() const {
-    return *reinterpret_cast<const std::unordered_map<std::string, IJsonValue> *>(elem.get());
+    return *reinterpret_cast<const std::unordered_map<std::string, IJsonValue> *>(elem.pointer);
 }
 
 int IJsonValue::getTypeId() const {
     return type;
+}
+
+void IJsonValue::reset() {
+    switch (type) {
+        case IEnumTypes::I_STRING:
+            delete static_cast<std::string *>(elem.pointer);
+            break;
+        case IEnumTypes::I_LIST:
+            delete static_cast<std::vector<IJsonValue> *>(elem.pointer);
+            break;
+        case IEnumTypes::I_MAP:
+            delete static_cast<std::unordered_map<std::string, IJsonValue> *>(elem.pointer);
+            break;
+    }
 }
 
 void (*IJsonWriterType<IJsonValue>::writers[])(JsonWriter &out, const api::IJsonValue &v) = {
