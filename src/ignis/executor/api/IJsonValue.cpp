@@ -298,10 +298,10 @@ void (*IReaderType<IJsonValue>::readers[])(protocol::IProtocol &protocol, api::I
             auto r_first = readers[readSizeAux(protocol)];
             auto r_second = readers[readSizeAux(protocol)];
             for (decltype(size) i = 0; i < size; i++) {
-                std::unordered_map<std::string, api::IJsonValue> map(2);
-                r_first(protocol, map["first"]);
-                r_second(protocol, map["second"]);
-                vector.emplace_back(std::move(map));
+                std::vector<api::IJsonValue> pair(2);
+                r_first(protocol, pair[0]);
+                r_second(protocol, pair[1]);
+                vector.emplace_back(std::move(pair));
             }
             obj.setArray(std::move(vector));
         },
@@ -317,10 +317,10 @@ void (*IReaderType<IJsonValue>::readers[])(protocol::IProtocol &protocol, api::I
             obj.setString(std::move(bytes));
         },
         [](protocol::IProtocol &protocol, api::IJsonValue &obj) {//I_PAIR_LIST = 0xd,
-            std::unordered_map<std::string, api::IJsonValue> map(2);
-            readers[readTypeAux(protocol)](protocol, map["first"]);
-            readers[readTypeAux(protocol)](protocol, map["second"]);
-            obj.setMap(map);
+            std::vector<api::IJsonValue> pair(2);
+            readers[readTypeAux(protocol)](protocol, pair[0]);
+            readers[readTypeAux(protocol)](protocol, pair[1]);
+            obj.setArray(std::move(pair));
         },
         [](protocol::IProtocol &protocol, api::IJsonValue &obj) {//I_JSON = 0xe,
             readers[readTypeAux(protocol)](protocol, obj); //should never be executed
