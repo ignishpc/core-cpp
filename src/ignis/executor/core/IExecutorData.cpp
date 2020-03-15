@@ -14,6 +14,7 @@ IExecutorData::IExecutorData() : properties(context.props()),
 void IExecutorData::deletePartitions() { partitions.reset(); }
 
 int64_t IExecutorData::clearVariables() {
+    context.variables.clear();
     int64_t n = variables.size();
     variables.clear();
     return n;
