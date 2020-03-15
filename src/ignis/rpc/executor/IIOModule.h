@@ -29,8 +29,8 @@ class IIOModuleIf {
   virtual void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
   virtual void partitionObjectFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
-  virtual void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
-  virtual void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void partitionJsonFile4a(const std::string& path, const int64_t first, const int64_t partitions, const bool objectMapping) = 0;
+  virtual void partitionJsonFile4b(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first) = 0;
   virtual void saveAsTextFile(const std::string& path, const int64_t first) = 0;
   virtual void saveAsJsonFile(const std::string& path, const int64_t first, const bool pretty) = 0;
@@ -86,10 +86,10 @@ class IIOModuleNull : virtual public IIOModuleIf {
   void partitionTextFile(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */) {
     return;
   }
-  void partitionJsonFile(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */) {
+  void partitionJsonFile4a(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */, const bool /* objectMapping */) {
     return;
   }
-  void partitionJsonFile4(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
+  void partitionJsonFile4b(const std::string& /* path */, const int64_t /* first */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void saveAsObjectFile(const std::string& /* path */, const int8_t /* compression */, const int64_t /* first */) {
@@ -879,27 +879,29 @@ class IIOModule_partitionTextFile_presult {
 
 };
 
-typedef struct _IIOModule_partitionJsonFile_args__isset {
-  _IIOModule_partitionJsonFile_args__isset() : path(false), first(false), partitions(false) {}
+typedef struct _IIOModule_partitionJsonFile4a_args__isset {
+  _IIOModule_partitionJsonFile4a_args__isset() : path(false), first(false), partitions(false), objectMapping(false) {}
   bool path :1;
   bool first :1;
   bool partitions :1;
-} _IIOModule_partitionJsonFile_args__isset;
+  bool objectMapping :1;
+} _IIOModule_partitionJsonFile4a_args__isset;
 
-class IIOModule_partitionJsonFile_args {
+class IIOModule_partitionJsonFile4a_args {
  public:
 
-  IIOModule_partitionJsonFile_args(const IIOModule_partitionJsonFile_args&);
-  IIOModule_partitionJsonFile_args& operator=(const IIOModule_partitionJsonFile_args&);
-  IIOModule_partitionJsonFile_args() : path(), first(0), partitions(0) {
+  IIOModule_partitionJsonFile4a_args(const IIOModule_partitionJsonFile4a_args&);
+  IIOModule_partitionJsonFile4a_args& operator=(const IIOModule_partitionJsonFile4a_args&);
+  IIOModule_partitionJsonFile4a_args() : path(), first(0), partitions(0), objectMapping(0) {
   }
 
-  virtual ~IIOModule_partitionJsonFile_args() noexcept;
+  virtual ~IIOModule_partitionJsonFile4a_args() noexcept;
   std::string path;
   int64_t first;
   int64_t partitions;
+  bool objectMapping;
 
-  _IIOModule_partitionJsonFile_args__isset __isset;
+  _IIOModule_partitionJsonFile4a_args__isset __isset;
 
   void __set_path(const std::string& val);
 
@@ -907,7 +909,9 @@ class IIOModule_partitionJsonFile_args {
 
   void __set_partitions(const int64_t val);
 
-  bool operator == (const IIOModule_partitionJsonFile_args & rhs) const
+  void __set_objectMapping(const bool val);
+
+  bool operator == (const IIOModule_partitionJsonFile4a_args & rhs) const
   {
     if (!(path == rhs.path))
       return false;
@@ -915,13 +919,15 @@ class IIOModule_partitionJsonFile_args {
       return false;
     if (!(partitions == rhs.partitions))
       return false;
+    if (!(objectMapping == rhs.objectMapping))
+      return false;
     return true;
   }
-  bool operator != (const IIOModule_partitionJsonFile_args &rhs) const {
+  bool operator != (const IIOModule_partitionJsonFile4a_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_partitionJsonFile_args & ) const;
+  bool operator < (const IIOModule_partitionJsonFile4a_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -929,97 +935,98 @@ class IIOModule_partitionJsonFile_args {
 };
 
 
-class IIOModule_partitionJsonFile_pargs {
+class IIOModule_partitionJsonFile4a_pargs {
  public:
 
 
-  virtual ~IIOModule_partitionJsonFile_pargs() noexcept;
+  virtual ~IIOModule_partitionJsonFile4a_pargs() noexcept;
   const std::string* path;
   const int64_t* first;
   const int64_t* partitions;
+  const bool* objectMapping;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IIOModule_partitionJsonFile_result__isset {
-  _IIOModule_partitionJsonFile_result__isset() : ex(false) {}
+typedef struct _IIOModule_partitionJsonFile4a_result__isset {
+  _IIOModule_partitionJsonFile4a_result__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_partitionJsonFile_result__isset;
+} _IIOModule_partitionJsonFile4a_result__isset;
 
-class IIOModule_partitionJsonFile_result {
+class IIOModule_partitionJsonFile4a_result {
  public:
 
-  IIOModule_partitionJsonFile_result(const IIOModule_partitionJsonFile_result&);
-  IIOModule_partitionJsonFile_result& operator=(const IIOModule_partitionJsonFile_result&);
-  IIOModule_partitionJsonFile_result() {
+  IIOModule_partitionJsonFile4a_result(const IIOModule_partitionJsonFile4a_result&);
+  IIOModule_partitionJsonFile4a_result& operator=(const IIOModule_partitionJsonFile4a_result&);
+  IIOModule_partitionJsonFile4a_result() {
   }
 
-  virtual ~IIOModule_partitionJsonFile_result() noexcept;
+  virtual ~IIOModule_partitionJsonFile4a_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_partitionJsonFile_result__isset __isset;
+  _IIOModule_partitionJsonFile4a_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const IIOModule_partitionJsonFile_result & rhs) const
+  bool operator == (const IIOModule_partitionJsonFile4a_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IIOModule_partitionJsonFile_result &rhs) const {
+  bool operator != (const IIOModule_partitionJsonFile4a_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_partitionJsonFile_result & ) const;
+  bool operator < (const IIOModule_partitionJsonFile4a_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IIOModule_partitionJsonFile_presult__isset {
-  _IIOModule_partitionJsonFile_presult__isset() : ex(false) {}
+typedef struct _IIOModule_partitionJsonFile4a_presult__isset {
+  _IIOModule_partitionJsonFile4a_presult__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_partitionJsonFile_presult__isset;
+} _IIOModule_partitionJsonFile4a_presult__isset;
 
-class IIOModule_partitionJsonFile_presult {
+class IIOModule_partitionJsonFile4a_presult {
  public:
 
 
-  virtual ~IIOModule_partitionJsonFile_presult() noexcept;
+  virtual ~IIOModule_partitionJsonFile4a_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_partitionJsonFile_presult__isset __isset;
+  _IIOModule_partitionJsonFile4a_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IIOModule_partitionJsonFile4_args__isset {
-  _IIOModule_partitionJsonFile4_args__isset() : path(false), first(false), partitions(false), src(false) {}
+typedef struct _IIOModule_partitionJsonFile4b_args__isset {
+  _IIOModule_partitionJsonFile4b_args__isset() : path(false), first(false), partitions(false), src(false) {}
   bool path :1;
   bool first :1;
   bool partitions :1;
   bool src :1;
-} _IIOModule_partitionJsonFile4_args__isset;
+} _IIOModule_partitionJsonFile4b_args__isset;
 
-class IIOModule_partitionJsonFile4_args {
+class IIOModule_partitionJsonFile4b_args {
  public:
 
-  IIOModule_partitionJsonFile4_args(const IIOModule_partitionJsonFile4_args&);
-  IIOModule_partitionJsonFile4_args& operator=(const IIOModule_partitionJsonFile4_args&);
-  IIOModule_partitionJsonFile4_args() : path(), first(0), partitions(0) {
+  IIOModule_partitionJsonFile4b_args(const IIOModule_partitionJsonFile4b_args&);
+  IIOModule_partitionJsonFile4b_args& operator=(const IIOModule_partitionJsonFile4b_args&);
+  IIOModule_partitionJsonFile4b_args() : path(), first(0), partitions(0) {
   }
 
-  virtual ~IIOModule_partitionJsonFile4_args() noexcept;
+  virtual ~IIOModule_partitionJsonFile4b_args() noexcept;
   std::string path;
   int64_t first;
   int64_t partitions;
    ::ignis::rpc::ISource src;
 
-  _IIOModule_partitionJsonFile4_args__isset __isset;
+  _IIOModule_partitionJsonFile4b_args__isset __isset;
 
   void __set_path(const std::string& val);
 
@@ -1029,7 +1036,7 @@ class IIOModule_partitionJsonFile4_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  bool operator == (const IIOModule_partitionJsonFile4_args & rhs) const
+  bool operator == (const IIOModule_partitionJsonFile4b_args & rhs) const
   {
     if (!(path == rhs.path))
       return false;
@@ -1041,11 +1048,11 @@ class IIOModule_partitionJsonFile4_args {
       return false;
     return true;
   }
-  bool operator != (const IIOModule_partitionJsonFile4_args &rhs) const {
+  bool operator != (const IIOModule_partitionJsonFile4b_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_partitionJsonFile4_args & ) const;
+  bool operator < (const IIOModule_partitionJsonFile4b_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1053,11 +1060,11 @@ class IIOModule_partitionJsonFile4_args {
 };
 
 
-class IIOModule_partitionJsonFile4_pargs {
+class IIOModule_partitionJsonFile4b_pargs {
  public:
 
 
-  virtual ~IIOModule_partitionJsonFile4_pargs() noexcept;
+  virtual ~IIOModule_partitionJsonFile4b_pargs() noexcept;
   const std::string* path;
   const int64_t* first;
   const int64_t* partitions;
@@ -1067,56 +1074,56 @@ class IIOModule_partitionJsonFile4_pargs {
 
 };
 
-typedef struct _IIOModule_partitionJsonFile4_result__isset {
-  _IIOModule_partitionJsonFile4_result__isset() : ex(false) {}
+typedef struct _IIOModule_partitionJsonFile4b_result__isset {
+  _IIOModule_partitionJsonFile4b_result__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_partitionJsonFile4_result__isset;
+} _IIOModule_partitionJsonFile4b_result__isset;
 
-class IIOModule_partitionJsonFile4_result {
+class IIOModule_partitionJsonFile4b_result {
  public:
 
-  IIOModule_partitionJsonFile4_result(const IIOModule_partitionJsonFile4_result&);
-  IIOModule_partitionJsonFile4_result& operator=(const IIOModule_partitionJsonFile4_result&);
-  IIOModule_partitionJsonFile4_result() {
+  IIOModule_partitionJsonFile4b_result(const IIOModule_partitionJsonFile4b_result&);
+  IIOModule_partitionJsonFile4b_result& operator=(const IIOModule_partitionJsonFile4b_result&);
+  IIOModule_partitionJsonFile4b_result() {
   }
 
-  virtual ~IIOModule_partitionJsonFile4_result() noexcept;
+  virtual ~IIOModule_partitionJsonFile4b_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_partitionJsonFile4_result__isset __isset;
+  _IIOModule_partitionJsonFile4b_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const IIOModule_partitionJsonFile4_result & rhs) const
+  bool operator == (const IIOModule_partitionJsonFile4b_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IIOModule_partitionJsonFile4_result &rhs) const {
+  bool operator != (const IIOModule_partitionJsonFile4b_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IIOModule_partitionJsonFile4_result & ) const;
+  bool operator < (const IIOModule_partitionJsonFile4b_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IIOModule_partitionJsonFile4_presult__isset {
-  _IIOModule_partitionJsonFile4_presult__isset() : ex(false) {}
+typedef struct _IIOModule_partitionJsonFile4b_presult__isset {
+  _IIOModule_partitionJsonFile4b_presult__isset() : ex(false) {}
   bool ex :1;
-} _IIOModule_partitionJsonFile4_presult__isset;
+} _IIOModule_partitionJsonFile4b_presult__isset;
 
-class IIOModule_partitionJsonFile4_presult {
+class IIOModule_partitionJsonFile4b_presult {
  public:
 
 
-  virtual ~IIOModule_partitionJsonFile4_presult() noexcept;
+  virtual ~IIOModule_partitionJsonFile4b_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IIOModule_partitionJsonFile4_presult__isset __isset;
+  _IIOModule_partitionJsonFile4b_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1515,12 +1522,12 @@ class IIOModuleClient : virtual public IIOModuleIf {
   void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
   void send_partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
   void recv_partitionTextFile();
-  void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
-  void send_partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
-  void recv_partitionJsonFile();
-  void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
-  void send_partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
-  void recv_partitionJsonFile4();
+  void partitionJsonFile4a(const std::string& path, const int64_t first, const int64_t partitions, const bool objectMapping);
+  void send_partitionJsonFile4a(const std::string& path, const int64_t first, const int64_t partitions, const bool objectMapping);
+  void recv_partitionJsonFile4a();
+  void partitionJsonFile4b(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void send_partitionJsonFile4b(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_partitionJsonFile4b();
   void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
   void send_saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
   void recv_saveAsObjectFile();
@@ -1552,8 +1559,8 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_partitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionObjectFile4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_partitionJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_partitionJsonFile4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionJsonFile4a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionJsonFile4b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1567,8 +1574,8 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["partitionObjectFile"] = &IIOModuleProcessor::process_partitionObjectFile;
     processMap_["partitionObjectFile4"] = &IIOModuleProcessor::process_partitionObjectFile4;
     processMap_["partitionTextFile"] = &IIOModuleProcessor::process_partitionTextFile;
-    processMap_["partitionJsonFile"] = &IIOModuleProcessor::process_partitionJsonFile;
-    processMap_["partitionJsonFile4"] = &IIOModuleProcessor::process_partitionJsonFile4;
+    processMap_["partitionJsonFile4a"] = &IIOModuleProcessor::process_partitionJsonFile4a;
+    processMap_["partitionJsonFile4b"] = &IIOModuleProcessor::process_partitionJsonFile4b;
     processMap_["saveAsObjectFile"] = &IIOModuleProcessor::process_saveAsObjectFile;
     processMap_["saveAsTextFile"] = &IIOModuleProcessor::process_saveAsTextFile;
     processMap_["saveAsJsonFile"] = &IIOModuleProcessor::process_saveAsJsonFile;
@@ -1663,22 +1670,22 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
     ifaces_[i]->partitionTextFile(path, first, partitions);
   }
 
-  void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions) {
+  void partitionJsonFile4a(const std::string& path, const int64_t first, const int64_t partitions, const bool objectMapping) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->partitionJsonFile(path, first, partitions);
+      ifaces_[i]->partitionJsonFile4a(path, first, partitions, objectMapping);
     }
-    ifaces_[i]->partitionJsonFile(path, first, partitions);
+    ifaces_[i]->partitionJsonFile4a(path, first, partitions, objectMapping);
   }
 
-  void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) {
+  void partitionJsonFile4b(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->partitionJsonFile4(path, first, partitions, src);
+      ifaces_[i]->partitionJsonFile4b(path, first, partitions, src);
     }
-    ifaces_[i]->partitionJsonFile4(path, first, partitions, src);
+    ifaces_[i]->partitionJsonFile4b(path, first, partitions, src);
   }
 
   void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first) {
@@ -1761,12 +1768,12 @@ class IIOModuleConcurrentClient : virtual public IIOModuleIf {
   void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
   int32_t send_partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions);
   void recv_partitionTextFile(const int32_t seqid);
-  void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
-  int32_t send_partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions);
-  void recv_partitionJsonFile(const int32_t seqid);
-  void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
-  int32_t send_partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
-  void recv_partitionJsonFile4(const int32_t seqid);
+  void partitionJsonFile4a(const std::string& path, const int64_t first, const int64_t partitions, const bool objectMapping);
+  int32_t send_partitionJsonFile4a(const std::string& path, const int64_t first, const int64_t partitions, const bool objectMapping);
+  void recv_partitionJsonFile4a(const int32_t seqid);
+  void partitionJsonFile4b(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_partitionJsonFile4b(const std::string& path, const int64_t first, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_partitionJsonFile4b(const int32_t seqid);
   void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
   int32_t send_saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first);
   void recv_saveAsObjectFile(const int32_t seqid);

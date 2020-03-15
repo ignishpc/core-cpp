@@ -79,8 +79,8 @@ namespace ignis {
                 std::shared_ptr<IDataFrame<std::string>> partitionTextFile(const std::string &path);
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> partitionJsonFile(const std::string &path) {
-                    return IDataFrame<Tp>::make(partitionJsonFileAbs(path));
+                std::shared_ptr<IDataFrame<Tp>> partitionJsonFile(const std::string &path, bool objectMapping=false) {
+                    return IDataFrame<Tp>::make(partitionJsonFileAbs(path, objectMapping));
                 }
 
                 template<typename Tp>
@@ -110,7 +110,7 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId partitionObjectFileAbs(const std::string &path, const ISource &src);
 
-                rpc::driver::IDataFrameId partitionJsonFileAbs(const std::string &path);
+                rpc::driver::IDataFrameId partitionJsonFileAbs(const std::string &path, bool objectMapping);
 
                 rpc::driver::IDataFrameId partitionJsonFileAbs(const std::string &path, const ISource &src);
             };

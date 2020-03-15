@@ -165,10 +165,10 @@ std::shared_ptr<IDataFrame<std::string>> IWorker::partitionTextFile(const std::s
     }
 }
 
-IDataFrameId IWorker::partitionJsonFileAbs(const std::string &path) {
+IDataFrameId IWorker::partitionJsonFileAbs(const std::string &path, bool objectMapping) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().partitionJsonFile(_return, id, path);
+        Ignis::clientPool->getClient()->getWorkerService().partitionJsonFile3a(_return, id, path, objectMapping);
         return _return;
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
@@ -178,7 +178,7 @@ IDataFrameId IWorker::partitionJsonFileAbs(const std::string &path) {
 IDataFrameId IWorker::partitionJsonFileAbs(const std::string &path, const ISource &src) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().partitionJsonFile3(_return, id, path, src.rpc());
+        Ignis::clientPool->getClient()->getWorkerService().partitionJsonFile3b(_return, id, path, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);

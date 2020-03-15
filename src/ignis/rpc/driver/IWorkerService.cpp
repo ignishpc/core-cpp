@@ -3733,11 +3733,11 @@ uint32_t IWorkerService_partitionTextFile_presult::read(::apache::thrift::protoc
 }
 
 
-IWorkerService_partitionJsonFile_args::~IWorkerService_partitionJsonFile_args() noexcept {
+IWorkerService_partitionJsonFile3a_args::~IWorkerService_partitionJsonFile3a_args() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_partitionJsonFile3a_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -3774,6 +3774,14 @@ uint32_t IWorkerService_partitionJsonFile_args::read(::apache::thrift::protocol:
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->objectMapping);
+          this->__isset.objectMapping = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -3786,10 +3794,10 @@ uint32_t IWorkerService_partitionJsonFile_args::read(::apache::thrift::protocol:
   return xfer;
 }
 
-uint32_t IWorkerService_partitionJsonFile_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_partitionJsonFile3a_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile_args");
+  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3a_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -3799,20 +3807,24 @@ uint32_t IWorkerService_partitionJsonFile_args::write(::apache::thrift::protocol
   xfer += oprot->writeString(this->path);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("objectMapping", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool(this->objectMapping);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IWorkerService_partitionJsonFile_pargs::~IWorkerService_partitionJsonFile_pargs() noexcept {
+IWorkerService_partitionJsonFile3a_pargs::~IWorkerService_partitionJsonFile3a_pargs() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_partitionJsonFile3a_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile_pargs");
+  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3a_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -3822,17 +3834,21 @@ uint32_t IWorkerService_partitionJsonFile_pargs::write(::apache::thrift::protoco
   xfer += oprot->writeString((*(this->path)));
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("objectMapping", ::apache::thrift::protocol::T_BOOL, 3);
+  xfer += oprot->writeBool((*(this->objectMapping)));
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
 }
 
 
-IWorkerService_partitionJsonFile_result::~IWorkerService_partitionJsonFile_result() noexcept {
+IWorkerService_partitionJsonFile3a_result::~IWorkerService_partitionJsonFile3a_result() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_partitionJsonFile3a_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -3881,11 +3897,11 @@ uint32_t IWorkerService_partitionJsonFile_result::read(::apache::thrift::protoco
   return xfer;
 }
 
-uint32_t IWorkerService_partitionJsonFile_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_partitionJsonFile3a_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile_result");
+  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3a_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -3902,11 +3918,11 @@ uint32_t IWorkerService_partitionJsonFile_result::write(::apache::thrift::protoc
 }
 
 
-IWorkerService_partitionJsonFile_presult::~IWorkerService_partitionJsonFile_presult() noexcept {
+IWorkerService_partitionJsonFile3a_presult::~IWorkerService_partitionJsonFile3a_presult() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_partitionJsonFile3a_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -3956,11 +3972,11 @@ uint32_t IWorkerService_partitionJsonFile_presult::read(::apache::thrift::protoc
 }
 
 
-IWorkerService_partitionJsonFile3_args::~IWorkerService_partitionJsonFile3_args() noexcept {
+IWorkerService_partitionJsonFile3b_args::~IWorkerService_partitionJsonFile3b_args() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_partitionJsonFile3b_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4017,10 +4033,10 @@ uint32_t IWorkerService_partitionJsonFile3_args::read(::apache::thrift::protocol
   return xfer;
 }
 
-uint32_t IWorkerService_partitionJsonFile3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_partitionJsonFile3b_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3_args");
+  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3b_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -4040,14 +4056,14 @@ uint32_t IWorkerService_partitionJsonFile3_args::write(::apache::thrift::protoco
 }
 
 
-IWorkerService_partitionJsonFile3_pargs::~IWorkerService_partitionJsonFile3_pargs() noexcept {
+IWorkerService_partitionJsonFile3b_pargs::~IWorkerService_partitionJsonFile3b_pargs() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_partitionJsonFile3b_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3_pargs");
+  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3b_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -4067,11 +4083,11 @@ uint32_t IWorkerService_partitionJsonFile3_pargs::write(::apache::thrift::protoc
 }
 
 
-IWorkerService_partitionJsonFile3_result::~IWorkerService_partitionJsonFile3_result() noexcept {
+IWorkerService_partitionJsonFile3b_result::~IWorkerService_partitionJsonFile3b_result() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_partitionJsonFile3b_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4120,11 +4136,11 @@ uint32_t IWorkerService_partitionJsonFile3_result::read(::apache::thrift::protoc
   return xfer;
 }
 
-uint32_t IWorkerService_partitionJsonFile3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_partitionJsonFile3b_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3_result");
+  xfer += oprot->writeStructBegin("IWorkerService_partitionJsonFile3b_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -4141,11 +4157,11 @@ uint32_t IWorkerService_partitionJsonFile3_result::write(::apache::thrift::proto
 }
 
 
-IWorkerService_partitionJsonFile3_presult::~IWorkerService_partitionJsonFile3_presult() noexcept {
+IWorkerService_partitionJsonFile3b_presult::~IWorkerService_partitionJsonFile3b_presult() noexcept {
 }
 
 
-uint32_t IWorkerService_partitionJsonFile3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_partitionJsonFile3b_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -5192,20 +5208,21 @@ void IWorkerServiceClient::recv_partitionTextFile( ::ignis::rpc::driver::IDataFr
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionTextFile failed: unknown result");
 }
 
-void IWorkerServiceClient::partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path)
+void IWorkerServiceClient::partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const bool objectMapping)
 {
-  send_partitionJsonFile(id, path);
-  recv_partitionJsonFile(_return);
+  send_partitionJsonFile3a(id, path, objectMapping);
+  recv_partitionJsonFile3a(_return);
 }
 
-void IWorkerServiceClient::send_partitionJsonFile(const IWorkerId& id, const std::string& path)
+void IWorkerServiceClient::send_partitionJsonFile3a(const IWorkerId& id, const std::string& path, const bool objectMapping)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionJsonFile3a", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_partitionJsonFile_pargs args;
+  IWorkerService_partitionJsonFile3a_pargs args;
   args.id = &id;
   args.path = &path;
+  args.objectMapping = &objectMapping;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -5213,7 +5230,7 @@ void IWorkerServiceClient::send_partitionJsonFile(const IWorkerId& id, const std
   oprot_->getTransport()->flush();
 }
 
-void IWorkerServiceClient::recv_partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return)
+void IWorkerServiceClient::recv_partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -5233,12 +5250,12 @@ void IWorkerServiceClient::recv_partitionJsonFile( ::ignis::rpc::driver::IDataFr
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("partitionJsonFile") != 0) {
+  if (fname.compare("partitionJsonFile3a") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IWorkerService_partitionJsonFile_presult result;
+  IWorkerService_partitionJsonFile3a_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -5251,21 +5268,21 @@ void IWorkerServiceClient::recv_partitionJsonFile( ::ignis::rpc::driver::IDataFr
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile3a failed: unknown result");
 }
 
-void IWorkerServiceClient::partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
+void IWorkerServiceClient::partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
 {
-  send_partitionJsonFile3(id, path, src);
-  recv_partitionJsonFile3(_return);
+  send_partitionJsonFile3b(id, path, src);
+  recv_partitionJsonFile3b(_return);
 }
 
-void IWorkerServiceClient::send_partitionJsonFile3(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
+void IWorkerServiceClient::send_partitionJsonFile3b(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("partitionJsonFile3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionJsonFile3b", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_partitionJsonFile3_pargs args;
+  IWorkerService_partitionJsonFile3b_pargs args;
   args.id = &id;
   args.path = &path;
   args.src = &src;
@@ -5276,7 +5293,7 @@ void IWorkerServiceClient::send_partitionJsonFile3(const IWorkerId& id, const st
   oprot_->getTransport()->flush();
 }
 
-void IWorkerServiceClient::recv_partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return)
+void IWorkerServiceClient::recv_partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -5296,12 +5313,12 @@ void IWorkerServiceClient::recv_partitionJsonFile3( ::ignis::rpc::driver::IDataF
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("partitionJsonFile3") != 0) {
+  if (fname.compare("partitionJsonFile3b") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IWorkerService_partitionJsonFile3_presult result;
+  IWorkerService_partitionJsonFile3b_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -5314,7 +5331,7 @@ void IWorkerServiceClient::recv_partitionJsonFile3( ::ignis::rpc::driver::IDataF
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile3 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile3b failed: unknown result");
 }
 
 bool IWorkerServiceProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
@@ -6247,41 +6264,41 @@ void IWorkerServiceProcessor::process_partitionTextFile(int32_t seqid, ::apache:
   }
 }
 
-void IWorkerServiceProcessor::process_partitionJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IWorkerServiceProcessor::process_partitionJsonFile3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IWorkerService.partitionJsonFile", callContext);
+    ctx = this->eventHandler_->getContext("IWorkerService.partitionJsonFile3a", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.partitionJsonFile");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.partitionJsonFile3a");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.partitionJsonFile");
+    this->eventHandler_->preRead(ctx, "IWorkerService.partitionJsonFile3a");
   }
 
-  IWorkerService_partitionJsonFile_args args;
+  IWorkerService_partitionJsonFile3a_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.partitionJsonFile", bytes);
+    this->eventHandler_->postRead(ctx, "IWorkerService.partitionJsonFile3a", bytes);
   }
 
-  IWorkerService_partitionJsonFile_result result;
+  IWorkerService_partitionJsonFile3a_result result;
   try {
-    iface_->partitionJsonFile(result.success, args.id, args.path);
+    iface_->partitionJsonFile3a(result.success, args.id, args.path, args.objectMapping);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.partitionJsonFile");
+      this->eventHandler_->handlerError(ctx, "IWorkerService.partitionJsonFile3a");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionJsonFile3a", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -6290,55 +6307,55 @@ void IWorkerServiceProcessor::process_partitionJsonFile(int32_t seqid, ::apache:
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.partitionJsonFile");
+    this->eventHandler_->preWrite(ctx, "IWorkerService.partitionJsonFile3a");
   }
 
-  oprot->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionJsonFile3a", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.partitionJsonFile", bytes);
+    this->eventHandler_->postWrite(ctx, "IWorkerService.partitionJsonFile3a", bytes);
   }
 }
 
-void IWorkerServiceProcessor::process_partitionJsonFile3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IWorkerServiceProcessor::process_partitionJsonFile3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IWorkerService.partitionJsonFile3", callContext);
+    ctx = this->eventHandler_->getContext("IWorkerService.partitionJsonFile3b", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.partitionJsonFile3");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.partitionJsonFile3b");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.partitionJsonFile3");
+    this->eventHandler_->preRead(ctx, "IWorkerService.partitionJsonFile3b");
   }
 
-  IWorkerService_partitionJsonFile3_args args;
+  IWorkerService_partitionJsonFile3b_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.partitionJsonFile3", bytes);
+    this->eventHandler_->postRead(ctx, "IWorkerService.partitionJsonFile3b", bytes);
   }
 
-  IWorkerService_partitionJsonFile3_result result;
+  IWorkerService_partitionJsonFile3b_result result;
   try {
-    iface_->partitionJsonFile3(result.success, args.id, args.path, args.src);
+    iface_->partitionJsonFile3b(result.success, args.id, args.path, args.src);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.partitionJsonFile3");
+      this->eventHandler_->handlerError(ctx, "IWorkerService.partitionJsonFile3b");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("partitionJsonFile3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionJsonFile3b", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -6347,17 +6364,17 @@ void IWorkerServiceProcessor::process_partitionJsonFile3(int32_t seqid, ::apache
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.partitionJsonFile3");
+    this->eventHandler_->preWrite(ctx, "IWorkerService.partitionJsonFile3b");
   }
 
-  oprot->writeMessageBegin("partitionJsonFile3", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionJsonFile3b", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.partitionJsonFile3", bytes);
+    this->eventHandler_->postWrite(ctx, "IWorkerService.partitionJsonFile3b", bytes);
   }
 }
 
@@ -7797,21 +7814,22 @@ void IWorkerServiceConcurrentClient::recv_partitionTextFile( ::ignis::rpc::drive
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path)
+void IWorkerServiceConcurrentClient::partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const bool objectMapping)
 {
-  int32_t seqid = send_partitionJsonFile(id, path);
-  recv_partitionJsonFile(_return, seqid);
+  int32_t seqid = send_partitionJsonFile3a(id, path, objectMapping);
+  recv_partitionJsonFile3a(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_partitionJsonFile(const IWorkerId& id, const std::string& path)
+int32_t IWorkerServiceConcurrentClient::send_partitionJsonFile3a(const IWorkerId& id, const std::string& path, const bool objectMapping)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("partitionJsonFile", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionJsonFile3a", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_partitionJsonFile_pargs args;
+  IWorkerService_partitionJsonFile3a_pargs args;
   args.id = &id;
   args.path = &path;
+  args.objectMapping = &objectMapping;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -7822,7 +7840,7 @@ int32_t IWorkerServiceConcurrentClient::send_partitionJsonFile(const IWorkerId& 
   return cseqid;
 }
 
-void IWorkerServiceConcurrentClient::recv_partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
+void IWorkerServiceConcurrentClient::recv_partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -7851,7 +7869,7 @@ void IWorkerServiceConcurrentClient::recv_partitionJsonFile( ::ignis::rpc::drive
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("partitionJsonFile") != 0) {
+      if (fname.compare("partitionJsonFile3a") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -7860,7 +7878,7 @@ void IWorkerServiceConcurrentClient::recv_partitionJsonFile( ::ignis::rpc::drive
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IWorkerService_partitionJsonFile_presult result;
+      IWorkerService_partitionJsonFile3a_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -7876,7 +7894,7 @@ void IWorkerServiceConcurrentClient::recv_partitionJsonFile( ::ignis::rpc::drive
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile3a failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -7886,19 +7904,19 @@ void IWorkerServiceConcurrentClient::recv_partitionJsonFile( ::ignis::rpc::drive
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
+void IWorkerServiceConcurrentClient::partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_partitionJsonFile3(id, path, src);
-  recv_partitionJsonFile3(_return, seqid);
+  int32_t seqid = send_partitionJsonFile3b(id, path, src);
+  recv_partitionJsonFile3b(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_partitionJsonFile3(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
+int32_t IWorkerServiceConcurrentClient::send_partitionJsonFile3b(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("partitionJsonFile3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionJsonFile3b", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_partitionJsonFile3_pargs args;
+  IWorkerService_partitionJsonFile3b_pargs args;
   args.id = &id;
   args.path = &path;
   args.src = &src;
@@ -7912,7 +7930,7 @@ int32_t IWorkerServiceConcurrentClient::send_partitionJsonFile3(const IWorkerId&
   return cseqid;
 }
 
-void IWorkerServiceConcurrentClient::recv_partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
+void IWorkerServiceConcurrentClient::recv_partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -7941,7 +7959,7 @@ void IWorkerServiceConcurrentClient::recv_partitionJsonFile3( ::ignis::rpc::driv
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("partitionJsonFile3") != 0) {
+      if (fname.compare("partitionJsonFile3b") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -7950,7 +7968,7 @@ void IWorkerServiceConcurrentClient::recv_partitionJsonFile3( ::ignis::rpc::driv
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IWorkerService_partitionJsonFile3_presult result;
+      IWorkerService_partitionJsonFile3b_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -7966,7 +7984,7 @@ void IWorkerServiceConcurrentClient::recv_partitionJsonFile3( ::ignis::rpc::driv
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile3 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionJsonFile3b failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

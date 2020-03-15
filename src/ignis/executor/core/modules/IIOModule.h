@@ -29,9 +29,9 @@ namespace ignis {
 
                     void partitionTextFile(const std::string& path, const int64_t first, const int64_t partitions) override;
 
-                    void partitionJsonFile(const std::string& path, const int64_t first, const int64_t partitions) override;
+                    void partitionJsonFile4a(const std::string& path, const int64_t first, const int64_t partitions, const bool objectMapping) override;
 
-                    void partitionJsonFile4(const std::string& path, const int64_t first, const int64_t partitions, const  rpc::ISource& src) override;
+                    void partitionJsonFile4b(const std::string& path, const int64_t first, const int64_t partitions, const  rpc::ISource& src) override;
 
                     void saveAsObjectFile(const std::string& path, const int8_t compression, const int64_t first) override;
 

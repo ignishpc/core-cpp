@@ -38,8 +38,8 @@ class IWorkerServiceIf {
   virtual void partitionObjectFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) = 0;
   virtual void partitionObjectFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src) = 0;
   virtual void partitionTextFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) = 0;
-  virtual void partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) = 0;
-  virtual void partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const bool objectMapping) = 0;
+  virtual void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src) = 0;
 };
 
 class IWorkerServiceIfFactory {
@@ -117,10 +117,10 @@ class IWorkerServiceNull : virtual public IWorkerServiceIf {
   void partitionTextFile( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */) {
     return;
   }
-  void partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */) {
+  void partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */, const bool /* objectMapping */) {
     return;
   }
-  void partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */, const  ::ignis::rpc::ISource& /* src */) {
+  void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
 };
@@ -2098,43 +2098,49 @@ class IWorkerService_partitionTextFile_presult {
 
 };
 
-typedef struct _IWorkerService_partitionJsonFile_args__isset {
-  _IWorkerService_partitionJsonFile_args__isset() : id(false), path(false) {}
+typedef struct _IWorkerService_partitionJsonFile3a_args__isset {
+  _IWorkerService_partitionJsonFile3a_args__isset() : id(false), path(false), objectMapping(false) {}
   bool id :1;
   bool path :1;
-} _IWorkerService_partitionJsonFile_args__isset;
+  bool objectMapping :1;
+} _IWorkerService_partitionJsonFile3a_args__isset;
 
-class IWorkerService_partitionJsonFile_args {
+class IWorkerService_partitionJsonFile3a_args {
  public:
 
-  IWorkerService_partitionJsonFile_args(const IWorkerService_partitionJsonFile_args&);
-  IWorkerService_partitionJsonFile_args& operator=(const IWorkerService_partitionJsonFile_args&);
-  IWorkerService_partitionJsonFile_args() : path() {
+  IWorkerService_partitionJsonFile3a_args(const IWorkerService_partitionJsonFile3a_args&);
+  IWorkerService_partitionJsonFile3a_args& operator=(const IWorkerService_partitionJsonFile3a_args&);
+  IWorkerService_partitionJsonFile3a_args() : path(), objectMapping(0) {
   }
 
-  virtual ~IWorkerService_partitionJsonFile_args() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3a_args() noexcept;
   IWorkerId id;
   std::string path;
+  bool objectMapping;
 
-  _IWorkerService_partitionJsonFile_args__isset __isset;
+  _IWorkerService_partitionJsonFile3a_args__isset __isset;
 
   void __set_id(const IWorkerId& val);
 
   void __set_path(const std::string& val);
 
-  bool operator == (const IWorkerService_partitionJsonFile_args & rhs) const
+  void __set_objectMapping(const bool val);
+
+  bool operator == (const IWorkerService_partitionJsonFile3a_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(path == rhs.path))
       return false;
+    if (!(objectMapping == rhs.objectMapping))
+      return false;
     return true;
   }
-  bool operator != (const IWorkerService_partitionJsonFile_args &rhs) const {
+  bool operator != (const IWorkerService_partitionJsonFile3a_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_partitionJsonFile_args & ) const;
+  bool operator < (const IWorkerService_partitionJsonFile3a_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2142,43 +2148,44 @@ class IWorkerService_partitionJsonFile_args {
 };
 
 
-class IWorkerService_partitionJsonFile_pargs {
+class IWorkerService_partitionJsonFile3a_pargs {
  public:
 
 
-  virtual ~IWorkerService_partitionJsonFile_pargs() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3a_pargs() noexcept;
   const IWorkerId* id;
   const std::string* path;
+  const bool* objectMapping;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_partitionJsonFile_result__isset {
-  _IWorkerService_partitionJsonFile_result__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_partitionJsonFile3a_result__isset {
+  _IWorkerService_partitionJsonFile3a_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_partitionJsonFile_result__isset;
+} _IWorkerService_partitionJsonFile3a_result__isset;
 
-class IWorkerService_partitionJsonFile_result {
+class IWorkerService_partitionJsonFile3a_result {
  public:
 
-  IWorkerService_partitionJsonFile_result(const IWorkerService_partitionJsonFile_result&);
-  IWorkerService_partitionJsonFile_result& operator=(const IWorkerService_partitionJsonFile_result&);
-  IWorkerService_partitionJsonFile_result() {
+  IWorkerService_partitionJsonFile3a_result(const IWorkerService_partitionJsonFile3a_result&);
+  IWorkerService_partitionJsonFile3a_result& operator=(const IWorkerService_partitionJsonFile3a_result&);
+  IWorkerService_partitionJsonFile3a_result() {
   }
 
-  virtual ~IWorkerService_partitionJsonFile_result() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3a_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_partitionJsonFile_result__isset __isset;
+  _IWorkerService_partitionJsonFile3a_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IWorkerService_partitionJsonFile_result & rhs) const
+  bool operator == (const IWorkerService_partitionJsonFile3a_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -2186,58 +2193,58 @@ class IWorkerService_partitionJsonFile_result {
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_partitionJsonFile_result &rhs) const {
+  bool operator != (const IWorkerService_partitionJsonFile3a_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_partitionJsonFile_result & ) const;
+  bool operator < (const IWorkerService_partitionJsonFile3a_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_partitionJsonFile_presult__isset {
-  _IWorkerService_partitionJsonFile_presult__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_partitionJsonFile3a_presult__isset {
+  _IWorkerService_partitionJsonFile3a_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_partitionJsonFile_presult__isset;
+} _IWorkerService_partitionJsonFile3a_presult__isset;
 
-class IWorkerService_partitionJsonFile_presult {
+class IWorkerService_partitionJsonFile3a_presult {
  public:
 
 
-  virtual ~IWorkerService_partitionJsonFile_presult() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3a_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_partitionJsonFile_presult__isset __isset;
+  _IWorkerService_partitionJsonFile3a_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IWorkerService_partitionJsonFile3_args__isset {
-  _IWorkerService_partitionJsonFile3_args__isset() : id(false), path(false), src(false) {}
+typedef struct _IWorkerService_partitionJsonFile3b_args__isset {
+  _IWorkerService_partitionJsonFile3b_args__isset() : id(false), path(false), src(false) {}
   bool id :1;
   bool path :1;
   bool src :1;
-} _IWorkerService_partitionJsonFile3_args__isset;
+} _IWorkerService_partitionJsonFile3b_args__isset;
 
-class IWorkerService_partitionJsonFile3_args {
+class IWorkerService_partitionJsonFile3b_args {
  public:
 
-  IWorkerService_partitionJsonFile3_args(const IWorkerService_partitionJsonFile3_args&);
-  IWorkerService_partitionJsonFile3_args& operator=(const IWorkerService_partitionJsonFile3_args&);
-  IWorkerService_partitionJsonFile3_args() : path() {
+  IWorkerService_partitionJsonFile3b_args(const IWorkerService_partitionJsonFile3b_args&);
+  IWorkerService_partitionJsonFile3b_args& operator=(const IWorkerService_partitionJsonFile3b_args&);
+  IWorkerService_partitionJsonFile3b_args() : path() {
   }
 
-  virtual ~IWorkerService_partitionJsonFile3_args() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3b_args() noexcept;
   IWorkerId id;
   std::string path;
    ::ignis::rpc::ISource src;
 
-  _IWorkerService_partitionJsonFile3_args__isset __isset;
+  _IWorkerService_partitionJsonFile3b_args__isset __isset;
 
   void __set_id(const IWorkerId& val);
 
@@ -2245,7 +2252,7 @@ class IWorkerService_partitionJsonFile3_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  bool operator == (const IWorkerService_partitionJsonFile3_args & rhs) const
+  bool operator == (const IWorkerService_partitionJsonFile3b_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -2255,11 +2262,11 @@ class IWorkerService_partitionJsonFile3_args {
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_partitionJsonFile3_args &rhs) const {
+  bool operator != (const IWorkerService_partitionJsonFile3b_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_partitionJsonFile3_args & ) const;
+  bool operator < (const IWorkerService_partitionJsonFile3b_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2267,11 +2274,11 @@ class IWorkerService_partitionJsonFile3_args {
 };
 
 
-class IWorkerService_partitionJsonFile3_pargs {
+class IWorkerService_partitionJsonFile3b_pargs {
  public:
 
 
-  virtual ~IWorkerService_partitionJsonFile3_pargs() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3b_pargs() noexcept;
   const IWorkerId* id;
   const std::string* path;
   const  ::ignis::rpc::ISource* src;
@@ -2280,31 +2287,31 @@ class IWorkerService_partitionJsonFile3_pargs {
 
 };
 
-typedef struct _IWorkerService_partitionJsonFile3_result__isset {
-  _IWorkerService_partitionJsonFile3_result__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_partitionJsonFile3b_result__isset {
+  _IWorkerService_partitionJsonFile3b_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_partitionJsonFile3_result__isset;
+} _IWorkerService_partitionJsonFile3b_result__isset;
 
-class IWorkerService_partitionJsonFile3_result {
+class IWorkerService_partitionJsonFile3b_result {
  public:
 
-  IWorkerService_partitionJsonFile3_result(const IWorkerService_partitionJsonFile3_result&);
-  IWorkerService_partitionJsonFile3_result& operator=(const IWorkerService_partitionJsonFile3_result&);
-  IWorkerService_partitionJsonFile3_result() {
+  IWorkerService_partitionJsonFile3b_result(const IWorkerService_partitionJsonFile3b_result&);
+  IWorkerService_partitionJsonFile3b_result& operator=(const IWorkerService_partitionJsonFile3b_result&);
+  IWorkerService_partitionJsonFile3b_result() {
   }
 
-  virtual ~IWorkerService_partitionJsonFile3_result() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3b_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_partitionJsonFile3_result__isset __isset;
+  _IWorkerService_partitionJsonFile3b_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IWorkerService_partitionJsonFile3_result & rhs) const
+  bool operator == (const IWorkerService_partitionJsonFile3b_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -2312,32 +2319,32 @@ class IWorkerService_partitionJsonFile3_result {
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_partitionJsonFile3_result &rhs) const {
+  bool operator != (const IWorkerService_partitionJsonFile3b_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_partitionJsonFile3_result & ) const;
+  bool operator < (const IWorkerService_partitionJsonFile3b_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_partitionJsonFile3_presult__isset {
-  _IWorkerService_partitionJsonFile3_presult__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_partitionJsonFile3b_presult__isset {
+  _IWorkerService_partitionJsonFile3b_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_partitionJsonFile3_presult__isset;
+} _IWorkerService_partitionJsonFile3b_presult__isset;
 
-class IWorkerService_partitionJsonFile3_presult {
+class IWorkerService_partitionJsonFile3b_presult {
  public:
 
 
-  virtual ~IWorkerService_partitionJsonFile3_presult() noexcept;
+  virtual ~IWorkerService_partitionJsonFile3b_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_partitionJsonFile3_presult__isset __isset;
+  _IWorkerService_partitionJsonFile3b_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -2416,12 +2423,12 @@ class IWorkerServiceClient : virtual public IWorkerServiceIf {
   void partitionTextFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path);
   void send_partitionTextFile(const IWorkerId& id, const std::string& path);
   void recv_partitionTextFile( ::ignis::rpc::driver::IDataFrameId& _return);
-  void partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path);
-  void send_partitionJsonFile(const IWorkerId& id, const std::string& path);
-  void recv_partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return);
-  void partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
-  void send_partitionJsonFile3(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
-  void recv_partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return);
+  void partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const bool objectMapping);
+  void send_partitionJsonFile3a(const IWorkerId& id, const std::string& path, const bool objectMapping);
+  void recv_partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return);
+  void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
+  void send_partitionJsonFile3b(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
+  void recv_partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -2453,8 +2460,8 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_partitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionObjectFile3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_partitionJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_partitionJsonFile3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionJsonFile3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionJsonFile3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IWorkerServiceProcessor(::std::shared_ptr<IWorkerServiceIf> iface) :
     iface_(iface) {
@@ -2474,8 +2481,8 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["partitionObjectFile"] = &IWorkerServiceProcessor::process_partitionObjectFile;
     processMap_["partitionObjectFile3"] = &IWorkerServiceProcessor::process_partitionObjectFile3;
     processMap_["partitionTextFile"] = &IWorkerServiceProcessor::process_partitionTextFile;
-    processMap_["partitionJsonFile"] = &IWorkerServiceProcessor::process_partitionJsonFile;
-    processMap_["partitionJsonFile3"] = &IWorkerServiceProcessor::process_partitionJsonFile3;
+    processMap_["partitionJsonFile3a"] = &IWorkerServiceProcessor::process_partitionJsonFile3a;
+    processMap_["partitionJsonFile3b"] = &IWorkerServiceProcessor::process_partitionJsonFile3b;
   }
 
   virtual ~IWorkerServiceProcessor() {}
@@ -2663,23 +2670,23 @@ class IWorkerServiceMultiface : virtual public IWorkerServiceIf {
     return;
   }
 
-  void partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) {
+  void partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const bool objectMapping) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->partitionJsonFile(_return, id, path);
+      ifaces_[i]->partitionJsonFile3a(_return, id, path, objectMapping);
     }
-    ifaces_[i]->partitionJsonFile(_return, id, path);
+    ifaces_[i]->partitionJsonFile3a(_return, id, path, objectMapping);
     return;
   }
 
-  void partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src) {
+  void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->partitionJsonFile3(_return, id, path, src);
+      ifaces_[i]->partitionJsonFile3b(_return, id, path, src);
     }
-    ifaces_[i]->partitionJsonFile3(_return, id, path, src);
+    ifaces_[i]->partitionJsonFile3b(_return, id, path, src);
     return;
   }
 
@@ -2763,12 +2770,12 @@ class IWorkerServiceConcurrentClient : virtual public IWorkerServiceIf {
   void partitionTextFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path);
   int32_t send_partitionTextFile(const IWorkerId& id, const std::string& path);
   void recv_partitionTextFile( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
-  void partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path);
-  int32_t send_partitionJsonFile(const IWorkerId& id, const std::string& path);
-  void recv_partitionJsonFile( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
-  void partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
-  int32_t send_partitionJsonFile3(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
-  void recv_partitionJsonFile3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const bool objectMapping);
+  int32_t send_partitionJsonFile3a(const IWorkerId& id, const std::string& path, const bool objectMapping);
+  void recv_partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
+  int32_t send_partitionJsonFile3b(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
+  void recv_partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
