@@ -219,7 +219,7 @@ ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IM
 
 template<typename Tp, typename Cmp>
 void ISortImplClass::sortMemoryPartition(storage::IMemoryPartition <Tp> &part, Cmp comparator) {
-    std::stable_sort(part.begin(), part.end(), comparator);
+    std::sort(part.begin(), part.end(), comparator);
 }
 
 template<typename Tp, typename Cmp>
