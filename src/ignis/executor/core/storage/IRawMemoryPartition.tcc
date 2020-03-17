@@ -96,8 +96,7 @@ void IRawMemoryPartitionClass<Tp>::writeHeader() {
     auto write_pos = buffer->getBufferSize() - buffer->available_write();
     buffer->resetBuffer();//Reset write
     auto ptr = buffer->getWritePtr(0);
-    bool native;
-    proto.writeBool(native);
+    proto.writeSerialization();
     IHeader<Tp>().write(proto, this->elems);
     this->zlib->flush();
     /*Align header to the left*/

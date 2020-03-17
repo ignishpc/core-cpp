@@ -113,8 +113,7 @@ void IDiskPartitionClass<Tp>::writeHeader() {
     auto buffer = std::make_shared<transport::IMemoryBuffer>(IDiskPartitionClass<Tp>::HEADER);
     auto zlib_buffer = std::make_shared<transport::IZlibTransport>(buffer, this->compression);
     protocol::IObjectProtocol proto(zlib_buffer);
-    bool native;
-    proto.writeBool(native);
+    proto.writeSerialization();
     IHeader<Tp>().write(proto, this->elems);
     zlib_buffer->flush();
     header = buffer->getBufferAsString();

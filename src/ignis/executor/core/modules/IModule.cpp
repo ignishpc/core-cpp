@@ -40,8 +40,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
         auto buffer = std::make_shared<transport::IMemoryBuffer>((uint8_t *) const_cast<char *>(header.c_str()),
                                                                  header.size());
         auto proto = std::make_shared<protocol::IObjectProtocol>(buffer);
-        bool native;
-        proto->readBool(native);
+        proto->readSerialization();
         auto tp = io::readTypeAux(*proto);
         auto sz = io::readSizeAux(*proto);
 

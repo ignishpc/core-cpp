@@ -7,6 +7,7 @@
 #include "ignis/executor/core/io/IWriter.h"
 #include "ignis/executor/core/transport/ITransport.h"
 #include "ignis/executor/core/exception/IInvalidArgument.h"
+#include "ignis/executor/core/exception/ILogicError.h"
 #include <thrift/protocol/TProtocolDecorator.h>
 #include <thrift/protocol/TCompactProtocol.h>
 
@@ -30,8 +31,7 @@ namespace ignis {
 
                     template<typename Tp>
                     void readObject(Tp &obj) {
-                        bool native;
-                        this->readBool(native);//C++ does not have a native serialization
+                        readSerialization();
                         io::IReader<Tp> reader;
                         reader.readType(*this);
                         return reader(*this, obj);
@@ -40,9 +40,21 @@ namespace ignis {
                     template<typename Tp>
                     void writeObject(const Tp &obj) {
                         io::IWriter<Tp> writer;
-                        this->writeBool(false);
+                        writeSerialization();
                         writer.writeType(*this);
                         writer(*this, obj);
+                    }
+
+                    void readSerialization(){
+                        int8_t id;
+                        this->readByte(id);
+                        if (id != 0){
+                            throw exception::ILogicError("C++ only support Ignis serialization");
+                        }
+                    }
+
+                    void writeSerialization(){
+                        this->writeByte(0);
                     }
 
                     virtual ~IObjectProtocol() {}

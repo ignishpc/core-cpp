@@ -58,8 +58,7 @@ std::shared_ptr<ignis::executor::api::IReadIterator<Tp>> IRawPartitionClass<Tp>:
     sync();
     auto zlib_it = std::make_shared<transport::IZlibTransport>(readTransport());
     auto proto = std::make_shared<protocol::IObjectProtocol>(zlib_it);
-    bool native;
-    proto->readBool(native);
+    proto->readSerialization();
     IHeader<Tp>().read(*proto);
     return std::make_shared<storage::IRawReadIterator<Tp>>(proto, elems);
 }
@@ -88,8 +87,7 @@ size_t IRawPartitionClass<Tp>::size() {
 template<typename Tp>
 void IRawPartitionClass<Tp>::readHeader(std::shared_ptr<transport::ITransport> &trans) {
     protocol::IObjectProtocol proto(trans);
-    bool native;
-    proto.readBool(native);
+    proto.readSerialization();
     this->elems += IHeader<Tp>().read(proto);
 }
 
@@ -117,8 +115,7 @@ void IRawPartitionClass<Tp>::copyFrom(IPartition <Tp> &source) {
             auto source_buffer = raw_source.readTransport();
             auto source_zlib = std::make_shared<transport::IZlibTransport>(source_buffer);
             auto source_proto = std::make_shared<protocol::IObjectProtocol>(source_zlib);
-            bool native;
-            source_proto->readBool(native);
+            source_proto->readSerialization();
             IHeader<Tp>().read(*source_proto);
             while ((read = source_zlib->read(bb, 256)) > 0) {
                 this->zlib->write(bb, read);
