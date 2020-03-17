@@ -13,7 +13,6 @@ namespace ignis {
                 template<typename Tp>
                 class IRawPartition : public IPartition<Tp> {
                 public:
-                    typedef Tp value_type;
 
                     IRawPartition(std::shared_ptr<transport::ITransport> &trans, int8_t compression = 6);
 
@@ -42,8 +41,6 @@ namespace ignis {
                     virtual const std::string &type() = 0;
 
                     virtual void sync();
-
-                    virtual size_t _parseHeader(std::shared_ptr<transport::ITransport> &trans);
 
                     virtual ~IRawPartition();
 

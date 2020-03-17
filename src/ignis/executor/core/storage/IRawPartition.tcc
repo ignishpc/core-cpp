@@ -81,21 +81,16 @@ void IRawPartitionClass<Tp>::sync() {
 }
 
 template<typename Tp>
-size_t IRawPartitionClass<Tp>::_parseHeader(std::shared_ptr<transport::ITransport> &trans) {
-    protocol::IObjectProtocol proto(trans);
-    bool native;
-    proto.readBool(native);
-    return IHeader<Tp>().read(proto);
-}
-
-template<typename Tp>
 size_t IRawPartitionClass<Tp>::size() {
     return this->elems;
 }
 
 template<typename Tp>
 void IRawPartitionClass<Tp>::readHeader(std::shared_ptr<transport::ITransport> &trans) {
-    this->elems += _parseHeader(trans);
+    protocol::IObjectProtocol proto(trans);
+    bool native;
+    proto.readBool(native);
+    this->elems += IHeader<Tp>().read(proto);
 }
 
 template<typename Tp>

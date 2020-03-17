@@ -22,6 +22,7 @@ void IIOModuleTest::textFileTest(int n) {
             "abcdefghijklmnopqrstuvwxyz";
 
     std::string path = "./tmpfile.txt";
+    auto executors = executor_data->getContext().executors();
     std::ofstream file(path, std::fstream::trunc);
     std::vector<std::string> lines;
     std::string line;
@@ -36,7 +37,7 @@ void IIOModuleTest::textFileTest(int n) {
 
     io->textFile2(path, n);
 
-    CPPUNIT_ASSERT_GREATEREQUAL(n, (int)executor_data->getPartitions<std::string>()->partitions());
+    CPPUNIT_ASSERT_GREATEREQUAL(n / executors, (int)executor_data->getPartitions<std::string>()->partitions());
 
     auto result = getFromPartitions<std::string>();
 
