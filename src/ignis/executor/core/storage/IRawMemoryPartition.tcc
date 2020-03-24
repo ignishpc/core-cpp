@@ -21,7 +21,7 @@ IRawMemoryPartitionClass<Tp>::~IRawMemoryPartition() {}
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IRawMemoryPartitionClass<Tp>::clone() {
     auto newPartition = std::make_shared<IRawMemoryPartition < Tp>>
-    (this->bytes());
+    (this->bytes(), this->compression);
     this->copyTo(*newPartition);
     return newPartition;
 }

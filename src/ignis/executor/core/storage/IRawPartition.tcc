@@ -17,8 +17,6 @@ IRawPartitionClass<Tp>::IRawPartition(std::shared_ptr<transport::ITransport> &tr
 template<typename Tp>
 void IRawPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &trans) {
     auto zlib_in = std::make_shared<transport::IZlibTransport>(trans);
-    protocol::IObjectProtocol proto_in(zlib_in);
-    protocol::IObjectProtocol proto_buffer(this->zlib);
     this->readHeader(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(zlib_in));
     this->sync();
     writeHeader();
