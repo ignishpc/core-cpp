@@ -94,9 +94,11 @@ IRawPartitionClass<Tp>::~IRawPartition() {}
 
 template<typename Tp>
 void IRawPartitionClass<Tp>::copyFrom(IPartition <Tp> &source) {
-    if (source.type() == "disk" || source.type() == "rawMemory") {
+    if (source.type() == "Disk" || source.type() == "RawMemory") {
         auto &raw_source = reinterpret_cast<IRawPartition <Tp> &>(source);
         raw_source.sync();
+        sync();
+        writeHeader();
         this->elems += raw_source.elems;
         uint8_t bb[256];
         uint32_t read;

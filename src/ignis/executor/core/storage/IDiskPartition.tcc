@@ -7,7 +7,7 @@
 #define IDiskPartitionClass ignis::executor::core::storage::IDiskPartition
 
 template<typename Tp>
-const std::string IDiskPartitionClass<Tp>::TYPE = "disk";
+const std::string IDiskPartitionClass<Tp>::TYPE = "Disk";
 
 template<typename Tp>
 IDiskPartitionClass<Tp>::IDiskPartition(std::string path, int8_t compression, bool persist, bool read):
@@ -47,6 +47,7 @@ std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IDiskPartitionCl
 
 template<typename Tp>
 void IDiskPartitionClass<Tp>::clear() {
+    this->zlib->flush();
     this->elems = 0;
     ::ftruncate64(file->getFD(), 0);
 }
@@ -105,6 +106,8 @@ IDiskPartitionClass<Tp>::~IDiskPartition() {
         file->close();
         std::remove(path.c_str());
         std::remove((path + ".header").c_str());
+    }else{
+        sync();
     }
 }
 
