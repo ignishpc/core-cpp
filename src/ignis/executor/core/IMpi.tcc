@@ -101,18 +101,19 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
                      &displs[0], MPI::BYTE, root);
         if (isRoot(root)) {
             auto root_path = disk.getPath();
-            auto destroy = disk.destroy;
             disk.rename(path + ".tmp");
-            storage::IDiskPartition<Tp> rcv(root_path, properties.partitionCompression(), !destroy, false);
+            storage::IDiskPartition<Tp> rcv(root_path, properties.partitionCompression(), false, false);
             for (int i = 0; i < executors(); i++) {
                 if (i != root) {
                     std::string src(full_path, displs[i], szv[i]);
-                    storage::IDiskPartition<Tp> aux(src, properties.partitionCompression(), true, true);
+                    storage::IDiskPartition<Tp> aux(src, properties.partitionCompression(), false, true);
                     aux.copyTo(rcv);
                 } else {
                     part.moveTo(rcv);
                 }
             }
+            rcv.destroy = disk.destroy;
+            disk.destroy = true;
             std::swap(disk, rcv);
         }
     }
@@ -131,7 +132,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
             }
             comm.Bcast(&men[0], sz * sizeof(Tp), MPI::BYTE, root);
         } else {
-            auto buffer = std::make_shared<transport::IMemoryBuffer>();
+            auto buffer = std::make_shared<transport::IMemoryBuffer>(part.bytes());
             int sz;
             if (isRoot(root)) {
                 part.write((std::shared_ptr<transport::ITransport> &) buffer, properties.msgCompression());
@@ -164,7 +165,8 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
         path.resize(sz);
         comm.Bcast(const_cast<char *>(path.c_str()), sz, MPI::BYTE, root);
         if (!isRoot(root)) {
-            storage::IDiskPartition<Tp> rcv(path, properties.partitionCompression(), true, true);
+            storage::IDiskPartition<Tp> rcv(path, properties.partitionCompression(), false, true);
+            disk.destroy = true;
             std::swap(disk, rcv);
         }
     }
