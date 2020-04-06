@@ -18,18 +18,12 @@ int64_t IIOImplClass::partitionApproxSize() {
             return 0;
         }
 
-        auto partitionType = (*group)[0]->type();
         int64_t size = 0;
-
-        if (partitionType == storage::IMemoryPartition<Tp>::TYPE) {
-            if (executor_data->mpi().isPrimitiveType<Tp>()) {
-                for (auto &partition: *group) {
-                    size += partition->size();
-                }
-                size *= sizeof(Tp);
-            } else {
-                return LONG_MAX; //UNKNOWN
+        if (executor_data->getPartitionTools().isMemory(*group) and executor_data->mpi().isPrimitiveType<Tp>()) {
+            for (auto &partition: *group) {
+                size += partition->size();
             }
+            size *= sizeof(Tp);
         } else {
             for (auto &partition: *group) {
                 size += partition->bytes();

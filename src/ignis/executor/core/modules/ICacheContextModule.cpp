@@ -22,7 +22,7 @@ ICacheContextModule::~ICacheContextModule() {}
 
 int64_t ICacheContextModule::saveContext() {
     IGNIS_RPC_TRY()
-        impl.saveContext();
+        return impl.saveContext();
     IGNIS_RPC_CATCH()
 }
 

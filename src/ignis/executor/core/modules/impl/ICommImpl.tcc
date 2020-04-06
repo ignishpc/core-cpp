@@ -13,7 +13,7 @@ std::vector<std::string> ICommImplClass::getPartitions() {
         std::vector<std::string> partitions;
         for (auto &part: (*group)) {
             auto buffer = std::make_shared<transport::IMemoryBuffer>();
-            part->write((std::shared_ptr<transport::ITransport> &) buffer);
+            part->write((std::shared_ptr<transport::ITransport> &) buffer, cmp);
             partitions.push_back(buffer->getBufferAsString());
         }
         return partitions;

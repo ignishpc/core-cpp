@@ -48,6 +48,7 @@ int64_t ICacheImpl::saveContext() {
         }
         IGNIS_LOG(info) << "CacheContext: saving context " << id;
         context[id] = std::static_pointer_cast<void>(executor_data->getPartitions<char>(true));
+        return id;
     IGNIS_CATCH()
 }
 
@@ -77,7 +78,6 @@ void ICacheImpl::loadCache(const int64_t id) {
         IGNIS_LOG(info) << "CacheContext: loading partition from cache";
         auto value = _cache.find(id);
         if (value == _cache.end()) {
-            IGNIS_LOG(error) << "CacheContext: cache " << id << " not found";
             throw exception::IInvalidArgument("cache " + std::to_string(id) + " not found");
         }
         executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));

@@ -94,7 +94,7 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
                     auto group = std::make_shared<storage::IPartitionGroup < Tp>>
                     ();
                     for (int i = 0; i < group_cache->partitions(); i++) {
-                        auto part = executor_data->getPartitionTools().newDiskPartition<Tp>("cache", true);
+                        auto part = executor_data->getPartitionTools().newDiskPartition<Tp>("", true);
                         (*group_cache)[i]->copyTo(*part);
                         group->add(part);
                     }

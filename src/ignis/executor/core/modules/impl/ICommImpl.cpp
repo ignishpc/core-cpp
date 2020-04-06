@@ -104,21 +104,17 @@ void ICommImpl::joinToGroup(const std::string &group_name, const std::string &id
             } else {
                 new_group = MPI::COMM_NULL;
                 info_comm = group.Connect(group_name.c_str(), MPI::INFO_NULL, 0);
-                client_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
-                group = addComm(group, client_comm, MPI::COMM_SELF, !permanent);
+                client_comm = MPI::COMM_SELF.Connect(group_name.c_str(), MPI::INFO_NULL, 0);
+                new_group = addComm(new_group, client_comm, MPI::COMM_SELF, !permanent);
                 client_comm.Free();
                 info_comm.Free();
             }
         } else {
             client_comm = MPI::COMM_NULL;
             if (member) {
-                group.Accept(group_name.c_str(), MPI::INFO_NULL, 0).Free();
-                new_group = addComm(new_group, client_comm, MPI::COMM_SELF, false);
-            } else {
-                new_group = MPI::COMM_NULL;
-                group.Accept(group_name.c_str(), MPI::INFO_NULL, 0).Free();
-                new_group = addComm(new_group, client_comm, MPI::COMM_SELF, false);
-            }
+                new_group = MPI::COMM_NULL;}
+            group.Accept(group_name.c_str(), MPI::INFO_NULL, 0).Free();
+            new_group = addComm(new_group, client_comm, MPI::COMM_SELF, false);
         }
         groups[id] = new_group;
     IGNIS_CATCH()
