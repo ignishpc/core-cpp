@@ -89,7 +89,7 @@ void IIOModule::partitionJsonFile4a(const std::string &path, const int64_t first
         } catch (exception::IException &ex) {
             IGNIS_LOG(warning) << "IO: ObjectMapping failed, avoiding: " << ex.what();
         }
-        impl.partitionObjectFileVoid(path, first, partitions);
+        impl.partitionJsonFileVoid(path, first, partitions);
     IGNIS_RPC_CATCH()
 }
 
