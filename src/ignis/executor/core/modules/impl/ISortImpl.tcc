@@ -84,9 +84,9 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
             group->add(pivots);
             parallelLocalSort(*group, comparator);
             if (partitions > 0) {
-                samples = partitions  - 1;
+                samples = partitions - 1;
             } else {
-                samples = totalPartitions  - 1;
+                samples = totalPartitions - 1;
             }
 
             IGNIS_LOG(info) << "Sort: selecting " << samples << " partition pivots";
@@ -96,7 +96,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
         IGNIS_LOG(info) << "Sort: broadcasting pivots ranges";
         executor_data->mpi().bcast(*pivots, 0);
 
-        decltype(input) ranges = generateRanges(*input, *pivots);
+        decltype(input) ranges = generateRanges(*input, *pivots, comparator);
         decltype(input) output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
         auto executor_ranges = (int64_t) std::ceil(ranges->partitions() / (double) executors);
         int target = -1;
@@ -163,9 +163,6 @@ ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, int64_t sampl
                     for (int i = 0; i < skip; i++) {
                         reader->next();
                     }
-                    if (!reader->hasNext()) {
-                        break;
-                    }
                     #pragma omp critical
                     {
                         writer->write(reader->next());
@@ -178,11 +175,12 @@ ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, int64_t sampl
     return pivots;
 }
 
-template<typename Tp>
+template<typename Tp, typename Cmp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
+ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots,
+                               Cmp comparator) {
     if (executor_data->getPartitionTools().isMemory(group)) {
-        return generateMemoryRanges(group, pivots);
+        return generateMemoryRanges(group, pivots,comparator);
     }
     auto ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(pivots.size() + 1);
 
@@ -201,7 +199,7 @@ ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IM
                 auto reader = group[p]->readIterator();
                 while (reader->hasNext()) {
                     auto &elem = reader->next();
-                    writers[searchRange(elem, pivots)]->write(elem);
+                    writers[searchRange(elem, pivots, comparator)]->write(elem);
                 }
                 group[p]->clear();
             }
@@ -303,9 +301,10 @@ ISortImplClass::selectMemoryPivots(storage::IPartitionGroup <Tp> &group, int64_t
 }
 
 
-template<typename Tp>
+template<typename Tp, typename Cmp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots) {
+ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots,
+                                     Cmp comparator) {
     auto ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(pivots.size() + 1);
 
     IGNIS_OMP_EXCEPTION_INIT()
@@ -323,7 +322,7 @@ ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, stora
             for (int64_t p = 0; p < group.partitions(); p++) {
                 auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
                 for (int64_t i = 0; i < group[p]->size(); i++) {
-                    writers[searchRange(part[i], pivots)]->write(std::move(part[i]));
+                    writers[searchRange(part[i], pivots, comparator)]->write(std::move(part[i]));
                 }
                 group[p]->clear();
             }
@@ -338,20 +337,20 @@ ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, stora
     return ranges;
 }
 
-template<typename Tp>
-int64_t ISortImplClass::searchRange(Tp &elem, storage::IMemoryPartition <Tp> &pivots) {
+template<typename Tp, typename Cmp>
+int64_t ISortImplClass::searchRange(Tp &elem, storage::IMemoryPartition <Tp> &pivots, Cmp comparator) {
     int64_t start = 0;
     int64_t end = pivots.size() - 1;
     int64_t mid;
     while (start < end) {
         mid = (start + end) / 2;
-        if (elem < pivots[mid]) {
+        if (comparator(elem, pivots[mid])) {
             end = mid - 1;
         } else {
             start = mid + 1;
         }
     }
-    if (elem < pivots[start]) {
+    if (comparator(elem, pivots[start])) {
         return start;
     } else {
         return start + 1;

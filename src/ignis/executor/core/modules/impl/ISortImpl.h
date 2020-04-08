@@ -39,9 +39,9 @@ namespace ignis {
                         std::shared_ptr<storage::IMemoryPartition<Tp>>
                         selectPivots(storage::IPartitionGroup<Tp> &group, int64_t samples);
 
-                        template<typename Tp>
+                        template<typename Tp, typename Cmp>
                         std::shared_ptr<storage::IPartitionGroup<Tp>>
-                        generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots);
+                        generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
 
                         /*Auxiliary functions*/
                         template<typename Tp, typename Cmp>
@@ -59,13 +59,13 @@ namespace ignis {
                         std::shared_ptr<storage::IMemoryPartition<Tp>>
                         selectMemoryPivots(storage::IPartitionGroup<Tp> &group, int64_t samples);
 
-                        template<typename Tp>
+                        template<typename Tp, typename Cmp>
                         std::shared_ptr<storage::IPartitionGroup<Tp>>
                         generateMemoryRanges(storage::IPartitionGroup<Tp> &group,
-                                             storage::IMemoryPartition<Tp> &pivots);
+                                             storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
 
-                        template<typename Tp>
-                        int64_t searchRange(Tp& elem, storage::IMemoryPartition<Tp> &pivots);
+                        template<typename Tp, typename Cmp>
+                        int64_t searchRange(Tp& elem, storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
                     };
                 }
             }
