@@ -32,6 +32,10 @@ namespace ignis {
 
                 bool nativeSerialization() { return getString("ignis.partition.serialization") == "native"; }
 
+                int64_t transportMinimal() {return getSize("ignis.transport.minimal");}
+
+                int64_t transportElemSize() {return getSize("ignis.transport.element.size");}
+
                 std::string partitionType() { return getString("ignis.partition.type"); }
 
                 std::string jobName() { return getString("ignis.job.name"); }

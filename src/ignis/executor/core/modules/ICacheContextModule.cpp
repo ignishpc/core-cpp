@@ -26,6 +26,12 @@ int64_t ICacheContextModule::saveContext() {
     IGNIS_RPC_CATCH()
 }
 
+void ICacheContextModule::clearContext(){
+    IGNIS_RPC_TRY()
+        impl.clearContext();
+    IGNIS_RPC_CATCH()
+}
+
 void ICacheContextModule::loadContext(const int64_t id) {
     IGNIS_RPC_TRY()
         impl.loadContext(id);

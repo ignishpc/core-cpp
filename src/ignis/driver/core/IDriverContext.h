@@ -22,6 +22,8 @@ namespace ignis {
 
                 int64_t saveContext();
 
+                void clearContext();
+
                 void loadContext(const int64_t id);
 
                 void cache(const int64_t id, const int8_t level);
@@ -32,7 +34,12 @@ namespace ignis {
                 rpc::ISource registerType();
 
                 template<typename C>
-                int64_t parallelize(const C &collection, int64_t partitions);
+                int64_t parallelize(const C &collection);
+
+                template<typename Tp>
+                int64_t parallelize(const std::vector<Tp> &&collection);
+
+                int64_t parallelize(const std::vector<bool>&& collection);
 
                 template<typename Tp>
                 std::vector<Tp> collect(int64_t id);

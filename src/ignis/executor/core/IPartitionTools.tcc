@@ -6,6 +6,12 @@
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IPartitionToolsClass::newPartition() {
     auto partitionType = properties.partitionType();
+    return newPartition<Tp>(partitionType);
+}
+
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IPartitionToolsClass::newPartition(const std::string& type) {
+    auto partitionType = properties.partitionType();
     if (partitionType == storage::IMemoryPartition<Tp>::TYPE) {
         return newMemoryPartition<Tp>();
     } else if (partitionType == storage::IRawMemoryPartition<Tp>::TYPE) {

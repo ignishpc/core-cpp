@@ -52,9 +52,15 @@ int64_t ICacheImpl::saveContext() {
     IGNIS_CATCH()
 }
 
+void ICacheImpl::clearContext() {
+    IGNIS_TRY()
+        executor_data->deletePartitions();
+        executor_data->clearVariables();
+    IGNIS_CATCH()
+}
+
 void ICacheImpl::loadContext(const int64_t id) {
     IGNIS_TRY()
-        executor_data->clearVariables();
         auto value = context.find(id);
         bool found = value != context.end();
 

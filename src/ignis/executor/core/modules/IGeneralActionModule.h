@@ -17,15 +17,17 @@ namespace ignis {
 
                     void reduce(const rpc::ISource &function) override;
 
-                    void treeReduce(const rpc::ISource &function, int64_t depth) override;
+                    void treeReduce(const rpc::ISource &function) override;
 
                     void collect() override;
 
-                    void aggregate(const rpc::ISource &seqOp, const rpc::ISource &combOp) override;
+                    void aggregate(const rpc::ISource &zero, const rpc::ISource &seqOp, const rpc::ISource &combOp) override;
 
-                    void treeAggregate(const rpc::ISource &seqOp, const rpc::ISource &combOp, int64_t depth) override;
+                    void treeAggregate(const rpc::ISource &zero, const rpc::ISource &seqOp, const rpc::ISource &combOp) override;
 
-                    void fold(const rpc::ISource &function) override;
+                    void fold(const rpc::ISource &zero, const rpc::ISource &function) override;
+
+                    void treeFold(const rpc::ISource &zero, const rpc::ISource &function) override;
 
                     void take(int64_t num) override;
 
@@ -37,10 +39,20 @@ namespace ignis {
 
                     void top2(int64_t num, const rpc::ISource &comp) override;
 
+                    void takeOrdered(int64_t num) override;
+
+                    void takeOrdered2(int64_t num, const rpc::ISource &comp) override;
+
+                    void keys() override;
+
+                    void values() override;
+
                     virtual ~IGeneralActionModule();
 
                 private:
                     impl::IReduceImpl reduce_impl;
+                    impl::IPipeImpl pipe_impl;
+                    impl::ISortImpl sort_impl;
                 };
             }
         }

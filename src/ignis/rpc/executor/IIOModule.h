@@ -22,6 +22,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IIOModuleIf {
  public:
   virtual ~IIOModuleIf() {}
+  virtual void loadClass(const  ::ignis::rpc::ISource& src) = 0;
   virtual int64_t partitionCount() = 0;
   virtual int64_t partitionApproxSize() = 0;
   virtual void textFile(const std::string& path) = 0;
@@ -63,6 +64,9 @@ class IIOModuleIfSingletonFactory : virtual public IIOModuleIfFactory {
 class IIOModuleNull : virtual public IIOModuleIf {
  public:
   virtual ~IIOModuleNull() {}
+  void loadClass(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
   int64_t partitionCount() {
     int64_t _return = 0;
     return _return;
@@ -101,6 +105,110 @@ class IIOModuleNull : virtual public IIOModuleIf {
   void saveAsJsonFile(const std::string& /* path */, const int64_t /* first */, const bool /* pretty */) {
     return;
   }
+};
+
+typedef struct _IIOModule_loadClass_args__isset {
+  _IIOModule_loadClass_args__isset() : src(false) {}
+  bool src :1;
+} _IIOModule_loadClass_args__isset;
+
+class IIOModule_loadClass_args {
+ public:
+
+  IIOModule_loadClass_args(const IIOModule_loadClass_args&);
+  IIOModule_loadClass_args& operator=(const IIOModule_loadClass_args&);
+  IIOModule_loadClass_args() {
+  }
+
+  virtual ~IIOModule_loadClass_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IIOModule_loadClass_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IIOModule_loadClass_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_loadClass_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_loadClass_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_loadClass_pargs {
+ public:
+
+
+  virtual ~IIOModule_loadClass_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_loadClass_result__isset {
+  _IIOModule_loadClass_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_loadClass_result__isset;
+
+class IIOModule_loadClass_result {
+ public:
+
+  IIOModule_loadClass_result(const IIOModule_loadClass_result&);
+  IIOModule_loadClass_result& operator=(const IIOModule_loadClass_result&);
+  IIOModule_loadClass_result() {
+  }
+
+  virtual ~IIOModule_loadClass_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_loadClass_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_loadClass_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_loadClass_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_loadClass_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_loadClass_presult__isset {
+  _IIOModule_loadClass_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_loadClass_presult__isset;
+
+class IIOModule_loadClass_presult {
+ public:
+
+
+  virtual ~IIOModule_loadClass_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_loadClass_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 
@@ -1501,6 +1609,9 @@ class IIOModuleClient : virtual public IIOModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void loadClass(const  ::ignis::rpc::ISource& src);
+  void send_loadClass(const  ::ignis::rpc::ISource& src);
+  void recv_loadClass();
   int64_t partitionCount();
   void send_partitionCount();
   int64_t recv_partitionCount();
@@ -1552,6 +1663,7 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IIOModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_loadClass(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionApproxSize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1567,6 +1679,7 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
  public:
   IIOModuleProcessor(::std::shared_ptr<IIOModuleIf> iface) :
     iface_(iface) {
+    processMap_["loadClass"] = &IIOModuleProcessor::process_loadClass;
     processMap_["partitionCount"] = &IIOModuleProcessor::process_partitionCount;
     processMap_["partitionApproxSize"] = &IIOModuleProcessor::process_partitionApproxSize;
     processMap_["textFile"] = &IIOModuleProcessor::process_textFile;
@@ -1607,6 +1720,15 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void loadClass(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->loadClass(src);
+    }
+    ifaces_[i]->loadClass(src);
+  }
+
   int64_t partitionCount() {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1747,6 +1869,9 @@ class IIOModuleConcurrentClient : virtual public IIOModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void loadClass(const  ::ignis::rpc::ISource& src);
+  int32_t send_loadClass(const  ::ignis::rpc::ISource& src);
+  void recv_loadClass(const int32_t seqid);
   int64_t partitionCount();
   int32_t send_partitionCount();
   int64_t recv_partitionCount(const int32_t seqid);

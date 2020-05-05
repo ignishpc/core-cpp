@@ -23,16 +23,21 @@ class IGeneralActionModuleIf {
  public:
   virtual ~IGeneralActionModuleIf() {}
   virtual void reduce(const  ::ignis::rpc::ISource& src) = 0;
-  virtual void treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth) = 0;
+  virtual void treeReduce(const  ::ignis::rpc::ISource& src) = 0;
   virtual void collect() = 0;
-  virtual void aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) = 0;
-  virtual void treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth) = 0;
-  virtual void fold(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) = 0;
+  virtual void treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) = 0;
+  virtual void fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src) = 0;
   virtual void take(const int64_t num) = 0;
   virtual void foreach_(const  ::ignis::rpc::ISource& src) = 0;
   virtual void foreachPartition(const  ::ignis::rpc::ISource& src) = 0;
   virtual void top(const int64_t num) = 0;
   virtual void top2(const int64_t num, const  ::ignis::rpc::ISource& cmp) = 0;
+  virtual void takeOrdered(const int64_t num) = 0;
+  virtual void takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp) = 0;
+  virtual void keys() = 0;
+  virtual void values() = 0;
 };
 
 class IGeneralActionModuleIfFactory {
@@ -65,19 +70,22 @@ class IGeneralActionModuleNull : virtual public IGeneralActionModuleIf {
   void reduce(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
-  void treeReduce(const  ::ignis::rpc::ISource& /* src */, const int64_t /* depth */) {
+  void treeReduce(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void collect() {
     return;
   }
-  void aggregate(const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */) {
+  void aggregate(const  ::ignis::rpc::ISource& /* zero */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */) {
     return;
   }
-  void treeAggregate(const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */, const int64_t /* depth */) {
+  void treeAggregate(const  ::ignis::rpc::ISource& /* zero */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */) {
     return;
   }
-  void fold(const  ::ignis::rpc::ISource& /* src */) {
+  void fold(const  ::ignis::rpc::ISource& /* zero */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void treeFold(const  ::ignis::rpc::ISource& /* zero */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void take(const int64_t /* num */) {
@@ -93,6 +101,18 @@ class IGeneralActionModuleNull : virtual public IGeneralActionModuleIf {
     return;
   }
   void top2(const int64_t /* num */, const  ::ignis::rpc::ISource& /* cmp */) {
+    return;
+  }
+  void takeOrdered(const int64_t /* num */) {
+    return;
+  }
+  void takeOrdered2(const int64_t /* num */, const  ::ignis::rpc::ISource& /* cmp */) {
+    return;
+  }
+  void keys() {
+    return;
+  }
+  void values() {
     return;
   }
 };
@@ -202,9 +222,8 @@ class IGeneralActionModule_reduce_presult {
 };
 
 typedef struct _IGeneralActionModule_treeReduce_args__isset {
-  _IGeneralActionModule_treeReduce_args__isset() : src(false), depth(false) {}
+  _IGeneralActionModule_treeReduce_args__isset() : src(false) {}
   bool src :1;
-  bool depth :1;
 } _IGeneralActionModule_treeReduce_args__isset;
 
 class IGeneralActionModule_treeReduce_args {
@@ -212,24 +231,19 @@ class IGeneralActionModule_treeReduce_args {
 
   IGeneralActionModule_treeReduce_args(const IGeneralActionModule_treeReduce_args&);
   IGeneralActionModule_treeReduce_args& operator=(const IGeneralActionModule_treeReduce_args&);
-  IGeneralActionModule_treeReduce_args() : depth(0) {
+  IGeneralActionModule_treeReduce_args() {
   }
 
   virtual ~IGeneralActionModule_treeReduce_args() noexcept;
    ::ignis::rpc::ISource src;
-  int64_t depth;
 
   _IGeneralActionModule_treeReduce_args__isset __isset;
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  void __set_depth(const int64_t val);
-
   bool operator == (const IGeneralActionModule_treeReduce_args & rhs) const
   {
     if (!(src == rhs.src))
-      return false;
-    if (!(depth == rhs.depth))
       return false;
     return true;
   }
@@ -251,7 +265,6 @@ class IGeneralActionModule_treeReduce_pargs {
 
   virtual ~IGeneralActionModule_treeReduce_pargs() noexcept;
   const  ::ignis::rpc::ISource* src;
-  const int64_t* depth;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -405,7 +418,8 @@ class IGeneralActionModule_collect_presult {
 };
 
 typedef struct _IGeneralActionModule_aggregate_args__isset {
-  _IGeneralActionModule_aggregate_args__isset() : seqOp(false), combOp(false) {}
+  _IGeneralActionModule_aggregate_args__isset() : zero(false), seqOp(false), combOp(false) {}
+  bool zero :1;
   bool seqOp :1;
   bool combOp :1;
 } _IGeneralActionModule_aggregate_args__isset;
@@ -419,10 +433,13 @@ class IGeneralActionModule_aggregate_args {
   }
 
   virtual ~IGeneralActionModule_aggregate_args() noexcept;
+   ::ignis::rpc::ISource zero;
    ::ignis::rpc::ISource seqOp;
    ::ignis::rpc::ISource combOp;
 
   _IGeneralActionModule_aggregate_args__isset __isset;
+
+  void __set_zero(const  ::ignis::rpc::ISource& val);
 
   void __set_seqOp(const  ::ignis::rpc::ISource& val);
 
@@ -430,6 +447,8 @@ class IGeneralActionModule_aggregate_args {
 
   bool operator == (const IGeneralActionModule_aggregate_args & rhs) const
   {
+    if (!(zero == rhs.zero))
+      return false;
     if (!(seqOp == rhs.seqOp))
       return false;
     if (!(combOp == rhs.combOp))
@@ -453,6 +472,7 @@ class IGeneralActionModule_aggregate_pargs {
 
 
   virtual ~IGeneralActionModule_aggregate_pargs() noexcept;
+  const  ::ignis::rpc::ISource* zero;
   const  ::ignis::rpc::ISource* seqOp;
   const  ::ignis::rpc::ISource* combOp;
 
@@ -516,10 +536,10 @@ class IGeneralActionModule_aggregate_presult {
 };
 
 typedef struct _IGeneralActionModule_treeAggregate_args__isset {
-  _IGeneralActionModule_treeAggregate_args__isset() : seqOp(false), combOp(false), depth(false) {}
+  _IGeneralActionModule_treeAggregate_args__isset() : zero(false), seqOp(false), combOp(false) {}
+  bool zero :1;
   bool seqOp :1;
   bool combOp :1;
-  bool depth :1;
 } _IGeneralActionModule_treeAggregate_args__isset;
 
 class IGeneralActionModule_treeAggregate_args {
@@ -527,29 +547,29 @@ class IGeneralActionModule_treeAggregate_args {
 
   IGeneralActionModule_treeAggregate_args(const IGeneralActionModule_treeAggregate_args&);
   IGeneralActionModule_treeAggregate_args& operator=(const IGeneralActionModule_treeAggregate_args&);
-  IGeneralActionModule_treeAggregate_args() : depth(0) {
+  IGeneralActionModule_treeAggregate_args() {
   }
 
   virtual ~IGeneralActionModule_treeAggregate_args() noexcept;
+   ::ignis::rpc::ISource zero;
    ::ignis::rpc::ISource seqOp;
    ::ignis::rpc::ISource combOp;
-  int64_t depth;
 
   _IGeneralActionModule_treeAggregate_args__isset __isset;
+
+  void __set_zero(const  ::ignis::rpc::ISource& val);
 
   void __set_seqOp(const  ::ignis::rpc::ISource& val);
 
   void __set_combOp(const  ::ignis::rpc::ISource& val);
 
-  void __set_depth(const int64_t val);
-
   bool operator == (const IGeneralActionModule_treeAggregate_args & rhs) const
   {
+    if (!(zero == rhs.zero))
+      return false;
     if (!(seqOp == rhs.seqOp))
       return false;
     if (!(combOp == rhs.combOp))
-      return false;
-    if (!(depth == rhs.depth))
       return false;
     return true;
   }
@@ -570,9 +590,9 @@ class IGeneralActionModule_treeAggregate_pargs {
 
 
   virtual ~IGeneralActionModule_treeAggregate_pargs() noexcept;
+  const  ::ignis::rpc::ISource* zero;
   const  ::ignis::rpc::ISource* seqOp;
   const  ::ignis::rpc::ISource* combOp;
-  const int64_t* depth;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -634,7 +654,8 @@ class IGeneralActionModule_treeAggregate_presult {
 };
 
 typedef struct _IGeneralActionModule_fold_args__isset {
-  _IGeneralActionModule_fold_args__isset() : src(false) {}
+  _IGeneralActionModule_fold_args__isset() : zero(false), src(false) {}
+  bool zero :1;
   bool src :1;
 } _IGeneralActionModule_fold_args__isset;
 
@@ -647,14 +668,19 @@ class IGeneralActionModule_fold_args {
   }
 
   virtual ~IGeneralActionModule_fold_args() noexcept;
+   ::ignis::rpc::ISource zero;
    ::ignis::rpc::ISource src;
 
   _IGeneralActionModule_fold_args__isset __isset;
+
+  void __set_zero(const  ::ignis::rpc::ISource& val);
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IGeneralActionModule_fold_args & rhs) const
   {
+    if (!(zero == rhs.zero))
+      return false;
     if (!(src == rhs.src))
       return false;
     return true;
@@ -676,6 +702,7 @@ class IGeneralActionModule_fold_pargs {
 
 
   virtual ~IGeneralActionModule_fold_pargs() noexcept;
+  const  ::ignis::rpc::ISource* zero;
   const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -732,6 +759,117 @@ class IGeneralActionModule_fold_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IGeneralActionModule_fold_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralActionModule_treeFold_args__isset {
+  _IGeneralActionModule_treeFold_args__isset() : zero(false), src(false) {}
+  bool zero :1;
+  bool src :1;
+} _IGeneralActionModule_treeFold_args__isset;
+
+class IGeneralActionModule_treeFold_args {
+ public:
+
+  IGeneralActionModule_treeFold_args(const IGeneralActionModule_treeFold_args&);
+  IGeneralActionModule_treeFold_args& operator=(const IGeneralActionModule_treeFold_args&);
+  IGeneralActionModule_treeFold_args() {
+  }
+
+  virtual ~IGeneralActionModule_treeFold_args() noexcept;
+   ::ignis::rpc::ISource zero;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralActionModule_treeFold_args__isset __isset;
+
+  void __set_zero(const  ::ignis::rpc::ISource& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralActionModule_treeFold_args & rhs) const
+  {
+    if (!(zero == rhs.zero))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_treeFold_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_treeFold_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralActionModule_treeFold_pargs {
+ public:
+
+
+  virtual ~IGeneralActionModule_treeFold_pargs() noexcept;
+  const  ::ignis::rpc::ISource* zero;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_treeFold_result__isset {
+  _IGeneralActionModule_treeFold_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_treeFold_result__isset;
+
+class IGeneralActionModule_treeFold_result {
+ public:
+
+  IGeneralActionModule_treeFold_result(const IGeneralActionModule_treeFold_result&);
+  IGeneralActionModule_treeFold_result& operator=(const IGeneralActionModule_treeFold_result&);
+  IGeneralActionModule_treeFold_result() {
+  }
+
+  virtual ~IGeneralActionModule_treeFold_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_treeFold_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralActionModule_treeFold_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_treeFold_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_treeFold_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_treeFold_presult__isset {
+  _IGeneralActionModule_treeFold_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_treeFold_presult__isset;
+
+class IGeneralActionModule_treeFold_presult {
+ public:
+
+
+  virtual ~IGeneralActionModule_treeFold_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_treeFold_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1264,6 +1402,405 @@ class IGeneralActionModule_top2_presult {
 
 };
 
+typedef struct _IGeneralActionModule_takeOrdered_args__isset {
+  _IGeneralActionModule_takeOrdered_args__isset() : num(false) {}
+  bool num :1;
+} _IGeneralActionModule_takeOrdered_args__isset;
+
+class IGeneralActionModule_takeOrdered_args {
+ public:
+
+  IGeneralActionModule_takeOrdered_args(const IGeneralActionModule_takeOrdered_args&);
+  IGeneralActionModule_takeOrdered_args& operator=(const IGeneralActionModule_takeOrdered_args&);
+  IGeneralActionModule_takeOrdered_args() : num(0) {
+  }
+
+  virtual ~IGeneralActionModule_takeOrdered_args() noexcept;
+  int64_t num;
+
+  _IGeneralActionModule_takeOrdered_args__isset __isset;
+
+  void __set_num(const int64_t val);
+
+  bool operator == (const IGeneralActionModule_takeOrdered_args & rhs) const
+  {
+    if (!(num == rhs.num))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_takeOrdered_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_takeOrdered_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralActionModule_takeOrdered_pargs {
+ public:
+
+
+  virtual ~IGeneralActionModule_takeOrdered_pargs() noexcept;
+  const int64_t* num;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_takeOrdered_result__isset {
+  _IGeneralActionModule_takeOrdered_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_takeOrdered_result__isset;
+
+class IGeneralActionModule_takeOrdered_result {
+ public:
+
+  IGeneralActionModule_takeOrdered_result(const IGeneralActionModule_takeOrdered_result&);
+  IGeneralActionModule_takeOrdered_result& operator=(const IGeneralActionModule_takeOrdered_result&);
+  IGeneralActionModule_takeOrdered_result() {
+  }
+
+  virtual ~IGeneralActionModule_takeOrdered_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_takeOrdered_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralActionModule_takeOrdered_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_takeOrdered_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_takeOrdered_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_takeOrdered_presult__isset {
+  _IGeneralActionModule_takeOrdered_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_takeOrdered_presult__isset;
+
+class IGeneralActionModule_takeOrdered_presult {
+ public:
+
+
+  virtual ~IGeneralActionModule_takeOrdered_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_takeOrdered_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralActionModule_takeOrdered2_args__isset {
+  _IGeneralActionModule_takeOrdered2_args__isset() : num(false), cmp(false) {}
+  bool num :1;
+  bool cmp :1;
+} _IGeneralActionModule_takeOrdered2_args__isset;
+
+class IGeneralActionModule_takeOrdered2_args {
+ public:
+
+  IGeneralActionModule_takeOrdered2_args(const IGeneralActionModule_takeOrdered2_args&);
+  IGeneralActionModule_takeOrdered2_args& operator=(const IGeneralActionModule_takeOrdered2_args&);
+  IGeneralActionModule_takeOrdered2_args() : num(0) {
+  }
+
+  virtual ~IGeneralActionModule_takeOrdered2_args() noexcept;
+  int64_t num;
+   ::ignis::rpc::ISource cmp;
+
+  _IGeneralActionModule_takeOrdered2_args__isset __isset;
+
+  void __set_num(const int64_t val);
+
+  void __set_cmp(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralActionModule_takeOrdered2_args & rhs) const
+  {
+    if (!(num == rhs.num))
+      return false;
+    if (!(cmp == rhs.cmp))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_takeOrdered2_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_takeOrdered2_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralActionModule_takeOrdered2_pargs {
+ public:
+
+
+  virtual ~IGeneralActionModule_takeOrdered2_pargs() noexcept;
+  const int64_t* num;
+  const  ::ignis::rpc::ISource* cmp;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_takeOrdered2_result__isset {
+  _IGeneralActionModule_takeOrdered2_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_takeOrdered2_result__isset;
+
+class IGeneralActionModule_takeOrdered2_result {
+ public:
+
+  IGeneralActionModule_takeOrdered2_result(const IGeneralActionModule_takeOrdered2_result&);
+  IGeneralActionModule_takeOrdered2_result& operator=(const IGeneralActionModule_takeOrdered2_result&);
+  IGeneralActionModule_takeOrdered2_result() {
+  }
+
+  virtual ~IGeneralActionModule_takeOrdered2_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_takeOrdered2_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralActionModule_takeOrdered2_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_takeOrdered2_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_takeOrdered2_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_takeOrdered2_presult__isset {
+  _IGeneralActionModule_takeOrdered2_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_takeOrdered2_presult__isset;
+
+class IGeneralActionModule_takeOrdered2_presult {
+ public:
+
+
+  virtual ~IGeneralActionModule_takeOrdered2_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_takeOrdered2_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IGeneralActionModule_keys_args {
+ public:
+
+  IGeneralActionModule_keys_args(const IGeneralActionModule_keys_args&);
+  IGeneralActionModule_keys_args& operator=(const IGeneralActionModule_keys_args&);
+  IGeneralActionModule_keys_args() {
+  }
+
+  virtual ~IGeneralActionModule_keys_args() noexcept;
+
+  bool operator == (const IGeneralActionModule_keys_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_keys_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_keys_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralActionModule_keys_pargs {
+ public:
+
+
+  virtual ~IGeneralActionModule_keys_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_keys_result__isset {
+  _IGeneralActionModule_keys_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_keys_result__isset;
+
+class IGeneralActionModule_keys_result {
+ public:
+
+  IGeneralActionModule_keys_result(const IGeneralActionModule_keys_result&);
+  IGeneralActionModule_keys_result& operator=(const IGeneralActionModule_keys_result&);
+  IGeneralActionModule_keys_result() {
+  }
+
+  virtual ~IGeneralActionModule_keys_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_keys_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralActionModule_keys_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_keys_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_keys_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_keys_presult__isset {
+  _IGeneralActionModule_keys_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_keys_presult__isset;
+
+class IGeneralActionModule_keys_presult {
+ public:
+
+
+  virtual ~IGeneralActionModule_keys_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_keys_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IGeneralActionModule_values_args {
+ public:
+
+  IGeneralActionModule_values_args(const IGeneralActionModule_values_args&);
+  IGeneralActionModule_values_args& operator=(const IGeneralActionModule_values_args&);
+  IGeneralActionModule_values_args() {
+  }
+
+  virtual ~IGeneralActionModule_values_args() noexcept;
+
+  bool operator == (const IGeneralActionModule_values_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_values_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_values_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralActionModule_values_pargs {
+ public:
+
+
+  virtual ~IGeneralActionModule_values_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_values_result__isset {
+  _IGeneralActionModule_values_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_values_result__isset;
+
+class IGeneralActionModule_values_result {
+ public:
+
+  IGeneralActionModule_values_result(const IGeneralActionModule_values_result&);
+  IGeneralActionModule_values_result& operator=(const IGeneralActionModule_values_result&);
+  IGeneralActionModule_values_result() {
+  }
+
+  virtual ~IGeneralActionModule_values_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_values_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralActionModule_values_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_values_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_values_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_values_presult__isset {
+  _IGeneralActionModule_values_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_values_presult__isset;
+
+class IGeneralActionModule_values_presult {
+ public:
+
+
+  virtual ~IGeneralActionModule_values_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_values_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class IGeneralActionModuleClient : virtual public IGeneralActionModuleIf {
  public:
   IGeneralActionModuleClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1292,21 +1829,24 @@ class IGeneralActionModuleClient : virtual public IGeneralActionModuleIf {
   void reduce(const  ::ignis::rpc::ISource& src);
   void send_reduce(const  ::ignis::rpc::ISource& src);
   void recv_reduce();
-  void treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth);
-  void send_treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth);
+  void treeReduce(const  ::ignis::rpc::ISource& src);
+  void send_treeReduce(const  ::ignis::rpc::ISource& src);
   void recv_treeReduce();
   void collect();
   void send_collect();
   void recv_collect();
-  void aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
-  void send_aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  void aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  void send_aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
   void recv_aggregate();
-  void treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
-  void send_treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
+  void treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  void send_treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
   void recv_treeAggregate();
-  void fold(const  ::ignis::rpc::ISource& src);
-  void send_fold(const  ::ignis::rpc::ISource& src);
+  void fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
+  void send_fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
   void recv_fold();
+  void treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
+  void send_treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
+  void recv_treeFold();
   void take(const int64_t num);
   void send_take(const int64_t num);
   void recv_take();
@@ -1322,6 +1862,18 @@ class IGeneralActionModuleClient : virtual public IGeneralActionModuleIf {
   void top2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
   void send_top2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
   void recv_top2();
+  void takeOrdered(const int64_t num);
+  void send_takeOrdered(const int64_t num);
+  void recv_takeOrdered();
+  void takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
+  void send_takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
+  void recv_takeOrdered2();
+  void keys();
+  void send_keys();
+  void recv_keys();
+  void values();
+  void send_values();
+  void recv_values();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1343,11 +1895,16 @@ class IGeneralActionModuleProcessor : public ::apache::thrift::TDispatchProcesso
   void process_aggregate(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_treeAggregate(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_fold(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_treeFold(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreach_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreachPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_top(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_top2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_takeOrdered(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_takeOrdered2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_keys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_values(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IGeneralActionModuleProcessor(::std::shared_ptr<IGeneralActionModuleIf> iface) :
     iface_(iface) {
@@ -1357,11 +1914,16 @@ class IGeneralActionModuleProcessor : public ::apache::thrift::TDispatchProcesso
     processMap_["aggregate"] = &IGeneralActionModuleProcessor::process_aggregate;
     processMap_["treeAggregate"] = &IGeneralActionModuleProcessor::process_treeAggregate;
     processMap_["fold"] = &IGeneralActionModuleProcessor::process_fold;
+    processMap_["treeFold"] = &IGeneralActionModuleProcessor::process_treeFold;
     processMap_["take"] = &IGeneralActionModuleProcessor::process_take;
     processMap_["foreach_"] = &IGeneralActionModuleProcessor::process_foreach_;
     processMap_["foreachPartition"] = &IGeneralActionModuleProcessor::process_foreachPartition;
     processMap_["top"] = &IGeneralActionModuleProcessor::process_top;
     processMap_["top2"] = &IGeneralActionModuleProcessor::process_top2;
+    processMap_["takeOrdered"] = &IGeneralActionModuleProcessor::process_takeOrdered;
+    processMap_["takeOrdered2"] = &IGeneralActionModuleProcessor::process_takeOrdered2;
+    processMap_["keys"] = &IGeneralActionModuleProcessor::process_keys;
+    processMap_["values"] = &IGeneralActionModuleProcessor::process_values;
   }
 
   virtual ~IGeneralActionModuleProcessor() {}
@@ -1399,13 +1961,13 @@ class IGeneralActionModuleMultiface : virtual public IGeneralActionModuleIf {
     ifaces_[i]->reduce(src);
   }
 
-  void treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth) {
+  void treeReduce(const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->treeReduce(src, depth);
+      ifaces_[i]->treeReduce(src);
     }
-    ifaces_[i]->treeReduce(src, depth);
+    ifaces_[i]->treeReduce(src);
   }
 
   void collect() {
@@ -1417,31 +1979,40 @@ class IGeneralActionModuleMultiface : virtual public IGeneralActionModuleIf {
     ifaces_[i]->collect();
   }
 
-  void aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) {
+  void aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->aggregate(seqOp, combOp);
+      ifaces_[i]->aggregate(zero, seqOp, combOp);
     }
-    ifaces_[i]->aggregate(seqOp, combOp);
+    ifaces_[i]->aggregate(zero, seqOp, combOp);
   }
 
-  void treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth) {
+  void treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->treeAggregate(seqOp, combOp, depth);
+      ifaces_[i]->treeAggregate(zero, seqOp, combOp);
     }
-    ifaces_[i]->treeAggregate(seqOp, combOp, depth);
+    ifaces_[i]->treeAggregate(zero, seqOp, combOp);
   }
 
-  void fold(const  ::ignis::rpc::ISource& src) {
+  void fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->fold(src);
+      ifaces_[i]->fold(zero, src);
     }
-    ifaces_[i]->fold(src);
+    ifaces_[i]->fold(zero, src);
+  }
+
+  void treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->treeFold(zero, src);
+    }
+    ifaces_[i]->treeFold(zero, src);
   }
 
   void take(const int64_t num) {
@@ -1489,6 +2060,42 @@ class IGeneralActionModuleMultiface : virtual public IGeneralActionModuleIf {
     ifaces_[i]->top2(num, cmp);
   }
 
+  void takeOrdered(const int64_t num) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->takeOrdered(num);
+    }
+    ifaces_[i]->takeOrdered(num);
+  }
+
+  void takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->takeOrdered2(num, cmp);
+    }
+    ifaces_[i]->takeOrdered2(num, cmp);
+  }
+
+  void keys() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->keys();
+    }
+    ifaces_[i]->keys();
+  }
+
+  void values() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->values();
+    }
+    ifaces_[i]->values();
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -1524,21 +2131,24 @@ class IGeneralActionModuleConcurrentClient : virtual public IGeneralActionModule
   void reduce(const  ::ignis::rpc::ISource& src);
   int32_t send_reduce(const  ::ignis::rpc::ISource& src);
   void recv_reduce(const int32_t seqid);
-  void treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth);
-  int32_t send_treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth);
+  void treeReduce(const  ::ignis::rpc::ISource& src);
+  int32_t send_treeReduce(const  ::ignis::rpc::ISource& src);
   void recv_treeReduce(const int32_t seqid);
   void collect();
   int32_t send_collect();
   void recv_collect(const int32_t seqid);
-  void aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
-  int32_t send_aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  void aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  int32_t send_aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
   void recv_aggregate(const int32_t seqid);
-  void treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
-  int32_t send_treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth);
+  void treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
+  int32_t send_treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp);
   void recv_treeAggregate(const int32_t seqid);
-  void fold(const  ::ignis::rpc::ISource& src);
-  int32_t send_fold(const  ::ignis::rpc::ISource& src);
+  void fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
+  int32_t send_fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
   void recv_fold(const int32_t seqid);
+  void treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
+  int32_t send_treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src);
+  void recv_treeFold(const int32_t seqid);
   void take(const int64_t num);
   int32_t send_take(const int64_t num);
   void recv_take(const int32_t seqid);
@@ -1554,6 +2164,18 @@ class IGeneralActionModuleConcurrentClient : virtual public IGeneralActionModule
   void top2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
   int32_t send_top2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
   void recv_top2(const int32_t seqid);
+  void takeOrdered(const int64_t num);
+  int32_t send_takeOrdered(const int64_t num);
+  void recv_takeOrdered(const int32_t seqid);
+  void takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
+  int32_t send_takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp);
+  void recv_takeOrdered2(const int32_t seqid);
+  void keys();
+  int32_t send_keys();
+  void recv_keys(const int32_t seqid);
+  void values();
+  int32_t send_values();
+  void recv_values(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

@@ -17,6 +17,8 @@ namespace ignis {
 
                         int64_t saveContext();
 
+                        void clearContext();
+
                         void loadContext(const int64_t id);
 
                         template<typename Tp>

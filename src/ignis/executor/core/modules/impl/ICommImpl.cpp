@@ -1,5 +1,6 @@
 
 #include "ICommImpl.h"
+#include "ignis/executor/core/protocol/IObjectProtocol.h"
 
 using namespace ignis::executor::core::modules::impl;
 
@@ -145,6 +146,10 @@ void ICommImpl::destroyGroups() {
     IGNIS_CATCH()
 }
 
+int8_t ICommImpl::getProtocol(){
+    return protocol::IObjectProtocol::CPP_PROTOCOL;
+}
+
 void ICommImpl::setPartitionsVoid(const std::vector<std::string> &partitions) {
     IGNIS_TRY()
         auto group = executor_data->getPartitionTools().newPartitionGroup<storage::IVoidPartition::VOID_TYPE>();
@@ -158,9 +163,12 @@ void ICommImpl::setPartitionsVoid(const std::vector<std::string> &partitions) {
     IGNIS_CATCH()
 }
 
-void ICommImpl::driverScatterVoid(const std::string &id, const int64_t dataId) {
+void ICommImpl::driverScatterVoid(const std::string &id, int64_t partitions) {
     IGNIS_TRY()
-        //TODO
+        auto group = getGroup(id);
+        auto part_group = executor_data->getPartitionTools().newPartitionGroup<storage::IVoidPartition::VOID_TYPE>();
+        executor_data->mpi().driverScatterVoid(group, *part_group, partitions);
+        executor_data->setPartitions<storage::IVoidPartition::VOID_TYPE>(part_group);
     IGNIS_CATCH()
 }
 
@@ -193,6 +201,14 @@ ICommImpl::addComm(MPI::Intracomm &group, MPI::Intercomm &comm, MPI::Intracomm &
     }
 
     return new_group;
+}
+
+MPI::Intracomm& ICommImpl::getGroup(const std::string &id){
+    auto it = groups.find(id);
+    if (it == groups.end()){
+        throw ignis::executor::core::exception::ILogicError("Group " + id + " not found");
+    }
+    return it->second;
 }
 
 

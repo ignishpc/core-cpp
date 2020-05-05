@@ -23,10 +23,15 @@ class IMathModuleIf {
  public:
   virtual ~IMathModuleIf() {}
   virtual void sample(const bool withReplacement, const double fraction, const int32_t seed) = 0;
-  virtual void takeSample(const bool withReplacement, const double fraction, const int32_t seed) = 0;
+  virtual void takeSample(const bool withReplacement, const int64_t num, const int32_t seed) = 0;
   virtual int64_t count() = 0;
-  virtual void max(const  ::ignis::rpc::ISource& cmp) = 0;
-  virtual void min(const  ::ignis::rpc::ISource& cmp) = 0;
+  virtual void max() = 0;
+  virtual void min() = 0;
+  virtual void max1(const  ::ignis::rpc::ISource& cmp) = 0;
+  virtual void min1(const  ::ignis::rpc::ISource& cmp) = 0;
+  virtual void sampleByKey(const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed) = 0;
+  virtual void countByKey() = 0;
+  virtual void countByValue() = 0;
 };
 
 class IMathModuleIfFactory {
@@ -59,17 +64,32 @@ class IMathModuleNull : virtual public IMathModuleIf {
   void sample(const bool /* withReplacement */, const double /* fraction */, const int32_t /* seed */) {
     return;
   }
-  void takeSample(const bool /* withReplacement */, const double /* fraction */, const int32_t /* seed */) {
+  void takeSample(const bool /* withReplacement */, const int64_t /* num */, const int32_t /* seed */) {
     return;
   }
   int64_t count() {
     int64_t _return = 0;
     return _return;
   }
-  void max(const  ::ignis::rpc::ISource& /* cmp */) {
+  void max() {
     return;
   }
-  void min(const  ::ignis::rpc::ISource& /* cmp */) {
+  void min() {
+    return;
+  }
+  void max1(const  ::ignis::rpc::ISource& /* cmp */) {
+    return;
+  }
+  void min1(const  ::ignis::rpc::ISource& /* cmp */) {
+    return;
+  }
+  void sampleByKey(const bool /* withReplacement */, const  ::ignis::rpc::ISource& /* fractions */, const int32_t /* seed */) {
+    return;
+  }
+  void countByKey() {
+    return;
+  }
+  void countByValue() {
     return;
   }
 };
@@ -193,9 +213,9 @@ class IMathModule_sample_presult {
 };
 
 typedef struct _IMathModule_takeSample_args__isset {
-  _IMathModule_takeSample_args__isset() : withReplacement(false), fraction(false), seed(false) {}
+  _IMathModule_takeSample_args__isset() : withReplacement(false), num(false), seed(false) {}
   bool withReplacement :1;
-  bool fraction :1;
+  bool num :1;
   bool seed :1;
 } _IMathModule_takeSample_args__isset;
 
@@ -204,19 +224,19 @@ class IMathModule_takeSample_args {
 
   IMathModule_takeSample_args(const IMathModule_takeSample_args&);
   IMathModule_takeSample_args& operator=(const IMathModule_takeSample_args&);
-  IMathModule_takeSample_args() : withReplacement(0), fraction(0), seed(0) {
+  IMathModule_takeSample_args() : withReplacement(0), num(0), seed(0) {
   }
 
   virtual ~IMathModule_takeSample_args() noexcept;
   bool withReplacement;
-  double fraction;
+  int64_t num;
   int32_t seed;
 
   _IMathModule_takeSample_args__isset __isset;
 
   void __set_withReplacement(const bool val);
 
-  void __set_fraction(const double val);
+  void __set_num(const int64_t val);
 
   void __set_seed(const int32_t val);
 
@@ -224,7 +244,7 @@ class IMathModule_takeSample_args {
   {
     if (!(withReplacement == rhs.withReplacement))
       return false;
-    if (!(fraction == rhs.fraction))
+    if (!(num == rhs.num))
       return false;
     if (!(seed == rhs.seed))
       return false;
@@ -248,7 +268,7 @@ class IMathModule_takeSample_pargs {
 
   virtual ~IMathModule_takeSample_pargs() noexcept;
   const bool* withReplacement;
-  const double* fraction;
+  const int64_t* num;
   const int32_t* seed;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -410,10 +430,6 @@ class IMathModule_count_presult {
 
 };
 
-typedef struct _IMathModule_max_args__isset {
-  _IMathModule_max_args__isset() : cmp(false) {}
-  bool cmp :1;
-} _IMathModule_max_args__isset;
 
 class IMathModule_max_args {
  public:
@@ -424,16 +440,9 @@ class IMathModule_max_args {
   }
 
   virtual ~IMathModule_max_args() noexcept;
-   ::ignis::rpc::ISource cmp;
 
-  _IMathModule_max_args__isset __isset;
-
-  void __set_cmp(const  ::ignis::rpc::ISource& val);
-
-  bool operator == (const IMathModule_max_args & rhs) const
+  bool operator == (const IMathModule_max_args & /* rhs */) const
   {
-    if (!(cmp == rhs.cmp))
-      return false;
     return true;
   }
   bool operator != (const IMathModule_max_args &rhs) const {
@@ -453,7 +462,6 @@ class IMathModule_max_pargs {
 
 
   virtual ~IMathModule_max_pargs() noexcept;
-  const  ::ignis::rpc::ISource* cmp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -514,10 +522,6 @@ class IMathModule_max_presult {
 
 };
 
-typedef struct _IMathModule_min_args__isset {
-  _IMathModule_min_args__isset() : cmp(false) {}
-  bool cmp :1;
-} _IMathModule_min_args__isset;
 
 class IMathModule_min_args {
  public:
@@ -528,16 +532,9 @@ class IMathModule_min_args {
   }
 
   virtual ~IMathModule_min_args() noexcept;
-   ::ignis::rpc::ISource cmp;
 
-  _IMathModule_min_args__isset __isset;
-
-  void __set_cmp(const  ::ignis::rpc::ISource& val);
-
-  bool operator == (const IMathModule_min_args & rhs) const
+  bool operator == (const IMathModule_min_args & /* rhs */) const
   {
-    if (!(cmp == rhs.cmp))
-      return false;
     return true;
   }
   bool operator != (const IMathModule_min_args &rhs) const {
@@ -557,7 +554,6 @@ class IMathModule_min_pargs {
 
 
   virtual ~IMathModule_min_pargs() noexcept;
-  const  ::ignis::rpc::ISource* cmp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -618,6 +614,516 @@ class IMathModule_min_presult {
 
 };
 
+typedef struct _IMathModule_max1_args__isset {
+  _IMathModule_max1_args__isset() : cmp(false) {}
+  bool cmp :1;
+} _IMathModule_max1_args__isset;
+
+class IMathModule_max1_args {
+ public:
+
+  IMathModule_max1_args(const IMathModule_max1_args&);
+  IMathModule_max1_args& operator=(const IMathModule_max1_args&);
+  IMathModule_max1_args() {
+  }
+
+  virtual ~IMathModule_max1_args() noexcept;
+   ::ignis::rpc::ISource cmp;
+
+  _IMathModule_max1_args__isset __isset;
+
+  void __set_cmp(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IMathModule_max1_args & rhs) const
+  {
+    if (!(cmp == rhs.cmp))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_max1_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_max1_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMathModule_max1_pargs {
+ public:
+
+
+  virtual ~IMathModule_max1_pargs() noexcept;
+  const  ::ignis::rpc::ISource* cmp;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_max1_result__isset {
+  _IMathModule_max1_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_max1_result__isset;
+
+class IMathModule_max1_result {
+ public:
+
+  IMathModule_max1_result(const IMathModule_max1_result&);
+  IMathModule_max1_result& operator=(const IMathModule_max1_result&);
+  IMathModule_max1_result() {
+  }
+
+  virtual ~IMathModule_max1_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_max1_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IMathModule_max1_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_max1_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_max1_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_max1_presult__isset {
+  _IMathModule_max1_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_max1_presult__isset;
+
+class IMathModule_max1_presult {
+ public:
+
+
+  virtual ~IMathModule_max1_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_max1_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IMathModule_min1_args__isset {
+  _IMathModule_min1_args__isset() : cmp(false) {}
+  bool cmp :1;
+} _IMathModule_min1_args__isset;
+
+class IMathModule_min1_args {
+ public:
+
+  IMathModule_min1_args(const IMathModule_min1_args&);
+  IMathModule_min1_args& operator=(const IMathModule_min1_args&);
+  IMathModule_min1_args() {
+  }
+
+  virtual ~IMathModule_min1_args() noexcept;
+   ::ignis::rpc::ISource cmp;
+
+  _IMathModule_min1_args__isset __isset;
+
+  void __set_cmp(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IMathModule_min1_args & rhs) const
+  {
+    if (!(cmp == rhs.cmp))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_min1_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_min1_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMathModule_min1_pargs {
+ public:
+
+
+  virtual ~IMathModule_min1_pargs() noexcept;
+  const  ::ignis::rpc::ISource* cmp;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_min1_result__isset {
+  _IMathModule_min1_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_min1_result__isset;
+
+class IMathModule_min1_result {
+ public:
+
+  IMathModule_min1_result(const IMathModule_min1_result&);
+  IMathModule_min1_result& operator=(const IMathModule_min1_result&);
+  IMathModule_min1_result() {
+  }
+
+  virtual ~IMathModule_min1_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_min1_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IMathModule_min1_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_min1_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_min1_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_min1_presult__isset {
+  _IMathModule_min1_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_min1_presult__isset;
+
+class IMathModule_min1_presult {
+ public:
+
+
+  virtual ~IMathModule_min1_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_min1_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IMathModule_sampleByKey_args__isset {
+  _IMathModule_sampleByKey_args__isset() : withReplacement(false), fractions(false), seed(false) {}
+  bool withReplacement :1;
+  bool fractions :1;
+  bool seed :1;
+} _IMathModule_sampleByKey_args__isset;
+
+class IMathModule_sampleByKey_args {
+ public:
+
+  IMathModule_sampleByKey_args(const IMathModule_sampleByKey_args&);
+  IMathModule_sampleByKey_args& operator=(const IMathModule_sampleByKey_args&);
+  IMathModule_sampleByKey_args() : withReplacement(0), seed(0) {
+  }
+
+  virtual ~IMathModule_sampleByKey_args() noexcept;
+  bool withReplacement;
+   ::ignis::rpc::ISource fractions;
+  int32_t seed;
+
+  _IMathModule_sampleByKey_args__isset __isset;
+
+  void __set_withReplacement(const bool val);
+
+  void __set_fractions(const  ::ignis::rpc::ISource& val);
+
+  void __set_seed(const int32_t val);
+
+  bool operator == (const IMathModule_sampleByKey_args & rhs) const
+  {
+    if (!(withReplacement == rhs.withReplacement))
+      return false;
+    if (!(fractions == rhs.fractions))
+      return false;
+    if (!(seed == rhs.seed))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_sampleByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_sampleByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMathModule_sampleByKey_pargs {
+ public:
+
+
+  virtual ~IMathModule_sampleByKey_pargs() noexcept;
+  const bool* withReplacement;
+  const  ::ignis::rpc::ISource* fractions;
+  const int32_t* seed;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_sampleByKey_result__isset {
+  _IMathModule_sampleByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_sampleByKey_result__isset;
+
+class IMathModule_sampleByKey_result {
+ public:
+
+  IMathModule_sampleByKey_result(const IMathModule_sampleByKey_result&);
+  IMathModule_sampleByKey_result& operator=(const IMathModule_sampleByKey_result&);
+  IMathModule_sampleByKey_result() {
+  }
+
+  virtual ~IMathModule_sampleByKey_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_sampleByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IMathModule_sampleByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_sampleByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_sampleByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_sampleByKey_presult__isset {
+  _IMathModule_sampleByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_sampleByKey_presult__isset;
+
+class IMathModule_sampleByKey_presult {
+ public:
+
+
+  virtual ~IMathModule_sampleByKey_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_sampleByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IMathModule_countByKey_args {
+ public:
+
+  IMathModule_countByKey_args(const IMathModule_countByKey_args&);
+  IMathModule_countByKey_args& operator=(const IMathModule_countByKey_args&);
+  IMathModule_countByKey_args() {
+  }
+
+  virtual ~IMathModule_countByKey_args() noexcept;
+
+  bool operator == (const IMathModule_countByKey_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IMathModule_countByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_countByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMathModule_countByKey_pargs {
+ public:
+
+
+  virtual ~IMathModule_countByKey_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_countByKey_result__isset {
+  _IMathModule_countByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_countByKey_result__isset;
+
+class IMathModule_countByKey_result {
+ public:
+
+  IMathModule_countByKey_result(const IMathModule_countByKey_result&);
+  IMathModule_countByKey_result& operator=(const IMathModule_countByKey_result&);
+  IMathModule_countByKey_result() {
+  }
+
+  virtual ~IMathModule_countByKey_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_countByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IMathModule_countByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_countByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_countByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_countByKey_presult__isset {
+  _IMathModule_countByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_countByKey_presult__isset;
+
+class IMathModule_countByKey_presult {
+ public:
+
+
+  virtual ~IMathModule_countByKey_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_countByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IMathModule_countByValue_args {
+ public:
+
+  IMathModule_countByValue_args(const IMathModule_countByValue_args&);
+  IMathModule_countByValue_args& operator=(const IMathModule_countByValue_args&);
+  IMathModule_countByValue_args() {
+  }
+
+  virtual ~IMathModule_countByValue_args() noexcept;
+
+  bool operator == (const IMathModule_countByValue_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IMathModule_countByValue_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_countByValue_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IMathModule_countByValue_pargs {
+ public:
+
+
+  virtual ~IMathModule_countByValue_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_countByValue_result__isset {
+  _IMathModule_countByValue_result__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_countByValue_result__isset;
+
+class IMathModule_countByValue_result {
+ public:
+
+  IMathModule_countByValue_result(const IMathModule_countByValue_result&);
+  IMathModule_countByValue_result& operator=(const IMathModule_countByValue_result&);
+  IMathModule_countByValue_result() {
+  }
+
+  virtual ~IMathModule_countByValue_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_countByValue_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IMathModule_countByValue_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IMathModule_countByValue_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IMathModule_countByValue_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IMathModule_countByValue_presult__isset {
+  _IMathModule_countByValue_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IMathModule_countByValue_presult__isset;
+
+class IMathModule_countByValue_presult {
+ public:
+
+
+  virtual ~IMathModule_countByValue_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IMathModule_countByValue_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class IMathModuleClient : virtual public IMathModuleIf {
  public:
   IMathModuleClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -646,18 +1152,33 @@ class IMathModuleClient : virtual public IMathModuleIf {
   void sample(const bool withReplacement, const double fraction, const int32_t seed);
   void send_sample(const bool withReplacement, const double fraction, const int32_t seed);
   void recv_sample();
-  void takeSample(const bool withReplacement, const double fraction, const int32_t seed);
-  void send_takeSample(const bool withReplacement, const double fraction, const int32_t seed);
+  void takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
+  void send_takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
   void recv_takeSample();
   int64_t count();
   void send_count();
   int64_t recv_count();
-  void max(const  ::ignis::rpc::ISource& cmp);
-  void send_max(const  ::ignis::rpc::ISource& cmp);
+  void max();
+  void send_max();
   void recv_max();
-  void min(const  ::ignis::rpc::ISource& cmp);
-  void send_min(const  ::ignis::rpc::ISource& cmp);
+  void min();
+  void send_min();
   void recv_min();
+  void max1(const  ::ignis::rpc::ISource& cmp);
+  void send_max1(const  ::ignis::rpc::ISource& cmp);
+  void recv_max1();
+  void min1(const  ::ignis::rpc::ISource& cmp);
+  void send_min1(const  ::ignis::rpc::ISource& cmp);
+  void recv_min1();
+  void sampleByKey(const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
+  void send_sampleByKey(const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
+  void recv_sampleByKey();
+  void countByKey();
+  void send_countByKey();
+  void recv_countByKey();
+  void countByValue();
+  void send_countByValue();
+  void recv_countByValue();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -678,6 +1199,11 @@ class IMathModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_count(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_max(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_min(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_max1(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_min1(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sampleByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_countByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_countByValue(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IMathModuleProcessor(::std::shared_ptr<IMathModuleIf> iface) :
     iface_(iface) {
@@ -686,6 +1212,11 @@ class IMathModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["count"] = &IMathModuleProcessor::process_count;
     processMap_["max"] = &IMathModuleProcessor::process_max;
     processMap_["min"] = &IMathModuleProcessor::process_min;
+    processMap_["max1"] = &IMathModuleProcessor::process_max1;
+    processMap_["min1"] = &IMathModuleProcessor::process_min1;
+    processMap_["sampleByKey"] = &IMathModuleProcessor::process_sampleByKey;
+    processMap_["countByKey"] = &IMathModuleProcessor::process_countByKey;
+    processMap_["countByValue"] = &IMathModuleProcessor::process_countByValue;
   }
 
   virtual ~IMathModuleProcessor() {}
@@ -723,13 +1254,13 @@ class IMathModuleMultiface : virtual public IMathModuleIf {
     ifaces_[i]->sample(withReplacement, fraction, seed);
   }
 
-  void takeSample(const bool withReplacement, const double fraction, const int32_t seed) {
+  void takeSample(const bool withReplacement, const int64_t num, const int32_t seed) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->takeSample(withReplacement, fraction, seed);
+      ifaces_[i]->takeSample(withReplacement, num, seed);
     }
-    ifaces_[i]->takeSample(withReplacement, fraction, seed);
+    ifaces_[i]->takeSample(withReplacement, num, seed);
   }
 
   int64_t count() {
@@ -741,22 +1272,67 @@ class IMathModuleMultiface : virtual public IMathModuleIf {
     return ifaces_[i]->count();
   }
 
-  void max(const  ::ignis::rpc::ISource& cmp) {
+  void max() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->max(cmp);
+      ifaces_[i]->max();
     }
-    ifaces_[i]->max(cmp);
+    ifaces_[i]->max();
   }
 
-  void min(const  ::ignis::rpc::ISource& cmp) {
+  void min() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->min(cmp);
+      ifaces_[i]->min();
     }
-    ifaces_[i]->min(cmp);
+    ifaces_[i]->min();
+  }
+
+  void max1(const  ::ignis::rpc::ISource& cmp) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->max1(cmp);
+    }
+    ifaces_[i]->max1(cmp);
+  }
+
+  void min1(const  ::ignis::rpc::ISource& cmp) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->min1(cmp);
+    }
+    ifaces_[i]->min1(cmp);
+  }
+
+  void sampleByKey(const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sampleByKey(withReplacement, fractions, seed);
+    }
+    ifaces_[i]->sampleByKey(withReplacement, fractions, seed);
+  }
+
+  void countByKey() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->countByKey();
+    }
+    ifaces_[i]->countByKey();
+  }
+
+  void countByValue() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->countByValue();
+    }
+    ifaces_[i]->countByValue();
   }
 
 };
@@ -794,18 +1370,33 @@ class IMathModuleConcurrentClient : virtual public IMathModuleIf {
   void sample(const bool withReplacement, const double fraction, const int32_t seed);
   int32_t send_sample(const bool withReplacement, const double fraction, const int32_t seed);
   void recv_sample(const int32_t seqid);
-  void takeSample(const bool withReplacement, const double fraction, const int32_t seed);
-  int32_t send_takeSample(const bool withReplacement, const double fraction, const int32_t seed);
+  void takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
+  int32_t send_takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
   void recv_takeSample(const int32_t seqid);
   int64_t count();
   int32_t send_count();
   int64_t recv_count(const int32_t seqid);
-  void max(const  ::ignis::rpc::ISource& cmp);
-  int32_t send_max(const  ::ignis::rpc::ISource& cmp);
+  void max();
+  int32_t send_max();
   void recv_max(const int32_t seqid);
-  void min(const  ::ignis::rpc::ISource& cmp);
-  int32_t send_min(const  ::ignis::rpc::ISource& cmp);
+  void min();
+  int32_t send_min();
   void recv_min(const int32_t seqid);
+  void max1(const  ::ignis::rpc::ISource& cmp);
+  int32_t send_max1(const  ::ignis::rpc::ISource& cmp);
+  void recv_max1(const int32_t seqid);
+  void min1(const  ::ignis::rpc::ISource& cmp);
+  int32_t send_min1(const  ::ignis::rpc::ISource& cmp);
+  void recv_min1(const int32_t seqid);
+  void sampleByKey(const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
+  int32_t send_sampleByKey(const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
+  void recv_sampleByKey(const int32_t seqid);
+  void countByKey();
+  int32_t send_countByKey();
+  void recv_countByKey(const int32_t seqid);
+  void countByValue();
+  int32_t send_countByValue();
+  void recv_countByValue(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

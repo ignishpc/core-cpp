@@ -52,20 +52,20 @@ void IWorker::setName(const std::string &name) {
     }
 }
 
-IDataFrameId IWorker::parallelizeAbs(int64_t data_id) {
+IDataFrameId IWorker::parallelizeAbs(int64_t data_id, int64_t partitions) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().parallelize(_return, id, data_id);
+        Ignis::clientPool->getClient()->getWorkerService().parallelize(_return, id, data_id, partitions);
         return _return;
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
     }
 }
 
-IDataFrameId IWorker::parallelizeAbs(int64_t data_id, const ISource &src) {
+IDataFrameId IWorker::parallelizeAbs(int64_t data_id, int64_t partitions, const ISource &src) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().parallelize3(_return, id, data_id, src.rpc());
+        Ignis::clientPool->getClient()->getWorkerService().parallelize4(_return, id, data_id, partitions, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);

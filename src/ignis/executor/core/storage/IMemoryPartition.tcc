@@ -17,6 +17,11 @@ IMemoryPartitionClass<Tp>::IMemoryPartition(size_t size) {
 }
 
 template<typename Tp>
+IMemoryPartitionClass<Tp>::IMemoryPartition(IVector<Tp>&& elements){
+    std::swap(this->elements, elements);
+}
+
+template<typename Tp>
 IMemoryPartitionClass<Tp>::~IMemoryPartition() {}
 
 template<typename Tp>
@@ -40,9 +45,14 @@ void IMemoryPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &tra
 
 template<typename Tp>
 void IMemoryPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans, int8_t compression) {
+    write(trans, compression, false);
+}
+
+template<typename Tp>
+void IMemoryPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans, int8_t compression, bool native) {
     auto zlib_trans = std::make_shared<transport::IZlibTransport>(trans, compression);
     protocol::IObjectProtocol proto(zlib_trans);
-    proto.writeObject(elements);
+    proto.writeObject(elements, native);
     zlib_trans->flush();
 }
 
@@ -124,6 +134,10 @@ Tp *IMemoryPartitionClass<Tp>::end() {
 template<typename Tp>
 void IMemoryPartitionClass<Tp>::resize(int64_t size) {
     elements.resize(size);
+}
+template<typename Tp>
+ignis::executor::api::IVector <Tp> & IMemoryPartitionClass<Tp>::inner(){
+    return elements;
 }
 
 template<typename Tp>

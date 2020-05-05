@@ -69,6 +69,10 @@ set(SOURCE_FILES
         ignis/executor/core/io/IJsonReader.tcc
         ignis/executor/core/io/IJsonWriter.h
         ignis/executor/core/io/IJsonWriter.tcc
+        ignis/executor/core/io/INativeReader.h
+        ignis/executor/core/io/INativeReader.tcc
+        ignis/executor/core/io/INativeWriter.h
+        ignis/executor/core/io/INativeWriter.tcc
         ignis/executor/core/io/IPrinter.h
         ignis/executor/core/io/IPrinter.tcc
         ignis/executor/core/io/IReader.h
@@ -85,11 +89,11 @@ set(SOURCE_FILES
         ignis/executor/core/modules/impl/ICommImpl.cpp
         ignis/executor/core/modules/impl/ICommImpl.h
         ignis/executor/core/modules/impl/ICommImpl.tcc
-        ignis/executor/core/modules/impl/IGroupByImpl.cpp
-        ignis/executor/core/modules/impl/IGroupByImpl.h
-        ignis/executor/core/modules/impl/IGroupByImpl.tcc
         ignis/executor/core/modules/impl/IIOImpl.cpp
         ignis/executor/core/modules/impl/IIOImpl.h
+        ignis/executor/core/modules/impl/IMathImpl.cpp
+        ignis/executor/core/modules/impl/IMathImpl.h
+        ignis/executor/core/modules/impl/IMathImpl.tcc
         ignis/executor/core/modules/impl/IIOImpl.tcc
         ignis/executor/core/modules/impl/IPipeImpl.cpp
         ignis/executor/core/modules/impl/IPipeImpl.h
@@ -126,8 +130,10 @@ set(SOURCE_FILES
         #Selector
         ignis/executor/core/selector/IGeneralActionSelector.h
         ignis/executor/core/selector/IGeneralSelector.h
+        ignis/executor/core/selector/IKeySelector.h
         ignis/executor/core/selector/ISelector.h
         ignis/executor/core/selector/ITypeSelector.h
+        ignis/executor/core/selector/IValueSelector.h
 
         #Storage
         ignis/executor/core/storage/IDiskPartition.h
@@ -152,6 +158,8 @@ set(SOURCE_FILES
         ignis/executor/core/transport/IZlibTransport.h
 
         #ignis/executor core
+        ignis/executor/core/IDynamicTypes.cpp
+        ignis/executor/core/IDynamicTypes.h
         ignis/executor/core/IExecutorData.cpp
         ignis/executor/core/IExecutorData.h
         ignis/executor/core/IExecutorData.tcc
@@ -171,7 +179,7 @@ set(SOURCE_FILES
         ignis/executor/core/RTTInfo.h
 
         #RPC
-        ${rpc} )
+        ${rpc})
 
 add_definitions(-DBOOST_ALL_DYN_LINK)
 

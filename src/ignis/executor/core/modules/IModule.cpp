@@ -2,6 +2,8 @@
 #include "IModule.h"
 #include "ignis/executor/core/transport/IMemoryBuffer.h"
 #include "ignis/executor/core/protocol/IObjectProtocol.h"
+#include "ignis/executor/core/storage/IVoidPartition.h"
+#include "ignis/executor/core/IDynamicTypes.h"
 #include "ignis/executor/core/io/IReader.h"
 #include "ignis/executor/core/RTTInfo.h"
 #include "ignis/executor/core/exception/ILogicError.h"
@@ -17,6 +19,39 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
     IGNIS_LOG(info) << "Cheeking partition type";
     auto type = executor_data->getPartitions<int>(true)->elemType();
     if (type.isVoid()) {
+        auto voidParts = executor_data->getPartitions<int>(true);
+        std::string typeName;
+        IGNIS_LOG(warning) << "Forced to search type in binary objects, it must be slow in some case, "
+                              "use src parameter in function to avoid";
+        for (auto part: *voidParts) {
+            if (part->size() > 0) {
+                auto &voidPart = reinterpret_cast<storage::IVoidPartition &>(*part);
+                auto transport = voidPart.readTransport();
+                typeName = IDynamicTypes::typeFromBytes(transport);
+                break;
+            }
+        }
+        auto type = executor_data->getType(typeName);
+        if (type) {
+            return type;
+        }
+        IGNIS_LOG(warning) << "Type found but it is not compiled, now the executor tries to compile it. "
+                              "The compilation process must be slow in some case, "
+                              "the result will be stored in the job folder. "
+                              "Use src parameter in function to avoid";
+
+        auto folder = executor_data->infoDirectory() + "/cpptypes";
+        executor_data->getPartitionTools().createDirectoryIfNotExists(folder);
+
+        if (!typeName.empty()) {
+            auto lib = IDynamicTypes::compiler(typeName, folder);
+            IGNIS_LOG(info) << "Compilation successful, use '" + lib +
+                               "' as src parameter in function to avoid future recompilation";
+            rpc::ISource source;
+            source.obj.__set_name(lib);
+            return typeFromSource(source);
+        }
+
         throw exception::ILogicError("The C ++ executor cannot identify the type of this partition");
     }
     return typeFromName(type.getStandardName());
@@ -96,5 +131,6 @@ std::shared_ptr<selector::ITypeSelector> IModule::typeFromSource(const ignis::rp
     if (lib->args.size() > 1) {
         IGNIS_LOG(warning) << "Function " << name << " has more than one type, using" << type->info().getStandardName();
     }
+    lib->loadClass(executor_data->getContext());
     return type;
 }

@@ -15,6 +15,8 @@ namespace ignis {
 
                     IIOModule(std::shared_ptr<IExecutorData> &executor_data);
 
+                    void loadClass(const  ::ignis::rpc::ISource& src);
+
                     int64_t partitionCount() override;
 
                     int64_t partitionApproxSize() override;

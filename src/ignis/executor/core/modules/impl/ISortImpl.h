@@ -27,6 +27,42 @@ namespace ignis {
                         template<typename Function>
                         void sortBy(bool ascending, int64_t partitions);
 
+                        template<typename Tp>
+                        void top(int64_t n);
+
+                        template<typename Function>
+                        void topBy(int64_t n);
+
+                        template<typename Tp>
+                        void takeOrdered(int64_t n);
+
+                        template<typename Function>
+                        void takeOrderedBy(int64_t n);
+
+                        template<typename Tp>
+                        void max();
+
+                        template<typename Tp>
+                        void min();
+
+                        template<typename Function>
+                        void maxBy();
+
+                        template<typename Function>
+                        void minBy();
+
+                        template<typename Tp>
+                        void sortByKey(bool ascending);
+
+                        template<typename Tp>
+                        void sortByKey(bool ascending, int64_t partitions);
+
+                        template<typename Tp, typename Function>
+                        void sortByKeyBy(bool ascending);
+
+                        template<typename Tp, typename Function>
+                        void sortByKeyBy(bool ascending, int64_t partitions);
+
                     private:
                         /*Primary Functions*/
                         template<typename Tp, typename Cmp>
@@ -45,15 +81,7 @@ namespace ignis {
 
                         /*Auxiliary functions*/
                         template<typename Tp, typename Cmp>
-                        void sortMemoryPartition(storage::IMemoryPartition<Tp> &part, Cmp comparator);
-
-                        template<typename Tp, typename Cmp>
-                        std::shared_ptr<storage::IPartition<Tp>>
-                        sortPartition(storage::IPartition<Tp> &part, Cmp comparator);
-
-                        template<typename Tp, typename Cmp>
-                        std::shared_ptr<storage::IPartition<Tp>>
-                        mergePartitions(storage::IPartition<Tp> &p1, storage::IPartition<Tp> &p2, Cmp comparator);
+                        void sortPartition(storage::IMemoryPartition<Tp> &part, Cmp comparator);
 
                         template<typename Tp>
                         std::shared_ptr<storage::IMemoryPartition<Tp>>
@@ -66,6 +94,15 @@ namespace ignis {
 
                         template<typename Tp, typename Cmp>
                         int64_t searchRange(Tp& elem, storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
+
+                        template<typename Tp, typename Cmp>
+                        void take_ordered_impl(Cmp comparator, int64_t n);
+
+                        template<typename Tp, typename Cmp>
+                        void take_ordered_add(Cmp comparator, storage::IMemoryPartition<Tp> &top, Tp& elem, int64_t n);
+
+                        template<typename Tp, typename Cmp>
+                        void max_impl(Cmp comparator);
                     };
                 }
             }

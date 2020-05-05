@@ -25,15 +25,26 @@ class IGeneralModuleIf {
   virtual void map_(const  ::ignis::rpc::ISource& src) = 0;
   virtual void filter(const  ::ignis::rpc::ISource& src) = 0;
   virtual void flatmap(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void keyBy(const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
   virtual void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
-  virtual void applyPartition(const  ::ignis::rpc::ISource& src) = 0;
-  virtual void groupBy(const  ::ignis::rpc::ISource& src) = 0;
-  virtual void groupBy2(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
+  virtual void mapExecutor(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
   virtual void sort(const bool ascending) = 0;
   virtual void sort2(const bool ascending, const int64_t numPartitions) = 0;
   virtual void sortBy(const  ::ignis::rpc::ISource& src, const bool ascending) = 0;
   virtual void sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions) = 0;
+  virtual void flatMapValues(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void mapValues(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void groupByKey(const int64_t numPartitions) = 0;
+  virtual void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce) = 0;
+  virtual void aggregateByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const int64_t numPartitions) = 0;
+  virtual void aggregateByKey4(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t numPartitions) = 0;
+  virtual void foldByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localFold) = 0;
+  virtual void sortByKey(const bool ascending) = 0;
+  virtual void sortByKey2a(const bool ascending, const int64_t numPartitions) = 0;
+  virtual void sortByKey2b(const  ::ignis::rpc::ISource& src, const bool ascending) = 0;
+  virtual void sortByKey3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions) = 0;
 };
 
 class IGeneralModuleIfFactory {
@@ -72,19 +83,19 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
   void flatmap(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
+  void keyBy(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
   void mapPartitions(const  ::ignis::rpc::ISource& /* src */, const bool /* preservesPartitioning */) {
     return;
   }
   void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& /* src */, const bool /* preservesPartitioning */) {
     return;
   }
-  void applyPartition(const  ::ignis::rpc::ISource& /* src */) {
+  void mapExecutor(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
-  void groupBy(const  ::ignis::rpc::ISource& /* src */) {
-    return;
-  }
-  void groupBy2(const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */) {
+  void groupBy(const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */) {
     return;
   }
   void sort(const bool /* ascending */) {
@@ -97,6 +108,39 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
     return;
   }
   void sortBy3(const  ::ignis::rpc::ISource& /* src */, const bool /* ascending */, const int64_t /* numPartitions */) {
+    return;
+  }
+  void flatMapValues(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void mapValues(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void groupByKey(const int64_t /* numPartitions */) {
+    return;
+  }
+  void reduceByKey(const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */, const bool /* localReduce */) {
+    return;
+  }
+  void aggregateByKey(const  ::ignis::rpc::ISource& /* zero */, const  ::ignis::rpc::ISource& /* seqOp */, const int64_t /* numPartitions */) {
+    return;
+  }
+  void aggregateByKey4(const  ::ignis::rpc::ISource& /* zero */, const  ::ignis::rpc::ISource& /* seqOp */, const  ::ignis::rpc::ISource& /* combOp */, const int64_t /* numPartitions */) {
+    return;
+  }
+  void foldByKey(const  ::ignis::rpc::ISource& /* zero */, const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */, const bool /* localFold */) {
+    return;
+  }
+  void sortByKey(const bool /* ascending */) {
+    return;
+  }
+  void sortByKey2a(const bool /* ascending */, const int64_t /* numPartitions */) {
+    return;
+  }
+  void sortByKey2b(const  ::ignis::rpc::ISource& /* src */, const bool /* ascending */) {
+    return;
+  }
+  void sortByKey3(const  ::ignis::rpc::ISource& /* src */, const bool /* ascending */, const int64_t /* numPartitions */) {
     return;
   }
 };
@@ -413,6 +457,110 @@ class IGeneralModule_flatmap_presult {
 
 };
 
+typedef struct _IGeneralModule_keyBy_args__isset {
+  _IGeneralModule_keyBy_args__isset() : src(false) {}
+  bool src :1;
+} _IGeneralModule_keyBy_args__isset;
+
+class IGeneralModule_keyBy_args {
+ public:
+
+  IGeneralModule_keyBy_args(const IGeneralModule_keyBy_args&);
+  IGeneralModule_keyBy_args& operator=(const IGeneralModule_keyBy_args&);
+  IGeneralModule_keyBy_args() {
+  }
+
+  virtual ~IGeneralModule_keyBy_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralModule_keyBy_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralModule_keyBy_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_keyBy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_keyBy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_keyBy_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_keyBy_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_keyBy_result__isset {
+  _IGeneralModule_keyBy_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_keyBy_result__isset;
+
+class IGeneralModule_keyBy_result {
+ public:
+
+  IGeneralModule_keyBy_result(const IGeneralModule_keyBy_result&);
+  IGeneralModule_keyBy_result& operator=(const IGeneralModule_keyBy_result&);
+  IGeneralModule_keyBy_result() {
+  }
+
+  virtual ~IGeneralModule_keyBy_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_keyBy_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_keyBy_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_keyBy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_keyBy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_keyBy_presult__isset {
+  _IGeneralModule_keyBy_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_keyBy_presult__isset;
+
+class IGeneralModule_keyBy_presult {
+ public:
+
+
+  virtual ~IGeneralModule_keyBy_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_keyBy_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IGeneralModule_mapPartitions_args__isset {
   _IGeneralModule_mapPartitions_args__isset() : src(false), preservesPartitioning(false) {}
   bool src :1;
@@ -635,37 +783,37 @@ class IGeneralModule_mapPartitionsWithIndex_presult {
 
 };
 
-typedef struct _IGeneralModule_applyPartition_args__isset {
-  _IGeneralModule_applyPartition_args__isset() : src(false) {}
+typedef struct _IGeneralModule_mapExecutor_args__isset {
+  _IGeneralModule_mapExecutor_args__isset() : src(false) {}
   bool src :1;
-} _IGeneralModule_applyPartition_args__isset;
+} _IGeneralModule_mapExecutor_args__isset;
 
-class IGeneralModule_applyPartition_args {
+class IGeneralModule_mapExecutor_args {
  public:
 
-  IGeneralModule_applyPartition_args(const IGeneralModule_applyPartition_args&);
-  IGeneralModule_applyPartition_args& operator=(const IGeneralModule_applyPartition_args&);
-  IGeneralModule_applyPartition_args() {
+  IGeneralModule_mapExecutor_args(const IGeneralModule_mapExecutor_args&);
+  IGeneralModule_mapExecutor_args& operator=(const IGeneralModule_mapExecutor_args&);
+  IGeneralModule_mapExecutor_args() {
   }
 
-  virtual ~IGeneralModule_applyPartition_args() noexcept;
+  virtual ~IGeneralModule_mapExecutor_args() noexcept;
    ::ignis::rpc::ISource src;
 
-  _IGeneralModule_applyPartition_args__isset __isset;
+  _IGeneralModule_mapExecutor_args__isset __isset;
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  bool operator == (const IGeneralModule_applyPartition_args & rhs) const
+  bool operator == (const IGeneralModule_mapExecutor_args & rhs) const
   {
     if (!(src == rhs.src))
       return false;
     return true;
   }
-  bool operator != (const IGeneralModule_applyPartition_args &rhs) const {
+  bool operator != (const IGeneralModule_mapExecutor_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IGeneralModule_applyPartition_args & ) const;
+  bool operator < (const IGeneralModule_mapExecutor_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -673,75 +821,76 @@ class IGeneralModule_applyPartition_args {
 };
 
 
-class IGeneralModule_applyPartition_pargs {
+class IGeneralModule_mapExecutor_pargs {
  public:
 
 
-  virtual ~IGeneralModule_applyPartition_pargs() noexcept;
+  virtual ~IGeneralModule_mapExecutor_pargs() noexcept;
   const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IGeneralModule_applyPartition_result__isset {
-  _IGeneralModule_applyPartition_result__isset() : ex(false) {}
+typedef struct _IGeneralModule_mapExecutor_result__isset {
+  _IGeneralModule_mapExecutor_result__isset() : ex(false) {}
   bool ex :1;
-} _IGeneralModule_applyPartition_result__isset;
+} _IGeneralModule_mapExecutor_result__isset;
 
-class IGeneralModule_applyPartition_result {
+class IGeneralModule_mapExecutor_result {
  public:
 
-  IGeneralModule_applyPartition_result(const IGeneralModule_applyPartition_result&);
-  IGeneralModule_applyPartition_result& operator=(const IGeneralModule_applyPartition_result&);
-  IGeneralModule_applyPartition_result() {
+  IGeneralModule_mapExecutor_result(const IGeneralModule_mapExecutor_result&);
+  IGeneralModule_mapExecutor_result& operator=(const IGeneralModule_mapExecutor_result&);
+  IGeneralModule_mapExecutor_result() {
   }
 
-  virtual ~IGeneralModule_applyPartition_result() noexcept;
+  virtual ~IGeneralModule_mapExecutor_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IGeneralModule_applyPartition_result__isset __isset;
+  _IGeneralModule_mapExecutor_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const IGeneralModule_applyPartition_result & rhs) const
+  bool operator == (const IGeneralModule_mapExecutor_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const IGeneralModule_applyPartition_result &rhs) const {
+  bool operator != (const IGeneralModule_mapExecutor_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IGeneralModule_applyPartition_result & ) const;
+  bool operator < (const IGeneralModule_mapExecutor_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IGeneralModule_applyPartition_presult__isset {
-  _IGeneralModule_applyPartition_presult__isset() : ex(false) {}
+typedef struct _IGeneralModule_mapExecutor_presult__isset {
+  _IGeneralModule_mapExecutor_presult__isset() : ex(false) {}
   bool ex :1;
-} _IGeneralModule_applyPartition_presult__isset;
+} _IGeneralModule_mapExecutor_presult__isset;
 
-class IGeneralModule_applyPartition_presult {
+class IGeneralModule_mapExecutor_presult {
  public:
 
 
-  virtual ~IGeneralModule_applyPartition_presult() noexcept;
+  virtual ~IGeneralModule_mapExecutor_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _IGeneralModule_applyPartition_presult__isset __isset;
+  _IGeneralModule_mapExecutor_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
 typedef struct _IGeneralModule_groupBy_args__isset {
-  _IGeneralModule_groupBy_args__isset() : src(false) {}
+  _IGeneralModule_groupBy_args__isset() : src(false), numPartitions(false) {}
   bool src :1;
+  bool numPartitions :1;
 } _IGeneralModule_groupBy_args__isset;
 
 class IGeneralModule_groupBy_args {
@@ -749,19 +898,24 @@ class IGeneralModule_groupBy_args {
 
   IGeneralModule_groupBy_args(const IGeneralModule_groupBy_args&);
   IGeneralModule_groupBy_args& operator=(const IGeneralModule_groupBy_args&);
-  IGeneralModule_groupBy_args() {
+  IGeneralModule_groupBy_args() : numPartitions(0) {
   }
 
   virtual ~IGeneralModule_groupBy_args() noexcept;
    ::ignis::rpc::ISource src;
+  int64_t numPartitions;
 
   _IGeneralModule_groupBy_args__isset __isset;
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
+  void __set_numPartitions(const int64_t val);
+
   bool operator == (const IGeneralModule_groupBy_args & rhs) const
   {
     if (!(src == rhs.src))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
       return false;
     return true;
   }
@@ -783,6 +937,7 @@ class IGeneralModule_groupBy_pargs {
 
   virtual ~IGeneralModule_groupBy_pargs() noexcept;
   const  ::ignis::rpc::ISource* src;
+  const int64_t* numPartitions;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -838,117 +993,6 @@ class IGeneralModule_groupBy_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IGeneralModule_groupBy_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _IGeneralModule_groupBy2_args__isset {
-  _IGeneralModule_groupBy2_args__isset() : src(false), numPartitions(false) {}
-  bool src :1;
-  bool numPartitions :1;
-} _IGeneralModule_groupBy2_args__isset;
-
-class IGeneralModule_groupBy2_args {
- public:
-
-  IGeneralModule_groupBy2_args(const IGeneralModule_groupBy2_args&);
-  IGeneralModule_groupBy2_args& operator=(const IGeneralModule_groupBy2_args&);
-  IGeneralModule_groupBy2_args() : numPartitions(0) {
-  }
-
-  virtual ~IGeneralModule_groupBy2_args() noexcept;
-   ::ignis::rpc::ISource src;
-  int64_t numPartitions;
-
-  _IGeneralModule_groupBy2_args__isset __isset;
-
-  void __set_src(const  ::ignis::rpc::ISource& val);
-
-  void __set_numPartitions(const int64_t val);
-
-  bool operator == (const IGeneralModule_groupBy2_args & rhs) const
-  {
-    if (!(src == rhs.src))
-      return false;
-    if (!(numPartitions == rhs.numPartitions))
-      return false;
-    return true;
-  }
-  bool operator != (const IGeneralModule_groupBy2_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IGeneralModule_groupBy2_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IGeneralModule_groupBy2_pargs {
- public:
-
-
-  virtual ~IGeneralModule_groupBy2_pargs() noexcept;
-  const  ::ignis::rpc::ISource* src;
-  const int64_t* numPartitions;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IGeneralModule_groupBy2_result__isset {
-  _IGeneralModule_groupBy2_result__isset() : ex(false) {}
-  bool ex :1;
-} _IGeneralModule_groupBy2_result__isset;
-
-class IGeneralModule_groupBy2_result {
- public:
-
-  IGeneralModule_groupBy2_result(const IGeneralModule_groupBy2_result&);
-  IGeneralModule_groupBy2_result& operator=(const IGeneralModule_groupBy2_result&);
-  IGeneralModule_groupBy2_result() {
-  }
-
-  virtual ~IGeneralModule_groupBy2_result() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _IGeneralModule_groupBy2_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
-
-  bool operator == (const IGeneralModule_groupBy2_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IGeneralModule_groupBy2_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IGeneralModule_groupBy2_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IGeneralModule_groupBy2_presult__isset {
-  _IGeneralModule_groupBy2_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IGeneralModule_groupBy2_presult__isset;
-
-class IGeneralModule_groupBy2_presult {
- public:
-
-
-  virtual ~IGeneralModule_groupBy2_presult() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _IGeneralModule_groupBy2_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1398,6 +1442,1248 @@ class IGeneralModule_sortBy3_presult {
 
 };
 
+typedef struct _IGeneralModule_flatMapValues_args__isset {
+  _IGeneralModule_flatMapValues_args__isset() : src(false) {}
+  bool src :1;
+} _IGeneralModule_flatMapValues_args__isset;
+
+class IGeneralModule_flatMapValues_args {
+ public:
+
+  IGeneralModule_flatMapValues_args(const IGeneralModule_flatMapValues_args&);
+  IGeneralModule_flatMapValues_args& operator=(const IGeneralModule_flatMapValues_args&);
+  IGeneralModule_flatMapValues_args() {
+  }
+
+  virtual ~IGeneralModule_flatMapValues_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralModule_flatMapValues_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralModule_flatMapValues_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_flatMapValues_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_flatMapValues_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_flatMapValues_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_flatMapValues_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_flatMapValues_result__isset {
+  _IGeneralModule_flatMapValues_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_flatMapValues_result__isset;
+
+class IGeneralModule_flatMapValues_result {
+ public:
+
+  IGeneralModule_flatMapValues_result(const IGeneralModule_flatMapValues_result&);
+  IGeneralModule_flatMapValues_result& operator=(const IGeneralModule_flatMapValues_result&);
+  IGeneralModule_flatMapValues_result() {
+  }
+
+  virtual ~IGeneralModule_flatMapValues_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_flatMapValues_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_flatMapValues_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_flatMapValues_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_flatMapValues_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_flatMapValues_presult__isset {
+  _IGeneralModule_flatMapValues_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_flatMapValues_presult__isset;
+
+class IGeneralModule_flatMapValues_presult {
+ public:
+
+
+  virtual ~IGeneralModule_flatMapValues_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_flatMapValues_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_mapValues_args__isset {
+  _IGeneralModule_mapValues_args__isset() : src(false) {}
+  bool src :1;
+} _IGeneralModule_mapValues_args__isset;
+
+class IGeneralModule_mapValues_args {
+ public:
+
+  IGeneralModule_mapValues_args(const IGeneralModule_mapValues_args&);
+  IGeneralModule_mapValues_args& operator=(const IGeneralModule_mapValues_args&);
+  IGeneralModule_mapValues_args() {
+  }
+
+  virtual ~IGeneralModule_mapValues_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralModule_mapValues_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralModule_mapValues_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_mapValues_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_mapValues_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_mapValues_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_mapValues_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_mapValues_result__isset {
+  _IGeneralModule_mapValues_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_mapValues_result__isset;
+
+class IGeneralModule_mapValues_result {
+ public:
+
+  IGeneralModule_mapValues_result(const IGeneralModule_mapValues_result&);
+  IGeneralModule_mapValues_result& operator=(const IGeneralModule_mapValues_result&);
+  IGeneralModule_mapValues_result() {
+  }
+
+  virtual ~IGeneralModule_mapValues_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_mapValues_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_mapValues_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_mapValues_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_mapValues_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_mapValues_presult__isset {
+  _IGeneralModule_mapValues_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_mapValues_presult__isset;
+
+class IGeneralModule_mapValues_presult {
+ public:
+
+
+  virtual ~IGeneralModule_mapValues_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_mapValues_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_groupByKey_args__isset {
+  _IGeneralModule_groupByKey_args__isset() : numPartitions(false) {}
+  bool numPartitions :1;
+} _IGeneralModule_groupByKey_args__isset;
+
+class IGeneralModule_groupByKey_args {
+ public:
+
+  IGeneralModule_groupByKey_args(const IGeneralModule_groupByKey_args&);
+  IGeneralModule_groupByKey_args& operator=(const IGeneralModule_groupByKey_args&);
+  IGeneralModule_groupByKey_args() : numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_groupByKey_args() noexcept;
+  int64_t numPartitions;
+
+  _IGeneralModule_groupByKey_args__isset __isset;
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_groupByKey_args & rhs) const
+  {
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_groupByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_groupByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_groupByKey_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_groupByKey_pargs() noexcept;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_groupByKey_result__isset {
+  _IGeneralModule_groupByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_groupByKey_result__isset;
+
+class IGeneralModule_groupByKey_result {
+ public:
+
+  IGeneralModule_groupByKey_result(const IGeneralModule_groupByKey_result&);
+  IGeneralModule_groupByKey_result& operator=(const IGeneralModule_groupByKey_result&);
+  IGeneralModule_groupByKey_result() {
+  }
+
+  virtual ~IGeneralModule_groupByKey_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_groupByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_groupByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_groupByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_groupByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_groupByKey_presult__isset {
+  _IGeneralModule_groupByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_groupByKey_presult__isset;
+
+class IGeneralModule_groupByKey_presult {
+ public:
+
+
+  virtual ~IGeneralModule_groupByKey_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_groupByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_reduceByKey_args__isset {
+  _IGeneralModule_reduceByKey_args__isset() : src(false), numPartitions(false), localReduce(false) {}
+  bool src :1;
+  bool numPartitions :1;
+  bool localReduce :1;
+} _IGeneralModule_reduceByKey_args__isset;
+
+class IGeneralModule_reduceByKey_args {
+ public:
+
+  IGeneralModule_reduceByKey_args(const IGeneralModule_reduceByKey_args&);
+  IGeneralModule_reduceByKey_args& operator=(const IGeneralModule_reduceByKey_args&);
+  IGeneralModule_reduceByKey_args() : numPartitions(0), localReduce(0) {
+  }
+
+  virtual ~IGeneralModule_reduceByKey_args() noexcept;
+   ::ignis::rpc::ISource src;
+  int64_t numPartitions;
+  bool localReduce;
+
+  _IGeneralModule_reduceByKey_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  void __set_localReduce(const bool val);
+
+  bool operator == (const IGeneralModule_reduceByKey_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    if (!(localReduce == rhs.localReduce))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_reduceByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_reduceByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_reduceByKey_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_reduceByKey_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+  const int64_t* numPartitions;
+  const bool* localReduce;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_reduceByKey_result__isset {
+  _IGeneralModule_reduceByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_reduceByKey_result__isset;
+
+class IGeneralModule_reduceByKey_result {
+ public:
+
+  IGeneralModule_reduceByKey_result(const IGeneralModule_reduceByKey_result&);
+  IGeneralModule_reduceByKey_result& operator=(const IGeneralModule_reduceByKey_result&);
+  IGeneralModule_reduceByKey_result() {
+  }
+
+  virtual ~IGeneralModule_reduceByKey_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_reduceByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_reduceByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_reduceByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_reduceByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_reduceByKey_presult__isset {
+  _IGeneralModule_reduceByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_reduceByKey_presult__isset;
+
+class IGeneralModule_reduceByKey_presult {
+ public:
+
+
+  virtual ~IGeneralModule_reduceByKey_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_reduceByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_aggregateByKey_args__isset {
+  _IGeneralModule_aggregateByKey_args__isset() : zero(false), seqOp(false), numPartitions(false) {}
+  bool zero :1;
+  bool seqOp :1;
+  bool numPartitions :1;
+} _IGeneralModule_aggregateByKey_args__isset;
+
+class IGeneralModule_aggregateByKey_args {
+ public:
+
+  IGeneralModule_aggregateByKey_args(const IGeneralModule_aggregateByKey_args&);
+  IGeneralModule_aggregateByKey_args& operator=(const IGeneralModule_aggregateByKey_args&);
+  IGeneralModule_aggregateByKey_args() : numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_aggregateByKey_args() noexcept;
+   ::ignis::rpc::ISource zero;
+   ::ignis::rpc::ISource seqOp;
+  int64_t numPartitions;
+
+  _IGeneralModule_aggregateByKey_args__isset __isset;
+
+  void __set_zero(const  ::ignis::rpc::ISource& val);
+
+  void __set_seqOp(const  ::ignis::rpc::ISource& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_aggregateByKey_args & rhs) const
+  {
+    if (!(zero == rhs.zero))
+      return false;
+    if (!(seqOp == rhs.seqOp))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_aggregateByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_aggregateByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_aggregateByKey_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_aggregateByKey_pargs() noexcept;
+  const  ::ignis::rpc::ISource* zero;
+  const  ::ignis::rpc::ISource* seqOp;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_aggregateByKey_result__isset {
+  _IGeneralModule_aggregateByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_aggregateByKey_result__isset;
+
+class IGeneralModule_aggregateByKey_result {
+ public:
+
+  IGeneralModule_aggregateByKey_result(const IGeneralModule_aggregateByKey_result&);
+  IGeneralModule_aggregateByKey_result& operator=(const IGeneralModule_aggregateByKey_result&);
+  IGeneralModule_aggregateByKey_result() {
+  }
+
+  virtual ~IGeneralModule_aggregateByKey_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_aggregateByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_aggregateByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_aggregateByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_aggregateByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_aggregateByKey_presult__isset {
+  _IGeneralModule_aggregateByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_aggregateByKey_presult__isset;
+
+class IGeneralModule_aggregateByKey_presult {
+ public:
+
+
+  virtual ~IGeneralModule_aggregateByKey_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_aggregateByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_aggregateByKey4_args__isset {
+  _IGeneralModule_aggregateByKey4_args__isset() : zero(false), seqOp(false), combOp(false), numPartitions(false) {}
+  bool zero :1;
+  bool seqOp :1;
+  bool combOp :1;
+  bool numPartitions :1;
+} _IGeneralModule_aggregateByKey4_args__isset;
+
+class IGeneralModule_aggregateByKey4_args {
+ public:
+
+  IGeneralModule_aggregateByKey4_args(const IGeneralModule_aggregateByKey4_args&);
+  IGeneralModule_aggregateByKey4_args& operator=(const IGeneralModule_aggregateByKey4_args&);
+  IGeneralModule_aggregateByKey4_args() : numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_aggregateByKey4_args() noexcept;
+   ::ignis::rpc::ISource zero;
+   ::ignis::rpc::ISource seqOp;
+   ::ignis::rpc::ISource combOp;
+  int64_t numPartitions;
+
+  _IGeneralModule_aggregateByKey4_args__isset __isset;
+
+  void __set_zero(const  ::ignis::rpc::ISource& val);
+
+  void __set_seqOp(const  ::ignis::rpc::ISource& val);
+
+  void __set_combOp(const  ::ignis::rpc::ISource& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_aggregateByKey4_args & rhs) const
+  {
+    if (!(zero == rhs.zero))
+      return false;
+    if (!(seqOp == rhs.seqOp))
+      return false;
+    if (!(combOp == rhs.combOp))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_aggregateByKey4_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_aggregateByKey4_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_aggregateByKey4_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_aggregateByKey4_pargs() noexcept;
+  const  ::ignis::rpc::ISource* zero;
+  const  ::ignis::rpc::ISource* seqOp;
+  const  ::ignis::rpc::ISource* combOp;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_aggregateByKey4_result__isset {
+  _IGeneralModule_aggregateByKey4_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_aggregateByKey4_result__isset;
+
+class IGeneralModule_aggregateByKey4_result {
+ public:
+
+  IGeneralModule_aggregateByKey4_result(const IGeneralModule_aggregateByKey4_result&);
+  IGeneralModule_aggregateByKey4_result& operator=(const IGeneralModule_aggregateByKey4_result&);
+  IGeneralModule_aggregateByKey4_result() {
+  }
+
+  virtual ~IGeneralModule_aggregateByKey4_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_aggregateByKey4_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_aggregateByKey4_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_aggregateByKey4_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_aggregateByKey4_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_aggregateByKey4_presult__isset {
+  _IGeneralModule_aggregateByKey4_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_aggregateByKey4_presult__isset;
+
+class IGeneralModule_aggregateByKey4_presult {
+ public:
+
+
+  virtual ~IGeneralModule_aggregateByKey4_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_aggregateByKey4_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_foldByKey_args__isset {
+  _IGeneralModule_foldByKey_args__isset() : zero(false), src(false), numPartitions(false), localFold(false) {}
+  bool zero :1;
+  bool src :1;
+  bool numPartitions :1;
+  bool localFold :1;
+} _IGeneralModule_foldByKey_args__isset;
+
+class IGeneralModule_foldByKey_args {
+ public:
+
+  IGeneralModule_foldByKey_args(const IGeneralModule_foldByKey_args&);
+  IGeneralModule_foldByKey_args& operator=(const IGeneralModule_foldByKey_args&);
+  IGeneralModule_foldByKey_args() : numPartitions(0), localFold(0) {
+  }
+
+  virtual ~IGeneralModule_foldByKey_args() noexcept;
+   ::ignis::rpc::ISource zero;
+   ::ignis::rpc::ISource src;
+  int64_t numPartitions;
+  bool localFold;
+
+  _IGeneralModule_foldByKey_args__isset __isset;
+
+  void __set_zero(const  ::ignis::rpc::ISource& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  void __set_localFold(const bool val);
+
+  bool operator == (const IGeneralModule_foldByKey_args & rhs) const
+  {
+    if (!(zero == rhs.zero))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    if (!(localFold == rhs.localFold))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_foldByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_foldByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_foldByKey_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_foldByKey_pargs() noexcept;
+  const  ::ignis::rpc::ISource* zero;
+  const  ::ignis::rpc::ISource* src;
+  const int64_t* numPartitions;
+  const bool* localFold;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_foldByKey_result__isset {
+  _IGeneralModule_foldByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_foldByKey_result__isset;
+
+class IGeneralModule_foldByKey_result {
+ public:
+
+  IGeneralModule_foldByKey_result(const IGeneralModule_foldByKey_result&);
+  IGeneralModule_foldByKey_result& operator=(const IGeneralModule_foldByKey_result&);
+  IGeneralModule_foldByKey_result() {
+  }
+
+  virtual ~IGeneralModule_foldByKey_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_foldByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_foldByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_foldByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_foldByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_foldByKey_presult__isset {
+  _IGeneralModule_foldByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_foldByKey_presult__isset;
+
+class IGeneralModule_foldByKey_presult {
+ public:
+
+
+  virtual ~IGeneralModule_foldByKey_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_foldByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_sortByKey_args__isset {
+  _IGeneralModule_sortByKey_args__isset() : ascending(false) {}
+  bool ascending :1;
+} _IGeneralModule_sortByKey_args__isset;
+
+class IGeneralModule_sortByKey_args {
+ public:
+
+  IGeneralModule_sortByKey_args(const IGeneralModule_sortByKey_args&);
+  IGeneralModule_sortByKey_args& operator=(const IGeneralModule_sortByKey_args&);
+  IGeneralModule_sortByKey_args() : ascending(0) {
+  }
+
+  virtual ~IGeneralModule_sortByKey_args() noexcept;
+  bool ascending;
+
+  _IGeneralModule_sortByKey_args__isset __isset;
+
+  void __set_ascending(const bool val);
+
+  bool operator == (const IGeneralModule_sortByKey_args & rhs) const
+  {
+    if (!(ascending == rhs.ascending))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_sortByKey_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey_pargs() noexcept;
+  const bool* ascending;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey_result__isset {
+  _IGeneralModule_sortByKey_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey_result__isset;
+
+class IGeneralModule_sortByKey_result {
+ public:
+
+  IGeneralModule_sortByKey_result(const IGeneralModule_sortByKey_result&);
+  IGeneralModule_sortByKey_result& operator=(const IGeneralModule_sortByKey_result&);
+  IGeneralModule_sortByKey_result() {
+  }
+
+  virtual ~IGeneralModule_sortByKey_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_sortByKey_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey_presult__isset {
+  _IGeneralModule_sortByKey_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey_presult__isset;
+
+class IGeneralModule_sortByKey_presult {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_sortByKey2a_args__isset {
+  _IGeneralModule_sortByKey2a_args__isset() : ascending(false), numPartitions(false) {}
+  bool ascending :1;
+  bool numPartitions :1;
+} _IGeneralModule_sortByKey2a_args__isset;
+
+class IGeneralModule_sortByKey2a_args {
+ public:
+
+  IGeneralModule_sortByKey2a_args(const IGeneralModule_sortByKey2a_args&);
+  IGeneralModule_sortByKey2a_args& operator=(const IGeneralModule_sortByKey2a_args&);
+  IGeneralModule_sortByKey2a_args() : ascending(0), numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_sortByKey2a_args() noexcept;
+  bool ascending;
+  int64_t numPartitions;
+
+  _IGeneralModule_sortByKey2a_args__isset __isset;
+
+  void __set_ascending(const bool val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_sortByKey2a_args & rhs) const
+  {
+    if (!(ascending == rhs.ascending))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey2a_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey2a_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_sortByKey2a_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey2a_pargs() noexcept;
+  const bool* ascending;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey2a_result__isset {
+  _IGeneralModule_sortByKey2a_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey2a_result__isset;
+
+class IGeneralModule_sortByKey2a_result {
+ public:
+
+  IGeneralModule_sortByKey2a_result(const IGeneralModule_sortByKey2a_result&);
+  IGeneralModule_sortByKey2a_result& operator=(const IGeneralModule_sortByKey2a_result&);
+  IGeneralModule_sortByKey2a_result() {
+  }
+
+  virtual ~IGeneralModule_sortByKey2a_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey2a_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_sortByKey2a_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey2a_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey2a_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey2a_presult__isset {
+  _IGeneralModule_sortByKey2a_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey2a_presult__isset;
+
+class IGeneralModule_sortByKey2a_presult {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey2a_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey2a_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_sortByKey2b_args__isset {
+  _IGeneralModule_sortByKey2b_args__isset() : src(false), ascending(false) {}
+  bool src :1;
+  bool ascending :1;
+} _IGeneralModule_sortByKey2b_args__isset;
+
+class IGeneralModule_sortByKey2b_args {
+ public:
+
+  IGeneralModule_sortByKey2b_args(const IGeneralModule_sortByKey2b_args&);
+  IGeneralModule_sortByKey2b_args& operator=(const IGeneralModule_sortByKey2b_args&);
+  IGeneralModule_sortByKey2b_args() : ascending(0) {
+  }
+
+  virtual ~IGeneralModule_sortByKey2b_args() noexcept;
+   ::ignis::rpc::ISource src;
+  bool ascending;
+
+  _IGeneralModule_sortByKey2b_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  void __set_ascending(const bool val);
+
+  bool operator == (const IGeneralModule_sortByKey2b_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    if (!(ascending == rhs.ascending))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey2b_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey2b_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_sortByKey2b_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey2b_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+  const bool* ascending;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey2b_result__isset {
+  _IGeneralModule_sortByKey2b_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey2b_result__isset;
+
+class IGeneralModule_sortByKey2b_result {
+ public:
+
+  IGeneralModule_sortByKey2b_result(const IGeneralModule_sortByKey2b_result&);
+  IGeneralModule_sortByKey2b_result& operator=(const IGeneralModule_sortByKey2b_result&);
+  IGeneralModule_sortByKey2b_result() {
+  }
+
+  virtual ~IGeneralModule_sortByKey2b_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey2b_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_sortByKey2b_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey2b_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey2b_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey2b_presult__isset {
+  _IGeneralModule_sortByKey2b_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey2b_presult__isset;
+
+class IGeneralModule_sortByKey2b_presult {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey2b_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey2b_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_sortByKey3_args__isset {
+  _IGeneralModule_sortByKey3_args__isset() : src(false), ascending(false), numPartitions(false) {}
+  bool src :1;
+  bool ascending :1;
+  bool numPartitions :1;
+} _IGeneralModule_sortByKey3_args__isset;
+
+class IGeneralModule_sortByKey3_args {
+ public:
+
+  IGeneralModule_sortByKey3_args(const IGeneralModule_sortByKey3_args&);
+  IGeneralModule_sortByKey3_args& operator=(const IGeneralModule_sortByKey3_args&);
+  IGeneralModule_sortByKey3_args() : ascending(0), numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_sortByKey3_args() noexcept;
+   ::ignis::rpc::ISource src;
+  bool ascending;
+  int64_t numPartitions;
+
+  _IGeneralModule_sortByKey3_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  void __set_ascending(const bool val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_sortByKey3_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    if (!(ascending == rhs.ascending))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey3_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey3_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_sortByKey3_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey3_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+  const bool* ascending;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey3_result__isset {
+  _IGeneralModule_sortByKey3_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey3_result__isset;
+
+class IGeneralModule_sortByKey3_result {
+ public:
+
+  IGeneralModule_sortByKey3_result(const IGeneralModule_sortByKey3_result&);
+  IGeneralModule_sortByKey3_result& operator=(const IGeneralModule_sortByKey3_result&);
+  IGeneralModule_sortByKey3_result() {
+  }
+
+  virtual ~IGeneralModule_sortByKey3_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey3_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_sortByKey3_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_sortByKey3_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_sortByKey3_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_sortByKey3_presult__isset {
+  _IGeneralModule_sortByKey3_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_sortByKey3_presult__isset;
+
+class IGeneralModule_sortByKey3_presult {
+ public:
+
+
+  virtual ~IGeneralModule_sortByKey3_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_sortByKey3_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class IGeneralModuleClient : virtual public IGeneralModuleIf {
  public:
   IGeneralModuleClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1432,21 +2718,21 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   void flatmap(const  ::ignis::rpc::ISource& src);
   void send_flatmap(const  ::ignis::rpc::ISource& src);
   void recv_flatmap();
+  void keyBy(const  ::ignis::rpc::ISource& src);
+  void send_keyBy(const  ::ignis::rpc::ISource& src);
+  void recv_keyBy();
   void mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   void send_mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   void recv_mapPartitions();
   void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   void send_mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   void recv_mapPartitionsWithIndex();
-  void applyPartition(const  ::ignis::rpc::ISource& src);
-  void send_applyPartition(const  ::ignis::rpc::ISource& src);
-  void recv_applyPartition();
-  void groupBy(const  ::ignis::rpc::ISource& src);
-  void send_groupBy(const  ::ignis::rpc::ISource& src);
+  void mapExecutor(const  ::ignis::rpc::ISource& src);
+  void send_mapExecutor(const  ::ignis::rpc::ISource& src);
+  void recv_mapExecutor();
+  void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void send_groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
   void recv_groupBy();
-  void groupBy2(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  void send_groupBy2(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  void recv_groupBy2();
   void sort(const bool ascending);
   void send_sort(const bool ascending);
   void recv_sort();
@@ -1459,6 +2745,39 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   void sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void send_sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void recv_sortBy3();
+  void flatMapValues(const  ::ignis::rpc::ISource& src);
+  void send_flatMapValues(const  ::ignis::rpc::ISource& src);
+  void recv_flatMapValues();
+  void mapValues(const  ::ignis::rpc::ISource& src);
+  void send_mapValues(const  ::ignis::rpc::ISource& src);
+  void recv_mapValues();
+  void groupByKey(const int64_t numPartitions);
+  void send_groupByKey(const int64_t numPartitions);
+  void recv_groupByKey();
+  void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
+  void send_reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
+  void recv_reduceByKey();
+  void aggregateByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const int64_t numPartitions);
+  void send_aggregateByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const int64_t numPartitions);
+  void recv_aggregateByKey();
+  void aggregateByKey4(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t numPartitions);
+  void send_aggregateByKey4(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t numPartitions);
+  void recv_aggregateByKey4();
+  void foldByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localFold);
+  void send_foldByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localFold);
+  void recv_foldByKey();
+  void sortByKey(const bool ascending);
+  void send_sortByKey(const bool ascending);
+  void recv_sortByKey();
+  void sortByKey2a(const bool ascending, const int64_t numPartitions);
+  void send_sortByKey2a(const bool ascending, const int64_t numPartitions);
+  void recv_sortByKey2a();
+  void sortByKey2b(const  ::ignis::rpc::ISource& src, const bool ascending);
+  void send_sortByKey2b(const  ::ignis::rpc::ISource& src, const bool ascending);
+  void recv_sortByKey2b();
+  void sortByKey3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
+  void send_sortByKey3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
+  void recv_sortByKey3();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1477,30 +2796,52 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_map_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_keyBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapPartitionsWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_applyPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mapExecutor(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_groupBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_groupBy2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sort2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sortBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sortBy3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_flatMapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_groupByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_aggregateByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_aggregateByKey4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_foldByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sortByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sortByKey2a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sortByKey2b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_sortByKey3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IGeneralModuleProcessor(::std::shared_ptr<IGeneralModuleIf> iface) :
     iface_(iface) {
     processMap_["map_"] = &IGeneralModuleProcessor::process_map_;
     processMap_["filter"] = &IGeneralModuleProcessor::process_filter;
     processMap_["flatmap"] = &IGeneralModuleProcessor::process_flatmap;
+    processMap_["keyBy"] = &IGeneralModuleProcessor::process_keyBy;
     processMap_["mapPartitions"] = &IGeneralModuleProcessor::process_mapPartitions;
     processMap_["mapPartitionsWithIndex"] = &IGeneralModuleProcessor::process_mapPartitionsWithIndex;
-    processMap_["applyPartition"] = &IGeneralModuleProcessor::process_applyPartition;
+    processMap_["mapExecutor"] = &IGeneralModuleProcessor::process_mapExecutor;
     processMap_["groupBy"] = &IGeneralModuleProcessor::process_groupBy;
-    processMap_["groupBy2"] = &IGeneralModuleProcessor::process_groupBy2;
     processMap_["sort"] = &IGeneralModuleProcessor::process_sort;
     processMap_["sort2"] = &IGeneralModuleProcessor::process_sort2;
     processMap_["sortBy"] = &IGeneralModuleProcessor::process_sortBy;
     processMap_["sortBy3"] = &IGeneralModuleProcessor::process_sortBy3;
+    processMap_["flatMapValues"] = &IGeneralModuleProcessor::process_flatMapValues;
+    processMap_["mapValues"] = &IGeneralModuleProcessor::process_mapValues;
+    processMap_["groupByKey"] = &IGeneralModuleProcessor::process_groupByKey;
+    processMap_["reduceByKey"] = &IGeneralModuleProcessor::process_reduceByKey;
+    processMap_["aggregateByKey"] = &IGeneralModuleProcessor::process_aggregateByKey;
+    processMap_["aggregateByKey4"] = &IGeneralModuleProcessor::process_aggregateByKey4;
+    processMap_["foldByKey"] = &IGeneralModuleProcessor::process_foldByKey;
+    processMap_["sortByKey"] = &IGeneralModuleProcessor::process_sortByKey;
+    processMap_["sortByKey2a"] = &IGeneralModuleProcessor::process_sortByKey2a;
+    processMap_["sortByKey2b"] = &IGeneralModuleProcessor::process_sortByKey2b;
+    processMap_["sortByKey3"] = &IGeneralModuleProcessor::process_sortByKey3;
   }
 
   virtual ~IGeneralModuleProcessor() {}
@@ -1556,6 +2897,15 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
     ifaces_[i]->flatmap(src);
   }
 
+  void keyBy(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->keyBy(src);
+    }
+    ifaces_[i]->keyBy(src);
+  }
+
   void mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1574,31 +2924,22 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
     ifaces_[i]->mapPartitionsWithIndex(src, preservesPartitioning);
   }
 
-  void applyPartition(const  ::ignis::rpc::ISource& src) {
+  void mapExecutor(const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->applyPartition(src);
+      ifaces_[i]->mapExecutor(src);
     }
-    ifaces_[i]->applyPartition(src);
+    ifaces_[i]->mapExecutor(src);
   }
 
-  void groupBy(const  ::ignis::rpc::ISource& src) {
+  void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->groupBy(src);
+      ifaces_[i]->groupBy(src, numPartitions);
     }
-    ifaces_[i]->groupBy(src);
-  }
-
-  void groupBy2(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->groupBy2(src, numPartitions);
-    }
-    ifaces_[i]->groupBy2(src, numPartitions);
+    ifaces_[i]->groupBy(src, numPartitions);
   }
 
   void sort(const bool ascending) {
@@ -1635,6 +2976,105 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
       ifaces_[i]->sortBy3(src, ascending, numPartitions);
     }
     ifaces_[i]->sortBy3(src, ascending, numPartitions);
+  }
+
+  void flatMapValues(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->flatMapValues(src);
+    }
+    ifaces_[i]->flatMapValues(src);
+  }
+
+  void mapValues(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->mapValues(src);
+    }
+    ifaces_[i]->mapValues(src);
+  }
+
+  void groupByKey(const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->groupByKey(numPartitions);
+    }
+    ifaces_[i]->groupByKey(numPartitions);
+  }
+
+  void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->reduceByKey(src, numPartitions, localReduce);
+    }
+    ifaces_[i]->reduceByKey(src, numPartitions, localReduce);
+  }
+
+  void aggregateByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->aggregateByKey(zero, seqOp, numPartitions);
+    }
+    ifaces_[i]->aggregateByKey(zero, seqOp, numPartitions);
+  }
+
+  void aggregateByKey4(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->aggregateByKey4(zero, seqOp, combOp, numPartitions);
+    }
+    ifaces_[i]->aggregateByKey4(zero, seqOp, combOp, numPartitions);
+  }
+
+  void foldByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localFold) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->foldByKey(zero, src, numPartitions, localFold);
+    }
+    ifaces_[i]->foldByKey(zero, src, numPartitions, localFold);
+  }
+
+  void sortByKey(const bool ascending) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sortByKey(ascending);
+    }
+    ifaces_[i]->sortByKey(ascending);
+  }
+
+  void sortByKey2a(const bool ascending, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sortByKey2a(ascending, numPartitions);
+    }
+    ifaces_[i]->sortByKey2a(ascending, numPartitions);
+  }
+
+  void sortByKey2b(const  ::ignis::rpc::ISource& src, const bool ascending) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sortByKey2b(src, ascending);
+    }
+    ifaces_[i]->sortByKey2b(src, ascending);
+  }
+
+  void sortByKey3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->sortByKey3(src, ascending, numPartitions);
+    }
+    ifaces_[i]->sortByKey3(src, ascending, numPartitions);
   }
 
 };
@@ -1678,21 +3118,21 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   void flatmap(const  ::ignis::rpc::ISource& src);
   int32_t send_flatmap(const  ::ignis::rpc::ISource& src);
   void recv_flatmap(const int32_t seqid);
+  void keyBy(const  ::ignis::rpc::ISource& src);
+  int32_t send_keyBy(const  ::ignis::rpc::ISource& src);
+  void recv_keyBy(const int32_t seqid);
   void mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   int32_t send_mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   void recv_mapPartitions(const int32_t seqid);
   void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   int32_t send_mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
   void recv_mapPartitionsWithIndex(const int32_t seqid);
-  void applyPartition(const  ::ignis::rpc::ISource& src);
-  int32_t send_applyPartition(const  ::ignis::rpc::ISource& src);
-  void recv_applyPartition(const int32_t seqid);
-  void groupBy(const  ::ignis::rpc::ISource& src);
-  int32_t send_groupBy(const  ::ignis::rpc::ISource& src);
+  void mapExecutor(const  ::ignis::rpc::ISource& src);
+  int32_t send_mapExecutor(const  ::ignis::rpc::ISource& src);
+  void recv_mapExecutor(const int32_t seqid);
+  void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  int32_t send_groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
   void recv_groupBy(const int32_t seqid);
-  void groupBy2(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  int32_t send_groupBy2(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  void recv_groupBy2(const int32_t seqid);
   void sort(const bool ascending);
   int32_t send_sort(const bool ascending);
   void recv_sort(const int32_t seqid);
@@ -1705,6 +3145,39 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   void sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   int32_t send_sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void recv_sortBy3(const int32_t seqid);
+  void flatMapValues(const  ::ignis::rpc::ISource& src);
+  int32_t send_flatMapValues(const  ::ignis::rpc::ISource& src);
+  void recv_flatMapValues(const int32_t seqid);
+  void mapValues(const  ::ignis::rpc::ISource& src);
+  int32_t send_mapValues(const  ::ignis::rpc::ISource& src);
+  void recv_mapValues(const int32_t seqid);
+  void groupByKey(const int64_t numPartitions);
+  int32_t send_groupByKey(const int64_t numPartitions);
+  void recv_groupByKey(const int32_t seqid);
+  void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
+  int32_t send_reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
+  void recv_reduceByKey(const int32_t seqid);
+  void aggregateByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const int64_t numPartitions);
+  int32_t send_aggregateByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const int64_t numPartitions);
+  void recv_aggregateByKey(const int32_t seqid);
+  void aggregateByKey4(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t numPartitions);
+  int32_t send_aggregateByKey4(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t numPartitions);
+  void recv_aggregateByKey4(const int32_t seqid);
+  void foldByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localFold);
+  int32_t send_foldByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localFold);
+  void recv_foldByKey(const int32_t seqid);
+  void sortByKey(const bool ascending);
+  int32_t send_sortByKey(const bool ascending);
+  void recv_sortByKey(const int32_t seqid);
+  void sortByKey2a(const bool ascending, const int64_t numPartitions);
+  int32_t send_sortByKey2a(const bool ascending, const int64_t numPartitions);
+  void recv_sortByKey2a(const int32_t seqid);
+  void sortByKey2b(const  ::ignis::rpc::ISource& src, const bool ascending);
+  int32_t send_sortByKey2b(const  ::ignis::rpc::ISource& src, const bool ascending);
+  void recv_sortByKey2b(const int32_t seqid);
+  void sortByKey3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
+  int32_t send_sortByKey3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
+  void recv_sortByKey3(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

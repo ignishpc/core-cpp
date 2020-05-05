@@ -229,14 +229,6 @@ uint32_t IGeneralActionModule_treeReduce_args::read(::apache::thrift::protocol::
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->depth);
-          this->__isset.depth = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -258,10 +250,6 @@ uint32_t IGeneralActionModule_treeReduce_args::write(::apache::thrift::protocol:
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("depth", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->depth);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -279,10 +267,6 @@ uint32_t IGeneralActionModule_treeReduce_pargs::write(::apache::thrift::protocol
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->src)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("depth", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->depth)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -592,13 +576,21 @@ uint32_t IGeneralActionModule_aggregate_args::read(::apache::thrift::protocol::T
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->zero.read(iprot);
+          this->__isset.zero = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->seqOp.read(iprot);
           this->__isset.seqOp = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->combOp.read(iprot);
           this->__isset.combOp = true;
@@ -623,11 +615,15 @@ uint32_t IGeneralActionModule_aggregate_args::write(::apache::thrift::protocol::
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IGeneralActionModule_aggregate_args");
 
-  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->zero.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += this->seqOp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += this->combOp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -646,11 +642,15 @@ uint32_t IGeneralActionModule_aggregate_pargs::write(::apache::thrift::protocol:
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IGeneralActionModule_aggregate_pargs");
 
-  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->zero)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->seqOp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += (*(this->combOp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -795,24 +795,24 @@ uint32_t IGeneralActionModule_treeAggregate_args::read(::apache::thrift::protoco
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->seqOp.read(iprot);
-          this->__isset.seqOp = true;
+          xfer += this->zero.read(iprot);
+          this->__isset.zero = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->combOp.read(iprot);
-          this->__isset.combOp = true;
+          xfer += this->seqOp.read(iprot);
+          this->__isset.seqOp = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
       case 3:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->depth);
-          this->__isset.depth = true;
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->combOp.read(iprot);
+          this->__isset.combOp = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -834,16 +834,16 @@ uint32_t IGeneralActionModule_treeAggregate_args::write(::apache::thrift::protoc
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IGeneralActionModule_treeAggregate_args");
 
-  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->zero.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += this->seqOp.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += this->combOp.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("depth", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64(this->depth);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -861,16 +861,16 @@ uint32_t IGeneralActionModule_treeAggregate_pargs::write(::apache::thrift::proto
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IGeneralActionModule_treeAggregate_pargs");
 
-  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->zero)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seqOp", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->seqOp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += oprot->writeFieldBegin("combOp", ::apache::thrift::protocol::T_STRUCT, 3);
   xfer += (*(this->combOp)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("depth", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64((*(this->depth)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1014,6 +1014,14 @@ uint32_t IGeneralActionModule_fold_args::read(::apache::thrift::protocol::TProto
     {
       case 1:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->zero.read(iprot);
+          this->__isset.zero = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->src.read(iprot);
           this->__isset.src = true;
         } else {
@@ -1037,7 +1045,11 @@ uint32_t IGeneralActionModule_fold_args::write(::apache::thrift::protocol::TProt
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IGeneralActionModule_fold_args");
 
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->zero.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -1056,7 +1068,11 @@ uint32_t IGeneralActionModule_fold_pargs::write(::apache::thrift::protocol::TPro
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
   xfer += oprot->writeStructBegin("IGeneralActionModule_fold_pargs");
 
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->zero)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->src)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -1133,6 +1149,209 @@ IGeneralActionModule_fold_presult::~IGeneralActionModule_fold_presult() noexcept
 
 
 uint32_t IGeneralActionModule_fold_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IGeneralActionModule_treeFold_args::~IGeneralActionModule_treeFold_args() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_treeFold_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->zero.read(iprot);
+          this->__isset.zero = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_treeFold_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_treeFold_args");
+
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->zero.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_treeFold_pargs::~IGeneralActionModule_treeFold_pargs() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_treeFold_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_treeFold_pargs");
+
+  xfer += oprot->writeFieldBegin("zero", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->zero)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_treeFold_result::~IGeneralActionModule_treeFold_result() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_treeFold_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_treeFold_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IGeneralActionModule_treeFold_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_treeFold_presult::~IGeneralActionModule_treeFold_presult() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_treeFold_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2124,6 +2343,728 @@ uint32_t IGeneralActionModule_top2_presult::read(::apache::thrift::protocol::TPr
   return xfer;
 }
 
+
+IGeneralActionModule_takeOrdered_args::~IGeneralActionModule_takeOrdered_args() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->num);
+          this->__isset.num = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_takeOrdered_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_takeOrdered_args");
+
+  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->num);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_takeOrdered_pargs::~IGeneralActionModule_takeOrdered_pargs() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_takeOrdered_pargs");
+
+  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->num)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_takeOrdered_result::~IGeneralActionModule_takeOrdered_result() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_takeOrdered_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IGeneralActionModule_takeOrdered_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_takeOrdered_presult::~IGeneralActionModule_takeOrdered_presult() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IGeneralActionModule_takeOrdered2_args::~IGeneralActionModule_takeOrdered2_args() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered2_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->num);
+          this->__isset.num = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->cmp.read(iprot);
+          this->__isset.cmp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_takeOrdered2_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_takeOrdered2_args");
+
+  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->num);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cmp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->cmp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_takeOrdered2_pargs::~IGeneralActionModule_takeOrdered2_pargs() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered2_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_takeOrdered2_pargs");
+
+  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->num)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cmp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->cmp)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_takeOrdered2_result::~IGeneralActionModule_takeOrdered2_result() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered2_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_takeOrdered2_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IGeneralActionModule_takeOrdered2_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_takeOrdered2_presult::~IGeneralActionModule_takeOrdered2_presult() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_takeOrdered2_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IGeneralActionModule_keys_args::~IGeneralActionModule_keys_args() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_keys_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_keys_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_keys_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_keys_pargs::~IGeneralActionModule_keys_pargs() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_keys_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_keys_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_keys_result::~IGeneralActionModule_keys_result() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_keys_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_keys_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IGeneralActionModule_keys_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_keys_presult::~IGeneralActionModule_keys_presult() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_keys_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IGeneralActionModule_values_args::~IGeneralActionModule_values_args() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_values_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    xfer += iprot->skip(ftype);
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_values_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_values_args");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_values_pargs::~IGeneralActionModule_values_pargs() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_values_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralActionModule_values_pargs");
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_values_result::~IGeneralActionModule_values_result() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_values_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralActionModule_values_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IGeneralActionModule_values_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralActionModule_values_presult::~IGeneralActionModule_values_presult() noexcept {
+}
+
+
+uint32_t IGeneralActionModule_values_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
 void IGeneralActionModuleClient::reduce(const  ::ignis::rpc::ISource& src)
 {
   send_reduce(src);
@@ -2180,20 +3121,19 @@ void IGeneralActionModuleClient::recv_reduce()
   return;
 }
 
-void IGeneralActionModuleClient::treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth)
+void IGeneralActionModuleClient::treeReduce(const  ::ignis::rpc::ISource& src)
 {
-  send_treeReduce(src, depth);
+  send_treeReduce(src);
   recv_treeReduce();
 }
 
-void IGeneralActionModuleClient::send_treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth)
+void IGeneralActionModuleClient::send_treeReduce(const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("treeReduce", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralActionModule_treeReduce_pargs args;
   args.src = &src;
-  args.depth = &depth;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2292,18 +3232,19 @@ void IGeneralActionModuleClient::recv_collect()
   return;
 }
 
-void IGeneralActionModuleClient::aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+void IGeneralActionModuleClient::aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
-  send_aggregate(seqOp, combOp);
+  send_aggregate(zero, seqOp, combOp);
   recv_aggregate();
 }
 
-void IGeneralActionModuleClient::send_aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+void IGeneralActionModuleClient::send_aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("aggregate", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralActionModule_aggregate_pargs args;
+  args.zero = &zero;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
   args.write(oprot_);
@@ -2349,21 +3290,21 @@ void IGeneralActionModuleClient::recv_aggregate()
   return;
 }
 
-void IGeneralActionModuleClient::treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+void IGeneralActionModuleClient::treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
-  send_treeAggregate(seqOp, combOp, depth);
+  send_treeAggregate(zero, seqOp, combOp);
   recv_treeAggregate();
 }
 
-void IGeneralActionModuleClient::send_treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+void IGeneralActionModuleClient::send_treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("treeAggregate", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralActionModule_treeAggregate_pargs args;
+  args.zero = &zero;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
-  args.depth = &depth;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -2407,18 +3348,19 @@ void IGeneralActionModuleClient::recv_treeAggregate()
   return;
 }
 
-void IGeneralActionModuleClient::fold(const  ::ignis::rpc::ISource& src)
+void IGeneralActionModuleClient::fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
 {
-  send_fold(src);
+  send_fold(zero, src);
   recv_fold();
 }
 
-void IGeneralActionModuleClient::send_fold(const  ::ignis::rpc::ISource& src)
+void IGeneralActionModuleClient::send_fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("fold", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralActionModule_fold_pargs args;
+  args.zero = &zero;
   args.src = &src;
   args.write(oprot_);
 
@@ -2453,6 +3395,63 @@ void IGeneralActionModuleClient::recv_fold()
     iprot_->getTransport()->readEnd();
   }
   IGeneralActionModule_fold_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IGeneralActionModuleClient::treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
+{
+  send_treeFold(zero, src);
+  recv_treeFold();
+}
+
+void IGeneralActionModuleClient::send_treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("treeFold", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_treeFold_pargs args;
+  args.zero = &zero;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IGeneralActionModuleClient::recv_treeFold()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("treeFold") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IGeneralActionModule_treeFold_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -2744,6 +3743,229 @@ void IGeneralActionModuleClient::recv_top2()
   return;
 }
 
+void IGeneralActionModuleClient::takeOrdered(const int64_t num)
+{
+  send_takeOrdered(num);
+  recv_takeOrdered();
+}
+
+void IGeneralActionModuleClient::send_takeOrdered(const int64_t num)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("takeOrdered", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_takeOrdered_pargs args;
+  args.num = &num;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IGeneralActionModuleClient::recv_takeOrdered()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("takeOrdered") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IGeneralActionModule_takeOrdered_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IGeneralActionModuleClient::takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp)
+{
+  send_takeOrdered2(num, cmp);
+  recv_takeOrdered2();
+}
+
+void IGeneralActionModuleClient::send_takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("takeOrdered2", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_takeOrdered2_pargs args;
+  args.num = &num;
+  args.cmp = &cmp;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IGeneralActionModuleClient::recv_takeOrdered2()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("takeOrdered2") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IGeneralActionModule_takeOrdered2_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IGeneralActionModuleClient::keys()
+{
+  send_keys();
+  recv_keys();
+}
+
+void IGeneralActionModuleClient::send_keys()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("keys", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_keys_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IGeneralActionModuleClient::recv_keys()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("keys") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IGeneralActionModule_keys_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
+void IGeneralActionModuleClient::values()
+{
+  send_values();
+  recv_values();
+}
+
+void IGeneralActionModuleClient::send_values()
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("values", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_values_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IGeneralActionModuleClient::recv_values()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("values") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IGeneralActionModule_values_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
 bool IGeneralActionModuleProcessor::dispatchCall(::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, const std::string& fname, int32_t seqid, void* callContext) {
   ProcessMap::iterator pfn;
   pfn = processMap_.find(fname);
@@ -2842,7 +4064,7 @@ void IGeneralActionModuleProcessor::process_treeReduce(int32_t seqid, ::apache::
 
   IGeneralActionModule_treeReduce_result result;
   try {
-    iface_->treeReduce(args.src, args.depth);
+    iface_->treeReduce(args.src);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -2954,7 +4176,7 @@ void IGeneralActionModuleProcessor::process_aggregate(int32_t seqid, ::apache::t
 
   IGeneralActionModule_aggregate_result result;
   try {
-    iface_->aggregate(args.seqOp, args.combOp);
+    iface_->aggregate(args.zero, args.seqOp, args.combOp);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -3010,7 +4232,7 @@ void IGeneralActionModuleProcessor::process_treeAggregate(int32_t seqid, ::apach
 
   IGeneralActionModule_treeAggregate_result result;
   try {
-    iface_->treeAggregate(args.seqOp, args.combOp, args.depth);
+    iface_->treeAggregate(args.zero, args.seqOp, args.combOp);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -3066,7 +4288,7 @@ void IGeneralActionModuleProcessor::process_fold(int32_t seqid, ::apache::thrift
 
   IGeneralActionModule_fold_result result;
   try {
-    iface_->fold(args.src);
+    iface_->fold(args.zero, args.src);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -3096,6 +4318,62 @@ void IGeneralActionModuleProcessor::process_fold(int32_t seqid, ::apache::thrift
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "IGeneralActionModule.fold", bytes);
+  }
+}
+
+void IGeneralActionModuleProcessor::process_treeFold(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IGeneralActionModule.treeFold", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralActionModule.treeFold");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IGeneralActionModule.treeFold");
+  }
+
+  IGeneralActionModule_treeFold_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IGeneralActionModule.treeFold", bytes);
+  }
+
+  IGeneralActionModule_treeFold_result result;
+  try {
+    iface_->treeFold(args.zero, args.src);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IGeneralActionModule.treeFold");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("treeFold", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IGeneralActionModule.treeFold");
+  }
+
+  oprot->writeMessageBegin("treeFold", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IGeneralActionModule.treeFold", bytes);
   }
 }
 
@@ -3379,6 +4657,230 @@ void IGeneralActionModuleProcessor::process_top2(int32_t seqid, ::apache::thrift
   }
 }
 
+void IGeneralActionModuleProcessor::process_takeOrdered(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IGeneralActionModule.takeOrdered", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralActionModule.takeOrdered");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IGeneralActionModule.takeOrdered");
+  }
+
+  IGeneralActionModule_takeOrdered_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IGeneralActionModule.takeOrdered", bytes);
+  }
+
+  IGeneralActionModule_takeOrdered_result result;
+  try {
+    iface_->takeOrdered(args.num);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IGeneralActionModule.takeOrdered");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("takeOrdered", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IGeneralActionModule.takeOrdered");
+  }
+
+  oprot->writeMessageBegin("takeOrdered", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IGeneralActionModule.takeOrdered", bytes);
+  }
+}
+
+void IGeneralActionModuleProcessor::process_takeOrdered2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IGeneralActionModule.takeOrdered2", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralActionModule.takeOrdered2");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IGeneralActionModule.takeOrdered2");
+  }
+
+  IGeneralActionModule_takeOrdered2_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IGeneralActionModule.takeOrdered2", bytes);
+  }
+
+  IGeneralActionModule_takeOrdered2_result result;
+  try {
+    iface_->takeOrdered2(args.num, args.cmp);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IGeneralActionModule.takeOrdered2");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("takeOrdered2", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IGeneralActionModule.takeOrdered2");
+  }
+
+  oprot->writeMessageBegin("takeOrdered2", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IGeneralActionModule.takeOrdered2", bytes);
+  }
+}
+
+void IGeneralActionModuleProcessor::process_keys(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IGeneralActionModule.keys", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralActionModule.keys");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IGeneralActionModule.keys");
+  }
+
+  IGeneralActionModule_keys_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IGeneralActionModule.keys", bytes);
+  }
+
+  IGeneralActionModule_keys_result result;
+  try {
+    iface_->keys();
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IGeneralActionModule.keys");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("keys", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IGeneralActionModule.keys");
+  }
+
+  oprot->writeMessageBegin("keys", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IGeneralActionModule.keys", bytes);
+  }
+}
+
+void IGeneralActionModuleProcessor::process_values(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IGeneralActionModule.values", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralActionModule.values");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IGeneralActionModule.values");
+  }
+
+  IGeneralActionModule_values_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IGeneralActionModule.values", bytes);
+  }
+
+  IGeneralActionModule_values_result result;
+  try {
+    iface_->values();
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IGeneralActionModule.values");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("values", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IGeneralActionModule.values");
+  }
+
+  oprot->writeMessageBegin("values", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IGeneralActionModule.values", bytes);
+  }
+}
+
 ::std::shared_ptr< ::apache::thrift::TProcessor > IGeneralActionModuleProcessorFactory::getProcessor(const ::apache::thrift::TConnectionInfo& connInfo) {
   ::apache::thrift::ReleaseHandler< IGeneralActionModuleIfFactory > cleanup(handlerFactory_);
   ::std::shared_ptr< IGeneralActionModuleIf > handler(handlerFactory_->getHandler(connInfo), cleanup);
@@ -3468,13 +4970,13 @@ void IGeneralActionModuleConcurrentClient::recv_reduce(const int32_t seqid)
   } // end while(true)
 }
 
-void IGeneralActionModuleConcurrentClient::treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth)
+void IGeneralActionModuleConcurrentClient::treeReduce(const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_treeReduce(src, depth);
+  int32_t seqid = send_treeReduce(src);
   recv_treeReduce(seqid);
 }
 
-int32_t IGeneralActionModuleConcurrentClient::send_treeReduce(const  ::ignis::rpc::ISource& src, const int64_t depth)
+int32_t IGeneralActionModuleConcurrentClient::send_treeReduce(const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -3482,7 +4984,6 @@ int32_t IGeneralActionModuleConcurrentClient::send_treeReduce(const  ::ignis::rp
 
   IGeneralActionModule_treeReduce_pargs args;
   args.src = &src;
-  args.depth = &depth;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -3632,19 +5133,20 @@ void IGeneralActionModuleConcurrentClient::recv_collect(const int32_t seqid)
   } // end while(true)
 }
 
-void IGeneralActionModuleConcurrentClient::aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+void IGeneralActionModuleConcurrentClient::aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
-  int32_t seqid = send_aggregate(seqOp, combOp);
+  int32_t seqid = send_aggregate(zero, seqOp, combOp);
   recv_aggregate(seqid);
 }
 
-int32_t IGeneralActionModuleConcurrentClient::send_aggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
+int32_t IGeneralActionModuleConcurrentClient::send_aggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("aggregate", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralActionModule_aggregate_pargs args;
+  args.zero = &zero;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
   args.write(oprot_);
@@ -3715,22 +5217,22 @@ void IGeneralActionModuleConcurrentClient::recv_aggregate(const int32_t seqid)
   } // end while(true)
 }
 
-void IGeneralActionModuleConcurrentClient::treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+void IGeneralActionModuleConcurrentClient::treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
-  int32_t seqid = send_treeAggregate(seqOp, combOp, depth);
+  int32_t seqid = send_treeAggregate(zero, seqOp, combOp);
   recv_treeAggregate(seqid);
 }
 
-int32_t IGeneralActionModuleConcurrentClient::send_treeAggregate(const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t depth)
+int32_t IGeneralActionModuleConcurrentClient::send_treeAggregate(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("treeAggregate", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralActionModule_treeAggregate_pargs args;
+  args.zero = &zero;
   args.seqOp = &seqOp;
   args.combOp = &combOp;
-  args.depth = &depth;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -3799,19 +5301,20 @@ void IGeneralActionModuleConcurrentClient::recv_treeAggregate(const int32_t seqi
   } // end while(true)
 }
 
-void IGeneralActionModuleConcurrentClient::fold(const  ::ignis::rpc::ISource& src)
+void IGeneralActionModuleConcurrentClient::fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_fold(src);
+  int32_t seqid = send_fold(zero, src);
   recv_fold(seqid);
 }
 
-int32_t IGeneralActionModuleConcurrentClient::send_fold(const  ::ignis::rpc::ISource& src)
+int32_t IGeneralActionModuleConcurrentClient::send_fold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
   oprot_->writeMessageBegin("fold", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralActionModule_fold_pargs args;
+  args.zero = &zero;
   args.src = &src;
   args.write(oprot_);
 
@@ -3862,6 +5365,89 @@ void IGeneralActionModuleConcurrentClient::recv_fold(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       IGeneralActionModule_fold_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IGeneralActionModuleConcurrentClient::treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_treeFold(zero, src);
+  recv_treeFold(seqid);
+}
+
+int32_t IGeneralActionModuleConcurrentClient::send_treeFold(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("treeFold", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_treeFold_pargs args;
+  args.zero = &zero;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IGeneralActionModuleConcurrentClient::recv_treeFold(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("treeFold") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IGeneralActionModule_treeFold_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -4273,6 +5859,333 @@ void IGeneralActionModuleConcurrentClient::recv_top2(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       IGeneralActionModule_top2_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IGeneralActionModuleConcurrentClient::takeOrdered(const int64_t num)
+{
+  int32_t seqid = send_takeOrdered(num);
+  recv_takeOrdered(seqid);
+}
+
+int32_t IGeneralActionModuleConcurrentClient::send_takeOrdered(const int64_t num)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("takeOrdered", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_takeOrdered_pargs args;
+  args.num = &num;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IGeneralActionModuleConcurrentClient::recv_takeOrdered(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("takeOrdered") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IGeneralActionModule_takeOrdered_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IGeneralActionModuleConcurrentClient::takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp)
+{
+  int32_t seqid = send_takeOrdered2(num, cmp);
+  recv_takeOrdered2(seqid);
+}
+
+int32_t IGeneralActionModuleConcurrentClient::send_takeOrdered2(const int64_t num, const  ::ignis::rpc::ISource& cmp)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("takeOrdered2", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_takeOrdered2_pargs args;
+  args.num = &num;
+  args.cmp = &cmp;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IGeneralActionModuleConcurrentClient::recv_takeOrdered2(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("takeOrdered2") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IGeneralActionModule_takeOrdered2_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IGeneralActionModuleConcurrentClient::keys()
+{
+  int32_t seqid = send_keys();
+  recv_keys(seqid);
+}
+
+int32_t IGeneralActionModuleConcurrentClient::send_keys()
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("keys", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_keys_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IGeneralActionModuleConcurrentClient::recv_keys(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("keys") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IGeneralActionModule_keys_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IGeneralActionModuleConcurrentClient::values()
+{
+  int32_t seqid = send_values();
+  recv_values(seqid);
+}
+
+int32_t IGeneralActionModuleConcurrentClient::send_values()
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("values", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralActionModule_values_pargs args;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IGeneralActionModuleConcurrentClient::recv_values(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("values") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IGeneralActionModule_values_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

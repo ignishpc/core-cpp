@@ -5,6 +5,8 @@
 #include <vector>
 #include "ignis/executor/core//io/IReader.h"
 #include "ignis/executor/core//io/IWriter.h"
+#include "ignis/executor/core/io/INativeReader.h"
+#include "ignis/executor/core/io/INativeWriter.h"
 #include "ignis/executor/core/io/IJsonWriter.h"
 #include "ignis/executor/core/io/IJsonReader.h"
 
@@ -14,34 +16,70 @@ namespace ignis {
 
             template<typename Tp>
             struct IVectorType {
-                using type=Tp;
-                using rtype=Tp;
+                using type = Tp;
+                using rtype = Tp;
             };
 
             template<>
             struct IVectorType<bool> {
-                using type=char;
-                using rtype=bool;
+                using type = char;
+                using rtype = bool;
+            };
+
+            template<typename Tp>
+            class IViewAllocator : public std::allocator<Tp> {
+            private:
+                using Base = std::allocator<Tp>;
+                using Pointer = typename std::allocator_traits<Base>::pointer;
+                using SizeType = typename std::allocator_traits<Base>::size_type;
+
+            public:
+                Pointer allocate(SizeType n, const void* = static_cast<const void*>(0)) {
+                    throw executor::core::exception::ILogicError("A view cannot be resized");
+                }
+
+                void deallocate(Pointer p, SizeType n) {
+                    throw executor::core::exception::ILogicError("A view cannot be resized");
+                }
             };
 
             /*avoid error of vector<bool> specialization*/
-            template<typename Tp, typename Tp2 = typename IVectorType<Tp>::type, typename _Alloc = std::allocator<Tp2>>
-            class IVector : public std::vector<Tp2, _Alloc> {
-                using std::vector<Tp2, _Alloc>::vector;
-            };
+            template<typename Tp, typename _Alloc = std::allocator<typename IVectorType<Tp>::type>>
+            class IVector : public std::vector<typename IVectorType<Tp>::type, _Alloc> {
+            private:
+                using Base = std::vector<typename IVectorType<Tp>::type, _Alloc>;
+                using Pointer = typename Base::pointer;
+                template<typename Tp2, typename _Alloc2>
+                friend class IVector;
+                IVector(Tp* init, size_t sz){
+                    this->_M_impl._M_start = (Pointer)init;
+                    this->_M_impl._M_finish = (Pointer)init + sz;
+                    this->_M_impl._M_end_of_storage = this->_M_impl._M_finish;
+                }
+            public:
+                using std::vector<typename IVectorType<Tp>::type, _Alloc>::vector;
 
+                IVector<Tp, IViewAllocator<Tp>> view(size_t begin, size_t end){
+                    return IVector<Tp, IViewAllocator<Tp>>(this->_M_impl._M_start + begin, end - begin);
+                }
+
+                inline static IVector<Tp, IViewAllocator<Tp>> view(Tp* init, size_t sz){
+                    return IVector<Tp, IViewAllocator<Tp>>(init,sz);
+                }
+
+            };
         }
         namespace core {
             namespace io {
 
                 template<typename _Alloc>
-                struct IWriterType<api::IVector<bool, char, _Alloc>> {
+                struct IWriterType<api::IVector<bool, _Alloc>> {
                     inline void writeType(protocol::IProtocol &protocol) {
                         return writer.writeType(protocol);
                     }
 
                     inline void
-                    operator()(protocol::IProtocol &protocol, const api::IVector<bool, char, _Alloc> &obj) {
+                    operator()(protocol::IProtocol &protocol, const api::IVector<bool, _Alloc> &obj) {
                         auto size = obj.size();
                         writeSizeAux(protocol, size);
                         IWriterType<bool>().writeType(protocol);
@@ -56,14 +94,14 @@ namespace ignis {
 
                 };
 
-                template<typename Tp, typename Tp2, typename _Alloc>
-                struct IWriterType<api::IVector<Tp, Tp2, _Alloc>> {
+                template<typename Tp, typename _Alloc>
+                struct IWriterType<api::IVector<Tp, _Alloc>> {
                     inline void writeType(protocol::IProtocol &protocol) {
                         return writer.writeType(protocol);
                     }
 
                     inline void
-                    operator()(protocol::IProtocol &protocol, const api::IVector<Tp, Tp2, _Alloc> &obj) {
+                    operator()(protocol::IProtocol &protocol, const api::IVector<Tp, _Alloc> &obj) {
                         writer(protocol, obj);
                     }
 
@@ -72,18 +110,43 @@ namespace ignis {
 
                 };
 
-                template<typename Tp, typename Tp2, typename _Alloc>
-                struct IReaderType<api::IVector<Tp, Tp2, _Alloc>> {
+                template<typename Tp, typename _Alloc>
+                struct INativeWriterType<api::IVector<Tp, _Alloc>> {
+
+                    inline void
+                    operator()(protocol::IProtocol &protocol, const api::IVector<Tp, _Alloc> &obj) {
+                        writer(protocol, obj);
+                    }
+
+                private:
+                    INativeWriterType<std::vector<Tp, _Alloc>> writer;
+
+                };
+
+                template<typename _Alloc>
+                struct INativeWriterType<api::IVector<bool, _Alloc>> {
+
+                    inline void
+                    operator()(protocol::IProtocol &protocol, const api::IVector<bool, _Alloc> &obj) {
+                        protocol.writeBool(true);
+                        protocol.writeI64(obj.size());
+                        protocol.getTransport()->write((uint8_t *) &obj[0], (uint32_t) obj.size() * sizeof(char));
+                    }
+
+                };
+
+                template<typename Tp, typename _Alloc>
+                struct IReaderType<api::IVector<Tp, _Alloc>> {
                     inline bool readType(protocol::IProtocol &protocol) {
                         return reader.readType(protocol);
                     }
 
-                    inline void operator()(protocol::IProtocol &protocol, api::IVector<Tp, Tp2, _Alloc> &obj) {
+                    inline void operator()(protocol::IProtocol &protocol, api::IVector<Tp, _Alloc> &obj) {
                         reader(protocol, obj);
                     }
 
-                    inline api::IVector<Tp, Tp2, _Alloc> operator()(protocol::IProtocol &protocol) {
-                        api::IVector<Tp, Tp2, _Alloc> obj;
+                    inline api::IVector<Tp, _Alloc> operator()(protocol::IProtocol &protocol) {
+                        api::IVector<Tp, _Alloc> obj;
                         (*this)(protocol, obj);
                         return std::move(obj);
                     }
@@ -92,13 +155,46 @@ namespace ignis {
                     IReaderType<std::vector<Tp, _Alloc>> reader;
                 };
 
+                template<typename Tp, typename _Alloc>
+                struct INativeReaderType<api::IVector<Tp, _Alloc>> {
+                    inline void operator()(protocol::IProtocol &protocol, api::IVector<Tp, _Alloc> &obj) {
+                        reader(protocol, obj);
+                    }
+
+                    inline api::IVector<Tp, _Alloc> operator()(protocol::IProtocol &protocol) {
+                        api::IVector<Tp, _Alloc> obj;
+                        (*this)(protocol, obj);
+                        return std::move(obj);
+                    }
+
+                private:
+                    INativeReaderType<std::vector<Tp, _Alloc>> reader;
+                };
+
                 template<typename _Alloc>
-                struct IReaderType<api::IVector<bool, char, _Alloc>> {
+                struct INativeReaderType<api::IVector<bool, _Alloc>> {
+                    inline void operator()(protocol::IProtocol &protocol, api::IVector<bool, _Alloc> &obj) {
+                        int64_t len;
+                        protocol.readI64(len);
+                        auto first = obj.size();
+                        obj.resize(len);
+                        protocol.getTransport()->read((uint8_t *) &obj[first], (uint32_t) len * sizeof(char));
+                    }
+
+                    inline api::IVector<bool, _Alloc> operator()(protocol::IProtocol &protocol) {
+                        api::IVector<bool, _Alloc> obj;
+                        (*this)(protocol, obj);
+                        return obj;
+                    }
+                };
+
+                template<typename _Alloc>
+                struct IReaderType<api::IVector<bool, _Alloc>> {
                     inline bool readType(protocol::IProtocol &protocol) {
                         return reader.readType(protocol);
                     }
 
-                    inline void operator()(protocol::IProtocol &protocol, api::IVector<bool, char, _Alloc> &obj) {
+                    inline void operator()(protocol::IProtocol &protocol, api::IVector<bool, _Alloc> &obj) {
                         auto size = readSizeAux(protocol);
                         auto init = obj.size();
                         IReaderType<bool>().readType(protocol);
@@ -109,8 +205,8 @@ namespace ignis {
                         }
                     }
 
-                    inline api::IVector<bool, char, _Alloc> operator()(protocol::IProtocol &protocol) {
-                        api::IVector<bool, char, _Alloc> obj;
+                    inline api::IVector<bool, _Alloc> operator()(protocol::IProtocol &protocol) {
+                        api::IVector<bool, _Alloc> obj;
                         (*this)(protocol, obj);
                         return std::move(obj);
                     }
@@ -121,8 +217,8 @@ namespace ignis {
 
 
                 template<typename _Alloc>
-                struct IJsonReaderType<api::IVector<bool, char, _Alloc>> {
-                    inline void operator()(JsonNode &in, api::IVector<bool, char, _Alloc> &obj) {
+                struct IJsonReaderType<api::IVector<bool, _Alloc>> {
+                    inline void operator()(JsonNode &in, api::IVector<bool, _Alloc> &obj) {
                         checkJsonTypeAux<api::IVector<bool, _Alloc>>(in.IsArray());
                         IJsonReaderType<bool> reader;
                         auto array = in.GetArray();
@@ -131,21 +227,21 @@ namespace ignis {
                         }
                     }
 
-                    inline api::IVector<bool, char, _Alloc> operator()(JsonNode &in) {
-                        api::IVector<bool, char, _Alloc> obj;
+                    inline api::IVector<bool, _Alloc> operator()(JsonNode &in) {
+                        api::IVector<bool, _Alloc> obj;
                         (*this)(in, obj);
                         return obj;
                     }
                 };
 
-                template<typename Tp, typename Tp2, typename _Alloc>
-                struct IJsonReaderType<api::IVector<Tp, Tp2, _Alloc>> {
-                    inline void operator()(JsonNode &in, api::IVector<Tp, Tp2, _Alloc> &obj) {
+                template<typename Tp, typename _Alloc>
+                struct IJsonReaderType<api::IVector<Tp, _Alloc>> {
+                    inline void operator()(JsonNode &in, api::IVector<Tp, _Alloc> &obj) {
                         reader(in, obj);
                     }
 
-                    inline api::IVector<Tp, Tp2, _Alloc> operator()(JsonNode &in) {
-                        api::IVector<Tp, Tp2, _Alloc> obj;
+                    inline api::IVector<Tp, _Alloc> operator()(JsonNode &in) {
+                        api::IVector<Tp, _Alloc> obj;
                         (*this)(in, obj);
                         return obj;
                     }
@@ -155,8 +251,8 @@ namespace ignis {
                 };
 
                 template<typename _Alloc>
-                struct IJsonWriterType<api::IVector<bool, char, _Alloc>> {
-                    inline void operator()(JsonWriter &out, const api::IVector<bool, char, _Alloc> &obj) {
+                struct IJsonWriterType<api::IVector<bool, _Alloc>> {
+                    inline void operator()(JsonWriter &out, const api::IVector<bool, _Alloc> &obj) {
                         out.StartArray();
                         IJsonWriterType<bool> writer;
                         for (const auto &elem:obj) {
@@ -166,9 +262,9 @@ namespace ignis {
                     }
                 };
 
-                template<typename Tp, typename Tp2, typename _Alloc>
-                struct IJsonWriterType<api::IVector<Tp, Tp2, _Alloc>> {
-                    inline void operator()(JsonWriter &out, const api::IVector<Tp, Tp2, _Alloc> &obj) {
+                template<typename Tp, typename _Alloc>
+                struct IJsonWriterType<api::IVector<Tp, _Alloc>> {
+                    inline void operator()(JsonWriter &out, const api::IVector<Tp, _Alloc> &obj) {
                         writer(out, obj);
                     }
 

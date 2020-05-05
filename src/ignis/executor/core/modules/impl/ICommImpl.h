@@ -27,8 +27,10 @@ namespace ignis {
 
                         void destroyGroups();
 
+                        int8_t getProtocol();
+
                         template<typename Tp>
-                        std::vector<std::string> getPartitions();
+                        std::vector<std::string> getPartitions(const int8_t protocol, int64_t minPartitions);
 
                         void setPartitionsVoid(const std::vector<std::string> &partitions);
 
@@ -41,10 +43,10 @@ namespace ignis {
                         template<typename Tp>
                         void driverGather0(const std::string &id);
 
-                        void driverScatterVoid(const std::string &id, const int64_t dataId);
+                        void driverScatterVoid(const std::string &id, int64_t partitions);
 
                         template<typename Tp>
-                        void driverScatter(const std::string &id, const int64_t dataId);
+                        void driverScatter(const std::string &id, int64_t partitions);
 
                         virtual ~ICommImpl();
 
@@ -53,6 +55,8 @@ namespace ignis {
                                                bool detroyGroup = true);
 
                         MPI::Intracomm joinGroups(MPI::Intracomm &groupLow, MPI::Intracomm &groupUp);
+
+                        MPI::Intracomm& getGroup(const std::string &id);
 
                         std::map<std::string, MPI::Intracomm> groups;
                     };

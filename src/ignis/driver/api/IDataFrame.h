@@ -58,11 +58,13 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId flatmapAbs(const ISource &src);
 
+                rpc::driver::IDataFrameId keyByAbs(const ISource &src);
+
                 rpc::driver::IDataFrameId mapPartitionsAbs(const ISource &src, bool preservesPartitioning);
 
                 rpc::driver::IDataFrameId mapPartitionsWithIndexAbs(const ISource &src, bool preservesPartitioning);
 
-                rpc::driver::IDataFrameId applyPartitionAbs(const ISource &src);
+                rpc::driver::IDataFrameId mapExecutorAbs(const ISource &src);
 
                 rpc::driver::IDataFrameId groupByAbs(const ISource &src);
 
@@ -81,18 +83,15 @@ namespace ignis {
 
                 int64_t treeReduceAbs(const ISource &src, const rpc::ISource &tp);
 
-                int64_t treeReduceAbs(const ISource &src, int64_t depth, const rpc::ISource &tp);
-
                 int64_t collectAbs(const rpc::ISource &tp);
 
-                int64_t aggregateAbs(const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
+                int64_t aggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
 
-                int64_t treeAggregateAbs(const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
+                int64_t treeAggregateAbs(const ISource &zero,const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
 
-                int64_t
-                treeAggregateAbs(const ISource &seqOp, const ISource &combOp, int64_t depth, const rpc::ISource &tp);
+                int64_t foldAbs(const ISource &zero, const ISource &src, const rpc::ISource &tp);
 
-                int64_t foldAbs(const ISource &src, const rpc::ISource &tp);
+                int64_t treeFoldAbs(const ISource &zero, const ISource &src, const rpc::ISource &tp);
 
                 int64_t takeAbs(int64_t num, const rpc::ISource &tp);
 
@@ -104,6 +103,10 @@ namespace ignis {
 
                 int64_t topAbs(int64_t num, const ISource &cmp, const rpc::ISource &tp);
 
+                int64_t takeOrderedAbs(int64_t num, const rpc::ISource &tp);
+
+                int64_t takeOrderedAbs(int64_t num, const ISource &cmp, const rpc::ISource &tp);
+
                 /*Math*/
                 rpc::driver::IDataFrameId sampleAbs(bool withReplacement, double fraction, int seed);
 
@@ -111,7 +114,11 @@ namespace ignis {
 
                 int64_t count();
 
+                int64_t maxAbs(const rpc::ISource &tp);
+
                 int64_t maxAbs(const ISource &cmp, const rpc::ISource &tp);
+
+                int64_t minAbs(const rpc::ISource &tp);
 
                 int64_t minAbs(const ISource &cmp, const rpc::ISource &tp);
 
@@ -173,8 +180,8 @@ namespace ignis {
                 }
 
                 template<typename R>
-                std::shared_ptr<IDataFrame<R>> applyPartition(const ISource &src) {
-                    return IDataFrame<R>::make(applyPartitionAbs(src));
+                std::shared_ptr<IDataFrame<R>> mapExecutor(const ISource &src) {
+                    return IDataFrame<R>::make(mapExecutorAbs(src));
                 }
 
                 template<typename R>
@@ -214,52 +221,57 @@ namespace ignis {
                     return driverContext().template collect1<Tp>(treeReduceAbs(src, tp));
                 }
 
-                Tp treeReduce(const ISource &src, int64_t depth) {
-                    auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(treeReduceAbs(src, depth, tp));
-                }
-
                 std::vector<Tp> collect() {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().template collect<Tp>(collectAbs(tp));
                 }
 
-                Tp aggregate(const ISource &seqOp, const ISource &combOp) {
+                Tp aggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(aggregateAbs(seqOp, combOp, tp));
+                    return driverContext().template collect1<Tp>(aggregateAbs(zero,seqOp, combOp, tp));
                 }
 
-                Tp treeAggregate(const ISource &seqOp, const ISource &combOp) {
+                Tp treeAggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(treeAggregateAbs(seqOp, combOp, tp));
+                    return driverContext().template collect1<Tp>(treeAggregateAbs(zero,seqOp, combOp, tp));
                 }
 
-                Tp treeAggregate(const ISource &seqOp, const ISource &combOp, int64_t depth) {
+                Tp fold(const ISource &zero, const ISource &src) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(treeAggregateAbs(seqOp, combOp, depth, tp));
+                    return driverContext().template collect1<Tp>(foldAbs(zero, src, tp));
                 }
 
-                Tp fold(const ISource &src) {
+                Tp treeFold(const ISource &zero, const ISource &src) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(foldAbs(src, tp));
+                    return driverContext().template collect1<Tp>(treeFoldAbs(zero, src, tp));
                 }
 
-                Tp take(int64_t num) {
+                std::vector<Tp> take(int64_t num) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(takeAbs(num, tp));
+                    return driverContext().template collect<Tp>(takeAbs(num, tp), num);
                 }
 
                 using IAbstractDataFrame::foreach;
                 using IAbstractDataFrame::foreachPartition;
 
-                Tp top(int64_t num) {
+                std::vector<Tp> top(int64_t num) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(topAbs(num, tp));
+                    return driverContext().template collect<Tp>(topAbs(num, tp), num);
                 }
 
-                Tp top(int64_t num, const ISource &cmp) {
+                std::vector<Tp> top(int64_t num, const ISource &cmp) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().collect1(topAbs(num, cmp, tp));
+                    return driverContext().collect(topAbs(num, cmp, tp), num);
+                }
+
+                std::vector<Tp> takeOrdered(int64_t num) {
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect<Tp>(takeOrderedAbs(num, tp), num);
+                }
+
+                std::vector<Tp> takeOrdered(int64_t num, const ISource &cmp) {
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().collect(takeOrderedAbs(num, cmp, tp),num);
                 }
 
                 /*Math*/
@@ -274,9 +286,19 @@ namespace ignis {
 
                 using IAbstractDataFrame::count;
 
+                Tp max() {
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect<Tp>(maxAbs(tp));
+                }
+
                 Tp max(const ISource &cmp) {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().template collect<Tp>(maxAbs(cmp, tp));
+                }
+
+                Tp min() {
+                    auto tp = driverContext().template registerType<Tp>();
+                    return driverContext().template collect<Tp>(minAbs(tp));
                 }
 
                 Tp min(const ISource &cmp) {

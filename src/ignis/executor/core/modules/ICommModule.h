@@ -27,7 +27,11 @@ namespace ignis {
 
                     void destroyGroups() override;
 
-                    void getPartitions(std::vector<std::string> &_return) override;
+                    int8_t getProtocol() override;
+
+                    void getPartitions(std::vector<std::string> &_return, const int8_t protocol) override;
+
+                    void getPartitions2(std::vector<std::string> &_return, const int8_t protocol, int64_t minPartitions) override;
 
                     void setPartitions(const std::vector<std::string> &partitions) override;
 
@@ -37,9 +41,9 @@ namespace ignis {
 
                     void driverGather0(const std::string &id, const rpc::ISource &src) override;
 
-                    void driverScatter(const std::string &id, const int64_t dataId) override;
+                    void driverScatter(const std::string &id, int64_t partitions) override;
 
-                    void driverScatter3(const std::string &id, const int64_t dataId, const rpc::ISource &src) override;
+                    void driverScatter3(const std::string &id, int64_t partitions, const rpc::ISource &src) override;
 
                     virtual ~ICommModule();
 

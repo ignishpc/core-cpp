@@ -134,6 +134,16 @@ IDataFrameId IAbstractDataFrame::flatmapAbs(const ISource &src) {
     }
 }
 
+IDataFrameId IAbstractDataFrame::keyByAbs(const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().keyBy(_return, id, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
 IDataFrameId IAbstractDataFrame::mapPartitionsAbs(const ISource &src, bool preservesPartitioning) {
     try {
         IDataFrameId _return;
@@ -156,10 +166,10 @@ IDataFrameId IAbstractDataFrame::mapPartitionsWithIndexAbs(const ISource &src, b
     }
 }
 
-IDataFrameId IAbstractDataFrame::applyPartitionAbs(const ISource &src) {
+IDataFrameId IAbstractDataFrame::mapExecutorAbs(const ISource &src) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getDataFrameService().applyPartition(_return, id, src.rpc());
+        Ignis::clientPool->getClient()->getDataFrameService().mapExecutor(_return, id, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
@@ -243,14 +253,6 @@ int64_t IAbstractDataFrame::treeReduceAbs(const ISource &src, const ignis::rpc::
     }
 }
 
-int64_t IAbstractDataFrame::treeReduceAbs(const ISource &src, int64_t depth, const ignis::rpc::ISource &tp) {
-    try {
-        return Ignis::clientPool->getClient()->getDataFrameService().treeReduce4(id, src.rpc(), depth, tp);
-    } catch (rpc::driver::IDriverException &ex) {
-        throw IDriverException(ex.message, ex._cause);
-    }
-}
-
 int64_t IAbstractDataFrame::collectAbs(const ignis::rpc::ISource &tp) {
     try {
         return Ignis::clientPool->getClient()->getDataFrameService().collect(id, tp);
@@ -259,36 +261,38 @@ int64_t IAbstractDataFrame::collectAbs(const ignis::rpc::ISource &tp) {
     }
 }
 
-int64_t IAbstractDataFrame::aggregateAbs(const ISource &seqOp, const ISource &combOp, const ignis::rpc::ISource &tp) {
+int64_t IAbstractDataFrame::aggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp,
+                                         const ignis::rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().aggregate(id, seqOp.rpc(), combOp.rpc(), tp);
+        return Ignis::clientPool->getClient()->getDataFrameService().aggregate(id, zero.rpc(), seqOp.rpc(),
+                                                                               combOp.rpc(), tp);
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
     }
 }
 
 int64_t
-IAbstractDataFrame::treeAggregateAbs(const ISource &seqOp, const ISource &combOp, const ignis::rpc::ISource &tp) {
+IAbstractDataFrame::treeAggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp,
+                                     const ignis::rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().treeAggregate(id, seqOp.rpc(), combOp.rpc(), tp);
+        return Ignis::clientPool->getClient()->getDataFrameService().treeAggregate(id, zero.rpc(), seqOp.rpc(),
+                                                                                   combOp.rpc(), tp);
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
     }
 }
 
-int64_t IAbstractDataFrame::treeAggregateAbs(const ISource &seqOp, const ISource &combOp, int64_t depth,
-                                             const ignis::rpc::ISource &tp) {
+int64_t IAbstractDataFrame::foldAbs(const ISource &zero, const ISource &src, const ignis::rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().treeAggregate5(id, seqOp.rpc(), combOp.rpc(),
-                                                                                    depth, tp);
+        return Ignis::clientPool->getClient()->getDataFrameService().fold(id, zero.rpc(), src.rpc(), tp);
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
     }
 }
 
-int64_t IAbstractDataFrame::foldAbs(const ISource &src, const ignis::rpc::ISource &tp) {
+int64_t IAbstractDataFrame::treeFoldAbs(const ISource &zero, const ISource &src, const ignis::rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().fold(id, src.rpc(), tp);
+        return Ignis::clientPool->getClient()->getDataFrameService().treeFold(id, zero.rpc(), src.rpc(), tp);
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
     }
@@ -334,6 +338,22 @@ int64_t IAbstractDataFrame::topAbs(int64_t num, const ISource &cmp, const ignis:
     }
 }
 
+int64_t IAbstractDataFrame::takeOrderedAbs(int64_t num, const ignis::rpc::ISource &tp) {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().takeOrdered(id, num, tp);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+int64_t IAbstractDataFrame::takeOrderedAbs(int64_t num, const ISource &cmp, const ignis::rpc::ISource &tp) {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().takeOrdered4(id, num, cmp.rpc(), tp);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
 IDataFrameId IAbstractDataFrame::sampleAbs(bool withReplacement, double fraction, int seed) {
     try {
         IDataFrameId _return;
@@ -360,9 +380,25 @@ int64_t IAbstractDataFrame::count() {
     }
 }
 
+int64_t IAbstractDataFrame::maxAbs(const ignis::rpc::ISource &tp) {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().max(id, tp);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
 int64_t IAbstractDataFrame::maxAbs(const ISource &cmp, const ignis::rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().max(id, cmp.rpc(), tp);
+        return Ignis::clientPool->getClient()->getDataFrameService().max3(id, cmp.rpc(), tp);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+int64_t IAbstractDataFrame::minAbs(const ignis::rpc::ISource &tp) {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().min(id, tp);
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
     }
@@ -370,7 +406,7 @@ int64_t IAbstractDataFrame::maxAbs(const ISource &cmp, const ignis::rpc::ISource
 
 int64_t IAbstractDataFrame::minAbs(const ISource &cmp, const ignis::rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().min(id, cmp.rpc(), tp);
+        return Ignis::clientPool->getClient()->getDataFrameService().min3(id, cmp.rpc(), tp);
     } catch (rpc::driver::IDriverException &ex) {
         throw IDriverException(ex.message, ex._cause);
     }

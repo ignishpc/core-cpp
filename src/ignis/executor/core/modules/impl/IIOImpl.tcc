@@ -19,11 +19,16 @@ int64_t IIOImplClass::partitionApproxSize() {
         }
 
         int64_t size = 0;
-        if (executor_data->getPartitionTools().isMemory(*group) and executor_data->mpi().isPrimitiveType<Tp>()) {
+        if (executor_data->getPartitionTools().isMemory(*group)){
             for (auto &partition: *group) {
                 size += partition->size();
             }
-            size *= sizeof(Tp);
+
+            if(executor_data->mpi().isContiguousType<Tp>()){
+                size *= sizeof(Tp);
+            }else{
+                size *= sizeof(Tp) + executor_data->getProperties().transportMinimal();
+            }
         } else {
             for (auto &partition: *group) {
                 size += partition->bytes();

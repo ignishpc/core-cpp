@@ -22,7 +22,7 @@ std::vector<int> IMpi::displs(const std::vector<int> &sz) {
     return std::move(d);
 }
 
-const MPI::Intracomm &IMpi::native(){
+const MPI::Intracomm &IMpi::native() {
     return comm;
 }
 
@@ -50,4 +50,48 @@ void IMpi::move(void *begin, size_t n, size_t displ) {
 }
 
 void IMpi::barrier() { comm.Barrier(); }
+
+void IMpi::driverScatterVoid(const MPI::Intracomm &group,
+                             storage::IPartitionGroup<storage::IVoidPartition::VOID_TYPE> &part_group,
+                             int64_t partitions) {
+    auto id = rank();
+    auto local_partitions = partitions / id + ((partitions % id < id) ? 1 : 0);
+    bool exec0 = group.Get_rank() == 1;
+    auto execs = executors();
+    auto max_exec_partitions = (int) std::ceil(partitions / (float) execs);
+    bool same_protocol;
+    uint8_t *ptr = nullptr;
+    auto buffer = std::make_shared<transport::IMemoryBuffer>();
+
+    if (exec0) {
+        int8_t protocol;
+        group.Recv(&protocol, 1, MPI::BYTE, 1, 0);
+        same_protocol = protocol == core::protocol::IObjectProtocol::IGNIS_PROTOCOL;//force data serializtion
+        group.Send(&same_protocol, 1, MPI::BOOL, 1, 0);
+    }
+
+    IGNIS_LOG(info) << "Comm: driverScatterVoid partitions: " << part_group.partitions();
+
+    auto cmp = properties.msgCompression();
+    auto zlib = std::make_shared<transport::IZlibTransport>(buffer, cmp);
+    protocol::IObjectProtocol proto(zlib);
+    std::vector<int> szv_part;
+    szv_part.resize(max_exec_partitions);
+
+    int sz;
+    group.Scatter(nullptr, 0, MPI::INT, &sz, 1, MPI::INT, 0);
+    group.Scatter(nullptr, 0, MPI::INT, &szv_part[0], szv_part.size(), MPI::INT, 0);
+    group.Scatterv(nullptr, nullptr, nullptr, MPI::BYTE, ptr = buffer->getWritePtr(sz), sz, MPI::BYTE, 0);
+
+    int64_t offset = 0;
+    for (int i = 0; i < szv_part.size(); i++) {
+        auto view = std::make_shared<transport::IMemoryBuffer>(ptr + offset, szv_part[i]);
+        offset += szv_part[i];
+        auto part = std::make_shared<storage::IVoidPartition>(szv_part[i]);
+        part->read((std::shared_ptr<transport::ITransport> &) view);
+        part_group.add(part);
+    }
+
+
+}
 

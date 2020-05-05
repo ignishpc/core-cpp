@@ -52,3 +52,5 @@ template<typename Tp>
 Tp &IExecutorDataClass::getVariable(const std::string key) {
     return *static_cast<Tp *>(variables[key].get());
 }
+
+#undef IExecutorDataClass

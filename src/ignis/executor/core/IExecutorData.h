@@ -13,6 +13,7 @@
 #include "ILog.h"
 #include "IMpi.h"
 #include <map>
+#include <utility>
 
 namespace ignis {
     namespace executor {
@@ -34,6 +35,8 @@ namespace ignis {
                 std::shared_ptr<storage::IPartitionGroup<Tp>>
                 setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group);
 
+                bool hasPartitions();
+
                 void deletePartitions();
 
                 template<typename Tp>
@@ -54,6 +57,8 @@ namespace ignis {
                 std::string infoDirectory();
 
                 std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
+
+                void loadParameters(const rpc::ISource &source);
 
                 void reloadLibraries();
 

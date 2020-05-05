@@ -16,13 +16,17 @@ namespace ignis {
 
                     IMemoryPartition(size_t size = 1024);
 
-                    virtual std::shared_ptr<api::IReadIterator < Tp>> readIterator();
+                    IMemoryPartition(IVector <Tp> &&elements);
 
-                    virtual std::shared_ptr<api::IWriteIterator < Tp>> writeIterator();
+                    virtual std::shared_ptr<api::IReadIterator<Tp>> readIterator();
+
+                    virtual std::shared_ptr<api::IWriteIterator<Tp>> writeIterator();
 
                     virtual void read(std::shared_ptr<transport::ITransport> &trans);
 
                     virtual void write(std::shared_ptr<transport::ITransport> &trans, int8_t compression);
+
+                    virtual void write(std::shared_ptr<transport::ITransport> &trans, int8_t compression, bool native);
 
                     virtual void copyFrom(IPartition <Tp> &source);
 
@@ -47,6 +51,8 @@ namespace ignis {
                     Tp *end();
 
                     void resize(int64_t size);
+
+                    IVector <Tp> &inner();
 
                     virtual ~IMemoryPartition();
 

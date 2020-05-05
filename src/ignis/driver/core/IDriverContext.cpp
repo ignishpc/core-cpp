@@ -1,5 +1,6 @@
 
 #include "IDriverContext.h"
+#include "ignis/executor/api/IVector.h"
 #include "ignis/executor/core/exception/IInvalidArgument.h"
 
 using namespace ignis::driver::core;
@@ -23,6 +24,13 @@ int64_t IDriverContext::saveContext() {
     IGNIS_RPC_CATCH()
 }
 
+void IDriverContext::clearContext() {
+    IGNIS_RPC_TRY()
+        executor_data->deletePartitions();
+        executor_data->clearVariables();
+    IGNIS_RPC_CATCH()
+}
+
 void IDriverContext::loadContext(const int64_t id) {
     IGNIS_RPC_TRY()
         std::lock_guard<std::mutex> lock(mutex);
@@ -32,4 +40,21 @@ void IDriverContext::loadContext(const int64_t id) {
         }
         executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
     IGNIS_RPC_CATCH()
+}
+
+int64_t IDriverContext::parallelize(const std::vector<bool> &&collection) {
+    try {
+        auto group = executor_data->getPartitionTools().newPartitionGroup<bool>();
+        executor::api::IVector<bool> v(collection.begin(), collection.end());
+        auto partition = std::make_shared<executor::core::storage::IMemoryPartition<bool>>(std::move(v));
+        group->add(partition);
+
+        std::lock_guard<std::mutex> lock(mutex);
+        executor_data->setPartitions<bool>(group);
+        return this->saveContext();
+    } catch (executor::core::exception::IException &ex) {
+        throw api::IDriverException(ex.what(), ex.toString());
+    } catch (std::exception &ex) {
+        throw api::IDriverException(ex.what());
+    }
 }

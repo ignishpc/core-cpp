@@ -19,6 +19,8 @@ namespace ignis {
 
                     int64_t saveContext();
 
+                    void clearContext();
+
                     void loadContext(const int64_t id);
 
                     void cache(const int64_t id, const int8_t level);

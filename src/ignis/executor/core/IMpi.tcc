@@ -1,8 +1,10 @@
 
 #include "IMpi.h"
+#include "ILog.h"
 #include "storage/IMemoryPartition.h"
 #include "storage/IRawMemoryPartition.h"
 #include "storage/IDiskPartition.h"
+#include "io/INativeWriter.h"
 
 #include <iostream>
 
@@ -13,7 +15,7 @@ template<typename Tp>
 void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
     if (executors() == 1) { return; }
     if (part.type() == storage::IMemoryPartition<Tp>::TYPE) {
-        if (isPrimitive<Tp>()()) {
+        if (isContiguousType<Tp>()) {
             auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(part);
             int sz = men.size() * sizeof(Tp);
             std::vector<int> szv;
@@ -123,7 +125,7 @@ template<typename Tp>
 void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
     if (executors() == 1) { return; }
     if (part.type() == storage::IMemoryPartition<Tp>::TYPE) {
-        if (isPrimitive<Tp>()()) {
+        if (isContiguousType<Tp>()) {
             auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(part);
             int sz = men.size();
             comm.Bcast(&sz, 1, MPI::INT, 0);
@@ -173,22 +175,350 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
 }
 
 template<typename Tp>
-bool IMpiClass::isPrimitiveType(){
-    return isPrimitive<Tp>()();
+void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGroup<Tp> &part_group) {
+    bool driver = group.Get_rank() == 0;
+    bool exec0 = group.Get_rank() == 1;
+    int max_partition;
+    std::vector<int> partition_size;
+    int8_t protocol;
+    bool same_protocol;
+    std::string storage;
+
+    if (driver) {
+        protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
+    } else {
+        max_partition = (int) part_group.partitions();
+        for (int64_t i = 0; i < part_group.partitions(); i++) {
+            if (i == 0) {
+                storage = part_group[i]->type();
+            }
+            partition_size[i] = (int) part_group[i]->size();
+        }
+    }
+
+    group.Allreduce(MPI_IN_PLACE, &max_partition, 1, MPI::INT, MPI::MAX);
+    if (max_partition == 0) {
+        return;
+    }
+    group.Gather(MPI_IN_PLACE, max_partition, MPI::INT, &partition_size[0], max_partition, MPI::INT, 0);
+    group.Bcast(&protocol, 1, MPI::BYTE, 0);
+
+    if (driver) {
+        int length;
+        group.Recv(&same_protocol, 1, MPI::BOOL, 1, 0);
+        group.Recv(&length, 1, MPI::INT, 1, 0);
+        storage.resize(length);
+        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, 0);
+    } else if (exec0) {
+        same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
+        int length = storage.length();
+        group.Send(&same_protocol, 1, MPI::BOOL, 0, 0);
+        group.Send(&length, 1, MPI::INT, 0, 0);
+        group.Send(storage.c_str(), length, MPI::BYTE, 0, 0);
+    }
+
+    IGNIS_LOG(info) << "Comm: driverGather storage: " << storage << ", operations: " << max_partition;
+
+    std::shared_ptr<storage::IPartition<Tp>> part_sp;
+    for (int64_t i = 0; i < max_partition; i++) {
+        if (i < part_group.partitions()) {
+            part_sp = part_group[i];
+        }
+        if (storage == storage::IMemoryPartition<Tp>::TYPE) {
+            if (isContiguousType<Tp>() && same_protocol) {
+                if (driver) {
+                    auto part = std::make_shared<storage::IMemoryPartition<Tp>>();
+                    auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(part);
+                    int sz = 0;
+                    std::vector<int> szv;
+                    std::vector<int> displs;
+                    szv.resize(group.Get_size(), sz);
+                    group.Gather(&sz, 1, MPI::INT, &szv[0], 1, MPI::INT, 0);
+                    displs = this->displs(szv);
+                    men.resize(displs.back() / sizeof(Tp));
+                    group.Gatherv(MPI::IN_PLACE, 0, MPI::BYTE, &men[0], &szv[0], &displs[0], MPI::BYTE, 0);
+                    if (group.Get_size() == 2) {
+                        part_group.add(part);
+                        continue;
+                    }
+                    int64_t offset = 0;
+                    for (int sz : szv) {
+                        auto part = std::make_shared<storage::IMemoryPartition<Tp>>();
+                        auto &rcv = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part);
+                        men.resize(sz / sizeof(Tp));
+                        std::memcpy(&rcv[0], &men[offset], men.size());
+                        offset += men.size();
+                        part_group.add(part);
+                    }
+                } else {
+                    if (!part_sp) {
+                        part_sp = std::make_shared<storage::IMemoryPartition<Tp>>();
+                    }
+                    auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part_sp);
+                    int sz = men.size() * sizeof(Tp);
+                    group.Gather(&sz, 1, MPI::INT, nullptr, 1, MPI::INT, 0);
+                    comm.Gatherv(&men[0], sz, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, 0);
+                }
+            } else {
+                if (driver) {
+                    auto buffer = std::make_shared<transport::IMemoryBuffer>();
+                    int sz = 0;
+                    std::vector<int> szv;
+                    std::vector<int> displs;
+                    szv.resize(group.Get_size(), sz);
+                    comm.Gather(&sz, 1, MPI::INT, &szv[0], 1, MPI::INT, 0);
+                    displs = this->displs(szv);
+                    buffer->getWritePtr(displs.back());
+                    comm.Gatherv(buffer->getWritePtr(sz), sz, MPI::BYTE, buffer->getWritePtr(sz), &szv[0], &displs[0],
+                                 MPI::BYTE, 0);
+                    auto ptr = buffer->getWritePtr(sz);
+                    for (int j = 1; j < group.Get_size(); j++) {
+                        auto view = std::make_shared<transport::IMemoryBuffer>(ptr + displs[j], szv[j]);
+                        part_sp = std::make_shared<storage::IMemoryPartition<Tp>>();
+                        part_sp->read((std::shared_ptr<transport::ITransport> &) view);
+                        part_group.add(part_sp);
+                    }
+                } else {
+                    if (!part_sp) {
+                        part_sp = std::make_shared<storage::IMemoryPartition<Tp>>();
+                    }
+                    auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part_sp);
+                    auto buffer = std::make_shared<transport::IMemoryBuffer>();
+                    int sz = 0;
+                    men.write((std::shared_ptr<transport::ITransport> &) buffer, properties.msgCompression());
+                    sz = buffer->writeEnd();
+                    buffer->resetBuffer();
+                    comm.Gather(&sz, 1, MPI::INT, nullptr, 1, MPI::INT, 0);
+                    comm.Gatherv(buffer->getWritePtr(sz), sz, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, 0);
+                }
+            }
+        } else if (storage == storage::IRawMemoryPartition<Tp>::TYPE) {
+            if (driver) {
+                part_sp = std::make_shared<storage::IRawMemoryPartition<Tp>>();
+                auto &raw = reinterpret_cast<storage::IRawMemoryPartition<Tp> &>(*part_sp);
+                std::pair<int, int> sz(0, 0);
+                std::vector<std::pair<int, int>> elems_szv;
+                std::vector<int> szv;
+                std::vector<int> displs;
+                elems_szv.resize(group.Get_size(), sz);
+                comm.Gather(&sz, 2, MPI::INT, &elems_szv[0], 2, MPI::INT, 0);
+                szv = this->szVector(elems_szv);
+                displs = this->displs(szv);
+                raw.resize(elems_szv[0].first, displs.back());
+                auto ptr = raw.begin(false) - storage::IRawMemoryPartition<Tp>::HEADER;
+                comm.Gatherv(MPI::IN_PLACE, 0, MPI::BYTE, ptr, &szv[0], &displs[0], MPI::BYTE, 0);
+                raw.buffer->wroteBytes(elems_szv[0].second);
+                part_group.add(part_sp);
+
+                for (int j = 1; j < group.Get_size(); j++) {
+                    auto part = std::make_shared<storage::IRawMemoryPartition<Tp>>();
+                    part->buffer = std::make_shared<transport::IMemoryBuffer>(ptr + displs[i], szv[i]);
+                    part->elems = elems_szv[i].first;
+                    part_group.add(part);
+                }
+            } else {
+                if (!part_sp) {
+                    part_sp = std::make_shared<storage::IRawMemoryPartition<Tp>>();
+                }
+                auto &raw = reinterpret_cast<storage::IRawMemoryPartition<Tp> &>(*part_sp);
+                raw.sync();
+                std::pair<int, int> sz(raw.size(), raw.buffer->writeEnd());
+                comm.Gather(&sz, 2, MPI::INT, nullptr, 2, MPI::INT, 0);
+                auto ptr = raw.begin(false) - storage::IRawMemoryPartition<Tp>::HEADER;
+                comm.Gatherv(ptr, sz.second, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, 0);
+            }
+        } else {
+            if (driver) {
+                std::vector<int> lengthv(max_partition * group.Get_size(), 0);
+                int sz = 0;
+                std::vector<int> szv(group.Get_size());
+                group.Gather(MPI_IN_PLACE, lengthv.size(), MPI::INT, &lengthv[0], lengthv.size(), MPI::INT, 0);
+                group.Gather(&sz, 1, MPI::INT, &szv[0], szv.size(), MPI::INT, 0);
+                std::vector<int> displs = this->displs(szv);
+                std::string full_path(displs.back(), '\0');
+                group.Gatherv(MPI_IN_PLACE, 0, MPI::BYTE, const_cast<char *>(full_path.c_str()), &szv[0], &displs[0],
+                              MPI::BYTE, 0);
+                int64_t offset = 0;
+                for (int length: lengthv) {
+                    if (length == 0) {
+                        continue;
+                    }
+                    std::string src(full_path, offset, length);
+                    offset += length;
+                    auto part = std::make_shared<storage::IDiskPartition<Tp>>(src, properties.partitionCompression(),
+                                                                              false, true);
+                    part_group.add(part);
+                }
+            } else {
+                std::vector<int> lengthv;
+                std::string full_path;
+                for (auto part: part_group) {
+                    auto &disk = reinterpret_cast<storage::IDiskPartition<Tp> &>(*part);
+                    auto &path = disk.getPath();
+                    lengthv.push_back(path.length());
+                    full_path.append(path);
+                }
+                int sz = full_path.length();
+                lengthv.resize(max_partition, 0);
+                group.Gather(MPI_IN_PLACE, lengthv.size(), MPI::INT, nullptr, 0, MPI::INT, 0);
+                group.Gather(&sz, 1, MPI::INT, nullptr, 0, MPI::INT, 0);
+                group.Gatherv(const_cast<char *>(full_path.c_str()), lengthv.back(), MPI::BYTE, nullptr, nullptr,
+                              nullptr, MPI::BYTE, 0);
+            }
+            break;
+        }
+    }
+
 }
 
 template<typename Tp>
-struct IMpiClass::isPrimitive {
-    inline bool operator()() {
-        return std::is_integral<Tp>::value || std::is_floating_point<Tp>::value;
+void IMpiClass::driverGather0(const MPI::Intracomm &group, storage::IPartitionGroup<Tp> &part_group) {
+    int rank = group.Get_rank();
+    auto sub_group = group.Split(rank < 2, rank);
+    if (rank < 2) {
+        driverGather(sub_group, part_group);
     }
-};
+    sub_group.Free();
+}
 
-template<typename Tp1, typename Tp2>
-struct IMpiClass::isPrimitive<std::pair<Tp1, Tp2>> {
-    inline bool operator()() {
-        return isPrimitive<Tp1>()() && isPrimitive<Tp2>()();
+template<typename Tp>
+void
+IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup<Tp> &part_group, int64_t partitions) {
+    auto id = rank();
+    bool driver = group.Get_rank() == 0;
+    bool exec0 = group.Get_rank() == 1;
+    auto execs = executors();
+    bool same_protocol;
+    uint8_t *ptr = nullptr;
+    std::vector<int> szv;
+    std::vector<int> displs;
+    auto buffer = std::make_shared<transport::IMemoryBuffer>();
+
+    if (driver) {
+        int8_t protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
+        group.Send(&protocol, 1, MPI::BYTE, 0, 0);
+        group.Recv(&same_protocol, 1, MPI::BOOL, 0, 0);
+    } else if (exec0) {
+        int8_t protocol;
+        group.Recv(&protocol, 1, MPI::BYTE, 1, 0);
+        same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
+        group.Send(&same_protocol, 1, MPI::BOOL, 1, 0);
     }
-};
+
+    IGNIS_LOG(info) << "Comm: driverScatter partitions: " << part_group.partitions();
+
+    if (driver) {
+        auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part_group[0]);
+        ptr = (uint8_t *) &men[0];
+        auto elems = men.size();
+        auto executor_elems = elems / execs;
+        auto remainder = elems % execs;
+        szv.reserve(execs + 1);
+        szv.push_back(0);
+        szv.insert(szv.end(), remainder, executor_elems + 1);
+        szv.insert(szv.end(), execs - remainder, executor_elems);
+    }
+
+    if (isContiguousType<Tp>() && same_protocol) {
+        int sz;
+        displs = this->displs(szv);
+        group.Scatter(&szv[0], szv.size(), MPI::INT, &sz, 1, MPI::INT, 0);
+        group.Scatterv(ptr, &szv[0], &displs[0], MPI::BYTE, buffer->getWritePtr(sz), sz, MPI::BYTE, 0);
+        auto local_partitions = partitions / execs + ((partitions % execs < id) ? 1 : 0);
+
+        if (!driver) {
+            auto executor_elems = sz / local_partitions;
+            auto remainder = sz % local_partitions;
+            for (int i = 0; i < local_partitions; i++) {
+                auto part = std::make_shared<storage::IMemoryPartition<Tp>>(sz);
+                part->resize(sz);
+                if (i < remainder) {
+                    std::memcpy(&(*part)[0], buffer->getWritePtr(0), (executor_elems + 1) * sizeof(Tp));
+                } else {
+                    std::memcpy(&(*part)[0], buffer->getWritePtr(0), executor_elems * sizeof(Tp));
+                }
+                part_group.add(part);
+            }
+        }
+
+    } else {
+        std::vector<int> szv_part;
+        auto max_exec_partitions = (int) std::ceil(partitions / (float) execs);
+        if (driver) {
+            auto cmp = properties.msgCompression();
+            auto zlib = std::make_shared<transport::IZlibTransport>(buffer, cmp);
+            protocol::IObjectProtocol proto(zlib);
+            szv_part.resize(max_exec_partitions * (execs + 1), 0);
+            auto writeBase = buffer->writeEnd();
+            int64_t offset = 0;
+            for (int64_t i = 0; i < execs + 1; i++) {
+                auto &szi = szv[i + i];
+                auto exec_partitions = partitions / execs + ((partitions % execs < i) ? 1 : 0);
+                auto executor_elems = szi / exec_partitions;
+                auto remainder = szi % exec_partitions;
+                for (int64_t j = 0; j < exec_partitions; j++) {
+                    if (j < remainder) {
+                        proto.writeObject(api::IVector<Tp>::view((Tp *) &ptr[offset], executor_elems + 1), false);
+                        offset += executor_elems + 1;
+                    } else {
+                        proto.writeObject(api::IVector<Tp>::view((Tp *) &ptr[offset], executor_elems), false);
+                        offset += executor_elems;
+                    }
+                    zlib->flush();
+                    zlib->reset();
+                    szv_part[i * max_exec_partitions + j];
+                }
+                szi = (int) (buffer->writeEnd() - writeBase);
+                writeBase = buffer->writeEnd();
+            }
+            buffer->resetBuffer();
+            part_group.clear();
+            displs = this->displs(szv);
+        }else{
+            szv_part.resize(max_exec_partitions);
+        }
+        int sz;
+        group.Scatter(&szv[0], szv.size(), MPI::INT, &sz, 1, MPI::INT, 0);
+        group.Scatter(MPI_IN_PLACE, szv_part.size(), MPI::INT, &szv_part[0], szv_part.size(), MPI::INT, 0);
+        group.Scatterv(ptr, &szv[0], &displs[0], MPI::BYTE, ptr = buffer->getWritePtr(sz), sz, MPI::BYTE, 0);
+
+        if (!driver) {
+            int64_t offset = 0;
+            for (int i = 0; i < szv_part.size(); i++) {
+                auto view = std::make_shared<transport::IMemoryBuffer>(ptr + offset, szv_part[i]);
+                offset += szv_part[i];
+                auto part = std::make_shared<storage::IMemoryPartition<Tp>>(sz);
+                part->read((std::shared_ptr<transport::ITransport> &) view);
+                part_group.add(part);
+            }
+        }
+    }
+}
+
+template<typename Tp>
+void IMpiClass::send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag) {
+    //TODO
+}
+
+template<typename Tp>
+void IMpiClass::send(storage::IPartition<Tp> &part, int dest, int tag) {
+    //TODO
+}
+
+template<typename Tp>
+void IMpiClass::recv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int tag) {
+    //TODO
+}
+
+template<typename Tp>
+void IMpiClass::recv(storage::IPartition<Tp> &part, int source, int tag) {
+    //TODO
+}
+
+template<typename Tp>
+bool IMpiClass::isContiguousType() {
+    return io::isContiguous<Tp>()();
+}
+
 
 #undef IMpiClass

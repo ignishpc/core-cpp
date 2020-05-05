@@ -7,10 +7,13 @@
 #include <functional>
 #include <type_traits>
 #include "ignis/executor/core/RTTInfo.h"
+#include <ignis/executor/core/modules/impl/IPipeImpl.h>
+#include <ignis/executor/core/modules/impl/IReduceImpl.h>
 #include "ignis/executor/core/modules/impl/IIOImpl.h"
 #include "ignis/executor/core/modules/impl/ICacheImpl.h"
 #include "ignis/executor/core/modules/impl/ICommImpl.h"
 #include "ignis/executor/core/modules/impl/ISortImpl.h"
+#include "ignis/executor/core/modules/impl/IMathImpl.h"
 #include "ignis/executor/core/exception/ICompatibilityException.h"
 
 namespace ignis {
@@ -26,7 +29,8 @@ namespace ignis {
                     virtual void
                     loadFromDisk(modules::impl::ICacheImpl &impl, const std::vector<std::string> &group) = 0;
 
-                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl) = 0;
+                    virtual std::vector<std::string>
+                    getPartitions(modules::impl::ICommImpl &impl, const int8_t protocol, int64_t minPartitions) = 0;
 
                     virtual void
                     setPartitions(modules::impl::ICommImpl &impl, const std::vector<std::string> &partitions) = 0;
@@ -36,11 +40,29 @@ namespace ignis {
                     virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id) = 0;
 
                     virtual void
-                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, const int64_t dataId) = 0;
+                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, int64_t partitions) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
+
+                    virtual void take(modules::impl::IPipeImpl &impl, int64_t num) = 0;
+
+                    virtual void top(modules::impl::ISortImpl &impl, int64_t num) = 0;
+
+                    virtual void takeOrdered(modules::impl::ISortImpl &impl, int64_t num) = 0;
+
+                    virtual int64_t count(modules::impl::IMathImpl &impl) = 0;
+
+                    virtual void max(modules::impl::ISortImpl &impl) = 0;
+
+                    virtual void min(modules::impl::ISortImpl &impl) = 0;
+
+                    virtual void
+                    sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction, int32_t seed) = 0;
+
+                    virtual void
+                    takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num, int32_t seed) = 0;
 
                     virtual int64_t partitionApproxSize(modules::impl::IIOImpl &impl) = 0;
 
@@ -59,6 +81,23 @@ namespace ignis {
                     virtual void
                     saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first,
                                    bool pretty) = 0;
+
+                    /*Key-Value*/
+                    virtual void sampleByKey(modules::impl::IMathImpl &impl, bool withReplacement, int32_t seed) = 0;
+
+                    virtual void countByKey(modules::impl::IMathImpl &impl) = 0;
+
+                    virtual void countByValue(modules::impl::IMathImpl &impl) = 0;
+
+                    virtual void keys(modules::impl::IPipeImpl &impl) = 0;
+
+                    virtual void values(modules::impl::IPipeImpl &impl) = 0;
+
+                    virtual void groupByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions) = 0;
+
+                    virtual void sortByKey(modules::impl::ISortImpl &impl, bool ascending) = 0;
+
+                    virtual void sortByKey(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
 
                 };
 
@@ -80,8 +119,9 @@ namespace ignis {
                         impl.loadFromDisk<Tp>(group);
                     }
 
-                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl) {
-                        return impl.getPartitions<Tp>();
+                    virtual std::vector<std::string>
+                    getPartitions(modules::impl::ICommImpl &impl, const int8_t protocol, int64_t minPartitions) {
+                        return impl.getPartitions<Tp>(protocol, minPartitions);
                     }
 
                     virtual void
@@ -98,8 +138,8 @@ namespace ignis {
                     }
 
                     virtual void
-                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, const int64_t dataId) {
-                        impl.driverScatter<Tp>(id, dataId);
+                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, int64_t partitions) {
+                        impl.driverScatter<Tp>(id, partitions);
                     }
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {
@@ -108,6 +148,34 @@ namespace ignis {
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) {
                         sort_check<Tp>(impl, nullptr, ascending, numPartitions);
+                    }
+
+                    virtual void take(modules::impl::IPipeImpl &impl, int64_t num) {
+                        impl.take<Tp>(num);
+                    }
+
+                    virtual void top(modules::impl::ISortImpl &impl, int64_t num) {
+                        top_check<Tp>(impl, nullptr, num);
+                    }
+
+                    virtual void takeOrdered(modules::impl::ISortImpl &impl, int64_t num) {
+                        takeOrdered_check<Tp>(impl, nullptr, num);
+                    }
+
+                    virtual int64_t count(modules::impl::IMathImpl &impl) { return impl.count<Tp>(); }
+
+                    virtual void max(modules::impl::ISortImpl &impl) { max_check<Tp>(impl, nullptr); }
+
+                    virtual void min(modules::impl::ISortImpl &impl) { min_check<Tp>(impl, nullptr); }
+
+                    virtual void
+                    sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction, int32_t seed) {
+                        impl.sample<Tp>(withReplacement, fraction, seed);
+                    }
+
+                    virtual void
+                    takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num, int32_t seed) {
+                        impl.takeSample<Tp>(withReplacement, num, seed);
                     }
 
                     virtual int64_t partitionApproxSize(modules::impl::IIOImpl &impl) {
@@ -138,21 +206,186 @@ namespace ignis {
                         impl.saveAsJsonFile<Tp>(path, first, pretty);
                     }
 
+                    /*Key-Value*/
+                    virtual void sampleByKey(modules::impl::IMathImpl &impl, bool withReplacement, int32_t seed) {
+                        sampleByKey_check<Tp>(impl, nullptr, withReplacement, seed);
+                    }
+
+                    virtual void countByKey(modules::impl::IMathImpl &impl) {
+                        countByKey_check<Tp>(impl, nullptr);
+                    }
+
+                    virtual void countByValue(modules::impl::IMathImpl &impl) {
+                        countByValue_check<Tp>(impl, nullptr);
+                    }
+
+                    virtual void keys(modules::impl::IPipeImpl &impl) {
+                        keys_check<Tp>(impl, nullptr);
+                    }
+
+                    virtual void values(modules::impl::IPipeImpl &impl) {
+                        values_check<Tp>(impl, nullptr);
+                    }
+
+                    virtual void groupByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions) {
+                        groupByKey_check<Tp>(impl, nullptr, numPartitions);
+                    }
+
+                    void sortByKey(modules::impl::ISortImpl &impl, bool ascending) {
+                        sortByKey_check<Tp>(impl, nullptr, nullptr, ascending);
+                    }
+
+                    void sortByKey(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) {
+                        sortByKey_check<Tp>(impl, nullptr, nullptr, ascending, numPartitions);
+                    }
+
                 private:
 
                     template<typename C>
-                    void sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val, bool ascending) {
+                    void
+                    sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val,
+                               bool ascending) {
                         impl.sort<Tp>(ascending);
                     }
 
                     template<typename C>
-                    void sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val, bool ascending,
-                                    int64_t numPartitions) {
+                    void
+                    sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val,
+                               bool ascending,
+                               int64_t numPartitions) {
                         impl.sort<Tp>(ascending, numPartitions);
                     }
 
                     template<typename C>
                     void sort_check(...) { throw exception::ICompatibilyException("sort", RTTInfo::from<C>()); }
+
+                    template<typename C>
+                    void
+                    top_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val,
+                              int64_t num) {
+                        impl.top<Tp>(num);
+                    }
+
+                    template<typename C>
+                    void top_check(...) { throw exception::ICompatibilyException("top", RTTInfo::from<C>()); }
+
+                    template<typename C>
+                    void
+                    takeOrdered_check(modules::impl::ISortImpl &impl,
+                                      decltype(std::declval<C>() < std::declval<C>()) *val,
+                                      int64_t num) {
+                        impl.takeOrdered<Tp>(num);
+                    }
+
+                    template<typename C>
+                    void takeOrdered_check(...) {
+                        throw exception::ICompatibilyException("takeOrdered", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void
+                    max_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val) {
+                        impl.max<Tp>();
+                    }
+
+                    template<typename C>
+                    void max_check(...) { throw exception::ICompatibilyException("max", RTTInfo::from<C>()); }
+
+                    template<typename C>
+                    void
+                    min_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val) {
+                        impl.min<Tp>();
+                    }
+
+                    template<typename C>
+                    void min_check(...) { throw exception::ICompatibilyException("min", RTTInfo::from<C>()); }
+
+                    /*Key-Value*/
+                    template<typename C>
+                    void sampleByKey_check(modules::impl::IMathImpl &impl, typename C::second_type *val,
+                                           bool withReplacement, int32_t seed) {
+                        impl.sampleByKey<C>(withReplacement, seed);
+                    }
+
+                    template<typename C>
+                    void sampleByKey_check(...) {
+                        throw exception::ICompatibilyException("sampleByKey", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void countByKey_check(modules::impl::IMathImpl &impl, typename C::second_type *val) {
+                        impl.countByKey<C>();
+                    }
+
+                    template<typename C>
+                    void countByKey_check(...) {
+                        throw exception::ICompatibilyException("countByKey", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void countByValue_check(modules::impl::IMathImpl &impl, typename C::second_type *val) {
+                        impl.countByValue<C>();
+                    }
+
+                    template<typename C>
+                    void countByValue_check(...) {
+                        throw exception::ICompatibilyException("countByValue", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void keys_check(modules::impl::IPipeImpl &impl, typename C::second_type *val) {
+                        impl.keys<C>();
+                    }
+
+                    template<typename C>
+                    void keys_check(...) {
+                        throw exception::ICompatibilyException("keys", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void values_check(modules::impl::IPipeImpl &impl, typename C::second_type *val) {
+                        impl.values<C>();
+                    }
+
+                    template<typename C>
+                    void values_check(...) {
+                        throw exception::ICompatibilyException("values", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void groupByKey_check(modules::impl::IReduceImpl &impl, decltype(&std::hash<typename C::first_type>::operator()) *val,
+                                          int64_t numPartitions) {
+                        impl.groupByKey<C>(numPartitions);
+                    }
+
+                    template<typename C>
+                    void groupByKey_check(...) {
+                        throw exception::ICompatibilyException("groupByKey", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void
+                    sortByKey_check(modules::impl::ISortImpl &impl, typename C::second_type *val,
+                                    decltype(std::declval<typename C::first_type>() <
+                                             std::declval<typename C::first_type>()) *val2,
+                                    bool ascending) {
+                        impl.sortByKey<Tp>(ascending);
+                    }
+
+                    template<typename C>
+                    void
+                    sortByKey_check(modules::impl::ISortImpl &impl, typename C::second_type *val,
+                                    decltype(std::declval<typename C::first_type>() <
+                                             std::declval<typename C::first_type>()) *val2,
+                                    bool ascending,
+                                    int64_t numPartitions) {
+                        impl.sortByKey<Tp>(ascending, numPartitions);
+                    }
+
+                    template<typename C>
+                    void sortByKey_check(...) {
+                        throw exception::ICompatibilyException("sortByKey", RTTInfo::from<C>());
+                    }
 
                 };
 

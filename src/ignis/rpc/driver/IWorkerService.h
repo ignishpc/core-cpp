@@ -27,8 +27,8 @@ class IWorkerServiceIf {
   virtual void newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores) = 0;
   virtual void newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores) = 0;
   virtual void setName(const IWorkerId& id, const std::string& name) = 0;
-  virtual void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId) = 0;
-  virtual void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions) = 0;
+  virtual void parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data) = 0;
   virtual void importDataFrame3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions) = 0;
   virtual void importDataFrame3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) = 0;
@@ -84,10 +84,10 @@ class IWorkerServiceNull : virtual public IWorkerServiceIf {
   void setName(const IWorkerId& /* id */, const std::string& /* name */) {
     return;
   }
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const int64_t /* dataId */) {
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const int64_t /* dataId */, const int64_t /* partitions */) {
     return;
   }
-  void parallelize3( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const int64_t /* dataId */, const  ::ignis::rpc::ISource& /* src */) {
+  void parallelize4( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const int64_t /* dataId */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void importDataFrame( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const  ::ignis::rpc::driver::IDataFrameId& /* data */) {
@@ -741,9 +741,10 @@ class IWorkerService_setName_presult {
 };
 
 typedef struct _IWorkerService_parallelize_args__isset {
-  _IWorkerService_parallelize_args__isset() : id(false), dataId(false) {}
+  _IWorkerService_parallelize_args__isset() : id(false), dataId(false), partitions(false) {}
   bool id :1;
   bool dataId :1;
+  bool partitions :1;
 } _IWorkerService_parallelize_args__isset;
 
 class IWorkerService_parallelize_args {
@@ -751,12 +752,13 @@ class IWorkerService_parallelize_args {
 
   IWorkerService_parallelize_args(const IWorkerService_parallelize_args&);
   IWorkerService_parallelize_args& operator=(const IWorkerService_parallelize_args&);
-  IWorkerService_parallelize_args() : dataId(0) {
+  IWorkerService_parallelize_args() : dataId(0), partitions(0) {
   }
 
   virtual ~IWorkerService_parallelize_args() noexcept;
   IWorkerId id;
   int64_t dataId;
+  int64_t partitions;
 
   _IWorkerService_parallelize_args__isset __isset;
 
@@ -764,11 +766,15 @@ class IWorkerService_parallelize_args {
 
   void __set_dataId(const int64_t val);
 
+  void __set_partitions(const int64_t val);
+
   bool operator == (const IWorkerService_parallelize_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(dataId == rhs.dataId))
+      return false;
+    if (!(partitions == rhs.partitions))
       return false;
     return true;
   }
@@ -791,6 +797,7 @@ class IWorkerService_parallelize_pargs {
   virtual ~IWorkerService_parallelize_pargs() noexcept;
   const IWorkerId* id;
   const int64_t* dataId;
+  const int64_t* partitions;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -859,49 +866,55 @@ class IWorkerService_parallelize_presult {
 
 };
 
-typedef struct _IWorkerService_parallelize3_args__isset {
-  _IWorkerService_parallelize3_args__isset() : id(false), dataId(false), src(false) {}
+typedef struct _IWorkerService_parallelize4_args__isset {
+  _IWorkerService_parallelize4_args__isset() : id(false), dataId(false), partitions(false), src(false) {}
   bool id :1;
   bool dataId :1;
+  bool partitions :1;
   bool src :1;
-} _IWorkerService_parallelize3_args__isset;
+} _IWorkerService_parallelize4_args__isset;
 
-class IWorkerService_parallelize3_args {
+class IWorkerService_parallelize4_args {
  public:
 
-  IWorkerService_parallelize3_args(const IWorkerService_parallelize3_args&);
-  IWorkerService_parallelize3_args& operator=(const IWorkerService_parallelize3_args&);
-  IWorkerService_parallelize3_args() : dataId(0) {
+  IWorkerService_parallelize4_args(const IWorkerService_parallelize4_args&);
+  IWorkerService_parallelize4_args& operator=(const IWorkerService_parallelize4_args&);
+  IWorkerService_parallelize4_args() : dataId(0), partitions(0) {
   }
 
-  virtual ~IWorkerService_parallelize3_args() noexcept;
+  virtual ~IWorkerService_parallelize4_args() noexcept;
   IWorkerId id;
   int64_t dataId;
+  int64_t partitions;
    ::ignis::rpc::ISource src;
 
-  _IWorkerService_parallelize3_args__isset __isset;
+  _IWorkerService_parallelize4_args__isset __isset;
 
   void __set_id(const IWorkerId& val);
 
   void __set_dataId(const int64_t val);
 
+  void __set_partitions(const int64_t val);
+
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  bool operator == (const IWorkerService_parallelize3_args & rhs) const
+  bool operator == (const IWorkerService_parallelize4_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(dataId == rhs.dataId))
       return false;
+    if (!(partitions == rhs.partitions))
+      return false;
     if (!(src == rhs.src))
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_parallelize3_args &rhs) const {
+  bool operator != (const IWorkerService_parallelize4_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_parallelize3_args & ) const;
+  bool operator < (const IWorkerService_parallelize4_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -909,44 +922,45 @@ class IWorkerService_parallelize3_args {
 };
 
 
-class IWorkerService_parallelize3_pargs {
+class IWorkerService_parallelize4_pargs {
  public:
 
 
-  virtual ~IWorkerService_parallelize3_pargs() noexcept;
+  virtual ~IWorkerService_parallelize4_pargs() noexcept;
   const IWorkerId* id;
   const int64_t* dataId;
+  const int64_t* partitions;
   const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_parallelize3_result__isset {
-  _IWorkerService_parallelize3_result__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_parallelize4_result__isset {
+  _IWorkerService_parallelize4_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_parallelize3_result__isset;
+} _IWorkerService_parallelize4_result__isset;
 
-class IWorkerService_parallelize3_result {
+class IWorkerService_parallelize4_result {
  public:
 
-  IWorkerService_parallelize3_result(const IWorkerService_parallelize3_result&);
-  IWorkerService_parallelize3_result& operator=(const IWorkerService_parallelize3_result&);
-  IWorkerService_parallelize3_result() {
+  IWorkerService_parallelize4_result(const IWorkerService_parallelize4_result&);
+  IWorkerService_parallelize4_result& operator=(const IWorkerService_parallelize4_result&);
+  IWorkerService_parallelize4_result() {
   }
 
-  virtual ~IWorkerService_parallelize3_result() noexcept;
+  virtual ~IWorkerService_parallelize4_result() noexcept;
    ::ignis::rpc::driver::IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_parallelize3_result__isset __isset;
+  _IWorkerService_parallelize4_result__isset __isset;
 
   void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IWorkerService_parallelize3_result & rhs) const
+  bool operator == (const IWorkerService_parallelize4_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -954,32 +968,32 @@ class IWorkerService_parallelize3_result {
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_parallelize3_result &rhs) const {
+  bool operator != (const IWorkerService_parallelize4_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_parallelize3_result & ) const;
+  bool operator < (const IWorkerService_parallelize4_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_parallelize3_presult__isset {
-  _IWorkerService_parallelize3_presult__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_parallelize4_presult__isset {
+  _IWorkerService_parallelize4_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_parallelize3_presult__isset;
+} _IWorkerService_parallelize4_presult__isset;
 
-class IWorkerService_parallelize3_presult {
+class IWorkerService_parallelize4_presult {
  public:
 
 
-  virtual ~IWorkerService_parallelize3_presult() noexcept;
+  virtual ~IWorkerService_parallelize4_presult() noexcept;
    ::ignis::rpc::driver::IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_parallelize3_presult__isset __isset;
+  _IWorkerService_parallelize4_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -2390,12 +2404,12 @@ class IWorkerServiceClient : virtual public IWorkerServiceIf {
   void setName(const IWorkerId& id, const std::string& name);
   void send_setName(const IWorkerId& id, const std::string& name);
   void recv_setName();
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId);
-  void send_parallelize(const IWorkerId& id, const int64_t dataId);
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions);
+  void send_parallelize(const IWorkerId& id, const int64_t dataId, const int64_t partitions);
   void recv_parallelize( ::ignis::rpc::driver::IDataFrameId& _return);
-  void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
-  void send_parallelize3(const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
-  void recv_parallelize3( ::ignis::rpc::driver::IDataFrameId& _return);
+  void parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void send_parallelize4(const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_parallelize4( ::ignis::rpc::driver::IDataFrameId& _return);
   void importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   void send_importDataFrame(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   void recv_importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return);
@@ -2450,7 +2464,7 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_newInstance4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_parallelize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_parallelize3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_parallelize4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2471,7 +2485,7 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["newInstance4"] = &IWorkerServiceProcessor::process_newInstance4;
     processMap_["setName"] = &IWorkerServiceProcessor::process_setName;
     processMap_["parallelize"] = &IWorkerServiceProcessor::process_parallelize;
-    processMap_["parallelize3"] = &IWorkerServiceProcessor::process_parallelize3;
+    processMap_["parallelize4"] = &IWorkerServiceProcessor::process_parallelize4;
     processMap_["importDataFrame"] = &IWorkerServiceProcessor::process_importDataFrame;
     processMap_["importDataFrame3a"] = &IWorkerServiceProcessor::process_importDataFrame3a;
     processMap_["importDataFrame3b"] = &IWorkerServiceProcessor::process_importDataFrame3b;
@@ -2560,23 +2574,23 @@ class IWorkerServiceMultiface : virtual public IWorkerServiceIf {
     ifaces_[i]->setName(id, name);
   }
 
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId) {
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->parallelize(_return, id, dataId);
+      ifaces_[i]->parallelize(_return, id, dataId, partitions);
     }
-    ifaces_[i]->parallelize(_return, id, dataId);
+    ifaces_[i]->parallelize(_return, id, dataId, partitions);
     return;
   }
 
-  void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) {
+  void parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->parallelize3(_return, id, dataId, src);
+      ifaces_[i]->parallelize4(_return, id, dataId, partitions, src);
     }
-    ifaces_[i]->parallelize3(_return, id, dataId, src);
+    ifaces_[i]->parallelize4(_return, id, dataId, partitions, src);
     return;
   }
 
@@ -2737,12 +2751,12 @@ class IWorkerServiceConcurrentClient : virtual public IWorkerServiceIf {
   void setName(const IWorkerId& id, const std::string& name);
   int32_t send_setName(const IWorkerId& id, const std::string& name);
   void recv_setName(const int32_t seqid);
-  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId);
-  int32_t send_parallelize(const IWorkerId& id, const int64_t dataId);
+  void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions);
+  int32_t send_parallelize(const IWorkerId& id, const int64_t dataId, const int64_t partitions);
   void recv_parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
-  void parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
-  int32_t send_parallelize3(const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
-  void recv_parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_parallelize4(const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void recv_parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
   void importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   int32_t send_importDataFrame(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data);
   void recv_importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);

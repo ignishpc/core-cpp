@@ -28,13 +28,15 @@ class ICommModuleIf {
   virtual bool hasGroup(const std::string& id) = 0;
   virtual void destroyGroup(const std::string& id) = 0;
   virtual void destroyGroups() = 0;
-  virtual void getPartitions(std::vector<std::string> & _return) = 0;
+  virtual int8_t getProtocol() = 0;
+  virtual void getPartitions(std::vector<std::string> & _return, const int8_t protocol) = 0;
+  virtual void getPartitions2(std::vector<std::string> & _return, const int8_t protocol, const int64_t minPartitions) = 0;
   virtual void setPartitions(const std::vector<std::string> & partitions) = 0;
   virtual void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void driverGather(const std::string& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src) = 0;
-  virtual void driverScatter(const std::string& id, const int64_t dataId) = 0;
-  virtual void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void driverScatter(const std::string& id, const int64_t partitions) = 0;
+  virtual void driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
 };
 
 class ICommModuleIfFactory {
@@ -83,7 +85,14 @@ class ICommModuleNull : virtual public ICommModuleIf {
   void destroyGroups() {
     return;
   }
-  void getPartitions(std::vector<std::string> & /* _return */) {
+  int8_t getProtocol() {
+    int8_t _return = 0;
+    return _return;
+  }
+  void getPartitions(std::vector<std::string> & /* _return */, const int8_t /* protocol */) {
+    return;
+  }
+  void getPartitions2(std::vector<std::string> & /* _return */, const int8_t /* protocol */, const int64_t /* minPartitions */) {
     return;
   }
   void setPartitions(const std::vector<std::string> & /* partitions */) {
@@ -98,10 +107,10 @@ class ICommModuleNull : virtual public ICommModuleIf {
   void driverGather0(const std::string& /* id */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
-  void driverScatter(const std::string& /* id */, const int64_t /* dataId */) {
+  void driverScatter(const std::string& /* id */, const int64_t /* partitions */) {
     return;
   }
-  void driverScatter3(const std::string& /* id */, const int64_t /* dataId */, const  ::ignis::rpc::ISource& /* src */) {
+  void driverScatter3(const std::string& /* id */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
 };
@@ -744,18 +753,129 @@ class ICommModule_destroyGroups_presult {
 };
 
 
+class ICommModule_getProtocol_args {
+ public:
+
+  ICommModule_getProtocol_args(const ICommModule_getProtocol_args&);
+  ICommModule_getProtocol_args& operator=(const ICommModule_getProtocol_args&);
+  ICommModule_getProtocol_args() {
+  }
+
+  virtual ~ICommModule_getProtocol_args() noexcept;
+
+  bool operator == (const ICommModule_getProtocol_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const ICommModule_getProtocol_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_getProtocol_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_getProtocol_pargs {
+ public:
+
+
+  virtual ~ICommModule_getProtocol_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_getProtocol_result__isset {
+  _ICommModule_getProtocol_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _ICommModule_getProtocol_result__isset;
+
+class ICommModule_getProtocol_result {
+ public:
+
+  ICommModule_getProtocol_result(const ICommModule_getProtocol_result&);
+  ICommModule_getProtocol_result& operator=(const ICommModule_getProtocol_result&);
+  ICommModule_getProtocol_result() : success(0) {
+  }
+
+  virtual ~ICommModule_getProtocol_result() noexcept;
+  int8_t success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_getProtocol_result__isset __isset;
+
+  void __set_success(const int8_t val);
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_getProtocol_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_getProtocol_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_getProtocol_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_getProtocol_presult__isset {
+  _ICommModule_getProtocol_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _ICommModule_getProtocol_presult__isset;
+
+class ICommModule_getProtocol_presult {
+ public:
+
+
+  virtual ~ICommModule_getProtocol_presult() noexcept;
+  int8_t* success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_getProtocol_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ICommModule_getPartitions_args__isset {
+  _ICommModule_getPartitions_args__isset() : protocol(false) {}
+  bool protocol :1;
+} _ICommModule_getPartitions_args__isset;
+
 class ICommModule_getPartitions_args {
  public:
 
   ICommModule_getPartitions_args(const ICommModule_getPartitions_args&);
   ICommModule_getPartitions_args& operator=(const ICommModule_getPartitions_args&);
-  ICommModule_getPartitions_args() {
+  ICommModule_getPartitions_args() : protocol(0) {
   }
 
   virtual ~ICommModule_getPartitions_args() noexcept;
+  int8_t protocol;
 
-  bool operator == (const ICommModule_getPartitions_args & /* rhs */) const
+  _ICommModule_getPartitions_args__isset __isset;
+
+  void __set_protocol(const int8_t val);
+
+  bool operator == (const ICommModule_getPartitions_args & rhs) const
   {
+    if (!(protocol == rhs.protocol))
+      return false;
     return true;
   }
   bool operator != (const ICommModule_getPartitions_args &rhs) const {
@@ -775,6 +895,7 @@ class ICommModule_getPartitions_pargs {
 
 
   virtual ~ICommModule_getPartitions_pargs() noexcept;
+  const int8_t* protocol;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -838,6 +959,125 @@ class ICommModule_getPartitions_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _ICommModule_getPartitions_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ICommModule_getPartitions2_args__isset {
+  _ICommModule_getPartitions2_args__isset() : protocol(false), minPartitions(false) {}
+  bool protocol :1;
+  bool minPartitions :1;
+} _ICommModule_getPartitions2_args__isset;
+
+class ICommModule_getPartitions2_args {
+ public:
+
+  ICommModule_getPartitions2_args(const ICommModule_getPartitions2_args&);
+  ICommModule_getPartitions2_args& operator=(const ICommModule_getPartitions2_args&);
+  ICommModule_getPartitions2_args() : protocol(0), minPartitions(0) {
+  }
+
+  virtual ~ICommModule_getPartitions2_args() noexcept;
+  int8_t protocol;
+  int64_t minPartitions;
+
+  _ICommModule_getPartitions2_args__isset __isset;
+
+  void __set_protocol(const int8_t val);
+
+  void __set_minPartitions(const int64_t val);
+
+  bool operator == (const ICommModule_getPartitions2_args & rhs) const
+  {
+    if (!(protocol == rhs.protocol))
+      return false;
+    if (!(minPartitions == rhs.minPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_getPartitions2_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_getPartitions2_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_getPartitions2_pargs {
+ public:
+
+
+  virtual ~ICommModule_getPartitions2_pargs() noexcept;
+  const int8_t* protocol;
+  const int64_t* minPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_getPartitions2_result__isset {
+  _ICommModule_getPartitions2_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _ICommModule_getPartitions2_result__isset;
+
+class ICommModule_getPartitions2_result {
+ public:
+
+  ICommModule_getPartitions2_result(const ICommModule_getPartitions2_result&);
+  ICommModule_getPartitions2_result& operator=(const ICommModule_getPartitions2_result&);
+  ICommModule_getPartitions2_result() {
+  }
+
+  virtual ~ICommModule_getPartitions2_result() noexcept;
+  std::vector<std::string>  success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_getPartitions2_result__isset __isset;
+
+  void __set_success(const std::vector<std::string> & val);
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_getPartitions2_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_getPartitions2_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_getPartitions2_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_getPartitions2_presult__isset {
+  _ICommModule_getPartitions2_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _ICommModule_getPartitions2_presult__isset;
+
+class ICommModule_getPartitions2_presult {
+ public:
+
+
+  virtual ~ICommModule_getPartitions2_presult() noexcept;
+  std::vector<std::string> * success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_getPartitions2_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1281,9 +1521,9 @@ class ICommModule_driverGather0_presult {
 };
 
 typedef struct _ICommModule_driverScatter_args__isset {
-  _ICommModule_driverScatter_args__isset() : id(false), dataId(false) {}
+  _ICommModule_driverScatter_args__isset() : id(false), partitions(false) {}
   bool id :1;
-  bool dataId :1;
+  bool partitions :1;
 } _ICommModule_driverScatter_args__isset;
 
 class ICommModule_driverScatter_args {
@@ -1291,24 +1531,24 @@ class ICommModule_driverScatter_args {
 
   ICommModule_driverScatter_args(const ICommModule_driverScatter_args&);
   ICommModule_driverScatter_args& operator=(const ICommModule_driverScatter_args&);
-  ICommModule_driverScatter_args() : id(), dataId(0) {
+  ICommModule_driverScatter_args() : id(), partitions(0) {
   }
 
   virtual ~ICommModule_driverScatter_args() noexcept;
   std::string id;
-  int64_t dataId;
+  int64_t partitions;
 
   _ICommModule_driverScatter_args__isset __isset;
 
   void __set_id(const std::string& val);
 
-  void __set_dataId(const int64_t val);
+  void __set_partitions(const int64_t val);
 
   bool operator == (const ICommModule_driverScatter_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
-    if (!(dataId == rhs.dataId))
+    if (!(partitions == rhs.partitions))
       return false;
     return true;
   }
@@ -1330,7 +1570,7 @@ class ICommModule_driverScatter_pargs {
 
   virtual ~ICommModule_driverScatter_pargs() noexcept;
   const std::string* id;
-  const int64_t* dataId;
+  const int64_t* partitions;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1392,9 +1632,9 @@ class ICommModule_driverScatter_presult {
 };
 
 typedef struct _ICommModule_driverScatter3_args__isset {
-  _ICommModule_driverScatter3_args__isset() : id(false), dataId(false), src(false) {}
+  _ICommModule_driverScatter3_args__isset() : id(false), partitions(false), src(false) {}
   bool id :1;
-  bool dataId :1;
+  bool partitions :1;
   bool src :1;
 } _ICommModule_driverScatter3_args__isset;
 
@@ -1403,19 +1643,19 @@ class ICommModule_driverScatter3_args {
 
   ICommModule_driverScatter3_args(const ICommModule_driverScatter3_args&);
   ICommModule_driverScatter3_args& operator=(const ICommModule_driverScatter3_args&);
-  ICommModule_driverScatter3_args() : id(), dataId(0) {
+  ICommModule_driverScatter3_args() : id(), partitions(0) {
   }
 
   virtual ~ICommModule_driverScatter3_args() noexcept;
   std::string id;
-  int64_t dataId;
+  int64_t partitions;
    ::ignis::rpc::ISource src;
 
   _ICommModule_driverScatter3_args__isset __isset;
 
   void __set_id(const std::string& val);
 
-  void __set_dataId(const int64_t val);
+  void __set_partitions(const int64_t val);
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
@@ -1423,7 +1663,7 @@ class ICommModule_driverScatter3_args {
   {
     if (!(id == rhs.id))
       return false;
-    if (!(dataId == rhs.dataId))
+    if (!(partitions == rhs.partitions))
       return false;
     if (!(src == rhs.src))
       return false;
@@ -1447,7 +1687,7 @@ class ICommModule_driverScatter3_pargs {
 
   virtual ~ICommModule_driverScatter3_pargs() noexcept;
   const std::string* id;
-  const int64_t* dataId;
+  const int64_t* partitions;
   const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1552,9 +1792,15 @@ class ICommModuleClient : virtual public ICommModuleIf {
   void destroyGroups();
   void send_destroyGroups();
   void recv_destroyGroups();
-  void getPartitions(std::vector<std::string> & _return);
-  void send_getPartitions();
+  int8_t getProtocol();
+  void send_getProtocol();
+  int8_t recv_getProtocol();
+  void getPartitions(std::vector<std::string> & _return, const int8_t protocol);
+  void send_getPartitions(const int8_t protocol);
   void recv_getPartitions(std::vector<std::string> & _return);
+  void getPartitions2(std::vector<std::string> & _return, const int8_t protocol, const int64_t minPartitions);
+  void send_getPartitions2(const int8_t protocol, const int64_t minPartitions);
+  void recv_getPartitions2(std::vector<std::string> & _return);
   void setPartitions(const std::vector<std::string> & partitions);
   void send_setPartitions(const std::vector<std::string> & partitions);
   void recv_setPartitions();
@@ -1567,11 +1813,11 @@ class ICommModuleClient : virtual public ICommModuleIf {
   void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
   void send_driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
   void recv_driverGather0();
-  void driverScatter(const std::string& id, const int64_t dataId);
-  void send_driverScatter(const std::string& id, const int64_t dataId);
+  void driverScatter(const std::string& id, const int64_t partitions);
+  void send_driverScatter(const std::string& id, const int64_t partitions);
   void recv_driverScatter();
-  void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
-  void send_driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  void send_driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void recv_driverScatter3();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -1594,7 +1840,9 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_hasGroup(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_destroyGroup(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_destroyGroups(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getProtocol(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getPartitions2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setPartitions2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverGather(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1610,7 +1858,9 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["hasGroup"] = &ICommModuleProcessor::process_hasGroup;
     processMap_["destroyGroup"] = &ICommModuleProcessor::process_destroyGroup;
     processMap_["destroyGroups"] = &ICommModuleProcessor::process_destroyGroups;
+    processMap_["getProtocol"] = &ICommModuleProcessor::process_getProtocol;
     processMap_["getPartitions"] = &ICommModuleProcessor::process_getPartitions;
+    processMap_["getPartitions2"] = &ICommModuleProcessor::process_getPartitions2;
     processMap_["setPartitions"] = &ICommModuleProcessor::process_setPartitions;
     processMap_["setPartitions2"] = &ICommModuleProcessor::process_setPartitions2;
     processMap_["driverGather"] = &ICommModuleProcessor::process_driverGather;
@@ -1700,13 +1950,32 @@ class ICommModuleMultiface : virtual public ICommModuleIf {
     ifaces_[i]->destroyGroups();
   }
 
-  void getPartitions(std::vector<std::string> & _return) {
+  int8_t getProtocol() {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->getPartitions(_return);
+      ifaces_[i]->getProtocol();
     }
-    ifaces_[i]->getPartitions(_return);
+    return ifaces_[i]->getProtocol();
+  }
+
+  void getPartitions(std::vector<std::string> & _return, const int8_t protocol) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getPartitions(_return, protocol);
+    }
+    ifaces_[i]->getPartitions(_return, protocol);
+    return;
+  }
+
+  void getPartitions2(std::vector<std::string> & _return, const int8_t protocol, const int64_t minPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getPartitions2(_return, protocol, minPartitions);
+    }
+    ifaces_[i]->getPartitions2(_return, protocol, minPartitions);
     return;
   }
 
@@ -1746,22 +2015,22 @@ class ICommModuleMultiface : virtual public ICommModuleIf {
     ifaces_[i]->driverGather0(id, src);
   }
 
-  void driverScatter(const std::string& id, const int64_t dataId) {
+  void driverScatter(const std::string& id, const int64_t partitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->driverScatter(id, dataId);
+      ifaces_[i]->driverScatter(id, partitions);
     }
-    ifaces_[i]->driverScatter(id, dataId);
+    ifaces_[i]->driverScatter(id, partitions);
   }
 
-  void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src) {
+  void driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->driverScatter3(id, dataId, src);
+      ifaces_[i]->driverScatter3(id, partitions, src);
     }
-    ifaces_[i]->driverScatter3(id, dataId, src);
+    ifaces_[i]->driverScatter3(id, partitions, src);
   }
 
 };
@@ -1814,9 +2083,15 @@ class ICommModuleConcurrentClient : virtual public ICommModuleIf {
   void destroyGroups();
   int32_t send_destroyGroups();
   void recv_destroyGroups(const int32_t seqid);
-  void getPartitions(std::vector<std::string> & _return);
-  int32_t send_getPartitions();
+  int8_t getProtocol();
+  int32_t send_getProtocol();
+  int8_t recv_getProtocol(const int32_t seqid);
+  void getPartitions(std::vector<std::string> & _return, const int8_t protocol);
+  int32_t send_getPartitions(const int8_t protocol);
   void recv_getPartitions(std::vector<std::string> & _return, const int32_t seqid);
+  void getPartitions2(std::vector<std::string> & _return, const int8_t protocol, const int64_t minPartitions);
+  int32_t send_getPartitions2(const int8_t protocol, const int64_t minPartitions);
+  void recv_getPartitions2(std::vector<std::string> & _return, const int32_t seqid);
   void setPartitions(const std::vector<std::string> & partitions);
   int32_t send_setPartitions(const std::vector<std::string> & partitions);
   void recv_setPartitions(const int32_t seqid);
@@ -1829,11 +2104,11 @@ class ICommModuleConcurrentClient : virtual public ICommModuleIf {
   void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
   int32_t send_driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src);
   void recv_driverGather0(const int32_t seqid);
-  void driverScatter(const std::string& id, const int64_t dataId);
-  int32_t send_driverScatter(const std::string& id, const int64_t dataId);
+  void driverScatter(const std::string& id, const int64_t partitions);
+  int32_t send_driverScatter(const std::string& id, const int64_t partitions);
   void recv_driverScatter(const int32_t seqid);
-  void driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
-  int32_t send_driverScatter3(const std::string& id, const int64_t dataId, const  ::ignis::rpc::ISource& src);
+  void driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void recv_driverScatter3(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

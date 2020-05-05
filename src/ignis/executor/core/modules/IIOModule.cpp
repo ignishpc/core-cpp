@@ -10,6 +10,12 @@ IIOModule::IIOModule(std::shared_ptr<IExecutorData> &executor_data) : IModule(ex
 
 IIOModule::~IIOModule() {}
 
+void IIOModule::loadClass(const  ::ignis::rpc::ISource& src){
+    IGNIS_RPC_TRY()
+        executor_data->loadLibrary(src)->loadClass(executor_data->getContext());
+    IGNIS_RPC_CATCH()
+}
+
 int64_t IIOModule::partitionCount() {
     IGNIS_RPC_TRY()
         return executor_data->getPartitions<char>(true)->partitions();

@@ -11,6 +11,10 @@ IExecutorData::IExecutorData() : properties(context.props()),
                                  _mpi(properties, context.mpiGroup()),
                                  partition_tools(properties, context) {}
 
+bool IExecutorData::hasPartitions() {
+    return (bool) partitions;
+}
+
 void IExecutorData::deletePartitions() { partitions.reset(); }
 
 int64_t IExecutorData::clearVariables() {
@@ -56,10 +60,7 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
 
     if (source.params.size() > 0) {
         IGNIS_LOG(info) << "Loading user variables";
-        for (auto &entry: source.params) {
-            context.variables[entry.first] = std::make_pair(false,
-                                                            std::make_shared<std::string>(std::move(entry.second)));
-        }
+        loadParameters(source);
     }
     IGNIS_LOG(info) << "Function loaded";
     std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak", std::ios::app);
@@ -67,7 +68,13 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
     return lib;
 }
 
-void IExecutorData::reloadLibraries(){
+void IExecutorData::loadParameters(const rpc::ISource &source) {
+    for (auto &entry: source.params) {
+        context.variables[entry.first] = std::make_pair(false, std::make_shared<std::string>(std::move(entry.second)));
+    }
+}
+
+void IExecutorData::reloadLibraries() {
     auto backup_path = infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak";
     if (boost::filesystem::exists(backup_path)) {
         IGNIS_LOG(info) << "Function backup found, loading";
@@ -77,7 +84,7 @@ void IExecutorData::reloadLibraries(){
         while (!backup.eof()) {
             std::getline(backup, source.obj.name, '\n');
             try {
-                if(loaded.find(source.obj.name) == loaded.end()){
+                if (loaded.find(source.obj.name) == loaded.end()) {
                     loadLibrary(source);
                     loaded.insert(source.obj.name);
                 }
@@ -102,17 +109,17 @@ ignis::executor::api::IContext &IExecutorData::getContext() {
     return context;
 }
 
-void IExecutorData::registerType(const std::shared_ptr<selector::ITypeSelector>&type){
+void IExecutorData::registerType(const std::shared_ptr<selector::ITypeSelector> &type) {
     types[type->info().getStandardName()] = std::make_pair(type, std::shared_ptr<selector::ISelectorGroup>());
 }
 
-bool IExecutorData::hasVariable(const std::string key){
+bool IExecutorData::hasVariable(const std::string key) {
     return variables.find(key) != variables.end();
 }
 
-void IExecutorData::removeVariable(const std::string key){
+void IExecutorData::removeVariable(const std::string key) {
     auto entry = variables.find(key);
-    if(entry != variables.end()){
+    if (entry != variables.end()) {
         variables.erase(entry);
     }
 }

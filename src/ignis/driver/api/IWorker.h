@@ -28,15 +28,15 @@ namespace ignis {
 
                 template<typename C>
                 std::shared_ptr<IDataFrame<typename C::value_type>> parallelize(const C &data, int64_t partitions) {
-                    auto data_id = Ignis::driverContext().parallelize<C>(data, partitions);
-                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id));
+                    auto data_id = Ignis::driverContext().parallelize<C>(data);
+                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, partitions));
                 }
 
                 template<typename C>
                 std::shared_ptr<IDataFrame<typename C::value_type>>
                 parallelize(const C &data, int64_t partitions, const ISource &src) {
-                    auto data_id = Ignis::driverContext().parallelize<C>(data, partitions);
-                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, src));
+                    auto data_id = Ignis::driverContext().parallelize<C>(data);
+                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, partitions,src));
                 }
 
                 template<typename Tp>
@@ -93,9 +93,9 @@ namespace ignis {
                 rpc::driver::IWorkerId id;
                 std::shared_ptr<ICluster> cluster;
 
-                rpc::driver::IDataFrameId parallelizeAbs(int64_t data_id);
+                rpc::driver::IDataFrameId parallelizeAbs(int64_t data_id, int64_t partitions);
 
-                rpc::driver::IDataFrameId parallelizeAbs(int64_t data_id, const ISource &src);
+                rpc::driver::IDataFrameId parallelizeAbs(int64_t data_id, int64_t partitions, const ISource &src);
 
                 rpc::driver::IDataFrameId importDataFrameAbs(rpc::driver::IDataFrameId data);
 

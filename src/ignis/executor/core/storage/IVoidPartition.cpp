@@ -70,6 +70,13 @@ void IVoidPartition::clear() {
 void IVoidPartition::fit() {
 }
 
+std::shared_ptr<core::transport::ITransport> IVoidPartition::readTransport(){
+    uint8_t *ptr;
+    size_t sz;
+    buffer->getBuffer(&ptr, &sz);
+    return std::make_shared<transport::IMemoryBuffer>(ptr, sz, transport::IMemoryBuffer::OBSERVE);
+}
+
 const std::string &IVoidPartition::type() {
     return TYPE;
 }

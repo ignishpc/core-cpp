@@ -1209,6 +1209,14 @@ uint32_t IWorkerService_parallelize_args::read(::apache::thrift::protocol::TProt
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->partitions);
+          this->__isset.partitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -1234,6 +1242,10 @@ uint32_t IWorkerService_parallelize_args::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeI64(this->dataId);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->partitions);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -1255,6 +1267,10 @@ uint32_t IWorkerService_parallelize_pargs::write(::apache::thrift::protocol::TPr
 
   xfer += oprot->writeFieldBegin("dataId", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64((*(this->dataId)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64((*(this->partitions)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1391,11 +1407,11 @@ uint32_t IWorkerService_parallelize_presult::read(::apache::thrift::protocol::TP
 }
 
 
-IWorkerService_parallelize3_args::~IWorkerService_parallelize3_args() noexcept {
+IWorkerService_parallelize4_args::~IWorkerService_parallelize4_args() noexcept {
 }
 
 
-uint32_t IWorkerService_parallelize3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_parallelize4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1433,6 +1449,14 @@ uint32_t IWorkerService_parallelize3_args::read(::apache::thrift::protocol::TPro
         }
         break;
       case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->partitions);
+          this->__isset.partitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
         if (ftype == ::apache::thrift::protocol::T_STRUCT) {
           xfer += this->src.read(iprot);
           this->__isset.src = true;
@@ -1452,10 +1476,10 @@ uint32_t IWorkerService_parallelize3_args::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-uint32_t IWorkerService_parallelize3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_parallelize4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_parallelize3_args");
+  xfer += oprot->writeStructBegin("IWorkerService_parallelize4_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -1465,7 +1489,11 @@ uint32_t IWorkerService_parallelize3_args::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeI64(this->dataId);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->partitions);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -1475,14 +1503,14 @@ uint32_t IWorkerService_parallelize3_args::write(::apache::thrift::protocol::TPr
 }
 
 
-IWorkerService_parallelize3_pargs::~IWorkerService_parallelize3_pargs() noexcept {
+IWorkerService_parallelize4_pargs::~IWorkerService_parallelize4_pargs() noexcept {
 }
 
 
-uint32_t IWorkerService_parallelize3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_parallelize4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_parallelize3_pargs");
+  xfer += oprot->writeStructBegin("IWorkerService_parallelize4_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -1492,7 +1520,11 @@ uint32_t IWorkerService_parallelize3_pargs::write(::apache::thrift::protocol::TP
   xfer += oprot->writeI64((*(this->dataId)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64((*(this->partitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
   xfer += (*(this->src)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
@@ -1502,11 +1534,11 @@ uint32_t IWorkerService_parallelize3_pargs::write(::apache::thrift::protocol::TP
 }
 
 
-IWorkerService_parallelize3_result::~IWorkerService_parallelize3_result() noexcept {
+IWorkerService_parallelize4_result::~IWorkerService_parallelize4_result() noexcept {
 }
 
 
-uint32_t IWorkerService_parallelize3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_parallelize4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1555,11 +1587,11 @@ uint32_t IWorkerService_parallelize3_result::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-uint32_t IWorkerService_parallelize3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_parallelize4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IWorkerService_parallelize3_result");
+  xfer += oprot->writeStructBegin("IWorkerService_parallelize4_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -1576,11 +1608,11 @@ uint32_t IWorkerService_parallelize3_result::write(::apache::thrift::protocol::T
 }
 
 
-IWorkerService_parallelize3_presult::~IWorkerService_parallelize3_presult() noexcept {
+IWorkerService_parallelize4_presult::~IWorkerService_parallelize4_presult() noexcept {
 }
 
 
-uint32_t IWorkerService_parallelize3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_parallelize4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4519,13 +4551,13 @@ void IWorkerServiceClient::recv_setName()
   return;
 }
 
-void IWorkerServiceClient::parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId)
+void IWorkerServiceClient::parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions)
 {
-  send_parallelize(id, dataId);
+  send_parallelize(id, dataId, partitions);
   recv_parallelize(_return);
 }
 
-void IWorkerServiceClient::send_parallelize(const IWorkerId& id, const int64_t dataId)
+void IWorkerServiceClient::send_parallelize(const IWorkerId& id, const int64_t dataId, const int64_t partitions)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("parallelize", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -4533,6 +4565,7 @@ void IWorkerServiceClient::send_parallelize(const IWorkerId& id, const int64_t d
   IWorkerService_parallelize_pargs args;
   args.id = &id;
   args.dataId = &dataId;
+  args.partitions = &partitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -4581,20 +4614,21 @@ void IWorkerServiceClient::recv_parallelize( ::ignis::rpc::driver::IDataFrameId&
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "parallelize failed: unknown result");
 }
 
-void IWorkerServiceClient::parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+void IWorkerServiceClient::parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src)
 {
-  send_parallelize3(id, dataId, src);
-  recv_parallelize3(_return);
+  send_parallelize4(id, dataId, partitions, src);
+  recv_parallelize4(_return);
 }
 
-void IWorkerServiceClient::send_parallelize3(const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+void IWorkerServiceClient::send_parallelize4(const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("parallelize3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("parallelize4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_parallelize3_pargs args;
+  IWorkerService_parallelize4_pargs args;
   args.id = &id;
   args.dataId = &dataId;
+  args.partitions = &partitions;
   args.src = &src;
   args.write(oprot_);
 
@@ -4603,7 +4637,7 @@ void IWorkerServiceClient::send_parallelize3(const IWorkerId& id, const int64_t 
   oprot_->getTransport()->flush();
 }
 
-void IWorkerServiceClient::recv_parallelize3( ::ignis::rpc::driver::IDataFrameId& _return)
+void IWorkerServiceClient::recv_parallelize4( ::ignis::rpc::driver::IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -4623,12 +4657,12 @@ void IWorkerServiceClient::recv_parallelize3( ::ignis::rpc::driver::IDataFrameId
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("parallelize3") != 0) {
+  if (fname.compare("parallelize4") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IWorkerService_parallelize3_presult result;
+  IWorkerService_parallelize4_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -4641,7 +4675,7 @@ void IWorkerServiceClient::recv_parallelize3( ::ignis::rpc::driver::IDataFrameId
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "parallelize3 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "parallelize4 failed: unknown result");
 }
 
 void IWorkerServiceClient::importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data)
@@ -5660,7 +5694,7 @@ void IWorkerServiceProcessor::process_parallelize(int32_t seqid, ::apache::thrif
 
   IWorkerService_parallelize_result result;
   try {
-    iface_->parallelize(result.success, args.id, args.dataId);
+    iface_->parallelize(result.success, args.id, args.dataId, args.partitions);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
@@ -5694,41 +5728,41 @@ void IWorkerServiceProcessor::process_parallelize(int32_t seqid, ::apache::thrif
   }
 }
 
-void IWorkerServiceProcessor::process_parallelize3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IWorkerServiceProcessor::process_parallelize4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IWorkerService.parallelize3", callContext);
+    ctx = this->eventHandler_->getContext("IWorkerService.parallelize4", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.parallelize3");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.parallelize4");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.parallelize3");
+    this->eventHandler_->preRead(ctx, "IWorkerService.parallelize4");
   }
 
-  IWorkerService_parallelize3_args args;
+  IWorkerService_parallelize4_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.parallelize3", bytes);
+    this->eventHandler_->postRead(ctx, "IWorkerService.parallelize4", bytes);
   }
 
-  IWorkerService_parallelize3_result result;
+  IWorkerService_parallelize4_result result;
   try {
-    iface_->parallelize3(result.success, args.id, args.dataId, args.src);
+    iface_->parallelize4(result.success, args.id, args.dataId, args.partitions, args.src);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.parallelize3");
+      this->eventHandler_->handlerError(ctx, "IWorkerService.parallelize4");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("parallelize3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("parallelize4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -5737,17 +5771,17 @@ void IWorkerServiceProcessor::process_parallelize3(int32_t seqid, ::apache::thri
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.parallelize3");
+    this->eventHandler_->preWrite(ctx, "IWorkerService.parallelize4");
   }
 
-  oprot->writeMessageBegin("parallelize3", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("parallelize4", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.parallelize3", bytes);
+    this->eventHandler_->postWrite(ctx, "IWorkerService.parallelize4", bytes);
   }
 }
 
@@ -6828,13 +6862,13 @@ void IWorkerServiceConcurrentClient::recv_setName(const int32_t seqid)
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId)
+void IWorkerServiceConcurrentClient::parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions)
 {
-  int32_t seqid = send_parallelize(id, dataId);
+  int32_t seqid = send_parallelize(id, dataId, partitions);
   recv_parallelize(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_parallelize(const IWorkerId& id, const int64_t dataId)
+int32_t IWorkerServiceConcurrentClient::send_parallelize(const IWorkerId& id, const int64_t dataId, const int64_t partitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -6843,6 +6877,7 @@ int32_t IWorkerServiceConcurrentClient::send_parallelize(const IWorkerId& id, co
   IWorkerService_parallelize_pargs args;
   args.id = &id;
   args.dataId = &dataId;
+  args.partitions = &partitions;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -6917,21 +6952,22 @@ void IWorkerServiceConcurrentClient::recv_parallelize( ::ignis::rpc::driver::IDa
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+void IWorkerServiceConcurrentClient::parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_parallelize3(id, dataId, src);
-  recv_parallelize3(_return, seqid);
+  int32_t seqid = send_parallelize4(id, dataId, partitions, src);
+  recv_parallelize4(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_parallelize3(const IWorkerId& id, const int64_t dataId, const  ::ignis::rpc::ISource& src)
+int32_t IWorkerServiceConcurrentClient::send_parallelize4(const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("parallelize3", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("parallelize4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_parallelize3_pargs args;
+  IWorkerService_parallelize4_pargs args;
   args.id = &id;
   args.dataId = &dataId;
+  args.partitions = &partitions;
   args.src = &src;
   args.write(oprot_);
 
@@ -6943,7 +6979,7 @@ int32_t IWorkerServiceConcurrentClient::send_parallelize3(const IWorkerId& id, c
   return cseqid;
 }
 
-void IWorkerServiceConcurrentClient::recv_parallelize3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
+void IWorkerServiceConcurrentClient::recv_parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -6972,7 +7008,7 @@ void IWorkerServiceConcurrentClient::recv_parallelize3( ::ignis::rpc::driver::ID
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("parallelize3") != 0) {
+      if (fname.compare("parallelize4") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -6981,7 +7017,7 @@ void IWorkerServiceConcurrentClient::recv_parallelize3( ::ignis::rpc::driver::ID
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IWorkerService_parallelize3_presult result;
+      IWorkerService_parallelize4_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -6997,7 +7033,7 @@ void IWorkerServiceConcurrentClient::recv_parallelize3( ::ignis::rpc::driver::ID
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "parallelize3 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "parallelize4 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

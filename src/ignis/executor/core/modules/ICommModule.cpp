@@ -43,9 +43,21 @@ void ICommModule::destroyGroups() {
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::getPartitions(std::vector<std::string> &_return) {
+int8_t ICommModule::getProtocol(){
     IGNIS_RPC_TRY()
-        _return = typeFromPartition()->getPartitions(impl);
+        impl.getProtocol();
+    IGNIS_RPC_CATCH()
+}
+
+void ICommModule::getPartitions(std::vector<std::string> &_return, const int8_t protocol) {
+    IGNIS_RPC_TRY()
+        _return = typeFromPartition()->getPartitions(impl, protocol, 0);
+    IGNIS_RPC_CATCH()
+}
+
+void ICommModule::getPartitions2(std::vector<std::string> &_return, const int8_t protocol, int64_t minPartitions) {
+    IGNIS_RPC_TRY()
+        _return = typeFromPartition()->getPartitions(impl, protocol, minPartitions);
     IGNIS_RPC_CATCH()
 }
 
@@ -63,24 +75,40 @@ void ICommModule::setPartitions2(const std::vector<std::string> &partitions, con
 
 void ICommModule::driverGather(const std::string &id, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        typeFromSource(src)->driverGather(impl, id);
+        if(executor_data->hasPartitions()){
+            typeFromPartition()->driverGather(impl, id);
+        }else{
+            typeFromSource(src)->driverGather(impl, id);
+        }
     IGNIS_RPC_CATCH()
 }
 
 void ICommModule::driverGather0(const std::string &id, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        typeFromSource(src)->driverGather0(impl, id);
+        if(executor_data->hasPartitions()){
+            typeFromPartition()->driverGather0(impl, id);
+        }else{
+            typeFromSource(src)->driverGather0(impl, id);
+        }
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverScatter(const std::string &id, const int64_t dataId) {
+void ICommModule::driverScatter(const std::string &id, int64_t partitions) {
     IGNIS_RPC_TRY()
-        impl.driverScatterVoid(id, dataId);
+        if(executor_data->hasPartitions()){
+            typeFromPartition()->driverScatter(impl, id, partitions);
+        }else{
+            impl.driverScatterVoid(id, partitions);
+        }
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverScatter3(const std::string &id, const int64_t dataId, const ignis::rpc::ISource &src) {
+void ICommModule::driverScatter3(const std::string &id, int64_t partitions, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        typeFromSource(src)->driverScatter(impl, id, dataId);
+        if(executor_data->hasPartitions()){
+            typeFromPartition()->driverScatter(impl, id, partitions);
+        }else {
+            typeFromSource(src)->driverScatter(impl, id, partitions);
+        }
     IGNIS_RPC_CATCH()
 }

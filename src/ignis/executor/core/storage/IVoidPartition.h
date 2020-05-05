@@ -45,6 +45,8 @@ namespace ignis {
 
                     virtual void fit();
 
+                    std::shared_ptr<transport::ITransport> readTransport();
+
                     virtual const std::string &type();
 
                     virtual ~IVoidPartition();

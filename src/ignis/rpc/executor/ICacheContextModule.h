@@ -23,6 +23,7 @@ class ICacheContextModuleIf {
  public:
   virtual ~ICacheContextModuleIf() {}
   virtual int64_t saveContext() = 0;
+  virtual void clearContext() = 0;
   virtual void loadContext(const int64_t id) = 0;
   virtual void cache(const int64_t id, const int8_t level) = 0;
   virtual void loadCache(const int64_t id) = 0;
@@ -58,6 +59,9 @@ class ICacheContextModuleNull : virtual public ICacheContextModuleIf {
   int64_t saveContext() {
     int64_t _return = 0;
     return _return;
+  }
+  void clearContext() {
+    return;
   }
   void loadContext(const int64_t /* id */) {
     return;
@@ -165,6 +169,98 @@ class ICacheContextModule_saveContext_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _ICacheContextModule_saveContext_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class ICacheContextModule_clearContext_args {
+ public:
+
+  ICacheContextModule_clearContext_args(const ICacheContextModule_clearContext_args&);
+  ICacheContextModule_clearContext_args& operator=(const ICacheContextModule_clearContext_args&);
+  ICacheContextModule_clearContext_args() {
+  }
+
+  virtual ~ICacheContextModule_clearContext_args() noexcept;
+
+  bool operator == (const ICacheContextModule_clearContext_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const ICacheContextModule_clearContext_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICacheContextModule_clearContext_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICacheContextModule_clearContext_pargs {
+ public:
+
+
+  virtual ~ICacheContextModule_clearContext_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICacheContextModule_clearContext_result__isset {
+  _ICacheContextModule_clearContext_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICacheContextModule_clearContext_result__isset;
+
+class ICacheContextModule_clearContext_result {
+ public:
+
+  ICacheContextModule_clearContext_result(const ICacheContextModule_clearContext_result&);
+  ICacheContextModule_clearContext_result& operator=(const ICacheContextModule_clearContext_result&);
+  ICacheContextModule_clearContext_result() {
+  }
+
+  virtual ~ICacheContextModule_clearContext_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICacheContextModule_clearContext_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICacheContextModule_clearContext_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICacheContextModule_clearContext_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICacheContextModule_clearContext_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICacheContextModule_clearContext_presult__isset {
+  _ICacheContextModule_clearContext_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICacheContextModule_clearContext_presult__isset;
+
+class ICacheContextModule_clearContext_presult {
+ public:
+
+
+  virtual ~ICacheContextModule_clearContext_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICacheContextModule_clearContext_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -517,6 +613,9 @@ class ICacheContextModuleClient : virtual public ICacheContextModuleIf {
   int64_t saveContext();
   void send_saveContext();
   int64_t recv_saveContext();
+  void clearContext();
+  void send_clearContext();
+  void recv_clearContext();
   void loadContext(const int64_t id);
   void send_loadContext(const int64_t id);
   void recv_loadContext();
@@ -542,6 +641,7 @@ class ICacheContextModuleProcessor : public ::apache::thrift::TDispatchProcessor
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_saveContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_clearContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_cache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadCache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -549,6 +649,7 @@ class ICacheContextModuleProcessor : public ::apache::thrift::TDispatchProcessor
   ICacheContextModuleProcessor(::std::shared_ptr<ICacheContextModuleIf> iface) :
     iface_(iface) {
     processMap_["saveContext"] = &ICacheContextModuleProcessor::process_saveContext;
+    processMap_["clearContext"] = &ICacheContextModuleProcessor::process_clearContext;
     processMap_["loadContext"] = &ICacheContextModuleProcessor::process_loadContext;
     processMap_["cache"] = &ICacheContextModuleProcessor::process_cache;
     processMap_["loadCache"] = &ICacheContextModuleProcessor::process_loadCache;
@@ -587,6 +688,15 @@ class ICacheContextModuleMultiface : virtual public ICacheContextModuleIf {
       ifaces_[i]->saveContext();
     }
     return ifaces_[i]->saveContext();
+  }
+
+  void clearContext() {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->clearContext();
+    }
+    ifaces_[i]->clearContext();
   }
 
   void loadContext(const int64_t id) {
@@ -651,6 +761,9 @@ class ICacheContextModuleConcurrentClient : virtual public ICacheContextModuleIf
   int64_t saveContext();
   int32_t send_saveContext();
   int64_t recv_saveContext(const int32_t seqid);
+  void clearContext();
+  int32_t send_clearContext();
+  void recv_clearContext(const int32_t seqid);
   void loadContext(const int64_t id);
   int32_t send_loadContext(const int64_t id);
   void recv_loadContext(const int32_t seqid);

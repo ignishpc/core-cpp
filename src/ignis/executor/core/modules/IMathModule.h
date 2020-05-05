@@ -4,6 +4,8 @@
 
 #include "IModule.h"
 #include "ignis/rpc/executor/IMathModule.h"
+#include "impl/IMathImpl.h"
+#include "impl/ISortImpl.h"
 
 namespace ignis {
     namespace executor {
@@ -13,19 +15,32 @@ namespace ignis {
                 public:
                     IMathModule(std::shared_ptr<IExecutorData> &executorData);
 
-                    void sample(const bool withReplacement, const double fraction, const int32_t seed);
+                    void sample(const bool withReplacement, const double fraction, const int32_t seed) override;
 
-                    void takeSample(const bool withReplacement, const double fraction, const int32_t seed);
+                    void takeSample(const bool withReplacement, const int64_t num, const int32_t seed) override;
 
-                    int64_t count();
+                    int64_t count() override;
 
-                    void max(const rpc::ISource &cmp);
+                    void max() override;
 
-                    void min(const rpc::ISource &cmp);
+                    void min() override;
+
+                    void max1(const rpc::ISource &cmp) override;
+
+                    void min1(const rpc::ISource &cmp) override;
+
+                    void
+                    sampleByKey(const bool withReplacement, const rpc::ISource &fractions, const int32_t seed) override;
+
+                    void countByKey() override;
+
+                    void countByValue() override;
 
                     virtual ~IMathModule();
 
                 private:
+                    impl::IMathImpl math_impl;
+                    impl::ISortImpl sort_impl;
                 };
             }
         }

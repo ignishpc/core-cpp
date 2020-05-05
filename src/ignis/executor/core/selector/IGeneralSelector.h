@@ -4,9 +4,9 @@
 
 #include "ignis/executor/core/exception/ICompatibilityException.h"
 #include "ignis/executor/core/RTTInfo.h"
-#include "ignis/executor/core/modules/impl/IGroupByImpl.h"
 #include "ignis/executor/core/modules/impl/IPipeImpl.h"
 #include "ignis/executor/core/modules/impl/ISortImpl.h"
+#include "ignis/executor/core/modules/impl/IIOImpl.h"
 #include "ignis/executor/api/IReadIterator.h"
 
 namespace ignis {
@@ -16,21 +16,21 @@ namespace ignis {
 
                 class IGeneralSelector {
                 public:
+                    virtual void loadClass(api::IContext& context) = 0;
+
                     virtual void map(modules::impl::IPipeImpl &impl) = 0;
 
                     virtual void filter(modules::impl::IPipeImpl &impl) = 0;
 
                     virtual void flatmap(modules::impl::IPipeImpl &impl) = 0;
 
+                    virtual void keyBy(modules::impl::IPipeImpl &impl) = 0;
+
                     virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning) = 0;
 
                     virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) = 0;
 
-                    virtual void applyPartition(modules::impl::IPipeImpl &impl) = 0;
-
-                    virtual void groupBy(modules::impl::IGroupByImpl &impl) = 0;
-
-                    virtual void groupBy(modules::impl::IGroupByImpl &impl, int64_t numPartitions) = 0;
+                    virtual void mapExecutor(modules::impl::IPipeImpl &impl) = 0;
 
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
@@ -41,11 +41,15 @@ namespace ignis {
                 template<typename Tp>
                 class IGeneralSelectorImpl : public IGeneralSelector {
                 public:
+                    virtual void loadClass(api::IContext& context) { loadClass_check<Tp>(context, nullptr); };
+
                     virtual void map(modules::impl::IPipeImpl &impl) { map_check<Tp>(impl, nullptr); }
 
                     virtual void filter(modules::impl::IPipeImpl &impl) { filter_check<Tp>(impl, nullptr); }
 
                     virtual void flatmap(modules::impl::IPipeImpl &impl) { flatmap_check<Tp>(impl, nullptr, nullptr); }
+
+                    virtual void keyBy(modules::impl::IPipeImpl &impl) { keyBy_check<Tp>(impl, nullptr); }
 
                     virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
                         mapPartitions_check<Tp>(impl, nullptr, nullptr, nullptr, preservesPartitioning);
@@ -55,16 +59,8 @@ namespace ignis {
                         mapPartitionsWithIndex_check<Tp>(impl, nullptr, nullptr, nullptr, preservesPartitioning);
                     }
 
-                    virtual void applyPartition(modules::impl::IPipeImpl &impl) {
-                        applyPartition_check<Tp>(impl, nullptr);
-                    }
-
-                    virtual void groupBy(modules::impl::IGroupByImpl &impl) {
-                        groupBy_check<Tp>(impl, nullptr);
-                    }
-
-                    virtual void groupBy(modules::impl::IGroupByImpl &impl, int64_t numPartitions) {
-                        groupBy_check<Tp>(impl, nullptr, numPartitions);
+                    virtual void mapExecutor(modules::impl::IPipeImpl &impl) {
+                        mapExecutor_check<Tp>(impl, nullptr);
                     }
 
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending) {
@@ -76,6 +72,16 @@ namespace ignis {
                     }
 
                 private:
+
+                    template<typename Function>
+                    void loadClass_check(api::IContext& context, decltype(&Function::before)*val) {
+                        Function().before(context);
+                    }
+
+                    template<typename Function>
+                    void loadClass_check(...) {
+                        throw exception::ICompatibilyException("loadClass", RTTInfo::from<Function>());
+                    }
 
                     template<typename Function>
                     void map_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction_type *val) {
@@ -111,6 +117,16 @@ namespace ignis {
                     template<typename Function>
                     void flatmap_check(...) {
                         throw exception::ICompatibilyException("flatmap", RTTInfo::from<Function>());
+                    }
+
+                    template<typename Function>
+                    void keyBy_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction_type *val) {
+                        impl.keyBy<Function>();
+                    }
+
+                    template<typename Function>
+                    void keyBy_check(...) {
+                        throw exception::ICompatibilyException("keyBy", RTTInfo::from<Function>());
                     }
 
                     template<typename Function>
@@ -151,40 +167,34 @@ namespace ignis {
 
                     template<typename Function>
                     void
-                    applyPartition_check(modules::impl::IPipeImpl &impl, typename Function::_IVoidFunction_type *val) {
-                        impl.applyPartition<Function>();
+                    mapExecutor_check(modules::impl::IPipeImpl &impl, typename Function::_IVoidFunction_type *val) {
+                        mapExecutor_check(impl, val, (typename Function::_IVoidFunction_type::_T_type *) nullptr);
                     }
 
-                    template<typename Function>
-                    void applyPartition_check(...) {
-                        throw exception::ICompatibilyException("applyPartition", RTTInfo::from<Function>());
+                    template<typename Function, typename Tpv>
+                    void mapExecutor_check(modules::impl::IPipeImpl &impl, typename Function::_IVoidFunction_type *val,
+                                           api::IVector<api::IVector < Tpv> *
+
+                    > *val2) {
+                        impl.mapExecutor<Function>();
                     }
 
-                    template<typename Function>
-                    void groupBy_check(modules::impl::IGroupByImpl &impl, typename Function::_IFunction_type *val) {
-                        impl.groupBy<Function>();
-                    }
 
                     template<typename Function>
-                    void groupBy_check(modules::impl::IGroupByImpl &impl, typename Function::_IFunction_type *val,
-                                       int64_t numPartitions) {
-                        impl.groupBy<Function>(numPartitions);
-                    }
-
-                    template<typename Function>
-                    void groupBy_check(...) {
-                        throw exception::ICompatibilyException("groupBy", RTTInfo::from<Function>());
+                    void mapExecutor_check(...) {
+                        throw exception::ICompatibilyException("mapExecutor", RTTInfo::from<Function>());
                     }
 
                     template<typename Function>
                     void sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val,
                                       bool ascending) {
-                        sortBy_check<Function>(impl, val, (typename Function::_R_type *) nullptr, ascending);
+                        sortBy_check<Function>(impl, (typename Function::_T2_type *) nullptr,
+                                               (typename Function::_R_type *) nullptr, ascending);
                     }
 
                     template<typename Function>
                     void
-                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, bool *val2,
+                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_T1_type **val, bool *val2,
                                  bool ascending) {
                         impl.sortBy<Function>(ascending);
                     }
@@ -192,13 +202,14 @@ namespace ignis {
                     template<typename Function>
                     void sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val,
                                       bool ascending, int64_t numPartitions) {
-                        sortBy_check<Function>(impl, val, (typename Function::_R_type *) nullptr, ascending,
+                        sortBy_check<Function>(impl, (typename Function::_T2_type *) nullptr,
+                                               (typename Function::_R_type *) nullptr, ascending,
                                                numPartitions);
                     }
 
                     template<typename Function>
                     void
-                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, bool *val2,
+                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_T1_type *val, bool *val2,
                                  bool ascending, int64_t numPartitions) {
                         impl.sortBy<Function>(ascending, numPartitions);
                     }
