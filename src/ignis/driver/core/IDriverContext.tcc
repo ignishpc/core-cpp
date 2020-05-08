@@ -25,7 +25,7 @@ int64_t IDriverContextClass::parallelize(const C &collection) {
         auto group = executor_data->getPartitionTools().newPartitionGroup<typename C::value_type>();
         auto partition = std::make_shared<executor::core::storage::IMemoryPartition<typename C::value_type>>(elems);
         auto writer = partition->writeIterator();
-        auto& men_writer = executor_data->getPartitionTools().toMemory(*writer);
+        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
         auto it = collection.begin();
 
         for (int64_t i = 0; i < elems; i++) {
@@ -46,7 +46,12 @@ int64_t IDriverContextClass::parallelize(const C &collection) {
 }
 
 template<typename Tp>
-int64_t IDriverContextClass::parallelize(const std::vector<Tp> &&collection){
+int64_t IDriverContextClass::parallelize(const std::vector<Tp> &&collection) {
+    return parallelize < Tp > (static_cast<const executor::api::IVector<Tp> &&>(collection));
+}
+
+template<typename Tp>
+int64_t IDriverContextClass::parallelize(const executor::api::IVector<Tp> &&collection) {
     try {
         auto group = executor_data->getPartitionTools().newPartitionGroup<Tp>();
         auto partition = std::make_shared<executor::core::storage::IMemoryPartition<Tp>>(collection);
@@ -63,7 +68,7 @@ int64_t IDriverContextClass::parallelize(const std::vector<Tp> &&collection){
 }
 
 template<typename Tp>
-std::vector<Tp> IDriverContextClass::collect(int64_t id) {
+ignis::executor::api::IVector<Tp> IDriverContextClass::collect(int64_t id) {
     try {
         std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>> group;
         {
@@ -73,18 +78,18 @@ std::vector<Tp> IDriverContextClass::collect(int64_t id) {
             executor_data->deletePartitions();
         }
         int64_t elems = 0;
-        for(auto& tp: *group){
-            elems+= tp->size();
+        for (auto &tp: *group) {
+            elems += tp->size();
         }
-        std::vector<Tp> result;
+        executor::api::IVector<Tp> result;
         result.reserve(elems);
-        for(auto& tp: *group){
-            elems+= tp->size();
+        for (auto &tp: *group) {
+            elems += tp->size();
         }
 
-        for(auto& tp: *group){
+        for (auto &tp: *group) {
             auto reader = tp->readIterator();
-            while(reader->hasNext()){
+            while (reader->hasNext()) {
                 result.push_back(std::move(reader->next()));
             }
         }

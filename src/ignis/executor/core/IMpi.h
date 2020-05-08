@@ -69,6 +69,9 @@ namespace ignis {
 
                 void move(void *begin, size_t n, size_t displ);
 
+                template<typename Tp>
+                void sendRecv(storage::IPartition<Tp> &part, int source, int dest, int tag);
+
                 IPropertyParser &properties;
                 const MPI::Intracomm &comm;
             };

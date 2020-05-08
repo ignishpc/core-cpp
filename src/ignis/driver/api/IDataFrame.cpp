@@ -411,3 +411,214 @@ int64_t IAbstractDataFrame::minAbs(const ISource &cmp, const ignis::rpc::ISource
         throw IDriverException(ex.message, ex._cause);
     }
 }
+
+IDataFrameId IAbstractDataFrame::flatMapValuesAbs(const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().flatMapValues(_return, id, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::mapValuesAbs(const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().mapValues(_return, id, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::groupByKeyAbs() {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().groupByKey(_return, id);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::groupByKeyAbs(int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().groupByKey2(_return, id, numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::reduceByKeyAbs(const ISource &src, bool localReduce) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().reduceByKey(_return, id, src.rpc(), localReduce);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::reduceByKeyAbs(const ISource &src, int64_t numPartitions, bool localReduce) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().reduceByKey4(_return, id, src.rpc(), numPartitions,
+                                                                           localReduce);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::aggregateByKeyAbs(const ISource &zero, const ISource &seqOp) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().aggregateByKey(_return, id, zero.rpc(), seqOp.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::aggregateByKeyAbs(const ISource &zero, const ISource &seqOp, int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().aggregateByKey4a(_return, id, zero.rpc(), seqOp.rpc(),
+                                                                               numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::aggregateByKeyAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().aggregateByKey4b(_return, id, zero.rpc(), seqOp.rpc(),
+                                                                               combOp.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::aggregateByKeyAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp,
+                                                   int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().aggregateByKey5(_return, id, zero.rpc(), seqOp.rpc(),
+                                                                              combOp.rpc(), numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::foldByKeyAbs(const ISource &zero, const ISource &src, bool localFold) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().foldByKey(_return, id, zero.rpc(), src.rpc(), localFold);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId
+IAbstractDataFrame::foldByKeyAbs(const ISource &zero, const ISource &src, int64_t numPartitions, bool localFold) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().foldByKey5(_return, id, zero.rpc(), src.rpc(),
+                                                                         numPartitions, localFold);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::sortByKeyAbs(bool ascending) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().sortByKey(_return, id, ascending);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::sortByKeyAbs(bool ascending, int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().sortByKey3a(_return, id, ascending, numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::sortByKeyAbs(const ISource &src, bool ascending) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().sortByKey3b(_return, id, src.rpc(), ascending);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::sortByKeyAbs(const ISource &src, bool ascending, int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().sortByKey4(_return, id, src.rpc(), ascending,
+                                                                         numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+int64_t IAbstractDataFrame::keysAbs(const rpc::ISource &tp) {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().keys(id, tp);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+int64_t IAbstractDataFrame::valueAbs(const rpc::ISource &tp) {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().keys(id, tp);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+IDataFrameId IAbstractDataFrame::sampleByKeyAbs(bool withReplacement, const ISource &fractions, int seed) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().sampleByKey(_return, id, withReplacement, fractions.rpc(),
+                                                                          seed);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+int64_t IAbstractDataFrame::countByKey() {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().countByKey(id);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
+int64_t IAbstractDataFrame::countByValue() {
+    try {
+        return Ignis::clientPool->getClient()->getDataFrameService().countByKey(id);
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}

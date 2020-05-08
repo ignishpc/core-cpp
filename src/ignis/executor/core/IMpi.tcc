@@ -12,11 +12,11 @@
 
 
 template<typename Tp>
-void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
+void IMpiClass::gather(storage::IPartition <Tp> &part, int root) {
     if (executors() == 1) { return; }
     if (part.type() == storage::IMemoryPartition<Tp>::TYPE) {
         if (isContiguousType<Tp>()) {
-            auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(part);
+            auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
             int sz = men.size() * sizeof(Tp);
             std::vector<int> szv;
             std::vector<int> displs;
@@ -32,7 +32,7 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
                 comm.Gatherv(&men[0], sz, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, root);
             }
         } else {
-            auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(part);
+            auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
             auto buffer = std::make_shared<transport::IMemoryBuffer>();
             int sz = 0;
             std::vector<int> szv;
@@ -52,7 +52,7 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
                          buffer->getWritePtr(sz), &szv[0], &displs[0], MPI::BYTE, root);
             if (isRoot(root)) {
                 auto ptr = buffer->getWritePtr(sz);
-                storage::IMemoryPartition<Tp> rcv;
+                storage::IMemoryPartition <Tp> rcv;
                 for (int i = 0; i < executors(); i++) {
                     if (i != root) {
                         auto view = std::make_shared<transport::IMemoryBuffer>(ptr + displs[i], szv[i]);
@@ -66,7 +66,7 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
             }
         }
     } else if (part.type() == storage::IRawMemoryPartition<Tp>::TYPE) {
-        auto &raw = reinterpret_cast<storage::IRawMemoryPartition<Tp> &>(part);
+        auto &raw = reinterpret_cast<storage::IRawMemoryPartition <Tp> &>(part);
         raw.sync();
         std::pair<int, int> sz(raw.size(), raw.end() - raw.begin(false));
         std::vector<std::pair<int, int>> elems_szv;
@@ -86,7 +86,7 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
             comm.Gatherv(raw.begin(false), sz.second, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, root);
         }
     } else {
-        auto &disk = reinterpret_cast<storage::IDiskPartition<Tp> &>(part);
+        auto &disk = reinterpret_cast<storage::IDiskPartition <Tp> &>(part);
         disk.sync();
         std::string path = disk.getPath();
         std::string full_path;
@@ -104,11 +104,11 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
         if (isRoot(root)) {
             auto root_path = disk.getPath();
             disk.rename(path + ".tmp");
-            storage::IDiskPartition<Tp> rcv(root_path, properties.partitionCompression(), false, false);
+            storage::IDiskPartition <Tp> rcv(root_path, properties.partitionCompression(), false, false);
             for (int i = 0; i < executors(); i++) {
                 if (i != root) {
                     std::string src(full_path, displs[i], szv[i]);
-                    storage::IDiskPartition<Tp> aux(src, properties.partitionCompression(), false, true);
+                    storage::IDiskPartition <Tp> aux(src, properties.partitionCompression(), false, true);
                     aux.copyTo(rcv);
                 } else {
                     part.moveTo(rcv);
@@ -122,11 +122,11 @@ void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
 }
 
 template<typename Tp>
-void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
+void IMpiClass::bcast(storage::IPartition <Tp> &part, int root) {
     if (executors() == 1) { return; }
     if (part.type() == storage::IMemoryPartition<Tp>::TYPE) {
         if (isContiguousType<Tp>()) {
-            auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(part);
+            auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
             int sz = men.size();
             comm.Bcast(&sz, 1, MPI::INT, 0);
             if (!isRoot(root)) {
@@ -141,7 +141,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
                 sz = buffer->writeEnd();
                 buffer->resetBuffer();
             }
-            comm.Bcast(&sz, 1, MPI::LONG_INT, root);
+            comm.Bcast(&sz, 1, MPI::INT, root);
             comm.Bcast(buffer->getWritePtr(sz), sz, MPI::BYTE, root);
             if (!isRoot(root)) {
                 buffer->wroteBytes(sz);
@@ -150,7 +150,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
             }
         }
     } else if (part.type() == storage::IRawMemoryPartition<Tp>::TYPE) {
-        auto &raw = reinterpret_cast<storage::IRawMemoryPartition<Tp> &>(part);
+        auto &raw = reinterpret_cast<storage::IRawMemoryPartition <Tp> &>(part);
         raw.sync();
         std::pair<int, int> sz(raw.size(), (int) (raw.end() - raw.begin(false)));
         comm.Bcast(&sz, 2, MPI::INT, root);
@@ -159,7 +159,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
         }
         comm.Bcast(raw.begin(false), sz.second, MPI::BYTE, root);
     } else {
-        auto &disk = reinterpret_cast<storage::IDiskPartition<Tp> &>(part);
+        auto &disk = reinterpret_cast<storage::IDiskPartition <Tp> &>(part);
         disk.sync();
         std::string path = disk.getPath();
         int sz = path.size();
@@ -167,7 +167,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
         path.resize(sz);
         comm.Bcast(const_cast<char *>(path.c_str()), sz, MPI::BYTE, root);
         if (!isRoot(root)) {
-            storage::IDiskPartition<Tp> rcv(path, properties.partitionCompression(), false, true);
+            storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), false, true);
             disk.destroy = true;
             std::swap(disk, rcv);
         }
@@ -175,7 +175,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
 }
 
 template<typename Tp>
-void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGroup<Tp> &part_group) {
+void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGroup <Tp> &part_group) {
     bool driver = group.Get_rank() == 0;
     bool exec0 = group.Get_rank() == 1;
     int max_partition;
@@ -219,7 +219,8 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
 
     IGNIS_LOG(info) << "Comm: driverGather storage: " << storage << ", operations: " << max_partition;
 
-    std::shared_ptr<storage::IPartition<Tp>> part_sp;
+    std::shared_ptr<storage::IPartition < Tp>>
+    part_sp;
     for (int64_t i = 0; i < max_partition; i++) {
         if (i < part_group.partitions()) {
             part_sp = part_group[i];
@@ -227,8 +228,9 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
         if (storage == storage::IMemoryPartition<Tp>::TYPE) {
             if (isContiguousType<Tp>() && same_protocol) {
                 if (driver) {
-                    auto part = std::make_shared<storage::IMemoryPartition<Tp>>();
-                    auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(part);
+                    auto part = std::make_shared<storage::IMemoryPartition < Tp>>
+                    ();
+                    auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
                     int sz = 0;
                     std::vector<int> szv;
                     std::vector<int> displs;
@@ -243,8 +245,9 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
                     }
                     int64_t offset = 0;
                     for (int sz : szv) {
-                        auto part = std::make_shared<storage::IMemoryPartition<Tp>>();
-                        auto &rcv = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part);
+                        auto part = std::make_shared<storage::IMemoryPartition < Tp>>
+                        ();
+                        auto &rcv = reinterpret_cast<storage::IMemoryPartition <Tp> &>(*part);
                         men.resize(sz / sizeof(Tp));
                         std::memcpy(&rcv[0], &men[offset], men.size());
                         offset += men.size();
@@ -252,9 +255,10 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
                     }
                 } else {
                     if (!part_sp) {
-                        part_sp = std::make_shared<storage::IMemoryPartition<Tp>>();
+                        part_sp = std::make_shared<storage::IMemoryPartition < Tp>>
+                        ();
                     }
-                    auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part_sp);
+                    auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(*part_sp);
                     int sz = men.size() * sizeof(Tp);
                     group.Gather(&sz, 1, MPI::INT, nullptr, 1, MPI::INT, 0);
                     comm.Gatherv(&men[0], sz, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, 0);
@@ -274,15 +278,17 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
                     auto ptr = buffer->getWritePtr(sz);
                     for (int j = 1; j < group.Get_size(); j++) {
                         auto view = std::make_shared<transport::IMemoryBuffer>(ptr + displs[j], szv[j]);
-                        part_sp = std::make_shared<storage::IMemoryPartition<Tp>>();
+                        part_sp = std::make_shared<storage::IMemoryPartition < Tp>>
+                        ();
                         part_sp->read((std::shared_ptr<transport::ITransport> &) view);
                         part_group.add(part_sp);
                     }
                 } else {
                     if (!part_sp) {
-                        part_sp = std::make_shared<storage::IMemoryPartition<Tp>>();
+                        part_sp = std::make_shared<storage::IMemoryPartition < Tp>>
+                        ();
                     }
-                    auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part_sp);
+                    auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(*part_sp);
                     auto buffer = std::make_shared<transport::IMemoryBuffer>();
                     int sz = 0;
                     men.write((std::shared_ptr<transport::ITransport> &) buffer, properties.msgCompression());
@@ -294,8 +300,9 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
             }
         } else if (storage == storage::IRawMemoryPartition<Tp>::TYPE) {
             if (driver) {
-                part_sp = std::make_shared<storage::IRawMemoryPartition<Tp>>();
-                auto &raw = reinterpret_cast<storage::IRawMemoryPartition<Tp> &>(*part_sp);
+                part_sp = std::make_shared<storage::IRawMemoryPartition < Tp>>
+                ();
+                auto &raw = reinterpret_cast<storage::IRawMemoryPartition <Tp> &>(*part_sp);
                 std::pair<int, int> sz(0, 0);
                 std::vector<std::pair<int, int>> elems_szv;
                 std::vector<int> szv;
@@ -311,16 +318,18 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
                 part_group.add(part_sp);
 
                 for (int j = 1; j < group.Get_size(); j++) {
-                    auto part = std::make_shared<storage::IRawMemoryPartition<Tp>>();
+                    auto part = std::make_shared<storage::IRawMemoryPartition < Tp>>
+                    ();
                     part->buffer = std::make_shared<transport::IMemoryBuffer>(ptr + displs[i], szv[i]);
                     part->elems = elems_szv[i].first;
                     part_group.add(part);
                 }
             } else {
                 if (!part_sp) {
-                    part_sp = std::make_shared<storage::IRawMemoryPartition<Tp>>();
+                    part_sp = std::make_shared<storage::IRawMemoryPartition < Tp>>
+                    ();
                 }
-                auto &raw = reinterpret_cast<storage::IRawMemoryPartition<Tp> &>(*part_sp);
+                auto &raw = reinterpret_cast<storage::IRawMemoryPartition <Tp> &>(*part_sp);
                 raw.sync();
                 std::pair<int, int> sz(raw.size(), raw.buffer->writeEnd());
                 comm.Gather(&sz, 2, MPI::INT, nullptr, 2, MPI::INT, 0);
@@ -345,15 +354,16 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
                     }
                     std::string src(full_path, offset, length);
                     offset += length;
-                    auto part = std::make_shared<storage::IDiskPartition<Tp>>(src, properties.partitionCompression(),
-                                                                              false, true);
+                    auto part = std::make_shared<storage::IDiskPartition < Tp>>
+                    (src, properties.partitionCompression(),
+                            false, true);
                     part_group.add(part);
                 }
             } else {
                 std::vector<int> lengthv;
                 std::string full_path;
                 for (auto part: part_group) {
-                    auto &disk = reinterpret_cast<storage::IDiskPartition<Tp> &>(*part);
+                    auto &disk = reinterpret_cast<storage::IDiskPartition <Tp> &>(*part);
                     auto &path = disk.getPath();
                     lengthv.push_back(path.length());
                     full_path.append(path);
@@ -372,7 +382,7 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
 }
 
 template<typename Tp>
-void IMpiClass::driverGather0(const MPI::Intracomm &group, storage::IPartitionGroup<Tp> &part_group) {
+void IMpiClass::driverGather0(const MPI::Intracomm &group, storage::IPartitionGroup <Tp> &part_group) {
     int rank = group.Get_rank();
     auto sub_group = group.Split(rank < 2, rank);
     if (rank < 2) {
@@ -383,7 +393,7 @@ void IMpiClass::driverGather0(const MPI::Intracomm &group, storage::IPartitionGr
 
 template<typename Tp>
 void
-IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup<Tp> &part_group, int64_t partitions) {
+IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup <Tp> &part_group, int64_t partitions) {
     auto id = rank();
     bool driver = group.Get_rank() == 0;
     bool exec0 = group.Get_rank() == 1;
@@ -408,7 +418,7 @@ IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup<T
     IGNIS_LOG(info) << "Comm: driverScatter partitions: " << part_group.partitions();
 
     if (driver) {
-        auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part_group[0]);
+        auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(*part_group[0]);
         ptr = (uint8_t *) &men[0];
         auto elems = men.size();
         auto executor_elems = elems / execs;
@@ -430,7 +440,8 @@ IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup<T
             auto executor_elems = sz / local_partitions;
             auto remainder = sz % local_partitions;
             for (int i = 0; i < local_partitions; i++) {
-                auto part = std::make_shared<storage::IMemoryPartition<Tp>>(sz);
+                auto part = std::make_shared<storage::IMemoryPartition < Tp>>
+                (sz);
                 part->resize(sz);
                 if (i < remainder) {
                     std::memcpy(&(*part)[0], buffer->getWritePtr(0), (executor_elems + 1) * sizeof(Tp));
@@ -474,7 +485,7 @@ IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup<T
             buffer->resetBuffer();
             part_group.clear();
             displs = this->displs(szv);
-        }else{
+        } else {
             szv_part.resize(max_exec_partitions);
         }
         int sz;
@@ -487,7 +498,8 @@ IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup<T
             for (int i = 0; i < szv_part.size(); i++) {
                 auto view = std::make_shared<transport::IMemoryBuffer>(ptr + offset, szv_part[i]);
                 offset += szv_part[i];
-                auto part = std::make_shared<storage::IMemoryPartition<Tp>>(sz);
+                auto part = std::make_shared<storage::IMemoryPartition < Tp>>
+                (sz);
                 part->read((std::shared_ptr<transport::ITransport> &) view);
                 part_group.add(part);
             }
@@ -496,23 +508,86 @@ IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup<T
 }
 
 template<typename Tp>
-void IMpiClass::send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag) {
+void IMpiClass::send(const MPI::Intracomm &group, storage::IPartition <Tp> &part, int dest, int tag) {
     //TODO
 }
 
 template<typename Tp>
-void IMpiClass::send(storage::IPartition<Tp> &part, int dest, int tag) {
+void IMpiClass::send(storage::IPartition <Tp> &part, int dest, int tag) {
+    sendRecv(part, rank(), dest, tag);
+}
+
+template<typename Tp>
+void IMpiClass::recv(const MPI::Intracomm &group, storage::IPartition <Tp> &part, int source, int tag) {
     //TODO
 }
 
 template<typename Tp>
-void IMpiClass::recv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int tag) {
-    //TODO
+void IMpiClass::recv(storage::IPartition <Tp> &part, int source, int tag) {
+    sendRecv(part, source, rank(), tag);
 }
 
 template<typename Tp>
-void IMpiClass::recv(storage::IPartition<Tp> &part, int source, int tag) {
-    //TODO
+void IMpiClass::sendRecv(storage::IPartition <Tp> &part, int source, int dest, int tag) {
+    auto id = rank();
+    if (part.type() == storage::IMemoryPartition<Tp>::TYPE) {
+        if (isContiguousType<Tp>()) {
+            auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
+            int sz = men.size();
+            if (id == source) {
+                comm.Send(&sz, 1, MPI::INT, dest, tag);
+                comm.Send(&men[0], sz * sizeof(Tp), MPI::BYTE, dest, tag);
+            } else {
+                comm.Recv(&sz, 1, MPI::INT, source, tag);
+                men.resize(sz);
+                comm.Recv(&men[0], sz * sizeof(Tp), MPI::BYTE, source, tag);
+            }
+        } else {
+            auto buffer = std::make_shared<transport::IMemoryBuffer>(part.bytes());
+            int sz;
+            if (id == source) {
+                part.write((std::shared_ptr<transport::ITransport> &) buffer, properties.msgCompression());
+                sz = buffer->writeEnd();
+                buffer->resetBuffer();
+                comm.Send(&sz, 1, MPI::INT, dest, tag);
+                comm.Send(buffer->getWritePtr(sz), sz, MPI::BYTE, dest, tag);
+            } else {
+                comm.Recv(&sz, 1, MPI::INT, source, tag);
+                comm.Recv(buffer->getWritePtr(sz), sz, MPI::BYTE, source, tag);
+                buffer->wroteBytes(sz);
+                part.clear();
+                part.read((std::shared_ptr<transport::ITransport> &) buffer);
+            }
+        }
+    } else if (part.type() == storage::IRawMemoryPartition<Tp>::TYPE) {
+        auto &raw = reinterpret_cast<storage::IRawMemoryPartition <Tp> &>(part);
+        raw.sync();
+        std::pair<int, int> sz(raw.size(), (int) (raw.end() - raw.begin(false)));
+        if (id == source) {
+            comm.Send(&sz, 2, MPI::INT, dest, tag);
+            comm.Send(raw.begin(false), sz.second, MPI::BYTE, dest, tag);
+        } else {
+            comm.Recv(&sz, 2, MPI::INT, source, tag);
+            raw.resize(sz.first, sz.second);
+            comm.Recv(raw.begin(false), sz.second, MPI::BYTE, source, tag);
+        }
+    } else {
+        auto &disk = reinterpret_cast<storage::IDiskPartition <Tp> &>(part);
+        disk.sync();
+        std::string path = disk.getPath();
+        int sz = path.size();
+        if (id == source) {
+            comm.Send(&sz, 1, MPI::INT, dest, tag);
+            comm.Send(const_cast<char *>(path.c_str()), sz, MPI::BYTE, dest, tag);
+        }else{
+            comm.Recv(&sz, 1, MPI::INT, source, tag);
+            path.resize(sz);
+            comm.Recv(const_cast<char *>(path.c_str()), sz, MPI::BYTE, source, tag);
+            storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), false, true);
+            disk.destroy = true;
+            std::swap(disk, rcv);
+        }
+    }
 }
 
 template<typename Tp>

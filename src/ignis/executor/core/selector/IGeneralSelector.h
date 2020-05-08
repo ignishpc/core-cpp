@@ -194,7 +194,7 @@ namespace ignis {
 
                     template<typename Function>
                     void
-                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_T1_type **val, bool *val2,
+                    sortBy_check(modules::impl::ISortImpl &impl, typename Function::_T1_type *val, bool *val2,
                                  bool ascending) {
                         impl.sortBy<Function>(ascending);
                     }

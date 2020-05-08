@@ -8,6 +8,7 @@
 #include <mutex>
 
 #include "ignis/rpc/ISource_types.h"
+#include "ignis/executor/api/IVector.h"
 #include "ignis/executor/core/modules/IModule.h"
 #include "ignis/rpc/executor/ICacheContextModule.h"
 
@@ -42,7 +43,10 @@ namespace ignis {
                 int64_t parallelize(const std::vector<bool>&& collection);
 
                 template<typename Tp>
-                std::vector<Tp> collect(int64_t id);
+                int64_t parallelize(const executor::api::IVector<Tp> &&collection);
+
+                template<typename Tp>
+                executor::api::IVector<Tp> collect(int64_t id);
 
                 template<typename Tp>
                 Tp collect1(int64_t id);

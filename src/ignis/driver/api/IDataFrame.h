@@ -85,9 +85,11 @@ namespace ignis {
 
                 int64_t collectAbs(const rpc::ISource &tp);
 
-                int64_t aggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
+                int64_t
+                aggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
 
-                int64_t treeAggregateAbs(const ISource &zero,const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
+                int64_t treeAggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp,
+                                         const rpc::ISource &tp);
 
                 int64_t foldAbs(const ISource &zero, const ISource &src, const rpc::ISource &tp);
 
@@ -122,13 +124,75 @@ namespace ignis {
 
                 int64_t minAbs(const ISource &cmp, const rpc::ISource &tp);
 
+                /*Key-Value*/
+                rpc::driver::IDataFrameId flatMapValuesAbs(const ISource &src);
+
+                rpc::driver::IDataFrameId mapValuesAbs(const ISource &src);
+
+                rpc::driver::IDataFrameId groupByKeyAbs();
+
+                rpc::driver::IDataFrameId groupByKeyAbs(int64_t numPartitions);
+
+                rpc::driver::IDataFrameId reduceByKeyAbs(const ISource &src, bool localReduce);
+
+                rpc::driver::IDataFrameId reduceByKeyAbs(const ISource &src, int64_t numPartitions, bool localReduce);
+
+                rpc::driver::IDataFrameId aggregateByKeyAbs(const ISource &zero, const ISource &seqOp);
+
+                rpc::driver::IDataFrameId aggregateByKeyAbs(const ISource &zero, const ISource &seqOp,
+                                                            int64_t numPartitions);
+
+                rpc::driver::IDataFrameId aggregateByKeyAbs(const ISource &zero, const ISource &seqOp,
+                                                            const ISource &combOp);
+
+                rpc::driver::IDataFrameId aggregateByKeyAbs(const ISource &zero, const ISource &seqOp,
+                                                            const ISource &combOp, int64_t numPartitions);
+
+                rpc::driver::IDataFrameId foldByKeyAbs(const ISource &zero, const ISource &src, bool localFold);
+
+                rpc::driver::IDataFrameId
+                foldByKeyAbs(const ISource &zero, const ISource &src, int64_t numPartitions, bool localFold);
+
+                rpc::driver::IDataFrameId sortByKeyAbs(bool ascending);
+
+                rpc::driver::IDataFrameId sortByKeyAbs(bool ascending, int64_t numPartitions);
+
+                rpc::driver::IDataFrameId sortByKeyAbs(const ISource &src, bool ascending);
+
+                rpc::driver::IDataFrameId sortByKeyAbs(const ISource &src, bool ascending, int64_t numPartitions);
+
+                int64_t keysAbs(const rpc::ISource &tp);
+
+                int64_t valueAbs(const rpc::ISource &tp);
+
+                rpc::driver::IDataFrameId sampleByKeyAbs(bool withReplacement, const ISource &fractions, int seed);
+
+                int64_t countByKey();
+
+                int64_t countByValue();
+
             };
 
             class IWorker;
 
+            template<typename Key, typename Value>
+            class IPairDataFrame;
+
             template<typename Tp>
-            class IDataFrame : private IAbstractDataFrame {
+            class _toPair {
+            };
+
+            template<typename Key, typename Value>
+            class _toPair<std::pair<Key, Value>> {
             public:
+                template<typename Tp>
+                std::shared_ptr<IPairDataFrame<Key, Value>> toPair();
+            };
+
+            template<typename Tp>
+            class IDataFrame : public IAbstractDataFrame, public _toPair<Tp> {
+            public:
+                typedef Tp Tp_type;
 
                 using IAbstractDataFrame::setName;
                 using IAbstractDataFrame::persist;
@@ -168,6 +232,9 @@ namespace ignis {
                     return IDataFrame<R>::make(flatmapAbs(src));
                 }
 
+                template<typename Key>
+                std::shared_ptr<IPairDataFrame<Key, Tp>> keyBy(const ISource &src);
+
                 template<typename R>
                 std::shared_ptr<IDataFrame<R>> mapPartitions(const ISource &src, bool preservesPartitioning = true) {
                     return IDataFrame<R>::make(mapPartitionsAbs(src, preservesPartitioning));
@@ -184,15 +251,12 @@ namespace ignis {
                     return IDataFrame<R>::make(mapExecutorAbs(src));
                 }
 
-                template<typename R>
-                std::shared_ptr<IDataFrame<R>> groupBy(const ISource &src) {
-                    return IDataFrame<R>::make(groupByAbs(src));
-                }
+                template<typename Key>
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>> groupBy(const ISource &src);
 
-                template<typename R>
-                std::shared_ptr<IDataFrame<R>> groupBy(const ISource &src, int64_t numPartitions) {
-                    return IDataFrame<R>::make(groupByAbs(src, numPartitions));
-                }
+                template<typename Key>
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>>
+                groupBy(const ISource &src, int64_t numPartitions);
 
                 std::shared_ptr<IDataFrame<Tp>> sort(bool ascending = true) {
                     return IDataFrame<Tp>::make(sortAbs(ascending));
@@ -221,19 +285,19 @@ namespace ignis {
                     return driverContext().template collect1<Tp>(treeReduceAbs(src, tp));
                 }
 
-                std::vector<Tp> collect() {
+                executor::api::IVector<Tp> collect() {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().template collect<Tp>(collectAbs(tp));
                 }
 
                 Tp aggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(aggregateAbs(zero,seqOp, combOp, tp));
+                    return driverContext().template collect1<Tp>(aggregateAbs(zero, seqOp, combOp, tp));
                 }
 
                 Tp treeAggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(treeAggregateAbs(zero,seqOp, combOp, tp));
+                    return driverContext().template collect1<Tp>(treeAggregateAbs(zero, seqOp, combOp, tp));
                 }
 
                 Tp fold(const ISource &zero, const ISource &src) {
@@ -246,7 +310,7 @@ namespace ignis {
                     return driverContext().template collect1<Tp>(treeFoldAbs(zero, src, tp));
                 }
 
-                std::vector<Tp> take(int64_t num) {
+                executor::api::IVector<Tp> take(int64_t num) {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().template collect<Tp>(takeAbs(num, tp), num);
                 }
@@ -254,24 +318,24 @@ namespace ignis {
                 using IAbstractDataFrame::foreach;
                 using IAbstractDataFrame::foreachPartition;
 
-                std::vector<Tp> top(int64_t num) {
+                executor::api::IVector<Tp> top(int64_t num) {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().template collect<Tp>(topAbs(num, tp), num);
                 }
 
-                std::vector<Tp> top(int64_t num, const ISource &cmp) {
+                executor::api::IVector<Tp> top(int64_t num, const ISource &cmp) {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().collect(topAbs(num, cmp, tp), num);
                 }
 
-                std::vector<Tp> takeOrdered(int64_t num) {
+                executor::api::IVector<Tp> takeOrdered(int64_t num) {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().template collect<Tp>(takeOrderedAbs(num, tp), num);
                 }
 
-                std::vector<Tp> takeOrdered(int64_t num, const ISource &cmp) {
+                executor::api::IVector<Tp> takeOrdered(int64_t num, const ISource &cmp) {
                     auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().collect(takeOrderedAbs(num, cmp, tp),num);
+                    return driverContext().collect(takeOrderedAbs(num, cmp, tp), num);
                 }
 
                 /*Math*/
@@ -279,7 +343,7 @@ namespace ignis {
                     return IDataFrame<Tp>::make(sampleAbs(withReplacement, fraction, seed));
                 }
 
-                std::vector<Tp> takeSample(bool withReplacement, int64_t num, int seed) {
+                executor::api::IVector<Tp> takeSample(bool withReplacement, int64_t num, int seed) {
                     auto tp = driverContext().template registerType<Tp>();
                     return driverContext().template collect<Tp>(takeSampleAbs(withReplacement, num, seed, tp));
                 };
@@ -311,11 +375,162 @@ namespace ignis {
 
                 IDataFrame(const rpc::driver::IDataFrameId &id) : IAbstractDataFrame(id) {}
 
-                static std::shared_ptr<IDataFrame<Tp>> make(const rpc::driver::IDataFrameId &id) {
-                    return std::shared_ptr<IDataFrame<Tp>>(new IDataFrame<Tp>(id));
+                inline static std::shared_ptr<IDataFrame<Tp>> make(const rpc::driver::IDataFrameId &id) {
+                    return std::shared_ptr<IDataFrame<Tp>>(new IDataFrame(id));
+                }
+            };
+
+            template<typename Key, typename Value>
+            class IPairDataFrame : public IDataFrame<std::pair<Key, Value>> {
+            public:
+                typedef Key Key_type;
+                typedef Value Value_type;
+
+                IPairDataFrame() = delete;
+
+                template<typename R>
+                std::shared_ptr<IPairDataFrame<Key, R>> flatMapValues(const ISource &src) {
+                    return IPairDataFrame<Key, R>::make(this->flatMapValuesAbs(src));
+                }
+
+                template<typename R>
+                std::shared_ptr<IPairDataFrame<Key, R>> mapValues(const ISource &src) {
+                    return IPairDataFrame<Key, R>::make(this->mapValuesAbs(src));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>> groupByKey() {
+                    return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs());
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>>
+                groupByKey(int64_t numPartitions) {
+                    return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs(numPartitions));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                reduceByKey(const ISource &src, bool localReduce = true) {
+                    return IPairDataFrame<Key, Value>::make(this->reduceByKeyAbs(src, localReduce));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                reduceByKey(const ISource &src, int64_t numPartitions, bool localReduce = true) {
+                    return IPairDataFrame<Key, Value>::make(this->reduceByKeyAbs(src, numPartitions, localReduce));
+                }
+
+                template<typename R>
+                std::shared_ptr<IPairDataFrame<Key, R>>
+                aggregateByKey(const ISource &zero, const ISource &seqOp) {
+                    return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp));
+                }
+
+                template<typename R>
+                std::shared_ptr<IPairDataFrame<Key, R>>
+                aggregateByKey(const ISource &zero, const ISource &seqOp, int64_t numPartitions) {
+                    return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp, numPartitions));
+                }
+
+                template<typename R>
+                std::shared_ptr<IPairDataFrame<Key, R>>
+                aggregateByKey(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
+                    return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp, combOp));
+                }
+
+                template<typename R>
+                std::shared_ptr<IPairDataFrame<Key, R>>
+                aggregateByKey(const ISource &zero, const ISource &seqOp, const ISource &combOp,
+                               int64_t numPartitions) {
+                    return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp, combOp, numPartitions));
+                }
+
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                foldByKey(const ISource &zero, const ISource &src, bool localFold = true) {
+                    return IPairDataFrame<Key, Value>::make(this->foldByKeyAbs(zero, src, localFold));
+                }
+
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                foldByKey(const ISource &zero, const ISource &src, int64_t numPartitions, bool localFold = true) {
+                    return IPairDataFrame<Key, Value>::make(this->foldByKeyAbs(zero, src, localFold));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>> sortByKey(bool ascending = true) {
+                    return IPairDataFrame<Key, Value>::make(this->sortByKeyAbs(ascending));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>> sortByKey(bool ascending, int64_t numPartitions) {
+                    return IPairDataFrame<Key, Value>::make(this->sortByKeyAbs(ascending, numPartitions));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>> sortByKey(const ISource &src, bool ascending = true) {
+                    return IPairDataFrame<Key, Value>::make(this->sortByKeyAbs(src, ascending));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                sortByKey(const ISource &src, bool ascending, int64_t numPartitions) {
+                    return IPairDataFrame<Key, Value>::make(this->sortByKeyAbs(src, ascending, numPartitions));
+                }
+
+                executor::api::IVector<Key> keys() {
+                    auto tp = this->driverContext().template registerType<Key>();
+                    return this->driverContext().template collect<Key>(keysAbs(tp));
+                }
+
+                executor::api::IVector<Value> values() {
+                    auto tp = this->driverContext().template registerType<Value>();
+                    return this->driverContext().template collect<Value>(valuesAbs(tp));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                sampleByKey(bool withReplacement, const std::map<Key, int64_t> &fractions, int seed) {
+                    return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, seed));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                sampleByKey(bool withReplacement, const std::unordered_map<Key, int64_t> &fractions, int seed) {
+                    ISource fractions_src("");
+                    fractions_src.addParam("fractions", fractions);
+                    return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, fractions, seed));
+                }
+
+                using IAbstractDataFrame::countByKey;
+                using IAbstractDataFrame::countByValue;
+
+            private:
+                friend IDataFrame<std::pair<Key, Value>>;
+
+                inline static std::shared_ptr<IPairDataFrame<Key, Value>> make(const rpc::driver::IDataFrameId &id) {
+                    return std::shared_ptr<IPairDataFrame<Key, Value>>(new IDataFrame<std::pair<Key, Value>>(id));
                 }
 
             };
+
+            template<typename Tp>
+            template<typename Key>
+            std::shared_ptr<IPairDataFrame<Key, Tp>> IDataFrame<Tp>::keyBy(const ISource &src) {
+                return IPairDataFrame<Key, Tp>::make(keyByAbs(src));
+            }
+
+            template<typename Tp>
+            template<typename Key>
+            std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>>
+            IDataFrame<Tp>::groupBy(const ISource &src) {
+                return IPairDataFrame<Key, executor::api::IVector<Tp>>::make(groupByAbs(src));
+            }
+
+            template<typename Tp>
+            template<typename Key>
+            std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>>
+            IDataFrame<Tp>::groupBy(const ISource &src, int64_t numPartitions) {
+                return IPairDataFrame<Key, executor::api::IVector<Tp>>::make(groupByAbs(src, numPartitions));
+            }
+
+            template<typename Key, typename Value>
+            template<typename Tp>
+            std::shared_ptr<IPairDataFrame<Key, Value>> _toPair<std::pair<Key, Value>>::toPair() {
+                return IPairDataFrame<Key, Value>::make(this->id);
+            }
+
         }
     }
 }
