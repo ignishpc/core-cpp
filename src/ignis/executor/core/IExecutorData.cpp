@@ -70,7 +70,7 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
 
 void IExecutorData::loadParameters(const rpc::ISource &source) {
     for (auto &entry: source.params) {
-        context.variables[entry.first] = std::make_pair(false, std::make_shared<std::string>(std::move(entry.second)));
+        context.variables[entry.first] = std::make_shared<IBytesVariable>(std::move(entry.second));
     }
 }
 

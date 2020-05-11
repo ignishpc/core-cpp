@@ -7,9 +7,9 @@
 #include "ILibraryLoader.h"
 #include "IPropertyParser.h"
 #include "IPartitionTools.h"
-#include "ignis/executor/api/IContext.h"
-#include "ignis/executor/core/exception/IInvalidArgument.h"
+#include "exception/IInvalidArgument.h"
 #include "ignis/rpc/ISource_types.h"
+#include "ignis/executor/api/IContext.h"
 #include "ILog.h"
 #include "IMpi.h"
 #include <map>
@@ -62,7 +62,7 @@ namespace ignis {
 
                 void reloadLibraries();
 
-                void registerType(const std::shared_ptr<selector::ITypeSelector>&type);
+                void registerType(const std::shared_ptr<selector::ITypeSelector> &type);
 
                 std::shared_ptr<selector::ITypeSelector> getType(const std::string &id);
 
@@ -80,7 +80,7 @@ namespace ignis {
 
             private:
                 std::shared_ptr<void> partitions;
-                std::map<std::string, std::shared_ptr<void>> variables;
+                std::map<std::string, std::shared_ptr<IVariable>> variables;
                 std::map<std::string, std::pair<
                         std::shared_ptr<selector::ITypeSelector>,
                         std::shared_ptr<selector::ISelectorGroup>>

@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <memory>
 #include <mpi.h>
-#include "ignis/executor/core/protocol/IObjectProtocol.h"
+#include "ignis/executor/core/IVariable.h"
 
 namespace ignis {
     namespace executor {
@@ -30,8 +30,8 @@ namespace ignis {
 
                 std::unordered_map<std::string, std::string> &props();
 
-                template<typename T>
-                T &var(const std::string &name);
+                template<typename Tp>
+                Tp &var(const std::string &name);
 
                 bool isVar(const std::string &name);
 
@@ -41,10 +41,9 @@ namespace ignis {
 
             private:
                 friend class core::IExecutorData;
-                std::shared_ptr<core::protocol::IObjectProtocol> varProtocol(std::shared_ptr<void> &var);
 
                 std::unordered_map<std::string, std::string> properties;
-                std::unordered_map<std::string, std::pair<bool, std::shared_ptr<void>>> variables;
+                std::unordered_map<std::string, std::shared_ptr<executor::core::IVariable>> variables;
                 MPI::Intracomm mpi_group;
             };
         }

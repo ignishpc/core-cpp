@@ -168,7 +168,7 @@ namespace ignis {
                     template<typename Function>
                     void
                     mapExecutor_check(modules::impl::IPipeImpl &impl, typename Function::_IVoidFunction_type *val) {
-                        mapExecutor_check(impl, val, (typename Function::_IVoidFunction_type::_T_type *) nullptr);
+                        mapExecutor_check<Function>(impl, val, (typename Function::_IVoidFunction_type::_T_type *) nullptr);
                     }
 
                     template<typename Function, typename Tpv>

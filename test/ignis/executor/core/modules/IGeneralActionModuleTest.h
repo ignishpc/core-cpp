@@ -12,6 +12,21 @@ namespace ignis {
                 CPPUNIT_TEST_SUITE(IGeneralActionModuleTest);
                         CPPUNIT_TEST(reduceIntTest);
                         CPPUNIT_TEST(reduceStringTest);
+                        CPPUNIT_TEST(treeReduceIntTest);
+                        CPPUNIT_TEST(treeReduceStringTest);
+                        CPPUNIT_TEST(aggregateIntToStringTest);
+                        CPPUNIT_TEST(treeAggregateStringToIntTest);
+                        CPPUNIT_TEST(foldIntTest);
+                        CPPUNIT_TEST(treeFoldStringTest);
+                        CPPUNIT_TEST(takeStringTest);
+                        CPPUNIT_TEST(foreachIntTest);
+                        CPPUNIT_TEST(foreachPartitionStringTest);
+                        CPPUNIT_TEST(topIntTest);
+                        CPPUNIT_TEST(customTopStringTest);
+                        CPPUNIT_TEST(takeOrderedStringTest);
+                        CPPUNIT_TEST(customTakeOrderedIntTest);
+                        CPPUNIT_TEST(keysIntStringTest);
+                        CPPUNIT_TEST(valuesStringIntTest);
                     CPPUNIT_TEST_SUITE_END();
                 public:
                     IGeneralActionModuleTest();
@@ -24,9 +39,96 @@ namespace ignis {
 
                     void reduceStringTest() { reduceTest<std::string>("ReduceString", 2, "RawMemory"); }
 
+                    void treeReduceIntTest() { treeReduceTest<int>("ReduceInt", 2, "Memory"); }
+
+                    void treeReduceStringTest() { treeReduceTest<std::string>("ReduceString", 2, "RawMemory"); }
+
+                    void aggregateIntToStringTest() {
+                        aggregateTest<int>("ZeroString", "ReduceIntToString", "ReduceString", 2, "Memory");
+                    }
+
+                    void treeAggregateStringToIntTest() {
+                        treeAggregateTest<std::string>("ZeroString", "ReduceString", "ReduceString", 2, "RawMemory");
+                    }
+
+                    void foldIntTest() { foldTest<int>("ZeroInt", "ReduceInt", 2, "Memory"); }
+
+                    void treeFoldStringTest() {
+                        treeFoldTest<std::string>("ZeroString", "ReduceString", 2, "RawMemory");
+                    }
+
+                    void takeStringTest() { takeTest<std::string>("Memory"); }
+
+                    void foreachIntTest() { foreachTest<int>("ForeachInt", 2, "Memory"); }
+
+                    void foreachPartitionStringTest() {
+                        foreachPartitionTest<std::string>("ForeachPartitionString", 2, "RawMemory");
+                    }
+
+                    void topIntTest() { topTest<int>(2, "Memory"); }
+
+                    void customTopStringTest() { customTopTest<std::string>("SortString", 2, "RawMemory"); }
+
+                    void takeOrderedStringTest() { takeOrderedTest<std::string>(2, "RawMemory"); }
+
+                    void customTakeOrderedIntTest() {
+                        customTakeOrderedTest<int>("SortInt", 2, "Memory");
+                    }
+
+                    void keysIntStringTest() { keysTest<int, std::string>(2, "Memory"); }
+
+                    void valuesStringIntTest() { valuesTest<std::string, int>(2, "RawMemory"); }
+
                 private:
                     template<typename Tp>
-                    void reduceTest(const std::string &name, int cores, const std::string& partitionType);
+                    void reduceTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void treeReduceTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void
+                    aggregateTest(const std::string &zero, const std::string &seq, const std::string &comb, int cores,
+                                  const std::string &partitionType);
+
+                    template<typename Tp>
+                    void treeAggregateTest(const std::string &zero, const std::string &seq, const std::string &comb,
+                                           int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void foldTest(const std::string &zero, const std::string &name, int cores,
+                                  const std::string &partitionType);
+
+                    template<typename Tp>
+                    void treeFoldTest(const std::string &zero, const std::string &name, int cores,
+                                      const std::string &partitionType);
+
+                    template<typename Tp>
+                    void takeTest(const std::string &partitionType);
+
+                    template<typename Tp>
+                    void foreachTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void foreachPartitionTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void topTest(int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void customTopTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void takeOrderedTest(int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void customTakeOrderedTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Key, typename Value>
+                    void keysTest(int cores, const std::string &partitionType);
+
+                    template<typename Key, typename Value>
+                    void valuesTest(int cores, const std::string &partitionType);
 
                     std::shared_ptr<IGeneralActionModule> generalAction;
                 };

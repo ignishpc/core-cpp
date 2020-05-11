@@ -18,6 +18,9 @@ namespace ignis {
 
                     rpc::ISource newSource(const std::string& name);
 
+                    template<typename Tp>
+                    void registerType();
+
                     template <typename Tp>
                     api::IVector<Tp> rankVector(const api::IVector<Tp>& elems);
 

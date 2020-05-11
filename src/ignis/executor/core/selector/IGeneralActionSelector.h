@@ -191,7 +191,7 @@ namespace ignis {
 
                     template<typename Function>
                     void
-                    top_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
+                    top_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
                         top_check<Function>(impl, (typename Function::_T2_type *) nullptr,
                                             (typename Function::_R_type *) nullptr, n);
                     }
@@ -209,7 +209,7 @@ namespace ignis {
 
                     template<typename Function>
                     void
-                    takeOrdered_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
+                    takeOrdered_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
                         takeOrdered_check<Function>(impl, (typename Function::_T2_type *) nullptr,
                                             (typename Function::_R_type *) nullptr, n);
                     }

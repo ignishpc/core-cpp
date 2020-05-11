@@ -6,32 +6,37 @@
 template<typename Function, typename Tp>
 inline void IReduceImplClass::basicReduce(Function &f, storage::IMemoryPartition <Tp> &result) {
     auto input = executor_data->getPartitions<typename Function::_T1_type>();
-    auto partial_reduce = executor_data->getPartitionTools().newPartition<typename Function::_R_type>();
     IGNIS_LOG(info) << "Reduce: reducing " << input->partitions() << " partitions locally";
 
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
     {
         IGNIS_OMP_TRY()
+            Tp acum;
+            bool acum_flag = false;
+
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < input->partitions(); p++) {
                 if ((*input)[p]->size() == 0) {
                     continue;
                 }
-                auto acum = reducePartition(f, *(*input)[p]);
-                #pragma omp critical
-                {
-                    partial_reduce->writeIterator()->write(std::move(acum));
+                if (acum_flag) {
+                    aggregatePartition(f, *(*input)[p], acum);
+                } else {
+                    acum = reducePartition(f, *(*input)[p]);
+                    acum_flag = true;
                 }
             }
+            if (acum_flag) {
+                #pragma omp critical
+                {
+                    result.writeIterator()->write(std::move(acum));
+                }
+            }
+
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
-
-    IGNIS_LOG(info) << "Reduce: reducing all elements in the executor";
-    if (partial_reduce->size() > 0) {
-        result.writeIterator()->write(reducePartition(f, *partial_reduce));
-    }
 }
 
 
@@ -74,7 +79,7 @@ void IReduceImplClass::zero() {
 }
 
 template<typename Function>
-void IReduceImplClass::aggregate() {
+void IReduceImplClass::aggregate() {//TODO
     IGNIS_TRY()
         auto &context = executor_data->getContext();
         Function function;
@@ -82,7 +87,7 @@ void IReduceImplClass::aggregate() {
         auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>();
         auto input = executor_data->getPartitions<typename Function::_T2_type>();
         auto partial_reduce = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(
-                input->partitions());
+                executor_data->getContext().cores());
         IGNIS_LOG(info) << "Reduce: aggregating " << input->partitions() << " partitions locally";
 
         IGNIS_OMP_EXCEPTION_INIT()
@@ -106,6 +111,7 @@ void IReduceImplClass::aggregate() {
         IGNIS_OMP_EXCEPTION_END()
 
         output->add(partial_reduce);
+        executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
@@ -120,7 +126,6 @@ void IReduceImplClass::fold() {
         auto input = executor_data->getPartitions<typename Function::_T2_type>();
         auto partial_reduce = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(
                 input->partitions());
-        auto elem_part = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(1);
         IGNIS_LOG(info) << "Reduce: folding " << input->partitions() << " partitions locally";
 
         IGNIS_OMP_EXCEPTION_INIT()
@@ -143,11 +148,7 @@ void IReduceImplClass::fold() {
         }
         IGNIS_OMP_EXCEPTION_END()
 
-        IGNIS_LOG(info) << "Reduce: folding all elements in the executor";
-        if (partial_reduce->size() > 0) {
-            elem_part->writeIterator()->write(reducePartition(function, *partial_reduce));
-        }
-        finalReduce<Function, typename Function::_R_type>(function, *elem_part);
+        finalReduce<Function, typename Function::_R_type>(function, *partial_reduce);
         function.after(context);
     IGNIS_CATCH()
 }
@@ -185,11 +186,7 @@ void IReduceImplClass::treeFold() {
         }
         IGNIS_OMP_EXCEPTION_END()
 
-        IGNIS_LOG(info) << "Reduce: folding all elements in the executor";
-        if (partial_reduce->size() > 0) {
-            elem_part->writeIterator()->write(reducePartition(function, *partial_reduce));
-        }
-        finalTreeReduce<Function, typename Function::_R_type>(function, *elem_part);
+        finalTreeReduce<Function, typename Function::_R_type>(function, *partial_reduce);
         function.after(context);
     IGNIS_CATCH()
 }
@@ -217,14 +214,14 @@ void IReduceImplClass::groupByKey(int64_t numPartitions) {
                 for (int64_t p = 0; p < input->partitions(); p++) {
                     auto &part = *(*input)[p];
                     if (executor_data->getPartitionTools().isMemory(part)) {
-                        auto& men_part = executor_data->getPartitionTools().toMemory(part);
+                        auto &men_part = executor_data->getPartitionTools().toMemory(part);
                         for (int64_t i = 0; i < men_part.size(); i++) {
                             auto &elem = men_part[i];
                             acum[std::move(elem.first)].push_back(std::move(elem.second));
                         }
                         part.clear();
                         auto writer = (*output)[p]->writeIterator();
-                        auto& men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                         for (auto &elem: acum) {
                             men_writer.write(std::move(elem));
                         }
@@ -312,7 +309,7 @@ template<typename Function, typename Tp>
 inline Tp IReduceImplClass::reducePartition(Function &f, storage::IPartition <Tp> &part) {
     auto &context = executor_data->getContext();
     if (executor_data->getPartitionTools().isMemory(part)) {
-        auto& men_part = executor_data->getPartitionTools().toMemory(part);
+        auto &men_part = executor_data->getPartitionTools().toMemory(part);
         auto acum = men_part[0];
         for (int64_t i = 1; i < men_part.size(); i++) {
             acum = f.call(acum, men_part[i], context);
@@ -329,41 +326,76 @@ inline Tp IReduceImplClass::reducePartition(Function &f, storage::IPartition <Tp
 }
 
 template<typename Function, typename Tp>
-inline void IReduceImplClass::finalReduce(Function &f, storage::IMemoryPartition <Tp> &elem_part) {
+inline void IReduceImplClass::finalReduce(Function &f, storage::IMemoryPartition <Tp> &partial) {
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>();
+    IGNIS_LOG(info) << "Reduce: reducing all elements in the executor";
+    if (partial.size() > 1) {
+        partial[0] = reducePartition(f, partial);
+        partial.resize(1);
+    }
+
     IGNIS_LOG(info) << "Reduce: gathering elements for an executor";
-    executor_data->mpi().gather(elem_part, 0);
-    if (executor_data->mpi().isRoot(0) && elem_part.size() > 0) {
+    executor_data->mpi().gather(partial, 0);
+    if (executor_data->mpi().isRoot(0) && partial.size() > 0) {
         IGNIS_LOG(info) << "Reduce: final reduce";
         auto result = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(1);
-        result->writeIterator()->write(reducePartition(f, elem_part));
+        result->writeIterator()->write(reducePartition(f, partial));
         output->add(result);
     }
     executor_data->setPartitions(output);
 }
 
 template<typename Function, typename Tp>
-inline void IReduceImplClass::finalTreeReduce(Function &f, storage::IMemoryPartition <Tp> &elem_part) {
+inline void IReduceImplClass::finalTreeReduce(Function &f, storage::IMemoryPartition <Tp> &partial) {
     auto executors = executor_data->mpi().executors();
     auto rank = executor_data->mpi().rank();
+    auto &context = executor_data->getContext();
     int64_t pivotUp = executors;
     int64_t pivotDown;
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>();
 
+    IGNIS_LOG(info) << "Reduce: reducing all elements in the executor";
+    if (partial.size() > 1) {
+        if (executor_data->getContext().cores() == 1) {
+            partial[0] = reducePartition(f, partial);
+        } else {
+            IGNIS_OMP_EXCEPTION_INIT()
+            #pragma omp parallel
+            {
+                IGNIS_OMP_TRY()
+                    auto id = executor_data->getContext().threadId();
+                    int64_t n = partial.size();
+                    int64_t n2 = n / 2;
+                    while (n2 > id) {
+                        #pragma omp for schedule(static)
+                        for (int64_t i = 0; i < n2; i++) {
+                            partial[i] = f.call(partial[i], partial[n - i], context);
+                        }
+                        n = (int64_t) std::ceil(n / 2.0);
+                        n2 = n / 2;
+                    }
+                IGNIS_OMP_CATCH()
+            }
+            IGNIS_OMP_EXCEPTION_END()
+        }
+        partial.resize(1);
+    }
+
     IGNIS_LOG(info) << "Reduce: performing a final tree reduce";
     while (pivotUp > 1) {
-        pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
         pivotDown = (int64_t) std::floor(pivotUp / 2.0);
+        pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
         if (rank < pivotDown) {
-            executor_data->mpi().recv(elem_part, rank + pivotUp, 0);
-            basicReduce<Function, typename Function::_R_type>(f, elem_part);
+            executor_data->mpi().recv(partial, rank + pivotUp, 0);
+            partial[0] = f.call(partial[0], partial[1], context);
+            partial.resize(1);
         } else if (rank >= pivotUp) {
-            executor_data->mpi().send(elem_part, rank - pivotUp, 0);
+            executor_data->mpi().send(partial, rank - pivotUp, 0);
         }
     }
-    if (executor_data->mpi().isRoot(0) && elem_part.size() > 0) {
+    if (executor_data->mpi().isRoot(0) && partial.size() > 0) {
         auto result = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(1);
-        result->writeIterator()->write(std::move(elem_part[0]));
+        result->writeIterator()->write(std::move(partial[0]));
         output->add(result);
     }
     executor_data->setPartitions(output);
@@ -373,7 +405,7 @@ template<typename Function, typename Tp, typename Tp2>
 inline void IReduceImplClass::aggregatePartition(Function &f, storage::IPartition <Tp> &part, Tp2 &acum) {
     auto &context = executor_data->getContext();
     if (executor_data->getPartitionTools().isMemory(part)) {
-        auto& men_part = executor_data->getPartitionTools().toMemory(part);
+        auto &men_part = executor_data->getPartitionTools().toMemory(part);
         for (int64_t i = 0; i < men_part.size(); i++) {
             acum = f.call(acum, men_part[i], context);
         }
@@ -399,7 +431,7 @@ void IReduceImplClass::localReduceByKey(Function &f) {
             for (int64_t p = 0; p < input->partitions(); p++) {
                 auto &part = *(*input)[p];
                 if (executor_data->getPartitionTools().isMemory(part)) {
-                    auto& men_part = executor_data->getPartitionTools().toMemory(part);
+                    auto &men_part = executor_data->getPartitionTools().toMemory(part);
                     for (int64_t i = 0; i < men_part.size(); i++) {
                         auto &elem = men_part[i];
                         auto it = acum.find(elem.first);
@@ -411,7 +443,7 @@ void IReduceImplClass::localReduceByKey(Function &f) {
                     }
                     part.clear();
                     auto writer = part.writeIterator();
-                    auto& men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                    auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                     for (auto &elem: acum) {
                         men_writer.write(std::move(elem));
                     }
@@ -460,7 +492,7 @@ void IReduceImplClass::localAggregateByKey(Function &f) {
             for (int64_t p = 0; p < input->partitions(); p++) {
                 auto &part = *(*input)[p];
                 if (executor_data->getPartitionTools().isMemory(part)) {
-                    auto& men_part = executor_data->getPartitionTools().toMemory(part);
+                    auto &men_part = executor_data->getPartitionTools().toMemory(part);
                     for (int64_t i = 0; i < men_part.size(); i++) {
                         auto &elem = men_part[i];
                         auto it = acum.find(elem.first);
@@ -480,7 +512,7 @@ void IReduceImplClass::localAggregateByKey(Function &f) {
                     }
                     part.clear();
                     auto writer = (*output)[p]->writeIterator();
-                    auto& men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                    auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                     for (auto &elem: acum) {
                         men_writer.write(std::move(elem));
                     }

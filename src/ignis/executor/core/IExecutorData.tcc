@@ -7,7 +7,7 @@ template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>> IExecutorDataClass::getPartitions(bool no_check) {
     auto group = std::static_pointer_cast<storage::IPartitionGroup < Tp>>
     (partitions);
-    if(!group){
+    if (!group) {
         throw exception::IInvalidArgument("Error: no partition loaded");
     }
     if (!no_check) {
@@ -20,9 +20,8 @@ std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>> IExecutorDa
             }
             std::swap(*new_group, *group);
         } else if (group->elemType() != RTTInfo::from<Tp>()) {
-            throw exception::IInvalidArgument(
-                    "Error: " + group->elemType().getStandardName() + " cannot be cast to " +
-                    RTTInfo::from<Tp>().getStandardName());
+            throw exception::IInvalidArgument("Error: " + RTTInfo::from<Tp>().getStandardName() + " is not " +
+                                              group->elemType().getStandardName());
         }
     }
     return group;
@@ -40,17 +39,33 @@ return std::static_pointer_cast<storage::IPartitionGroup < Tp>>(old);
 
 template<typename Tp>
 void IExecutorDataClass::setVariable(const std::string key, const Tp &value) {
-    variables[key] = std::make_shared<Tp>(value);
+    auto it = variables.find(key);
+    if (it == variables.end()) {
+        variables[key] = std::make_shared<IBasicVariable < Tp>>
+        (value);
+    } else {
+        variables[key]->basic<Tp>().get() = value;
+    }
 }
 
 template<typename Tp>
 void IExecutorDataClass::setVariable(const std::string key, Tp &&value) {
-    variables[key] = std::make_shared<Tp>(value);
+    auto it = variables.find(key);
+    if (it == variables.end()) {
+        variables[key] = std::make_shared<IBasicVariable < Tp>>
+        (value);
+    } else {
+        variables[key]->basic<Tp>().get() = value;
+    }
 }
 
 template<typename Tp>
 Tp &IExecutorDataClass::getVariable(const std::string key) {
-    return *static_cast<Tp *>(variables[key].get());
+    auto it = variables.find(key);
+    if (it != variables.end()) {
+        return it->second->basic<Tp>().get();
+    }
+    throw exception::ILogicError("variable " + key + " not found");
 }
 
 #undef IExecutorDataClass

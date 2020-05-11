@@ -2,8 +2,11 @@
 #include <string>
 #include <vector>
 #include "ignis/executor/api/IReadIterator.h"
+#include "ignis/executor/api/function/IFunction0.h"
 #include "ignis/executor/api/function/IFunction.h"
 #include "ignis/executor/api/function/IFunction2.h"
+#include "ignis/executor/api/function/IVoidFunction.h"
+#include "ignis/executor/api/function/IVoidFunction2.h"
 
 using namespace ignis::executor::api;
 
@@ -39,7 +42,7 @@ class MapPartitionsInt : public function::IFunction<IReadIterator<int>, std::vec
 public:
     std::vector<std::string> call(IReadIterator<int> &it, IContext &context) override {
         std::vector<std::string> v;
-        while(it.hasNext()){
+        while (it.hasNext()) {
             v.push_back(std::to_string(it.next()));
         }
         return v;
@@ -52,7 +55,7 @@ class MapPartitionWithIndexInt : public function::IFunction2<int64_t, IReadItera
 public:
     std::vector<std::string> call(int64_t &p, IReadIterator<int> &it, IContext &context) override {
         std::vector<std::string> v;
-        while(it.hasNext()){
+        while (it.hasNext()) {
             v.push_back(std::to_string(it.next()));
         }
         return v;
@@ -98,3 +101,54 @@ public:
 };
 
 ignis_export(SortString, SortString)
+
+
+class ZeroInt : public function::IFunction0<int> {
+public:
+    int call(IContext &context) override {
+        return 0;
+    }
+
+};
+
+ignis_export(ZeroInt, ZeroInt)
+
+class ReduceIntToString : public function::IFunction2<std::string, int, std::string> {
+public:
+    std::string call(std::string &v1, int &v2, IContext &context) override {
+        return v1 + std::to_string(v2);
+    }
+};
+
+ignis_export(ReduceIntToString, ReduceIntToString)
+
+class ZeroString : public function::IFunction0<std::string> {
+public:
+    std::string call(IContext &context) override {
+        return "";
+    }
+
+};
+
+ignis_export(ZeroString, ZeroString)
+
+class ForeachInt : public function::IVoidFunction<int> {
+public:
+    void call(int &elem, IContext &context) override {
+    }
+
+};
+
+ignis_export(ForeachInt, ForeachInt)
+
+class ForeachPartitionString : public function::IVoidFunction<IReadIterator<std::string>> {
+public:
+    void call(IReadIterator<std::string> &it, IContext &context) override {
+        while(it.hasNext()){
+            it.next();
+        }
+    }
+
+};
+
+ignis_export(ForeachPartitionString, ForeachPartitionString)

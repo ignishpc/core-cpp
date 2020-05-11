@@ -10,17 +10,16 @@ namespace ignis {
         namespace api {
             namespace function {
 
-                template<typename T1, typename T2, typename R>
+                template<typename T1, typename T2>
                 class IVoidFunction2 {
                 public:
-                    typedef IVoidFunction2<T1, T2, R> _IVoidFunction2_type;
-                    typedef T _T1_type;
-                    typedef T _T2_type;
-                    typedef R _R_type;
+                    typedef IVoidFunction2<T1, T2> _IVoidFunction2_type;
+                    typedef T1 _T1_type;
+                    typedef T2 _T2_type;
 
                     virtual void before(IContext &context) {}
 
-                    virtual R call(T1 &v1, T2 &v2, IContext &context) {}
+                    virtual void call(T1 &v1, T2 &v2, IContext &context) {}
 
                     virtual void after(IContext &context) {}
 

@@ -464,7 +464,7 @@ void ISortImplClass::take_ordered_impl(Cmp comparator, int64_t n) {
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < input->partitions(); p++) {
                 if (inMemory) {
-                    auto& men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                    auto &men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                     for (int64_t i = 0; i < men.size(); i++) {
                         take_ordered_add(comparator, local_top, men[i], n);
                     }
@@ -498,12 +498,17 @@ void ISortImplClass::take_ordered_impl(Cmp comparator, int64_t n) {
 
 template<typename Tp, typename Cmp>
 void ISortImplClass::take_ordered_add(Cmp comparator, storage::IMemoryPartition <Tp> &top, Tp &elem, int64_t n) {
-    auto inner = top.inner();
-    if (!inner.empty() && inner.back() > elem) {
+    auto &inner = top.inner();
+    if (inner.empty()) {
+        inner.push_back(elem);
         return;
     }
-    if (inner.size() >= n) {
-        inner.pop_back();
+    if(inner.size() == n){
+        if (comparator(inner.back(), elem)) {
+            return;
+        }else{
+            inner.pop_back();
+        }
     }
     auto i = searchRange(elem, top, comparator);
     inner.insert(inner.begin() + i, elem);
@@ -535,7 +540,7 @@ void ISortImplClass::max_impl(Cmp comparator) {
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < input->partitions(); p++) {
                 if (inMemory) {
-                    auto& men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                    auto &men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                     for (int64_t i = 0; i < men.size(); i++) {
                         if (comparator(local_elem, men[i])) {
                             local_elem = men[i];

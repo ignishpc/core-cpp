@@ -69,8 +69,8 @@ void IMathImplClass::countByKey() {
                 int64_t pivotUp = threads;
                 int64_t pivotDown;
                 while (pivotUp - 1 > thread) {
-                    pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
                     pivotDown = (int64_t) std::floor(pivotUp / 2.0);
+                    pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
                     if (thread < pivotDown) {
                         for (auto &entry: acum[thread + pivotUp]) {
                             acum[thread][entry.first] += entry.second;
@@ -117,8 +117,8 @@ void IMathImplClass::countByValue() {
                 int64_t pivotUp = threads;
                 int64_t pivotDown;
                 while (pivotUp - 1 > thread) {
-                    pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
                     pivotDown = (int64_t) std::floor(pivotUp / 2.0);
+                    pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
                     if (thread < pivotDown) {
                         for (auto &entry: acum[thread + pivotUp]) {
                             acum[thread][entry.first] += entry.second;
@@ -142,8 +142,8 @@ void IMathImplClass::countByReduce(std::unordered_map<Tp, int64_t> &acum) {
     int64_t pivotDown;
     pivotUp = executor_data->mpi().executors();
     while (pivotUp > 1) {
-        pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
         pivotDown = (int64_t) std::floor(pivotUp / 2.0);
+        pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
         if (rank < pivotDown) {
             executor_data->mpi().recv(*elem_part, rank + pivotUp, 0);
             for (int64_t i = 0; i < elem_part->size(); i++) {

@@ -1,7 +1,14 @@
 
 #include "IModuleTest.h"
+#include "ignis/executor/core/selector/ITypeSelector.h"
 
 #define IModuleTestClass ignis::executor::core::modules::IModuleTest
+
+template<typename Tp>
+void IModuleTestClass::registerType(){
+    auto tp =std::make_shared<ignis::executor::core::selector::ITypeSelectorImpl<Tp>>();
+    executor_data->registerType(tp);
+}
 
 template<typename Tp>
 ignis::executor::api::IVector<Tp> IModuleTestClass::rankVector(const api::IVector <Tp> &elems) {

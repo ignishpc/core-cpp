@@ -344,6 +344,7 @@ void IPipeImplCLass::foreach() {
         }
         IGNIS_OMP_EXCEPTION_END()
         function.after(context);
+        executor_data->deletePartitions();
     IGNIS_CATCH()
 }
 
@@ -369,6 +370,7 @@ void IPipeImplCLass::foreachPartition() {
         }
         IGNIS_OMP_EXCEPTION_END()
         function.after(context);
+        executor_data->deletePartitions();
     IGNIS_CATCH()
 }
 

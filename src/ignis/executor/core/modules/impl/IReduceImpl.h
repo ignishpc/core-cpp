@@ -57,10 +57,10 @@ namespace ignis {
                         inline Tp reducePartition(Function &f, storage::IPartition <Tp> &part);
 
                         template<typename Function, typename Tp>
-                        inline void finalReduce(Function &f, storage::IMemoryPartition <Tp> &elem_part);
+                        inline void finalReduce(Function &f, storage::IMemoryPartition <Tp> &partial);
 
                         template<typename Function, typename Tp>
-                        inline void finalTreeReduce(Function &f, storage::IMemoryPartition <Tp> &elem_part);
+                        inline void finalTreeReduce(Function &f, storage::IMemoryPartition <Tp> &partial);
 
                         template<typename Function, typename Tp, typename Tp2>
                         inline void aggregatePartition(Function &f, storage::IPartition <Tp> &part, Tp2 &acum);

@@ -1,5 +1,19 @@
 
 #include "IElements.h"
+#include <utility>
+
+template<typename Key, typename Value>
+struct ignis::executor::core::IElements<std::pair<Key, Value>> {
+    static api::IVector <std::pair<Key, Value>> create(int n, int seed) {
+        auto keys = IElements<Key>::create(n, seed);
+        auto values = IElements<Value>::create(n, seed);
+        api::IVector<std::pair<Key, Value>> v;
+        for (int i = 0; i < n; i++) {
+            v.emplace_back(keys[i], values[i]);
+        }
+        return v;
+    }
+};
 
 template<>
 struct ignis::executor::core::IElements<bool> {
@@ -27,7 +41,7 @@ struct ignis::executor::core::IElements<int> {
 
 template<>
 struct ignis::executor::core::IElements<std::string> {
-    static api::IVector<std::string> create(int n, int seed) {
+    static api::IVector <std::string> create(int n, int seed) {
         std::srand(seed);
         api::IVector<std::string> v;
         for (int i = 0; i < n; i++) {
@@ -39,7 +53,7 @@ struct ignis::executor::core::IElements<std::string> {
 
 template<>
 struct ignis::executor::core::IElements<uint8_t> {
-    static api::IVector<uint8_t> create(int n, int seed) {
+    static api::IVector <uint8_t> create(int n, int seed) {
         std::srand(seed);
         api::IVector<uint8_t> v;
         for (int i = 0; i < n; i++) {
@@ -51,12 +65,12 @@ struct ignis::executor::core::IElements<uint8_t> {
 
 template<>
 struct ignis::executor::core::IElements<std::pair<int, std::string>> {
-static api::IVector<std::pair<int, std::string>> create(int n, int seed) {
-    std::srand(seed);
-    api::IVector<std::pair<int, std::string>> v;
-    for (int i = 0; i < n; i++) {
-        v.emplace_back(std::rand() % n, std::to_string(std::rand() % n));
+    static api::IVector <std::pair<int, std::string>> create(int n, int seed) {
+        std::srand(seed);
+        api::IVector<std::pair<int, std::string>> v;
+        for (int i = 0; i < n; i++) {
+            v.emplace_back(std::rand() % n, std::to_string(std::rand() % n));
+        }
+        return v;
     }
-    return v;
-}
 };

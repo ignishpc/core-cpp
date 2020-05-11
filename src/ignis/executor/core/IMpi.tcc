@@ -167,7 +167,7 @@ void IMpiClass::bcast(storage::IPartition <Tp> &part, int root) {
         path.resize(sz);
         comm.Bcast(const_cast<char *>(path.c_str()), sz, MPI::BYTE, root);
         if (!isRoot(root)) {
-            storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), false, true);
+            storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), true, true);
             disk.destroy = true;
             std::swap(disk, rcv);
         }
@@ -538,9 +538,10 @@ void IMpiClass::sendRecv(storage::IPartition <Tp> &part, int source, int dest, i
                 comm.Send(&sz, 1, MPI::INT, dest, tag);
                 comm.Send(&men[0], sz * sizeof(Tp), MPI::BYTE, dest, tag);
             } else {
+                int init = sz;
                 comm.Recv(&sz, 1, MPI::INT, source, tag);
-                men.resize(sz);
-                comm.Recv(&men[0], sz * sizeof(Tp), MPI::BYTE, source, tag);
+                men.resize(init + sz);
+                comm.Recv(&men[init], sz * sizeof(Tp), MPI::BYTE, source, tag);
             }
         } else {
             auto buffer = std::make_shared<transport::IMemoryBuffer>(part.bytes());
@@ -555,7 +556,6 @@ void IMpiClass::sendRecv(storage::IPartition <Tp> &part, int source, int dest, i
                 comm.Recv(&sz, 1, MPI::INT, source, tag);
                 comm.Recv(buffer->getWritePtr(sz), sz, MPI::BYTE, source, tag);
                 buffer->wroteBytes(sz);
-                part.clear();
                 part.read((std::shared_ptr<transport::ITransport> &) buffer);
             }
         }
@@ -567,9 +567,10 @@ void IMpiClass::sendRecv(storage::IPartition <Tp> &part, int source, int dest, i
             comm.Send(&sz, 2, MPI::INT, dest, tag);
             comm.Send(raw.begin(false), sz.second, MPI::BYTE, dest, tag);
         } else {
+            auto init = sz;
             comm.Recv(&sz, 2, MPI::INT, source, tag);
-            raw.resize(sz.first, sz.second);
-            comm.Recv(raw.begin(false), sz.second, MPI::BYTE, source, tag);
+            raw.resize(init.first + sz.first, init.second + sz.second);
+            comm.Recv(raw.begin(false) + init.first, sz.second, MPI::BYTE, source, tag);
         }
     } else {
         auto &disk = reinterpret_cast<storage::IDiskPartition <Tp> &>(part);
@@ -583,9 +584,13 @@ void IMpiClass::sendRecv(storage::IPartition <Tp> &part, int source, int dest, i
             comm.Recv(&sz, 1, MPI::INT, source, tag);
             path.resize(sz);
             comm.Recv(const_cast<char *>(path.c_str()), sz, MPI::BYTE, source, tag);
-            storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), false, true);
-            disk.destroy = true;
-            std::swap(disk, rcv);
+            storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), true, true);
+            if(disk.size() == 0){
+                disk.destroy = true;
+                std::swap(disk, rcv);
+            }else{
+                rcv.copyTo(disk);
+            }
         }
     }
 }

@@ -175,6 +175,8 @@ set(SOURCE_FILES
         ignis/executor/core/IPartitionTools.h
         ignis/executor/core/IPropertyParser.cpp
         ignis/executor/core/IPropertyParser.h
+        ignis/executor/core/IVariable.cpp
+        ignis/executor/core/IVariable.h
         ignis/executor/core/RTTInfo.cpp
         ignis/executor/core/RTTInfo.h
 
