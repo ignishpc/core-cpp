@@ -153,7 +153,7 @@ void IPipeImplCLass::keyBy() {
     IGNIS_TRY()
         auto input = executor_data->getPartitions<typename Function::_T_type>();
         auto output = executor_data->getPartitionTools().newPartitionGroup<
-                std::pair<typename Function::_T_type, typename Function::_R_type>
+                std::pair<typename Function::_R_type, typename Function::_T_type>
         >(input->partitions());
         bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
         auto &context = executor_data->getContext();
@@ -176,14 +176,14 @@ void IPipeImplCLass::keyBy() {
                         if (cache) {
                             for (size_t i = 0; i < sz; i++) {
                                 men_writer.write(
-                                        std::pair<typename Function::_T_type, typename Function::_R_type>(
-                                                std::move(men_part[i]), function.call(men_part[i], context)));
+                                        std::pair<typename Function::_R_type, typename Function::_T_type>(
+                                                function.call(men_part[i], context), std::move(men_part[i])));
                             }
                         } else {
                             for (size_t i = 0; i < sz; i++) {
                                 men_writer.write(
-                                        std::pair<typename Function::_T_type, typename Function::_R_type>(
-                                                men_part[i], function.call(men_part[i], context)));
+                                        std::pair<typename Function::_R_type, typename Function::_T_type>(
+                                                function.call(men_part[i], context), men_part[i]));
                             }
                         }
                     } else {
@@ -191,8 +191,8 @@ void IPipeImplCLass::keyBy() {
                         for (size_t i = 0; i < sz; i++) {
                             auto &elem = reader->next();
                             writer->write(
-                                    std::pair<typename Function::_T_type, typename Function::_R_type>(
-                                            std::move(elem), function.call(elem, context)));
+                                    std::pair<typename Function::_R_type, typename Function::_T_type>(
+                                            function.call(elem, context), std::move(elem)));
                         }
                     }
                 }
@@ -268,10 +268,10 @@ void IPipeImplCLass::mapPartitionsWithIndex(bool preservesPartitioning) {
     IGNIS_CATCH()
 }
 
-template<typename Function>
+template<typename Function, typename Tp>
 void IPipeImplCLass::mapExecutor() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type>();
+        auto input = executor_data->getPartitions<Tp>();
         auto inMemory = executor_data->getPartitionTools().isMemory(*input);
         auto &context = executor_data->getContext();
         Function function;
@@ -279,28 +279,28 @@ void IPipeImplCLass::mapExecutor() {
         IGNIS_LOG(info) << "General: mapExecutor " << input->partitions() << " partitions";
         if (!inMemory || input->cache()) {
             IGNIS_LOG(info) << "General: loading partitions in memory";
-            auto aux = executor_data->getPartitionTools().newPartitionGroup<typename Function::_T_type>();
+            auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
             for (auto &part: *input) {
-                auto men = executor_data->getPartitionTools().newMemoryPartition<typename Function::_T_type>(*part);
+                auto men = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
                 part->copyTo(*men);
                 aux->add(men);
             }
             input = aux;
         }
 
-        api::IVector < api::IVector < typename Function::_T_type > * > arg;
+        typename Function::_T_type arg;
         for (auto &part: *input) {
-            auto& men = executor_data->getPartitionTools().toMemory(*part);
+            auto &men = executor_data->getPartitionTools().toMemory(*part);
             arg.push_back(&men.inner());
         }
 
         function.call(arg, context);
 
         if (!inMemory) {
-            IGNIS_LOG(info) << "General: saving partitions in memory";
-            auto aux = executor_data->getPartitionTools().newPartitionGroup<typename Function::_T_type>();
+            IGNIS_LOG(info) << "General: saving partitions from memory";
+            auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
             for (auto &men: *input) {
-                auto part = executor_data->getPartitionTools().newPartition<typename Function::_T_type>(*men);
+                auto part = executor_data->getPartitionTools().newPartition<Tp>(*men);
                 men->copyTo(*part);
                 aux->add(part);
             }
@@ -308,6 +308,58 @@ void IPipeImplCLass::mapExecutor() {
         }
         function.after(context);
         executor_data->setPartitions(input);
+
+    IGNIS_CATCH()
+}
+
+template<typename Function, typename Tp, typename R>
+void IPipeImplCLass::mapExecutorTo() {
+    IGNIS_TRY()
+        auto input = executor_data->getPartitions<Tp>();
+        auto output = executor_data->getPartitionTools().newPartitionGroup<R>();
+        auto inMemory = executor_data->getPartitionTools().isMemory(*input);
+        auto &context = executor_data->getContext();
+        Function function;
+        function.before(context);
+        IGNIS_LOG(info) << "General: mapExecutorTo " << input->partitions() << " partitions";
+        if (!inMemory) {
+            IGNIS_LOG(info) << "General: loading partitions in memory";
+            auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+            for (auto &part: *input) {
+                auto men = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
+                part->copyTo(*men);
+                aux->add(men);
+            }
+            input = aux;
+        }
+
+        typename Function::_T_type  arg;
+        for (auto &part: *input) {
+            auto &men = executor_data->getPartitionTools().toMemory(*part);
+            arg.push_back(&men.inner());
+        }
+
+        auto newParts = function.call(arg, context);
+
+        IGNIS_LOG(info) << "General: moving elements to partitions";
+        for(auto &v: newParts){
+            auto part = executor_data->getPartitionTools().newMemoryPartition<R>(0);
+            std::swap(v, part->inner());
+            output->add(part);
+        }
+
+
+        if (!inMemory) {
+            IGNIS_LOG(info) << "General: saving partitions from memory";
+            for(int64_t i = 0; i< output->partitions();i++){
+                auto& oldPart = (*output)[i];
+                auto part = executor_data->getPartitionTools().newPartition<R>(*oldPart);
+                oldPart->moveTo(*part);
+                oldPart = part;
+            }
+        }
+        function.after(context);
+        executor_data->setPartitions(output);
 
     IGNIS_CATCH()
 }

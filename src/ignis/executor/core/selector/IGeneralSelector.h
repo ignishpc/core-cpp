@@ -8,6 +8,7 @@
 #include "ignis/executor/core/modules/impl/ISortImpl.h"
 #include "ignis/executor/core/modules/impl/IIOImpl.h"
 #include "ignis/executor/api/IReadIterator.h"
+#include "ITypeSelector.h"
 
 namespace ignis {
     namespace executor {
@@ -16,7 +17,7 @@ namespace ignis {
 
                 class IGeneralSelector {
                 public:
-                    virtual void loadClass(api::IContext& context) = 0;
+                    virtual void loadClass(api::IContext &context) = 0;
 
                     virtual void map(modules::impl::IPipeImpl &impl) = 0;
 
@@ -32,6 +33,8 @@ namespace ignis {
 
                     virtual void mapExecutor(modules::impl::IPipeImpl &impl) = 0;
 
+                    virtual void mapExecutorTo(modules::impl::IPipeImpl &impl) = 0;
+
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
@@ -41,7 +44,7 @@ namespace ignis {
                 template<typename Tp>
                 class IGeneralSelectorImpl : public IGeneralSelector {
                 public:
-                    virtual void loadClass(api::IContext& context) { loadClass_check<Tp>(context, nullptr); };
+                    virtual void loadClass(api::IContext &context) { loadClass_check<Tp>(context, nullptr); };
 
                     virtual void map(modules::impl::IPipeImpl &impl) { map_check<Tp>(impl, nullptr); }
 
@@ -52,15 +55,19 @@ namespace ignis {
                     virtual void keyBy(modules::impl::IPipeImpl &impl) { keyBy_check<Tp>(impl, nullptr); }
 
                     virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
-                        mapPartitions_check<Tp>(impl, nullptr, nullptr, nullptr, preservesPartitioning);
+                        mapPartitions_check<Tp>(impl, nullptr, nullptr, preservesPartitioning);
                     }
 
                     virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
-                        mapPartitionsWithIndex_check<Tp>(impl, nullptr, nullptr, nullptr, preservesPartitioning);
+                        mapPartitionsWithIndex_check<Tp>(impl, nullptr, nullptr, preservesPartitioning);
                     }
 
                     virtual void mapExecutor(modules::impl::IPipeImpl &impl) {
                         mapExecutor_check<Tp>(impl, nullptr);
+                    }
+
+                    virtual void mapExecutorTo(modules::impl::IPipeImpl &impl) {
+                        mapExecutorTo_check<Tp>(impl, nullptr);
                     }
 
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending) {
@@ -74,7 +81,7 @@ namespace ignis {
                 private:
 
                     template<typename Function>
-                    void loadClass_check(api::IContext& context, decltype(&Function::before)*val) {
+                    void loadClass_check(api::IContext &context, decltype(&Function::before) *val) {
                         Function().before(context);
                     }
 
@@ -111,6 +118,7 @@ namespace ignis {
                     void flatmap_check(modules::impl::IPipeImpl &impl,
                                        typename Function::_IFunction_type::_R_type::iterator *val,
                                        typename Function::_IFunction_type::_R_type::value_type *val2) {
+                        impl.registerType(getType<typename Function::_IFunction_type::_R_type::value_type>());
                         impl.flatmap<Function>();
                     }
 
@@ -121,6 +129,7 @@ namespace ignis {
 
                     template<typename Function>
                     void keyBy_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction_type *val) {
+                        impl.registerType(getType<std::pair<typename Function::_R_type, typename Function::_T_type>>());//TODO
                         impl.keyBy<Function>();
                     }
 
@@ -132,9 +141,10 @@ namespace ignis {
                     template<typename Function>
                     void mapPartitions_check(modules::impl::IPipeImpl &impl,
                                              typename Function::_IFunction_type::_R_type::iterator *val,
-                                             typename Function::_IFunction_type::_R_type::value_type *val2,
-                                             typename Function::_IFunction_type::_T_type::_IReadIterator_type *val3,
+                                             typename Function::_IFunction_type::_T_type::_IReadIterator_type *val2,
                                              bool preservesPartitioning) {
+                        impl.registerType(getType<typename Function::_IFunction_type::_R_type::value_type>());
+                        impl.registerType(getType<typename Function::_IFunction_type::_T_type::value_type>());
                         impl.mapPartitions<Function>(preservesPartitioning);
                     }
 
@@ -146,8 +156,7 @@ namespace ignis {
                     template<typename Function>
                     void mapPartitionsWithIndex_check(modules::impl::IPipeImpl &impl,
                                                       typename Function::_IFunction2_type::_R_type::iterator *val,
-                                                      typename Function::_IFunction2_type::_R_type::value_type *val2,
-                                                      typename Function::_IFunction2_type::_T2_type::_IReadIterator_type *val3,
+                                                      typename Function::_IFunction2_type::_T2_type::_IReadIterator_type *val2,
                                                       bool preservesPartitioning) {
                         mapPartitionsWithIndex_check<Function>(impl, (typename Function::_T1_type *) nullptr,
                                                                preservesPartitioning);
@@ -157,6 +166,8 @@ namespace ignis {
                     void mapPartitionsWithIndex_check(modules::impl::IPipeImpl &impl,
                                                       int64_t *val,
                                                       bool preservesPartitioning) {
+                        impl.registerType(getType<typename Function::_IFunction2_type::_R_type::value_type>());
+                        impl.registerType(getType<typename Function::_IFunction2_type::_T2_type::value_type>());
                         impl.mapPartitionsWithIndex<Function>(preservesPartitioning);
                     }
 
@@ -168,21 +179,48 @@ namespace ignis {
                     template<typename Function>
                     void
                     mapExecutor_check(modules::impl::IPipeImpl &impl, typename Function::_IVoidFunction_type *val) {
-                        mapExecutor_check<Function>(impl, val, (typename Function::_IVoidFunction_type::_T_type *) nullptr);
+                        mapExecutor_check(impl, (Function *) nullptr,
+                                          (typename Function::_IVoidFunction_type::_T_type *) nullptr);
                     }
 
                     template<typename Function, typename Tpv>
-                    void mapExecutor_check(modules::impl::IPipeImpl &impl, typename Function::_IVoidFunction_type *val,
-                                           api::IVector<api::IVector < Tpv> *
+                    void
+                    mapExecutor_check(modules::impl::IPipeImpl &impl, Function *val, api::IVector<api::IVector < Tpv> *
 
                     > *val2) {
-                        impl.mapExecutor<Function>();
+                        impl.registerType(getType<Tpv>());
+                        impl.mapExecutor<Function, Tpv>();
                     }
 
+                    template<typename Function, typename Tpv=void>
+                    void mapExecutor_check(modules::impl::IPipeImpl &impl, Function *f, ...) {
+                        throw exception::ICompatibilyException("mapExecutor", RTTInfo::from<Function>());
+                    }
 
                     template<typename Function>
-                    void mapExecutor_check(...) {
-                        throw exception::ICompatibilyException("mapExecutor", RTTInfo::from<Function>());
+                    void
+                    mapExecutorTo_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction_type *val) {
+                        mapExecutorTo_check(impl, (Function *) nullptr,
+                                            (typename Function::_IFunction_type::_T_type *) nullptr,
+                                            (typename Function::_IFunction_type::_R_type *) nullptr);
+                    }
+
+                    template<typename Function, typename Tpv, typename Rv>
+                    void
+                    mapExecutorTo_check(modules::impl::IPipeImpl &impl, Function *val,
+                                        api::IVector<api::IVector < Tpv> *
+
+                    > *val2,
+                    api::IVector <api::IVector<Rv>> *val3
+                    ) {
+                        impl.registerType(getType<Tpv>());
+                        impl.registerType(getType<Rv>());
+                        impl.mapExecutorTo<Function, Tpv, Rv>();
+                    }
+
+                    template<typename Function, typename Tpv=void, typename Rv=void>
+                    void mapExecutorTo_check(modules::impl::IPipeImpl &impl, Function *f, ...) {
+                        throw exception::ICompatibilyException("mapExecutorTo", RTTInfo::from<Function>());
                     }
 
                     template<typename Function>

@@ -234,8 +234,8 @@ struct ignis::executor::core::io::IJsonWriterType<std::pair<_T1, _T2>> {
 
 template<typename _Tp>
 struct ignis::executor::core::io::IJsonWriterType<_Tp *> {
-    inline void operator()(JsonWriter &out, const _Tp *&v) {
-        IJsonWriterType<_Tp *>()(out, *v);
+    inline void operator()(JsonWriter &out, const _Tp *v) {
+        IJsonWriterType<_Tp>()(out, *v);
     }
 };
 

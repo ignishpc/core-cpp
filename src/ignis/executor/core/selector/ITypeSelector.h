@@ -6,6 +6,7 @@
 #include <memory>
 #include <functional>
 #include <type_traits>
+#include "ISelectorUtils.h"
 #include "ignis/executor/core/RTTInfo.h"
 #include <ignis/executor/core/modules/impl/IPipeImpl.h>
 #include <ignis/executor/core/modules/impl/IReduceImpl.h>
@@ -232,27 +233,23 @@ namespace ignis {
                     }
 
                     void sortByKey(modules::impl::ISortImpl &impl, bool ascending) {
-                        sortByKey_check<Tp>(impl, nullptr, nullptr, ascending);
+                        sortByKey_check<Tp>(impl, nullptr, ascending);
                     }
 
                     void sortByKey(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) {
-                        sortByKey_check<Tp>(impl, nullptr, nullptr, ascending, numPartitions);
+                        sortByKey_check<Tp>(impl, nullptr, ascending, numPartitions);
                     }
 
                 private:
 
                     template<typename C>
-                    void
-                    sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val,
-                               bool ascending) {
+                    void sort_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val, bool ascending) {
                         impl.sort<Tp>(ascending);
                     }
 
                     template<typename C>
-                    void
-                    sort_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val,
-                               bool ascending,
-                               int64_t numPartitions) {
+                    void sort_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val, bool ascending,
+                                    int64_t numPartitions) {
                         impl.sort<Tp>(ascending, numPartitions);
                     }
 
@@ -260,9 +257,7 @@ namespace ignis {
                     void sort_check(...) { throw exception::ICompatibilyException("sort", RTTInfo::from<C>()); }
 
                     template<typename C>
-                    void
-                    top_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val,
-                              int64_t num) {
+                    void top_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val, int64_t num) {
                         impl.top<Tp>(num);
                     }
 
@@ -271,9 +266,7 @@ namespace ignis {
 
                     template<typename C>
                     void
-                    takeOrdered_check(modules::impl::ISortImpl &impl,
-                                      decltype(std::declval<C>() < std::declval<C>()) *val,
-                                      int64_t num) {
+                    takeOrdered_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val, int64_t num) {
                         impl.takeOrdered<Tp>(num);
                     }
 
@@ -283,8 +276,7 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void
-                    max_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val) {
+                    void max_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val) {
                         impl.max<Tp>();
                     }
 
@@ -292,8 +284,7 @@ namespace ignis {
                     void max_check(...) { throw exception::ICompatibilyException("max", RTTInfo::from<C>()); }
 
                     template<typename C>
-                    void
-                    min_check(modules::impl::ISortImpl &impl, decltype(std::declval<C>() < std::declval<C>()) *val) {
+                    void min_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val) {
                         impl.min<Tp>();
                     }
 
@@ -313,7 +304,8 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void countByKey_check(modules::impl::IMathImpl &impl, typename C::second_type *val) {
+                    void countByKey_check(modules::impl::IMathImpl &impl,
+                                          typename IHasHash<typename C::first_type>::result val) {
                         impl.countByKey<C>();
                     }
 
@@ -323,7 +315,8 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void countByValue_check(modules::impl::IMathImpl &impl, typename C::second_type *val) {
+                    void countByValue_check(modules::impl::IMathImpl &impl,
+                                            typename IHasHash<typename C::second_type>::result val) {
                         impl.countByValue<C>();
                     }
 
@@ -353,7 +346,8 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void groupByKey_check(modules::impl::IReduceImpl &impl, decltype(&std::hash<typename C::first_type>::operator()) *val,
+                    void groupByKey_check(modules::impl::IReduceImpl &impl,
+                                          typename IHasHash<typename C::first_type>::result val,
                                           int64_t numPartitions) {
                         impl.groupByKey<C>(numPartitions);
                     }
@@ -364,21 +358,17 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void
-                    sortByKey_check(modules::impl::ISortImpl &impl, typename C::second_type *val,
-                                    decltype(std::declval<typename C::first_type>() <
-                                             std::declval<typename C::first_type>()) *val2,
-                                    bool ascending) {
+                    void sortByKey_check(modules::impl::ISortImpl &impl,
+                                         typename IHasLess<typename C::first_type>::result val,
+                                         bool ascending) {
                         impl.sortByKey<Tp>(ascending);
                     }
 
                     template<typename C>
-                    void
-                    sortByKey_check(modules::impl::ISortImpl &impl, typename C::second_type *val,
-                                    decltype(std::declval<typename C::first_type>() <
-                                             std::declval<typename C::first_type>()) *val2,
-                                    bool ascending,
-                                    int64_t numPartitions) {
+                    void sortByKey_check(modules::impl::ISortImpl &impl,
+                                         typename IHasLess<typename C::first_type>::result val,
+                                         bool ascending,
+                                         int64_t numPartitions) {
                         impl.sortByKey<Tp>(ascending, numPartitions);
                     }
 
@@ -388,6 +378,11 @@ namespace ignis {
                     }
 
                 };
+
+                template<typename Tp>
+                std::shared_ptr<ITypeSelector> getType() {
+                    return std::make_shared<ITypeSelectorImpl<Tp>>();
+                }
 
                 class ITypeSelectorExtractor {
                 public:

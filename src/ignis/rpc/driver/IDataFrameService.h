@@ -40,6 +40,7 @@ class IDataFrameServiceIf {
   virtual void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
   virtual void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
   virtual void mapExecutor(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void mapExecutorTo(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupBy2(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
   virtual void sort(IDataFrameId& _return, const IDataFrameId& id, const bool ascending) = 0;
@@ -177,6 +178,9 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
     return;
   }
   void mapExecutor(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void mapExecutorTo(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void groupBy(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
@@ -2427,6 +2431,125 @@ class IDataFrameService_mapExecutor_presult {
    ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_mapExecutor_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_mapExecutorTo_args__isset {
+  _IDataFrameService_mapExecutorTo_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IDataFrameService_mapExecutorTo_args__isset;
+
+class IDataFrameService_mapExecutorTo_args {
+ public:
+
+  IDataFrameService_mapExecutorTo_args(const IDataFrameService_mapExecutorTo_args&);
+  IDataFrameService_mapExecutorTo_args& operator=(const IDataFrameService_mapExecutorTo_args&);
+  IDataFrameService_mapExecutorTo_args() {
+  }
+
+  virtual ~IDataFrameService_mapExecutorTo_args() noexcept;
+  IDataFrameId id;
+   ::ignis::rpc::ISource src;
+
+  _IDataFrameService_mapExecutorTo_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_mapExecutorTo_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_mapExecutorTo_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_mapExecutorTo_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_mapExecutorTo_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_mapExecutorTo_pargs() noexcept;
+  const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_mapExecutorTo_result__isset {
+  _IDataFrameService_mapExecutorTo_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_mapExecutorTo_result__isset;
+
+class IDataFrameService_mapExecutorTo_result {
+ public:
+
+  IDataFrameService_mapExecutorTo_result(const IDataFrameService_mapExecutorTo_result&);
+  IDataFrameService_mapExecutorTo_result& operator=(const IDataFrameService_mapExecutorTo_result&);
+  IDataFrameService_mapExecutorTo_result() {
+  }
+
+  virtual ~IDataFrameService_mapExecutorTo_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_mapExecutorTo_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_mapExecutorTo_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_mapExecutorTo_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_mapExecutorTo_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_mapExecutorTo_presult__isset {
+  _IDataFrameService_mapExecutorTo_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_mapExecutorTo_presult__isset;
+
+class IDataFrameService_mapExecutorTo_presult {
+ public:
+
+
+  virtual ~IDataFrameService_mapExecutorTo_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_mapExecutorTo_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -8550,6 +8673,9 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void mapExecutor(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void send_mapExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapExecutor(IDataFrameId& _return);
+  void mapExecutorTo(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void send_mapExecutorTo(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_mapExecutorTo(IDataFrameId& _return);
   void groupBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void send_groupBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_groupBy(IDataFrameId& _return);
@@ -8727,6 +8853,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_mapPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapPartitionsWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapExecutor(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mapExecutorTo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_groupBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_groupBy2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -8796,6 +8923,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["mapPartitions"] = &IDataFrameServiceProcessor::process_mapPartitions;
     processMap_["mapPartitionsWithIndex"] = &IDataFrameServiceProcessor::process_mapPartitionsWithIndex;
     processMap_["mapExecutor"] = &IDataFrameServiceProcessor::process_mapExecutor;
+    processMap_["mapExecutorTo"] = &IDataFrameServiceProcessor::process_mapExecutorTo;
     processMap_["groupBy"] = &IDataFrameServiceProcessor::process_groupBy;
     processMap_["groupBy2"] = &IDataFrameServiceProcessor::process_groupBy2;
     processMap_["sort"] = &IDataFrameServiceProcessor::process_sort;
@@ -9040,6 +9168,16 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
       ifaces_[i]->mapExecutor(_return, id, src);
     }
     ifaces_[i]->mapExecutor(_return, id, src);
+    return;
+  }
+
+  void mapExecutorTo(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->mapExecutorTo(_return, id, src);
+    }
+    ifaces_[i]->mapExecutorTo(_return, id, src);
     return;
   }
 
@@ -9585,6 +9723,9 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void mapExecutor(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   int32_t send_mapExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapExecutor(IDataFrameId& _return, const int32_t seqid);
+  void mapExecutorTo(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_mapExecutorTo(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_mapExecutorTo(IDataFrameId& _return, const int32_t seqid);
   void groupBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   int32_t send_groupBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_groupBy(IDataFrameId& _return, const int32_t seqid);

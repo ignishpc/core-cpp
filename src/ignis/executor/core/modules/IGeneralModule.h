@@ -31,6 +31,8 @@ namespace ignis {
 
                     void mapExecutor(const rpc::ISource &function) override;
 
+                    void mapExecutorTo(const rpc::ISource &function) override;
+
                     void groupBy(const rpc::ISource &function, int64_t numPartitions) override;
 
                     void sort(bool ascending) override;

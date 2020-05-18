@@ -66,6 +66,8 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId mapExecutorAbs(const ISource &src);
 
+                rpc::driver::IDataFrameId mapExecutorAbsTo(const ISource &src);
+
                 rpc::driver::IDataFrameId groupByAbs(const ISource &src);
 
                 rpc::driver::IDataFrameId groupByAbs(const ISource &src, int64_t numPartitions);
@@ -249,6 +251,11 @@ namespace ignis {
                 template<typename R>
                 std::shared_ptr<IDataFrame<R>> mapExecutor(const ISource &src) {
                     return IDataFrame<R>::make(mapExecutorAbs(src));
+                }
+
+                template<typename R>
+                std::shared_ptr<IDataFrame<R>> mapExecutorTo(const ISource &src) {
+                    return IDataFrame<R>::make(mapExecutorAbsTo(src));
                 }
 
                 template<typename Key>

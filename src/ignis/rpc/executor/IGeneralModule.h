@@ -29,6 +29,7 @@ class IGeneralModuleIf {
   virtual void mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
   virtual void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
   virtual void mapExecutor(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void mapExecutorTo(const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
   virtual void sort(const bool ascending) = 0;
   virtual void sort2(const bool ascending, const int64_t numPartitions) = 0;
@@ -93,6 +94,9 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
     return;
   }
   void mapExecutor(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void mapExecutorTo(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void groupBy(const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */) {
@@ -882,6 +886,110 @@ class IGeneralModule_mapExecutor_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IGeneralModule_mapExecutor_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_mapExecutorTo_args__isset {
+  _IGeneralModule_mapExecutorTo_args__isset() : src(false) {}
+  bool src :1;
+} _IGeneralModule_mapExecutorTo_args__isset;
+
+class IGeneralModule_mapExecutorTo_args {
+ public:
+
+  IGeneralModule_mapExecutorTo_args(const IGeneralModule_mapExecutorTo_args&);
+  IGeneralModule_mapExecutorTo_args& operator=(const IGeneralModule_mapExecutorTo_args&);
+  IGeneralModule_mapExecutorTo_args() {
+  }
+
+  virtual ~IGeneralModule_mapExecutorTo_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralModule_mapExecutorTo_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralModule_mapExecutorTo_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_mapExecutorTo_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_mapExecutorTo_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_mapExecutorTo_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_mapExecutorTo_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_mapExecutorTo_result__isset {
+  _IGeneralModule_mapExecutorTo_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_mapExecutorTo_result__isset;
+
+class IGeneralModule_mapExecutorTo_result {
+ public:
+
+  IGeneralModule_mapExecutorTo_result(const IGeneralModule_mapExecutorTo_result&);
+  IGeneralModule_mapExecutorTo_result& operator=(const IGeneralModule_mapExecutorTo_result&);
+  IGeneralModule_mapExecutorTo_result() {
+  }
+
+  virtual ~IGeneralModule_mapExecutorTo_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_mapExecutorTo_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_mapExecutorTo_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_mapExecutorTo_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_mapExecutorTo_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_mapExecutorTo_presult__isset {
+  _IGeneralModule_mapExecutorTo_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_mapExecutorTo_presult__isset;
+
+class IGeneralModule_mapExecutorTo_presult {
+ public:
+
+
+  virtual ~IGeneralModule_mapExecutorTo_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_mapExecutorTo_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -2730,6 +2838,9 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   void mapExecutor(const  ::ignis::rpc::ISource& src);
   void send_mapExecutor(const  ::ignis::rpc::ISource& src);
   void recv_mapExecutor();
+  void mapExecutorTo(const  ::ignis::rpc::ISource& src);
+  void send_mapExecutorTo(const  ::ignis::rpc::ISource& src);
+  void recv_mapExecutorTo();
   void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
   void send_groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
   void recv_groupBy();
@@ -2800,6 +2911,7 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_mapPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapPartitionsWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapExecutor(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mapExecutorTo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_groupBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sort(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sort2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2826,6 +2938,7 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["mapPartitions"] = &IGeneralModuleProcessor::process_mapPartitions;
     processMap_["mapPartitionsWithIndex"] = &IGeneralModuleProcessor::process_mapPartitionsWithIndex;
     processMap_["mapExecutor"] = &IGeneralModuleProcessor::process_mapExecutor;
+    processMap_["mapExecutorTo"] = &IGeneralModuleProcessor::process_mapExecutorTo;
     processMap_["groupBy"] = &IGeneralModuleProcessor::process_groupBy;
     processMap_["sort"] = &IGeneralModuleProcessor::process_sort;
     processMap_["sort2"] = &IGeneralModuleProcessor::process_sort2;
@@ -2931,6 +3044,15 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
       ifaces_[i]->mapExecutor(src);
     }
     ifaces_[i]->mapExecutor(src);
+  }
+
+  void mapExecutorTo(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->mapExecutorTo(src);
+    }
+    ifaces_[i]->mapExecutorTo(src);
   }
 
   void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) {
@@ -3130,6 +3252,9 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   void mapExecutor(const  ::ignis::rpc::ISource& src);
   int32_t send_mapExecutor(const  ::ignis::rpc::ISource& src);
   void recv_mapExecutor(const int32_t seqid);
+  void mapExecutorTo(const  ::ignis::rpc::ISource& src);
+  int32_t send_mapExecutorTo(const  ::ignis::rpc::ISource& src);
+  void recv_mapExecutorTo(const int32_t seqid);
   void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
   int32_t send_groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
   void recv_groupBy(const int32_t seqid);

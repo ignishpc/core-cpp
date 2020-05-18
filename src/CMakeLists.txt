@@ -132,6 +132,7 @@ set(SOURCE_FILES
         ignis/executor/core/selector/IGeneralSelector.h
         ignis/executor/core/selector/IKeySelector.h
         ignis/executor/core/selector/ISelector.h
+        ignis/executor/core/selector/ISelectorUtils.h
         ignis/executor/core/selector/ITypeSelector.h
         ignis/executor/core/selector/IValueSelector.h
 

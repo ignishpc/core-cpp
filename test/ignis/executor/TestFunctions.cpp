@@ -29,14 +29,23 @@ public:
 
 ignis_export(FilterInt, FilterInt)
 
-class FlatmapInt : public function::IFunction<int, std::vector<int>> {
+class FlatmapString : public function::IFunction<std::string, std::vector<std::string>> {
 public:
-    std::vector<int> call(int &v, IContext &context) override {
-        return std::vector<int>(2, v);
+    std::vector<std::string> call(std::string &v, IContext &context) override {
+        return std::vector<std::string>(2, v);
     }
 };
 
-ignis_export(FlatmapInt, FlatmapInt)
+ignis_export(FlatmapString, FlatmapString)
+
+class KeyByString : public function::IFunction<std::string, int> {
+public:
+    int call(std::string &v, IContext &context) override {
+        return (int) v.length();
+    }
+};
+
+ignis_export(KeyByString, KeyByString)
 
 class MapPartitionsInt : public function::IFunction<IReadIterator<int>, std::vector<std::string>> {
 public:
@@ -63,6 +72,44 @@ public:
 };
 
 ignis_export(MapPartitionWithIndexInt, MapPartitionWithIndexInt)
+
+class MapExecutorInt : public function::IVoidFunction<IVector<IVector<int> *>> {
+public:
+    void call(IVector<IVector<int> *> &parts, IContext &context) override {
+        for (auto &part : parts) {
+            for (auto &elem : *part) {
+                elem++;
+            }
+        }
+    }
+};
+
+ignis_export(MapExecutorInt, MapExecutorInt)
+
+class MapExecutorToString : public function::IFunction<IVector<IVector<int> *>, IVector<IVector<std::string>>> {
+public:
+    IVector<IVector<std::string>> call(IVector<IVector<int> *> &parts, IContext &context) override {
+        IVector<IVector<std::string>> v;
+        for (auto part : parts) {
+            v.emplace_back();
+            for (auto elem : *part) {
+                v.back().push_back(std::to_string(elem));
+            }
+        }
+        return std::move(v);
+    }
+};
+
+ignis_export(MapExecutorToString, MapExecutorToString)
+
+class GroupByIntString : public function::IFunction<std::string, int> {
+public:
+    int call(std::string &elem, IContext &context) override {
+        return (int) elem.length();
+    }
+};
+
+ignis_export(GroupByIntString, GroupByIntString)
 
 class ReduceInt : public function::IFunction2<int, int, int> {
 public:
@@ -144,7 +191,7 @@ ignis_export(ForeachInt, ForeachInt)
 class ForeachPartitionString : public function::IVoidFunction<IReadIterator<std::string>> {
 public:
     void call(IReadIterator<std::string> &it, IContext &context) override {
-        while(it.hasNext()){
+        while (it.hasNext()) {
             it.next();
         }
     }

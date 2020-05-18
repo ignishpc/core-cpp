@@ -344,7 +344,7 @@ struct ignis::executor::core::io::IWriterType<_Tp *> {
         writer.writeType(protocol);
     }
 
-    inline void operator()(protocol::IProtocol &protocol, const _Tp *&obj) {
+    inline void operator()(protocol::IProtocol &protocol, const _Tp *obj) {
         writer(protocol, *obj);
     }
 

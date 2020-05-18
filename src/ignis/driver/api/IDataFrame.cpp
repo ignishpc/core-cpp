@@ -176,6 +176,16 @@ IDataFrameId IAbstractDataFrame::mapExecutorAbs(const ISource &src) {
     }
 }
 
+IDataFrameId IAbstractDataFrame::mapExecutorAbsTo(const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().mapExecutorTo(_return, id, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) {
+        throw IDriverException(ex.message, ex._cause);
+    }
+}
+
 IDataFrameId IAbstractDataFrame::groupByAbs(const ISource &src) {
     try {
         IDataFrameId _return;

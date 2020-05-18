@@ -53,6 +53,12 @@ void IGeneralModule::mapExecutor(const rpc::ISource &function) {
     IGNIS_RPC_CATCH()
 }
 
+void IGeneralModule::mapExecutorTo(const rpc::ISource &function) {
+    IGNIS_RPC_TRY()
+        executor_data->loadLibrary(function)->general->mapExecutorTo(pipe_impl);
+    IGNIS_RPC_CATCH()
+}
+
 void IGeneralModule::groupBy(const rpc::ISource &function, int64_t numPartitions) {
     IGNIS_RPC_TRY()
         executor_data->loadLibrary(function)->general->keyBy(pipe_impl);

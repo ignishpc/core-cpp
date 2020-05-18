@@ -31,8 +31,11 @@ namespace ignis {
                         template<typename Function>
                         void mapPartitionsWithIndex(bool preservesPartitioning);
 
-                        template<typename Function>
+                        template<typename Function, typename Tp>
                         void mapExecutor();
+
+                        template<typename Function, typename Tp, typename R>
+                        void mapExecutorTo();
 
                         template<typename Function>
                         void foreach();

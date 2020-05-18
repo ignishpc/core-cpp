@@ -212,8 +212,8 @@ struct ignis::executor::core::io::IPrinterType<std::pair<_T1, _T2>> {
 
 template<typename _Tp>
 struct ignis::executor::core::io::IPrinterType<_Tp *> {
-    inline void operator()(std::ostream &out, const _Tp *&v, int64_t level) {
-        IPrinterType<_Tp *>()(out, *v, level);
+    inline void operator()(std::ostream &out, const _Tp *v, int64_t level) {
+        IPrinterType<_Tp>()(out, *v, level);
     }
 };
 

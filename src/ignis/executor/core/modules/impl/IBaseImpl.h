@@ -21,6 +21,8 @@ namespace ignis {
                     public:
                         IBaseImpl(std::shared_ptr<IExecutorData> &executor_data);
 
+                        void registerType(const std::shared_ptr<selector::ITypeSelector> &type);
+
                         virtual ~IBaseImpl();
 
                     protected:
