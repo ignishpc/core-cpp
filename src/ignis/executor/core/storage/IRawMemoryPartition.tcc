@@ -30,6 +30,7 @@ template<typename Tp>
 void IRawMemoryPartitionClass<Tp>::clear() {
     buffer->resetBuffer();
     this->elems = 0;
+    this->writeHeader();
 }
 
 template<typename Tp>

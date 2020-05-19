@@ -546,9 +546,9 @@ void IPipeImplCLass::values() {
 template<typename Tp, typename Function>
 void IPipeImplCLass::flatMapValues() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type>();
+        auto input = executor_data->getPartitions<Tp>();
         auto output = executor_data->getPartitionTools().newPartitionGroup<
-                std::pair<typename Tp::first_type, typename Function::_R_type>
+                std::pair<typename Tp::first_type, typename Function::_R_type::value_type>
         >(input->partitions());
         auto &context = executor_data->getContext();
         Function function;
@@ -570,7 +570,7 @@ void IPipeImplCLass::flatMapValues() {
                         for (size_t i = 0; i < sz; i++) {
                             auto result = function.call(men_part[i].second, context);
                             for (auto it = result.begin(); it != result.end(); it++) {
-                                men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type>
+                                men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type::value_type>
                                                          (men_part[i].first, std::move(*it)));
                             }
                         }
@@ -580,7 +580,7 @@ void IPipeImplCLass::flatMapValues() {
                             auto &pair = reader->next();
                             auto result = function.call(pair.second, context);
                             for (auto it = result.begin(); it != result.end(); it++) {
-                                writer->write(std::pair<typename Tp::first_type, typename Function::_R_type>
+                                writer->write(std::pair<typename Tp::first_type, typename Function::_R_type::value_type>
                                                       (pair.first, std::move(*it)));
                             }
                         }

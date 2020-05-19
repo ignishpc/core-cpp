@@ -50,6 +50,7 @@ void IDiskPartitionClass<Tp>::clear() {
     this->zlib->flush();
     this->elems = 0;
     ::ftruncate64(file->getFD(), 0);
+    writeHeader();
 }
 
 template<typename Tp>

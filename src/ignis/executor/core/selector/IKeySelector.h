@@ -57,8 +57,8 @@ namespace ignis {
                         reduceByKey_check<Tp>(impl, nullptr, numPartitions, localReduce);
                     };
 
-                    virtual void aggregateByKey(modules::impl::IReduceImpl &impl, bool hashing) {
-                        aggregateByKey_check<Tp>(impl, nullptr, hashing);
+                    virtual void aggregateByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions, bool hashing) {
+                        aggregateByKey_check<Tp>(impl, nullptr, numPartitions, hashing);
                     };
 
                     virtual void foldByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions, bool localFold) {
@@ -69,7 +69,7 @@ namespace ignis {
 
                     template<typename Function>
                     void mapValues_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction_type *val) {
-                        impl.mapValues<std::pair<K, typename Function::_T_T_type>, Function>();
+                        impl.mapValues<std::pair<K, typename Function::_T_type>, Function>();
                     }
 
                     template<typename Function>
@@ -81,7 +81,10 @@ namespace ignis {
                     void flatMapValues_check(modules::impl::IPipeImpl &impl,
                                              typename Function::_IFunction_type::_R_type::iterator *val,
                                              typename Function::_IFunction_type::_R_type::value_type *val2) {
-                        impl.flatmap<std::pair<K, typename Function::_T_type>, Function>();
+                        impl.registerType(
+                                getType<std::pair<K, typename Function::_IFunction_type::_R_type::value_type>>()
+                        );
+                        impl.flatMapValues<std::pair<K, typename Function::_T_type>, Function>();
                     }
 
                     template<typename Function>
@@ -126,7 +129,7 @@ namespace ignis {
                                               typename Function::_R_type *val2,
                                               decltype(&std::hash<typename Function::_T1_type>::operator()) *val3,
                                               int64_t numPartitions, bool hashing) {
-                        impl.aggregateByKey<std::pair<K, typename Function::_T1_type>, Function>(numPartitions,
+                        impl.aggregateByKey<std::pair<K, typename Function::_T2_type>, Function>(numPartitions,
                                                                                                  hashing);
                     }
 

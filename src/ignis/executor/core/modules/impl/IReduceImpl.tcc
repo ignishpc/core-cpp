@@ -254,13 +254,13 @@ void IReduceImplClass::reduceByKey(int64_t numPartitions, bool localReduce) {
         f.before(context);
         if (localReduce) {
             IGNIS_LOG(info) << "Reduce: local reducing key elements";
-            localReduceByKey<Tp, Function>(f);
+            localReduceByKey<Function, Tp>(f);
         }
         keyHashing<Tp>(numPartitions);
         keyExchanging<Tp>();
         IGNIS_LOG(info) << "Reduce: reducing key elements";
 
-        localReduceByKey<Tp, Function>(f);
+        localReduceByKey<Function, Tp>(f);
         f.after(context);
     IGNIS_CATCH()
 }
@@ -278,7 +278,7 @@ void IReduceImplClass::aggregateByKey(int64_t numPartitions, bool hashing) {
         }
         IGNIS_LOG(info) << "Reduce: aggregating key elements";
 
-        localAggregateByKey<Tp, Function>(f);
+        localAggregateByKey<Function, Tp>(f);
         f.after(context);
 
     IGNIS_CATCH()
@@ -291,16 +291,16 @@ void IReduceImplClass::foldByKey(int64_t numPartitions, bool localFold) {
     f.before(context);
     if (localFold) {
         IGNIS_LOG(info) << "Reduce: local folding key elements";
-        localAggregateByKey<Tp, Function>(f);
+        localAggregateByKey<Function, Tp>(f);
         keyHashing<Tp>(numPartitions);
         keyExchanging<Tp>();
         IGNIS_LOG(info) << "Reduce: folding key elements";
-        localReduceByKey<Tp, Function>(f);
+        localReduceByKey<Function, Tp>(f);
     } else {
         keyHashing<Tp>(numPartitions);
         keyExchanging<Tp>();
         IGNIS_LOG(info) << "Reduce: folding key elements";
-        localAggregateByKey<Tp, Function>(f);
+        localAggregateByKey<Function, Tp>(f);
     }
     f.after(context);
 }
@@ -420,18 +420,27 @@ inline void IReduceImplClass::aggregatePartition(Function &f, storage::IPartitio
 template<typename Function, typename Tp>
 void IReduceImplClass::localReduceByKey(Function &f) {
     auto input = executor_data->getPartitions<Tp>();
+    auto output = input;
+    if (output->cache()) {
+        output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+        for (int64_t p = 0; p < output->partitions(); p++) {
+            output->add(executor_data->getPartitionTools().newPartition<Tp>((*input)[0]->type()));
+        }
+    }
+
     auto &context = executor_data->getContext();
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
     {
         IGNIS_OMP_TRY()
-            std::unordered_map<typename Tp::first_type, typename Tp::first_type::second_type> acum;
+            std::unordered_map<typename Tp::first_type, typename Tp::second_type> acum;
 
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < input->partitions(); p++) {
-                auto &part = *(*input)[p];
-                if (executor_data->getPartitionTools().isMemory(part)) {
-                    auto &men_part = executor_data->getPartitionTools().toMemory(part);
+                auto &part_in = *(*input)[p];
+                auto &part_out = *(*output)[p];
+                if (executor_data->getPartitionTools().isMemory(part_in)) {
+                    auto &men_part = executor_data->getPartitionTools().toMemory(part_in);
                     for (int64_t i = 0; i < men_part.size(); i++) {
                         auto &elem = men_part[i];
                         auto it = acum.find(elem.first);
@@ -441,15 +450,15 @@ void IReduceImplClass::localReduceByKey(Function &f) {
                             it->second = f.call(it->second, elem.second, context);
                         }
                     }
-                    part.clear();
-                    auto writer = part.writeIterator();
+                    part_out.clear();
+                    auto writer = part_out.writeIterator();
                     auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                     for (auto &elem: acum) {
                         men_writer.write(std::move(elem));
                     }
                 } else {
-                    auto reader = part.readIterator();
-                    for (int64_t i = 0; i < part.size(); i++) {
+                    auto reader = part_in.readIterator();
+                    for (int64_t i = 0; i < part_in.size(); i++) {
                         auto &elem = reader->next();
                         auto it = acum.find(elem.first);
                         if (it == acum.end()) {
@@ -458,8 +467,8 @@ void IReduceImplClass::localReduceByKey(Function &f) {
                             it->second = f.call(it->second, elem.second, context);
                         }
                     }
-                    part.clear();
-                    auto writer = part.writeIterator();
+                    part_out.clear();
+                    auto writer = part_out.writeIterator();
                     for (auto &elem: acum) {
                         writer->write(std::move(elem));
                     }
@@ -469,13 +478,14 @@ void IReduceImplClass::localReduceByKey(Function &f) {
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
+    executor_data->setPartitions(output);
 }
 
 template<typename Function, typename Tp>
 void IReduceImplClass::localAggregateByKey(Function &f) {
     auto input = executor_data->getPartitions<Tp>();
-    auto output = executor_data->getPartitions<std::pair<typename Tp::first_type, typename Function::_R_type>>(
-            input->partitions());
+    auto output = executor_data->getPartitionTools().newPartitionGroup
+            <std::pair<typename Tp::first_type, typename Function::_R_type>>(input->partitions());
     auto &context = executor_data->getContext();
     auto base_acum = executor_data->getVariable<typename Function::_T1_type>("zero");
     const bool inMemory = executor_data->getPartitionTools().isMemory(*input) &&
@@ -490,9 +500,9 @@ void IReduceImplClass::localAggregateByKey(Function &f) {
 
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < input->partitions(); p++) {
-                auto &part = *(*input)[p];
-                if (executor_data->getPartitionTools().isMemory(part)) {
-                    auto &men_part = executor_data->getPartitionTools().toMemory(part);
+                auto &part_in = *(*input)[p];
+                if (executor_data->getPartitionTools().isMemory(part_in)) {
+                    auto &men_part = executor_data->getPartitionTools().toMemory(part_in);
                     for (int64_t i = 0; i < men_part.size(); i++) {
                         auto &elem = men_part[i];
                         auto it = acum.find(elem.first);
@@ -510,15 +520,17 @@ void IReduceImplClass::localAggregateByKey(Function &f) {
                             it->second = f.call(it->second, elem.second, context);
                         }
                     }
-                    part.clear();
+                    if (!cache) {
+                        part_in.clear();
+                    }
                     auto writer = (*output)[p]->writeIterator();
                     auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                     for (auto &elem: acum) {
                         men_writer.write(std::move(elem));
                     }
                 } else {
-                    auto reader = (*output)[p]->readIterator();
-                    for (int64_t i = 0; i < part.size(); i++) {
+                    auto reader = (*input)[p]->readIterator();
+                    for (int64_t i = 0; i < part_in.size(); i++) {
                         auto &elem = reader->next();
                         auto it = acum.find(elem.first);
                         if (it == acum.end()) {
@@ -529,8 +541,10 @@ void IReduceImplClass::localAggregateByKey(Function &f) {
                             it->second = f.call(it->second, elem.second, context);
                         }
                     }
-                    part.clear();
-                    auto writer = part.writeIterator();
+                    if (!cache) {
+                        part_in.clear();
+                    }
+                    auto writer = (*output)[p]->writeIterator();
                     for (auto &elem: acum) {
                         writer->write(std::move(elem));
                     }
@@ -540,6 +554,7 @@ void IReduceImplClass::localAggregateByKey(Function &f) {
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
+    executor_data->setPartitions(output);
 }
 
 template<typename Tp>
@@ -566,13 +581,12 @@ void IReduceImplClass::keyHashing(int64_t numPartitions) {
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
     {
-        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(output->partitions());
-        std::vector<std::shared_ptr<api::IWriteIterator < Tp>> > writers;
-        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
-            writers.push_back((*thread_ranges)[p]->writeIterator());
-        }
-
         IGNIS_OMP_TRY()
+            auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(output->partitions());
+            std::vector<std::shared_ptr<api::IWriteIterator < Tp>> > writers;
+            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+                writers.push_back((*thread_ranges)[p]->writeIterator());
+            }
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < input->partitions(); p++) {
                 auto reader = (*input)[p]->readIterator();

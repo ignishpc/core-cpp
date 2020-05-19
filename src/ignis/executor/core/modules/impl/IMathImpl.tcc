@@ -49,8 +49,8 @@ void IMathImplClass::countByKey() {
         IGNIS_OMP_EXCEPTION_INIT()
         #pragma omp parallel
         {
-            auto thread = executor_data->getContext().threadId();
             IGNIS_OMP_TRY()
+                auto thread = executor_data->getContext().threadId();
                 #pragma omp for schedule(dynamic)
                 for (int64_t p = 0; p < input->partitions(); p++) {
                     auto &part = *(*input)[p];
@@ -97,8 +97,8 @@ void IMathImplClass::countByValue() {
         IGNIS_OMP_EXCEPTION_INIT()
         #pragma omp parallel
         {
-            auto thread = executor_data->getContext().threadId();
             IGNIS_OMP_TRY()
+                auto thread = executor_data->getContext().threadId();
                 #pragma omp for schedule(dynamic)
                 for (int64_t p = 0; p < input->partitions(); p++) {
                     auto &part = *(*input)[p];

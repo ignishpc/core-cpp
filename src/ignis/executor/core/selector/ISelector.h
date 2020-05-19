@@ -72,6 +72,7 @@ namespace ignis {
 
                 template<typename K, typename Tp>
                 class ISelectorGroupKeyImpl : public ISelectorGroupImpl<Tp> {
+                public:
                     ISelectorGroupKeyImpl() : ISelectorGroupImpl<Tp>() {
                         this->key = std::make_shared<IKeySelectorImpl<K, Tp>>();
                     }
@@ -79,6 +80,7 @@ namespace ignis {
 
                 template<typename K, typename Tp>
                 class ISelectorGroupValueImpl : public ISelectorGroupImpl<Tp> {
+                public:
                     ISelectorGroupValueImpl() : ISelectorGroupImpl<Tp>() {
                         this->value = std::make_shared<IValueSelectorImpl<K, Tp>>();
                     }

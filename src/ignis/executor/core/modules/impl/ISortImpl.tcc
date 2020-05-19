@@ -337,13 +337,13 @@ ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IM
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
     {
-        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
-        std::vector<std::shared_ptr<api::IWriteIterator < Tp>> > writers;
-        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
-            writers.push_back((*thread_ranges)[p]->writeIterator());
-        }
-
         IGNIS_OMP_TRY()
+            auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
+            std::vector<std::shared_ptr<api::IWriteIterator < Tp>> > writers;
+            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+                writers.push_back((*thread_ranges)[p]->writeIterator());
+            }
+
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < group.partitions(); p++) {
                 auto reader = group[p]->readIterator();
@@ -399,14 +399,14 @@ ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, stora
     IGNIS_OMP_EXCEPTION_INIT()
     #pragma omp parallel
     {
-        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
-        std::vector<std::shared_ptr<storage::IMemoryWriteIterator < Tp>> > writers(ranges->partitions());
-        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
-            auto it = (*thread_ranges)[p]->writeIterator();
-            writers[p] = executor_data->getPartitionTools().toMemory(it);
-        }
-
         IGNIS_OMP_TRY()
+            auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
+            std::vector<std::shared_ptr<storage::IMemoryWriteIterator < Tp>> > writers(ranges->partitions());
+            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+                auto it = (*thread_ranges)[p]->writeIterator();
+                writers[p] = executor_data->getPartitionTools().toMemory(it);
+            }
+
             #pragma omp for schedule(dynamic)
             for (int64_t p = 0; p < group.partitions(); p++) {
                 auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
@@ -503,10 +503,10 @@ void ISortImplClass::take_ordered_add(Cmp comparator, storage::IMemoryPartition 
         inner.push_back(elem);
         return;
     }
-    if(inner.size() == n){
+    if (inner.size() == n) {
         if (comparator(inner.back(), elem)) {
             return;
-        }else{
+        } else {
             inner.pop_back();
         }
     }

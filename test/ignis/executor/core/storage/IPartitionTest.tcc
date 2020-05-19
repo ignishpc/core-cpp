@@ -94,9 +94,19 @@ template<typename Tp>
 void IPartitionTestClass<Tp>::clearTest() {
     auto part = create();
     IVector <Tp> elems = IElements<Tp>::create(100, 0);
+    IVector <Tp> result;
     read(elems, *part);
     part->clear();
     CPPUNIT_ASSERT_EQUAL((size_t) 0, part->size());
+    read(elems, *part);
+    write(*part, result);
+    CPPUNIT_ASSERT(elems == result);
+    part->clear();
+    CPPUNIT_ASSERT_EQUAL((size_t) 0, part->size());
+    writeIterator(elems, *part);
+    result.clear();
+    readIterator(*part, result);
+    CPPUNIT_ASSERT(elems == result);
 }
 
 template<typename Tp>

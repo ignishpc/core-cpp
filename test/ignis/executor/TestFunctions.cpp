@@ -118,7 +118,7 @@ public:
     }
 };
 
-ignis_export(ReduceInt, ReduceInt)
+ignis_export_with_key(ReduceInt, ReduceInt, int)
 
 
 class ReduceString : public function::IFunction2<std::string, std::string, std::string> {
@@ -128,7 +128,7 @@ public:
     }
 };
 
-ignis_export(ReduceString, ReduceString)
+ignis_export_with_key(ReduceString, ReduceString, int)
 
 class SortInt : public function::IFunction2<int, int, bool> {
 public:
@@ -150,6 +150,24 @@ public:
 ignis_export(SortString, SortString)
 
 
+class MapValuesInt : public function::IFunction<int, std::string> {
+public:
+    std::string call(int &v, IContext &context) override {
+        return std::to_string(v);
+    }
+};
+
+ignis_export_with_key(MapValuesInt, MapValuesInt, int)
+
+class FlatMapValuesInt : public function::IFunction<int, std::vector<std::string>> {
+public:
+    std::vector<std::string> call(int &v, IContext &context) override {
+        return std::vector<std::string>(1, std::to_string(v));
+    }
+};
+
+ignis_export_with_key(FlatMapValuesInt, FlatMapValuesInt, int)
+
 class ZeroInt : public function::IFunction0<int> {
 public:
     int call(IContext &context) override {
@@ -167,7 +185,7 @@ public:
     }
 };
 
-ignis_export(ReduceIntToString, ReduceIntToString)
+ignis_export_with_key(ReduceIntToString, ReduceIntToString, int)
 
 class ZeroString : public function::IFunction0<std::string> {
 public:
