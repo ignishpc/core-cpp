@@ -8,8 +8,8 @@
 using namespace ignis::executor::core;
 
 IExecutorData::IExecutorData() : properties(context.props()),
-                                 _mpi(properties, context.mpiGroup()),
-                                 partition_tools(properties, context) {}
+                                 partition_tools(properties, context),
+                                 _mpi(properties, partition_tools, context.mpiGroup()) {}
 
 bool IExecutorData::hasPartitions() {
     return (bool) partitions;

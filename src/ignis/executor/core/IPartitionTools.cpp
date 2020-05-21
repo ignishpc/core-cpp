@@ -22,3 +22,17 @@ void IPartitionTools::createDirectoryIfNotExists(const std::string &path) {
         }
     }
 }
+
+bool IPartitionTools::createHardLink(const std::string &target, const std::string &link) {
+    boost::filesystem::remove(link);
+    boost::system::error_code error;
+    boost::filesystem::create_hard_link(target, link, error);
+    return !error.failed();
+}
+
+bool IPartitionTools::copyFile(const std::string &from, const std::string &to) {
+    boost::filesystem::remove(to);
+    boost::system::error_code error;
+    boost::filesystem::copy(from, to, error);
+    return !error.failed();
+}

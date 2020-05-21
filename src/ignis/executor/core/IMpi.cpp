@@ -4,7 +4,8 @@
 
 using namespace ignis::executor::core;
 
-IMpi::IMpi(IPropertyParser &properties, const MPI::Intracomm &comm) : properties(properties), comm(comm) {}
+IMpi::IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, const MPI::Intracomm &comm) :
+        properties(properties), partition_tools(partition_tools), comm(comm) {}
 
 bool IMpi::isRoot(int root) { return comm.Get_rank() == root; }
 
@@ -55,7 +56,6 @@ void IMpi::driverScatterVoid(const MPI::Intracomm &group,
                              storage::IPartitionGroup<storage::IVoidPartition::VOID_TYPE> &part_group,
                              int64_t partitions) {
     auto id = rank();
-    auto local_partitions = partitions / id + ((partitions % id < id) ? 1 : 0);
     bool exec0 = group.Get_rank() == 1;
     auto execs = executors();
     auto max_exec_partitions = (int) std::ceil(partitions / (float) execs);

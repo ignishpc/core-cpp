@@ -16,7 +16,7 @@ void IMpiClass::gather(storage::IPartition <Tp> &part, int root) {
     if (executors() == 1) { return; }
     if (part.type() == storage::IMemoryPartition<Tp>::TYPE) {
         if (isContiguousType<Tp>()) {
-            auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
+            auto &men = partition_tools.toMemory(part);
             int sz = men.size() * sizeof(Tp);
             std::vector<int> szv;
             std::vector<int> displs;
@@ -32,7 +32,7 @@ void IMpiClass::gather(storage::IPartition <Tp> &part, int root) {
                 comm.Gatherv(&men[0], sz, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, root);
             }
         } else {
-            auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
+            auto &men = partition_tools.toMemory(part);
             auto buffer = std::make_shared<transport::IMemoryBuffer>();
             int sz = 0;
             std::vector<int> szv;
@@ -66,7 +66,7 @@ void IMpiClass::gather(storage::IPartition <Tp> &part, int root) {
             }
         }
     } else if (part.type() == storage::IRawMemoryPartition<Tp>::TYPE) {
-        auto &raw = reinterpret_cast<storage::IRawMemoryPartition <Tp> &>(part);
+        auto &raw = partition_tools.toRawMemory(part);
         raw.sync();
         std::pair<int, int> sz(raw.size(), raw.end() - raw.begin(false));
         std::vector<std::pair<int, int>> elems_szv;
@@ -86,7 +86,7 @@ void IMpiClass::gather(storage::IPartition <Tp> &part, int root) {
             comm.Gatherv(raw.begin(false), sz.second, MPI::BYTE, nullptr, nullptr, nullptr, MPI::BYTE, root);
         }
     } else {
-        auto &disk = reinterpret_cast<storage::IDiskPartition <Tp> &>(part);
+        auto &disk = partition_tools.toDisk(part);
         disk.sync();
         std::string path = disk.getPath();
         std::string full_path;
@@ -103,7 +103,7 @@ void IMpiClass::gather(storage::IPartition <Tp> &part, int root) {
                      &displs[0], MPI::BYTE, root);
         if (isRoot(root)) {
             auto root_path = disk.getPath();
-            disk.rename(path + ".tmp");
+            disk.rename(root_path + ".tmp");
             storage::IDiskPartition <Tp> rcv(root_path, properties.partitionCompression(), false, false);
             for (int i = 0; i < executors(); i++) {
                 if (i != root) {
@@ -126,7 +126,7 @@ void IMpiClass::bcast(storage::IPartition <Tp> &part, int root) {
     if (executors() == 1) { return; }
     if (part.type() == storage::IMemoryPartition<Tp>::TYPE) {
         if (isContiguousType<Tp>()) {
-            auto &men = reinterpret_cast<storage::IMemoryPartition <Tp> &>(part);
+            auto &men = partition_tools.toMemory(part);
             int sz = men.size();
             comm.Bcast(&sz, 1, MPI::INT, 0);
             if (!isRoot(root)) {
@@ -150,7 +150,7 @@ void IMpiClass::bcast(storage::IPartition <Tp> &part, int root) {
             }
         }
     } else if (part.type() == storage::IRawMemoryPartition<Tp>::TYPE) {
-        auto &raw = reinterpret_cast<storage::IRawMemoryPartition <Tp> &>(part);
+        auto &raw = partition_tools.toRawMemory(part);
         raw.sync();
         std::pair<int, int> sz(raw.size(), (int) (raw.end() - raw.begin(false)));
         comm.Bcast(&sz, 2, MPI::INT, root);
@@ -159,7 +159,7 @@ void IMpiClass::bcast(storage::IPartition <Tp> &part, int root) {
         }
         comm.Bcast(raw.begin(false), sz.second, MPI::BYTE, root);
     } else {
-        auto &disk = reinterpret_cast<storage::IDiskPartition <Tp> &>(part);
+        auto &disk = partition_tools.toDisk(part);
         disk.sync();
         std::string path = disk.getPath();
         int sz = path.size();
@@ -167,9 +167,9 @@ void IMpiClass::bcast(storage::IPartition <Tp> &part, int root) {
         path.resize(sz);
         comm.Bcast(const_cast<char *>(path.c_str()), sz, MPI::BYTE, root);
         if (!isRoot(root)) {
-            storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), true, true);
             disk.destroy = true;
-            std::swap(disk, rcv);
+            auto rcv = partition_tools.copyDiskPartition<Tp>(path);
+            std::swap(disk, *rcv);
         }
     }
 }
@@ -509,7 +509,7 @@ IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGroup <
 
 template<typename Tp>
 void IMpiClass::send(const MPI::Intracomm &group, storage::IPartition <Tp> &part, int dest, int tag) {
-    //TODO
+    sendRecv(group, part, rank(), dest, tag);
 }
 
 template<typename Tp>
@@ -519,7 +519,7 @@ void IMpiClass::send(storage::IPartition <Tp> &part, int dest, int tag) {
 
 template<typename Tp>
 void IMpiClass::recv(const MPI::Intracomm &group, storage::IPartition <Tp> &part, int source, int tag) {
-    //TODO
+    sendRecv(group, part, source, rank(), tag);
 }
 
 template<typename Tp>
@@ -580,19 +580,48 @@ void IMpiClass::sendRecv(storage::IPartition <Tp> &part, int source, int dest, i
         if (id == source) {
             comm.Send(&sz, 1, MPI::INT, dest, tag);
             comm.Send(const_cast<char *>(path.c_str()), sz, MPI::BYTE, dest, tag);
-        }else{
+        } else {
             comm.Recv(&sz, 1, MPI::INT, source, tag);
             path.resize(sz);
             comm.Recv(const_cast<char *>(path.c_str()), sz, MPI::BYTE, source, tag);
             storage::IDiskPartition <Tp> rcv(path, properties.partitionCompression(), true, true);
-            if(disk.size() == 0){
+            if (disk.size() == 0) {
                 disk.destroy = true;
                 std::swap(disk, rcv);
-            }else{
+            } else {
                 rcv.copyTo(disk);
             }
         }
     }
+}
+
+template<typename Tp>
+void IMpiClass::sendRecv(const MPI::Intracomm &group, storage::IPartition <Tp> &part, int source, int dest, int tag) {
+    auto id = group.Get_rank();
+    int8_t protocol;
+    bool same_protocol;
+    std::string storage;
+    bool same_storage;
+
+    if (id == source) {
+        int length = storage.length();
+        protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
+        storage = part.type();
+        group.Send(&protocol, 1, MPI::BYTE, dest, tag);
+        group.Send(&length, 1, MPI::INT, dest, tag);
+        group.Send(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, 0);
+        group.Recv(&same_protocol, 1, MPI::BOOL, source, tag);
+    } else {
+        int length;
+        group.Recv(&protocol, 1, MPI::BYTE, source, tag);
+        group.Recv(&length, 1, MPI::INT, dest, tag);
+        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, 0);
+        same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
+        same_storage = part.type() == storage;
+        group.Send(&same_protocol, 1, MPI::BOOL, dest, tag);
+    }
+
+
 }
 
 template<typename Tp>

@@ -24,6 +24,8 @@ namespace ignis {
 
                     virtual void write(std::shared_ptr<transport::ITransport> &trans, int8_t compression);
 
+                    virtual void write(std::shared_ptr<transport::ITransport> &trans);
+
                     virtual void copyFrom(IPartition<Tp> &source);
 
                     virtual void moveFrom(IPartition<Tp> &source);

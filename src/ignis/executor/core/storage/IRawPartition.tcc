@@ -52,6 +52,11 @@ void IRawPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans
 }
 
 template<typename Tp>
+void IRawPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans){
+    write(trans, compression);
+}
+
+template<typename Tp>
 std::shared_ptr<ignis::executor::api::IReadIterator<Tp>> IRawPartitionClass<Tp>::readIterator() {
     sync();
     auto zlib_it = std::make_shared<transport::IZlibTransport>(readTransport());

@@ -43,6 +43,7 @@ void IMpiTestClass<Ps>::setUp() {
     props["ignis.transport.compression"] = "6";
     props["ignis.partition.compression"] = "6";
     props["ignis.partition.serialization"] = "native";
+    props["ignis.job.directory"] = ".";
 }
 
 template<typename Ps>
@@ -58,7 +59,7 @@ void IMpiTestClass<Ps>::gatherTest(int root) {
     auto part = create();
     insert(local_elems, *part);
     executor_data->mpi().gather(*part, root);
-    if(rank == root){
+    if (rank == root) {
         api::IVector <Tp> result;
         get(result, *part);
         CPPUNIT_ASSERT(elems == result);
@@ -74,7 +75,7 @@ void IMpiTestClass<Ps>::bcastTest() {
     auto part = create();
     if (rank == 0) {
         insert(elems, *part);
-    } else{
+    } else {
         /*Ensures that the partition will be cleaned*/
         part->writeIterator()->write(elems.back());
     }
@@ -83,6 +84,49 @@ void IMpiTestClass<Ps>::bcastTest() {
     get(result, *part);
     CPPUNIT_ASSERT(elems == result);
     executor_data->mpi().barrier();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::sendRcvTest() {
+    int n = 100;
+    int rank = executor_data->mpi().rank();
+    api::IVector <Tp> elems = IElements<Tp>().create(n, 0);
+    auto part = create();
+    if (rank % 2 == 0) {
+        if (rank + 1 == executor_data->mpi().executors()) {
+            return;
+        }
+        executor_data->mpi().recv(*part, rank + 1, 0);
+        api::IVector <Tp> result;
+        get(result, *part);
+
+        CPPUNIT_ASSERT(elems == result);
+
+    } else {
+        insert(elems, *part);
+        executor_data->mpi().send(*part, rank - 1, 0);
+    }
+    executor_data->mpi().barrier();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::sendRcvGroupTest(const std::string &partitionType) {
+
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::driverGather() {
+
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::driverScatter() {
+
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::driverScatterVoid() {
+
 }
 
 #undef IMpiTestClass

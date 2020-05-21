@@ -6,11 +6,12 @@
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IPartitionToolsClass::newPartition() {
     auto partitionType = properties.partitionType();
-    return newPartition<Tp>(partitionType);
+    return newPartition < Tp > (partitionType);
 }
 
 template<typename Tp>
-std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IPartitionToolsClass::newPartition(const std::string& type) {
+std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>>
+IPartitionToolsClass::newPartition(const std::string &type) {
     auto partitionType = properties.partitionType();
     if (partitionType == storage::IMemoryPartition<Tp>::TYPE) {
         return newMemoryPartition<Tp>();
@@ -77,10 +78,7 @@ IPartitionToolsClass::newRawMemoryPartition(int64_t sz) {
     (sz, cmp);
 }
 
-template<typename Tp>
-std::shared_ptr<ignis::executor::core::storage::IDiskPartition<Tp>>
-IPartitionToolsClass::newDiskPartition(const std::string &name, bool persist, bool read) {
-    auto cmp = properties.partitionCompression();
+std::string IPartitionToolsClass::diskPath(const std::string &name) {
     auto path = properties.JobDirectory() + "/partitions";
     createDirectoryIfNotExists(path);
     if (name.empty()) {
@@ -94,8 +92,32 @@ IPartitionToolsClass::newDiskPartition(const std::string &name, bool persist, bo
     } else {
         path += "/" + name;
     }
+    return path;
+}
+
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IDiskPartition<Tp>>
+IPartitionToolsClass::newDiskPartition(const std::string &name, bool persist, bool read) {
+    auto cmp = properties.partitionCompression();
+    auto path = diskPath(name);
     return std::make_shared<storage::IDiskPartition < Tp>>
     (path, cmp, persist, read);
+}
+
+template<typename Tp>
+inline std::shared_ptr<ignis::executor::core::storage::IDiskPartition<Tp>>
+IPartitionToolsClass::copyDiskPartition(const std::string &path, const std::string &name, bool persist) {
+    auto cmp = properties.partitionCompression();
+    auto newPath = diskPath(name);
+    if(createHardLink(path, newPath)){
+        createHardLink((path + ".header"), (newPath + ".header"));
+    }else{
+        IGNIS_LOG(warning) << "current file system not support hard links, disk partitions will be copied";
+        copyFile(path, newPath);
+        copyFile((path + ".header"), (newPath + ".header"));
+    }
+    return std::make_shared<storage::IDiskPartition < Tp>>
+    (newPath, cmp, persist, true);
 }
 
 template<typename Tp>
@@ -157,7 +179,7 @@ std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>> &
 IPartitionToolsClass::toMemory(std::shared_ptr<storage::IPartition < Tp>>
 
 &st) {
-return reinterpret_cast<std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>> &>(st);
+return reinterpret_cast<std::shared_ptr<storage::IMemoryPartition < Tp>> &>(st);
 }
 
 template<typename Tp>
@@ -165,7 +187,7 @@ std::shared_ptr<ignis::executor::core::storage::IMemoryReadIterator<Tp> > &
 IPartitionToolsClass::toMemory(std::shared_ptr<api::IReadIterator < Tp>>
 
 &it) {
-return reinterpret_cast<std::shared_ptr<ignis::executor::core::storage::IMemoryReadIterator<Tp> > &>(it);
+return reinterpret_cast<std::shared_ptr<storage::IMemoryReadIterator < Tp>> &>(it);
 }
 
 template<typename Tp>
@@ -173,7 +195,30 @@ std::shared_ptr<ignis::executor::core::storage::IMemoryWriteIterator<Tp>> &
 IPartitionToolsClass::toMemory(std::shared_ptr<api::IWriteIterator < Tp>>
 
 &it) {
-return reinterpret_cast<std::shared_ptr<ignis::executor::core::storage::IMemoryWriteIterator<Tp>> &>(it);
+return reinterpret_cast<std::shared_ptr<storage::IMemoryWriteIterator < Tp>> &>(it);
 }
+
+template<typename Tp>
+inline ignis::executor::core::storage::IRawMemoryPartition<Tp> &
+IPartitionToolsClass::toRawMemory(storage::IPartition <Tp> &st) {
+    return reinterpret_cast<storage::IRawMemoryPartition < Tp> & > (st);
+}
+
+template<typename Tp>
+inline std::shared_ptr<ignis::executor::core::storage::IRawMemoryPartition<Tp>> &
+IPartitionToolsClass::toRawMemory(std::shared_ptr<storage::IPartition < Tp>>
+
+&st){ return reinterpret_cast<std::shared_ptr<storage::IRawMemoryPartition < Tp>> &>(st);}
+
+template<typename Tp>
+inline ignis::executor::core::storage::IDiskPartition<Tp> &IPartitionToolsClass::toDisk(storage::IPartition <Tp> &st) {
+    return reinterpret_cast<storage::IDiskPartition < Tp> & > (st);
+}
+
+template<typename Tp>
+inline std::shared_ptr<ignis::executor::core::storage::IDiskPartition<Tp>> &
+IPartitionToolsClass::toDisk(std::shared_ptr<storage::IPartition < Tp>>
+
+&st){ return reinterpret_cast<std::shared_ptr<storage::IDiskPartition < Tp>> &>(st);}
 
 #undef IPartitionToolsClass

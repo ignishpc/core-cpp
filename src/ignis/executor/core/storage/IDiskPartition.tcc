@@ -18,7 +18,7 @@ template<typename Tp>
 IDiskPartitionClass<Tp>::IDiskPartition(std::shared_ptr<transport::IFileTransport> &&trans, std::string &path,
                                         int8_t compression, bool persist, bool read) :
         IRawPartition<Tp>((std::shared_ptr<transport::ITransport> &) trans, compression), path(path), file(trans),
-        destroy(!persist) {
+        destroy(!persist),copies(0) {
     /*Flush out zlib header*/
     transport::IFileTransport tmp(path, false, true);
     uint8_t byte = 0;
@@ -39,10 +39,9 @@ IDiskPartitionClass<Tp>::IDiskPartition(std::shared_ptr<transport::IFileTranspor
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IDiskPartitionClass<Tp>::clone() {
     auto newPartition = std::make_shared<IDiskPartition < Tp>>
-    (path + "0", this->compression);
+    (path + "_" + std::to_string(copies++), this->compression);
     this->copyTo(*newPartition);
     return newPartition;
-
 }
 
 template<typename Tp>

@@ -21,6 +21,13 @@ namespace ignis {
                     CPPUNIT_TEST(gather0Test);
                     CPPUNIT_TEST(gather1Test);
                     CPPUNIT_TEST(bcastTest);
+                    CPPUNIT_TEST(sendRcvTest);
+                    //CPPUNIT_TEST(sendRcvGroupToMemoryTest);
+                    //CPPUNIT_TEST(sendRcvGroupToRawMemoryTest);
+                    //CPPUNIT_TEST(sendRcvGroupToDiskTest);
+                    //CPPUNIT_TEST(driverGather);
+                    //CPPUNIT_TEST(driverScatter);
+                    //CPPUNIT_TEST(driverScatterVoid);
                 CPPUNIT_TEST_SUITE_END();
             public:
                 typedef typename Ps::value_type Tp;
@@ -33,10 +40,26 @@ namespace ignis {
 
                 void bcastTest();
 
+                void sendRcvTest();
+
+                void sendRcvGroupToMemoryTest() { sendRcvGroupTest("Memory"); }
+
+                void sendRcvGroupToRawMemoryTest() { sendRcvGroupTest("RawMemory"); }
+
+                void sendRcvGroupToDiskTest() { sendRcvGroupTest("Disk"); }
+
+                void driverGather();
+
+                void driverScatter();
+
+                void driverScatterVoid();
+
                 void tearDown();
 
             private:
                 void gatherTest(int root);
+
+                void sendRcvGroupTest(const std::string &partitionType);
 
                 void insert(api::IVector<Tp> &v, storage::IPartition<Tp> &part);
 
