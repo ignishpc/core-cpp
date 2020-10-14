@@ -18,7 +18,6 @@ namespace ignis {
 
             class Ignis {
             public:
-
                 static void start();
 
                 static void stop();
@@ -34,10 +33,9 @@ namespace ignis {
                 static core::IDriverContext &driverContext();
 
                 static std::shared_ptr<core::IClientPool> clientPool;
-
             };
-        }
-    }
-}
+        }// namespace api
+    }    // namespace driver
+}// namespace ignis
 
 #endif

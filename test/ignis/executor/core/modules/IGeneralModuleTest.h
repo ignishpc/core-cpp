@@ -11,26 +11,27 @@ namespace ignis {
             namespace modules {
 
                 class IGeneralModuleTest : public IModuleTest {
-                CPPUNIT_TEST_SUITE(IGeneralModuleTest);
-                        CPPUNIT_TEST(mapIntTest);
-                        CPPUNIT_TEST(filterIntTest);
-                        CPPUNIT_TEST(flatmapStringTest);
-                        CPPUNIT_TEST(keyByStringIntTest);
-                        CPPUNIT_TEST(mapPartitionsIntTest);
-                        CPPUNIT_TEST(mapPartitionWithIndexIntTest);
-                        CPPUNIT_TEST(mapExecutorIntTest);
-                        CPPUNIT_TEST(mapExecutorToStringTest);
-                        CPPUNIT_TEST(groupByIntStringTest);
-                        CPPUNIT_TEST(sortIntTest);
-                        CPPUNIT_TEST(sortStringTest);
-                        CPPUNIT_TEST(flatMapValuesIntTest);
-                        CPPUNIT_TEST(mapValuesIntTest);
-                        CPPUNIT_TEST(groupByKeyIntStringTest);
-                        CPPUNIT_TEST(reduceByKeyIntStringTest);
-                        CPPUNIT_TEST(aggregateByKeyIntIntTest);
-                        CPPUNIT_TEST(foldByKeyIntIntTest);
-                        CPPUNIT_TEST(sortByKeyIntStringTest);
+                    CPPUNIT_TEST_SUITE(IGeneralModuleTest);
+                    CPPUNIT_TEST(mapIntTest);
+                    CPPUNIT_TEST(filterIntTest);
+                    CPPUNIT_TEST(flatmapStringTest);
+                    CPPUNIT_TEST(keyByStringIntTest);
+                    CPPUNIT_TEST(mapPartitionsIntTest);
+                    CPPUNIT_TEST(mapPartitionWithIndexIntTest);
+                    CPPUNIT_TEST(mapExecutorIntTest);
+                    CPPUNIT_TEST(mapExecutorToStringTest);
+                    CPPUNIT_TEST(groupByIntStringTest);
+                    CPPUNIT_TEST(sortIntTest);
+                    CPPUNIT_TEST(sortStringTest);
+                    CPPUNIT_TEST(flatMapValuesIntTest);
+                    CPPUNIT_TEST(mapValuesIntTest);
+                    CPPUNIT_TEST(groupByKeyIntStringTest);
+                    CPPUNIT_TEST(reduceByKeyIntStringTest);
+                    CPPUNIT_TEST(aggregateByKeyIntIntTest);
+                    CPPUNIT_TEST(foldByKeyIntIntTest);
+                    CPPUNIT_TEST(sortByKeyIntStringTest);
                     CPPUNIT_TEST_SUITE_END();
+
                 public:
                     IGeneralModuleTest();
 
@@ -73,8 +74,7 @@ namespace ignis {
                     }
 
                     void aggregateByKeyIntIntTest() {
-                        aggregateByKeyTest<int, int>
-                                ("ZeroString", "ReduceIntToString", "ReduceString", 2, "Memory");
+                        aggregateByKeyTest<int, int>("ZeroString", "ReduceIntToString", "ReduceString", 2, "Memory");
                     }
 
                     void foldByKeyIntIntTest() { foldByKeyTest<int, int>("ZeroInt", "ReduceInt", 2, "Memory"); }
@@ -97,8 +97,8 @@ namespace ignis {
                     void mapPartitionsTest(const std::string &name, int cores, const std::string &partitionType);
 
                     template<typename Tp>
-                    void
-                    mapPartitionsWithIndexTest(const std::string &name, int cores, const std::string &partitionType);
+                    void mapPartitionsWithIndexTest(const std::string &name, int cores,
+                                                    const std::string &partitionType);
 
                     template<typename Tp>
                     void mapExecutorTest(const std::string &name, const std::string &partitionType);
@@ -124,10 +124,8 @@ namespace ignis {
                     void reduceByKeyTest(const std::string &name, int cores, const std::string &partitionType);
 
                     template<typename Key, typename Value>
-                    void
-                    aggregateByKeyTest(const std::string &zero, const std::string &seq, const std::string &comb,
-                                       int cores,
-                                       const std::string &partitionType);
+                    void aggregateByKeyTest(const std::string &zero, const std::string &seq, const std::string &comb,
+                                            int cores, const std::string &partitionType);
 
                     template<typename Key, typename Value>
                     void foldByKeyTest(const std::string &zero, const std::string &name, int cores,
@@ -138,12 +136,11 @@ namespace ignis {
 
                     std::shared_ptr<IGeneralModule> general;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IGeneralModuleTest.tcc"
 
 #endif
-

@@ -6,36 +6,25 @@ using namespace ignis::executor::api;
 
 IContext::IContext() : mpi_group(MPI::COMM_WORLD) {}
 
-IContext::~IContext() {
-
-}
+IContext::~IContext() {}
 
 int IContext::cores() { return omp_get_num_threads(); }
 
 int IContext::executors() { return mpi_group.Get_size(); }
 
-int IContext::executorId() { mpi_group.Get_rank(); }
+int IContext::executorId() { return mpi_group.Get_rank(); }
 
-int IContext::threadId(){ omp_get_thread_num();}
+int IContext::threadId() { return omp_get_thread_num(); }
 
 const MPI::Intracomm &IContext::mpiGroup() { return mpi_group; }
 
-std::unordered_map<std::string, std::string> &IContext::props() {
-    return properties;
-}
+std::unordered_map<std::string, std::string> &IContext::props() { return properties; }
 
-bool IContext::isVar(const std::string &name){
-    return variables.find(name) != variables.end();
-}
+bool IContext::isVar(const std::string &name) { return variables.find(name) != variables.end(); }
 
 bool IContext::rmVar(const std::string &name) {
     auto it = variables.find(name);
-    if (it == variables.end()) {
-        return false;
-    }
+    if (it == variables.end()) { return false; }
     variables.erase(it);
     return true;
 }
-
-
-

@@ -2,19 +2,19 @@
 #ifndef IGNIS_IMPI_H
 #define IGNIS_IMPI_H
 
-#include <mpi.h>
+#include "IPartitionTools.h"
+#include "IPropertyParser.h"
 #include "ignis/executor/core/ILog.h"
 #include "storage/IPartition.h"
 #include "storage/IVoidPartition.h"
-#include "IPropertyParser.h"
-#include "IPartitionTools.h"
+#include <mpi.h>
 
 namespace ignis {
     namespace executor {
         namespace core {
             class IMpi {
             public:
-                IMpi(IPropertyParser &properties, IPartitionTools& partition_tools, const MPI::Intracomm &comm);
+                IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, const MPI::Intracomm &comm);
 
                 template<typename Tp>
                 void gather(storage::IPartition<Tp> &part, int root);
@@ -37,13 +37,15 @@ namespace ignis {
                                        int64_t partitions);
 
                 template<typename Tp>
-                void send(const MPI::Intracomm &group,storage::IPartition<Tp> &part, int dest, int tag);
+                void send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag);
 
                 template<typename Tp>
                 void send(storage::IPartition<Tp> &part, int dest, int tag);
 
                 template<typename Tp>
                 void recv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int tag);
+
+                void recvVoid(const MPI::Intracomm &group, storage::IVoidPartition &part, int source, int tag);
 
                 template<typename Tp>
                 void recv(storage::IPartition<Tp> &part, int source, int tag);
@@ -62,7 +64,6 @@ namespace ignis {
                 bool isContiguousType();
 
             private:
-
                 std::vector<int> szVector(const std::vector<std::pair<int, int>> &elems_szv);
 
                 int sumElems(const std::vector<std::pair<int, int>> &elems_szv);
@@ -72,20 +73,27 @@ namespace ignis {
                 void move(void *begin, size_t n, size_t displ);
 
                 template<typename Tp>
+                void gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int root, bool same_protocol);
+
+                template<typename Tp>
                 void sendRecv(storage::IPartition<Tp> &part, int source, int dest, int tag);
 
                 template<typename Tp>
-                void sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int dest, int tag);
+                void sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int dest,
+                              int tag);
+
+                template<typename Tp>
+                void sendRecvImpl(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int dest,
+                              int tag, bool same_protocol);
 
                 IPropertyParser &properties;
-                IPartitionTools& partition_tools;
+                IPartitionTools &partition_tools;
                 const MPI::Intracomm &comm;
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #include "IMpi.tcc"
 
 #endif
-

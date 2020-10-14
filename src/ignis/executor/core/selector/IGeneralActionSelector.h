@@ -2,10 +2,12 @@
 #ifndef IGNIS_IGENERALACTIONSELECTOR_H
 #define IGNIS_IGENERALACTIONSELECTOR_H
 
-#include "ignis/executor/core/exception/ICompatibilityException.h"
-#include "ignis/executor/core/RTTInfo.h"
-#include "ignis/executor/core/modules/impl/IReduceImpl.h"
 #include "ignis/executor/api/IReadIterator.h"
+#include "ignis/executor/core/RTTInfo.h"
+#include "ignis/executor/core/exception/ICompatibilityException.h"
+#include "ignis/executor/core/modules/impl/IPipeImpl.h"
+#include "ignis/executor/core/modules/impl/IReduceImpl.h"
+#include "ignis/executor/core/modules/impl/ISortImpl.h"
 
 namespace ignis {
     namespace executor {
@@ -26,7 +28,7 @@ namespace ignis {
 
                     virtual void treeFold(modules::impl::IReduceImpl &impl) = 0;
 
-                    virtual void foreach(modules::impl::IPipeImpl &impl) = 0;
+                    virtual void foreach (modules::impl::IPipeImpl &impl) = 0;
 
                     virtual void foreachPartition(modules::impl::IPipeImpl &impl) = 0;
 
@@ -54,7 +56,7 @@ namespace ignis {
 
                     virtual void treeFold(modules::impl::IReduceImpl &impl) { treeFold_check<Tp>(impl, nullptr); }
 
-                    virtual void foreach(modules::impl::IPipeImpl &impl) { foreach_check<Tp>(impl, nullptr); }
+                    virtual void foreach (modules::impl::IPipeImpl &impl) { foreach_check<Tp>(impl, nullptr); }
 
                     virtual void foreachPartition(modules::impl::IPipeImpl &impl) {
                         foreachPartition_check<Tp>(impl, nullptr);
@@ -71,7 +73,6 @@ namespace ignis {
                     virtual void min(modules::impl::ISortImpl &impl) { min_check<Tp>(impl, nullptr); }
 
                 private:
-
                     template<typename Function>
                     void reduce_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val) {
                         reduce_check<Function>(impl, (typename Function::_T1_type *) nullptr,
@@ -179,8 +180,9 @@ namespace ignis {
                     }
 
                     template<typename Function>
-                    void foreachPartition_check(modules::impl::IPipeImpl &impl,
-                                                typename Function::_IVoidFunction_type::_T_type::_IReadIterator_type *val) {
+                    void
+                    foreachPartition_check(modules::impl::IPipeImpl &impl,
+                                           typename Function::_IVoidFunction_type::_T_type::_IReadIterator_type *val) {
                         impl.foreachPartition<Function>();
                     }
 
@@ -190,8 +192,8 @@ namespace ignis {
                     }
 
                     template<typename Function>
-                    void
-                    top_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
+                    void top_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val,
+                                   int64_t n) {
                         top_check<Function>(impl, (typename Function::_T2_type *) nullptr,
                                             (typename Function::_R_type *) nullptr, n);
                     }
@@ -208,15 +210,15 @@ namespace ignis {
                     }
 
                     template<typename Function>
-                    void
-                    takeOrdered_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
+                    void takeOrdered_check(modules::impl::ISortImpl &impl, typename Function::_IFunction2_type *val,
+                                           int64_t n) {
                         takeOrdered_check<Function>(impl, (typename Function::_T2_type *) nullptr,
-                                            (typename Function::_R_type *) nullptr, n);
+                                                    (typename Function::_R_type *) nullptr, n);
                     }
 
                     template<typename Function>
                     void takeOrdered_check(modules::impl::ISortImpl &impl, typename Function::_T1_type *val, bool *val2,
-                                   int64_t n) {
+                                           int64_t n) {
                         impl.takeOrderedBy<Function>(n);
                     }
 
@@ -226,8 +228,8 @@ namespace ignis {
                     }
 
                     template<typename Function>
-                    void
-                    max_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
+                    void max_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val,
+                                   int64_t n) {
                         max_check<Function>(impl, val, (typename Function::_T2_type *) nullptr,
                                             (typename Function::_R_type *) nullptr, n);
                     }
@@ -244,8 +246,8 @@ namespace ignis {
                     }
 
                     template<typename Function>
-                    void
-                    min_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val, int64_t n) {
+                    void min_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val,
+                                   int64_t n) {
                         min_check<Function>(impl, val, (typename Function::_T2_type *) nullptr,
                                             (typename Function::_R_type *) nullptr, n);
                     }
@@ -260,11 +262,10 @@ namespace ignis {
                     void min_check(...) {
                         throw exception::ICompatibilyException("min", RTTInfo::from<Function>());
                     }
-
                 };
-            }
-        }
-    }
-}
+            }// namespace selector
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

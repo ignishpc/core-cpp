@@ -2,16 +2,16 @@
 #ifndef IGNIS_EXECUTORDATA_H
 #define IGNIS_EXECUTORDATA_H
 
-#include "storage/IPartition.h"
-#include "storage/IVoidPartition.h"
 #include "ILibraryLoader.h"
-#include "IPropertyParser.h"
-#include "IPartitionTools.h"
-#include "exception/IInvalidArgument.h"
-#include "ignis/rpc/ISource_types.h"
-#include "ignis/executor/api/IContext.h"
 #include "ILog.h"
 #include "IMpi.h"
+#include "IPartitionTools.h"
+#include "IPropertyParser.h"
+#include "exception/IInvalidArgument.h"
+#include "ignis/executor/api/IContext.h"
+#include "ignis/rpc/ISource_types.h"
+#include "storage/IPartition.h"
+#include "storage/IVoidPartition.h"
 #include <map>
 #include <utility>
 
@@ -22,7 +22,7 @@ namespace ignis {
                 class ISelectorGroup;
 
                 class ITypeSelector;
-            }
+            }// namespace selector
 
             class IExecutorData {
             public:
@@ -81,19 +81,18 @@ namespace ignis {
             private:
                 std::shared_ptr<void> partitions;
                 std::map<std::string, std::shared_ptr<IVariable>> variables;
-                std::map<std::string, std::pair<
-                        std::shared_ptr<selector::ITypeSelector>,
-                        std::shared_ptr<selector::ISelectorGroup>>
-                > types;
+                std::map<std::string,
+                         std::pair<std::shared_ptr<selector::ITypeSelector>, std::shared_ptr<selector::ISelectorGroup>>>
+                        types;
                 ILibraryLoader library_loader;
                 IPropertyParser properties;
                 IPartitionTools partition_tools;
                 IMpi _mpi;
                 api::IContext context;
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #include "IExecutorData.tcc"
 

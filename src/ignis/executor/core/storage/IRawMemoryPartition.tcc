@@ -7,21 +7,20 @@ template<typename Tp>
 const std::string IRawMemoryPartitionClass<Tp>::TYPE = "RawMemory";
 
 template<typename Tp>
-IRawMemoryPartitionClass<Tp>::IRawMemoryPartition(size_t bytes, int8_t compression) :
-        IRawMemoryPartition(std::make_shared<transport::IMemoryBuffer>(bytes + IRawMemoryPartitionClass<Tp>::HEADER),
-                            compression) {}
+IRawMemoryPartitionClass<Tp>::IRawMemoryPartition(size_t bytes, int8_t compression)
+    : IRawMemoryPartition(std::make_shared<transport::IMemoryBuffer>(bytes + IRawMemoryPartitionClass<Tp>::HEADER),
+                          compression) {}
 
 template<typename Tp>
 IRawMemoryPartitionClass<Tp>::IRawMemoryPartition(std::shared_ptr<transport::IMemoryBuffer> &&bb, int8_t compression)
-        : IRawPartition<Tp>((std::shared_ptr<transport::ITransport> &) bb, compression), buffer(bb) {}
+    : IRawPartition<Tp>((std::shared_ptr<transport::ITransport> &) bb, compression), buffer(bb) {}
 
 template<typename Tp>
 IRawMemoryPartitionClass<Tp>::~IRawMemoryPartition() {}
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IRawMemoryPartitionClass<Tp>::clone() {
-    auto newPartition = std::make_shared<IRawMemoryPartition < Tp>>
-    (this->bytes(), this->compression);
+    auto newPartition = std::make_shared<IRawMemoryPartition<Tp>>(this->bytes(), this->compression);
     this->copyTo(*newPartition);
     return newPartition;
 }
@@ -57,12 +56,8 @@ uint8_t *IRawMemoryPartitionClass<Tp>::begin(bool header) {
     uint8_t *ptr;
     size_t sz;
     buffer->getBuffer(&ptr, &sz);
-    if (sz == 0) {
-        return ptr;
-    }
-    if (header) {
-        return ptr + IRawMemoryPartitionClass<Tp>::HEADER - this->header_size;
-    }
+    if (sz == 0) { return ptr; }
+    if (header) { return ptr + IRawMemoryPartitionClass<Tp>::HEADER - this->header_size; }
     return ptr + IRawMemoryPartitionClass<Tp>::HEADER;
 }
 

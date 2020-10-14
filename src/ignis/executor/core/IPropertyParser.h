@@ -2,8 +2,8 @@
 #ifndef IGNIS_IPROPERTYPARSER_H
 #define IGNIS_IPROPERTYPARSER_H
 
-#include <unordered_map>
 #include "exception/IInvalidArgument.h"
+#include <unordered_map>
 
 namespace ignis {
     namespace executor {
@@ -32,9 +32,9 @@ namespace ignis {
 
                 bool nativeSerialization() { return getString("ignis.partition.serialization") == "native"; }
 
-                int64_t transportMinimal() {return getSize("ignis.transport.minimal");}
+                int64_t transportMinimal() { return getSize("ignis.transport.minimal"); }
 
-                int64_t transportElemSize() {return getSize("ignis.transport.element.size");}
+                int64_t transportElemSize() { return getSize("ignis.transport.element.size"); }
 
                 std::string partitionType() { return getString("ignis.partition.type"); }
 
@@ -62,10 +62,9 @@ namespace ignis {
                 void parserError(const std::string &key, const std::string &value, size_t pos);
 
                 std::unordered_map<std::string, std::string> &properties;
-
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #endif

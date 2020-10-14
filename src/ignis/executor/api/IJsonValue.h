@@ -2,18 +2,17 @@
 #ifndef IGNIS_IJSONVALUE_H
 #define IGNIS_IJSONVALUE_H
 
-#include "ignis/executor/core/io/IWriter.h"
-#include "ignis/executor/core/io/IReader.h"
-#include "ignis/executor/core/io/IJsonWriter.h"
 #include "ignis/executor/core/io/IJsonReader.h"
+#include "ignis/executor/core/io/IJsonWriter.h"
 #include "ignis/executor/core/io/IPrinter.h"
+#include "ignis/executor/core/io/IReader.h"
+#include "ignis/executor/core/io/IWriter.h"
 
 namespace ignis {
     namespace executor {
         namespace api {
             class IJsonValue {
             public:
-
                 IJsonValue();
 
                 IJsonValue(bool value);
@@ -97,7 +96,7 @@ namespace ignis {
                 } elem;
                 int8_t type;
             };
-        }
+        }// namespace api
         namespace core {
             namespace io {
 
@@ -108,15 +107,12 @@ namespace ignis {
                     }
 
                 private:
-
                     static void (*writers[])(JsonWriter &out, const api::IJsonValue &v);
                 };
 
                 template<>
                 struct IJsonReaderType<api::IJsonValue> {
-                    inline void operator()(JsonNode &in, api::IJsonValue &v) {
-                        readers[in.GetType()](in, v);
-                    }
+                    inline void operator()(JsonNode &in, api::IJsonValue &v) { readers[in.GetType()](in, v); }
 
                     inline api::IJsonValue operator()(JsonNode &in) {
                         api::IJsonValue obj;
@@ -125,23 +121,19 @@ namespace ignis {
                     }
 
                 private:
-
                     static void (*readers[])(JsonNode &in, api::IJsonValue &v);
                 };
 
                 template<>
                 struct IWriterType<api::IJsonValue> {
 
-                    inline void writeType(protocol::IProtocol &protocol) {
-                        writeTypeAux(protocol, IEnumTypes::I_JSON);
-                    }
+                    inline void writeType(protocol::IProtocol &protocol) { writeTypeAux(protocol, IEnumTypes::I_JSON); }
 
                     inline void operator()(protocol::IProtocol &protocol, const api::IJsonValue &v) {
                         writers[v.getTypeId()](protocol, v);
                     }
 
                 private:
-
                     static void (*writers[])(protocol::IProtocol &protocol, const api::IJsonValue &obj);
                 };
 
@@ -163,7 +155,6 @@ namespace ignis {
                     }
 
                 private:
-
                     static void (*readers[])(protocol::IProtocol &protocol, api::IJsonValue &obj);
                 };
 
@@ -177,9 +168,9 @@ namespace ignis {
                 private:
                     static void (*printers[])(std::ostream &out, const api::IJsonValue &v, int64_t level);
                 };
-            }
-        }
-    }
-}
+            }// namespace io
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

@@ -1,21 +1,21 @@
 
 #include "IDynamicTypes.h"
 
+#include "ignis/executor/api/IJsonValue.h"
+#include "ignis/executor/core/RTTInfo.h"
+#include "ignis/executor/core/protocol/IObjectProtocol.h"
+#include "ignis/executor/core/transport/IZlibTransport.h"
+#include <algorithm>
+#include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/process/search_path.hpp>
 #include <boost/interprocess/sync/file_lock.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
-#include <boost/algorithm/string/replace.hpp>
-#include <memory>
-#include <algorithm>
-#include <unordered_set>
-#include <unordered_map>
-#include "ignis/executor/core/transport/IZlibTransport.h"
-#include "ignis/executor/core/protocol/IObjectProtocol.h"
-#include "ignis/executor/core/RTTInfo.h"
-#include "ignis/executor/api/IJsonValue.h"
-#include <iostream>
+#include <boost/process/search_path.hpp>
 #include <fstream>
+#include <iostream>
+#include <memory>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace ignis::executor::core;
 
@@ -39,9 +39,7 @@ std::string IDynamicTypes::typeFromBytes(std::shared_ptr<transport::ITransport> 
             while (sz > 0) {
                 sz--;
                 typeReader(protocol, nameTp);
-                if (!nameTp.empty()) {
-                    return nameTp;
-                }
+                if (!nameTp.empty()) { return nameTp; }
             }
         } else if (tp == io::IEnumTypes::I_PAIR_LIST || tp == io::IEnumTypes::I_MAP) {
             int64_t sz;
@@ -72,16 +70,12 @@ std::string IDynamicTypes::typeFromBytes(std::shared_ptr<transport::ITransport> 
     } else {
         knownTypes[checkRange(tp)](protocol, typeName);
     }
-    if (typeName.empty()) {
-        throw exception::ILogicError("C++ cannot auto detect this storage type");
-    }
+    if (typeName.empty()) { throw exception::ILogicError("C++ cannot auto detect this storage type"); }
     return typeName;
 }
 
 std::string IDynamicTypes::compiler(const std::string &type, const std::string &folder) {
-    if (std::system("mpic++ --version") == 0) {
-        throw exception::ILogicError("mpic++ compiler not found in path");
-    }
+    if (std::system("mpic++ --version") == 0) { throw exception::ILogicError("mpic++ compiler not found in path"); }
     auto fileName = type;
     boost::replace_all(fileName, "::", ".");
     boost::replace_all(fileName, "<", "(");
@@ -92,20 +86,15 @@ std::string IDynamicTypes::compiler(const std::string &type, const std::string &
     auto fileLibrary = folder + "/" + fileName + ".so";
     auto libraryName = "AutoType:" + fileLibrary;
 
-    if (boost::filesystem::exists(fileLibrary)) {
-        return libraryName;
-    }
+    if (boost::filesystem::exists(fileLibrary)) { return libraryName; }
 
     auto sourceCode = std::string() +
                       "#include <ignis/executor/core/io/IReader.h> //include all default headers\n"
                       "#include <ignis/executor/api/IVector.h>\n" +
                       "#include <ignis/executor/api/IJson.h>\n" +
-                      "#include <ignis/executor/api/function/IVoidFunction.h>\n" +
-                      "\n" +
-                      "class AutoType : public ignis::executor::api::function::IVoidFunction<" + type + "> {};" +
-                      "\n" +
-                      "ignis_export(AutoType, AutoType)" +
-                      "\n";
+                      "#include <ignis/executor/api/function/IVoidFunction.h>\n" + "\n" +
+                      "class AutoType : public ignis::executor::api::function::IVoidFunction<" + type + "> {};" + "\n" +
+                      "ignis_export(AutoType, AutoType)" + "\n";
 
     std::ofstream file(fileSource, std::ifstream::out | std::ifstream::binary | std::fstream::trunc);
     file << sourceCode;
@@ -114,17 +103,14 @@ std::string IDynamicTypes::compiler(const std::string &type, const std::string &
 
     int error = std::system(("mpic++ -O3 -shared -fPIC -o -ligniscore" + fileLibrary + " " + fileSource).c_str());
     if (error != 0) {
-        throw exception::ILogicError("mpic++ exited with exit value " + std::to_string(error) + " " +
-                                     fileSource);
+        throw exception::ILogicError("mpic++ exited with exit value " + std::to_string(error) + " " + fileSource);
     }
 
     return libraryName;
 }
 
 int8_t IDynamicTypes::checkRange(int8_t tp) {
-    if (tp < 0 || tp > 0xe) {
-        throw exception::ILogicError("C++ cannot auto detect custom types");
-    }
+    if (tp < 0 || tp > 0xe) { throw exception::ILogicError("C++ cannot auto detect custom types"); }
     return tp;
 }
 
@@ -179,9 +165,7 @@ void (*IDynamicTypes::knownTypes[])(protocol::IProtocol &protocol, std::string &
                 sz--;
                 typeReader(protocol, nameTp);
             }
-            if (nameTp.empty() || !name.empty()) {
-                return;
-            }
+            if (nameTp.empty() || !name.empty()) { return; }
             name = RTTInfo::from<std::vector<bool>>().getStandardName();
             boost::replace_first(name, "bool", name);
         },
@@ -196,9 +180,7 @@ void (*IDynamicTypes::knownTypes[])(protocol::IProtocol &protocol, std::string &
                 sz--;
                 typeReader(protocol, nameTp);
             }
-            if (nameTp.empty() || !name.empty()) {
-                return;
-            }
+            if (nameTp.empty() || !name.empty()) { return; }
             name = RTTInfo::from<std::unordered_set<bool>>().getStandardName();
             boost::replace_first(name, "bool", name);
         },
@@ -218,9 +200,7 @@ void (*IDynamicTypes::knownTypes[])(protocol::IProtocol &protocol, std::string &
                 keyReader(protocol, nameKey);
                 valueReader(protocol, nameValue);
             }
-            if (nameKey.empty() || nameValue.empty() || !name.empty()) {
-                return;
-            }
+            if (nameKey.empty() || nameValue.empty() || !name.empty()) { return; }
             name = RTTInfo::from<std::unordered_map<bool, bool>>().getStandardName();
             boost::replace_first(name, "bool", nameKey);
             boost::replace_last(name, "bool", nameValue);
@@ -233,9 +213,7 @@ void (*IDynamicTypes::knownTypes[])(protocol::IProtocol &protocol, std::string &
             knownTypes[checkRange(firstKey)](protocol, nameFirst);
             std::string nameSecond;
             knownTypes[checkRange(secondValue)](protocol, nameSecond);
-            if (nameFirst.empty() || nameSecond.empty() || !name.empty()) {
-                return;
-            }
+            if (nameFirst.empty() || nameSecond.empty() || !name.empty()) { return; }
             auto pairName = RTTInfo::from<std::pair<bool, double>>().getStandardName();
             boost::replace_first(pairName, "bool", nameFirst);
             boost::replace_last(pairName, "bool", nameSecond);
@@ -260,15 +238,11 @@ void (*IDynamicTypes::knownTypes[])(protocol::IProtocol &protocol, std::string &
                 firstReader(protocol, nameFirst);
                 secondReader(protocol, nameSecond);
             }
-            if (nameFirst.empty() || nameSecond.empty() || !name.empty()) {
-                return;
-            }
+            if (nameFirst.empty() || nameSecond.empty() || !name.empty()) { return; }
             name = RTTInfo::from<std::vector<std::pair<bool, bool>>>().getStandardName();
-            boost::replace_first(name,"bool", nameFirst);
+            boost::replace_first(name, "bool", nameFirst);
             boost::replace_last(name, "bool", nameSecond);
         },
         [](protocol::IProtocol &protocol, std::string &name) {//I_JSON = 0xe,
             name = RTTInfo::from<executor::api::IJsonValue>().getStandardName();
-        }
-};
-
+        }};

@@ -14,9 +14,9 @@ namespace ignis {
 
                     virtual ~ILogicError() {}
                 };
-            }
-        }
-    }
-}
+            }// namespace exception
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

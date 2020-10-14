@@ -10,10 +10,11 @@ namespace ignis {
         namespace core {
             namespace modules {
                 class IIOModuleTest : public IModuleTest {
-                CPPUNIT_TEST_SUITE(IIOModuleTest);
-                        CPPUNIT_TEST(textFile1);
-                        CPPUNIT_TEST(textFileN);
+                    CPPUNIT_TEST_SUITE(IIOModuleTest);
+                    CPPUNIT_TEST(textFile1);
+                    CPPUNIT_TEST(textFileN);
                     CPPUNIT_TEST_SUITE_END();
+
                 public:
                     IIOModuleTest();
 
@@ -26,16 +27,14 @@ namespace ignis {
                     void textFileN() { textFileTest(8); }
 
                 private:
-
                     void textFileTest(int n);
 
                     std::shared_ptr<IIOModule> io;
-
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IIOModuleTest.tcc"
 

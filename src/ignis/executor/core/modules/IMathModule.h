@@ -29,8 +29,8 @@ namespace ignis {
 
                     void min1(const rpc::ISource &cmp) override;
 
-                    void
-                    sampleByKey(const bool withReplacement, const rpc::ISource &fractions, const int32_t seed) override;
+                    void sampleByKey(const bool withReplacement, const rpc::ISource &fractions,
+                                     const int32_t seed) override;
 
                     void countByKey() override;
 
@@ -42,9 +42,9 @@ namespace ignis {
                     impl::IMathImpl math_impl;
                     impl::ISortImpl sort_impl;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

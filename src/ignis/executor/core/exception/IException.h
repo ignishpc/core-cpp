@@ -2,9 +2,9 @@
 #ifndef IGNIS_IEXCEPTION_H
 #define IGNIS_IEXCEPTION_H
 
-#include <stdexcept>
-#include <memory>
 #include "ignis/executor/core/RTTInfo.h"
+#include <memory>
+#include <stdexcept>
 
 namespace ignis {
     namespace executor {
@@ -14,7 +14,6 @@ namespace ignis {
                 class IException : public std::runtime_error {
 
                 public:
-
                     IException(const IException &other);
 
                     IException(const std::string &message);
@@ -40,11 +39,12 @@ namespace ignis {
                     virtual std::ostream &operator<<(std::ostream &stream) const;
 
                 protected:
-
                     virtual std::string exceptionName() const;
 
                     template<typename Ex>
-                    std::string parseName() const { return RTTInfo::from<Ex>().getStandardName(); }
+                    std::string parseName() const {
+                        return RTTInfo::from<Ex>().getStandardName();
+                    }
 
                 private:
                     const std::shared_ptr<IException> cause;
@@ -53,54 +53,58 @@ namespace ignis {
 
                 inline std::ostream &operator<<(std::ostream &stream, const IException &ex) {
                     ex.operator<<(stream);
+                    return stream;
                 }
-            }
-        }
-    }
-}
+            }// namespace exception
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
-#define IGNIS_TRY()  try {
+#define IGNIS_TRY() try {
 
-#define IGNIS_CATCH() \
-    } catch (ignis::executor::core::exception::IException &ex) { \
-        throw ex; \
-    } catch (std::exception &ex) { \
-        throw ignis::executor::core::exception::IException(ex); \
-    }
-
-#define IGNIS_RPC_TRY()  try {
-
-#define IGNIS_RPC_CATCH()  \
-    } catch (ignis::executor::core::exception::IException &ex) { \
-        ignis::rpc::IExecutorException eex; \
-        eex.__set_message(ex.what());\
-        eex.__set__cause(ex.toString());\
-        IGNIS_LOG(error) << ex.toString(); \
-        throw eex; \
-    } catch (std::exception &ex) { \
-        ignis::rpc::IExecutorException eex; \
-        eex.__set_message(ex.what());\
-        eex.__set__cause("");\
-        IGNIS_LOG(error) << ex.what(); \
-        throw eex; \
+#define IGNIS_CATCH()                                                                                                  \
+    }                                                                                                                  \
+    catch (ignis::executor::core::exception::IException & ex) {                                                        \
+        throw ex;                                                                                                      \
+    }                                                                                                                  \
+    catch (std::exception & ex) {                                                                                      \
+        throw ignis::executor::core::exception::IException(ex);                                                        \
     }
 
-#define IGNIS_OMP_EXCEPTION_INIT() \
+#define IGNIS_RPC_TRY() try {
+
+#define IGNIS_RPC_CATCH()                                                                                              \
+    }                                                                                                                  \
+    catch (ignis::executor::core::exception::IException & ex) {                                                        \
+        ignis::rpc::IExecutorException eex;                                                                            \
+        eex.__set_message(ex.what());                                                                                  \
+        eex.__set__cause(ex.toString());                                                                               \
+        IGNIS_LOG(error) << ex.toString();                                                                             \
+        throw eex;                                                                                                     \
+    }                                                                                                                  \
+    catch (std::exception & ex) {                                                                                      \
+        ignis::rpc::IExecutorException eex;                                                                            \
+        eex.__set_message(ex.what());                                                                                  \
+        eex.__set__cause("");                                                                                          \
+        IGNIS_LOG(error) << ex.what();                                                                                 \
+        throw eex;                                                                                                     \
+    }
+
+#define IGNIS_OMP_EXCEPTION_INIT()                                                                                     \
     std::shared_ptr<ignis::executor::core::exception::IException> ignis_parallel_exception;
 
 #define IGNIS_OMP_TRY() try {
 
-#define IGNIS_OMP_CATCH() \
-    } catch (ignis::executor::core::exception::IException &ex) { \
-        ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(ex); \
-    } catch (std::exception &ex) { \
-        ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(ex); \
+#define IGNIS_OMP_CATCH()                                                                                              \
+    }                                                                                                                  \
+    catch (ignis::executor::core::exception::IException & ex) {                                                        \
+        ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(ex);                 \
+    }                                                                                                                  \
+    catch (std::exception & ex) {                                                                                      \
+        ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(ex);                 \
     }
 
-#define IGNIS_OMP_EXCEPTION_END() \
-    if(ignis_parallel_exception) { \
-        throw ignis::executor::core::exception::IException(*ignis_parallel_exception);\
-    }
+#define IGNIS_OMP_EXCEPTION_END()                                                                                      \
+    if (ignis_parallel_exception) { throw ignis::executor::core::exception::IException(*ignis_parallel_exception); }
 
 #endif
-

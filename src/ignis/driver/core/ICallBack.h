@@ -18,14 +18,12 @@ namespace ignis {
                 virtual ~ICallBack();
 
             private:
-
                 std::shared_ptr<core::IDriverContext> driverContext;
 
                 std::shared_ptr<rpc::executor::IExecutorServerModuleIf> server;
-
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace driver
+}// namespace ignis
 
 #endif

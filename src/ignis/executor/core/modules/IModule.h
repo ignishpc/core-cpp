@@ -2,9 +2,9 @@
 #ifndef IGNIS_IGNISMODULE_H
 #define IGNIS_IGNISMODULE_H
 
-#include "ignis/executor/core/selector/ISelector.h"
 #include "ignis/executor/core/IExecutorData.h"
 #include "ignis/executor/core/ILog.h"
+#include "ignis/executor/core/selector/ISelector.h"
 #include "ignis/rpc/IExecutorException_types.h"
 
 namespace ignis {
@@ -29,10 +29,10 @@ namespace ignis {
                 protected:
                     std::shared_ptr<IExecutorData> executor_data;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 
 #endif

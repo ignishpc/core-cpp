@@ -16,10 +16,9 @@ void IIOModuleTest::tearDown() {}
 
 void IIOModuleTest::textFileTest(int n) {
     srand(0);
-    const char alphanum[] =
-            "0123456789"
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            "abcdefghijklmnopqrstuvwxyz";
+    const char alphanum[] = "0123456789"
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            "abcdefghijklmnopqrstuvwxyz";
 
     std::string path = "./tmpfile.txt";
     auto executors = executor_data->getContext().executors();
@@ -28,16 +27,14 @@ void IIOModuleTest::textFileTest(int n) {
     std::string line;
 
     for (int l = 0; l < 10000; l++) {
-        for (int i = 0; i < rand() % 100; ++i) {
-            line += alphanum[rand() % (sizeof(alphanum) - 1)];
-        }
+        for (int i = 0; i < rand() % 100; ++i) { line += alphanum[rand() % (sizeof(alphanum) - 1)]; }
         file << line << std::endl;
         lines.push_back(std::move(line));
     }
 
     io->textFile2(path, n);
 
-    CPPUNIT_ASSERT_GREATEREQUAL(n / executors, (int)executor_data->getPartitions<std::string>()->partitions());
+    CPPUNIT_ASSERT_GREATEREQUAL(n / executors, (int) executor_data->getPartitions<std::string>()->partitions());
 
     auto result = getFromPartitions<std::string>();
 
@@ -47,11 +44,8 @@ void IIOModuleTest::textFileTest(int n) {
 
     result = getFromPartitions<std::string>();
 
-    if(executor_data->mpi().isRoot(0)){
+    if (executor_data->mpi().isRoot(0)) {
         CPPUNIT_ASSERT_EQUAL(lines.size(), result.size());
-        for (int i = 0; i < result.size(); i++) {
-            CPPUNIT_ASSERT_EQUAL(lines[i], result[i]);
-        }
+        for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(lines[i], result[i]); }
     }
-
 }

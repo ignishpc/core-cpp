@@ -4,9 +4,9 @@
 
 #include "IModule.h"
 #include "ignis/rpc/executor/IGeneralModule.h"
-#include "impl/ISortImpl.h"
 #include "impl/IPipeImpl.h"
 #include "impl/IReduceImpl.h"
+#include "impl/ISortImpl.h"
 
 namespace ignis {
     namespace executor {
@@ -14,7 +14,6 @@ namespace ignis {
             namespace modules {
                 class IGeneralModule : public modules::IModule, public rpc::executor::IGeneralModuleIf {
                 public:
-
                     IGeneralModule(std::shared_ptr<IExecutorData> &executor_data);
 
                     void map_(const rpc::ISource &function) override;
@@ -77,9 +76,9 @@ namespace ignis {
                     impl::ISortImpl sort_impl;
                     impl::IReduceImpl reduce_impl;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

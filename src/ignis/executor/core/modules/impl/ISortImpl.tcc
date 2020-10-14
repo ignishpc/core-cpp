@@ -8,187 +8,166 @@
 
 template<typename Tp>
 void ISortImplClass::sort(bool ascending) {
-    sort < Tp > (ascending, -1);
+    sort<Tp>(ascending, -1);
 }
 
 template<typename Tp>
 void ISortImplClass::sort(bool ascending, int64_t partitions) {
     IGNIS_TRY()
-        std::less<Tp> comparator;
-        sort_impl<Tp>([&comparator, ascending](const Tp &lhs, const Tp &rhs) {
-            return comparator(lhs, rhs) == ascending;
-        }, partitions);
+    std::less<Tp> comparator;
+    sort_impl<Tp>([&comparator, ascending](const Tp &lhs, const Tp &rhs) { return comparator(lhs, rhs) == ascending; },
+                  partitions);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void ISortImplClass::sortBy(bool ascending) {
-    sortBy < Function > (ascending, -1);
+    sortBy<Function>(ascending, -1);
 }
 
 template<typename Function>
 void ISortImplClass::sortBy(bool ascending, int64_t partitions) {
     IGNIS_TRY()
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        sort_impl<typename Function::_T1_type>(
-                [&context, &function, ascending](const typename Function::_T1_type &lhs,
-                                                 const typename Function::_T2_type &rhs) {
-                    return function.call(
-                            const_cast<typename Function::_T1_type &>(lhs),
-                            const_cast<typename Function::_T2_type &>(rhs), context
-                    ) == ascending;
-                }, partitions);
-        function.after(context);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    sort_impl<typename Function::_T1_type>(
+            [&context, &function, ascending](const typename Function::_T1_type &lhs,
+                                             const typename Function::_T2_type &rhs) {
+                return function.call(const_cast<typename Function::_T1_type &>(lhs),
+                                     const_cast<typename Function::_T2_type &>(rhs), context) == ascending;
+            },
+            partitions);
+    function.after(context);
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void ISortImplClass::top(int64_t n) {
     IGNIS_TRY()
-        std::less<Tp> comparator;
-        take_ordered_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) {
-            return !comparator(lhs, rhs);
-        }, n);
+    std::less<Tp> comparator;
+    take_ordered_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) { return !comparator(lhs, rhs); }, n);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void ISortImplClass::topBy(int64_t n) {
     IGNIS_TRY()
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        take_ordered_impl<typename Function::_T1_type>(
-                [&context, &function](const typename Function::_T1_type &lhs,
-                                      const typename Function::_T2_type &rhs) {
-                    return !function.call(
-                            const_cast<typename Function::_T1_type &>(lhs),
-                            const_cast<typename Function::_T2_type &>(rhs), context
-                    );
-                }, n);
-        function.after(context);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    take_ordered_impl<typename Function::_T1_type>(
+            [&context, &function](const typename Function::_T1_type &lhs, const typename Function::_T2_type &rhs) {
+                return !function.call(const_cast<typename Function::_T1_type &>(lhs),
+                                      const_cast<typename Function::_T2_type &>(rhs), context);
+            },
+            n);
+    function.after(context);
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void ISortImplClass::takeOrdered(int64_t n) {
     IGNIS_TRY()
-        std::less<Tp> comparator;
-        take_ordered_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) {
-            return comparator(lhs, rhs);
-        }, n);
+    std::less<Tp> comparator;
+    take_ordered_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) { return comparator(lhs, rhs); }, n);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void ISortImplClass::takeOrderedBy(int64_t n) {
     IGNIS_TRY()
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        take_ordered_impl<typename Function::_T1_type>(
-                [&context, &function](const typename Function::_T1_type &lhs,
-                                      const typename Function::_T2_type &rhs) {
-                    return function.call(
-                            const_cast<typename Function::_T1_type &>(lhs),
-                            const_cast<typename Function::_T2_type &>(rhs), context
-                    );
-                }, n);
-        function.after(context);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    take_ordered_impl<typename Function::_T1_type>(
+            [&context, &function](const typename Function::_T1_type &lhs, const typename Function::_T2_type &rhs) {
+                return function.call(const_cast<typename Function::_T1_type &>(lhs),
+                                     const_cast<typename Function::_T2_type &>(rhs), context);
+            },
+            n);
+    function.after(context);
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void ISortImplClass::max() {
     IGNIS_TRY()
-        std::less<Tp> comparator;
-        max_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) {
-            return comparator(lhs, rhs);
-        });
+    std::less<Tp> comparator;
+    max_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) { return comparator(lhs, rhs); });
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void ISortImplClass::min() {
     IGNIS_TRY()
-        std::less<Tp> comparator;
-        max_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) {
-            return !comparator(lhs, rhs);
-        });
+    std::less<Tp> comparator;
+    max_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) { return !comparator(lhs, rhs); });
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void ISortImplClass::maxBy() {
     IGNIS_TRY()
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        max_impl<typename Function::_T1_type>(
-                [&context, &function](const typename Function::_T1_type &lhs,
-                                      const typename Function::_T2_type &rhs) {
-                    return function.call(
-                            const_cast<typename Function::_T1_type &>(lhs),
-                            const_cast<typename Function::_T2_type &>(rhs), context
-                    );
-                });
-        function.after(context);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    max_impl<typename Function::_T1_type>(
+            [&context, &function](const typename Function::_T1_type &lhs, const typename Function::_T2_type &rhs) {
+                return function.call(const_cast<typename Function::_T1_type &>(lhs),
+                                     const_cast<typename Function::_T2_type &>(rhs), context);
+            });
+    function.after(context);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void ISortImplClass::minBy() {
     IGNIS_TRY()
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        max_impl<typename Function::_T1_type>(
-                [&context, &function](const typename Function::_T1_type &lhs,
-                                      const typename Function::_T2_type &rhs) {
-                    return !function.call(
-                            const_cast<typename Function::_T1_type &>(lhs),
-                            const_cast<typename Function::_T2_type &>(rhs), context
-                    );
-                });
-        function.after(context);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    max_impl<typename Function::_T1_type>(
+            [&context, &function](const typename Function::_T1_type &lhs, const typename Function::_T2_type &rhs) {
+                return !function.call(const_cast<typename Function::_T1_type &>(lhs),
+                                      const_cast<typename Function::_T2_type &>(rhs), context);
+            });
+    function.after(context);
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void ISortImplClass::sortByKey(bool ascending) {
-    sortByKey < Tp > (ascending, -1);
+    sortByKey<Tp>(ascending, -1);
 }
 
 template<typename Tp>
 void ISortImplClass::sortByKey(bool ascending, int64_t partitions) {
     IGNIS_TRY()
-        std::less<typename Tp::first_type> comparator;
-        sort_impl<Tp>([&comparator, ascending](const Tp &lhs, const Tp &rhs) {
-            return comparator(lhs.first, rhs.first) == ascending;
-        }, partitions);
+    std::less<typename Tp::first_type> comparator;
+    sort_impl<Tp>([&comparator, ascending](const Tp &lhs,
+                                           const Tp &rhs) { return comparator(lhs.first, rhs.first) == ascending; },
+                  partitions);
     IGNIS_CATCH()
 }
 
 template<typename Tp, typename Function>
 void ISortImplClass::sortByKeyBy(bool ascending) {
-    sortByKeyBy < Tp, Function > (ascending, -1);
+    sortByKeyBy<Tp, Function>(ascending, -1);
 }
 
 template<typename Tp, typename Function>
 void ISortImplClass::sortByKeyBy(bool ascending, int64_t partitions) {
     IGNIS_TRY()
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        sort_impl<Tp>(
-                [&context, &function, ascending](const Tp &lhs,
-                                                 const Tp &rhs) {
-                    return function.call(const_cast<Tp &>(lhs).first, const_cast<Tp &>(rhs).first, context)
-                           == ascending;
-                }, partitions);
-        function.after(context);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    sort_impl<Tp>(
+            [&context, &function, ascending](const Tp &lhs, const Tp &rhs) {
+                return function.call(const_cast<Tp &>(lhs).first, const_cast<Tp &>(rhs).first, context) == ascending;
+            },
+            partitions);
+    function.after(context);
     IGNIS_CATCH()
 }
 
@@ -221,9 +200,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
 
     /*Generates pivots to separate the elements in order*/
     int64_t samples = executor_data->getProperties().sortSamples();
-    if (partitions > 0) {
-        samples *= partitions / input->partitions() + 1;
-    }
+    if (partitions > 0) { samples *= partitions / input->partitions() + 1; }
     IGNIS_LOG(info) << "Sort: selecting " << samples << " pivots";
     auto pivots = selectPivots(*input, samples);
 
@@ -269,25 +246,25 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
 }
 
 template<typename Tp, typename Cmp>
-void ISortImplClass::parallelLocalSort(storage::IPartitionGroup <Tp> &group, Cmp comparator) {
+void ISortImplClass::parallelLocalSort(storage::IPartitionGroup<Tp> &group, Cmp comparator) {
     bool inMemory = executor_data->getPartitionTools().isMemory(group);
     IGNIS_OMP_EXCEPTION_INIT()
-    #pragma omp parallel
+#pragma omp parallel
     {
         IGNIS_OMP_TRY()
-            /*Sort each partition locally*/
-            #pragma omp for schedule(dynamic)
-            for (int64_t p = 0; p < group.partitions(); p++) {
-                if (inMemory) {
-                    sortPartition<Tp>(executor_data->getPartitionTools().toMemory(*group[p]), comparator);
-                } else {
-                    storage::IMemoryPartition <Tp> tmp(group[p]->size());
-                    group[p]->copyTo(tmp);
-                    sortPartition<Tp>(tmp, comparator);
-                    group[p] = executor_data->getPartitionTools().newPartition(tmp);
-                    group[p]->copyFrom(tmp);
-                }
+/*Sort each partition locally*/
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < group.partitions(); p++) {
+            if (inMemory) {
+                sortPartition<Tp>(executor_data->getPartitionTools().toMemory(*group[p]), comparator);
+            } else {
+                storage::IMemoryPartition<Tp> tmp(group[p]->size());
+                group[p]->copyTo(tmp);
+                sortPartition<Tp>(tmp, comparator);
+                group[p] = executor_data->getPartitionTools().newPartition(tmp);
+                group[p]->copyFrom(tmp);
             }
+        }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
@@ -295,30 +272,24 @@ void ISortImplClass::parallelLocalSort(storage::IPartitionGroup <Tp> &group, Cmp
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
-ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, int64_t samples) {
-    if (executor_data->getPartitionTools().isMemory(group)) {
-        return selectMemoryPivots(group, samples);
-    }
+ISortImplClass::selectPivots(storage::IPartitionGroup<Tp> &group, int64_t samples) {
+    if (executor_data->getPartitionTools().isMemory(group)) { return selectMemoryPivots(group, samples); }
     auto pivots = executor_data->getPartitionTools().newMemoryPartition<Tp>();
     auto writer = pivots->writeIterator();
     IGNIS_OMP_EXCEPTION_INIT()
-    #pragma omp parallel
+#pragma omp parallel
     {
         IGNIS_OMP_TRY()
-            #pragma omp for schedule(dynamic)
-            for (int64_t p = 0; p < group.partitions(); p++) {
-                auto skip = (group[p]->size() - samples) / (samples + 1);
-                auto reader = group[p]->readIterator();
-                for (int n = 0; n < samples; n++) {
-                    for (int i = 0; i < skip; i++) {
-                        reader->next();
-                    }
-                    #pragma omp critical
-                    {
-                        writer->write(reader->next());
-                    }
-                }
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < group.partitions(); p++) {
+            auto skip = (group[p]->size() - samples) / (samples + 1);
+            auto reader = group[p]->readIterator();
+            for (int n = 0; n < samples; n++) {
+                for (int i = 0; i < skip; i++) { reader->next(); }
+#pragma omp critical
+                { writer->write(reader->next()); }
             }
+        }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
@@ -327,36 +298,32 @@ ISortImplClass::selectPivots(storage::IPartitionGroup <Tp> &group, int64_t sampl
 
 template<typename Tp, typename Cmp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots,
+ISortImplClass::generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots,
                                Cmp comparator) {
-    if (executor_data->getPartitionTools().isMemory(group)) {
-        return generateMemoryRanges(group, pivots, comparator);
-    }
+    if (executor_data->getPartitionTools().isMemory(group)) { return generateMemoryRanges(group, pivots, comparator); }
     auto ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(pivots.size() + 1);
 
     IGNIS_OMP_EXCEPTION_INIT()
-    #pragma omp parallel
+#pragma omp parallel
     {
         IGNIS_OMP_TRY()
-            auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
-            std::vector<std::shared_ptr<api::IWriteIterator < Tp>> > writers;
-            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
-                writers.push_back((*thread_ranges)[p]->writeIterator());
-            }
+        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
+        std::vector<std::shared_ptr<api::IWriteIterator<Tp>>> writers;
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+            writers.push_back((*thread_ranges)[p]->writeIterator());
+        }
 
-            #pragma omp for schedule(dynamic)
-            for (int64_t p = 0; p < group.partitions(); p++) {
-                auto reader = group[p]->readIterator();
-                while (reader->hasNext()) {
-                    auto &elem = reader->next();
-                    writers[searchRange(elem, pivots, comparator)]->write(elem);
-                }
-                group[p]->clear();
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < group.partitions(); p++) {
+            auto reader = group[p]->readIterator();
+            while (reader->hasNext()) {
+                auto &elem = reader->next();
+                writers[searchRange(elem, pivots, comparator)]->write(elem);
             }
-            #pragma omp critical
-            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
-                (*thread_ranges)[p]->moveTo(*((*ranges)[p]));
-            }
+            group[p]->clear();
+        }
+#pragma omp critical
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) { (*thread_ranges)[p]->moveTo(*((*ranges)[p])); }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
@@ -366,13 +333,13 @@ ISortImplClass::generateRanges(storage::IPartitionGroup <Tp> &group, storage::IM
 
 
 template<typename Tp, typename Cmp>
-void ISortImplClass::sortPartition(storage::IMemoryPartition <Tp> &part, Cmp comparator) {
+void ISortImplClass::sortPartition(storage::IMemoryPartition<Tp> &part, Cmp comparator) {
     std::sort(part.begin(), part.end(), comparator);
 }
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
-ISortImplClass::selectMemoryPivots(storage::IPartitionGroup <Tp> &group, int64_t samples) {
+ISortImplClass::selectMemoryPivots(storage::IPartitionGroup<Tp> &group, int64_t samples) {
     auto pivots = executor_data->getPartitionTools().newMemoryPartition<Tp>();
     auto writer = pivots->writeIterator();
     auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
@@ -392,33 +359,31 @@ ISortImplClass::selectMemoryPivots(storage::IPartitionGroup <Tp> &group, int64_t
 
 template<typename Tp, typename Cmp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, storage::IMemoryPartition <Tp> &pivots,
+ISortImplClass::generateMemoryRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots,
                                      Cmp comparator) {
     auto ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(pivots.size() + 1);
 
     IGNIS_OMP_EXCEPTION_INIT()
-    #pragma omp parallel
+#pragma omp parallel
     {
         IGNIS_OMP_TRY()
-            auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
-            std::vector<std::shared_ptr<storage::IMemoryWriteIterator < Tp>> > writers(ranges->partitions());
-            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
-                auto it = (*thread_ranges)[p]->writeIterator();
-                writers[p] = executor_data->getPartitionTools().toMemory(it);
-            }
+        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges->partitions());
+        std::vector<std::shared_ptr<storage::IMemoryWriteIterator<Tp>>> writers(ranges->partitions());
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+            auto it = (*thread_ranges)[p]->writeIterator();
+            writers[p] = executor_data->getPartitionTools().toMemory(it);
+        }
 
-            #pragma omp for schedule(dynamic)
-            for (int64_t p = 0; p < group.partitions(); p++) {
-                auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
-                for (int64_t i = 0; i < group[p]->size(); i++) {
-                    writers[searchRange(part[i], pivots, comparator)]->write(std::move(part[i]));
-                }
-                group[p]->clear();
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < group.partitions(); p++) {
+            auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
+            for (int64_t i = 0; i < group[p]->size(); i++) {
+                writers[searchRange(part[i], pivots, comparator)]->write(std::move(part[i]));
             }
-            #pragma omp critical
-            for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
-                (*thread_ranges)[p]->moveTo(*((*ranges)[p]));
-            }
+            group[p]->clear();
+        }
+#pragma omp critical
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) { (*thread_ranges)[p]->moveTo(*((*ranges)[p])); }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
@@ -427,7 +392,7 @@ ISortImplClass::generateMemoryRanges(storage::IPartitionGroup <Tp> &group, stora
 }
 
 template<typename Tp, typename Cmp>
-int64_t ISortImplClass::searchRange(Tp &elem, storage::IMemoryPartition <Tp> &pivots, Cmp comparator) {
+int64_t ISortImplClass::searchRange(Tp &elem, storage::IMemoryPartition<Tp> &pivots, Cmp comparator) {
     int64_t start = 0;
     int64_t end = pivots.size() - 1;
     int64_t mid;
@@ -456,29 +421,23 @@ void ISortImplClass::take_ordered_impl(Cmp comparator, int64_t n) {
     auto top = executor_data->getPartitionTools().newMemoryPartition<Tp>(n * input->partitions());
     IGNIS_LOG(info) << "Sort: local partition top/takeOrdered";
     IGNIS_OMP_EXCEPTION_INIT()
-    #pragma omp parallel
+#pragma omp parallel
     {
         IGNIS_OMP_TRY()
-            storage::IMemoryPartition <Tp> local_top(n);
-            /*Sort each partition locally*/
-            #pragma omp for schedule(dynamic)
-            for (int64_t p = 0; p < input->partitions(); p++) {
-                if (inMemory) {
-                    auto &men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                    for (int64_t i = 0; i < men.size(); i++) {
-                        take_ordered_add(comparator, local_top, men[i], n);
-                    }
-                } else {
-                    auto it = (*input)[p]->readIterator();
-                    while (it->hasNext()) {
-                        take_ordered_add(comparator, local_top, it->next(), n);
-                    }
-                }
+        storage::IMemoryPartition<Tp> local_top(n);
+/*Sort each partition locally*/
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            if (inMemory) {
+                auto &men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                for (int64_t i = 0; i < men.size(); i++) { take_ordered_add(comparator, local_top, men[i], n); }
+            } else {
+                auto it = (*input)[p]->readIterator();
+                while (it->hasNext()) { take_ordered_add(comparator, local_top, it->next(), n); }
             }
-            #pragma omp critical
-            {
-                local_top.moveTo(*top);
-            }
+        }
+#pragma omp critical
+        { local_top.moveTo(*top); }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
@@ -497,7 +456,7 @@ void ISortImplClass::take_ordered_impl(Cmp comparator, int64_t n) {
 }
 
 template<typename Tp, typename Cmp>
-void ISortImplClass::take_ordered_add(Cmp comparator, storage::IMemoryPartition <Tp> &top, Tp &elem, int64_t n) {
+void ISortImplClass::take_ordered_add(Cmp comparator, storage::IMemoryPartition<Tp> &top, Tp &elem, int64_t n) {
     auto &inner = top.inner();
     if (inner.empty()) {
         inner.push_back(elem);
@@ -522,46 +481,38 @@ void ISortImplClass::max_impl(Cmp comparator) {
 
     IGNIS_LOG(info) << "Sort: max/min";
     auto result = executor_data->getPartitionTools().newMemoryPartition<Tp>(1);
-    for (auto &part: *input) {
-        if (part->size() > 0) {
-            result->writeIterator()->write(part->readIterator()->next());
-        }
+    for (auto &part : *input) {
+        if (part->size() > 0) { result->writeIterator()->write(part->readIterator()->next()); }
     }
 
     Tp &elem = (*result)[0];
 
     IGNIS_LOG(info) << "Sort: local max/min";
     IGNIS_OMP_EXCEPTION_INIT()
-    #pragma omp parallel
+#pragma omp parallel
     {
         IGNIS_OMP_TRY()
-            Tp local_elem = elem;
-            /*Sort each partition locally*/
-            #pragma omp for schedule(dynamic)
-            for (int64_t p = 0; p < input->partitions(); p++) {
-                if (inMemory) {
-                    auto &men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                    for (int64_t i = 0; i < men.size(); i++) {
-                        if (comparator(local_elem, men[i])) {
-                            local_elem = men[i];
-                        }
-                    }
-                } else {
-                    auto it = (*input)[p]->readIterator();
-                    while (it->hasNext()) {
-                        auto &tmp = it->next();
-                        if (comparator(local_elem, tmp)) {
-                            local_elem = tmp;
-                        }
-                    }
+        Tp local_elem = elem;
+/*Sort each partition locally*/
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            if (inMemory) {
+                auto &men = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                for (int64_t i = 0; i < men.size(); i++) {
+                    if (comparator(local_elem, men[i])) { local_elem = men[i]; }
+                }
+            } else {
+                auto it = (*input)[p]->readIterator();
+                while (it->hasNext()) {
+                    auto &tmp = it->next();
+                    if (comparator(local_elem, tmp)) { local_elem = tmp; }
                 }
             }
-            #pragma omp critical
-            {
-                if (comparator(elem, local_elem)) {
-                    elem = local_elem;
-                }
-            }
+        }
+#pragma omp critical
+        {
+            if (comparator(elem, local_elem)) { elem = local_elem; }
+        }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()

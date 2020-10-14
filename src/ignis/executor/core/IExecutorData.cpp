@@ -1,19 +1,17 @@
 
 #include "IExecutorData.h"
 #include "selector/ISelector.h"
-#include <omp.h>
-#include <fstream>
 #include <boost/filesystem.hpp>
+#include <fstream>
+#include <omp.h>
 
 using namespace ignis::executor::core;
 
-IExecutorData::IExecutorData() : properties(context.props()),
-                                 partition_tools(properties, context),
-                                 _mpi(properties, partition_tools, context.mpiGroup()) {}
+IExecutorData::IExecutorData()
+    : properties(context.props()), partition_tools(properties, context),
+      _mpi(properties, partition_tools, context.mpiGroup()) {}
 
-bool IExecutorData::hasPartitions() {
-    return (bool) partitions;
-}
+bool IExecutorData::hasPartitions() { return (bool) partitions; }
 
 void IExecutorData::deletePartitions() { partitions.reset(); }
 
@@ -30,32 +28,20 @@ std::string IExecutorData::infoDirectory() {
     return info;
 }
 
-IPropertyParser &IExecutorData::getProperties() {
-    return properties;
-}
+IPropertyParser &IExecutorData::getProperties() { return properties; }
 
-IPartitionTools &IExecutorData::getPartitionTools() {
-    return partition_tools;
-}
+IPartitionTools &IExecutorData::getPartitionTools() { return partition_tools; }
 
-IMpi IExecutorData::mpi() {
-    return _mpi;
-}
+IMpi IExecutorData::mpi() { return _mpi; }
 
-void IExecutorData::setCores(int cores) {
-    omp_set_num_threads(cores);
-}
+void IExecutorData::setCores(int cores) { omp_set_num_threads(cores); }
 
 std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source) {
     IGNIS_LOG(info) << "Loading function";
-    if (source.obj.__isset.bytes) {
-        throw exception::IInvalidArgument("C++ not support function serialization");
-    }
+    if (source.obj.__isset.bytes) { throw exception::IInvalidArgument("C++ not support function serialization"); }
     auto lib = library_loader.load<selector::ISelectorGroup>(source.obj.name);
-    for (auto &tp: lib->args) {
-        if (types.find(tp.first) == types.end()) {
-            types[tp.first] = std::make_pair(tp.second, lib);
-        }
+    for (auto &tp : lib->args) {
+        if (types.find(tp.first) == types.end()) { types[tp.first] = std::make_pair(tp.second, lib); }
     }
 
     if (source.params.size() > 0) {
@@ -69,7 +55,7 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
 }
 
 void IExecutorData::loadParameters(const rpc::ISource &source) {
-    for (auto &entry: source.params) {
+    for (auto &entry : source.params) {
         context.variables[entry.first] = std::make_shared<IBytesVariable>(std::move(entry.second));
     }
 }
@@ -88,9 +74,7 @@ void IExecutorData::reloadLibraries() {
                     loadLibrary(source);
                     loaded.insert(source.obj.name);
                 }
-            } catch (exception::IException &ex) {
-                IGNIS_LOG(error) << ex.toString();
-            } catch (std::exception &ex) {
+            } catch (exception::IException &ex) { IGNIS_LOG(error) << ex.toString(); } catch (std::exception &ex) {
                 IGNIS_LOG(error) << ex.what();
             }
         }
@@ -99,32 +83,21 @@ void IExecutorData::reloadLibraries() {
 
 std::shared_ptr<selector::ITypeSelector> IExecutorData::getType(const std::string &id) {
     auto result = types.find(id);
-    if (result != types.end()) {
-        return result->second.first;
-    }
+    if (result != types.end()) { return result->second.first; }
     return std::shared_ptr<selector::ITypeSelector>();
 }
 
-ignis::executor::api::IContext &IExecutorData::getContext() {
-    return context;
-}
+ignis::executor::api::IContext &IExecutorData::getContext() { return context; }
 
 void IExecutorData::registerType(const std::shared_ptr<selector::ITypeSelector> &type) {
     types[type->info().getStandardName()] = std::make_pair(type, std::shared_ptr<selector::ISelectorGroup>());
 }
 
-bool IExecutorData::hasVariable(const std::string key) {
-    return variables.find(key) != variables.end();
-}
+bool IExecutorData::hasVariable(const std::string key) { return variables.find(key) != variables.end(); }
 
 void IExecutorData::removeVariable(const std::string key) {
     auto entry = variables.find(key);
-    if (entry != variables.end()) {
-        variables.erase(entry);
-    }
+    if (entry != variables.end()) { variables.erase(entry); }
 }
 
-IExecutorData::~IExecutorData() {
-
-}
-
+IExecutorData::~IExecutorData() {}

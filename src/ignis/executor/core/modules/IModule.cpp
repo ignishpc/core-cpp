@@ -1,12 +1,12 @@
 
 #include "IModule.h"
-#include "ignis/executor/core/transport/IMemoryBuffer.h"
-#include "ignis/executor/core/protocol/IObjectProtocol.h"
-#include "ignis/executor/core/storage/IVoidPartition.h"
 #include "ignis/executor/core/IDynamicTypes.h"
-#include "ignis/executor/core/io/IReader.h"
 #include "ignis/executor/core/RTTInfo.h"
 #include "ignis/executor/core/exception/ILogicError.h"
+#include "ignis/executor/core/io/IReader.h"
+#include "ignis/executor/core/protocol/IObjectProtocol.h"
+#include "ignis/executor/core/storage/IVoidPartition.h"
+#include "ignis/executor/core/transport/IMemoryBuffer.h"
 
 using namespace ignis::executor::core;
 using namespace ignis::executor::core::modules;
@@ -23,7 +23,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
         std::string typeName;
         IGNIS_LOG(warning) << "Forced to search type in binary objects, it must be slow in some case, "
                               "use src parameter in function to avoid";
-        for (auto part: *voidParts) {
+        for (auto part : *voidParts) {
             if (part->size() > 0) {
                 auto &voidPart = reinterpret_cast<storage::IVoidPartition &>(*part);
                 auto transport = voidPart.readTransport();
@@ -32,9 +32,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
             }
         }
         auto type = executor_data->getType(typeName);
-        if (type) {
-            return type;
-        }
+        if (type) { return type; }
         IGNIS_LOG(warning) << "Type found but it is not compiled, now the executor tries to compile it. "
                               "The compilation process must be slow in some case, "
                               "the result will be stored in the job folder. "
@@ -46,7 +44,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
         if (!typeName.empty()) {
             auto lib = IDynamicTypes::compiler(typeName, folder);
             IGNIS_LOG(info) << "Compilation successful, use '" + lib +
-                               "' as src parameter in function to avoid future recompilation";
+                                       "' as src parameter in function to avoid future recompilation";
             rpc::ISource source;
             source.obj.__set_name(lib);
             return typeFromSource(source);
@@ -60,13 +58,13 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
 std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromHeader(const std::string &header) {
     const int N_NAMED_TYPES = 8;
     const static std::string BASIC_NAMED_TYPES[]{
-            RTTInfo::from<void>().getStandardName(),//I_VOID = 0x0,
-            RTTInfo::from<bool>().getStandardName(),//I_BOOL = 0x1,
-            RTTInfo::from<int8_t>().getStandardName(),//I_I08 = 0x2,
-            RTTInfo::from<int16_t>().getStandardName(),//I_I16 = 0x3,
-            RTTInfo::from<int32_t>().getStandardName(),//I_I32 = 0x4,
-            RTTInfo::from<int64_t>().getStandardName(),//I_I64 = 0x5,
-            RTTInfo::from<double>().getStandardName(),//I_DOUBLE = 0x6,
+            RTTInfo::from<void>().getStandardName(),       //I_VOID = 0x0,
+            RTTInfo::from<bool>().getStandardName(),       //I_BOOL = 0x1,
+            RTTInfo::from<int8_t>().getStandardName(),     //I_I08 = 0x2,
+            RTTInfo::from<int16_t>().getStandardName(),    //I_I16 = 0x3,
+            RTTInfo::from<int32_t>().getStandardName(),    //I_I32 = 0x4,
+            RTTInfo::from<int64_t>().getStandardName(),    //I_I64 = 0x5,
+            RTTInfo::from<double>().getStandardName(),     //I_DOUBLE = 0x6,
             RTTInfo::from<std::string>().getStandardName(),//I_STRING = 0x7,
     };
     IGNIS_LOG(info) << "Cheeking incoming partition type";
@@ -81,9 +79,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
 
         if (tp == io::IEnumTypes::I_LIST) {
             auto elem_tp = io::readTypeAux(*proto);
-            if (0 < elem_tp && elem_tp < N_NAMED_TYPES) {
-                type_name = BASIC_NAMED_TYPES[elem_tp];
-            }
+            if (0 < elem_tp && elem_tp < N_NAMED_TYPES) { type_name = BASIC_NAMED_TYPES[elem_tp]; }
         } else if (tp == io::IEnumTypes::I_PAIR_LIST) {
             auto first_tp = io::readTypeAux(*proto);
             auto second_tp = io::readTypeAux(*proto);
@@ -93,9 +89,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
         } else if (tp == io::IEnumTypes::I_BINARY) {
             type_name = RTTInfo::from<uint8_t>().getStandardName();
         }
-    } catch (std::exception &ex) {
-        IGNIS_LOG(warning) << "exception: " << ex.what();
-    }
+    } catch (std::exception &ex) { IGNIS_LOG(warning) << "exception: " << ex.what(); }
 
     if (type_name.empty()) {
         throw exception::ILogicError("Incoming partition type not found or is too complex.");
@@ -109,10 +103,11 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
 std::shared_ptr<selector::ITypeSelector> IModule::typeFromName(const std::string &name) {
     auto type = executor_data->getType(name);
     if (!type) {
-        throw exception::ILogicError("Type '" + name +
-                                     "' is not in the registry, that means  that the type is not compiled in the executor. "
-                                     "By default only the combinations of the most used types are compiled, the rest are loaded "
-                                     "from the libraries used by the user.");
+        throw exception::ILogicError(
+                "Type '" + name +
+                "' is not in the registry, that means  that the type is not compiled in the executor. "
+                "By default only the combinations of the most used types are compiled, the rest are loaded "
+                "from the libraries used by the user.");
     }
 
     return type;
@@ -120,13 +115,9 @@ std::shared_ptr<selector::ITypeSelector> IModule::typeFromName(const std::string
 
 std::shared_ptr<selector::ITypeSelector> IModule::typeFromSource(const ignis::rpc::ISource &source) {
     auto &name = source.obj.name;
-    if (!name.empty() && name[0] == ':') {
-        return typeFromName(name.substr(1));
-    }
+    if (!name.empty() && name[0] == ':') { return typeFromName(name.substr(1)); }
     auto lib = executor_data->loadLibrary(source);
-    if (lib->args.empty()) {
-        throw exception::ILogicError("Function " + name + " has not type to use");
-    }
+    if (lib->args.empty()) { throw exception::ILogicError("Function " + name + " has not type to use"); }
     auto type = lib->args.begin()->second;
     if (lib->args.size() > 1) {
         IGNIS_LOG(warning) << "Function " << name << " has more than one type, using" << type->info().getStandardName();

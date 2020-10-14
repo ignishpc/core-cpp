@@ -2,10 +2,10 @@
 #ifndef IGNIS_IKEYSELECTOR_H
 #define IGNIS_IKEYSELECTOR_H
 
-#include <utility>
-#include "ignis/executor/core/exception/ICompatibilityException.h"
 #include "ignis/executor/core/RTTInfo.h"
+#include "ignis/executor/core/exception/ICompatibilityException.h"
 #include "ignis/executor/core/modules/impl/IPipeImpl.h"
+#include <utility>
 
 
 namespace ignis {
@@ -19,8 +19,8 @@ namespace ignis {
 
                     virtual void mapValues(modules::impl::IPipeImpl &impl) { error(); };
 
-                    virtual void
-                    reduceByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions, bool localReduce) {
+                    virtual void reduceByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions,
+                                             bool localReduce) {
                         error();
                     };
 
@@ -34,7 +34,6 @@ namespace ignis {
 
 
                 private:
-
                     inline void error() {
                         throw exception::ILogicError("function not registered with ignis_export_with_key");
                     }
@@ -43,17 +42,14 @@ namespace ignis {
                 template<typename K, typename Tp>
                 class IKeySelectorImpl : public IKeySelector {
                 public:
-
                     virtual void flatMapValues(modules::impl::IPipeImpl &impl) {
                         flatMapValues_check<Tp>(impl, nullptr, nullptr);
                     }
 
-                    virtual void mapValues(modules::impl::IPipeImpl &impl) {
-                        mapValues_check<Tp>(impl, nullptr);
-                    }
+                    virtual void mapValues(modules::impl::IPipeImpl &impl) { mapValues_check<Tp>(impl, nullptr); }
 
-                    virtual void
-                    reduceByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions, bool localReduce) {
+                    virtual void reduceByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions,
+                                             bool localReduce) {
                         reduceByKey_check<Tp>(impl, nullptr, numPartitions, localReduce);
                     };
 
@@ -66,7 +62,6 @@ namespace ignis {
                     };
 
                 private:
-
                     template<typename Function>
                     void mapValues_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction_type *val) {
                         impl.mapValues<std::pair<K, typename Function::_T_type>, Function>();
@@ -82,8 +77,7 @@ namespace ignis {
                                              typename Function::_IFunction_type::_R_type::iterator *val,
                                              typename Function::_IFunction_type::_R_type::value_type *val2) {
                         impl.registerType(
-                                getType<std::pair<K, typename Function::_IFunction_type::_R_type::value_type>>()
-                        );
+                                getType<std::pair<K, typename Function::_IFunction_type::_R_type::value_type>>());
                         impl.flatMapValues<std::pair<K, typename Function::_T_type>, Function>();
                     }
 
@@ -116,8 +110,7 @@ namespace ignis {
 
                     template<typename Function>
                     void aggregateByKey_check(modules::impl::IReduceImpl &impl,
-                                              typename Function::_IFunction2_type *val,
-                                              int64_t numPartitions,
+                                              typename Function::_IFunction2_type *val, int64_t numPartitions,
                                               bool hashing) {
                         aggregateByKey_check<Function>(impl, (typename Function::_T2_type *) nullptr,
                                                        (typename Function::_T1_type *) nullptr, nullptr, numPartitions,
@@ -158,12 +151,10 @@ namespace ignis {
                     void foldByKey_check(...) {
                         throw exception::ICompatibilyException("foldByKey", RTTInfo::from<Function>());
                     }
-
                 };
 
-            }
-        }
-    }
-}
+            }// namespace selector
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 #endif
-

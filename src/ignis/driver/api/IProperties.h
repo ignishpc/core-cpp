@@ -18,7 +18,7 @@ namespace ignis {
 
                 private:
                     friend IProperties;
-                    Value(IProperties &properties,const std::string &key, const std::string &value);
+                    Value(IProperties &properties, const std::string &key, const std::string &value);
 
                     IProperties &properties;
                     std::string key;
@@ -53,8 +53,8 @@ namespace ignis {
                 friend ICluster;
                 int64_t id;
             };
-        }
-    }
-}
+        }// namespace api
+    }    // namespace driver
+}// namespace ignis
 
 #endif

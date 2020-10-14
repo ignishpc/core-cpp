@@ -38,7 +38,7 @@ namespace ignis {
                         void mapExecutorTo();
 
                         template<typename Function>
-                        void foreach();
+                        void foreach ();
 
                         template<typename Function>
                         void foreachPartition();
@@ -60,11 +60,11 @@ namespace ignis {
 
                         virtual ~IPipeImpl();
                     };
-                }
-            }
-        }
-    }
-}
+                }// namespace impl
+            }    // namespace modules
+        }        // namespace core
+    }            // namespace executor
+}// namespace ignis
 
 
 #include "IPipeImpl.tcc"

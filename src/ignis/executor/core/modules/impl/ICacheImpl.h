@@ -10,9 +10,8 @@ namespace ignis {
         namespace core {
             namespace modules {
                 namespace impl {
-                    class ICacheImpl : public IBaseImpl{
+                    class ICacheImpl : public IBaseImpl {
                     public:
-
                         ICacheImpl(std::shared_ptr<IExecutorData> &executorData);
 
                         int64_t saveContext();
@@ -28,8 +27,8 @@ namespace ignis {
 
                         std::vector<std::vector<std::string>> getCacheFromDisk();
 
-                        template <typename Tp>
-                        void loadFromDisk(const std::vector<std::string>& group);
+                        template<typename Tp>
+                        void loadFromDisk(const std::vector<std::string> &group);
 
                     private:
                         std::string fileCache();
@@ -38,11 +37,11 @@ namespace ignis {
                         int64_t next_context_id;
                         std::map<int64_t, std::shared_ptr<void>> _cache;
                     };
-                }
-            }
-        }
-    }
-}
+                }// namespace impl
+            }    // namespace modules
+        }        // namespace core
+    }            // namespace executor
+}// namespace ignis
 
 #include "ICacheImpl.tcc"
 

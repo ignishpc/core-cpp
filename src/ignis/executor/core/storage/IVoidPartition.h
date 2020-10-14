@@ -18,6 +18,8 @@ namespace ignis {
 
                     IVoidPartition(size_t size = 1024);
 
+                    IVoidPartition(const std::string& path);
+
                     virtual std::shared_ptr<api::IReadIterator<VOID_TYPE>> readIterator();
 
                     virtual std::shared_ptr<api::IWriteIterator<VOID_TYPE>> writeIterator();
@@ -25,11 +27,6 @@ namespace ignis {
                     virtual void read(std::shared_ptr<transport::ITransport> &trans);
 
                     virtual void write(std::shared_ptr<transport::ITransport> &trans, int8_t compression);
-
-                    template<typename Tp>
-                    void write(IPartition<Tp> &partition) {
-                        partition.read(reinterpret_cast<std::shared_ptr<core::transport::ITransport>&>(buffer));
-                    }
 
                     virtual void copyFrom(IPartition<VOID_TYPE> &source);
 
@@ -53,10 +50,13 @@ namespace ignis {
 
                 private:
                     std::shared_ptr<core::transport::IMemoryBuffer> buffer;
+                    std::shared_ptr<transport::IFileTransport> file;
+                    std::string path;
+                    int copies;
                 };
-            }
-        }
-    }
-}
+            }// namespace storage
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

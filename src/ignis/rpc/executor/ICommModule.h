@@ -37,6 +37,9 @@ class ICommModuleIf {
   virtual void driverGather0(const std::string& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void driverScatter(const std::string& id, const int64_t partitions) = 0;
   virtual void driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void send(const std::string& id, const int64_t partition, const int64_t dest, const int64_t tag) = 0;
+  virtual void recv(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag) = 0;
+  virtual void recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag, const  ::ignis::rpc::ISource& src) = 0;
 };
 
 class ICommModuleIfFactory {
@@ -111,6 +114,15 @@ class ICommModuleNull : virtual public ICommModuleIf {
     return;
   }
   void driverScatter3(const std::string& /* id */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void send(const std::string& /* id */, const int64_t /* partition */, const int64_t /* dest */, const int64_t /* tag */) {
+    return;
+  }
+  void recv(const std::string& /* id */, const int64_t /* partition */, const int64_t /* source */, const int64_t /* tag */) {
+    return;
+  }
+  void recv5(const std::string& /* id */, const int64_t /* partition */, const int64_t /* source */, const int64_t /* tag */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
 };
@@ -1749,6 +1761,388 @@ class ICommModule_driverScatter3_presult {
 
 };
 
+typedef struct _ICommModule_send_args__isset {
+  _ICommModule_send_args__isset() : id(false), partition(false), dest(false), tag(false) {}
+  bool id :1;
+  bool partition :1;
+  bool dest :1;
+  bool tag :1;
+} _ICommModule_send_args__isset;
+
+class ICommModule_send_args {
+ public:
+
+  ICommModule_send_args(const ICommModule_send_args&);
+  ICommModule_send_args& operator=(const ICommModule_send_args&);
+  ICommModule_send_args() : id(), partition(0), dest(0), tag(0) {
+  }
+
+  virtual ~ICommModule_send_args() noexcept;
+  std::string id;
+  int64_t partition;
+  int64_t dest;
+  int64_t tag;
+
+  _ICommModule_send_args__isset __isset;
+
+  void __set_id(const std::string& val);
+
+  void __set_partition(const int64_t val);
+
+  void __set_dest(const int64_t val);
+
+  void __set_tag(const int64_t val);
+
+  bool operator == (const ICommModule_send_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(partition == rhs.partition))
+      return false;
+    if (!(dest == rhs.dest))
+      return false;
+    if (!(tag == rhs.tag))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_send_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_send_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_send_pargs {
+ public:
+
+
+  virtual ~ICommModule_send_pargs() noexcept;
+  const std::string* id;
+  const int64_t* partition;
+  const int64_t* dest;
+  const int64_t* tag;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_send_result__isset {
+  _ICommModule_send_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_send_result__isset;
+
+class ICommModule_send_result {
+ public:
+
+  ICommModule_send_result(const ICommModule_send_result&);
+  ICommModule_send_result& operator=(const ICommModule_send_result&);
+  ICommModule_send_result() {
+  }
+
+  virtual ~ICommModule_send_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_send_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_send_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_send_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_send_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_send_presult__isset {
+  _ICommModule_send_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_send_presult__isset;
+
+class ICommModule_send_presult {
+ public:
+
+
+  virtual ~ICommModule_send_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_send_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ICommModule_recv_args__isset {
+  _ICommModule_recv_args__isset() : id(false), partition(false), source(false), tag(false) {}
+  bool id :1;
+  bool partition :1;
+  bool source :1;
+  bool tag :1;
+} _ICommModule_recv_args__isset;
+
+class ICommModule_recv_args {
+ public:
+
+  ICommModule_recv_args(const ICommModule_recv_args&);
+  ICommModule_recv_args& operator=(const ICommModule_recv_args&);
+  ICommModule_recv_args() : id(), partition(0), source(0), tag(0) {
+  }
+
+  virtual ~ICommModule_recv_args() noexcept;
+  std::string id;
+  int64_t partition;
+  int64_t source;
+  int64_t tag;
+
+  _ICommModule_recv_args__isset __isset;
+
+  void __set_id(const std::string& val);
+
+  void __set_partition(const int64_t val);
+
+  void __set_source(const int64_t val);
+
+  void __set_tag(const int64_t val);
+
+  bool operator == (const ICommModule_recv_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(partition == rhs.partition))
+      return false;
+    if (!(source == rhs.source))
+      return false;
+    if (!(tag == rhs.tag))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_recv_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_recv_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_recv_pargs {
+ public:
+
+
+  virtual ~ICommModule_recv_pargs() noexcept;
+  const std::string* id;
+  const int64_t* partition;
+  const int64_t* source;
+  const int64_t* tag;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_recv_result__isset {
+  _ICommModule_recv_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_recv_result__isset;
+
+class ICommModule_recv_result {
+ public:
+
+  ICommModule_recv_result(const ICommModule_recv_result&);
+  ICommModule_recv_result& operator=(const ICommModule_recv_result&);
+  ICommModule_recv_result() {
+  }
+
+  virtual ~ICommModule_recv_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_recv_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_recv_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_recv_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_recv_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_recv_presult__isset {
+  _ICommModule_recv_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_recv_presult__isset;
+
+class ICommModule_recv_presult {
+ public:
+
+
+  virtual ~ICommModule_recv_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_recv_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ICommModule_recv5_args__isset {
+  _ICommModule_recv5_args__isset() : id(false), partition(false), source(false), tag(false), src(false) {}
+  bool id :1;
+  bool partition :1;
+  bool source :1;
+  bool tag :1;
+  bool src :1;
+} _ICommModule_recv5_args__isset;
+
+class ICommModule_recv5_args {
+ public:
+
+  ICommModule_recv5_args(const ICommModule_recv5_args&);
+  ICommModule_recv5_args& operator=(const ICommModule_recv5_args&);
+  ICommModule_recv5_args() : id(), partition(0), source(0), tag(0) {
+  }
+
+  virtual ~ICommModule_recv5_args() noexcept;
+  std::string id;
+  int64_t partition;
+  int64_t source;
+  int64_t tag;
+   ::ignis::rpc::ISource src;
+
+  _ICommModule_recv5_args__isset __isset;
+
+  void __set_id(const std::string& val);
+
+  void __set_partition(const int64_t val);
+
+  void __set_source(const int64_t val);
+
+  void __set_tag(const int64_t val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const ICommModule_recv5_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(partition == rhs.partition))
+      return false;
+    if (!(source == rhs.source))
+      return false;
+    if (!(tag == rhs.tag))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_recv5_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_recv5_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_recv5_pargs {
+ public:
+
+
+  virtual ~ICommModule_recv5_pargs() noexcept;
+  const std::string* id;
+  const int64_t* partition;
+  const int64_t* source;
+  const int64_t* tag;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_recv5_result__isset {
+  _ICommModule_recv5_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_recv5_result__isset;
+
+class ICommModule_recv5_result {
+ public:
+
+  ICommModule_recv5_result(const ICommModule_recv5_result&);
+  ICommModule_recv5_result& operator=(const ICommModule_recv5_result&);
+  ICommModule_recv5_result() {
+  }
+
+  virtual ~ICommModule_recv5_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_recv5_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_recv5_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_recv5_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_recv5_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_recv5_presult__isset {
+  _ICommModule_recv5_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_recv5_presult__isset;
+
+class ICommModule_recv5_presult {
+ public:
+
+
+  virtual ~ICommModule_recv5_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_recv5_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class ICommModuleClient : virtual public ICommModuleIf {
  public:
   ICommModuleClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -1819,6 +2213,15 @@ class ICommModuleClient : virtual public ICommModuleIf {
   void driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void send_driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void recv_driverScatter3();
+  void send(const std::string& id, const int64_t partition, const int64_t dest, const int64_t tag);
+  void send_send(const std::string& id, const int64_t partition, const int64_t dest, const int64_t tag);
+  void recv_send();
+  void recv(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag);
+  void send_recv(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag);
+  void recv_recv();
+  void recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag, const  ::ignis::rpc::ISource& src);
+  void send_recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag, const  ::ignis::rpc::ISource& src);
+  void recv_recv5();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -1849,6 +2252,9 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_driverGather0(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverScatter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverScatter3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_send(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_recv(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_recv5(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ICommModuleProcessor(::std::shared_ptr<ICommModuleIf> iface) :
     iface_(iface) {
@@ -1867,6 +2273,9 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["driverGather0"] = &ICommModuleProcessor::process_driverGather0;
     processMap_["driverScatter"] = &ICommModuleProcessor::process_driverScatter;
     processMap_["driverScatter3"] = &ICommModuleProcessor::process_driverScatter3;
+    processMap_["send"] = &ICommModuleProcessor::process_send;
+    processMap_["recv"] = &ICommModuleProcessor::process_recv;
+    processMap_["recv5"] = &ICommModuleProcessor::process_recv5;
   }
 
   virtual ~ICommModuleProcessor() {}
@@ -2033,6 +2442,33 @@ class ICommModuleMultiface : virtual public ICommModuleIf {
     ifaces_[i]->driverScatter3(id, partitions, src);
   }
 
+  void send(const std::string& id, const int64_t partition, const int64_t dest, const int64_t tag) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->send(id, partition, dest, tag);
+    }
+    ifaces_[i]->send(id, partition, dest, tag);
+  }
+
+  void recv(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->recv(id, partition, source, tag);
+    }
+    ifaces_[i]->recv(id, partition, source, tag);
+  }
+
+  void recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->recv5(id, partition, source, tag, src);
+    }
+    ifaces_[i]->recv5(id, partition, source, tag, src);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -2110,6 +2546,15 @@ class ICommModuleConcurrentClient : virtual public ICommModuleIf {
   void driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   int32_t send_driverScatter3(const std::string& id, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void recv_driverScatter3(const int32_t seqid);
+  void send(const std::string& id, const int64_t partition, const int64_t dest, const int64_t tag);
+  int32_t send_send(const std::string& id, const int64_t partition, const int64_t dest, const int64_t tag);
+  void recv_send(const int32_t seqid);
+  void recv(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag);
+  int32_t send_recv(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag);
+  void recv_recv(const int32_t seqid);
+  void recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag, const  ::ignis::rpc::ISource& src);
+  int32_t send_recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag, const  ::ignis::rpc::ISource& src);
+  void recv_recv5(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

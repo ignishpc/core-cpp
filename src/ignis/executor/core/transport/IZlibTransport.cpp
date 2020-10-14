@@ -4,8 +4,8 @@ using namespace ignis::executor::core::transport;
 using namespace apache::thrift::transport;
 
 IZlibTransport::IZlibTransport(std::shared_ptr<TTransport> transport, int16_t comp_level, int urbuf_size,
-                               int crbuf_size, int uwbuf_size, int cwbuf_size) :
-        TZlibTransport(transport, urbuf_size, crbuf_size, uwbuf_size, cwbuf_size, comp_level) {}
+                               int crbuf_size, int uwbuf_size, int cwbuf_size)
+    : TZlibTransport(transport, urbuf_size, crbuf_size, uwbuf_size, cwbuf_size, comp_level) {}
 
 
 void IZlibTransport::reset() {
@@ -24,9 +24,7 @@ void IZlibTransport::reset() {
  * checkZlibRv throws an exception when there is no more data to write and
  * Storages can flush twice to ensure that flush has been called before reading. */
 void IZlibTransport::flush() {
-    if (output_finished_) {
-        throw TTransportException(TTransportException::BAD_ARGS, "flush() called after finish()");
-    }
+    if (output_finished_) { throw TTransportException(TTransportException::BAD_ARGS, "flush() called after finish()"); }
 
     flushToZlib(uwbuf_, uwpos_, Z_BLOCK);
     uwpos_ = 0;
@@ -45,9 +43,7 @@ void IZlibTransport::flushToZlib(const uint8_t *buf, int len, int flush) {
     wstream_->avail_in = len;
 
     while (true) {
-        if ((flush == Z_NO_FLUSH || flush == Z_BLOCK) && wstream_->avail_in == 0) {
-            break;
-        }
+        if ((flush == Z_NO_FLUSH || flush == Z_BLOCK) && wstream_->avail_in == 0) { break; }
 
         // If our ouput buffer is full, flush to the underlying transport.
         if (wstream_->avail_out == 0) {
@@ -66,8 +62,7 @@ void IZlibTransport::flushToZlib(const uint8_t *buf, int len, int flush) {
 
         checkZlibRv(zlib_rv, wstream_->msg);
 
-        if ((flush == Z_SYNC_FLUSH || flush == Z_FULL_FLUSH) && wstream_->avail_in == 0
-            && wstream_->avail_out != 0) {
+        if ((flush == Z_SYNC_FLUSH || flush == Z_FULL_FLUSH) && wstream_->avail_in == 0 && wstream_->avail_out != 0) {
             break;
         }
     }
@@ -88,9 +83,7 @@ void IZlibTransport::flushToTransport(int flush) {
 }
 
 inline void IZlibTransport::checkZlibRv(int status, const char *message) {
-    if (status != Z_OK && status != Z_BUF_ERROR) {
-        throw TZlibTransportException(status, message);
-    }
+    if (status != Z_OK && status != Z_BUF_ERROR) { throw TZlibTransportException(status, message); }
 }
 
 IZlibTransportFactory::IZlibTransportFactory(int compression) : compression(compression) {}
@@ -100,4 +93,3 @@ std::shared_ptr<ITransport> IZlibTransportFactory::getTransport(std::shared_ptr<
 }
 
 IZlibTransportFactory::~IZlibTransportFactory() {}
-

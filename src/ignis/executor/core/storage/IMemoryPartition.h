@@ -16,7 +16,7 @@ namespace ignis {
 
                     IMemoryPartition(size_t size = 1024);
 
-                    IMemoryPartition(IVector <Tp> &&elements);
+                    IMemoryPartition(IVector<Tp> &&elements);
 
                     virtual std::shared_ptr<api::IReadIterator<Tp>> readIterator();
 
@@ -28,11 +28,11 @@ namespace ignis {
 
                     virtual void write(std::shared_ptr<transport::ITransport> &trans, int8_t compression, bool native);
 
-                    virtual void copyFrom(IPartition <Tp> &source);
+                    virtual void copyFrom(IPartition<Tp> &source);
 
-                    virtual void moveFrom(IPartition <Tp> &source);
+                    virtual void moveFrom(IPartition<Tp> &source);
 
-                    virtual std::shared_ptr<IPartition < Tp>> clone();
+                    virtual std::shared_ptr<IPartition<Tp>> clone();
 
                     virtual size_t size();
 
@@ -52,19 +52,18 @@ namespace ignis {
 
                     void resize(int64_t size);
 
-                    IVector <Tp> &inner();
+                    IVector<Tp> &inner();
 
                     virtual ~IMemoryPartition();
 
                 private:
-                    IVector <Tp> elements;
+                    IVector<Tp> elements;
                 };
 
                 template<typename Tp>
                 class IMemoryReadIterator : public api::IReadIterator<Tp> {
                 public:
-
-                    IMemoryReadIterator(IVector <Tp> &elements);
+                    IMemoryReadIterator(IVector<Tp> &elements);
 
                     Tp &next();
 
@@ -75,15 +74,14 @@ namespace ignis {
                     virtual ~IMemoryReadIterator();
 
                 private:
-                    IVector <Tp> &elements;
+                    IVector<Tp> &elements;
                     int64_t index;
                 };
 
                 template<typename Tp>
                 class IMemoryWriteIterator : public api::IWriteIterator<Tp> {
                 public:
-
-                    IMemoryWriteIterator(IVector <Tp> &elements);
+                    IMemoryWriteIterator(IVector<Tp> &elements);
 
                     void write(Tp &obj);
 
@@ -92,14 +90,13 @@ namespace ignis {
                     virtual ~IMemoryWriteIterator();
 
                 private:
-                    IVector <Tp> &elements;
+                    IVector<Tp> &elements;
                 };
-            }
-        }
-    }
-}
+            }// namespace storage
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IMemoryPartition.tcc"
 
 #endif
-

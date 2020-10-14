@@ -6,308 +6,291 @@
 template<typename Function>
 void IPipeImplCLass::map() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>(
-                input->partitions());
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>(input->partitions());
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: map " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                        executor_data->getPartitionTools().isMemory(*(*output)[p])) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        for (size_t i = 0; i < sz; i++) {
-                            men_writer.write(function.call(men_part[i], context));
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            writer->write(function.call(reader->next(), context));
-                        }
-                    }
-                }
-            IGNIS_OMP_CATCH()
+    function.before(context);
+    IGNIS_LOG(info) << "General: map " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
+                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                for (size_t i = 0; i < sz; i++) { men_writer.write(function.call(men_part[i], context)); }
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) { writer->write(function.call(reader->next(), context)); }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void IPipeImplCLass::filter() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_T_type>(
-                input->partitions());
-        bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_T_type>(input->partitions());
+    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: filter " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*input) &&
-                        executor_data->getPartitionTools().isMemory(*output)) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        if (cache) {
-                            for (size_t i = 0; i < sz; i++) {
-                                if (function.call(men_part[i], context)) {
-                                    if (cache) {
-                                        men_writer.write(men_part[i]);
-                                    } else {
-                                        men_writer.write(std::move(men_part[i]));
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            auto &elem = reader->next();
-                            if (function.call(elem, context)) {
-                                if (cache) {
-                                    writer->write(std::move(elem));
-                                } else {
-                                    writer->write(elem);
-                                }
+    function.before(context);
+    IGNIS_LOG(info) << "General: filter " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*input) &&
+                executor_data->getPartitionTools().isMemory(*output)) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                if (cache) {
+                    for (size_t i = 0; i < sz; i++) {
+                        if (function.call(men_part[i], context)) {
+                            if (cache) {
+                                men_writer.write(men_part[i]);
+                            } else {
+                                men_writer.write(std::move(men_part[i]));
                             }
                         }
                     }
                 }
-            IGNIS_OMP_CATCH()
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) {
+                    auto &elem = reader->next();
+                    if (function.call(elem, context)) {
+                        if (cache) {
+                            writer->write(std::move(elem));
+                        } else {
+                            writer->write(elem);
+                        }
+                    }
+                }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void IPipeImplCLass::flatmap() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
-                input->partitions());
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
+            input->partitions());
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                        executor_data->getPartitionTools().isMemory(*(*output)[p])) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        for (size_t i = 0; i < sz; i++) {
-                            auto result = function.call(men_part[i], context);
-                            for (auto it = result.begin(); it != result.end(); it++) {
-                                men_writer.write(std::move(*it));
-                            }
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            auto result = function.call(reader->next(), context);
-                            for (auto it = result.begin(); it != result.end(); it++) {
-                                writer->write(std::move(*it));
-                            }
-                        }
-                    }
+    function.before(context);
+    IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
+                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                for (size_t i = 0; i < sz; i++) {
+                    auto result = function.call(men_part[i], context);
+                    for (auto it = result.begin(); it != result.end(); it++) { men_writer.write(std::move(*it)); }
                 }
-            IGNIS_OMP_CATCH()
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) {
+                    auto result = function.call(reader->next(), context);
+                    for (auto it = result.begin(); it != result.end(); it++) { writer->write(std::move(*it)); }
+                }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void IPipeImplCLass::keyBy() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<
-                std::pair<typename Function::_R_type, typename Function::_T_type>
-        >(input->partitions());
-        bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto output = executor_data->getPartitionTools()
+                          .newPartitionGroup<std::pair<typename Function::_R_type, typename Function::_T_type>>(
+                                  input->partitions());
+    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: keyBy " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                        executor_data->getPartitionTools().isMemory(*(*output)[p])) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        if (cache) {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(
-                                        std::pair<typename Function::_R_type, typename Function::_T_type>(
-                                                function.call(men_part[i], context), std::move(men_part[i])));
-                            }
-                        } else {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(
-                                        std::pair<typename Function::_R_type, typename Function::_T_type>(
-                                                function.call(men_part[i], context), men_part[i]));
-                            }
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            auto &elem = reader->next();
-                            writer->write(
-                                    std::pair<typename Function::_R_type, typename Function::_T_type>(
-                                            function.call(elem, context), std::move(elem)));
-                        }
+    function.before(context);
+    IGNIS_LOG(info) << "General: keyBy " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
+                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                if (cache) {
+                    for (size_t i = 0; i < sz; i++) {
+                        men_writer.write(std::pair<typename Function::_R_type, typename Function::_T_type>(
+                                function.call(men_part[i], context), std::move(men_part[i])));
+                    }
+                } else {
+                    for (size_t i = 0; i < sz; i++) {
+                        men_writer.write(std::pair<typename Function::_R_type, typename Function::_T_type>(
+                                function.call(men_part[i], context), men_part[i]));
                     }
                 }
-            IGNIS_OMP_CATCH()
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) {
+                    auto &elem = reader->next();
+                    writer->write(std::pair<typename Function::_R_type, typename Function::_T_type>(
+                            function.call(elem, context), std::move(elem)));
+                }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void IPipeImplCLass::mapPartitions(bool preservesPartitioning) {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
-                input->partitions());
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
+            input->partitions());
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto reader = (*input)[p]->readIterator();
-                    auto result = function.call(*reader, context);
-                    for (auto it = result.begin(); it != result.end(); it++) {
-                        writer->write(std::move(*it));
-                    }
-                }
-            IGNIS_OMP_CATCH()
+    function.before(context);
+    IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto reader = (*input)[p]->readIterator();
+            auto result = function.call(*reader, context);
+            for (auto it = result.begin(); it != result.end(); it++) { writer->write(std::move(*it)); }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void IPipeImplCLass::mapPartitionsWithIndex(bool preservesPartitioning) {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T2_type::value_type>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
-                input->partitions());
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T2_type::value_type>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
+            input->partitions());
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto reader = (*input)[p]->readIterator();
-                    auto result = function.call(p, *reader, context);
-                    for (auto it = result.begin(); it != result.end(); it++) {
-                        writer->write(std::move(*it));
-                    }
-                }
-            IGNIS_OMP_CATCH()
+    function.before(context);
+    IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto reader = (*input)[p]->readIterator();
+            auto result = function.call(p, *reader, context);
+            for (auto it = result.begin(); it != result.end(); it++) { writer->write(std::move(*it)); }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Function, typename Tp>
 void IPipeImplCLass::mapExecutor() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<Tp>();
-        auto inMemory = executor_data->getPartitionTools().isMemory(*input);
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        IGNIS_LOG(info) << "General: mapExecutor " << input->partitions() << " partitions";
-        if (!inMemory || input->cache()) {
-            IGNIS_LOG(info) << "General: loading partitions in memory";
-            auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-            for (auto &part: *input) {
-                auto men = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
-                part->copyTo(*men);
-                aux->add(men);
-            }
-            input = aux;
+    auto input = executor_data->getPartitions<Tp>();
+    auto inMemory = executor_data->getPartitionTools().isMemory(*input);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    IGNIS_LOG(info) << "General: mapExecutor " << input->partitions() << " partitions";
+    if (!inMemory || input->cache()) {
+        IGNIS_LOG(info) << "General: loading partitions in memory";
+        auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+        for (auto &part : *input) {
+            auto men = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
+            part->copyTo(*men);
+            aux->add(men);
         }
+        input = aux;
+    }
 
-        typename Function::_T_type arg;
-        for (auto &part: *input) {
-            auto &men = executor_data->getPartitionTools().toMemory(*part);
-            arg.push_back(&men.inner());
+    typename Function::_T_type arg;
+    for (auto &part : *input) {
+        auto &men = executor_data->getPartitionTools().toMemory(*part);
+        arg.push_back(&men.inner());
+    }
+
+    function.call(arg, context);
+
+    if (!inMemory) {
+        IGNIS_LOG(info) << "General: saving partitions from memory";
+        auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+        for (auto &men : *input) {
+            auto part = executor_data->getPartitionTools().newPartition<Tp>(*men);
+            men->copyTo(*part);
+            aux->add(part);
         }
-
-        function.call(arg, context);
-
-        if (!inMemory) {
-            IGNIS_LOG(info) << "General: saving partitions from memory";
-            auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-            for (auto &men: *input) {
-                auto part = executor_data->getPartitionTools().newPartition<Tp>(*men);
-                men->copyTo(*part);
-                aux->add(part);
-            }
-            input = aux;
-        }
-        function.after(context);
-        executor_data->setPartitions(input);
+        input = aux;
+    }
+    function.after(context);
+    executor_data->setPartitions(input);
 
     IGNIS_CATCH()
 }
@@ -315,337 +298,318 @@ void IPipeImplCLass::mapExecutor() {
 template<typename Function, typename Tp, typename R>
 void IPipeImplCLass::mapExecutorTo() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<Tp>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<R>();
-        auto inMemory = executor_data->getPartitionTools().isMemory(*input);
-        auto &context = executor_data->getContext();
-        Function function;
-        function.before(context);
-        IGNIS_LOG(info) << "General: mapExecutorTo " << input->partitions() << " partitions";
-        if (!inMemory) {
-            IGNIS_LOG(info) << "General: loading partitions in memory";
-            auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-            for (auto &part: *input) {
-                auto men = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
-                part->copyTo(*men);
-                aux->add(men);
-            }
-            input = aux;
+    auto input = executor_data->getPartitions<Tp>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<R>();
+    auto inMemory = executor_data->getPartitionTools().isMemory(*input);
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    IGNIS_LOG(info) << "General: mapExecutorTo " << input->partitions() << " partitions";
+    if (!inMemory) {
+        IGNIS_LOG(info) << "General: loading partitions in memory";
+        auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+        for (auto &part : *input) {
+            auto men = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
+            part->copyTo(*men);
+            aux->add(men);
         }
+        input = aux;
+    }
 
-        typename Function::_T_type  arg;
-        for (auto &part: *input) {
-            auto &men = executor_data->getPartitionTools().toMemory(*part);
-            arg.push_back(&men.inner());
+    typename Function::_T_type arg;
+    for (auto &part : *input) {
+        auto &men = executor_data->getPartitionTools().toMemory(*part);
+        arg.push_back(&men.inner());
+    }
+
+    auto newParts = function.call(arg, context);
+
+    IGNIS_LOG(info) << "General: moving elements to partitions";
+    for (auto &v : newParts) {
+        auto part = executor_data->getPartitionTools().newMemoryPartition<R>(0);
+        std::swap(v, part->inner());
+        output->add(part);
+    }
+
+
+    if (!inMemory) {
+        IGNIS_LOG(info) << "General: saving partitions from memory";
+        for (int64_t i = 0; i < output->partitions(); i++) {
+            auto &oldPart = (*output)[i];
+            auto part = executor_data->getPartitionTools().newPartition<R>(*oldPart);
+            oldPart->moveTo(*part);
+            oldPart = part;
         }
-
-        auto newParts = function.call(arg, context);
-
-        IGNIS_LOG(info) << "General: moving elements to partitions";
-        for(auto &v: newParts){
-            auto part = executor_data->getPartitionTools().newMemoryPartition<R>(0);
-            std::swap(v, part->inner());
-            output->add(part);
-        }
-
-
-        if (!inMemory) {
-            IGNIS_LOG(info) << "General: saving partitions from memory";
-            for(int64_t i = 0; i< output->partitions();i++){
-                auto& oldPart = (*output)[i];
-                auto part = executor_data->getPartitionTools().newPartition<R>(*oldPart);
-                oldPart->moveTo(*part);
-                oldPart = part;
-            }
-        }
-        function.after(context);
-        executor_data->setPartitions(output);
+    }
+    function.after(context);
+    executor_data->setPartitions(output);
 
     IGNIS_CATCH()
 }
 
 template<typename Function>
-void IPipeImplCLass::foreach() {
+void IPipeImplCLass::foreach () {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type>();
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: foreach " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p])) {
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        for (size_t i = 0; i < sz; i++) {
-                            function.call(men_part[i], context);
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            function.call(reader->next(), context);
-                        }
-                    }
-                }
-            IGNIS_OMP_CATCH()
+    function.before(context);
+    IGNIS_LOG(info) << "General: foreach " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p])) {
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                for (size_t i = 0; i < sz; i++) { function.call(men_part[i], context); }
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) { function.call(reader->next(), context); }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->deletePartitions();
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->deletePartitions();
     IGNIS_CATCH()
 }
 
 template<typename Function>
 void IPipeImplCLass::foreachPartition() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: foreachPartition " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto reader = (*input)[p]->readIterator();
-                    function.call(*reader, context);
-                }
-            IGNIS_OMP_CATCH()
+    function.before(context);
+    IGNIS_LOG(info) << "General: foreachPartition " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto reader = (*input)[p]->readIterator();
+            function.call(*reader, context);
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->deletePartitions();
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->deletePartitions();
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void IPipeImplCLass::take(int64_t num) {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<Tp>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-        int64_t count = 0;
-        for (auto &part : *input) {
-            if (part->size() + count > num) {
-                if (executor_data->getPartitionTools().isMemory(*part) && !input->cache()) {
-                    executor_data->getPartitionTools().toMemory(*part).resize(num - count);
-                    output->add(part);
-                } else {
-                    auto cut = executor_data->getPartitionTools().newPartition<Tp>(part->type());
-                    auto reader = part->readIterator();
-                    auto writer = cut->writeIterator();
-                    while (count != num) {
-                        count++;
-                        writer->write(reader->next());
-                    }
+    auto input = executor_data->getPartitions<Tp>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+    int64_t count = 0;
+    for (auto &part : *input) {
+        if (part->size() + count > num) {
+            if (executor_data->getPartitionTools().isMemory(*part) && !input->cache()) {
+                executor_data->getPartitionTools().toMemory(*part).resize(num - count);
+                output->add(part);
+            } else {
+                auto cut = executor_data->getPartitionTools().newPartition<Tp>(part->type());
+                auto reader = part->readIterator();
+                auto writer = cut->writeIterator();
+                while (count != num) {
+                    count++;
+                    writer->write(reader->next());
                 }
-                break;
             }
-            count += part->size();
-            output->add(part);
+            break;
         }
-        executor_data->setPartitions(output);
+        count += part->size();
+        output->add(part);
+    }
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void IPipeImplCLass::keys() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<Tp>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Tp::first_type>(
-                input->partitions());
-        bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    auto input = executor_data->getPartitions<Tp>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Tp::first_type>(input->partitions());
+    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
 
-        IGNIS_LOG(info) << "General: keys " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                        executor_data->getPartitionTools().isMemory(*(*output)[p])) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        if (cache) {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(men_part[i].first);
-                            }
-                        } else {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(std::move(men_part[i].first));
-                            }
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            writer->write(reader->next().first);
-                        }
-                    }
+    IGNIS_LOG(info) << "General: keys " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
+                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                if (cache) {
+                    for (size_t i = 0; i < sz; i++) { men_writer.write(men_part[i].first); }
+                } else {
+                    for (size_t i = 0; i < sz; i++) { men_writer.write(std::move(men_part[i].first)); }
                 }
-            IGNIS_OMP_CATCH()
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) { writer->write(reader->next().first); }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Tp>
 void IPipeImplCLass::values() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<Tp>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<typename Tp::second_type>(
-                input->partitions());
-        bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    auto input = executor_data->getPartitions<Tp>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Tp::second_type>(input->partitions());
+    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
 
-        IGNIS_LOG(info) << "General: keys " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                        executor_data->getPartitionTools().isMemory(*(*output)[p])) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        if (cache) {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(men_part[i].second);
-                            }
-                        } else {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(std::move(men_part[i].second));
-                            }
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            writer->write(reader->next().second);
-                        }
-                    }
+    IGNIS_LOG(info) << "General: keys " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
+                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                if (cache) {
+                    for (size_t i = 0; i < sz; i++) { men_writer.write(men_part[i].second); }
+                } else {
+                    for (size_t i = 0; i < sz; i++) { men_writer.write(std::move(men_part[i].second)); }
                 }
-            IGNIS_OMP_CATCH()
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) { writer->write(reader->next().second); }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Tp, typename Function>
 void IPipeImplCLass::flatMapValues() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<Tp>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<
-                std::pair<typename Tp::first_type, typename Function::_R_type::value_type>
-        >(input->partitions());
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<Tp>();
+    auto output =
+            executor_data->getPartitionTools()
+                    .newPartitionGroup<std::pair<typename Tp::first_type, typename Function::_R_type::value_type>>(
+                            input->partitions());
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: flatMapValues " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                        executor_data->getPartitionTools().isMemory(*(*output)[p])) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        for (size_t i = 0; i < sz; i++) {
-                            auto result = function.call(men_part[i].second, context);
-                            for (auto it = result.begin(); it != result.end(); it++) {
-                                men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type::value_type>
-                                                         (men_part[i].first, std::move(*it)));
-                            }
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            auto &pair = reader->next();
-                            auto result = function.call(pair.second, context);
-                            for (auto it = result.begin(); it != result.end(); it++) {
-                                writer->write(std::pair<typename Tp::first_type, typename Function::_R_type::value_type>
-                                                      (pair.first, std::move(*it)));
-                            }
-                        }
+    function.before(context);
+    IGNIS_LOG(info) << "General: flatMapValues " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
+                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                for (size_t i = 0; i < sz; i++) {
+                    auto result = function.call(men_part[i].second, context);
+                    for (auto it = result.begin(); it != result.end(); it++) {
+                        men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type::value_type>(
+                                men_part[i].first, std::move(*it)));
                     }
                 }
-            IGNIS_OMP_CATCH()
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) {
+                    auto &pair = reader->next();
+                    auto result = function.call(pair.second, context);
+                    for (auto it = result.begin(); it != result.end(); it++) {
+                        writer->write(std::pair<typename Tp::first_type, typename Function::_R_type::value_type>(
+                                pair.first, std::move(*it)));
+                    }
+                }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
 template<typename Tp, typename Function>
 void IPipeImplCLass::mapValues() {
     IGNIS_TRY()
-        auto input = executor_data->getPartitions<Tp>();
-        auto output = executor_data->getPartitionTools().newPartitionGroup<
-                std::pair<typename Tp::first_type, typename Function::_R_type>
-        >(input->partitions());
-        bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
-        auto &context = executor_data->getContext();
-        Function function;
+    auto input = executor_data->getPartitions<Tp>();
+    auto output = executor_data->getPartitionTools()
+                          .newPartitionGroup<std::pair<typename Tp::first_type, typename Function::_R_type>>(
+                                  input->partitions());
+    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    auto &context = executor_data->getContext();
+    Function function;
 
-        function.before(context);
-        IGNIS_LOG(info) << "General: mapValues " << input->partitions() << " partitions";
-        IGNIS_OMP_EXCEPTION_INIT()
-        #pragma omp parallel
-        {
-            IGNIS_OMP_TRY()
-                #pragma omp for schedule(dynamic)
-                for (int64_t p = 0; p < input->partitions(); p++) {
-                    auto writer = (*output)[p]->writeIterator();
-                    auto sz = (*input)[p]->size();
-                    if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                        executor_data->getPartitionTools().isMemory(*(*output)[p])) {
-                        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-                        auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
-                        if (cache) {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type>
-                                                         (men_part[i].first,
-                                                          function.call(men_part[i].second, context)));
-                            }
-                        } else {
-                            for (size_t i = 0; i < sz; i++) {
-                                men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type>
-                                                         (std::move(men_part[i].first),
-                                                          function.call(men_part[i].second, context)));
-                            }
-                        }
-                    } else {
-                        auto reader = (*input)[p]->readIterator();
-                        for (size_t i = 0; i < sz; i++) {
-                            auto &pair = reader->next();
-                            writer->write(std::pair<typename Tp::first_type, typename Function::_R_type>(
-                                    std::move(pair.first), function.call(pair.second, context)));
-                        }
+    function.before(context);
+    IGNIS_LOG(info) << "General: mapValues " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
+                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                if (cache) {
+                    for (size_t i = 0; i < sz; i++) {
+                        men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type>(
+                                men_part[i].first, function.call(men_part[i].second, context)));
+                    }
+                } else {
+                    for (size_t i = 0; i < sz; i++) {
+                        men_writer.write(std::pair<typename Tp::first_type, typename Function::_R_type>(
+                                std::move(men_part[i].first), function.call(men_part[i].second, context)));
                     }
                 }
-            IGNIS_OMP_CATCH()
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) {
+                    auto &pair = reader->next();
+                    writer->write(std::pair<typename Tp::first_type, typename Function::_R_type>(
+                            std::move(pair.first), function.call(pair.second, context)));
+                }
+            }
         }
-        IGNIS_OMP_EXCEPTION_END()
-        function.after(context);
-        executor_data->setPartitions(output);
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 

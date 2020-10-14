@@ -4,8 +4,8 @@
 
 #include "IEnumTypes.h"
 #include "ignis/executor/core/RTTInfo.h"
-#include "ignis/executor/core/protocol/IProtocol.h"
 #include "ignis/executor/core/exception/ILogicError.h"
+#include "ignis/executor/core/protocol/IProtocol.h"
 #include <ostream>
 
 namespace ignis {
@@ -13,13 +13,13 @@ namespace ignis {
         namespace core {
             namespace io {
 
-                std::string inline tab(int64_t n) { return std::string(n > 0 ? n : 0 , '\t'); }
+                std::string inline tab(int64_t n) { return std::string(n > 0 ? n : 0, '\t'); }
 
                 template<typename T>
                 struct IPrinterType {
                     inline void operator()(std::ostream &out, const T &b, int64_t level) {
-                        throw exception::ILogicError(
-                                "IPrinterType not implemented for " + RTTInfo::from<T>().getStandardName());
+                        throw exception::ILogicError("IPrinterType not implemented for " +
+                                                     RTTInfo::from<T>().getStandardName());
                     }
                 };
 
@@ -33,10 +33,10 @@ namespace ignis {
                 private:
                     IPrinterType<T> printer;
                 };
-            }
-        }
-    }
-}
+            }// namespace io
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IPrinter.tcc"
 #endif

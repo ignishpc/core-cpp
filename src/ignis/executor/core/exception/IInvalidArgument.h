@@ -14,10 +14,9 @@ namespace ignis {
 
                     virtual ~IInvalidArgument() {}
                 };
-            }
-        }
-    }
-}
+            }// namespace exception
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif
-

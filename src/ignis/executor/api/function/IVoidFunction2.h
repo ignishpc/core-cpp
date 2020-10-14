@@ -19,15 +19,15 @@ namespace ignis {
 
                     virtual void before(IContext &context) {}
 
-                    virtual void call(T1 &v1, T2 &v2, IContext &context) {}
+                    virtual void call(T1 &v1, T2 &v2, IContext &context) {
+                        throw executor::core::exception::ILogicError("call function must be implemented");
+                    }
 
                     virtual void after(IContext &context) {}
-
                 };
-            }
-        }
-    }
-}
+            }// namespace function
+        }    // namespace api
+    }        // namespace executor
+}// namespace ignis
 
 #endif
-

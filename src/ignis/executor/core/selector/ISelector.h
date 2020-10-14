@@ -3,38 +3,37 @@
 #define IGNIS_ISELECTOR_H
 
 
-#include "ITypeSelector.h"
-#include "IGeneralSelector.h"
 #include "IGeneralActionSelector.h"
+#include "IGeneralSelector.h"
 #include "IKeySelector.h"
+#include "ITypeSelector.h"
 #include "IValueSelector.h"
 
-#define ignis_export(name, class)\
-extern "C" ignis::executor::core::selector::ISelectorGroup* name##_constructor(){\
-    return new ignis::executor::core::selector::ISelectorGroupImpl<class>();\
-}\
-\
-extern "C" void name##_destructor(ignis::executor::core::selector::ISelectorGroupImpl<class>* obj){\
-    delete obj;\
-}
+#define ignis_export(name, class)                                                                                      \
+    extern "C" ignis::executor::core::selector::ISelectorGroup *name##_constructor() {                                 \
+        return new ignis::executor::core::selector::ISelectorGroupImpl<class>();                                       \
+    }                                                                                                                  \
+                                                                                                                       \
+    extern "C" void name##_destructor(ignis::executor::core::selector::ISelectorGroupImpl<class> *obj) { delete obj; }
 
-#define ignis_export_with_key(name, class, keyclass)\
-extern "C" ignis::executor::core::selector::ISelectorGroup* name##_constructor(){\
-    return new ignis::executor::core::selector::ISelectorGroupKeyImpl<keyclass, class>();\
-}\
-\
-extern "C" void name##_destructor(ignis::executor::core::selector::ISelectorGroupKeyImpl<keyclass, class>* obj){\
-    delete obj;\
-}
+#define ignis_export_with_key(name, class, keyclass)                                                                   \
+    extern "C" ignis::executor::core::selector::ISelectorGroup *name##_constructor() {                                 \
+        return new ignis::executor::core::selector::ISelectorGroupKeyImpl<keyclass, class>();                          \
+    }                                                                                                                  \
+                                                                                                                       \
+    extern "C" void name##_destructor(ignis::executor::core::selector::ISelectorGroupKeyImpl<keyclass, class> *obj) {  \
+        delete obj;                                                                                                    \
+    }
 
-#define ignis_export_with_value(name, class, valueclass)\
-extern "C" ignis::executor::core::selector::ISelectorGroup* name##_constructor(){\
-    return new ignis::executor::core::selector::ISelectorGroupValueImpl<valueclass, class>();\
-}\
-\
-extern "C" void name##_destructor(ignis::executor::core::selector::ISelectorGroupValueImpl<valueclass, class>* obj){\
-    delete obj;\
-}
+#define ignis_export_with_value(name, class, valueclass)                                                               \
+    extern "C" ignis::executor::core::selector::ISelectorGroup *name##_constructor() {                                 \
+        return new ignis::executor::core::selector::ISelectorGroupValueImpl<valueclass, class>();                      \
+    }                                                                                                                  \
+                                                                                                                       \
+    extern "C" void name##_destructor(                                                                                 \
+            ignis::executor::core::selector::ISelectorGroupValueImpl<valueclass, class> *obj) {                        \
+        delete obj;                                                                                                    \
+    }
 
 namespace ignis {
     namespace executor {
@@ -87,11 +86,10 @@ namespace ignis {
                 };
 
 
-            }
-        }
-    }
-}
+            }// namespace selector
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 
 #endif
-

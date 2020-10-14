@@ -2,8 +2,8 @@
 #ifndef IGNIS_IREADITERATOR_H
 #define IGNIS_IREADITERATOR_H
 
-#include <memory>
 #include "ignis/executor/core/exception/ILogicError.h"
+#include <memory>
 
 namespace ignis {
     namespace executor {
@@ -20,9 +20,9 @@ namespace ignis {
 
                 virtual bool hasNext() { throw core::exception::ILogicError("not implemented"); }
             };
-        }
-    }
-}
+        }// namespace api
+    }    // namespace executor
+}// namespace ignis
 
 
 #endif

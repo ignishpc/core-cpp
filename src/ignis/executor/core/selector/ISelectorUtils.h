@@ -3,6 +3,7 @@
 #ifndef IGNIS_ISELECTORUTILS_H
 #define IGNIS_ISELECTORUTILS_H
 
+#include <functional>
 #include <utility>
 
 namespace ignis {
@@ -34,11 +35,12 @@ namespace ignis {
 
                         typename ISame<typename IHasLess<Key>::result, typename IHasLess<Value>::result>::result
                         operator()() {}
-
                     };
 
                     template<typename C>
-                    static const C *has(decltype(Check<C>()() < Check<C>()()) *flag) { return nullptr; }
+                    static const C *has(decltype(Check<C>()() < Check<C>()()) *flag) {
+                        return nullptr;
+                    }
 
                     template<typename C>
                     static void has(...) {}
@@ -62,11 +64,12 @@ namespace ignis {
 
                         typename ISame<typename IHasLess<Key>::result, typename IHasLess<Value>::result>::result
                         operator()() {}
-
                     };
 
                     template<typename C>
-                    static const C *has(decltype(&std::hash<C>::operator()) *flag) { return nullptr; }
+                    static const C *has(decltype(&std::hash<C>::operator()) *flag) {
+                        return nullptr;
+                    }
 
                     template<typename C>
                     static void has(...) {}
@@ -75,10 +78,10 @@ namespace ignis {
                     typedef decltype(has<Tp>(nullptr)) result;
                 };
 
-            }
-        }
-    }
-}
+            }// namespace selector
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 
 #endif

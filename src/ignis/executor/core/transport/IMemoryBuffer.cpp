@@ -12,9 +12,7 @@ void IMemoryBuffer::initCommon(uint8_t *buf, size_t size, bool owner, size_t wPo
     if (buf == nullptr && size != 0) {
         assert(owner);
         buf = (uint8_t *) std::malloc(size);
-        if (buf == nullptr) {
-            throw std::bad_alloc();
-        }
+        if (buf == nullptr) { throw std::bad_alloc(); }
     }
 
     buffer_ = buf;
@@ -31,18 +29,13 @@ void IMemoryBuffer::initCommon(uint8_t *buf, size_t size, bool owner, size_t wPo
     // equal to wBase_.  We update it in a few places (computeRead, etc.).
 }
 
-IMemoryBuffer::IMemoryBuffer() {
-    initCommon(NULL, defaultSize, true, 0);
-}
+IMemoryBuffer::IMemoryBuffer() { initCommon(NULL, defaultSize, true, 0); }
 
-IMemoryBuffer::IMemoryBuffer(size_t sz) {
-    initCommon(NULL, sz, true, 0);
-}
+IMemoryBuffer::IMemoryBuffer(size_t sz) { initCommon(NULL, sz, true, 0); }
 
 IMemoryBuffer::IMemoryBuffer(uint8_t *buf, size_t sz, IMemoryBuffer::MemoryPolicy policy) {
     if (buf == NULL && sz != 0) {
-        throw TTransportException(TTransportException::BAD_ARGS,
-                                  "TMemoryBuffer given null buffer with non-zero size.");
+        throw TTransportException(TTransportException::BAD_ARGS, "TMemoryBuffer given null buffer with non-zero size.");
     }
 
     switch (policy) {
@@ -55,30 +48,21 @@ IMemoryBuffer::IMemoryBuffer(uint8_t *buf, size_t sz, IMemoryBuffer::MemoryPolic
             this->write(buf, sz);
             break;
         default:
-            throw TTransportException(TTransportException::BAD_ARGS,
-                                      "Invalid MemoryPolicy for TMemoryBuffer");
+            throw TTransportException(TTransportException::BAD_ARGS, "Invalid MemoryPolicy for TMemoryBuffer");
     }
 }
 
 IMemoryBuffer::~IMemoryBuffer() {
-    if (owner_) {
-        std::free(buffer_);
-    }
+    if (owner_) { std::free(buffer_); }
 }
 
-bool IMemoryBuffer::isOpen() {
-    return true;
-}
+bool IMemoryBuffer::isOpen() { return true; }
 
-bool IMemoryBuffer::peek() {
-    return (rBase_ < wBase_);
-}
+bool IMemoryBuffer::peek() { return (rBase_ < wBase_); }
 
-void IMemoryBuffer::open() {
-}
+void IMemoryBuffer::open() {}
 
-void IMemoryBuffer::close() {
-}
+void IMemoryBuffer::close() {}
 
 void IMemoryBuffer::getBuffer(uint8_t **bufPtr, size_t *sz) {
     *bufPtr = rBase_;
@@ -86,9 +70,7 @@ void IMemoryBuffer::getBuffer(uint8_t **bufPtr, size_t *sz) {
 }
 
 std::string IMemoryBuffer::getBufferAsString() {
-    if (buffer_ == nullptr) {
-        return "";
-    }
+    if (buffer_ == nullptr) { return ""; }
     uint8_t *buf;
     size_t sz;
     getBuffer(&buf, &sz);
@@ -96,9 +78,7 @@ std::string IMemoryBuffer::getBufferAsString() {
 }
 
 void IMemoryBuffer::appendBufferToString(std::string &str) {
-    if (buffer_ == nullptr) {
-        return;
-    }
+    if (buffer_ == nullptr) { return; }
     uint8_t *buf;
     size_t sz;
     getBuffer(&buf, &sz);
@@ -152,9 +132,7 @@ std::string IMemoryBuffer::readAsString(size_t len) {
 
 uint32_t IMemoryBuffer::readAppendToString(std::string &str, size_t len) {
     // Don't get some stupid assertion failure.
-    if (buffer_ == nullptr) {
-        return 0;
-    }
+    if (buffer_ == nullptr) { return 0; }
 
     uint8_t *start;
     size_t give;
@@ -169,9 +147,7 @@ uint32_t IMemoryBuffer::readAppendToString(std::string &str, size_t len) {
 uint32_t IMemoryBuffer::readEnd() {
     // This cast should be safe, because buffer_'s size is a uint32_t
     uint32_t bytes = static_cast<uint32_t>(rBase_ - buffer_);
-    if (rBase_ == wBase_) {
-        resetBuffer();
-    }
+    if (rBase_ == wBase_) { resetBuffer(); }
     return bytes;
 }
 
@@ -185,9 +161,7 @@ size_t IMemoryBuffer::available_read() const {
     return static_cast<size_t>(wBase_ - rBase_);
 }
 
-size_t IMemoryBuffer::available_write() const {
-    return static_cast<size_t>(wBound_ - wBase_);
-}
+size_t IMemoryBuffer::available_write() const { return static_cast<size_t>(wBound_ - wBase_); }
 
 uint8_t *IMemoryBuffer::getWritePtr(uint32_t len) {
     ensureCanWrite(len);
@@ -196,23 +170,15 @@ uint8_t *IMemoryBuffer::getWritePtr(uint32_t len) {
 
 void IMemoryBuffer::wroteBytes(uint32_t len) {
     size_t avail = available_write();
-    if (len > avail) {
-        throw TTransportException("Client wrote more bytes than size of buffer.");
-    }
+    if (len > avail) { throw TTransportException("Client wrote more bytes than size of buffer."); }
     wBase_ += len;
 }
 
-uint32_t IMemoryBuffer::readAll(uint8_t *buf, uint32_t len) {
-    return TBufferBase::readAll(buf, len);
-}
+uint32_t IMemoryBuffer::readAll(uint8_t *buf, uint32_t len) { return TBufferBase::readAll(buf, len); }
 
-size_t IMemoryBuffer::getBufferSize() const {
-    return bufferSize_;
-}
+size_t IMemoryBuffer::getBufferSize() const { return bufferSize_; }
 
-size_t IMemoryBuffer::getMaxBufferSize() const {
-    return maxBufferSize_;
-}
+size_t IMemoryBuffer::getMaxBufferSize() const { return maxBufferSize_; }
 
 void IMemoryBuffer::setMaxBufferSize(size_t maxSize) {
     if (maxSize < bufferSize_) {
@@ -238,21 +204,16 @@ void IMemoryBuffer::swap(IMemoryBuffer &that) {
 void IMemoryBuffer::ensureCanWrite(size_t len) {
     // Check available space
     size_t avail = available_write();
-    if (len <= avail) {
-        return;
-    }
+    if (len <= avail) { return; }
 
-    if (!owner_) {
-        throw TTransportException("Insufficient space in external MemoryBuffer");
-    }
+    if (!owner_) { throw TTransportException("Insufficient space in external MemoryBuffer"); }
 
     // Grow the buffer as necessary.
     size_t new_size = bufferSize_;
     while (len > avail) {
         if (new_size > maxBufferSize_ / 2) {
             if (available_write() + maxBufferSize_ - bufferSize_ < len) {
-                throw TTransportException(TTransportException::BAD_ARGS,
-                                          "Internal buffer size overflow");
+                throw TTransportException(TTransportException::BAD_ARGS, "Internal buffer size overflow");
             }
             new_size = maxBufferSize_ - 1;
         }
@@ -306,14 +267,10 @@ const uint8_t *IMemoryBuffer::borrowSlow(uint8_t *buf, uint32_t *len) {
 }
 
 void IMemoryBuffer::setBufferSize(size_t new_size) {
-    if (!owner_) {
-        throw TTransportException("resize in buffer we don't own");
-    }
+    if (!owner_) { throw TTransportException("resize in buffer we don't own"); }
     // Allocate into a new pointer so we don't bork ours if it fails.
     uint8_t *new_buffer = static_cast<uint8_t *>(std::realloc(buffer_, new_size));
-    if (new_buffer == nullptr) {
-        throw std::bad_alloc();
-    }
+    if (new_buffer == nullptr) { throw std::bad_alloc(); }
 
     rBase_ = new_buffer + std::min(static_cast<size_t>(rBase_ - buffer_), new_size);
     rBound_ = new_buffer + std::min(static_cast<size_t>(rBound_ - buffer_), new_size);

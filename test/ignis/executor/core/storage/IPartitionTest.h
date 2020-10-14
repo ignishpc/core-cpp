@@ -2,10 +2,10 @@
 #ifndef IGNIS_IPARTITIONTEST_H
 #define IGNIS_IPARTITIONTEST_H
 
+#include "ignis/executor/core/IElements.h"
+#include "ignis/executor/core/storage/IPartition.h"
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "ignis/executor/core/storage/IPartition.h"
-#include "ignis/executor/core/IElements.h"
 
 namespace ignis {
     namespace executor {
@@ -16,7 +16,6 @@ namespace ignis {
                 template<typename Tp>
                 class IPartitionTest : public CPPUNIT_NS::TestCase {
                 public:
-
                     void setUp();
 
                     void itWriteItReadTest();
@@ -53,14 +52,12 @@ namespace ignis {
                     void read(IVector<Tp> &elems, IPartition<Tp> &part);
 
                     void write(IPartition<Tp> &part, IVector<Tp> &elems);
-
                 };
-            }
-        }
-    }
-}
+            }// namespace storage
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IPartitionTest.tcc"
 
 #endif
-

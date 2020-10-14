@@ -12,7 +12,6 @@ namespace ignis {
             namespace modules {
                 class ICommModule : public modules::IModule, public rpc::executor::ICommModuleIf {
                 public:
-
                     ICommModule(std::shared_ptr<IExecutorData> &executor_data);
 
                     void createGroup(std::string &_return) override;
@@ -31,7 +30,8 @@ namespace ignis {
 
                     void getPartitions(std::vector<std::string> &_return, const int8_t protocol) override;
 
-                    void getPartitions2(std::vector<std::string> &_return, const int8_t protocol, int64_t minPartitions) override;
+                    void getPartitions2(std::vector<std::string> &_return, const int8_t protocol,
+                                        int64_t minPartitions) override;
 
                     void setPartitions(const std::vector<std::string> &partitions) override;
 
@@ -45,15 +45,23 @@ namespace ignis {
 
                     void driverScatter3(const std::string &id, int64_t partitions, const rpc::ISource &src) override;
 
+                    void send(const std::string &id, const int64_t partition, const int64_t dest,
+                              const int64_t tag) override;
+
+                    void recv(const std::string &id, const int64_t partition, const int64_t source,
+                              const int64_t tag) override;
+
+                    void recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag,
+                               const rpc::ISource& src) override;
+
                     virtual ~ICommModule();
 
                 private:
                     impl::ICommImpl impl;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif
-

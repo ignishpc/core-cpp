@@ -16,7 +16,7 @@ namespace ignis {
 
                     IDiskPartition(std::string path, int8_t compression = 6, bool persist = false, bool read = false);
 
-                    virtual std::shared_ptr<IPartition < Tp>> clone();
+                    virtual std::shared_ptr<IPartition<Tp>> clone();
 
                     virtual void clear();
 
@@ -54,12 +54,11 @@ namespace ignis {
                     int copies;
                     bool destroy;
                 };
-            }
-        }
-    }
-}
+            }// namespace storage
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IDiskPartition.tcc"
 
 #endif
-

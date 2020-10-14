@@ -6,50 +6,30 @@ using namespace ignis::executor::api;
 using namespace ignis::executor::core::io;
 using ignis::executor::core::io::IEnumTypes;
 
-bool IJsonValue::isNull() const {
-    return type == IEnumTypes::I_VOID;
-}
+bool IJsonValue::isNull() const { return type == IEnumTypes::I_VOID; }
 
-bool IJsonValue::isBoolean() const {
-    return type == IEnumTypes::I_BOOL;
-}
+bool IJsonValue::isBoolean() const { return type == IEnumTypes::I_BOOL; }
 
-bool IJsonValue::isInteger() const {
-    return type == IEnumTypes::I_I64;
-}
+bool IJsonValue::isInteger() const { return type == IEnumTypes::I_I64; }
 
-bool IJsonValue::isDouble() const {
-    return type == IEnumTypes::I_DOUBLE;
-}
+bool IJsonValue::isDouble() const { return type == IEnumTypes::I_DOUBLE; }
 
-bool IJsonValue::isNumber() const {
-    return type == IEnumTypes::I_DOUBLE || type == IEnumTypes::I_I64;
-}
+bool IJsonValue::isNumber() const { return type == IEnumTypes::I_DOUBLE || type == IEnumTypes::I_I64; }
 
-bool IJsonValue::isString() const {
-    return type == IEnumTypes::I_STRING;
-}
+bool IJsonValue::isString() const { return type == IEnumTypes::I_STRING; }
 
-bool IJsonValue::isArray() const {
-    return type == IEnumTypes::I_LIST;
-}
+bool IJsonValue::isArray() const { return type == IEnumTypes::I_LIST; }
 
-bool IJsonValue::isMap() const {
-    return type == IEnumTypes::I_MAP;
-}
+bool IJsonValue::isMap() const { return type == IEnumTypes::I_MAP; }
 
-IJsonValue::IJsonValue() {
-    setNull();
-}
+IJsonValue::IJsonValue() { setNull(); }
 
 void IJsonValue::setNull() {
     reset();
     type = IEnumTypes::I_VOID;
 }
 
-IJsonValue::IJsonValue(bool value) {
-    setBoolean(value);
-}
+IJsonValue::IJsonValue(bool value) { setBoolean(value); }
 
 void IJsonValue::setBoolean(bool value) {
     reset();
@@ -57,13 +37,9 @@ void IJsonValue::setBoolean(bool value) {
     elem.boolean = value;
 }
 
-bool IJsonValue::getBoolean() const {
-    return elem.boolean;
-}
+bool IJsonValue::getBoolean() const { return elem.boolean; }
 
-IJsonValue::IJsonValue(int64_t value) {
-    setInteger(value);
-}
+IJsonValue::IJsonValue(int64_t value) { setInteger(value); }
 
 void IJsonValue::setInteger(int64_t value) {
     reset();
@@ -71,13 +47,9 @@ void IJsonValue::setInteger(int64_t value) {
     elem.integer = value;
 }
 
-int64_t IJsonValue::getInteger() const {
-    return elem.integer;
-}
+int64_t IJsonValue::getInteger() const { return elem.integer; }
 
-IJsonValue::IJsonValue(double value) {
-    setDouble(value);
-}
+IJsonValue::IJsonValue(double value) { setDouble(value); }
 
 void IJsonValue::setDouble(double value) {
     reset();
@@ -85,9 +57,7 @@ void IJsonValue::setDouble(double value) {
     elem.floating = value;
 }
 
-double IJsonValue::getDouble() const {
-    return elem.floating;
-}
+double IJsonValue::getDouble() const { return elem.floating; }
 
 double IJsonValue::getNumber() const {
     if (isDouble()) {
@@ -97,13 +67,9 @@ double IJsonValue::getNumber() const {
     }
 }
 
-IJsonValue::IJsonValue(const std::string &value) {
-    setString(value);
-}
+IJsonValue::IJsonValue(const std::string &value) { setString(value); }
 
-IJsonValue::IJsonValue(std::string &&value) {
-    setString(std::forward<std::string>(value));
-}
+IJsonValue::IJsonValue(std::string &&value) { setString(std::forward<std::string>(value)); }
 
 void IJsonValue::setString(const std::string &value) {
     reset();
@@ -117,17 +83,11 @@ void IJsonValue::setString(std::string &&value) {
     elem.pointer = new std::string(std::forward<std::string>(value));
 }
 
-const std::string &IJsonValue::getString() const {
-    return *reinterpret_cast<const std::string *>(elem.pointer);
-}
+const std::string &IJsonValue::getString() const { return *reinterpret_cast<const std::string *>(elem.pointer); }
 
-IJsonValue::IJsonValue(const std::vector<IJsonValue> &value) {
-    setArray(value);
-}
+IJsonValue::IJsonValue(const std::vector<IJsonValue> &value) { setArray(value); }
 
-IJsonValue::IJsonValue(std::vector<IJsonValue> &&value) {
-    setArray(std::forward<std::vector<IJsonValue>>(value));
-}
+IJsonValue::IJsonValue(std::vector<IJsonValue> &&value) { setArray(std::forward<std::vector<IJsonValue>>(value)); }
 
 void IJsonValue::setArray(const std::vector<IJsonValue> &value) {
     reset();
@@ -145,9 +105,7 @@ const std::vector<IJsonValue> &IJsonValue::getArray() const {
     return *reinterpret_cast<const std::vector<IJsonValue> *>(elem.pointer);
 }
 
-IJsonValue::IJsonValue(const std::unordered_map<std::string, IJsonValue> &value) {
-    setMap(value);
-}
+IJsonValue::IJsonValue(const std::unordered_map<std::string, IJsonValue> &value) { setMap(value); }
 
 IJsonValue::IJsonValue(std::unordered_map<std::string, IJsonValue> &&value) {
     setMap(std::forward<std::unordered_map<std::string, IJsonValue>>(value));
@@ -163,17 +121,14 @@ void IJsonValue::setMap(std::unordered_map<std::string, IJsonValue> &&value) {
     reset();
     type = IEnumTypes::I_MAP;
     elem.pointer = new std::unordered_map<std::string, IJsonValue>(
-            std::forward<std::unordered_map<std::string, IJsonValue>>(value)
-    );
+            std::forward<std::unordered_map<std::string, IJsonValue>>(value));
 }
 
 const std::unordered_map<std::string, IJsonValue> &IJsonValue::getMap() const {
     return *reinterpret_cast<const std::unordered_map<std::string, IJsonValue> *>(elem.pointer);
 }
 
-int IJsonValue::getTypeId() const {
-    return type;
-}
+int IJsonValue::getTypeId() const { return type; }
 
 void IJsonValue::reset() {
     switch (type) {
@@ -196,9 +151,9 @@ void (*IJsonWriterType<IJsonValue>::writers[])(JsonWriter &out, const api::IJson
         [](JsonWriter &out, const api::IJsonValue &v) {//I_BOOL = 0x1
             IJsonWriterType<bool>()(out, v.getBoolean());
         },
-        nullptr,//I_I08 = 0x2,
-        nullptr,//I_I16 = 0x3,
-        nullptr,//I_I32 = 0x4,
+        nullptr,                                       //I_I08 = 0x2,
+        nullptr,                                       //I_I16 = 0x3,
+        nullptr,                                       //I_I32 = 0x4,
         [](JsonWriter &out, const api::IJsonValue &v) {//I_I64 = 0x5
             IJsonWriterType<int64_t>()(out, v.getInteger());
         },
@@ -211,7 +166,7 @@ void (*IJsonWriterType<IJsonValue>::writers[])(JsonWriter &out, const api::IJson
         [](JsonWriter &out, const api::IJsonValue &v) {//I_LIST = 0x8
             IJsonWriterType<std::vector<api::IJsonValue>>()(out, v.getArray());
         },
-        nullptr,//I_SET = 0x9,
+        nullptr,                                       //I_SET = 0x9,
         [](JsonWriter &out, const api::IJsonValue &v) {//I_MAP = 0xa
             IJsonWriterType<std::unordered_map<std::string, api::IJsonValue>>()(out, v.getMap());
         },
@@ -226,10 +181,12 @@ void (*IJsonReaderType<IJsonValue>::readers[])(JsonNode &in, api::IJsonValue &v)
             v.setNull();
         },
         [](JsonNode &in, api::IJsonValue &v) {//kFalseType = 1,
-            v.setBoolean(false);;
+            v.setBoolean(false);
+            ;
         },
         [](JsonNode &in, api::IJsonValue &v) {//kTrueType = 2,
-            v.setBoolean(true);;
+            v.setBoolean(true);
+            ;
         },
         [](JsonNode &in, api::IJsonValue &v) {//kObjectType = 3
             v.setMap(IJsonReaderType<std::unordered_map<std::string, api::IJsonValue>>()(in));
@@ -246,8 +203,7 @@ void (*IJsonReaderType<IJsonValue>::readers[])(JsonNode &in, api::IJsonValue &v)
             } else {
                 v.setInteger(IJsonReaderType<int64_t>()(in));
             }
-        }
-};
+        }};
 
 void (*IWriterType<IJsonValue>::writers[])(protocol::IProtocol &protocol, const api::IJsonValue &obj){
         [](protocol::IProtocol &protocol, const api::IJsonValue &obj) {//I_VOID = 0x0
@@ -257,9 +213,9 @@ void (*IWriterType<IJsonValue>::writers[])(protocol::IProtocol &protocol, const 
             writeTypeAux(protocol, IEnumTypes::I_BOOL);
             IWriterType<bool>()(protocol, obj.getBoolean());
         },
-        nullptr,//I_I08 = 0x2,
-        nullptr,//I_I16 = 0x3,
-        nullptr,//I_I32 = 0x4,
+        nullptr,                                                       //I_I08 = 0x2,
+        nullptr,                                                       //I_I16 = 0x3,
+        nullptr,                                                       //I_I32 = 0x4,
         [](protocol::IProtocol &protocol, const api::IJsonValue &obj) {//I_I64 = 0x5
             writeTypeAux(protocol, IEnumTypes::I_I64);
             IWriterType<int64_t>()(protocol, obj.getInteger());
@@ -291,7 +247,8 @@ void (*IReaderType<IJsonValue>::readers[])(protocol::IProtocol &protocol, api::I
             obj.setNull();
         },
         [](protocol::IProtocol &protocol, api::IJsonValue &obj) {//I_BOOL = 0x1
-            obj.setBoolean(IReaderType<bool>()(protocol));;
+            obj.setBoolean(IReaderType<bool>()(protocol));
+            ;
         },
         [](protocol::IProtocol &protocol, api::IJsonValue &obj) {//I_I08 = 0x2,
             obj.setInteger(IReaderType<int8_t>()(protocol));
@@ -349,9 +306,8 @@ void (*IReaderType<IJsonValue>::readers[])(protocol::IProtocol &protocol, api::I
             obj.setArray(std::move(pair));
         },
         [](protocol::IProtocol &protocol, api::IJsonValue &obj) {//I_JSON = 0xe,
-            readers[readTypeAux(protocol)](protocol, obj); //should never be executed
-        }
-};
+            readers[readTypeAux(protocol)](protocol, obj);       //should never be executed
+        }};
 
 void (*IPrinterType<IJsonValue>::printers[])(std::ostream &out, const api::IJsonValue &v, int64_t level){
         [](std::ostream &out, const api::IJsonValue &v, int64_t level) {//I_VOID = 0x0
@@ -359,9 +315,9 @@ void (*IPrinterType<IJsonValue>::printers[])(std::ostream &out, const api::IJson
         [](std::ostream &out, const api::IJsonValue &v, int64_t level) {//I_I08 = 0x2,
             IPrinterType<bool>()(out, v.getBoolean(), level);
         },
-        nullptr,//I_I08 = 0x2,
-        nullptr,//I_I16 = 0x3,
-        nullptr,//I_I32 = 0x4,
+        nullptr,                                                        //I_I08 = 0x2,
+        nullptr,                                                        //I_I16 = 0x3,
+        nullptr,                                                        //I_I32 = 0x4,
         [](std::ostream &out, const api::IJsonValue &v, int64_t level) {//I_I64 = 0x5
             IPrinterType<int64_t>()(out, v.getInteger(), level);
         },

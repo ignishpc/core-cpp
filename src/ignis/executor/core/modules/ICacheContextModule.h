@@ -3,10 +3,10 @@
 #define IGNIS_ICACHECONTEXTMODULE_H
 
 #include "IModule.h"
-#include <map>
-#include <memory>
 #include "ignis/rpc/executor/ICacheContextModule.h"
 #include "impl/ICacheImpl.h"
+#include <map>
+#include <memory>
 
 namespace ignis {
     namespace executor {
@@ -14,7 +14,6 @@ namespace ignis {
             namespace modules {
                 class ICacheContextModule : public IModule, public rpc::executor::ICacheContextModuleIf {
                 public:
-
                     ICacheContextModule(std::shared_ptr<IExecutorData> &executor_data);
 
                     int64_t saveContext();
@@ -32,9 +31,9 @@ namespace ignis {
                 private:
                     impl::ICacheImpl impl;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

@@ -9,25 +9,26 @@ namespace ignis {
         namespace core {
             namespace modules {
                 class IGeneralActionModuleTest : public IModuleTest {
-                CPPUNIT_TEST_SUITE(IGeneralActionModuleTest);
-                        CPPUNIT_TEST(reduceIntTest);
-                        CPPUNIT_TEST(reduceStringTest);
-                        CPPUNIT_TEST(treeReduceIntTest);
-                        CPPUNIT_TEST(treeReduceStringTest);
-                        CPPUNIT_TEST(aggregateIntToStringTest);
-                        CPPUNIT_TEST(treeAggregateStringToIntTest);
-                        CPPUNIT_TEST(foldIntTest);
-                        CPPUNIT_TEST(treeFoldStringTest);
-                        CPPUNIT_TEST(takeStringTest);
-                        CPPUNIT_TEST(foreachIntTest);
-                        CPPUNIT_TEST(foreachPartitionStringTest);
-                        CPPUNIT_TEST(topIntTest);
-                        CPPUNIT_TEST(customTopStringTest);
-                        CPPUNIT_TEST(takeOrderedStringTest);
-                        CPPUNIT_TEST(customTakeOrderedIntTest);
-                        CPPUNIT_TEST(keysIntStringTest);
-                        CPPUNIT_TEST(valuesStringIntTest);
+                    CPPUNIT_TEST_SUITE(IGeneralActionModuleTest);
+                    CPPUNIT_TEST(reduceIntTest);
+                    CPPUNIT_TEST(reduceStringTest);
+                    CPPUNIT_TEST(treeReduceIntTest);
+                    CPPUNIT_TEST(treeReduceStringTest);
+                    CPPUNIT_TEST(aggregateIntToStringTest);
+                    CPPUNIT_TEST(treeAggregateStringToIntTest);
+                    CPPUNIT_TEST(foldIntTest);
+                    CPPUNIT_TEST(treeFoldStringTest);
+                    CPPUNIT_TEST(takeStringTest);
+                    CPPUNIT_TEST(foreachIntTest);
+                    CPPUNIT_TEST(foreachPartitionStringTest);
+                    CPPUNIT_TEST(topIntTest);
+                    CPPUNIT_TEST(customTopStringTest);
+                    CPPUNIT_TEST(takeOrderedStringTest);
+                    CPPUNIT_TEST(customTakeOrderedIntTest);
+                    CPPUNIT_TEST(keysIntStringTest);
+                    CPPUNIT_TEST(valuesStringIntTest);
                     CPPUNIT_TEST_SUITE_END();
+
                 public:
                     IGeneralActionModuleTest();
 
@@ -71,9 +72,7 @@ namespace ignis {
 
                     void takeOrderedStringTest() { takeOrderedTest<std::string>(2, "RawMemory"); }
 
-                    void customTakeOrderedIntTest() {
-                        customTakeOrderedTest<int>("SortInt", 2, "Memory");
-                    }
+                    void customTakeOrderedIntTest() { customTakeOrderedTest<int>("SortInt", 2, "Memory"); }
 
                     void keysIntStringTest() { keysTest<int, std::string>(2, "Memory"); }
 
@@ -87,9 +86,8 @@ namespace ignis {
                     void treeReduceTest(const std::string &name, int cores, const std::string &partitionType);
 
                     template<typename Tp>
-                    void
-                    aggregateTest(const std::string &zero, const std::string &seq, const std::string &comb, int cores,
-                                  const std::string &partitionType);
+                    void aggregateTest(const std::string &zero, const std::string &seq, const std::string &comb,
+                                       int cores, const std::string &partitionType);
 
                     template<typename Tp>
                     void treeAggregateTest(const std::string &zero, const std::string &seq, const std::string &comb,
@@ -132,12 +130,11 @@ namespace ignis {
 
                     std::shared_ptr<IGeneralActionModule> generalAction;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IGeneralActionModuleTest.tcc"
 
 #endif
-

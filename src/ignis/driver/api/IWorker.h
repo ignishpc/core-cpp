@@ -12,7 +12,6 @@ namespace ignis {
         namespace api {
             class IWorker {
             public:
-
                 IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type);
 
                 IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type);
@@ -33,10 +32,10 @@ namespace ignis {
                 }
 
                 template<typename C>
-                std::shared_ptr<IDataFrame<typename C::value_type>>
-                parallelize(const C &data, int64_t partitions, const ISource &src) {
+                std::shared_ptr<IDataFrame<typename C::value_type>> parallelize(const C &data, int64_t partitions,
+                                                                                const ISource &src) {
                     auto data_id = Ignis::driverContext().parallelize<C>(data);
-                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, partitions,src));
+                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, partitions, src));
                 }
 
                 template<typename Tp>
@@ -45,20 +44,20 @@ namespace ignis {
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>>
-                importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data, int64_t partitions) {
+                std::shared_ptr<IDataFrame<Tp>> importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data,
+                                                                int64_t partitions) {
                     return IDataFrame<Tp>::make(importDataFrameAbs(data.id, partitions));
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>>
-                importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data, const ISource &src) {
+                std::shared_ptr<IDataFrame<Tp>> importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data,
+                                                                const ISource &src) {
                     return IDataFrame<Tp>::make(importDataFrameAbs(data.id, src));
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>>
-                importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data, int64_t partitions, const ISource &src) {
+                std::shared_ptr<IDataFrame<Tp>> importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data,
+                                                                int64_t partitions, const ISource &src) {
                     return IDataFrame<Tp>::make(importDataFrameAbs(data.id, partitions, src));
                 }
 
@@ -79,7 +78,7 @@ namespace ignis {
                 std::shared_ptr<IDataFrame<std::string>> partitionTextFile(const std::string &path);
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> partitionJsonFile(const std::string &path, bool objectMapping=false) {
+                std::shared_ptr<IDataFrame<Tp>> partitionJsonFile(const std::string &path, bool objectMapping = false) {
                     return IDataFrame<Tp>::make(partitionJsonFileAbs(path, objectMapping));
                 }
 
@@ -103,8 +102,8 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId importDataFrameAbs(rpc::driver::IDataFrameId data, const ISource &src);
 
-                rpc::driver::IDataFrameId
-                importDataFrameAbs(rpc::driver::IDataFrameId data, int64_t partitions, const ISource &src);
+                rpc::driver::IDataFrameId importDataFrameAbs(rpc::driver::IDataFrameId data, int64_t partitions,
+                                                             const ISource &src);
 
                 rpc::driver::IDataFrameId partitionObjectFileAbs(const std::string &path);
 
@@ -114,8 +113,8 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId partitionJsonFileAbs(const std::string &path, const ISource &src);
             };
-        }
-    }
-}
+        }// namespace api
+    }    // namespace driver
+}// namespace ignis
 
 #endif

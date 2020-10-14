@@ -40,5 +40,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ../src)
 add_executable(ignistest ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)
 
-set (CMAKE_CXX_FLAGS "-g -O0 -rdynamic -fPIC")
-add_library(testfunctions SHARED ignis/executor/TestFunctions.cpp )
+set(CMAKE_CXX_FLAGS "-g -O0 -rdynamic -fPIC")
+add_library(testfunctions SHARED ignis/executor/TestFunctions.cpp)

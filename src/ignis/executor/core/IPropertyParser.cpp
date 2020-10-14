@@ -1,9 +1,9 @@
 
 #include "IPropertyParser.h"
-#include <regex>
-#include <math.h>
-#include <sstream>
 #include "exception/IInvalidArgument.h"
+#include <math.h>
+#include <regex>
+#include <sstream>
 
 using namespace ignis::executor::core;
 
@@ -11,9 +11,7 @@ IPropertyParser::IPropertyParser(std::unordered_map<std::string, std::string> &p
 
 std::string &IPropertyParser::getString(const std::string &key) {
     auto value = properties.find(key);
-    if (value != properties.end()) {
-        return value->second;
-    }
+    if (value != properties.end()) { return value->second; }
     throw exception::IInvalidArgument(key + " is empty");
 }
 
@@ -22,13 +20,9 @@ int64_t IPropertyParser::getNumber(const std::string &key) {
     try {
         size_t end;
         int64_t n = stol(value, &end);
-        if (value.length() != end) {
-            parserError(key, value, end);
-        }
+        if (value.length() != end) { parserError(key, value, end); }
         return n;
-    } catch (std::exception &ex) {
-        throw exception::IInvalidArgument(key + " must be a number, find '" + value + "'");
-    }
+    } catch (std::exception &ex) { throw exception::IInvalidArgument(key + " must be a number, find '" + value + "'"); }
 }
 
 int64_t IPropertyParser::getMinNumber(const std::string &key, const int64_t &min) {
@@ -89,19 +83,13 @@ size_t IPropertyParser::getSize(const std::string &key) {
     }
     size_t end;
     num = stod(value.substr(0, i), &end);
-    if (i != end) {
-        parserError(key, value, end);
-    }
+    if (i != end) { parserError(key, value, end); }
     if (i < len) {
-        if (value[i] == ' ') {
-            i++;
-        }
+        if (value[i] == ' ') { i++; }
     }
     if (i < len) {
         exp = UNITS.find(toupper(value[i])) + 1;
-        if (exp > 0) {
-            i++;
-        }
+        if (exp > 0) { i++; }
     }
     if (i < len && exp > 0 && value[i] == 'i') {
         i++;
@@ -120,9 +108,7 @@ size_t IPropertyParser::getSize(const std::string &key) {
         i++;
     }
     while (i < len && (value[i] <= ' ' || value[i] <= '\t')) {}
-    if (i < len) {
-        parserError(key, value, i);
-    }
+    if (i < len) { parserError(key, value, i); }
     return (size_t) ceil(num * pow(base, exp));
 }
 
@@ -130,6 +116,4 @@ bool IPropertyParser::getBoolean(const std::string &key) {
     return std::regex_search(properties[key], std::regex("y|Y|yes|Yes|YES|true|True|TRUE|on|On|ON"));
 }
 
-IPropertyParser::~IPropertyParser() {
-
-}
+IPropertyParser::~IPropertyParser() {}

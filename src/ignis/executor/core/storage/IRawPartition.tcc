@@ -10,9 +10,9 @@ template<typename Tp>
 const int IRawPartitionClass<Tp>::HEADER = 30;
 
 template<typename Tp>
-IRawPartitionClass<Tp>::IRawPartition(std::shared_ptr<transport::ITransport> &trans, int8_t compression) :
-        elems(0), compression(compression), header_size(0),
-        zlib(std::make_shared<transport::IZlibTransport>(trans, compression)) {}
+IRawPartitionClass<Tp>::IRawPartition(std::shared_ptr<transport::ITransport> &trans, int8_t compression)
+    : elems(0), compression(compression), header_size(0),
+      zlib(std::make_shared<transport::IZlibTransport>(trans, compression)) {}
 
 template<typename Tp>
 void IRawPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &trans) {
@@ -23,9 +23,7 @@ void IRawPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &trans)
 
     uint8_t bb[256];
     uint32_t read;
-    while ((read = zlib_in->read(bb, 256)) > 0) {
-        this->zlib->write(bb, read);
-    }
+    while ((read = zlib_in->read(bb, 256)) > 0) { this->zlib->write(bb, read); }
 }
 
 template<typename Tp>
@@ -37,22 +35,18 @@ void IRawPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans
     uint8_t bb[256];
     uint32_t read;
     if (compression == this->compression) {
-        while ((read = source->read(bb, 256)) > 0) {
-            trans->write(bb, read);
-        }
+        while ((read = source->read(bb, 256)) > 0) { trans->write(bb, read); }
         trans->flush();
     } else {
         auto zlib = std::make_shared<transport::IZlibTransport>(source);
         auto zlib_out = std::make_shared<transport::IZlibTransport>(trans, compression);
-        while ((read = zlib->read(bb, 256)) > 0) {
-            zlib_out->write(bb, read);
-        }
+        while ((read = zlib->read(bb, 256)) > 0) { zlib_out->write(bb, read); }
         zlib_out->flush();
     }
 }
 
 template<typename Tp>
-void IRawPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans){
+void IRawPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans) {
     write(trans, compression);
 }
 
@@ -68,18 +62,13 @@ std::shared_ptr<ignis::executor::api::IReadIterator<Tp>> IRawPartitionClass<Tp>:
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::api::IWriteIterator<Tp>> IRawPartitionClass<Tp>::writeIterator() {
-    if (header_size == 0) {
-        writeHeader();
-    }
-    return std::make_shared<storage::IRawWriteIterator<Tp>>(
-            std::make_shared<protocol::IObjectProtocol>(zlib), elems);
+    if (header_size == 0) { writeHeader(); }
+    return std::make_shared<storage::IRawWriteIterator<Tp>>(std::make_shared<protocol::IObjectProtocol>(zlib), elems);
 }
 
 template<typename Tp>
 void IRawPartitionClass<Tp>::sync() {
-    if (elems > 0) {
-        zlib->flush();
-    }
+    if (elems > 0) { zlib->flush(); }
 }
 
 template<typename Tp>
@@ -98,9 +87,9 @@ template<typename Tp>
 IRawPartitionClass<Tp>::~IRawPartition() {}
 
 template<typename Tp>
-void IRawPartitionClass<Tp>::copyFrom(IPartition <Tp> &source) {
+void IRawPartitionClass<Tp>::copyFrom(IPartition<Tp> &source) {
     if (source.type() == "Disk" || source.type() == "RawMemory") {
-        auto &raw_source = reinterpret_cast<IRawPartition <Tp> &>(source);
+        auto &raw_source = reinterpret_cast<IRawPartition<Tp> &>(source);
         raw_source.sync();
         sync();
         writeHeader();
@@ -112,9 +101,7 @@ void IRawPartitionClass<Tp>::copyFrom(IPartition <Tp> &source) {
             auto source_buffer = raw_source.readTransport();
             source_buffer->read(bb, raw_source.header_size);//skip header
             auto &target = transport();
-            while ((read = source_buffer->read(bb, 256)) > 0) {
-                target->write(bb, read);
-            }
+            while ((read = source_buffer->read(bb, 256)) > 0) { target->write(bb, read); }
         } else {
             /*Read header to initialize zlib*/
             auto source_buffer = raw_source.readTransport();
@@ -122,21 +109,17 @@ void IRawPartitionClass<Tp>::copyFrom(IPartition <Tp> &source) {
             auto source_proto = std::make_shared<protocol::IObjectProtocol>(source_zlib);
             source_proto->readSerialization();
             IHeader<Tp>().read(*source_proto);
-            while ((read = source_zlib->read(bb, 256)) > 0) {
-                this->zlib->write(bb, read);
-            }
+            while ((read = source_zlib->read(bb, 256)) > 0) { this->zlib->write(bb, read); }
         }
     } else {
         auto reader = source.readIterator();
         auto writer = this->writeIterator();
-        for (int64_t i = 0; i < source.size(); i++) {
-            writer->write(reader->next());
-        }
+        for (int64_t i = 0; i < source.size(); i++) { writer->write(reader->next()); }
     }
 }
 
 template<typename Tp>
-void IRawPartitionClass<Tp>::moveFrom(IPartition <Tp> &source) {
+void IRawPartitionClass<Tp>::moveFrom(IPartition<Tp> &source) {
     copyFrom(source);
     source.clear();
 }
@@ -188,8 +171,8 @@ struct IHeaderClass<std::pair<H1, H2>> {
 };
 
 template<typename Tp>
-IRawReadIteratorClass<Tp>::IRawReadIterator(std::shared_ptr<protocol::IProtocol> proto, size_t &elems) :
-        proto(proto), elems(elems), pos(0) {}
+IRawReadIteratorClass<Tp>::IRawReadIterator(std::shared_ptr<protocol::IProtocol> proto, size_t &elems)
+    : proto(proto), elems(elems), pos(0) {}
 
 template<typename Tp>
 Tp &IRawReadIteratorClass<Tp>::next() {
@@ -213,8 +196,8 @@ template<typename Tp>
 IRawReadIteratorClass<Tp>::~IRawReadIterator() {}
 
 template<typename Tp>
-IRawWriteIteratorClass<Tp>::IRawWriteIterator(std::shared_ptr<protocol::IProtocol> proto, size_t &elems):
-        proto(proto), elems(elems) {}
+IRawWriteIteratorClass<Tp>::IRawWriteIterator(std::shared_ptr<protocol::IProtocol> proto, size_t &elems)
+    : proto(proto), elems(elems) {}
 
 template<typename Tp>
 void IRawWriteIteratorClass<Tp>::write(Tp &obj) {

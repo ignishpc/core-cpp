@@ -2,20 +2,20 @@
 #ifndef IGNIS_ITYPESELECTOR_H
 #define IGNIS_ITYPESELECTOR_H
 
-#include <map>
-#include <memory>
-#include <functional>
-#include <type_traits>
 #include "ISelectorUtils.h"
 #include "ignis/executor/core/RTTInfo.h"
-#include <ignis/executor/core/modules/impl/IPipeImpl.h>
-#include <ignis/executor/core/modules/impl/IReduceImpl.h>
-#include "ignis/executor/core/modules/impl/IIOImpl.h"
+#include "ignis/executor/core/exception/ICompatibilityException.h"
 #include "ignis/executor/core/modules/impl/ICacheImpl.h"
 #include "ignis/executor/core/modules/impl/ICommImpl.h"
-#include "ignis/executor/core/modules/impl/ISortImpl.h"
+#include "ignis/executor/core/modules/impl/IIOImpl.h"
 #include "ignis/executor/core/modules/impl/IMathImpl.h"
-#include "ignis/executor/core/exception/ICompatibilityException.h"
+#include "ignis/executor/core/modules/impl/ISortImpl.h"
+#include <functional>
+#include <ignis/executor/core/modules/impl/IPipeImpl.h>
+#include <ignis/executor/core/modules/impl/IReduceImpl.h>
+#include <map>
+#include <memory>
+#include <type_traits>
 
 namespace ignis {
     namespace executor {
@@ -27,21 +27,27 @@ namespace ignis {
 
                     virtual void cache(modules::impl::ICacheImpl &impl, const int64_t id, const int8_t level) = 0;
 
-                    virtual void
-                    loadFromDisk(modules::impl::ICacheImpl &impl, const std::vector<std::string> &group) = 0;
+                    virtual void loadFromDisk(modules::impl::ICacheImpl &impl,
+                                              const std::vector<std::string> &group) = 0;
 
-                    virtual std::vector<std::string>
-                    getPartitions(modules::impl::ICommImpl &impl, const int8_t protocol, int64_t minPartitions) = 0;
+                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl,
+                                                                   const int8_t protocol, int64_t minPartitions) = 0;
 
-                    virtual void
-                    setPartitions(modules::impl::ICommImpl &impl, const std::vector<std::string> &partitions) = 0;
+                    virtual void setPartitions(modules::impl::ICommImpl &impl,
+                                               const std::vector<std::string> &partitions) = 0;
 
                     virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id) = 0;
 
                     virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id) = 0;
 
-                    virtual void
-                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, int64_t partitions) = 0;
+                    virtual void driverScatter(modules::impl::ICommImpl &impl, const std::string &id,
+                                               int64_t partitions) = 0;
+
+                    virtual void send(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
+                                      int64_t dest, int64_t tag) = 0;
+
+                    virtual void recv(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
+                                      int64_t source, int64_t tag) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
@@ -59,29 +65,28 @@ namespace ignis {
 
                     virtual void min(modules::impl::ISortImpl &impl) = 0;
 
-                    virtual void
-                    sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction, int32_t seed) = 0;
+                    virtual void sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction,
+                                        int32_t seed) = 0;
 
-                    virtual void
-                    takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num, int32_t seed) = 0;
+                    virtual void takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num,
+                                            int32_t seed) = 0;
 
                     virtual int64_t partitionApproxSize(modules::impl::IIOImpl &impl) = 0;
 
                     virtual void partitionObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
                                                      int64_t first, int64_t partitions) = 0;
 
-                    virtual void partitionJsonFile(modules::impl::IIOImpl &impl, const std::string &path,
-                                                   int64_t first, int64_t partitions) = 0;
+                    virtual void partitionJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first,
+                                                   int64_t partitions) = 0;
 
                     virtual void saveAsObjectFile(modules::impl::IIOImpl &impl, const std::string &path,
                                                   int8_t compression, int64_t first) = 0;
 
-                    virtual void
-                    saveAsTextFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first) = 0;
+                    virtual void saveAsTextFile(modules::impl::IIOImpl &impl, const std::string &path,
+                                                int64_t first) = 0;
 
-                    virtual void
-                    saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first,
-                                   bool pretty) = 0;
+                    virtual void saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first,
+                                                bool pretty) = 0;
 
                     /*Key-Value*/
                     virtual void sampleByKey(modules::impl::IMathImpl &impl, bool withReplacement, int32_t seed) = 0;
@@ -99,13 +104,11 @@ namespace ignis {
                     virtual void sortByKey(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
                     virtual void sortByKey(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
-
                 };
 
                 template<typename Tp>
                 class ITypeSelectorImpl : public ITypeSelector {
                 public:
-
                     virtual void checkAbstract() {
                         static_assert(!(std::is_abstract<Tp>::value), "abstract classes are not allowed");
                     }
@@ -120,13 +123,13 @@ namespace ignis {
                         impl.loadFromDisk<Tp>(group);
                     }
 
-                    virtual std::vector<std::string>
-                    getPartitions(modules::impl::ICommImpl &impl, const int8_t protocol, int64_t minPartitions) {
+                    virtual std::vector<std::string> getPartitions(modules::impl::ICommImpl &impl,
+                                                                   const int8_t protocol, int64_t minPartitions) {
                         return impl.getPartitions<Tp>(protocol, minPartitions);
                     }
 
-                    virtual void
-                    setPartitions(modules::impl::ICommImpl &impl, const std::vector<std::string> &partitions) {
+                    virtual void setPartitions(modules::impl::ICommImpl &impl,
+                                               const std::vector<std::string> &partitions) {
                         impl.setPartitions<Tp>(partitions);
                     }
 
@@ -138,9 +141,19 @@ namespace ignis {
                         impl.driverGather0<Tp>(id);
                     }
 
-                    virtual void
-                    driverScatter(modules::impl::ICommImpl &impl, const std::string &id, int64_t partitions) {
+                    virtual void driverScatter(modules::impl::ICommImpl &impl, const std::string &id,
+                                               int64_t partitions) {
                         impl.driverScatter<Tp>(id, partitions);
+                    }
+
+                    virtual void send(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
+                                      int64_t dest, int64_t tag) {
+                        impl.send<Tp>(id, partition, dest, tag);
+                    }
+
+                    virtual void recv(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
+                                      int64_t source, int64_t tag) {
+                        impl.recv<Tp>(id, partition, source, tag);
                     }
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {
@@ -151,13 +164,9 @@ namespace ignis {
                         sort_check<Tp>(impl, nullptr, ascending, numPartitions);
                     }
 
-                    virtual void take(modules::impl::IPipeImpl &impl, int64_t num) {
-                        impl.take<Tp>(num);
-                    }
+                    virtual void take(modules::impl::IPipeImpl &impl, int64_t num) { impl.take<Tp>(num); }
 
-                    virtual void top(modules::impl::ISortImpl &impl, int64_t num) {
-                        top_check<Tp>(impl, nullptr, num);
-                    }
+                    virtual void top(modules::impl::ISortImpl &impl, int64_t num) { top_check<Tp>(impl, nullptr, num); }
 
                     virtual void takeOrdered(modules::impl::ISortImpl &impl, int64_t num) {
                         takeOrdered_check<Tp>(impl, nullptr, num);
@@ -169,13 +178,13 @@ namespace ignis {
 
                     virtual void min(modules::impl::ISortImpl &impl) { min_check<Tp>(impl, nullptr); }
 
-                    virtual void
-                    sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction, int32_t seed) {
+                    virtual void sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction,
+                                        int32_t seed) {
                         impl.sample<Tp>(withReplacement, fraction, seed);
                     }
 
-                    virtual void
-                    takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num, int32_t seed) {
+                    virtual void takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num,
+                                            int32_t seed) {
                         impl.takeSample<Tp>(withReplacement, num, seed);
                     }
 
@@ -188,8 +197,8 @@ namespace ignis {
                         impl.partitionObjectFile<Tp>(path, first, partitions);
                     }
 
-                    virtual void partitionJsonFile(modules::impl::IIOImpl &impl, const std::string &path,
-                                                   int64_t first, int64_t partitions) {
+                    virtual void partitionJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first,
+                                                   int64_t partitions) {
                         impl.partitionJsonFile<Tp>(path, first, partitions);
                     }
 
@@ -202,8 +211,8 @@ namespace ignis {
                         impl.saveAsTextFile<Tp>(path, first);
                     }
 
-                    virtual void
-                    saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first, bool pretty) {
+                    virtual void saveAsJsonFile(modules::impl::IIOImpl &impl, const std::string &path, int64_t first,
+                                                bool pretty) {
                         impl.saveAsJsonFile<Tp>(path, first, pretty);
                     }
 
@@ -212,21 +221,13 @@ namespace ignis {
                         sampleByKey_check<Tp>(impl, nullptr, withReplacement, seed);
                     }
 
-                    virtual void countByKey(modules::impl::IMathImpl &impl) {
-                        countByKey_check<Tp>(impl, nullptr);
-                    }
+                    virtual void countByKey(modules::impl::IMathImpl &impl) { countByKey_check<Tp>(impl, nullptr); }
 
-                    virtual void countByValue(modules::impl::IMathImpl &impl) {
-                        countByValue_check<Tp>(impl, nullptr);
-                    }
+                    virtual void countByValue(modules::impl::IMathImpl &impl) { countByValue_check<Tp>(impl, nullptr); }
 
-                    virtual void keys(modules::impl::IPipeImpl &impl) {
-                        keys_check<Tp>(impl, nullptr);
-                    }
+                    virtual void keys(modules::impl::IPipeImpl &impl) { keys_check<Tp>(impl, nullptr); }
 
-                    virtual void values(modules::impl::IPipeImpl &impl) {
-                        values_check<Tp>(impl, nullptr);
-                    }
+                    virtual void values(modules::impl::IPipeImpl &impl) { values_check<Tp>(impl, nullptr); }
 
                     virtual void groupByKey(modules::impl::IReduceImpl &impl, int64_t numPartitions) {
                         groupByKey_check<Tp>(impl, nullptr, numPartitions);
@@ -241,7 +242,6 @@ namespace ignis {
                     }
 
                 private:
-
                     template<typename C>
                     void sort_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val, bool ascending) {
                         impl.sort<Tp>(ascending);
@@ -254,7 +254,9 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void sort_check(...) { throw exception::ICompatibilyException("sort", RTTInfo::from<C>()); }
+                    void sort_check(...) {
+                        throw exception::ICompatibilyException("sort", RTTInfo::from<C>());
+                    }
 
                     template<typename C>
                     void top_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val, int64_t num) {
@@ -262,11 +264,13 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void top_check(...) { throw exception::ICompatibilyException("top", RTTInfo::from<C>()); }
+                    void top_check(...) {
+                        throw exception::ICompatibilyException("top", RTTInfo::from<C>());
+                    }
 
                     template<typename C>
-                    void
-                    takeOrdered_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val, int64_t num) {
+                    void takeOrdered_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val,
+                                           int64_t num) {
                         impl.takeOrdered<Tp>(num);
                     }
 
@@ -281,7 +285,9 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void max_check(...) { throw exception::ICompatibilyException("max", RTTInfo::from<C>()); }
+                    void max_check(...) {
+                        throw exception::ICompatibilyException("max", RTTInfo::from<C>());
+                    }
 
                     template<typename C>
                     void min_check(modules::impl::ISortImpl &impl, typename IHasLess<C>::result val) {
@@ -289,7 +295,9 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void min_check(...) { throw exception::ICompatibilyException("min", RTTInfo::from<C>()); }
+                    void min_check(...) {
+                        throw exception::ICompatibilyException("min", RTTInfo::from<C>());
+                    }
 
                     /*Key-Value*/
                     template<typename C>
@@ -359,15 +367,13 @@ namespace ignis {
 
                     template<typename C>
                     void sortByKey_check(modules::impl::ISortImpl &impl,
-                                         typename IHasLess<typename C::first_type>::result val,
-                                         bool ascending) {
+                                         typename IHasLess<typename C::first_type>::result val, bool ascending) {
                         impl.sortByKey<Tp>(ascending);
                     }
 
                     template<typename C>
                     void sortByKey_check(modules::impl::ISortImpl &impl,
-                                         typename IHasLess<typename C::first_type>::result val,
-                                         bool ascending,
+                                         typename IHasLess<typename C::first_type>::result val, bool ascending,
                                          int64_t numPartitions) {
                         impl.sortByKey<Tp>(ascending, numPartitions);
                     }
@@ -376,7 +382,6 @@ namespace ignis {
                     void sortByKey_check(...) {
                         throw exception::ICompatibilyException("sortByKey", RTTInfo::from<C>());
                     }
-
                 };
 
                 template<typename Tp>
@@ -446,10 +451,9 @@ namespace ignis {
                     template<typename None>
                     void add(...) {}
                 };
-            }
-        }
-    }
-}
+            }// namespace selector
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif
-

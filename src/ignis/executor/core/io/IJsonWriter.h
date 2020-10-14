@@ -2,11 +2,11 @@
 #ifndef IGNIS_IJSONWRITER_H
 #define IGNIS_IJSONWRITER_H
 
-#include <ostream>
 #include "ignis/executor/core/RTTInfo.h"
 #include "ignis/executor/core/exception/ILogicError.h"
-#include <rapidjson/prettywriter.h>
+#include <ostream>
 #include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/prettywriter.h>
 
 namespace ignis {
     namespace executor {
@@ -18,8 +18,8 @@ namespace ignis {
                 template<typename T>
                 struct IJsonWriterType {
                     inline void operator()(JsonWriter &out, const T &b) {
-                        throw exception::ILogicError(
-                                "IJsonWriterType not implemented for " + RTTInfo::from<T>().getStandardName());
+                        throw exception::ILogicError("IJsonWriterType not implemented for " +
+                                                     RTTInfo::from<T>().getStandardName());
                     }
                 };
 
@@ -41,10 +41,10 @@ namespace ignis {
                 private:
                     IJsonWriterType<T> writer;
                 };
-            }
-        }
-    }
-}
+            }// namespace io
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IJsonWriter.tcc"
 

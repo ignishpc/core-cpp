@@ -2,8 +2,8 @@
 #ifndef IGNIS_IRAWMEMORYPARTITION_H
 #define IGNIS_IRAWMEMORYPARTITION_H
 
-#include "ignis/executor/core/transport/IMemoryBuffer.h"
 #include "IRawPartition.h"
+#include "ignis/executor/core/transport/IMemoryBuffer.h"
 
 namespace ignis {
     namespace executor {
@@ -52,12 +52,11 @@ namespace ignis {
 
                     std::shared_ptr<transport::IMemoryBuffer> buffer;
                 };
-            }
-        }
-    }
-}
+            }// namespace storage
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IRawMemoryPartition.tcc"
 
 #endif
-

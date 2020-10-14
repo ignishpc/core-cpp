@@ -24,8 +24,8 @@ namespace ignis {
                     I_JSON = 0xe,
                 };
             }
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #endif

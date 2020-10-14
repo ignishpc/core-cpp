@@ -1,12 +1,12 @@
 #ifndef IGNIS_IPARTITION_H
 #define IGNIS_IPARTITION_H
 
-#include <memory>
-#include "ignis/executor/core/RTTInfo.h"
-#include "ignis/executor/api/IVector.h"
-#include "ignis/executor/core/transport/ITransport.h"
 #include "ignis/executor/api/IReadIterator.h"
+#include "ignis/executor/api/IVector.h"
 #include "ignis/executor/api/IWriteIterator.h"
+#include "ignis/executor/core/RTTInfo.h"
+#include "ignis/executor/core/transport/ITransport.h"
+#include <memory>
 
 namespace ignis {
     namespace executor {
@@ -25,6 +25,8 @@ namespace ignis {
                     virtual void write(std::shared_ptr<transport::ITransport> &trans) { write(trans, 0); }
 
                     virtual size_t size() = 0;
+
+                    bool empty() { return size() == 0; }
 
                     virtual size_t bytes() = 0;
 
@@ -58,15 +60,17 @@ namespace ignis {
                 template<typename Tp>
                 class IPartitionGroup {
                 public:
-
                     std::shared_ptr<IPartition<Tp>> &operator[](int64_t index) { return _partitions[index]; }
 
-                    typename std::vector<std::shared_ptr<IPartition<Tp>>>::iterator
-                    begin() { return _partitions.begin(); }
+                    typename std::vector<std::shared_ptr<IPartition<Tp>>>::iterator begin() {
+                        return _partitions.begin();
+                    }
 
                     typename std::vector<std::shared_ptr<IPartition<Tp>>>::iterator end() { return _partitions.end(); }
 
                     int64_t partitions() { return _partitions.size(); }
+
+                    bool empty() { return partitions() == 0; }
 
                     void add(const std::shared_ptr<IPartition<Tp>> &partition) { _partitions.push_back(partition); }
 
@@ -87,9 +91,7 @@ namespace ignis {
 
                     std::shared_ptr<IPartitionGroup<Tp>> shadowCopy() {
                         auto newGroup = std::make_shared<IPartitionGroup<Tp>>();
-                        for (auto &p : *this) {
-                            newGroup->add(p);
-                        }
+                        for (auto &p : *this) { newGroup->add(p); }
                         return newGroup;
                     }
 
@@ -110,9 +112,9 @@ namespace ignis {
                     return n;
                 }
 
-            }
-        }
-    }
-}
+            }// namespace storage
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

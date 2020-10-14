@@ -48,13 +48,12 @@ namespace ignis {
 
                         virtual ~IIOImpl();
                     };
-                }
-            }
-        }
-    }
-}
+                }// namespace impl
+            }    // namespace modules
+        }        // namespace core
+    }            // namespace executor
+}// namespace ignis
 
 #include "IIOImpl.tcc"
 
 #endif
-

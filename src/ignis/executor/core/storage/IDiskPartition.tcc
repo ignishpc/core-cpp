@@ -1,8 +1,8 @@
 
 #include "IDiskPartition.h"
+#include "ignis/executor/core/exception/IInvalidArgument.h"
 #include "ignis/executor/core/transport/IHeaderTransport.h"
 #include "ignis/executor/core/transport/IMemoryBuffer.h"
-#include "ignis/executor/core/exception/IInvalidArgument.h"
 
 #define IDiskPartitionClass ignis::executor::core::storage::IDiskPartition
 
@@ -10,15 +10,15 @@ template<typename Tp>
 const std::string IDiskPartitionClass<Tp>::TYPE = "Disk";
 
 template<typename Tp>
-IDiskPartitionClass<Tp>::IDiskPartition(std::string path, int8_t compression, bool persist, bool read):
-        IDiskPartition(std::make_shared<transport::IFileTransport>("/dev/null", false, true), path, compression,
-                       persist, read) {}
+IDiskPartitionClass<Tp>::IDiskPartition(std::string path, int8_t compression, bool persist, bool read)
+    : IDiskPartition(std::make_shared<transport::IFileTransport>("/dev/null", false, true), path, compression, persist,
+                     read) {}
 
 template<typename Tp>
 IDiskPartitionClass<Tp>::IDiskPartition(std::shared_ptr<transport::IFileTransport> &&trans, std::string &path,
-                                        int8_t compression, bool persist, bool read) :
-        IRawPartition<Tp>((std::shared_ptr<transport::ITransport> &) trans, compression), path(path), file(trans),
-        destroy(!persist),copies(0) {
+                                        int8_t compression, bool persist, bool read)
+    : IRawPartition<Tp>((std::shared_ptr<transport::ITransport> &) trans, compression), path(path), file(trans),
+      destroy(!persist), copies(0) {
     /*Flush out zlib header*/
     transport::IFileTransport tmp(path, false, true);
     uint8_t byte = 0;
@@ -38,8 +38,7 @@ IDiskPartitionClass<Tp>::IDiskPartition(std::shared_ptr<transport::IFileTranspor
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IDiskPartitionClass<Tp>::clone() {
-    auto newPartition = std::make_shared<IDiskPartition < Tp>>
-    (path + "_" + std::to_string(copies++), this->compression);
+    auto newPartition = std::make_shared<IDiskPartition<Tp>>(path + "_" + std::to_string(copies++), this->compression);
     this->copyTo(*newPartition);
     return newPartition;
 }
@@ -94,10 +93,8 @@ void IDiskPartitionClass<Tp>::rename(const std::string &new_path) {
     }
     auto new_file = std::make_shared<transport::IFileTransport>(path, false, true);
     std::swap(*file, *new_file);
-    this->sync(); //flush and create new header
-    if (error != 0) {
-        throw exception::IInvalidArgument("error: " + new_path + " is not a valid storage name");
-    }
+    this->sync();//flush and create new header
+    if (error != 0) { throw exception::IInvalidArgument("error: " + new_path + " is not a valid storage name"); }
 }
 
 template<typename Tp>
@@ -106,7 +103,7 @@ IDiskPartitionClass<Tp>::~IDiskPartition() {
         file->close();
         std::remove(path.c_str());
         std::remove((path + ".header").c_str());
-    }else{
+    } else {
         sync();
     }
 }

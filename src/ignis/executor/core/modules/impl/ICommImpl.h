@@ -48,6 +48,14 @@ namespace ignis {
                         template<typename Tp>
                         void driverScatter(const std::string &id, int64_t partitions);
 
+                        template<typename Tp>
+                        void send(const std::string &id, int64_t partition, int64_t dest, int64_t tag);
+
+                        template<typename Tp>
+                        void recv(const std::string &id, int64_t partition, int64_t source, int64_t tag);
+
+                        void recvVoid(const std::string &id, int64_t partition, int64_t source, int64_t tag);
+
                         virtual ~ICommImpl();
 
                     private:
@@ -56,15 +64,15 @@ namespace ignis {
 
                         MPI::Intracomm joinGroups(MPI::Intracomm &groupLow, MPI::Intracomm &groupUp);
 
-                        MPI::Intracomm& getGroup(const std::string &id);
+                        MPI::Intracomm &getGroup(const std::string &id);
 
                         std::map<std::string, MPI::Intracomm> groups;
                     };
-                }
-            }
-        }
-    }
-}
+                }// namespace impl
+            }    // namespace modules
+        }        // namespace core
+    }            // namespace executor
+}// namespace ignis
 
 #include "ICommImpl.tcc"
 

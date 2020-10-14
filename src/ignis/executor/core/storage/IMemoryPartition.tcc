@@ -1,8 +1,8 @@
 
 #include "IMemoryPartition.h"
-#include <utility>
 #include "ignis/executor/core/protocol/IObjectProtocol.h"
 #include "ignis/executor/core/transport/IZlibTransport.h"
+#include <utility>
 
 #define IMemoryPartitionClass ignis::executor::core::storage::IMemoryPartition
 #define IMemoryReadIteratorClass ignis::executor::core::storage::IMemoryReadIterator
@@ -17,7 +17,7 @@ IMemoryPartitionClass<Tp>::IMemoryPartition(size_t size) {
 }
 
 template<typename Tp>
-IMemoryPartitionClass<Tp>::IMemoryPartition(IVector<Tp>&& elements){
+IMemoryPartitionClass<Tp>::IMemoryPartition(IVector<Tp> &&elements) {
     std::swap(this->elements, elements);
 }
 
@@ -26,21 +26,19 @@ IMemoryPartitionClass<Tp>::~IMemoryPartition() {}
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::api::IReadIterator<Tp>> IMemoryPartitionClass<Tp>::readIterator() {
-    return std::make_shared<IMemoryReadIterator < Tp>>
-    (elements);
+    return std::make_shared<IMemoryReadIterator<Tp>>(elements);
 };
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::api::IWriteIterator<Tp>> IMemoryPartitionClass<Tp>::writeIterator() {
-    return std::make_shared<IMemoryWriteIterator < Tp>>
-    (elements);
+    return std::make_shared<IMemoryWriteIterator<Tp>>(elements);
 }
 
 template<typename Tp>
 void IMemoryPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &trans) {
     auto zlib_trans = std::make_shared<transport::IZlibTransport>(trans);
     protocol::IObjectProtocol proto(zlib_trans);
-    proto.readObject < IVector < Tp >> (elements);
+    proto.readObject<IVector<Tp>>(elements);
 }
 
 template<typename Tp>
@@ -57,36 +55,31 @@ void IMemoryPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &tr
 }
 
 template<typename Tp>
-void IMemoryPartitionClass<Tp>::copyFrom(IPartition <Tp> &source) {
+void IMemoryPartitionClass<Tp>::copyFrom(IPartition<Tp> &source) {
     if (source.type() == TYPE) {
-        auto &men_source = reinterpret_cast<IMemoryPartition <Tp> &>(source);
+        auto &men_source = reinterpret_cast<IMemoryPartition<Tp> &>(source);
         std::copy(men_source.begin(), men_source.end(), std::back_inserter(elements));
     } else {
         auto it = source.readIterator();
-        for (int64_t i = 0; i < source.size(); i++) {
-            elements.push_back(std::move(it->next()));
-        }
+        for (int64_t i = 0; i < source.size(); i++) { elements.push_back(std::move(it->next())); }
     }
 }
 
 template<typename Tp>
-void IMemoryPartitionClass<Tp>::moveFrom(IPartition <Tp> &source) {
+void IMemoryPartitionClass<Tp>::moveFrom(IPartition<Tp> &source) {
     if (source.type() == TYPE) {
-        auto &men_source = reinterpret_cast<IMemoryPartition <Tp> &>(source);
+        auto &men_source = reinterpret_cast<IMemoryPartition<Tp> &>(source);
         std::move(men_source.begin(), men_source.end(), std::back_inserter(elements));
         source.clear();
     } else {
         auto it = source.readIterator();
-        for (int64_t i = 0; i < source.size(); i++) {
-            elements.push_back(std::move(it->next()));
-        }
+        for (int64_t i = 0; i < source.size(); i++) { elements.push_back(std::move(it->next())); }
     }
 }
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IMemoryPartitionClass<Tp>::clone() {
-    auto newPartition = std::make_shared<IMemoryPartition < Tp>>
-    (size());
+    auto newPartition = std::make_shared<IMemoryPartition<Tp>>(size());
     this->copyTo(*newPartition);
     return newPartition;
 }
@@ -136,13 +129,12 @@ void IMemoryPartitionClass<Tp>::resize(int64_t size) {
     elements.resize(size);
 }
 template<typename Tp>
-ignis::executor::api::IVector <Tp> & IMemoryPartitionClass<Tp>::inner(){
+ignis::executor::api::IVector<Tp> &IMemoryPartitionClass<Tp>::inner() {
     return elements;
 }
 
 template<typename Tp>
-IMemoryReadIteratorClass<Tp>::IMemoryReadIterator(IVector <Tp> &elements)
-        :elements(elements), index(0) {}
+IMemoryReadIteratorClass<Tp>::IMemoryReadIterator(IVector<Tp> &elements) : elements(elements), index(0) {}
 
 template<typename Tp>
 Tp &IMemoryReadIteratorClass<Tp>::next() {
@@ -163,8 +155,7 @@ template<typename Tp>
 IMemoryReadIteratorClass<Tp>::~IMemoryReadIterator() {}
 
 template<typename Tp>
-IMemoryWriteIteratorClass<Tp>::IMemoryWriteIterator(IVector <Tp> &elements)
-        :elements(elements) {}
+IMemoryWriteIteratorClass<Tp>::IMemoryWriteIterator(IVector<Tp> &elements) : elements(elements) {}
 
 template<typename Tp>
 void IMemoryWriteIteratorClass<Tp>::write(Tp &obj) {

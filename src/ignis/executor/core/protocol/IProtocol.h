@@ -7,12 +7,11 @@
 namespace ignis {
     namespace executor {
         namespace core {
-            namespace protocol{
+            namespace protocol {
                 using IProtocol = apache::thrift::protocol::TProtocol;
             }
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #endif
-

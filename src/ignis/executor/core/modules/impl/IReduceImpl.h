@@ -49,42 +49,39 @@ namespace ignis {
                         virtual ~IReduceImpl();
 
                     private:
+                        template<typename Function, typename Tp>
+                        inline void basicReduce(Function &f, storage::IMemoryPartition<Tp> &result);
 
                         template<typename Function, typename Tp>
-                        inline void basicReduce(Function &f, storage::IMemoryPartition <Tp> &result);
+                        inline Tp reducePartition(Function &f, storage::IPartition<Tp> &part);
 
                         template<typename Function, typename Tp>
-                        inline Tp reducePartition(Function &f, storage::IPartition <Tp> &part);
+                        inline void finalReduce(Function &f, storage::IMemoryPartition<Tp> &partial);
 
                         template<typename Function, typename Tp>
-                        inline void finalReduce(Function &f, storage::IMemoryPartition <Tp> &partial);
-
-                        template<typename Function, typename Tp>
-                        inline void finalTreeReduce(Function &f, storage::IMemoryPartition <Tp> &partial);
+                        inline void finalTreeReduce(Function &f, storage::IMemoryPartition<Tp> &partial);
 
                         template<typename Function, typename Tp, typename Tp2>
-                        inline void aggregatePartition(Function &f, storage::IPartition <Tp> &part, Tp2 &acum);
+                        inline void aggregatePartition(Function &f, storage::IPartition<Tp> &part, Tp2 &acum);
 
                         template<typename Function, typename Tp>
-                        inline void localReduceByKey(Function& f);
+                        inline void localReduceByKey(Function &f);
 
                         template<typename Function, typename Tp>
-                        inline void localAggregateByKey(Function& f);
+                        inline void localAggregateByKey(Function &f);
 
                         template<typename Tp>
                         inline void keyHashing(int64_t numPartitions);
 
                         template<typename Tp>
                         inline void keyExchanging();
-
                     };
-                }
-            }
-        }
-    }
-}
+                }// namespace impl
+            }    // namespace modules
+        }        // namespace core
+    }            // namespace executor
+}// namespace ignis
 
 #include "IReduceImpl.tcc"
 
 #endif
-

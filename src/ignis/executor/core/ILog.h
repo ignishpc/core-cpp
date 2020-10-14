@@ -2,30 +2,24 @@
 #ifndef IGNIS_ILOG_H
 #define IGNIS_ILOG_H
 
-#include <string>
 #include <sstream>
+#include <string>
 
 #define IGNIS_LOG_INIT() ignis::executor::core::ILog::initLog()
 
-#define IGNIS_LOG_ENABLE(enable) ignis::executor::core::ILog::logEnable(enable)
+#define IGNIS_LOG_ENABLE(e) ignis::executor::core::ILog::enable(e)
 
 #define IGNIS_LOG(sev) ignis::executor::core::ILog::log(ignis::executor::core::ILog::sev, __FILE__, __LINE__)
 
-#define IGNIS_THREAD_LOG(sev) ignis::executor::core::ILog::threadLog(ignis::executor::core::ILog::sev, __FILE__, __LINE__)
+#define IGNIS_THREAD_LOG(sev)                                                                                          \
+    ignis::executor::core::ILog::threadLog(ignis::executor::core::ILog::sev, __FILE__, __LINE__)
 
 namespace ignis {
     namespace executor {
         namespace core {
             class ILog {
             public:
-                enum level {
-                    trace,
-                    debug,
-                    info,
-                    warning,
-                    error,
-                    fatal
-                };
+                enum level { trace, debug, info, warning, error, fatal };
 
                 class Streamlog : public std::ostringstream {
                     friend ILog;
@@ -51,15 +45,14 @@ namespace ignis {
 
                 static Streamlog log(level l, const std::string &file, const int &line);
 
-                static bool logEnable(bool enable);
+                static void enable(bool enable);
 
             private:
                 ILog() {}
-
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 
 #endif

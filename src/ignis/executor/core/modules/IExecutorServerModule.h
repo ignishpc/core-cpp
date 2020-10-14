@@ -13,7 +13,6 @@ namespace ignis {
             namespace modules {
                 class IExecutorServerModule : public IModule, public rpc::executor::IExecutorServerModuleIf {
                 public:
-
                     IExecutorServerModule(std::shared_ptr<IExecutorData> &executor_data);
 
                     void serve(const std::string &name, int port, int compression);
@@ -33,10 +32,9 @@ namespace ignis {
                     std::shared_ptr<apache::thrift::server::TServer> server;
                     std::shared_ptr<apache::thrift::TMultiplexedProcessor> processor;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif
-

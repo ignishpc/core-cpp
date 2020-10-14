@@ -2,8 +2,8 @@
 #ifndef IGNIS_IFUNCTION2_H
 #define IGNIS_IFUNCTION2_H
 
-#include "ignis/executor/core/selector/ISelector.h"
 #include "ignis/executor/api/IContext.h"
+#include "ignis/executor/core/selector/ISelector.h"
 
 namespace ignis {
     namespace executor {
@@ -20,15 +20,15 @@ namespace ignis {
 
                     virtual void before(IContext &context) {}
 
-                    virtual R call(T1 &v1, T2 &v2, IContext &context) {}
+                    virtual R call(T1 &v1, T2 &v2, IContext &context) {
+                        throw executor::core::exception::ILogicError("call function must be implemented");
+                    }
 
                     virtual void after(IContext &context) {}
-
                 };
-            }
-        }
-    }
-}
+            }// namespace function
+        }    // namespace api
+    }        // namespace executor
+}// namespace ignis
 
 #endif
-

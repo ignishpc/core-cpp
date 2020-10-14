@@ -11,6 +11,7 @@ namespace ignis {
             class RTTInfo {
             private:
                 const std::type_info &info;
+
             public:
                 /*
                  *
@@ -124,8 +125,8 @@ namespace ignis {
 
             bool operator!=(const RTTInfo &lhs, const RTTInfo &rhs);
 
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #endif

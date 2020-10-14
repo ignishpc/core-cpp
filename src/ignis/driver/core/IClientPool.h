@@ -2,9 +2,9 @@
 #ifndef IGNIS_ICLIENTPOOL_H
 #define IGNIS_ICLIENTPOOL_H
 
+#include "IClient.h"
 #include <list>
 #include <mutex>
-#include "IClient.h"
 
 namespace ignis {
     namespace driver {
@@ -22,8 +22,8 @@ namespace ignis {
                 std::list<std::shared_ptr<IClient>> clients;
                 std::list<std::shared_ptr<IClient>> queue;
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace driver
+}// namespace ignis
 
 #endif

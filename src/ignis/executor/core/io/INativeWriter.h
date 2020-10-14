@@ -18,19 +18,16 @@ namespace ignis {
                 template<typename T>
                 class INativeWriter {
                 public:
-
-                    virtual void operator()(protocol::IProtocol &protocol, const T &obj) {
-                        writer(protocol, obj);
-                    }
+                    virtual void operator()(protocol::IProtocol &protocol, const T &obj) { writer(protocol, obj); }
 
                 private:
                     INativeWriterType<T> writer;
                 };
 
-            }
-        }
-    }
-}
+            }// namespace io
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "INativeWriter.tcc"
 

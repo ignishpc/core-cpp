@@ -1,10 +1,10 @@
 
 #include "IExecutorServerModule.h"
-#include <thrift/transport/TServerSocket.h>
-#include <thrift/server/TThreadPoolServer.h>
-#include <thrift/protocol/TCompactProtocol.h>
 #include "ignis/executor/core/transport/IZlibTransport.h"
 #include <thrift/concurrency/ThreadFactory.h>
+#include <thrift/protocol/TCompactProtocol.h>
+#include <thrift/server/TThreadPoolServer.h>
+#include <thrift/transport/TServerSocket.h>
 
 using namespace ignis::executor::core::modules;
 using namespace apache::thrift;
@@ -24,11 +24,10 @@ void IExecutorServerModule::serve(const std::string &name, int port, int compres
                 processor = std::make_shared<apache::thrift::TMultiplexedProcessor>(),
                 std::make_shared<apache::thrift::transport::TServerSocket>(port),
                 std::make_shared<transport::IZlibTransportFactory>(compression),
-                std::make_shared<apache::thrift::protocol::TCompactProtocolFactory>(),
-                threadManager
-        );
+                std::make_shared<apache::thrift::protocol::TCompactProtocolFactory>(), threadManager);
         std::shared_ptr<IExecutorServerModule> this_shared(this, [](IExecutorServerModule *) {});
-        processor->registerProcessor(name,std::make_shared<rpc::executor::IExecutorServerModuleProcessor>(this_shared));
+        processor->registerProcessor(name,
+                                     std::make_shared<rpc::executor::IExecutorServerModuleProcessor>(this_shared));
         IGNIS_LOG(info) << "ServerModule: cpp executor started";
         server->serve();
         IGNIS_LOG(info) << "ServerModule: cpp executor stopped";
@@ -39,10 +38,10 @@ void IExecutorServerModule::serve(const std::string &name, int port, int compres
 
 void IExecutorServerModule::start(const std::map<std::string, std::string> &properties) {
     IGNIS_RPC_TRY()
-        executor_data->getContext().props().insert(properties.begin(), properties.end());
-        executor_data->setCores(executor_data->getProperties().cores());
-        createServices(*processor);
-        IGNIS_LOG(info) << "ServerModule: cpp executor ready";
+    executor_data->getContext().props().insert(properties.begin(), properties.end());
+    executor_data->setCores(executor_data->getProperties().cores());
+    createServices(*processor);
+    IGNIS_LOG(info) << "ServerModule: cpp executor ready";
     IGNIS_RPC_CATCH()
 }
 
@@ -50,9 +49,7 @@ void IExecutorServerModule::createServices(TMultiplexedProcessor &processor) {}
 
 void IExecutorServerModule::stop() {
     IGNIS_RPC_TRY()
-        if (server) {
-            server->stop();
-        }
+    if (server) { server->stop(); }
     IGNIS_RPC_CATCH()
 }
 

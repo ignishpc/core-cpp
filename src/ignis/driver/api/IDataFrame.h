@@ -2,23 +2,17 @@
 #ifndef IGNIS_IDATAFRAME_H
 #define IGNIS_IDATAFRAME_H
 
-#include "Ignis.h"
-#include "ignis/rpc/driver/IDataFrameService_types.h"
-#include "ignis/rpc/ISource_types.h"
-#include <vector>
 #include "ISource.h"
+#include "Ignis.h"
+#include "ignis/rpc/ISource_types.h"
+#include "ignis/rpc/driver/IDataFrameService_types.h"
+#include <vector>
 
 namespace ignis {
     namespace driver {
         namespace api {
 
-            enum ICacheLevel {
-                NO_CACHE = 0,
-                PRESERVE = 1,
-                MEMORY = 2,
-                RAW_MEMORY = 3,
-                DISK = 4
-            };
+            enum ICacheLevel { NO_CACHE = 0, PRESERVE = 1, MEMORY = 2, RAW_MEMORY = 3, DISK = 4 };
 
             class IAbstractDataFrame {
             protected:
@@ -87,8 +81,8 @@ namespace ignis {
 
                 int64_t collectAbs(const rpc::ISource &tp);
 
-                int64_t
-                aggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp, const rpc::ISource &tp);
+                int64_t aggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp,
+                                     const rpc::ISource &tp);
 
                 int64_t treeAggregateAbs(const ISource &zero, const ISource &seqOp, const ISource &combOp,
                                          const rpc::ISource &tp);
@@ -99,7 +93,7 @@ namespace ignis {
 
                 int64_t takeAbs(int64_t num, const rpc::ISource &tp);
 
-                void foreach(const ISource &src);
+                void foreach (const ISource &src);
 
                 void foreachPartition(const ISource &src);
 
@@ -152,8 +146,8 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId foldByKeyAbs(const ISource &zero, const ISource &src, bool localFold);
 
-                rpc::driver::IDataFrameId
-                foldByKeyAbs(const ISource &zero, const ISource &src, int64_t numPartitions, bool localFold);
+                rpc::driver::IDataFrameId foldByKeyAbs(const ISource &zero, const ISource &src, int64_t numPartitions,
+                                                       bool localFold);
 
                 rpc::driver::IDataFrameId sortByKeyAbs(bool ascending);
 
@@ -172,7 +166,6 @@ namespace ignis {
                 int64_t countByKey();
 
                 int64_t countByValue();
-
             };
 
             class IWorker;
@@ -181,8 +174,7 @@ namespace ignis {
             class IPairDataFrame;
 
             template<typename Tp>
-            class _toPair {
-            };
+            class _toPair {};
 
             template<typename Key, typename Value>
             class _toPair<std::pair<Key, Value>> {
@@ -196,11 +188,11 @@ namespace ignis {
             public:
                 typedef Tp Tp_type;
 
-                using IAbstractDataFrame::setName;
-                using IAbstractDataFrame::persist;
                 using IAbstractDataFrame::cache;
-                using IAbstractDataFrame::unpersist;
+                using IAbstractDataFrame::persist;
+                using IAbstractDataFrame::setName;
                 using IAbstractDataFrame::uncache;
+                using IAbstractDataFrame::unpersist;
 
                 /*IO*/
                 template<typename R>
@@ -214,9 +206,9 @@ namespace ignis {
                 }
 
                 using IAbstractDataFrame::partitions;
+                using IAbstractDataFrame::saveAsJsonFile;
                 using IAbstractDataFrame::saveAsObjectFile;
                 using IAbstractDataFrame::saveAsTextFile;
-                using IAbstractDataFrame::saveAsJsonFile;
 
                 /*General*/
                 template<typename R>
@@ -243,8 +235,8 @@ namespace ignis {
                 }
 
                 template<typename R>
-                std::shared_ptr<IDataFrame<R>>
-                mapPartitionsWithIndex(const ISource &src, bool preservesPartitioning = true) {
+                std::shared_ptr<IDataFrame<R>> mapPartitionsWithIndex(const ISource &src,
+                                                                      bool preservesPartitioning = true) {
                     return IDataFrame<R>::make(mapPartitionsWithIndexAbs(src, preservesPartitioning));
                 }
 
@@ -262,8 +254,8 @@ namespace ignis {
                 std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>> groupBy(const ISource &src);
 
                 template<typename Key>
-                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>>
-                groupBy(const ISource &src, int64_t numPartitions);
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>> groupBy(const ISource &src,
+                                                                                         int64_t numPartitions);
 
                 std::shared_ptr<IDataFrame<Tp>> sort(bool ascending = true) {
                     return IDataFrame<Tp>::make(sortAbs(ascending));
@@ -409,55 +401,51 @@ namespace ignis {
                     return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs());
                 }
 
-                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>>
-                groupByKey(int64_t numPartitions) {
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>> groupByKey(int64_t numPartitions) {
                     return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs(numPartitions));
                 }
 
-                std::shared_ptr<IPairDataFrame<Key, Value>>
-                reduceByKey(const ISource &src, bool localReduce = true) {
+                std::shared_ptr<IPairDataFrame<Key, Value>> reduceByKey(const ISource &src, bool localReduce = true) {
                     return IPairDataFrame<Key, Value>::make(this->reduceByKeyAbs(src, localReduce));
                 }
 
-                std::shared_ptr<IPairDataFrame<Key, Value>>
-                reduceByKey(const ISource &src, int64_t numPartitions, bool localReduce = true) {
+                std::shared_ptr<IPairDataFrame<Key, Value>> reduceByKey(const ISource &src, int64_t numPartitions,
+                                                                        bool localReduce = true) {
                     return IPairDataFrame<Key, Value>::make(this->reduceByKeyAbs(src, numPartitions, localReduce));
                 }
 
                 template<typename R>
-                std::shared_ptr<IPairDataFrame<Key, R>>
-                aggregateByKey(const ISource &zero, const ISource &seqOp) {
+                std::shared_ptr<IPairDataFrame<Key, R>> aggregateByKey(const ISource &zero, const ISource &seqOp) {
                     return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp));
                 }
 
                 template<typename R>
-                std::shared_ptr<IPairDataFrame<Key, R>>
-                aggregateByKey(const ISource &zero, const ISource &seqOp, int64_t numPartitions) {
+                std::shared_ptr<IPairDataFrame<Key, R>> aggregateByKey(const ISource &zero, const ISource &seqOp,
+                                                                       int64_t numPartitions) {
                     return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp, numPartitions));
                 }
 
                 template<typename R>
-                std::shared_ptr<IPairDataFrame<Key, R>>
-                aggregateByKey(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
+                std::shared_ptr<IPairDataFrame<Key, R>> aggregateByKey(const ISource &zero, const ISource &seqOp,
+                                                                       const ISource &combOp) {
                     return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp, combOp));
                 }
 
                 template<typename R>
-                std::shared_ptr<IPairDataFrame<Key, R>>
-                aggregateByKey(const ISource &zero, const ISource &seqOp, const ISource &combOp,
-                               int64_t numPartitions) {
+                std::shared_ptr<IPairDataFrame<Key, R>> aggregateByKey(const ISource &zero, const ISource &seqOp,
+                                                                       const ISource &combOp, int64_t numPartitions) {
                     return IPairDataFrame<Key, R>::make(this->aggregateByKeyAbs(zero, seqOp, combOp, numPartitions));
                 }
 
 
-                std::shared_ptr<IPairDataFrame<Key, Value>>
-                foldByKey(const ISource &zero, const ISource &src, bool localFold = true) {
+                std::shared_ptr<IPairDataFrame<Key, Value>> foldByKey(const ISource &zero, const ISource &src,
+                                                                      bool localFold = true) {
                     return IPairDataFrame<Key, Value>::make(this->foldByKeyAbs(zero, src, localFold));
                 }
 
 
-                std::shared_ptr<IPairDataFrame<Key, Value>>
-                foldByKey(const ISource &zero, const ISource &src, int64_t numPartitions, bool localFold = true) {
+                std::shared_ptr<IPairDataFrame<Key, Value>> foldByKey(const ISource &zero, const ISource &src,
+                                                                      int64_t numPartitions, bool localFold = true) {
                     return IPairDataFrame<Key, Value>::make(this->foldByKeyAbs(zero, src, localFold));
                 }
 
@@ -473,8 +461,8 @@ namespace ignis {
                     return IPairDataFrame<Key, Value>::make(this->sortByKeyAbs(src, ascending));
                 }
 
-                std::shared_ptr<IPairDataFrame<Key, Value>>
-                sortByKey(const ISource &src, bool ascending, int64_t numPartitions) {
+                std::shared_ptr<IPairDataFrame<Key, Value>> sortByKey(const ISource &src, bool ascending,
+                                                                      int64_t numPartitions) {
                     return IPairDataFrame<Key, Value>::make(this->sortByKeyAbs(src, ascending, numPartitions));
                 }
 
@@ -509,7 +497,6 @@ namespace ignis {
                 inline static std::shared_ptr<IPairDataFrame<Key, Value>> make(const rpc::driver::IDataFrameId &id) {
                     return std::shared_ptr<IPairDataFrame<Key, Value>>(new IDataFrame<std::pair<Key, Value>>(id));
                 }
-
             };
 
             template<typename Tp>
@@ -538,8 +525,8 @@ namespace ignis {
                 return IPairDataFrame<Key, Value>::make(this->id);
             }
 
-        }
-    }
-}
+        }// namespace api
+    }    // namespace driver
+}// namespace ignis
 
 #endif

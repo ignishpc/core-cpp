@@ -39,8 +39,8 @@ namespace ignis {
 
                 int64_t id;
             };
-        }
-    }
-}
+        }// namespace api
+    }    // namespace driver
+}// namespace ignis
 
 #endif

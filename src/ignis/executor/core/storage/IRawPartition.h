@@ -2,9 +2,9 @@
 #ifndef IGNIS_IRAWPARTITION_H
 #define IGNIS_IRAWPARTITION_H
 
+#include "IPartition.h"
 #include "ignis/executor/core/protocol/IObjectProtocol.h"
 #include "ignis/executor/core/transport/IZlibTransport.h"
-#include "IPartition.h"
 
 namespace ignis {
     namespace executor {
@@ -13,7 +13,6 @@ namespace ignis {
                 template<typename Tp>
                 class IRawPartition : public IPartition<Tp> {
                 public:
-
                     IRawPartition(std::shared_ptr<transport::ITransport> &trans, int8_t compression = 6);
 
                     virtual std::shared_ptr<api::IReadIterator<Tp>> readIterator();
@@ -72,7 +71,6 @@ namespace ignis {
                 template<typename Tp>
                 class IRawReadIterator : public api::IReadIterator<Tp> {
                 public:
-
                     IRawReadIterator(std::shared_ptr<protocol::IProtocol> proto, size_t &elems);
 
                     Tp &next();
@@ -94,7 +92,6 @@ namespace ignis {
                 template<typename Tp>
                 class IRawWriteIterator : public api::IWriteIterator<Tp> {
                 public:
-
                     IRawWriteIterator(std::shared_ptr<protocol::IProtocol> proto, size_t &elems);
 
                     void write(Tp &obj);
@@ -108,12 +105,11 @@ namespace ignis {
                     size_t &elems;
                     io::IWriter<Tp> writer;
                 };
-            }
-        }
-    }
-}
+            }// namespace storage
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "IRawPartition.tcc"
 
 #endif
-

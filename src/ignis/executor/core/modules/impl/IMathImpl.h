@@ -9,7 +9,7 @@ namespace ignis {
         namespace core {
             namespace modules {
                 namespace impl {
-                    class IMathImpl : public IBaseImpl{
+                    class IMathImpl : public IBaseImpl {
                     public:
                         IMathImpl(std::shared_ptr<IExecutorData> &executorData);
 
@@ -32,16 +32,14 @@ namespace ignis {
                         void countByValue();
 
                     private:
-
                         template<typename Tp>
-                        void countByReduce(std::unordered_map<Tp, int64_t>& acum);
-
+                        void countByReduce(std::unordered_map<Tp, int64_t> &acum);
                     };
-                }
-            }
-        }
-    }
-}
+                }// namespace impl
+            }    // namespace modules
+        }        // namespace core
+    }            // namespace executor
+}// namespace ignis
 
 #include "IMathImpl.tcc"
 

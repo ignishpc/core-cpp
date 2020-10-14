@@ -2,21 +2,20 @@
 #ifndef IGNIS_ICLIENT_H
 #define IGNIS_ICLIENT_H
 
-#include <memory>
-#include <thrift/transport/TTransport.h>
-#include <thrift/protocol/TCompactProtocol.h>
 #include "ignis/rpc/driver/IBackendService.h"
-#include "ignis/rpc/driver/IPropertiesService.h"
 #include "ignis/rpc/driver/IClusterService.h"
-#include "ignis/rpc/driver/IWorkerService.h"
 #include "ignis/rpc/driver/IDataFrameService.h"
+#include "ignis/rpc/driver/IPropertiesService.h"
+#include "ignis/rpc/driver/IWorkerService.h"
+#include <memory>
+#include <thrift/protocol/TCompactProtocol.h>
+#include <thrift/transport/TTransport.h>
 
 namespace ignis {
     namespace driver {
         namespace core {
             class IClient {
             public:
-
                 IClient(int port, int compression);
 
                 rpc::driver::IBackendServiceClient &getBackendService();
@@ -40,8 +39,8 @@ namespace ignis {
                 std::shared_ptr<rpc::driver::IWorkerServiceClient> workerService;
                 std::shared_ptr<rpc::driver::IDataFrameServiceClient> dataframeService;
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace driver
+}// namespace ignis
 
 #endif

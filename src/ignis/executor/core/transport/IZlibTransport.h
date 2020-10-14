@@ -11,13 +11,9 @@ namespace ignis {
             namespace transport {
                 class IZlibTransport : public apache::thrift::transport::TZlibTransport {
                 public:
-                    IZlibTransport(
-                            std::shared_ptr<TTransport> transport,
-                            int16_t comp_level = Z_DEFAULT_COMPRESSION,
-                            int urbuf_size = 256 * 1024,
-                            int crbuf_size = 256 * 1024,
-                            int uwbuf_size = 256 * 1024,
-                            int cwbuf_size = 256 * 1024);
+                    IZlibTransport(std::shared_ptr<TTransport> transport, int16_t comp_level = Z_DEFAULT_COMPRESSION,
+                                   int urbuf_size = 256 * 1024, int crbuf_size = 256 * 1024,
+                                   int uwbuf_size = 256 * 1024, int cwbuf_size = 256 * 1024);
 
                     virtual void flush() override;
 
@@ -31,7 +27,6 @@ namespace ignis {
                     void checkZlibRv(int status, const char *message);
 
                     void flushToTransport(int flush);
-
                 };
 
                 class IZlibTransportFactory : public apache::thrift::transport::TTransportFactory {
@@ -45,9 +40,9 @@ namespace ignis {
                 private:
                     int compression;
                 };
-            }
-        }
-    }
-}
+            }// namespace transport
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

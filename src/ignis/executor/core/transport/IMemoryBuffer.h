@@ -20,8 +20,9 @@ namespace ignis {
                  * doubles as necessary.  We've considered using scoped
                  *
                  */
-                class IMemoryBuffer : public apache::thrift::transport::TVirtualTransport<IMemoryBuffer,
-                        apache::thrift::transport::TBufferBase> {
+                class IMemoryBuffer
+                    : public apache::thrift::transport::TVirtualTransport<IMemoryBuffer,
+                                                                          apache::thrift::transport::TBufferBase> {
 
                 public:
                     static const uint32_t defaultSize = 1024;
@@ -46,9 +47,7 @@ namespace ignis {
                      *   and will be responsible for freeing it.
                      *   The memory must have been allocated with malloc.
                      */
-                    enum MemoryPolicy {
-                        OBSERVE = 1, COPY = 2, TAKE_OWNERSHIP = 3
-                    };
+                    enum MemoryPolicy { OBSERVE = 1, COPY = 2, TAKE_OWNERSHIP = 3 };
 
                     /*
                      * Construct a IMemoryBuffer with a default-sized buffer,
@@ -179,14 +178,14 @@ namespace ignis {
 
                     // Is this object the owner of the buffer?
                     bool owner_;
-                private:
 
+                private:
                     // Common initialization done by all constructors.
                     void initCommon(uint8_t *buf, size_t size, bool owner, size_t wPos);
                 };
-            }
-        }
-    }
-}
+            }// namespace transport
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif

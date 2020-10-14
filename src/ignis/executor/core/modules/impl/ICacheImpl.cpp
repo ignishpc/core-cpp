@@ -35,57 +35,53 @@ std::string ICacheImpl::fileCache() {
 
 int64_t ICacheImpl::saveContext() {
     IGNIS_TRY()
-        int64_t id;
-        if (context.size() <= 10) {//small contexts reuse ids
-            for (int i = 0; i <= 10; i++) {
-                if (context.find(i) == context.end()) {
-                    id = i;
-                    break;
-                }
+    int64_t id;
+    if (context.size() <= 10) {//small contexts reuse ids
+        for (int i = 0; i <= 10; i++) {
+            if (context.find(i) == context.end()) {
+                id = i;
+                break;
             }
-        } else {
-            id = next_context_id++;
         }
-        IGNIS_LOG(info) << "CacheContext: saving context " << id;
-        context[id] = std::static_pointer_cast<void>(executor_data->getPartitions<char>(true));
-        return id;
+    } else {
+        id = next_context_id++;
+    }
+    IGNIS_LOG(info) << "CacheContext: saving context " << id;
+    context[id] = std::static_pointer_cast<void>(executor_data->getPartitions<char>(true));
+    return id;
     IGNIS_CATCH()
 }
 
 void ICacheImpl::clearContext() {
     IGNIS_TRY()
-        executor_data->deletePartitions();
-        executor_data->clearVariables();
+    executor_data->deletePartitions();
+    executor_data->clearVariables();
     IGNIS_CATCH()
 }
 
 void ICacheImpl::loadContext(const int64_t id) {
     IGNIS_TRY()
-        auto value = context.find(id);
-        bool found = value != context.end();
+    auto value = context.find(id);
+    bool found = value != context.end();
 
-        if (found && value->second.get() == executor_data->getPartitions<char>(true).get()) {
-            context.erase(value);
-            return;
-        }
-        IGNIS_LOG(info) << "CacheContext: loading context " << id;
-
-        if (!found) {
-            throw exception::IInvalidArgument("context " + std::to_string(id) + " not found");
-        }
-        executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
+    if (found && value->second.get() == executor_data->getPartitions<char>(true).get()) {
         context.erase(value);
+        return;
+    }
+    IGNIS_LOG(info) << "CacheContext: loading context " << id;
+
+    if (!found) { throw exception::IInvalidArgument("context " + std::to_string(id) + " not found"); }
+    executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
+    context.erase(value);
     IGNIS_CATCH()
 }
 
 
 void ICacheImpl::loadCache(const int64_t id) {
     IGNIS_TRY()
-        IGNIS_LOG(info) << "CacheContext: loading partition from cache";
-        auto value = _cache.find(id);
-        if (value == _cache.end()) {
-            throw exception::IInvalidArgument("cache " + std::to_string(id) + " not found");
-        }
-        executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
+    IGNIS_LOG(info) << "CacheContext: loading partition from cache";
+    auto value = _cache.find(id);
+    if (value == _cache.end()) { throw exception::IInvalidArgument("cache " + std::to_string(id) + " not found"); }
+    executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
     IGNIS_CATCH()
 }

@@ -12,7 +12,6 @@ namespace ignis {
             namespace modules {
                 class IGeneralActionModule : public modules::IModule, public rpc::executor::IGeneralActionModuleIf {
                 public:
-
                     IGeneralActionModule(std::shared_ptr<IExecutorData> &executor_data);
 
                     void reduce(const rpc::ISource &function) override;
@@ -21,9 +20,11 @@ namespace ignis {
 
                     void collect() override;
 
-                    void aggregate(const rpc::ISource &zero, const rpc::ISource &seqOp, const rpc::ISource &combOp) override;
+                    void aggregate(const rpc::ISource &zero, const rpc::ISource &seqOp,
+                                   const rpc::ISource &combOp) override;
 
-                    void treeAggregate(const rpc::ISource &zero, const rpc::ISource &seqOp, const rpc::ISource &combOp) override;
+                    void treeAggregate(const rpc::ISource &zero, const rpc::ISource &seqOp,
+                                       const rpc::ISource &combOp) override;
 
                     void fold(const rpc::ISource &zero, const rpc::ISource &function) override;
 
@@ -54,10 +55,10 @@ namespace ignis {
                     impl::IPipeImpl pipe_impl;
                     impl::ISortImpl sort_impl;
                 };
-            }
-        }
-    }
-}
+            }// namespace modules
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 
 #endif

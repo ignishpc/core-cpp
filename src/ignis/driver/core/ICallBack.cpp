@@ -3,9 +3,9 @@
 #include "ignis/executor/core/ILog.h"
 
 #include "ignis/executor/core/IExecutorData.h"
+#include "ignis/executor/core/modules/ICommModule.h"
 #include "ignis/executor/core/modules/IExecutorServerModule.h"
 #include "ignis/executor/core/modules/IIOModule.h"
-#include "ignis/executor/core/modules/ICommModule.h"
 #include <thread>
 
 
@@ -20,8 +20,8 @@ ICallBack::ICallBack(int port, int compression) {
     class IExecutorServerModuleImpl : public IExecutorServerModule {
     public:
         IExecutorServerModuleImpl(std::shared_ptr<IExecutorData> &executor_data,
-                                  std::shared_ptr<core::IDriverContext> &driverContext) :
-                IExecutorServerModule(executor_data), driverContext(driverContext) {}
+                                  std::shared_ptr<core::IDriverContext> &driverContext)
+            : IExecutorServerModule(executor_data), driverContext(driverContext) {}
 
         void createServices(apache::thrift::TMultiplexedProcessor &processor) {
             auto io = std::make_shared<IIOModule>(executor_data);
@@ -41,12 +41,8 @@ ICallBack::ICallBack(int port, int compression) {
     this->server = server;
 }
 
-ignis::driver::core::IDriverContext &ICallBack::getDriverContext() {
-    return *driverContext;
-}
+ignis::driver::core::IDriverContext &ICallBack::getDriverContext() { return *driverContext; }
 
 ICallBack::~ICallBack() {
-    if (server) {
-        server->stop();
-    }
+    if (server) { server->stop(); }
 }

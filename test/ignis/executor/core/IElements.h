@@ -4,16 +4,16 @@
 
 #include "ignis/executor/api/IVector.h"
 
-namespace ignis{
-    namespace executor{
-        namespace core{
+namespace ignis {
+    namespace executor {
+        namespace core {
             template<typename Tp>
             struct IElements {
                 static api::IVector<Tp> create(int n, int seed);
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #include "IElements.tcc"
 #endif

@@ -2,12 +2,12 @@
 #ifndef IGNIS_IVARIABLE_H
 #define IGNIS_IVARIABLE_H
 
-#include <memory>
-#include <utility>
-#include <string>
 #include "RTTInfo.h"
 #include "exception/ILogicError.h"
 #include "protocol/IObjectProtocol.h"
+#include <memory>
+#include <string>
+#include <utility>
 
 namespace ignis {
     namespace executor {
@@ -21,11 +21,12 @@ namespace ignis {
 
             class IVariable {
             public:
-
                 virtual operator bool() = 0;
 
                 template<typename Tp>
-                IBasicVariable<Tp> &basic() { return reinterpret_cast<IBasicVariable<Tp> &>(*this); }
+                IBasicVariable<Tp> &basic() {
+                    return reinterpret_cast<IBasicVariable<Tp> &>(*this);
+                }
 
                 IBytesVariable &bytes();
             };
@@ -33,7 +34,6 @@ namespace ignis {
             template<typename Tp>
             class IBasicVariable : public IVariable {
             public:
-
                 IBasicVariable() {}
 
                 IBasicVariable(const Tp &value) : value(value) {}
@@ -45,7 +45,6 @@ namespace ignis {
                 Tp &get() { return get(RTTInfo::from<Tp>()); }
 
             private:
-
                 virtual Tp &get(const RTTInfo &tp) {
                     if (tp != RTTInfo::from<Tp>()) {
                         throw exception::ILogicError("Error: " + tp.getStandardName() + " is not " +
@@ -59,7 +58,6 @@ namespace ignis {
 
             class IBytesVariable : public IVariable {
             public:
-
                 IBytesVariable(const std::string &value);
 
                 IBytesVariable(std::string &&value);
@@ -78,8 +76,8 @@ namespace ignis {
             };
 
 
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #endif

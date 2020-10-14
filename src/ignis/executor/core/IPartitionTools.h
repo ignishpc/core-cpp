@@ -3,14 +3,14 @@
 #define IGNIS_IPARTITIONTOOL_H
 
 #include "IPropertyParser.h"
+#include "ignis/executor/api/IContext.h"
 #include "ignis/executor/core/ILog.h"
 #include "ignis/executor/core/exception/IInvalidArgument.h"
 #include "ignis/executor/core/exception/ILogicError.h"
+#include "ignis/executor/core/storage/IDiskPartition.h"
 #include "ignis/executor/core/storage/IMemoryPartition.h"
 #include "ignis/executor/core/storage/IRawMemoryPartition.h"
-#include "ignis/executor/core/storage/IDiskPartition.h"
 #include "ignis/executor/core/storage/IVoidPartition.h"
-#include "ignis/executor/api/IContext.h"
 
 namespace ignis {
     namespace executor {
@@ -39,8 +39,8 @@ namespace ignis {
                 inline std::shared_ptr<storage::IMemoryPartition<Tp>> newMemoryPartition(int64_t elems = 1000);
 
                 template<typename Tp>
-                inline std::shared_ptr<storage::IRawMemoryPartition<Tp>>
-                newRawMemoryPartition(int64_t sz = 120 * 1024 * 1024);
+                inline std::shared_ptr<storage::IRawMemoryPartition<Tp>> newRawMemoryPartition(int64_t sz = 120 * 1024 *
+                                                                                                            1024);
 
                 template<typename Tp>
                 inline std::shared_ptr<storage::IDiskPartition<Tp>>
@@ -84,7 +84,7 @@ namespace ignis {
                 toMemory(std::shared_ptr<storage::IPartition<Tp>> &st);
 
                 template<typename Tp>
-                inline std::shared_ptr<storage::IMemoryReadIterator<Tp> > &
+                inline std::shared_ptr<storage::IMemoryReadIterator<Tp>> &
                 toMemory(std::shared_ptr<api::IReadIterator<Tp>> &it);
 
                 template<typename Tp>
@@ -108,7 +108,6 @@ namespace ignis {
                 void createDirectoryIfNotExists(const std::string &path);
 
             private:
-
                 inline std::string diskPath(const std::string &name = "");
 
                 bool createHardLink(const std::string &target, const std::string &link);
@@ -119,9 +118,9 @@ namespace ignis {
                 api::IContext &context;
                 int partition_id_gen;
             };
-        }
-    }
-}
+        }// namespace core
+    }    // namespace executor
+}// namespace ignis
 
 #include "IPartitionTools.tcc"
 

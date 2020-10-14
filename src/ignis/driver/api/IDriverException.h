@@ -2,8 +2,8 @@
 #ifndef IGNIS_IDRIVEREXCEPTION_H
 #define IGNIS_IDRIVEREXCEPTION_H
 
-#include <stdexcept>
 #include <ostream>
+#include <stdexcept>
 
 namespace ignis {
     namespace driver {
@@ -28,9 +28,10 @@ namespace ignis {
 
             inline std::ostream &operator<<(std::ostream &stream, IDriverException &ex) {
                 ex.operator<<(stream);
+                return stream;
             }
-        }
-    }
-}
+        }// namespace api
+    }    // namespace driver
+}// namespace ignis
 
 #endif

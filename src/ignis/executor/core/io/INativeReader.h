@@ -15,23 +15,17 @@ namespace ignis {
                 template<typename T>
                 class INativeReader {
                 public:
+                    virtual inline T operator()(protocol::IProtocol &protocol) { return reader(protocol); }
 
-                    virtual inline T operator()(protocol::IProtocol &protocol) {
-                        return reader(protocol);
-                    }
-
-                    virtual inline void operator()(protocol::IProtocol &protocol, T& obj) {
-                        reader(protocol, obj);
-                    }
+                    virtual inline void operator()(protocol::IProtocol &protocol, T &obj) { reader(protocol, obj); }
 
                 private:
                     INativeReaderType<T> reader;
-
                 };
-            }
-        }
-    }
-}
+            }// namespace io
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #include "INativeReader.tcc"
 

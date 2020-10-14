@@ -7,7 +7,7 @@ struct ignis::executor::core::io::INativeReaderType {
         bool contiguous;
         protocol.readBool(contiguous);
         if (contiguous) {
-            protocol.getTransport()->read((uint8_t * ) & obj, sizeof(Tp));
+            protocol.getTransport()->read((uint8_t *) &obj, sizeof(Tp));
         } else {
             IReaderType<Tp>()(protocol, obj);
         }
@@ -21,7 +21,7 @@ struct ignis::executor::core::io::INativeReaderType {
 };
 
 template<typename _Tp, typename _Alloc>
-struct ignis::executor::core::io::INativeReaderType<std::vector<_Tp,_Alloc>> {
+struct ignis::executor::core::io::INativeReaderType<std::vector<_Tp, _Alloc>> {
 
     inline void operator()(protocol::IProtocol &protocol, std::vector<_Tp> &obj) {
         bool contiguous;
@@ -31,9 +31,9 @@ struct ignis::executor::core::io::INativeReaderType<std::vector<_Tp,_Alloc>> {
             protocol.readI64(len);
             auto first = obj.size();
             obj.resize(len);
-            protocol.getTransport()->read((uint8_t * ) & obj[first], (uint32_t) len * sizeof(_Tp));
+            protocol.getTransport()->read((uint8_t *) &obj[first], (uint32_t) len * sizeof(_Tp));
         } else {
-            IReaderType<std::vector<_Tp,_Alloc>>()(protocol, obj);
+            IReaderType<std::vector<_Tp, _Alloc>>()(protocol, obj);
         }
     }
 
@@ -42,5 +42,4 @@ struct ignis::executor::core::io::INativeReaderType<std::vector<_Tp,_Alloc>> {
         (*this)(protocol, obj);
         return obj;
     }
-
 };

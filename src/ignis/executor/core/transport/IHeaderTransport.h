@@ -10,9 +10,8 @@ namespace ignis {
         namespace core {
             namespace transport {
                 class IHeaderTransport
-                        : public apache::thrift::transport::TVirtualTransport<IHeaderTransport, ITransport> {
+                    : public apache::thrift::transport::TVirtualTransport<IHeaderTransport, ITransport> {
                 public:
-
                     IHeaderTransport(std::shared_ptr<transport::ITransport> &trans, std::string &header);
 
                     virtual ~IHeaderTransport();
@@ -30,10 +29,9 @@ namespace ignis {
                     std::string header;
                     int pos;
                 };
-            }
-        }
-    }
-}
+            }// namespace transport
+        }    // namespace core
+    }        // namespace executor
+}// namespace ignis
 
 #endif
-

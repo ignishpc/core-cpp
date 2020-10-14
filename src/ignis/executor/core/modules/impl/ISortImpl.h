@@ -72,12 +72,13 @@ namespace ignis {
                         void parallelLocalSort(storage::IPartitionGroup<Tp> &group, Cmp comparator);
 
                         template<typename Tp>
-                        std::shared_ptr<storage::IMemoryPartition<Tp>>
-                        selectPivots(storage::IPartitionGroup<Tp> &group, int64_t samples);
+                        std::shared_ptr<storage::IMemoryPartition<Tp>> selectPivots(storage::IPartitionGroup<Tp> &group,
+                                                                                    int64_t samples);
 
                         template<typename Tp, typename Cmp>
                         std::shared_ptr<storage::IPartitionGroup<Tp>>
-                        generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
+                        generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots,
+                                       Cmp comparator);
 
                         /*Auxiliary functions*/
                         template<typename Tp, typename Cmp>
@@ -89,28 +90,27 @@ namespace ignis {
 
                         template<typename Tp, typename Cmp>
                         std::shared_ptr<storage::IPartitionGroup<Tp>>
-                        generateMemoryRanges(storage::IPartitionGroup<Tp> &group,
-                                             storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
+                        generateMemoryRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots,
+                                             Cmp comparator);
 
                         template<typename Tp, typename Cmp>
-                        int64_t searchRange(Tp& elem, storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
+                        int64_t searchRange(Tp &elem, storage::IMemoryPartition<Tp> &pivots, Cmp comparator);
 
                         template<typename Tp, typename Cmp>
                         void take_ordered_impl(Cmp comparator, int64_t n);
 
                         template<typename Tp, typename Cmp>
-                        void take_ordered_add(Cmp comparator, storage::IMemoryPartition<Tp> &top, Tp& elem, int64_t n);
+                        void take_ordered_add(Cmp comparator, storage::IMemoryPartition<Tp> &top, Tp &elem, int64_t n);
 
                         template<typename Tp, typename Cmp>
                         void max_impl(Cmp comparator);
                     };
-                }
-            }
-        }
-    }
-}
+                }// namespace impl
+            }    // namespace modules
+        }        // namespace core
+    }            // namespace executor
+}// namespace ignis
 
 #include "ISortImpl.tcc"
 
 #endif
-
