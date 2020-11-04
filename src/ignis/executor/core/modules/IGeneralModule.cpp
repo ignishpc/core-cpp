@@ -106,6 +106,12 @@ void IGeneralModule::groupByKey(const int64_t numPartitions) {
     IGNIS_RPC_CATCH()
 }
 
+void IGeneralModule::groupByKey2(const int64_t numPartitions, const ::ignis::rpc::ISource &src) {
+    IGNIS_RPC_TRY()
+    typeFromSource(src)->groupByKey(reduce_impl, numPartitions);
+    IGNIS_RPC_CATCH()
+}
+
 void IGeneralModule::reduceByKey(const ::ignis::rpc::ISource &src, const int64_t numPartitions, bool localReduce) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(src)->key->reduceByKey(reduce_impl, numPartitions, localReduce);

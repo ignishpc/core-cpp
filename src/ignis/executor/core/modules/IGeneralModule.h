@@ -48,6 +48,8 @@ namespace ignis {
 
                     void groupByKey(const int64_t numPartitions) override;
 
+                    void groupByKey2(const int64_t numPartitions, const ::ignis::rpc::ISource &src) override;
+
                     void reduceByKey(const ::ignis::rpc::ISource &src, const int64_t numPartitions,
                                      bool localReduce) override;
 

@@ -11216,11 +11216,11 @@ uint32_t IDataFrameService_groupByKey_presult::read(::apache::thrift::protocol::
 }
 
 
-IDataFrameService_groupByKey2_args::~IDataFrameService_groupByKey2_args() noexcept {
+IDataFrameService_groupByKey2a_args::~IDataFrameService_groupByKey2a_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_groupByKey2_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_groupByKey2a_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -11269,10 +11269,10 @@ uint32_t IDataFrameService_groupByKey2_args::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-uint32_t IDataFrameService_groupByKey2_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_groupByKey2a_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2a_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -11288,14 +11288,14 @@ uint32_t IDataFrameService_groupByKey2_args::write(::apache::thrift::protocol::T
 }
 
 
-IDataFrameService_groupByKey2_pargs::~IDataFrameService_groupByKey2_pargs() noexcept {
+IDataFrameService_groupByKey2a_pargs::~IDataFrameService_groupByKey2a_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_groupByKey2_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_groupByKey2a_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2a_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -11311,11 +11311,11 @@ uint32_t IDataFrameService_groupByKey2_pargs::write(::apache::thrift::protocol::
 }
 
 
-IDataFrameService_groupByKey2_result::~IDataFrameService_groupByKey2_result() noexcept {
+IDataFrameService_groupByKey2a_result::~IDataFrameService_groupByKey2a_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_groupByKey2_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_groupByKey2a_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -11364,11 +11364,11 @@ uint32_t IDataFrameService_groupByKey2_result::read(::apache::thrift::protocol::
   return xfer;
 }
 
-uint32_t IDataFrameService_groupByKey2_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_groupByKey2a_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2a_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -11385,11 +11385,473 @@ uint32_t IDataFrameService_groupByKey2_result::write(::apache::thrift::protocol:
 }
 
 
-IDataFrameService_groupByKey2_presult::~IDataFrameService_groupByKey2_presult() noexcept {
+IDataFrameService_groupByKey2a_presult::~IDataFrameService_groupByKey2a_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_groupByKey2_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_groupByKey2a_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey2b_args::~IDataFrameService_groupByKey2b_args() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey2b_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->id.read(iprot);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataFrameService_groupByKey2b_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2b_args");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->id.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey2b_pargs::~IDataFrameService_groupByKey2b_pargs() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey2b_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2b_pargs");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->id)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey2b_result::~IDataFrameService_groupByKey2b_result() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey2b_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataFrameService_groupByKey2b_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey2b_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey2b_presult::~IDataFrameService_groupByKey2b_presult() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey2b_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey3_args::~IDataFrameService_groupByKey3_args() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->id.read(iprot);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->numPartitions);
+          this->__isset.numPartitions = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataFrameService_groupByKey3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey3_args");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->id.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64(this->numPartitions);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey3_pargs::~IDataFrameService_groupByKey3_pargs() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey3_pargs");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->id)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 2);
+  xfer += oprot->writeI64((*(this->numPartitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 3);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey3_result::~IDataFrameService_groupByKey3_result() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataFrameService_groupByKey3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IDataFrameService_groupByKey3_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_groupByKey3_presult::~IDataFrameService_groupByKey3_presult() noexcept {
+}
+
+
+uint32_t IDataFrameService_groupByKey3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -18567,18 +19029,18 @@ void IDataFrameServiceClient::recv_groupByKey(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey failed: unknown result");
 }
 
-void IDataFrameServiceClient::groupByKey2(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::groupByKey2a(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
 {
-  send_groupByKey2(id, numPartitions);
-  recv_groupByKey2(_return);
+  send_groupByKey2a(id, numPartitions);
+  recv_groupByKey2a(_return);
 }
 
-void IDataFrameServiceClient::send_groupByKey2(const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::send_groupByKey2a(const IDataFrameId& id, const int64_t numPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("groupByKey2", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("groupByKey2a", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_groupByKey2_pargs args;
+  IDataFrameService_groupByKey2a_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -18588,7 +19050,7 @@ void IDataFrameServiceClient::send_groupByKey2(const IDataFrameId& id, const int
   oprot_->getTransport()->flush();
 }
 
-void IDataFrameServiceClient::recv_groupByKey2(IDataFrameId& _return)
+void IDataFrameServiceClient::recv_groupByKey2a(IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -18608,12 +19070,12 @@ void IDataFrameServiceClient::recv_groupByKey2(IDataFrameId& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("groupByKey2") != 0) {
+  if (fname.compare("groupByKey2a") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IDataFrameService_groupByKey2_presult result;
+  IDataFrameService_groupByKey2a_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -18626,7 +19088,132 @@ void IDataFrameServiceClient::recv_groupByKey2(IDataFrameId& _return)
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey2 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey2a failed: unknown result");
+}
+
+void IDataFrameServiceClient::groupByKey2b(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  send_groupByKey2b(id, src);
+  recv_groupByKey2b(_return);
+}
+
+void IDataFrameServiceClient::send_groupByKey2b(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("groupByKey2b", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataFrameService_groupByKey2b_pargs args;
+  args.id = &id;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IDataFrameServiceClient::recv_groupByKey2b(IDataFrameId& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("groupByKey2b") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IDataFrameService_groupByKey2b_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey2b failed: unknown result");
+}
+
+void IDataFrameServiceClient::groupByKey3(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
+{
+  send_groupByKey3(id, numPartitions, src);
+  recv_groupByKey3(_return);
+}
+
+void IDataFrameServiceClient::send_groupByKey3(const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("groupByKey3", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataFrameService_groupByKey3_pargs args;
+  args.id = &id;
+  args.numPartitions = &numPartitions;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IDataFrameServiceClient::recv_groupByKey3(IDataFrameId& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("groupByKey3") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IDataFrameService_groupByKey3_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey3 failed: unknown result");
 }
 
 void IDataFrameServiceClient::reduceByKey(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool localReduce)
@@ -22505,41 +23092,41 @@ void IDataFrameServiceProcessor::process_groupByKey(int32_t seqid, ::apache::thr
   }
 }
 
-void IDataFrameServiceProcessor::process_groupByKey2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_groupByKey2a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = NULL;
   if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.groupByKey2", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.groupByKey2a", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.groupByKey2");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.groupByKey2a");
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.groupByKey2");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.groupByKey2a");
   }
 
-  IDataFrameService_groupByKey2_args args;
+  IDataFrameService_groupByKey2a_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.groupByKey2", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.groupByKey2a", bytes);
   }
 
-  IDataFrameService_groupByKey2_result result;
+  IDataFrameService_groupByKey2a_result result;
   try {
-    iface_->groupByKey2(result.success, args.id, args.numPartitions);
+    iface_->groupByKey2a(result.success, args.id, args.numPartitions);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.groupByKey2");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.groupByKey2a");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("groupByKey2", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("groupByKey2a", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -22548,17 +23135,131 @@ void IDataFrameServiceProcessor::process_groupByKey2(int32_t seqid, ::apache::th
   }
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.groupByKey2");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.groupByKey2a");
   }
 
-  oprot->writeMessageBegin("groupByKey2", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("groupByKey2a", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.groupByKey2", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.groupByKey2a", bytes);
+  }
+}
+
+void IDataFrameServiceProcessor::process_groupByKey2b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IDataFrameService.groupByKey2b", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.groupByKey2b");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IDataFrameService.groupByKey2b");
+  }
+
+  IDataFrameService_groupByKey2b_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IDataFrameService.groupByKey2b", bytes);
+  }
+
+  IDataFrameService_groupByKey2b_result result;
+  try {
+    iface_->groupByKey2b(result.success, args.id, args.src);
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.groupByKey2b");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("groupByKey2b", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.groupByKey2b");
+  }
+
+  oprot->writeMessageBegin("groupByKey2b", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.groupByKey2b", bytes);
+  }
+}
+
+void IDataFrameServiceProcessor::process_groupByKey3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = NULL;
+  if (this->eventHandler_.get() != NULL) {
+    ctx = this->eventHandler_->getContext("IDataFrameService.groupByKey3", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.groupByKey3");
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preRead(ctx, "IDataFrameService.groupByKey3");
+  }
+
+  IDataFrameService_groupByKey3_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postRead(ctx, "IDataFrameService.groupByKey3", bytes);
+  }
+
+  IDataFrameService_groupByKey3_result result;
+  try {
+    iface_->groupByKey3(result.success, args.id, args.numPartitions, args.src);
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != NULL) {
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.groupByKey3");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("groupByKey3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.groupByKey3");
+  }
+
+  oprot->writeMessageBegin("groupByKey3", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != NULL) {
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.groupByKey3", bytes);
   }
 }
 
@@ -27869,19 +28570,19 @@ void IDataFrameServiceConcurrentClient::recv_groupByKey(IDataFrameId& _return, c
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::groupByKey2(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceConcurrentClient::groupByKey2a(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
 {
-  int32_t seqid = send_groupByKey2(id, numPartitions);
-  recv_groupByKey2(_return, seqid);
+  int32_t seqid = send_groupByKey2a(id, numPartitions);
+  recv_groupByKey2a(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_groupByKey2(const IDataFrameId& id, const int64_t numPartitions)
+int32_t IDataFrameServiceConcurrentClient::send_groupByKey2a(const IDataFrameId& id, const int64_t numPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("groupByKey2", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("groupByKey2a", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_groupByKey2_pargs args;
+  IDataFrameService_groupByKey2a_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -27894,7 +28595,7 @@ int32_t IDataFrameServiceConcurrentClient::send_groupByKey2(const IDataFrameId& 
   return cseqid;
 }
 
-void IDataFrameServiceConcurrentClient::recv_groupByKey2(IDataFrameId& _return, const int32_t seqid)
+void IDataFrameServiceConcurrentClient::recv_groupByKey2a(IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -27923,7 +28624,7 @@ void IDataFrameServiceConcurrentClient::recv_groupByKey2(IDataFrameId& _return, 
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("groupByKey2") != 0) {
+      if (fname.compare("groupByKey2a") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -27932,7 +28633,7 @@ void IDataFrameServiceConcurrentClient::recv_groupByKey2(IDataFrameId& _return, 
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IDataFrameService_groupByKey2_presult result;
+      IDataFrameService_groupByKey2a_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -27948,7 +28649,186 @@ void IDataFrameServiceConcurrentClient::recv_groupByKey2(IDataFrameId& _return, 
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey2 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey2a failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IDataFrameServiceConcurrentClient::groupByKey2b(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_groupByKey2b(id, src);
+  recv_groupByKey2b(_return, seqid);
+}
+
+int32_t IDataFrameServiceConcurrentClient::send_groupByKey2b(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("groupByKey2b", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataFrameService_groupByKey2b_pargs args;
+  args.id = &id;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IDataFrameServiceConcurrentClient::recv_groupByKey2b(IDataFrameId& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("groupByKey2b") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IDataFrameService_groupByKey2b_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey2b failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IDataFrameServiceConcurrentClient::groupByKey3(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_groupByKey3(id, numPartitions, src);
+  recv_groupByKey3(_return, seqid);
+}
+
+int32_t IDataFrameServiceConcurrentClient::send_groupByKey3(const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("groupByKey3", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataFrameService_groupByKey3_pargs args;
+  args.id = &id;
+  args.numPartitions = &numPartitions;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IDataFrameServiceConcurrentClient::recv_groupByKey3(IDataFrameId& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("groupByKey3") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IDataFrameService_groupByKey3_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "groupByKey3 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

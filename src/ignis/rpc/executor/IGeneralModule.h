@@ -38,6 +38,7 @@ class IGeneralModuleIf {
   virtual void flatMapValues(const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapValues(const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupByKey(const int64_t numPartitions) = 0;
+  virtual void groupByKey2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce) = 0;
   virtual void aggregateByKey(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const int64_t numPartitions) = 0;
   virtual void aggregateByKey4(const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp, const  ::ignis::rpc::ISource& combOp, const int64_t numPartitions) = 0;
@@ -121,6 +122,9 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
     return;
   }
   void groupByKey(const int64_t /* numPartitions */) {
+    return;
+  }
+  void groupByKey2(const int64_t /* numPartitions */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void reduceByKey(const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */, const bool /* localReduce */) {
@@ -1862,6 +1866,117 @@ class IGeneralModule_groupByKey_presult {
 
 };
 
+typedef struct _IGeneralModule_groupByKey2_args__isset {
+  _IGeneralModule_groupByKey2_args__isset() : numPartitions(false), src(false) {}
+  bool numPartitions :1;
+  bool src :1;
+} _IGeneralModule_groupByKey2_args__isset;
+
+class IGeneralModule_groupByKey2_args {
+ public:
+
+  IGeneralModule_groupByKey2_args(const IGeneralModule_groupByKey2_args&);
+  IGeneralModule_groupByKey2_args& operator=(const IGeneralModule_groupByKey2_args&);
+  IGeneralModule_groupByKey2_args() : numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_groupByKey2_args() noexcept;
+  int64_t numPartitions;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralModule_groupByKey2_args__isset __isset;
+
+  void __set_numPartitions(const int64_t val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralModule_groupByKey2_args & rhs) const
+  {
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_groupByKey2_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_groupByKey2_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_groupByKey2_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_groupByKey2_pargs() noexcept;
+  const int64_t* numPartitions;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_groupByKey2_result__isset {
+  _IGeneralModule_groupByKey2_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_groupByKey2_result__isset;
+
+class IGeneralModule_groupByKey2_result {
+ public:
+
+  IGeneralModule_groupByKey2_result(const IGeneralModule_groupByKey2_result&);
+  IGeneralModule_groupByKey2_result& operator=(const IGeneralModule_groupByKey2_result&);
+  IGeneralModule_groupByKey2_result() {
+  }
+
+  virtual ~IGeneralModule_groupByKey2_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_groupByKey2_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_groupByKey2_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_groupByKey2_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_groupByKey2_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_groupByKey2_presult__isset {
+  _IGeneralModule_groupByKey2_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_groupByKey2_presult__isset;
+
+class IGeneralModule_groupByKey2_presult {
+ public:
+
+
+  virtual ~IGeneralModule_groupByKey2_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_groupByKey2_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IGeneralModule_reduceByKey_args__isset {
   _IGeneralModule_reduceByKey_args__isset() : src(false), numPartitions(false), localReduce(false) {}
   bool src :1;
@@ -2865,6 +2980,9 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   void groupByKey(const int64_t numPartitions);
   void send_groupByKey(const int64_t numPartitions);
   void recv_groupByKey();
+  void groupByKey2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  void send_groupByKey2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  void recv_groupByKey2();
   void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
   void send_reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
   void recv_reduceByKey();
@@ -2920,6 +3038,7 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_flatMapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_groupByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_groupByKey2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_aggregateByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_aggregateByKey4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2947,6 +3066,7 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["flatMapValues"] = &IGeneralModuleProcessor::process_flatMapValues;
     processMap_["mapValues"] = &IGeneralModuleProcessor::process_mapValues;
     processMap_["groupByKey"] = &IGeneralModuleProcessor::process_groupByKey;
+    processMap_["groupByKey2"] = &IGeneralModuleProcessor::process_groupByKey2;
     processMap_["reduceByKey"] = &IGeneralModuleProcessor::process_reduceByKey;
     processMap_["aggregateByKey"] = &IGeneralModuleProcessor::process_aggregateByKey;
     processMap_["aggregateByKey4"] = &IGeneralModuleProcessor::process_aggregateByKey4;
@@ -3127,6 +3247,15 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
     ifaces_[i]->groupByKey(numPartitions);
   }
 
+  void groupByKey2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->groupByKey2(numPartitions, src);
+    }
+    ifaces_[i]->groupByKey2(numPartitions, src);
+  }
+
   void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -3279,6 +3408,9 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   void groupByKey(const int64_t numPartitions);
   int32_t send_groupByKey(const int64_t numPartitions);
   void recv_groupByKey(const int32_t seqid);
+  void groupByKey2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_groupByKey2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  void recv_groupByKey2(const int32_t seqid);
   void reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
   int32_t send_reduceByKey(const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce);
   void recv_reduceByKey(const int32_t seqid);

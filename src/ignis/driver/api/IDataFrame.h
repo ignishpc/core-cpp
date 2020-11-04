@@ -129,6 +129,10 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId groupByKeyAbs(int64_t numPartitions);
 
+                rpc::driver::IDataFrameId groupByKeyAbs(const ISource &src);
+
+                rpc::driver::IDataFrameId groupByKeyAbs(int64_t numPartitions, const ISource &src);
+
                 rpc::driver::IDataFrameId reduceByKeyAbs(const ISource &src, bool localReduce);
 
                 rpc::driver::IDataFrameId reduceByKeyAbs(const ISource &src, int64_t numPartitions, bool localReduce);
@@ -159,7 +163,7 @@ namespace ignis {
 
                 int64_t keysAbs(const rpc::ISource &tp);
 
-                int64_t valueAbs(const rpc::ISource &tp);
+                int64_t valuesAbs(const rpc::ISource &tp);
 
                 rpc::driver::IDataFrameId sampleByKeyAbs(bool withReplacement, const ISource &fractions, int seed);
 
@@ -446,7 +450,7 @@ namespace ignis {
 
                 std::shared_ptr<IPairDataFrame<Key, Value>> foldByKey(const ISource &zero, const ISource &src,
                                                                       int64_t numPartitions, bool localFold = true) {
-                    return IPairDataFrame<Key, Value>::make(this->foldByKeyAbs(zero, src, localFold));
+                    return IPairDataFrame<Key, Value>::make(this->foldByKeyAbs(zero, src, numPartitions, localFold));
                 }
 
                 std::shared_ptr<IPairDataFrame<Key, Value>> sortByKey(bool ascending = true) {
@@ -478,7 +482,9 @@ namespace ignis {
 
                 std::shared_ptr<IPairDataFrame<Key, Value>>
                 sampleByKey(bool withReplacement, const std::map<Key, int64_t> &fractions, int seed) {
-                    return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, seed));
+                    ISource fractions_src("");
+                    fractions_src.addParam("fractions", fractions);
+                    return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, fractions, seed));
                 }
 
                 std::shared_ptr<IPairDataFrame<Key, Value>>

@@ -78,7 +78,9 @@ class IDataFrameServiceIf {
   virtual void flatMapValues(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapValues(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupByKey(IDataFrameId& _return, const IDataFrameId& id) = 0;
-  virtual void groupByKey2(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
+  virtual void groupByKey2a(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
+  virtual void groupByKey2b(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void groupByKey3(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void reduceByKey(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool localReduce) = 0;
   virtual void reduceByKey4(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions, const bool localReduce) = 0;
   virtual void aggregateByKey(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& zero, const  ::ignis::rpc::ISource& seqOp) = 0;
@@ -291,7 +293,13 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void groupByKey(IDataFrameId& /* _return */, const IDataFrameId& /* id */) {
     return;
   }
-  void groupByKey2(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
+  void groupByKey2a(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
+    return;
+  }
+  void groupByKey2b(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void groupByKey3(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void reduceByKey(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const bool /* localReduce */) {
@@ -6312,31 +6320,31 @@ class IDataFrameService_groupByKey_presult {
 
 };
 
-typedef struct _IDataFrameService_groupByKey2_args__isset {
-  _IDataFrameService_groupByKey2_args__isset() : id(false), numPartitions(false) {}
+typedef struct _IDataFrameService_groupByKey2a_args__isset {
+  _IDataFrameService_groupByKey2a_args__isset() : id(false), numPartitions(false) {}
   bool id :1;
   bool numPartitions :1;
-} _IDataFrameService_groupByKey2_args__isset;
+} _IDataFrameService_groupByKey2a_args__isset;
 
-class IDataFrameService_groupByKey2_args {
+class IDataFrameService_groupByKey2a_args {
  public:
 
-  IDataFrameService_groupByKey2_args(const IDataFrameService_groupByKey2_args&);
-  IDataFrameService_groupByKey2_args& operator=(const IDataFrameService_groupByKey2_args&);
-  IDataFrameService_groupByKey2_args() : numPartitions(0) {
+  IDataFrameService_groupByKey2a_args(const IDataFrameService_groupByKey2a_args&);
+  IDataFrameService_groupByKey2a_args& operator=(const IDataFrameService_groupByKey2a_args&);
+  IDataFrameService_groupByKey2a_args() : numPartitions(0) {
   }
 
-  virtual ~IDataFrameService_groupByKey2_args() noexcept;
+  virtual ~IDataFrameService_groupByKey2a_args() noexcept;
   IDataFrameId id;
   int64_t numPartitions;
 
-  _IDataFrameService_groupByKey2_args__isset __isset;
+  _IDataFrameService_groupByKey2a_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
   void __set_numPartitions(const int64_t val);
 
-  bool operator == (const IDataFrameService_groupByKey2_args & rhs) const
+  bool operator == (const IDataFrameService_groupByKey2a_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -6344,11 +6352,11 @@ class IDataFrameService_groupByKey2_args {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_groupByKey2_args &rhs) const {
+  bool operator != (const IDataFrameService_groupByKey2a_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_groupByKey2_args & ) const;
+  bool operator < (const IDataFrameService_groupByKey2a_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -6356,11 +6364,11 @@ class IDataFrameService_groupByKey2_args {
 };
 
 
-class IDataFrameService_groupByKey2_pargs {
+class IDataFrameService_groupByKey2a_pargs {
  public:
 
 
-  virtual ~IDataFrameService_groupByKey2_pargs() noexcept;
+  virtual ~IDataFrameService_groupByKey2a_pargs() noexcept;
   const IDataFrameId* id;
   const int64_t* numPartitions;
 
@@ -6368,31 +6376,31 @@ class IDataFrameService_groupByKey2_pargs {
 
 };
 
-typedef struct _IDataFrameService_groupByKey2_result__isset {
-  _IDataFrameService_groupByKey2_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_groupByKey2a_result__isset {
+  _IDataFrameService_groupByKey2a_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_groupByKey2_result__isset;
+} _IDataFrameService_groupByKey2a_result__isset;
 
-class IDataFrameService_groupByKey2_result {
+class IDataFrameService_groupByKey2a_result {
  public:
 
-  IDataFrameService_groupByKey2_result(const IDataFrameService_groupByKey2_result&);
-  IDataFrameService_groupByKey2_result& operator=(const IDataFrameService_groupByKey2_result&);
-  IDataFrameService_groupByKey2_result() {
+  IDataFrameService_groupByKey2a_result(const IDataFrameService_groupByKey2a_result&);
+  IDataFrameService_groupByKey2a_result& operator=(const IDataFrameService_groupByKey2a_result&);
+  IDataFrameService_groupByKey2a_result() {
   }
 
-  virtual ~IDataFrameService_groupByKey2_result() noexcept;
+  virtual ~IDataFrameService_groupByKey2a_result() noexcept;
   IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_groupByKey2_result__isset __isset;
+  _IDataFrameService_groupByKey2a_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_groupByKey2_result & rhs) const
+  bool operator == (const IDataFrameService_groupByKey2a_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -6400,32 +6408,277 @@ class IDataFrameService_groupByKey2_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_groupByKey2_result &rhs) const {
+  bool operator != (const IDataFrameService_groupByKey2a_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_groupByKey2_result & ) const;
+  bool operator < (const IDataFrameService_groupByKey2a_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_groupByKey2_presult__isset {
-  _IDataFrameService_groupByKey2_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_groupByKey2a_presult__isset {
+  _IDataFrameService_groupByKey2a_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_groupByKey2_presult__isset;
+} _IDataFrameService_groupByKey2a_presult__isset;
 
-class IDataFrameService_groupByKey2_presult {
+class IDataFrameService_groupByKey2a_presult {
  public:
 
 
-  virtual ~IDataFrameService_groupByKey2_presult() noexcept;
+  virtual ~IDataFrameService_groupByKey2a_presult() noexcept;
   IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_groupByKey2_presult__isset __isset;
+  _IDataFrameService_groupByKey2a_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_groupByKey2b_args__isset {
+  _IDataFrameService_groupByKey2b_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IDataFrameService_groupByKey2b_args__isset;
+
+class IDataFrameService_groupByKey2b_args {
+ public:
+
+  IDataFrameService_groupByKey2b_args(const IDataFrameService_groupByKey2b_args&);
+  IDataFrameService_groupByKey2b_args& operator=(const IDataFrameService_groupByKey2b_args&);
+  IDataFrameService_groupByKey2b_args() {
+  }
+
+  virtual ~IDataFrameService_groupByKey2b_args() noexcept;
+  IDataFrameId id;
+   ::ignis::rpc::ISource src;
+
+  _IDataFrameService_groupByKey2b_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_groupByKey2b_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_groupByKey2b_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_groupByKey2b_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_groupByKey2b_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_groupByKey2b_pargs() noexcept;
+  const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_groupByKey2b_result__isset {
+  _IDataFrameService_groupByKey2b_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_groupByKey2b_result__isset;
+
+class IDataFrameService_groupByKey2b_result {
+ public:
+
+  IDataFrameService_groupByKey2b_result(const IDataFrameService_groupByKey2b_result&);
+  IDataFrameService_groupByKey2b_result& operator=(const IDataFrameService_groupByKey2b_result&);
+  IDataFrameService_groupByKey2b_result() {
+  }
+
+  virtual ~IDataFrameService_groupByKey2b_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_groupByKey2b_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_groupByKey2b_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_groupByKey2b_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_groupByKey2b_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_groupByKey2b_presult__isset {
+  _IDataFrameService_groupByKey2b_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_groupByKey2b_presult__isset;
+
+class IDataFrameService_groupByKey2b_presult {
+ public:
+
+
+  virtual ~IDataFrameService_groupByKey2b_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_groupByKey2b_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_groupByKey3_args__isset {
+  _IDataFrameService_groupByKey3_args__isset() : id(false), numPartitions(false), src(false) {}
+  bool id :1;
+  bool numPartitions :1;
+  bool src :1;
+} _IDataFrameService_groupByKey3_args__isset;
+
+class IDataFrameService_groupByKey3_args {
+ public:
+
+  IDataFrameService_groupByKey3_args(const IDataFrameService_groupByKey3_args&);
+  IDataFrameService_groupByKey3_args& operator=(const IDataFrameService_groupByKey3_args&);
+  IDataFrameService_groupByKey3_args() : numPartitions(0) {
+  }
+
+  virtual ~IDataFrameService_groupByKey3_args() noexcept;
+  IDataFrameId id;
+  int64_t numPartitions;
+   ::ignis::rpc::ISource src;
+
+  _IDataFrameService_groupByKey3_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_groupByKey3_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_groupByKey3_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_groupByKey3_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_groupByKey3_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_groupByKey3_pargs() noexcept;
+  const IDataFrameId* id;
+  const int64_t* numPartitions;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_groupByKey3_result__isset {
+  _IDataFrameService_groupByKey3_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_groupByKey3_result__isset;
+
+class IDataFrameService_groupByKey3_result {
+ public:
+
+  IDataFrameService_groupByKey3_result(const IDataFrameService_groupByKey3_result&);
+  IDataFrameService_groupByKey3_result& operator=(const IDataFrameService_groupByKey3_result&);
+  IDataFrameService_groupByKey3_result() {
+  }
+
+  virtual ~IDataFrameService_groupByKey3_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_groupByKey3_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_groupByKey3_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_groupByKey3_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_groupByKey3_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_groupByKey3_presult__isset {
+  _IDataFrameService_groupByKey3_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_groupByKey3_presult__isset;
+
+class IDataFrameService_groupByKey3_presult {
+ public:
+
+
+  virtual ~IDataFrameService_groupByKey3_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_groupByKey3_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -8766,9 +9019,15 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void groupByKey(IDataFrameId& _return, const IDataFrameId& id);
   void send_groupByKey(const IDataFrameId& id);
   void recv_groupByKey(IDataFrameId& _return);
-  void groupByKey2(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  void send_groupByKey2(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_groupByKey2(IDataFrameId& _return);
+  void groupByKey2a(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  void send_groupByKey2a(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_groupByKey2a(IDataFrameId& _return);
+  void groupByKey2b(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void send_groupByKey2b(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_groupByKey2b(IDataFrameId& _return);
+  void groupByKey3(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  void send_groupByKey3(const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  void recv_groupByKey3(IDataFrameId& _return);
   void reduceByKey(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool localReduce);
   void send_reduceByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool localReduce);
   void recv_reduceByKey(IDataFrameId& _return);
@@ -8884,7 +9143,9 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_flatMapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_groupByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_groupByKey2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_groupByKey2a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_groupByKey2b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_groupByKey3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduceByKey4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_aggregateByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -8954,7 +9215,9 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["flatMapValues"] = &IDataFrameServiceProcessor::process_flatMapValues;
     processMap_["mapValues"] = &IDataFrameServiceProcessor::process_mapValues;
     processMap_["groupByKey"] = &IDataFrameServiceProcessor::process_groupByKey;
-    processMap_["groupByKey2"] = &IDataFrameServiceProcessor::process_groupByKey2;
+    processMap_["groupByKey2a"] = &IDataFrameServiceProcessor::process_groupByKey2a;
+    processMap_["groupByKey2b"] = &IDataFrameServiceProcessor::process_groupByKey2b;
+    processMap_["groupByKey3"] = &IDataFrameServiceProcessor::process_groupByKey3;
     processMap_["reduceByKey"] = &IDataFrameServiceProcessor::process_reduceByKey;
     processMap_["reduceByKey4"] = &IDataFrameServiceProcessor::process_reduceByKey4;
     processMap_["aggregateByKey"] = &IDataFrameServiceProcessor::process_aggregateByKey;
@@ -9461,13 +9724,33 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  void groupByKey2(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
+  void groupByKey2a(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->groupByKey2(_return, id, numPartitions);
+      ifaces_[i]->groupByKey2a(_return, id, numPartitions);
     }
-    ifaces_[i]->groupByKey2(_return, id, numPartitions);
+    ifaces_[i]->groupByKey2a(_return, id, numPartitions);
+    return;
+  }
+
+  void groupByKey2b(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->groupByKey2b(_return, id, src);
+    }
+    ifaces_[i]->groupByKey2b(_return, id, src);
+    return;
+  }
+
+  void groupByKey3(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->groupByKey3(_return, id, numPartitions, src);
+    }
+    ifaces_[i]->groupByKey3(_return, id, numPartitions, src);
     return;
   }
 
@@ -9816,9 +10099,15 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void groupByKey(IDataFrameId& _return, const IDataFrameId& id);
   int32_t send_groupByKey(const IDataFrameId& id);
   void recv_groupByKey(IDataFrameId& _return, const int32_t seqid);
-  void groupByKey2(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  int32_t send_groupByKey2(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_groupByKey2(IDataFrameId& _return, const int32_t seqid);
+  void groupByKey2a(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  int32_t send_groupByKey2a(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_groupByKey2a(IDataFrameId& _return, const int32_t seqid);
+  void groupByKey2b(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_groupByKey2b(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_groupByKey2b(IDataFrameId& _return, const int32_t seqid);
+  void groupByKey3(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  int32_t send_groupByKey3(const IDataFrameId& id, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
+  void recv_groupByKey3(IDataFrameId& _return, const int32_t seqid);
   void reduceByKey(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool localReduce);
   int32_t send_reduceByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool localReduce);
   void recv_reduceByKey(IDataFrameId& _return, const int32_t seqid);

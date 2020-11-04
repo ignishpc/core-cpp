@@ -353,7 +353,23 @@ IDataFrameId IAbstractDataFrame::groupByKeyAbs() {
 IDataFrameId IAbstractDataFrame::groupByKeyAbs(int64_t numPartitions) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getDataFrameService().groupByKey2(_return, id, numPartitions);
+        Ignis::clientPool->getClient()->getDataFrameService().groupByKey2a(_return, id, numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IAbstractDataFrame::groupByKeyAbs(const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().groupByKey2b(_return, id, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IAbstractDataFrame::groupByKeyAbs(int64_t numPartitions, const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().groupByKey3(_return, id, numPartitions, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
@@ -468,7 +484,7 @@ int64_t IAbstractDataFrame::keysAbs(const rpc::ISource &tp) {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-int64_t IAbstractDataFrame::valueAbs(const rpc::ISource &tp) {
+int64_t IAbstractDataFrame::valuesAbs(const rpc::ISource &tp) {
     try {
         return Ignis::clientPool->getClient()->getDataFrameService().keys(id, tp);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
