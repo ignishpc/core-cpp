@@ -15,9 +15,7 @@ namespace ignis {
                 public:
                     IMathModule(std::shared_ptr<IExecutorData> &executorData);
 
-                    void sample(const bool withReplacement, const double fraction, const int32_t seed) override;
-
-                    void takeSample(const bool withReplacement, const int64_t num, const int32_t seed) override;
+                    void sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed) override;
 
                     int64_t count() override;
 

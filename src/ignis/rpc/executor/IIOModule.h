@@ -24,6 +24,7 @@ class IIOModuleIf {
   virtual ~IIOModuleIf() {}
   virtual void loadClass(const  ::ignis::rpc::ISource& src) = 0;
   virtual int64_t partitionCount() = 0;
+  virtual void countByPartition(std::vector<int64_t> & _return) = 0;
   virtual int64_t partitionApproxSize() = 0;
   virtual void textFile(const std::string& path) = 0;
   virtual void textFile2(const std::string& path, const int64_t minPartitions) = 0;
@@ -70,6 +71,9 @@ class IIOModuleNull : virtual public IIOModuleIf {
   int64_t partitionCount() {
     int64_t _return = 0;
     return _return;
+  }
+  void countByPartition(std::vector<int64_t> & /* _return */) {
+    return;
   }
   int64_t partitionApproxSize() {
     int64_t _return = 0;
@@ -306,6 +310,106 @@ class IIOModule_partitionCount_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IIOModule_partitionCount_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+
+class IIOModule_countByPartition_args {
+ public:
+
+  IIOModule_countByPartition_args(const IIOModule_countByPartition_args&);
+  IIOModule_countByPartition_args& operator=(const IIOModule_countByPartition_args&);
+  IIOModule_countByPartition_args() {
+  }
+
+  virtual ~IIOModule_countByPartition_args() noexcept;
+
+  bool operator == (const IIOModule_countByPartition_args & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IIOModule_countByPartition_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_countByPartition_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_countByPartition_pargs {
+ public:
+
+
+  virtual ~IIOModule_countByPartition_pargs() noexcept;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_countByPartition_result__isset {
+  _IIOModule_countByPartition_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IIOModule_countByPartition_result__isset;
+
+class IIOModule_countByPartition_result {
+ public:
+
+  IIOModule_countByPartition_result(const IIOModule_countByPartition_result&);
+  IIOModule_countByPartition_result& operator=(const IIOModule_countByPartition_result&);
+  IIOModule_countByPartition_result() {
+  }
+
+  virtual ~IIOModule_countByPartition_result() noexcept;
+  std::vector<int64_t>  success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_countByPartition_result__isset __isset;
+
+  void __set_success(const std::vector<int64_t> & val);
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_countByPartition_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_countByPartition_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_countByPartition_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_countByPartition_presult__isset {
+  _IIOModule_countByPartition_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IIOModule_countByPartition_presult__isset;
+
+class IIOModule_countByPartition_presult {
+ public:
+
+
+  virtual ~IIOModule_countByPartition_presult() noexcept;
+  std::vector<int64_t> * success;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_countByPartition_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1615,6 +1719,9 @@ class IIOModuleClient : virtual public IIOModuleIf {
   int64_t partitionCount();
   void send_partitionCount();
   int64_t recv_partitionCount();
+  void countByPartition(std::vector<int64_t> & _return);
+  void send_countByPartition();
+  void recv_countByPartition(std::vector<int64_t> & _return);
   int64_t partitionApproxSize();
   void send_partitionApproxSize();
   int64_t recv_partitionApproxSize();
@@ -1665,6 +1772,7 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   ProcessMap processMap_;
   void process_loadClass(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_countByPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionApproxSize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1681,6 +1789,7 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     iface_(iface) {
     processMap_["loadClass"] = &IIOModuleProcessor::process_loadClass;
     processMap_["partitionCount"] = &IIOModuleProcessor::process_partitionCount;
+    processMap_["countByPartition"] = &IIOModuleProcessor::process_countByPartition;
     processMap_["partitionApproxSize"] = &IIOModuleProcessor::process_partitionApproxSize;
     processMap_["textFile"] = &IIOModuleProcessor::process_textFile;
     processMap_["textFile2"] = &IIOModuleProcessor::process_textFile2;
@@ -1736,6 +1845,16 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
       ifaces_[i]->partitionCount();
     }
     return ifaces_[i]->partitionCount();
+  }
+
+  void countByPartition(std::vector<int64_t> & _return) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->countByPartition(_return);
+    }
+    ifaces_[i]->countByPartition(_return);
+    return;
   }
 
   int64_t partitionApproxSize() {
@@ -1875,6 +1994,9 @@ class IIOModuleConcurrentClient : virtual public IIOModuleIf {
   int64_t partitionCount();
   int32_t send_partitionCount();
   int64_t recv_partitionCount(const int32_t seqid);
+  void countByPartition(std::vector<int64_t> & _return);
+  int32_t send_countByPartition();
+  void recv_countByPartition(std::vector<int64_t> & _return, const int32_t seqid);
   int64_t partitionApproxSize();
   int32_t send_partitionApproxSize();
   int64_t recv_partitionApproxSize(const int32_t seqid);

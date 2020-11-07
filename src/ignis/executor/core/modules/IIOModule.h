@@ -18,6 +18,8 @@ namespace ignis {
 
                     int64_t partitionCount() override;
 
+                    void countByPartition(std::vector<int64_t> & _return) override;
+
                     int64_t partitionApproxSize() override;
 
                     void textFile(const std::string &path) override;

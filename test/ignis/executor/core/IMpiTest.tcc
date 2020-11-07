@@ -40,7 +40,7 @@ void IMpiTestClass<Ps>::setUp() {
     props["ignis.transport.compression"] = "6";
     props["ignis.partition.compression"] = "6";
     props["ignis.partition.serialization"] = "native";
-    props["ignis.job.directory"] = ".";
+    props["ignis.executor.directory"] = ".";
     props["ignis.partition.type"] = Ps::TYPE;
 }
 

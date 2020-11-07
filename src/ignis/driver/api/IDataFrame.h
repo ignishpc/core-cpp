@@ -6,6 +6,7 @@
 #include "Ignis.h"
 #include "ignis/rpc/ISource_types.h"
 #include "ignis/rpc/driver/IDataFrameService_types.h"
+#include <unordered_map>
 #include <vector>
 
 namespace ignis {
@@ -167,9 +168,9 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId sampleByKeyAbs(bool withReplacement, const ISource &fractions, int seed);
 
-                int64_t countByKey();
+                int64_t countByKeyAbs(const rpc::ISource &tp);
 
-                int64_t countByValue();
+                int64_t countByValueAbs(const rpc::ISource &tp);
             };
 
             class IWorker;
@@ -494,8 +495,25 @@ namespace ignis {
                     return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, fractions, seed));
                 }
 
-                using IAbstractDataFrame::countByKey;
-                using IAbstractDataFrame::countByValue;
+                std::unordered_map<Key, int64_t> countByKey() {
+                    auto tp = this->driverContext().template registerType<std::unordered_map<Key, int64_t>>();
+                    auto counts =
+                            this->driverContext().template collect<std::unordered_map<Key, int64_t>>(countByKeyAbs(tp));
+                    for (int64_t i = 1; i < counts.size(); i++) {
+                        counts[0].insert(counts[i].begin(), counts[i].end());
+                    }
+                    return counts[0];
+                }
+
+                std::unordered_map<Value, int64_t> countByValue() {
+                    auto tp = this->driverContext().template registerType<std::unordered_map<Value, int64_t>>();
+                    auto counts = this->driverContext().template collect<std::unordered_map<Value, int64_t>>(
+                            countByKeyAbs(tp));
+                    for (int64_t i = 1; i < counts.size(); i++) {
+                        counts[0].insert(counts[i].begin(), counts[i].end());
+                    }
+                    return counts[0];
+                }
 
             private:
                 friend IDataFrame<std::pair<Key, Value>>;

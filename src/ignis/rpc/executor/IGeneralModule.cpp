@@ -790,14 +790,6 @@ uint32_t IGeneralModule_mapPartitions_args::read(::apache::thrift::protocol::TPr
           xfer += iprot->skip(ftype);
         }
         break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->preservesPartitioning);
-          this->__isset.preservesPartitioning = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -819,10 +811,6 @@ uint32_t IGeneralModule_mapPartitions_args::write(::apache::thrift::protocol::TP
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("preservesPartitioning", ::apache::thrift::protocol::T_BOOL, 2);
-  xfer += oprot->writeBool(this->preservesPartitioning);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -840,10 +828,6 @@ uint32_t IGeneralModule_mapPartitions_pargs::write(::apache::thrift::protocol::T
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->src)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("preservesPartitioning", ::apache::thrift::protocol::T_BOOL, 2);
-  xfer += oprot->writeBool((*(this->preservesPartitioning)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -5259,20 +5243,19 @@ void IGeneralModuleClient::recv_keyBy()
   return;
 }
 
-void IGeneralModuleClient::mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IGeneralModuleClient::mapPartitions(const  ::ignis::rpc::ISource& src)
 {
-  send_mapPartitions(src, preservesPartitioning);
+  send_mapPartitions(src);
   recv_mapPartitions();
 }
 
-void IGeneralModuleClient::send_mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IGeneralModuleClient::send_mapPartitions(const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("mapPartitions", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralModule_mapPartitions_pargs args;
   args.src = &src;
-  args.preservesPartitioning = &preservesPartitioning;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -6723,7 +6706,7 @@ void IGeneralModuleProcessor::process_mapPartitions(int32_t seqid, ::apache::thr
 
   IGeneralModule_mapPartitions_result result;
   try {
-    iface_->mapPartitions(args.src, args.preservesPartitioning);
+    iface_->mapPartitions(args.src);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -8211,13 +8194,13 @@ void IGeneralModuleConcurrentClient::recv_keyBy(const int32_t seqid)
   } // end while(true)
 }
 
-void IGeneralModuleConcurrentClient::mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IGeneralModuleConcurrentClient::mapPartitions(const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_mapPartitions(src, preservesPartitioning);
+  int32_t seqid = send_mapPartitions(src);
   recv_mapPartitions(seqid);
 }
 
-int32_t IGeneralModuleConcurrentClient::send_mapPartitions(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+int32_t IGeneralModuleConcurrentClient::send_mapPartitions(const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -8225,7 +8208,6 @@ int32_t IGeneralModuleConcurrentClient::send_mapPartitions(const  ::ignis::rpc::
 
   IGeneralModule_mapPartitions_pargs args;
   args.src = &src;
-  args.preservesPartitioning = &preservesPartitioning;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

@@ -14,10 +14,7 @@ namespace ignis {
                         IMathImpl(std::shared_ptr<IExecutorData> &executorData);
 
                         template<typename Tp>
-                        void sample(const bool withReplacement, const double fraction, const int32_t seed);
-
-                        template<typename Tp>
-                        void takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
+                        void sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed);
 
                         template<typename Tp>
                         int64_t count();

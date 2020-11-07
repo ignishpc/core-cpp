@@ -12,7 +12,7 @@ IModuleTest::IModuleTest()
     props["ignis.transport.compression"] = "6";
     props["ignis.partition.compression"] = "6";
     props["ignis.partition.serialization"] = "native";
-    props["ignis.job.directory"] = "./";
+    props["ignis.executor.directory"] = "./";
 }
 
 ignis::rpc::ISource IModuleTest::newSource(const std::string &name) {

@@ -43,9 +43,21 @@ uint32_t IMathModule_sample_args::read(::apache::thrift::protocol::TProtocol* ip
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_DOUBLE) {
-          xfer += iprot->readDouble(this->fraction);
-          this->__isset.fraction = true;
+        if (ftype == ::apache::thrift::protocol::T_LIST) {
+          {
+            this->num.clear();
+            uint32_t _size0;
+            ::apache::thrift::protocol::TType _etype3;
+            xfer += iprot->readListBegin(_etype3, _size0);
+            this->num.resize(_size0);
+            uint32_t _i4;
+            for (_i4 = 0; _i4 < _size0; ++_i4)
+            {
+              xfer += iprot->readI64(this->num[_i4]);
+            }
+            xfer += iprot->readListEnd();
+          }
+          this->__isset.num = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -79,8 +91,16 @@ uint32_t IMathModule_sample_args::write(::apache::thrift::protocol::TProtocol* o
   xfer += oprot->writeBool(this->withReplacement);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("fraction", ::apache::thrift::protocol::T_DOUBLE, 2);
-  xfer += oprot->writeDouble(this->fraction);
+  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_LIST, 2);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>(this->num.size()));
+    std::vector<int64_t> ::const_iterator _iter5;
+    for (_iter5 = this->num.begin(); _iter5 != this->num.end(); ++_iter5)
+    {
+      xfer += oprot->writeI64((*_iter5));
+    }
+    xfer += oprot->writeListEnd();
+  }
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
@@ -106,8 +126,16 @@ uint32_t IMathModule_sample_pargs::write(::apache::thrift::protocol::TProtocol* 
   xfer += oprot->writeBool((*(this->withReplacement)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("fraction", ::apache::thrift::protocol::T_DOUBLE, 2);
-  xfer += oprot->writeDouble((*(this->fraction)));
+  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_LIST, 2);
+  {
+    xfer += oprot->writeListBegin(::apache::thrift::protocol::T_I64, static_cast<uint32_t>((*(this->num)).size()));
+    std::vector<int64_t> ::const_iterator _iter6;
+    for (_iter6 = (*(this->num)).begin(); _iter6 != (*(this->num)).end(); ++_iter6)
+    {
+      xfer += oprot->writeI64((*_iter6));
+    }
+    xfer += oprot->writeListEnd();
+  }
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
@@ -187,225 +215,6 @@ IMathModule_sample_presult::~IMathModule_sample_presult() noexcept {
 
 
 uint32_t IMathModule_sample_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-IMathModule_takeSample_args::~IMathModule_takeSample_args() noexcept {
-}
-
-
-uint32_t IMathModule_takeSample_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->withReplacement);
-          this->__isset.withReplacement = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->num);
-          this->__isset.num = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->seed);
-          this->__isset.seed = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IMathModule_takeSample_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IMathModule_takeSample_args");
-
-  xfer += oprot->writeFieldBegin("withReplacement", ::apache::thrift::protocol::T_BOOL, 1);
-  xfer += oprot->writeBool(this->withReplacement);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->num);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32(this->seed);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IMathModule_takeSample_pargs::~IMathModule_takeSample_pargs() noexcept {
-}
-
-
-uint32_t IMathModule_takeSample_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IMathModule_takeSample_pargs");
-
-  xfer += oprot->writeFieldBegin("withReplacement", ::apache::thrift::protocol::T_BOOL, 1);
-  xfer += oprot->writeBool((*(this->withReplacement)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("num", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->num)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32((*(this->seed)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IMathModule_takeSample_result::~IMathModule_takeSample_result() noexcept {
-}
-
-
-uint32_t IMathModule_takeSample_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IMathModule_takeSample_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IMathModule_takeSample_result");
-
-  if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IMathModule_takeSample_presult::~IMathModule_takeSample_presult() noexcept {
-}
-
-
-uint32_t IMathModule_takeSample_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1889,20 +1698,20 @@ uint32_t IMathModule_countByValue_presult::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-void IMathModuleClient::sample(const bool withReplacement, const double fraction, const int32_t seed)
+void IMathModuleClient::sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed)
 {
-  send_sample(withReplacement, fraction, seed);
+  send_sample(withReplacement, num, seed);
   recv_sample();
 }
 
-void IMathModuleClient::send_sample(const bool withReplacement, const double fraction, const int32_t seed)
+void IMathModuleClient::send_sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("sample", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IMathModule_sample_pargs args;
   args.withReplacement = &withReplacement;
-  args.fraction = &fraction;
+  args.num = &num;
   args.seed = &seed;
   args.write(oprot_);
 
@@ -1937,64 +1746,6 @@ void IMathModuleClient::recv_sample()
     iprot_->getTransport()->readEnd();
   }
   IMathModule_sample_presult result;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  return;
-}
-
-void IMathModuleClient::takeSample(const bool withReplacement, const int64_t num, const int32_t seed)
-{
-  send_takeSample(withReplacement, num, seed);
-  recv_takeSample();
-}
-
-void IMathModuleClient::send_takeSample(const bool withReplacement, const int64_t num, const int32_t seed)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("takeSample", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IMathModule_takeSample_pargs args;
-  args.withReplacement = &withReplacement;
-  args.num = &num;
-  args.seed = &seed;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IMathModuleClient::recv_takeSample()
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("takeSample") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IMathModule_takeSample_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -2497,7 +2248,7 @@ void IMathModuleProcessor::process_sample(int32_t seqid, ::apache::thrift::proto
 
   IMathModule_sample_result result;
   try {
-    iface_->sample(args.withReplacement, args.fraction, args.seed);
+    iface_->sample(args.withReplacement, args.num, args.seed);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -2527,62 +2278,6 @@ void IMathModuleProcessor::process_sample(int32_t seqid, ::apache::thrift::proto
 
   if (this->eventHandler_.get() != NULL) {
     this->eventHandler_->postWrite(ctx, "IMathModule.sample", bytes);
-  }
-}
-
-void IMathModuleProcessor::process_takeSample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = NULL;
-  if (this->eventHandler_.get() != NULL) {
-    ctx = this->eventHandler_->getContext("IMathModule.takeSample", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IMathModule.takeSample");
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preRead(ctx, "IMathModule.takeSample");
-  }
-
-  IMathModule_takeSample_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postRead(ctx, "IMathModule.takeSample", bytes);
-  }
-
-  IMathModule_takeSample_result result;
-  try {
-    iface_->takeSample(args.withReplacement, args.num, args.seed);
-  } catch ( ::ignis::rpc::IExecutorException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != NULL) {
-      this->eventHandler_->handlerError(ctx, "IMathModule.takeSample");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("takeSample", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->preWrite(ctx, "IMathModule.takeSample");
-  }
-
-  oprot->writeMessageBegin("takeSample", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != NULL) {
-    this->eventHandler_->postWrite(ctx, "IMathModule.takeSample", bytes);
   }
 }
 
@@ -3042,13 +2737,13 @@ void IMathModuleProcessor::process_countByValue(int32_t seqid, ::apache::thrift:
   return processor;
 }
 
-void IMathModuleConcurrentClient::sample(const bool withReplacement, const double fraction, const int32_t seed)
+void IMathModuleConcurrentClient::sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed)
 {
-  int32_t seqid = send_sample(withReplacement, fraction, seed);
+  int32_t seqid = send_sample(withReplacement, num, seed);
   recv_sample(seqid);
 }
 
-int32_t IMathModuleConcurrentClient::send_sample(const bool withReplacement, const double fraction, const int32_t seed)
+int32_t IMathModuleConcurrentClient::send_sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -3056,7 +2751,7 @@ int32_t IMathModuleConcurrentClient::send_sample(const bool withReplacement, con
 
   IMathModule_sample_pargs args;
   args.withReplacement = &withReplacement;
-  args.fraction = &fraction;
+  args.num = &num;
   args.seed = &seed;
   args.write(oprot_);
 
@@ -3107,90 +2802,6 @@ void IMathModuleConcurrentClient::recv_sample(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       IMathModule_sample_presult result;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      sentry.commit();
-      return;
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void IMathModuleConcurrentClient::takeSample(const bool withReplacement, const int64_t num, const int32_t seed)
-{
-  int32_t seqid = send_takeSample(withReplacement, num, seed);
-  recv_takeSample(seqid);
-}
-
-int32_t IMathModuleConcurrentClient::send_takeSample(const bool withReplacement, const int64_t num, const int32_t seed)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("takeSample", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IMathModule_takeSample_pargs args;
-  args.withReplacement = &withReplacement;
-  args.num = &num;
-  args.seed = &seed;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IMathModuleConcurrentClient::recv_takeSample(const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("takeSample") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IMathModule_takeSample_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

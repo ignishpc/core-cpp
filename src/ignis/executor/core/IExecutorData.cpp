@@ -23,7 +23,7 @@ int64_t IExecutorData::clearVariables() {
 }
 
 std::string IExecutorData::infoDirectory() {
-    std::string info = properties.JobDirectory() + "/info";
+    std::string info = properties.executorDirectory() + "/info";
     partition_tools.createDirectoryIfNotExists(info);
     return info;
 }

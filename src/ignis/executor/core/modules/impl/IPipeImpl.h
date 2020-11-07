@@ -26,7 +26,7 @@ namespace ignis {
                         void keyBy();
 
                         template<typename Function>
-                        void mapPartitions(bool preservesPartitioning);
+                        void mapPartitions();
 
                         template<typename Function>
                         void mapPartitionsWithIndex(bool preservesPartitioning);

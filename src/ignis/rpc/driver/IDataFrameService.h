@@ -96,8 +96,8 @@ class IDataFrameServiceIf {
   virtual int64_t keys(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) = 0;
   virtual int64_t values(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) = 0;
   virtual void sampleByKey(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed) = 0;
-  virtual int64_t countByKey(const IDataFrameId& id) = 0;
-  virtual int64_t countByValue(const IDataFrameId& id) = 0;
+  virtual int64_t countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) = 0;
+  virtual int64_t countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) = 0;
 };
 
 class IDataFrameServiceIfFactory {
@@ -349,11 +349,11 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void sampleByKey(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const bool /* withReplacement */, const  ::ignis::rpc::ISource& /* fractions */, const int32_t /* seed */) {
     return;
   }
-  int64_t countByKey(const IDataFrameId& /* id */) {
+  int64_t countByKey(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
-  int64_t countByValue(const IDataFrameId& /* id */) {
+  int64_t countByValue(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* tp */) {
     int64_t _return = 0;
     return _return;
   }
@@ -8624,8 +8624,9 @@ class IDataFrameService_sampleByKey_presult {
 };
 
 typedef struct _IDataFrameService_countByKey_args__isset {
-  _IDataFrameService_countByKey_args__isset() : id(false) {}
+  _IDataFrameService_countByKey_args__isset() : id(false), tp(false) {}
   bool id :1;
+  bool tp :1;
 } _IDataFrameService_countByKey_args__isset;
 
 class IDataFrameService_countByKey_args {
@@ -8638,14 +8639,19 @@ class IDataFrameService_countByKey_args {
 
   virtual ~IDataFrameService_countByKey_args() noexcept;
   IDataFrameId id;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_countByKey_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_countByKey_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -8667,6 +8673,7 @@ class IDataFrameService_countByKey_pargs {
 
   virtual ~IDataFrameService_countByKey_pargs() noexcept;
   const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -8736,8 +8743,9 @@ class IDataFrameService_countByKey_presult {
 };
 
 typedef struct _IDataFrameService_countByValue_args__isset {
-  _IDataFrameService_countByValue_args__isset() : id(false) {}
+  _IDataFrameService_countByValue_args__isset() : id(false), tp(false) {}
   bool id :1;
+  bool tp :1;
 } _IDataFrameService_countByValue_args__isset;
 
 class IDataFrameService_countByValue_args {
@@ -8750,14 +8758,19 @@ class IDataFrameService_countByValue_args {
 
   virtual ~IDataFrameService_countByValue_args() noexcept;
   IDataFrameId id;
+   ::ignis::rpc::ISource tp;
 
   _IDataFrameService_countByValue_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
+  void __set_tp(const  ::ignis::rpc::ISource& val);
+
   bool operator == (const IDataFrameService_countByValue_args & rhs) const
   {
     if (!(id == rhs.id))
+      return false;
+    if (!(tp == rhs.tp))
       return false;
     return true;
   }
@@ -8779,6 +8792,7 @@ class IDataFrameService_countByValue_pargs {
 
   virtual ~IDataFrameService_countByValue_pargs() noexcept;
   const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* tp;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -9073,11 +9087,11 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void sampleByKey(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
   void send_sampleByKey(const IDataFrameId& id, const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
   void recv_sampleByKey(IDataFrameId& _return);
-  int64_t countByKey(const IDataFrameId& id);
-  void send_countByKey(const IDataFrameId& id);
+  int64_t countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
+  void send_countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
   int64_t recv_countByKey();
-  int64_t countByValue(const IDataFrameId& id);
-  void send_countByValue(const IDataFrameId& id);
+  int64_t countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
+  void send_countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
   int64_t recv_countByValue();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -9902,22 +9916,22 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  int64_t countByKey(const IDataFrameId& id) {
+  int64_t countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->countByKey(id);
+      ifaces_[i]->countByKey(id, tp);
     }
-    return ifaces_[i]->countByKey(id);
+    return ifaces_[i]->countByKey(id, tp);
   }
 
-  int64_t countByValue(const IDataFrameId& id) {
+  int64_t countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->countByValue(id);
+      ifaces_[i]->countByValue(id, tp);
     }
-    return ifaces_[i]->countByValue(id);
+    return ifaces_[i]->countByValue(id, tp);
   }
 
 };
@@ -10153,11 +10167,11 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void sampleByKey(IDataFrameId& _return, const IDataFrameId& id, const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
   int32_t send_sampleByKey(const IDataFrameId& id, const bool withReplacement, const  ::ignis::rpc::ISource& fractions, const int32_t seed);
   void recv_sampleByKey(IDataFrameId& _return, const int32_t seqid);
-  int64_t countByKey(const IDataFrameId& id);
-  int32_t send_countByKey(const IDataFrameId& id);
+  int64_t countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
+  int32_t send_countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
   int64_t recv_countByKey(const int32_t seqid);
-  int64_t countByValue(const IDataFrameId& id);
-  int32_t send_countByValue(const IDataFrameId& id);
+  int64_t countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
+  int32_t send_countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp);
   int64_t recv_countByValue(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

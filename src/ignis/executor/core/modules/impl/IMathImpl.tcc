@@ -4,16 +4,55 @@
 #define IMathImplClass ignis::executor::core::modules::impl::IMathImpl
 
 template<typename Tp>
-void IMathImplClass::sample(const bool withReplacement, const double fraction, const int32_t seed) {
+void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_t> &num, const int32_t seed) {
     IGNIS_TRY()
-    //TODO
-    IGNIS_CATCH()
-}
+    auto input = executor_data->getPartitions<Tp>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>(input->partitions());
+    auto &context = executor_data->getContext();
 
-template<typename Tp>
-void IMathImplClass::takeSample(const bool withReplacement, const int64_t num, const int32_t seed) {
-    IGNIS_TRY()
-    //TODO
+    IGNIS_LOG(info) << "Math: sample " << input->partitions() << " partitions";
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto size = (*input)[p]->size();
+            auto part = (*input)[p];
+            if(!executor_data->getPartitionTools().isMemory(*part)){
+                auto aux = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
+                part->copyTo(*aux);
+                part = aux;
+            }
+            auto &men = executor_data->getPartitionTools().toMemory(*part);
+            if (withReplacement) {
+                for (size_t i = 0; i < num[p]; i++) {
+                    for (size_t j = 0; j < num[p]; j++) {
+                        double prob = ((double) num[p]) / (size - j);
+                        double random = ((double) rand() / (RAND_MAX));
+                        if (random < prob) {
+                            writer->write(men[j]);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                size_t picked = 0;
+                for (size_t i = 0; i < size; i++) {
+                    double prob = ((double) (num[p] - picked)) / (size - i);
+                    double random = ((double) rand() / (RAND_MAX));
+                    if (random < prob) {
+                        writer->write(men[i]);
+                        picked += 1;
+                    }
+                }
+            }
+        }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    executor_data->setPartitions(output);
     IGNIS_CATCH()
 }
 
@@ -85,7 +124,7 @@ void IMathImplClass::countByValue() {
     auto threads = executor_data->getContext().cores();
 
     std::unordered_map<typename Tp::second_type, int64_t> acum[threads];
-    IGNIS_LOG(info) << "Math: counting local keys " << input->partitions() << " partitions";
+    IGNIS_LOG(info) << "Math: counting local values " << input->partitions() << " partitions";
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
     {

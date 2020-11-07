@@ -192,7 +192,7 @@ void IPipeImplCLass::keyBy() {
 }
 
 template<typename Function>
-void IPipeImplCLass::mapPartitions(bool preservesPartitioning) {
+void IPipeImplCLass::mapPartitions() {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(

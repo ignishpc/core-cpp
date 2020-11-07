@@ -65,11 +65,8 @@ namespace ignis {
 
                     virtual void min(modules::impl::ISortImpl &impl) = 0;
 
-                    virtual void sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction,
-                                        int32_t seed) = 0;
-
-                    virtual void takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num,
-                                            int32_t seed) = 0;
+                    virtual void sample(modules::impl::IMathImpl &impl, bool withReplacement,
+                                        const std::vector<int64_t> &num, int32_t seed) = 0;
 
                     virtual int64_t partitionApproxSize(modules::impl::IIOImpl &impl) = 0;
 
@@ -178,14 +175,9 @@ namespace ignis {
 
                     virtual void min(modules::impl::ISortImpl &impl) { min_check<Tp>(impl, nullptr); }
 
-                    virtual void sample(modules::impl::IMathImpl &impl, bool withReplacement, double fraction,
-                                        int32_t seed) {
-                        impl.sample<Tp>(withReplacement, fraction, seed);
-                    }
-
-                    virtual void takeSample(modules::impl::IMathImpl &impl, bool withReplacement, int64_t num,
-                                            int32_t seed) {
-                        impl.takeSample<Tp>(withReplacement, num, seed);
+                    virtual void sample(modules::impl::IMathImpl &impl, bool withReplacement,
+                                        const std::vector<int64_t> &num, int32_t seed) {
+                        impl.sample<Tp>(withReplacement, num, seed);
                     }
 
                     virtual int64_t partitionApproxSize(modules::impl::IIOImpl &impl) {

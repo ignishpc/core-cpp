@@ -15631,6 +15631,14 @@ uint32_t IDataFrameService_countByKey_args::read(::apache::thrift::protocol::TPr
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -15652,6 +15660,10 @@ uint32_t IDataFrameService_countByKey_args::write(::apache::thrift::protocol::TP
   xfer += this->id.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -15669,6 +15681,10 @@ uint32_t IDataFrameService_countByKey_pargs::write(::apache::thrift::protocol::T
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -15838,6 +15854,14 @@ uint32_t IDataFrameService_countByValue_args::read(::apache::thrift::protocol::T
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->tp.read(iprot);
+          this->__isset.tp = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -15859,6 +15883,10 @@ uint32_t IDataFrameService_countByValue_args::write(::apache::thrift::protocol::
   xfer += this->id.write(oprot);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->tp.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -15876,6 +15904,10 @@ uint32_t IDataFrameService_countByValue_pargs::write(::apache::thrift::protocol:
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("tp", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->tp)).write(oprot);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -20168,19 +20200,20 @@ void IDataFrameServiceClient::recv_sampleByKey(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "sampleByKey failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::countByKey(const IDataFrameId& id)
+int64_t IDataFrameServiceClient::countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
-  send_countByKey(id);
+  send_countByKey(id, tp);
   return recv_countByKey();
 }
 
-void IDataFrameServiceClient::send_countByKey(const IDataFrameId& id)
+void IDataFrameServiceClient::send_countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("countByKey", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IDataFrameService_countByKey_pargs args;
   args.id = &id;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -20229,19 +20262,20 @@ int64_t IDataFrameServiceClient::recv_countByKey()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "countByKey failed: unknown result");
 }
 
-int64_t IDataFrameServiceClient::countByValue(const IDataFrameId& id)
+int64_t IDataFrameServiceClient::countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
-  send_countByValue(id);
+  send_countByValue(id, tp);
   return recv_countByValue();
 }
 
-void IDataFrameServiceClient::send_countByValue(const IDataFrameId& id)
+void IDataFrameServiceClient::send_countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("countByValue", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IDataFrameService_countByValue_pargs args;
   args.id = &id;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -24141,7 +24175,7 @@ void IDataFrameServiceProcessor::process_countByKey(int32_t seqid, ::apache::thr
 
   IDataFrameService_countByKey_result result;
   try {
-    result.success = iface_->countByKey(args.id);
+    result.success = iface_->countByKey(args.id, args.tp);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
@@ -24198,7 +24232,7 @@ void IDataFrameServiceProcessor::process_countByValue(int32_t seqid, ::apache::t
 
   IDataFrameService_countByValue_result result;
   try {
-    result.success = iface_->countByValue(args.id);
+    result.success = iface_->countByValue(args.id, args.tp);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
@@ -30195,13 +30229,13 @@ void IDataFrameServiceConcurrentClient::recv_sampleByKey(IDataFrameId& _return, 
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::countByKey(const IDataFrameId& id)
+int64_t IDataFrameServiceConcurrentClient::countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_countByKey(id);
+  int32_t seqid = send_countByKey(id, tp);
   return recv_countByKey(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_countByKey(const IDataFrameId& id)
+int32_t IDataFrameServiceConcurrentClient::send_countByKey(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -30209,6 +30243,7 @@ int32_t IDataFrameServiceConcurrentClient::send_countByKey(const IDataFrameId& i
 
   IDataFrameService_countByKey_pargs args;
   args.id = &id;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -30283,13 +30318,13 @@ int64_t IDataFrameServiceConcurrentClient::recv_countByKey(const int32_t seqid)
   } // end while(true)
 }
 
-int64_t IDataFrameServiceConcurrentClient::countByValue(const IDataFrameId& id)
+int64_t IDataFrameServiceConcurrentClient::countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
-  int32_t seqid = send_countByValue(id);
+  int32_t seqid = send_countByValue(id, tp);
   return recv_countByValue(seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_countByValue(const IDataFrameId& id)
+int32_t IDataFrameServiceConcurrentClient::send_countByValue(const IDataFrameId& id, const  ::ignis::rpc::ISource& tp)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -30297,6 +30332,7 @@ int32_t IDataFrameServiceConcurrentClient::send_countByValue(const IDataFrameId&
 
   IDataFrameService_countByValue_pargs args;
   args.id = &id;
+  args.tp = &tp;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

@@ -33,9 +33,9 @@ void IGeneralModule::keyBy(const ::ignis::rpc::ISource &src) {
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::mapPartitions(const rpc::ISource &function, bool preservesPartitioning) {
+void IGeneralModule::mapPartitions(const rpc::ISource &function) {
     IGNIS_RPC_TRY()
-    executor_data->loadLibrary(function)->general->mapPartitions(pipe_impl, preservesPartitioning);
+    executor_data->loadLibrary(function)->general->mapPartitions(pipe_impl);
     IGNIS_RPC_CATCH()
 }
 

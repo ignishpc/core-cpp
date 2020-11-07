@@ -24,7 +24,7 @@ namespace ignis {
 
                     void keyBy(const ::ignis::rpc::ISource &src) override;
 
-                    void mapPartitions(const rpc::ISource &function, bool preservesPartitioning) override;
+                    void mapPartitions(const rpc::ISource &function) override;
 
                     void mapPartitionsWithIndex(const rpc::ISource &function, bool preservesPartitioning) override;
 

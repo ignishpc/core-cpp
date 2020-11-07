@@ -22,8 +22,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IMathModuleIf {
  public:
   virtual ~IMathModuleIf() {}
-  virtual void sample(const bool withReplacement, const double fraction, const int32_t seed) = 0;
-  virtual void takeSample(const bool withReplacement, const int64_t num, const int32_t seed) = 0;
+  virtual void sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed) = 0;
   virtual int64_t count() = 0;
   virtual void max() = 0;
   virtual void min() = 0;
@@ -61,10 +60,7 @@ class IMathModuleIfSingletonFactory : virtual public IMathModuleIfFactory {
 class IMathModuleNull : virtual public IMathModuleIf {
  public:
   virtual ~IMathModuleNull() {}
-  void sample(const bool /* withReplacement */, const double /* fraction */, const int32_t /* seed */) {
-    return;
-  }
-  void takeSample(const bool /* withReplacement */, const int64_t /* num */, const int32_t /* seed */) {
+  void sample(const bool /* withReplacement */, const std::vector<int64_t> & /* num */, const int32_t /* seed */) {
     return;
   }
   int64_t count() {
@@ -95,9 +91,9 @@ class IMathModuleNull : virtual public IMathModuleIf {
 };
 
 typedef struct _IMathModule_sample_args__isset {
-  _IMathModule_sample_args__isset() : withReplacement(false), fraction(false), seed(false) {}
+  _IMathModule_sample_args__isset() : withReplacement(false), num(false), seed(false) {}
   bool withReplacement :1;
-  bool fraction :1;
+  bool num :1;
   bool seed :1;
 } _IMathModule_sample_args__isset;
 
@@ -106,19 +102,19 @@ class IMathModule_sample_args {
 
   IMathModule_sample_args(const IMathModule_sample_args&);
   IMathModule_sample_args& operator=(const IMathModule_sample_args&);
-  IMathModule_sample_args() : withReplacement(0), fraction(0), seed(0) {
+  IMathModule_sample_args() : withReplacement(0), seed(0) {
   }
 
   virtual ~IMathModule_sample_args() noexcept;
   bool withReplacement;
-  double fraction;
+  std::vector<int64_t>  num;
   int32_t seed;
 
   _IMathModule_sample_args__isset __isset;
 
   void __set_withReplacement(const bool val);
 
-  void __set_fraction(const double val);
+  void __set_num(const std::vector<int64_t> & val);
 
   void __set_seed(const int32_t val);
 
@@ -126,7 +122,7 @@ class IMathModule_sample_args {
   {
     if (!(withReplacement == rhs.withReplacement))
       return false;
-    if (!(fraction == rhs.fraction))
+    if (!(num == rhs.num))
       return false;
     if (!(seed == rhs.seed))
       return false;
@@ -150,7 +146,7 @@ class IMathModule_sample_pargs {
 
   virtual ~IMathModule_sample_pargs() noexcept;
   const bool* withReplacement;
-  const double* fraction;
+  const std::vector<int64_t> * num;
   const int32_t* seed;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -207,124 +203,6 @@ class IMathModule_sample_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IMathModule_sample_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _IMathModule_takeSample_args__isset {
-  _IMathModule_takeSample_args__isset() : withReplacement(false), num(false), seed(false) {}
-  bool withReplacement :1;
-  bool num :1;
-  bool seed :1;
-} _IMathModule_takeSample_args__isset;
-
-class IMathModule_takeSample_args {
- public:
-
-  IMathModule_takeSample_args(const IMathModule_takeSample_args&);
-  IMathModule_takeSample_args& operator=(const IMathModule_takeSample_args&);
-  IMathModule_takeSample_args() : withReplacement(0), num(0), seed(0) {
-  }
-
-  virtual ~IMathModule_takeSample_args() noexcept;
-  bool withReplacement;
-  int64_t num;
-  int32_t seed;
-
-  _IMathModule_takeSample_args__isset __isset;
-
-  void __set_withReplacement(const bool val);
-
-  void __set_num(const int64_t val);
-
-  void __set_seed(const int32_t val);
-
-  bool operator == (const IMathModule_takeSample_args & rhs) const
-  {
-    if (!(withReplacement == rhs.withReplacement))
-      return false;
-    if (!(num == rhs.num))
-      return false;
-    if (!(seed == rhs.seed))
-      return false;
-    return true;
-  }
-  bool operator != (const IMathModule_takeSample_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IMathModule_takeSample_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IMathModule_takeSample_pargs {
- public:
-
-
-  virtual ~IMathModule_takeSample_pargs() noexcept;
-  const bool* withReplacement;
-  const int64_t* num;
-  const int32_t* seed;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IMathModule_takeSample_result__isset {
-  _IMathModule_takeSample_result__isset() : ex(false) {}
-  bool ex :1;
-} _IMathModule_takeSample_result__isset;
-
-class IMathModule_takeSample_result {
- public:
-
-  IMathModule_takeSample_result(const IMathModule_takeSample_result&);
-  IMathModule_takeSample_result& operator=(const IMathModule_takeSample_result&);
-  IMathModule_takeSample_result() {
-  }
-
-  virtual ~IMathModule_takeSample_result() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _IMathModule_takeSample_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
-
-  bool operator == (const IMathModule_takeSample_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IMathModule_takeSample_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IMathModule_takeSample_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IMathModule_takeSample_presult__isset {
-  _IMathModule_takeSample_presult__isset() : ex(false) {}
-  bool ex :1;
-} _IMathModule_takeSample_presult__isset;
-
-class IMathModule_takeSample_presult {
- public:
-
-
-  virtual ~IMathModule_takeSample_presult() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _IMathModule_takeSample_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1149,12 +1027,9 @@ class IMathModuleClient : virtual public IMathModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void sample(const bool withReplacement, const double fraction, const int32_t seed);
-  void send_sample(const bool withReplacement, const double fraction, const int32_t seed);
+  void sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed);
+  void send_sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed);
   void recv_sample();
-  void takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
-  void send_takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
-  void recv_takeSample();
   int64_t count();
   void send_count();
   int64_t recv_count();
@@ -1195,7 +1070,6 @@ class IMathModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_sample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_takeSample(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_count(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_max(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_min(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1208,7 +1082,6 @@ class IMathModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   IMathModuleProcessor(::std::shared_ptr<IMathModuleIf> iface) :
     iface_(iface) {
     processMap_["sample"] = &IMathModuleProcessor::process_sample;
-    processMap_["takeSample"] = &IMathModuleProcessor::process_takeSample;
     processMap_["count"] = &IMathModuleProcessor::process_count;
     processMap_["max"] = &IMathModuleProcessor::process_max;
     processMap_["min"] = &IMathModuleProcessor::process_min;
@@ -1245,22 +1118,13 @@ class IMathModuleMultiface : virtual public IMathModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void sample(const bool withReplacement, const double fraction, const int32_t seed) {
+  void sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->sample(withReplacement, fraction, seed);
+      ifaces_[i]->sample(withReplacement, num, seed);
     }
-    ifaces_[i]->sample(withReplacement, fraction, seed);
-  }
-
-  void takeSample(const bool withReplacement, const int64_t num, const int32_t seed) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->takeSample(withReplacement, num, seed);
-    }
-    ifaces_[i]->takeSample(withReplacement, num, seed);
+    ifaces_[i]->sample(withReplacement, num, seed);
   }
 
   int64_t count() {
@@ -1367,12 +1231,9 @@ class IMathModuleConcurrentClient : virtual public IMathModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void sample(const bool withReplacement, const double fraction, const int32_t seed);
-  int32_t send_sample(const bool withReplacement, const double fraction, const int32_t seed);
+  void sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed);
+  int32_t send_sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed);
   void recv_sample(const int32_t seqid);
-  void takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
-  int32_t send_takeSample(const bool withReplacement, const int64_t num, const int32_t seed);
-  void recv_takeSample(const int32_t seqid);
   int64_t count();
   int32_t send_count();
   int64_t recv_count(const int32_t seqid);

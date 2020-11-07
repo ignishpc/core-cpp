@@ -27,7 +27,7 @@ namespace ignis {
 
                     virtual void keyBy(modules::impl::IPipeImpl &impl) = 0;
 
-                    virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning) = 0;
+                    virtual void mapPartitions(modules::impl::IPipeImpl &impl) = 0;
 
                     virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) = 0;
 
@@ -54,8 +54,8 @@ namespace ignis {
 
                     virtual void keyBy(modules::impl::IPipeImpl &impl) { keyBy_check<Tp>(impl, nullptr); }
 
-                    virtual void mapPartitions(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
-                        mapPartitions_check<Tp>(impl, nullptr, nullptr, preservesPartitioning);
+                    virtual void mapPartitions(modules::impl::IPipeImpl &impl) {
+                        mapPartitions_check<Tp>(impl, nullptr, nullptr);
                     }
 
                     virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
@@ -141,11 +141,10 @@ namespace ignis {
                     template<typename Function>
                     void mapPartitions_check(modules::impl::IPipeImpl &impl,
                                              typename Function::_IFunction_type::_R_type::iterator *val,
-                                             typename Function::_IFunction_type::_T_type::_IReadIterator_type *val2,
-                                             bool preservesPartitioning) {
+                                             typename Function::_IFunction_type::_T_type::_IReadIterator_type *val2) {
                         impl.registerType(getType<typename Function::_IFunction_type::_R_type::value_type>());
                         impl.registerType(getType<typename Function::_IFunction_type::_T_type::value_type>());
-                        impl.mapPartitions<Function>(preservesPartitioning);
+                        impl.mapPartitions<Function>();
                     }
 
                     template<typename Function>

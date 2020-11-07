@@ -499,14 +499,14 @@ IDataFrameId IAbstractDataFrame::sampleByKeyAbs(bool withReplacement, const ISou
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-int64_t IAbstractDataFrame::countByKey() {
+int64_t IAbstractDataFrame::countByKeyAbs(const rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().countByKey(id);
+        return Ignis::clientPool->getClient()->getDataFrameService().countByKey(id, tp);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-int64_t IAbstractDataFrame::countByValue() {
+int64_t IAbstractDataFrame::countByValueAbs(const rpc::ISource &tp) {
     try {
-        return Ignis::clientPool->getClient()->getDataFrameService().countByKey(id);
+        return Ignis::clientPool->getClient()->getDataFrameService().countByKey(id, tp);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }

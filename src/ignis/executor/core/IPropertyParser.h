@@ -40,7 +40,9 @@ namespace ignis {
 
                 std::string jobName() { return getString("ignis.job.name"); }
 
-                std::string JobDirectory() { return getString("ignis.job.directory"); }
+                std::string jobDirectory() { return getString("ignis.job.directory"); }
+
+                std::string executorDirectory() { return getString("ignis.executor.directory"); }
 
                 //Auxiliary functions
 

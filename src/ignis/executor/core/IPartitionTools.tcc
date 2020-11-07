@@ -74,7 +74,7 @@ IPartitionToolsClass::newRawMemoryPartition(int64_t sz) {
 }
 
 std::string IPartitionToolsClass::diskPath(const std::string &name) {
-    auto path = properties.JobDirectory() + "/partitions";
+    auto path = properties.executorDirectory() + "/partitions";
     createDirectoryIfNotExists(path);
     if (name.empty()) {
         path.append("/partition");
