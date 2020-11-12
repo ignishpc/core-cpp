@@ -88,7 +88,7 @@ void IDiskPartitionClass<Tp>::rename(const std::string &new_path) {
     file->close();
     int error = std::rename(path.c_str(), new_path.c_str());
     if (error == 0) {
-        std::remove((path + ".header").c_str());
+        std::rename((path + ".header").c_str(), (new_path + ".header").c_str());
         path = new_path;
     }
     auto new_file = std::make_shared<transport::IFileTransport>(path, false, true);
