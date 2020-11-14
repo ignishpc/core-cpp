@@ -23,9 +23,9 @@ namespace ignis {
                 CPPUNIT_TEST(bcastTest);
                 CPPUNIT_TEST(sendRcvTest);
                 CPPUNIT_TEST(sendRcvGroupToMemoryTest);
-                //CPPUNIT_TEST(sendRcvGroupToRawMemoryTest);
-                //CPPUNIT_TEST(sendRcvGroupToDiskTest);
-                //CPPUNIT_TEST(sendRcvGroupToVoidTest);
+                CPPUNIT_TEST(sendRcvGroupToRawMemoryTest);
+                CPPUNIT_TEST(sendRcvGroupToDiskTest);
+                CPPUNIT_TEST(sendRcvGroupToVoidTest);
                 CPPUNIT_TEST(driverGatherTest);
                 CPPUNIT_TEST(driverScatterTest);
                 CPPUNIT_TEST(driverScatterVoidTest);

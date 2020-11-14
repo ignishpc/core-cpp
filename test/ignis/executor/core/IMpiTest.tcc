@@ -40,7 +40,7 @@ void IMpiTestClass<Ps>::setUp() {
     props["ignis.transport.compression"] = "6";
     props["ignis.partition.compression"] = "6";
     props["ignis.partition.serialization"] = "native";
-    props["ignis.executor.directory"] = ".";
+    props["ignis.executor.directory"] = boost::filesystem::current_path().string();
     props["ignis.partition.type"] = Ps::TYPE;
 }
 

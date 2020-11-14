@@ -47,8 +47,8 @@ size_t IRawMemoryPartitionClass<Tp>::bytes() {
     uint8_t *ptr;
     size_t sz;
     buffer->getBuffer(&ptr, &sz);
-    size_t n = sz - IRawMemoryPartitionClass<Tp>::HEADER + this->header_size;
-    return n > 0 ? n : 0;
+    if (sz == 0) return 0;
+    return sz - IRawMemoryPartitionClass<Tp>::HEADER + this->header_size;
 }
 
 template<typename Tp>

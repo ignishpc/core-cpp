@@ -63,6 +63,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
             auto rcv = partition_tools.copyDiskPartition<Tp>(path);
             std::swap(disk, *rcv);
         }
+        comm.Barrier();
     }
 }
 
@@ -373,6 +374,7 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
             disk.destroy = true;
             std::swap(disk, rcv);
         }
+        group.Barrier();
     }
 }
 
@@ -404,6 +406,7 @@ void IMpiClass::sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &p
         same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
         group.Send(&same_protocol, 1, MPI::BOOL, source, 0);
         group.Recv(&length, 1, MPI::INT, source, tag);
+        storage.resize(length);
         group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, 0);
         same_storage = part.type() == storage;
         group.Send(&same_storage, 1, MPI::BOOL, source, tag);
@@ -487,14 +490,15 @@ void IMpiClass::sendRecvImpl(const MPI::Intracomm &group, storage::IPartition<Tp
             group.Recv(&sz, 1, MPI::INT, source, tag);
             path.resize(sz);
             group.Recv(const_cast<char *>(path.c_str()), sz, MPI::BYTE, source, tag);
-            storage::IDiskPartition<Tp> rcv(path, properties.partitionCompression(), true, true);
+            auto rcv = partition_tools.copyDiskPartition<Tp>(path);
             if (disk.size() == 0) {
                 disk.destroy = true;
-                std::swap(disk, rcv);
+                std::swap(disk, *rcv);
             } else {
-                rcv.copyTo(disk);
+                rcv->copyTo(disk);
             }
         }
+        group.Barrier();
     }
 }
 
