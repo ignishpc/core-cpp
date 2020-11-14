@@ -393,21 +393,21 @@ void IMpiClass::sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &p
         int8_t protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
         std::string storage = part.type();
         int length = storage.length();
-        group.Send(&protocol, 1, MPI::BYTE, dest, 0);
-        group.Recv(&same_protocol, 1, MPI::BOOL, dest, 0);
+        group.Send(&protocol, 1, MPI::BYTE, dest, tag);
+        group.Recv(&same_protocol, 1, MPI::BOOL, dest, tag);
         group.Send(&length, 1, MPI::INT, dest, tag);
-        group.Send(const_cast<char *>(storage.c_str()), length, MPI::BYTE, dest, 0);
+        group.Send(const_cast<char *>(storage.c_str()), length, MPI::BYTE, dest, tag);
         group.Recv(&same_storage, 1, MPI::BOOL, dest, tag);
     } else {
         int8_t protocol;
         std::string storage;
         int length;
-        group.Recv(&protocol, 1, MPI::BYTE, source, 0);
+        group.Recv(&protocol, 1, MPI::BYTE, source, tag);
         same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
-        group.Send(&same_protocol, 1, MPI::BOOL, source, 0);
+        group.Send(&same_protocol, 1, MPI::BOOL, source, tag);
         group.Recv(&length, 1, MPI::INT, source, tag);
         storage.resize(length);
-        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, 0);
+        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, tag);
         same_storage = part.type() == storage;
         group.Send(&same_storage, 1, MPI::BOOL, source, tag);
     }
