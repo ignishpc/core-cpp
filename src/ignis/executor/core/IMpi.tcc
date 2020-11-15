@@ -324,6 +324,13 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
     } else if (part.type() == storage::IRawMemoryPartition<Tp>::TYPE) {
         auto &raw = partition_tools.toRawMemory(part);
         raw.sync();
+        raw.writeHeader();
+        if (!same_protocol) {//Headers for dynamic languages
+            auto HEADER = storage::IRawMemoryPartition<Tp>::HEADER;
+            group.Gather(rank == root ? MPI::IN_PLACE : (raw.begin(false) - HEADER), HEADER, MPI::BYTE,
+                         (raw.begin(false) - HEADER), HEADER, MPI::BYTE, root);
+            raw.writeHeader();//C++ ignore and write his header
+        }
         std::pair<int, int> sz(raw.size(), raw.end() - raw.begin(false));
         std::vector<std::pair<int, int>> elems_szv;
         std::vector<int> szv;
@@ -407,7 +414,7 @@ void IMpiClass::sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &p
         group.Send(&same_protocol, 1, MPI::BOOL, source, tag);
         group.Recv(&length, 1, MPI::INT, source, tag);
         storage.resize(length);
-        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, tag);
+        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, source, tag);
         same_storage = part.type() == storage;
         group.Send(&same_storage, 1, MPI::BOOL, source, tag);
     }
@@ -467,16 +474,26 @@ void IMpiClass::sendRecvImpl(const MPI::Intracomm &group, storage::IPartition<Tp
         }
     } else if (part.type() == storage::IRawMemoryPartition<Tp>::TYPE) {
         auto &raw = reinterpret_cast<storage::IRawMemoryPartition<Tp> &>(part);
+        auto HEADER = storage::IRawMemoryPartition<Tp>::HEADER;
         raw.sync();
-        std::pair<int, int> sz(raw.size(), (int) (raw.end() - raw.begin(false)));
+        raw.writeHeader();
+        std::pair<int, int> sz(raw.size(), (int) (raw.end() - raw.begin(false) + HEADER));
         if (id == source) {
             group.Send(&sz, 2, MPI::INT, dest, tag);
-            group.Send(raw.begin(false), sz.second, MPI::BYTE, dest, tag);
+            group.Send(raw.begin(false) - HEADER, sz.second, MPI::BYTE, dest, tag);
         } else {
-            auto init = sz;
             group.Recv(&sz, 2, MPI::INT, source, tag);
-            raw.resize(init.first + sz.first, init.second + sz.second);
-            group.Recv(raw.begin(false) + init.first, sz.second, MPI::BYTE, source, tag);
+            if (part.empty()) {
+                raw.resize(sz.first, sz.second - HEADER);
+                group.Recv(raw.begin(false) - HEADER, sz.second, MPI::BYTE, source, tag);
+                raw.writeHeader();
+            } else {
+                storage::IRawMemoryPartition<Tp> tmp;
+                tmp.resize(sz.first, sz.second - HEADER);
+                group.Recv(raw.begin(false) - HEADER, sz.second, MPI::BYTE, source, tag);
+                tmp.writeHeader();
+                tmp.moveTo(raw);
+            }
         }
     } else {
         auto &disk = reinterpret_cast<storage::IDiskPartition<Tp> &>(part);
