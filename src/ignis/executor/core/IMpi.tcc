@@ -325,12 +325,12 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
         raw.writeHeader();
         if (!same_protocol) {//Headers for dynamic languages
             auto HEADER = storage::IRawMemoryPartition<Tp>::HEADER;
+            transport::IMemoryBuffer buffer(HEADER * group.Get_size());
             std::vector<int> hsz;
             if (rank == root) { hsz.resize(executors, raw.header_size); }
             group.Gather(&raw.header_size, 1, MPI::INT, &hsz[0], 1, MPI::INT, root);
-            group.Gather(rank == root ? MPI::IN_PLACE : (raw.begin(false) - HEADER), HEADER, MPI::BYTE,
-                         (raw.begin(false) - HEADER), HEADER, MPI::BYTE, root);
-            raw.writeHeader();//C++ ignore and write his header
+            group.Gather(raw.begin(false) - HEADER, HEADER, MPI::BYTE, buffer.getWritePtr(0), HEADER, MPI::BYTE, root);
+            //C++ ignore headers
         }
         std::pair<int, int> sz(raw.size(), raw.end() - raw.begin(false));
         std::vector<std::pair<int, int>> elems_szv;
