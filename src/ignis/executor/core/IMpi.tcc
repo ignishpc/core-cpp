@@ -102,7 +102,6 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
     }
 
     if (driver) {
-        int length;
         group.Recv(&same_protocol, 1, MPI::BOOL, 1, 0);
     } else {
         same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
@@ -150,18 +149,17 @@ void IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGr
     std::vector<int> displs;
     auto buffer = std::make_shared<transport::IMemoryBuffer>();
 
+    int8_t protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
+    group.Bcast(&protocol, 1, MPI::BYTE, 0);
+
     if (driver) {
         auto &men = reinterpret_cast<storage::IMemoryPartition<Tp> &>(*part_group[0]);
         src = (uint8_t *) &men[0];
         sz = men.size();
-        int8_t protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
-        group.Send(&protocol, 1, MPI::BYTE, 1, 0);
         group.Recv(&same_protocol, 1, MPI::BOOL, 1, 0);
-    } else if (exec0) {
-        int8_t protocol;
-        group.Recv(&protocol, 1, MPI::BYTE, 0, 0);
+    } else {
         same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
-        group.Send(&same_protocol, 1, MPI::BOOL, 0, 0);
+        if (exec0) { group.Send(&same_protocol, 1, MPI::BOOL, 0, 0); }
     }
 
     IGNIS_LOG(info) << "Comm: driverScatter partitions: " << partitions;
@@ -293,7 +291,7 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
             int sz = 0;
             std::vector<int> szv;
             std::vector<int> displs;
-            if (!rank == root) {
+            if (rank != root) {
                 part.write((std::shared_ptr<transport::ITransport> &) buffer, properties.msgCompression());
                 sz = buffer->writeEnd();
                 buffer->resetBuffer();
@@ -310,7 +308,7 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
                 auto ptr = buffer->getWritePtr(sz);
                 storage::IMemoryPartition<Tp> rcv;
                 for (int i = 0; i < executors; i++) {
-                    if (i != root) {
+                    if (i != rank) {
                         auto view = std::make_shared<transport::IMemoryBuffer>(ptr + displs[i], szv[i]);
                         rcv.read((std::shared_ptr<transport::ITransport> &) view);
                     } else {
@@ -327,6 +325,9 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
         raw.writeHeader();
         if (!same_protocol) {//Headers for dynamic languages
             auto HEADER = storage::IRawMemoryPartition<Tp>::HEADER;
+            std::vector<int> hsz;
+            if (rank == root) { hsz.resize(executors, raw.header_size); }
+            group.Gather(&raw.header_size, 1, MPI::INT, &hsz[0], 1, MPI::INT, root);
             group.Gather(rank == root ? MPI::IN_PLACE : (raw.begin(false) - HEADER), HEADER, MPI::BYTE,
                          (raw.begin(false) - HEADER), HEADER, MPI::BYTE, root);
             raw.writeHeader();//C++ ignore and write his header
@@ -477,6 +478,13 @@ void IMpiClass::sendRecvImpl(const MPI::Intracomm &group, storage::IPartition<Tp
         auto HEADER = storage::IRawMemoryPartition<Tp>::HEADER;
         raw.sync();
         raw.writeHeader();
+        if (!same_protocol) {//Headers for dynamic languages
+            if (id == source) {
+                group.Send(&raw.header_size, 1, MPI::INT, dest, tag);
+            } else {
+                group.Recv(&raw.header_size, 1, MPI::INT, source, tag);
+            }
+        }
         std::pair<int, int> sz(raw.size(), (int) (raw.end() - raw.begin(false) + HEADER));
         if (id == source) {
             group.Send(&sz, 2, MPI::INT, dest, tag);
@@ -503,11 +511,13 @@ void IMpiClass::sendRecvImpl(const MPI::Intracomm &group, storage::IPartition<Tp
         if (id == source) {
             group.Send(&sz, 1, MPI::INT, dest, tag);
             group.Send(const_cast<char *>(path.c_str()), sz, MPI::BYTE, dest, tag);
+            group.Recv(&sz, 1, MPI::INT, dest, tag);//wait copyDiskPartition
         } else {
             group.Recv(&sz, 1, MPI::INT, source, tag);
             path.resize(sz);
             group.Recv(const_cast<char *>(path.c_str()), sz, MPI::BYTE, source, tag);
             auto rcv = partition_tools.copyDiskPartition<Tp>(path);
+            group.Send(&sz, 1, MPI::INT, source, tag);
             if (disk.size() == 0) {
                 disk.destroy = true;
                 std::swap(disk, *rcv);
@@ -515,7 +525,6 @@ void IMpiClass::sendRecvImpl(const MPI::Intracomm &group, storage::IPartition<Tp
                 rcv->copyTo(disk);
             }
         }
-        group.Barrier();
     }
 }
 

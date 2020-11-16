@@ -50,18 +50,17 @@ void IMpi::driverScatterVoid(const MPI::Intracomm &group,
     auto execs = group.Get_size() - 1;
     bool same_protocol;
     int64_t sz = 0;
-    uint8_t *src = nullptr;
+    uint8_t *src;
     std::vector<int> partsv;
     std::vector<int> szv;
     std::vector<int> displs;
     auto buffer = std::make_shared<transport::IMemoryBuffer>();
 
-    if (exec0) {
-        int8_t protocol;
-        group.Recv(&protocol, 1, MPI::BYTE, 0, 0);
-        same_protocol = protocol == core::protocol::IObjectProtocol::IGNIS_PROTOCOL;
-        group.Send(&same_protocol, 1, MPI::BOOL, 0, 0);
-    }
+    int8_t protocol;
+    group.Bcast(&protocol, 1, MPI::BYTE, 0);
+
+    same_protocol = protocol == core::protocol::IObjectProtocol::IGNIS_PROTOCOL;
+    if (exec0) { group.Send(&same_protocol, 1, MPI::BOOL, 0, 0); }
 
     IGNIS_LOG(info) << "Comm: driverScatter(Void) partitions: " << partitions;
 
@@ -89,19 +88,17 @@ void IMpi::driverScatterVoid(const MPI::Intracomm &group,
 }
 
 void IMpi::recvVoid(const MPI::Intracomm &group, storage::IVoidPartition &part, int source, int tag) {
-    auto id = group.Get_rank();
     bool same_protocol;
     bool same_storage;
-    int dest = id;
 
     int8_t protocol;
     std::string storage;
     int length;
-    group.Recv(&protocol, 1, MPI::BYTE, source, 0);
+    group.Recv(&protocol, 1, MPI::BYTE, source, tag);
     same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
-    group.Send(&same_protocol, 1, MPI::BOOL, source, 0);
+    group.Send(&same_protocol, 1, MPI::BOOL, source, tag);
     group.Recv(&length, 1, MPI::INT, source, tag);
-    group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, 1, 0);
+    group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, source, tag);
     same_storage = part.type() == storage;
     group.Send(&same_storage, 1, MPI::BOOL, source, tag);
 

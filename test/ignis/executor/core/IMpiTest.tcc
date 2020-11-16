@@ -91,13 +91,13 @@ void IMpiTestClass<Ps>::sendRcvTest() {
     api::IVector<Tp> elems = IElements<Tp>().create(n, 0);
     auto part = create();
     if (rank % 2 == 0) {
-        if (rank + 1 == executor_data->mpi().executors()) { return; }
-        executor_data->mpi().recv(*part, rank + 1, 0);
-        api::IVector<Tp> result;
-        get(result, *part);
+        if (rank + 1 < executor_data->mpi().executors()) {
+            executor_data->mpi().recv(*part, rank + 1, 0);
+            api::IVector<Tp> result;
+            get(result, *part);
 
-        CPPUNIT_ASSERT(elems == result);
-
+            CPPUNIT_ASSERT(elems == result);
+        }
     } else {
         insert(elems, *part);
         executor_data->mpi().send(*part, rank - 1, 0);
@@ -111,14 +111,14 @@ void IMpiTestClass<Ps>::sendRcvGroupTest(const std::string &partitionType) {
     int rank = executor_data->mpi().rank();
     api::IVector<Tp> elems = IElements<Tp>().create(n, 0);
     if (rank % 2 == 0) {
-        if (rank + 1 == executor_data->mpi().executors()) { return; }
-        auto part = create(partitionType);
-        executor_data->mpi().recv(executor_data->mpi().native(), *part, rank + 1, 0);
-        api::IVector<Tp> result;
-        get(result, *part);
+        if (rank + 1 < executor_data->mpi().executors()) {
+            auto part = create(partitionType);
+            executor_data->mpi().recv(executor_data->mpi().native(), *part, rank + 1, 0);
+            api::IVector<Tp> result;
+            get(result, *part);
 
-        CPPUNIT_ASSERT(elems == result);
-
+            CPPUNIT_ASSERT(elems == result);
+        }
     } else {
         auto part = create();
         insert(elems, *part);
@@ -133,17 +133,17 @@ void IMpiTestClass<Ps>::sendRcvGroupToVoidTest() {
     int rank = executor_data->mpi().rank();
     api::IVector<Tp> elems = IElements<Tp>().create(n, 0);
     if (rank % 2 == 0) {
-        if (rank + 1 == executor_data->mpi().executors()) { return; }
-        auto part = std::make_shared<storage::IVoidPartition>();
-        executor_data->mpi().recvVoid(executor_data->mpi().native(), *part, rank + 1, 0);
-        auto men_part = std::make_shared<storage::IMemoryPartition<Tp>>();
-        auto trans = part->readTransport();
-        men_part->read(trans);
-        api::IVector<Tp> result;
-        get(result, *men_part);
+        if (rank + 1 < executor_data->mpi().executors()) {
+            auto part = std::make_shared<storage::IVoidPartition>();
+            executor_data->mpi().recvVoid(executor_data->mpi().native(), *part, rank + 1, 0);
+            auto men_part = std::make_shared<storage::IMemoryPartition<Tp>>();
+            auto trans = part->readTransport();
+            men_part->read(trans);
+            api::IVector<Tp> result;
+            get(result, *men_part);
 
-        CPPUNIT_ASSERT(elems == result);
-
+            CPPUNIT_ASSERT(elems == result);
+        }
     } else {
         auto part = create();
         insert(elems, *part);
@@ -191,7 +191,7 @@ void IMpiTestClass<Ps>::driverScatterTest() {
         part_group.add(part);
     }
 
-    executor_data->mpi().driverScatter(executor_data->mpi().native(), part_group, (size - 1) * 2 + 1);
+    executor_data->mpi().driverScatter(executor_data->mpi().native(), part_group, (size - 1) * 2);
 
     if (rank != driver) {
         api::IVector<Tp> local_elems(elems.begin() + n * (rank - 1), elems.begin() + n * rank);
@@ -216,11 +216,11 @@ void IMpiTestClass<Ps>::driverScatterVoidTest() {
         insert(elems, *part);
         part_group.add(part);
 
-        executor_data->mpi().driverScatter(executor_data->mpi().native(), part_group, (size - 1) * 2 + 1);
+        executor_data->mpi().driverScatter(executor_data->mpi().native(), part_group, (size - 1) * 2);
     } else {
         storage::IPartitionGroup<storage::IVoidPartition::VOID_TYPE> part_group;
 
-        executor_data->mpi().driverScatterVoid(executor_data->mpi().native(), part_group, (size - 1) * 2 + 1);
+        executor_data->mpi().driverScatterVoid(executor_data->mpi().native(), part_group, (size - 1) * 2);
 
         api::IVector<Tp> local_elems(elems.begin() + n * (rank - 1), elems.begin() + n * rank);
         api::IVector<Tp> result;
