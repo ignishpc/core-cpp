@@ -92,14 +92,19 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
     group.Bcast(&protocol, 1, MPI::BYTE, 0);
 
     storage.resize(storage_length);
-    storage_v.resize(storage_length * group.Get_size());
-    group.Allgather(const_cast<char *>(storage.c_str()), storage_length, MPI::BYTE,
-                    const_cast<char *>(storage_v.c_str()), storage_length, MPI::BYTE);
+    if (driver) { storage_v.resize(storage_length * group.Get_size()); }
+    group.Gather(const_cast<char *>(storage.c_str()), storage_length, MPI::BYTE, const_cast<char *>(storage_v.c_str()),
+                 storage_length, MPI::BYTE, 0);
 
     for (int i = 0; i < storage_v.size();) {
-        if (storage_v[i] != '\0') { storage = storage_v.substr(i, storage_length - 1); }
+        if (storage_v[i] != '\0') {
+            storage = storage_v.substr(i, storage_length);
+            break;
+        }
         i += storage_length;
     }
+    group.Bcast(const_cast<char *>(storage.c_str()), storage_length, MPI::BYTE, 0);
+    storage.resize(storage_length - 1);
 
     if (driver) {
         group.Recv(&same_protocol, 1, MPI::BOOL, 1, 0);
