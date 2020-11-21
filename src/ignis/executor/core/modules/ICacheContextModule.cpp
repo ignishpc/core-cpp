@@ -5,8 +5,9 @@ using namespace ignis::executor::core::modules;
 
 ICacheContextModule::ICacheContextModule(std::shared_ptr<IExecutorData> &executor_data)
     : IModule(executor_data), impl(executor_data) {
-    executor_data->reloadLibraries();
-    try {//load partition cache when the executor has previously crashed
+    try {
+        executor_data->reloadLibraries();
+        //load partition cache when the executor has previously crashed
         auto disk_cache = impl.getCacheFromDisk();
         for (auto &group : disk_cache) {
             typeFromName(group[1])->loadFromDisk(impl, group);//group[0] is id, group[1] is type name...
