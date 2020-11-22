@@ -38,7 +38,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
                               "the result will be stored in the job folder. "
                               "Use src parameter in function to avoid";
 
-        auto folder = executor_data->infoDirectory() + "/cpptypes";
+        auto folder = executor_data->getProperties().jobDirectory() + "/cpptypes";
         executor_data->getPartitionTools().createDirectoryIfNotExists(folder);
 
         if (!typeName.empty()) {

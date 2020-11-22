@@ -36,7 +36,7 @@ IMpi IExecutorData::mpi() { return _mpi; }
 
 void IExecutorData::setCores(int cores) { omp_set_num_threads(cores); }
 
-std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source) {
+std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source, bool withBackup) {
     IGNIS_LOG(info) << "Loading function";
     if (source.obj.__isset.bytes) { throw exception::IInvalidArgument("C++ not support function serialization"); }
     auto lib = library_loader.load<selector::ISelectorGroup>(source.obj.name);
@@ -49,8 +49,11 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
         loadParameters(source);
     }
     IGNIS_LOG(info) << "Function loaded";
-    std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak", std::ios::app);
-    backup << source.obj.name << "\n";
+    if (withBackup) {
+        std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak",
+                             std::ios::app);
+        backup << source.obj.name << "\n";
+    }
     return lib;
 }
 
@@ -71,7 +74,7 @@ void IExecutorData::reloadLibraries() {
             std::getline(backup, source.obj.name, '\n');
             try {
                 if (loaded.find(source.obj.name) == loaded.end()) {
-                    loadLibrary(source);
+                    loadLibrary(source, false);
                     loaded.insert(source.obj.name);
                 }
             } catch (exception::IException &ex) { IGNIS_LOG(error) << ex.toString(); } catch (std::exception &ex) {

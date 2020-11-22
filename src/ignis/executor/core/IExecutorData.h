@@ -56,7 +56,7 @@ namespace ignis {
 
                 std::string infoDirectory();
 
-                std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source);
+                std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source, bool withBackup = true);
 
                 void loadParameters(const rpc::ISource &source);
 

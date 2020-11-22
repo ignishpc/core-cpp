@@ -21,7 +21,9 @@ void IPartitionTools::createDirectoryIfNotExists(const std::string &path) {
     if (!boost::filesystem::is_directory(path)) {
         boost::system::error_code error;
         boost::filesystem::create_directories(path, error);
-        if (error) { throw exception::IInvalidArgument("Unable to create directory " + path + " " + error.message()); }
+        if (error && !boost::filesystem::is_directory(path)) {
+            throw exception::IInvalidArgument("Unable to create directory " + path + " " + error.message());
+        }
     }
 }
 
