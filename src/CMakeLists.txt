@@ -184,8 +184,6 @@ set(SOURCE_FILES
         #RPC
         ${rpc})
 
-add_definitions(-DBOOST_ALL_DYN_LINK)
-
 set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -g")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -194,7 +192,7 @@ add_library(igniscore SHARED ${SOURCE_FILES})
 add_library(igniscore_types SHARED ignis/executor/core/ICoreTypes.cpp)
 add_executable(ignis-cpp main.cpp)
 
-TARGET_LINK_LIBRARIES(igniscore thrift dl backtrace thriftz z boost_log boost_thread boost_system boost_filesystem)
+TARGET_LINK_LIBRARIES(igniscore thrift dl backtrace thriftz z)
 TARGET_LINK_LIBRARIES(igniscore_types igniscore)
 TARGET_LINK_LIBRARIES(ignis-cpp igniscore igniscore_types)
 

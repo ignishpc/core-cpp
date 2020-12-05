@@ -7,10 +7,9 @@
 #include "ignis/executor/core/transport/IZlibTransport.h"
 #include <algorithm>
 #include <boost/algorithm/string/replace.hpp>
-#include <boost/filesystem.hpp>
+#include <ghc/filesystem.hpp>
 #include <boost/interprocess/sync/file_lock.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
-#include <boost/process/search_path.hpp>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -86,7 +85,7 @@ std::string IDynamicTypes::compiler(const std::string &type, const std::string &
     auto fileLibrary = folder + "/" + fileName + ".so";
     auto libraryName = "AutoType:" + fileLibrary;
 
-    if (boost::filesystem::exists(fileLibrary)) { return libraryName; }
+    if (ghc::filesystem::exists(fileLibrary)) { return libraryName; }
 
     auto sourceCode = std::string() +
                       "#include <ignis/executor/core/io/IReader.h> //include all default headers\n"

@@ -1,6 +1,6 @@
 
 #include "ICacheImpl.h"
-#include <boost/filesystem.hpp>
+#include <ghc/filesystem.hpp>
 
 using namespace ignis::executor::core::modules::impl;
 
@@ -10,7 +10,7 @@ ICacheImpl::ICacheImpl(std::shared_ptr<IExecutorData> &executorData) : IBaseImpl
 std::vector<std::vector<std::string>> ICacheImpl::getCacheFromDisk() {
     auto cache = fileCache();
     std::vector<std::vector<std::string>> groups;
-    if (boost::filesystem::exists(cache)) {
+    if (ghc::filesystem::exists(cache)) {
         IGNIS_LOG(info) << "CacheContext: cache file found, loading";
         std::ifstream file_cache(fileCache(), std::ios::binary);
         std::vector<std::string> parts;

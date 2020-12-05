@@ -1,7 +1,7 @@
 
 #include "ILibraryLoader.h"
 #include "exception/IInvalidArgument.h"
-#include <boost/filesystem.hpp>
+#include <ghc/filesystem.hpp>
 #include <dlfcn.h>
 
 using namespace ignis::executor::core;
@@ -13,7 +13,7 @@ std::shared_ptr<void> ILibraryLoader::vload(const std::string &name) {
     std::string path = name.substr(0, sep);
     std::string class_name = name.substr(sep + 1, name.size());
 
-    if (!boost::filesystem::exists(path)) { throw exception::IInvalidArgument(path + " was not found"); }
+    if (!ghc::filesystem::exists(path)) { throw exception::IInvalidArgument(path + " was not found"); }
 
     void *library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
 

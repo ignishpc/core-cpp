@@ -1,6 +1,6 @@
 
 #include "IMpiTest.h"
-#include <boost/filesystem.hpp>
+#include <ghc/filesystem.hpp>
 
 #define IMpiTestClass ignis::executor::core::IMpiTest
 
@@ -13,7 +13,7 @@ std::shared_ptr<ignis::executor::core::storage::IPartition<typename Ps::value_ty
 IMpiTestClass<Ps>::create(const std::string &type) {
     if (storage::IDiskPartition<Tp>::TYPE == type) {
         std::string path =
-                boost::filesystem::current_path().generic_string() + "/diskpartitionTest" + std::to_string(disk_id++);
+                ghc::filesystem::current_path().generic_string() + "/diskpartitionTest" + std::to_string(disk_id++);
         return std::make_shared<storage::IDiskPartition<Tp>>(path);
     } else if (storage::IRawMemoryPartition<Tp>::TYPE == type) {
         return std::make_shared<storage::IRawMemoryPartition<Tp>>();
@@ -40,7 +40,7 @@ void IMpiTestClass<Ps>::setUp() {
     props["ignis.transport.compression"] = "6";
     props["ignis.partition.compression"] = "6";
     props["ignis.partition.serialization"] = "native";
-    props["ignis.executor.directory"] = boost::filesystem::current_path().string();
+    props["ignis.executor.directory"] = ghc::filesystem::current_path().string();
     props["ignis.partition.type"] = Ps::TYPE;
 }
 

@@ -1,7 +1,7 @@
 
 #include "IExecutorData.h"
 #include "selector/ISelector.h"
-#include <boost/filesystem.hpp>
+#include <ghc/filesystem.hpp>
 #include <fstream>
 #include <omp.h>
 
@@ -65,7 +65,7 @@ void IExecutorData::loadParameters(const rpc::ISource &source) {
 
 void IExecutorData::reloadLibraries() {
     auto backup_path = infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak";
-    if (boost::filesystem::exists(backup_path)) {
+    if (ghc::filesystem::exists(backup_path)) {
         IGNIS_LOG(info) << "Function backup found, loading";
         std::ifstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak");
         rpc::ISource source;

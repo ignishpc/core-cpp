@@ -3,7 +3,7 @@
 #include "ignis/executor/api/IJsonValue.h"
 #include "ignis/executor/core/storage/IVoidPartition.h"
 #include <algorithm>
-#include <boost/filesystem.hpp>
+#include <ghc/filesystem.hpp>
 #include <fstream>
 #include <rapidjson/error/en.h>
 #include <rapidjson/istreamwrapper.h>
@@ -18,10 +18,10 @@ IIOImpl::IIOImpl(std::shared_ptr<IExecutorData> &executorData) : IBaseImpl(execu
 IIOImpl::~IIOImpl() {}
 
 std::string IIOImpl::partitionFileName(const std::string &path, int64_t index) {
-    if (!boost::filesystem::is_directory(path)) {
-        boost::system::error_code error;
-        boost::filesystem::create_directories(path, error);
-        if (!boost::filesystem::is_directory(path)) {
+    if (!ghc::filesystem::is_directory(path)) {
+        std::error_code error;
+        ghc::filesystem::create_directories(path, error);
+        if (!ghc::filesystem::is_directory(path)) {
             throw exception::IInvalidArgument("Unable to create directory " + path + " " + error.message());
         }
     }
@@ -33,7 +33,7 @@ std::string IIOImpl::partitionFileName(const std::string &path, int64_t index) {
 
 std::ifstream IIOImpl::openFileRead(const std::string &path) {
     IGNIS_LOG(info) << "IO: opening file " << path;
-    if (!boost::filesystem::exists(path)) { throw exception::IInvalidArgument(path + " was not found"); }
+    if (!ghc::filesystem::exists(path)) { throw exception::IInvalidArgument(path + " was not found"); }
 
     std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
     if (!file.good()) { throw exception::IInvalidArgument(path + " cannot be opened"); }
@@ -43,10 +43,10 @@ std::ifstream IIOImpl::openFileRead(const std::string &path) {
 
 std::ofstream IIOImpl::openFileWrite(const std::string &path) {
     IGNIS_LOG(info) << "IO: creating file " << path;
-    if (boost::filesystem::exists(path)) {
+    if (ghc::filesystem::exists(path)) {
         if (executor_data->getProperties().ioOverwrite()) {
             IGNIS_LOG(warning) << "IO: " << path << " already exists";
-            if (!boost::filesystem::remove(path)) { throw exception::ILogicError(path + " can not be removed"); }
+            if (!ghc::filesystem::remove(path)) { throw exception::ILogicError(path + " can not be removed"); }
         } else {
             throw exception::IInvalidArgument(path + " already exists");
         }
@@ -61,7 +61,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: reading text file";
     auto file = openFileRead(path);
-    auto size = boost::filesystem::file_size(path);
+    auto size = ghc::filesystem::file_size(path);
     auto executorId = executor_data->getContext().executorId();
     auto executors = executor_data->getContext().executors();
     size_t ex_chunk = size / executors;
@@ -142,7 +142,7 @@ void IIOImpl::partitionObjectFileVoid(const std::string &path, int64_t first, in
         openFileRead(file_name);//Only to check
         auto transport = std::make_shared<transport::IFileTransport>(file_name);
 
-        auto partition = executor_data->getPartitionTools().newVoidPartition(boost::filesystem::file_size(file_name));
+        auto partition = executor_data->getPartitionTools().newVoidPartition(ghc::filesystem::file_size(file_name));
         partition->read(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(transport));
 
         group->add(partition);

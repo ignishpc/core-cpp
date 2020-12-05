@@ -1,16 +1,13 @@
 
 #include "ignis/executor/core/ILog.h"
-#include <boost/filesystem.hpp>
+#include <ghc/filesystem.hpp>
 #include <cppunit/BriefTestProgressListener.h>
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestResultCollector.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
-#include <fcntl.h>
 #include <mpi.h>
-#include <sys/stat.h>
 
 #include "ignis/executor/core/IMpiTest.h"
 #include "ignis/executor/core/storage/IDiskPartitionTest.h"
@@ -58,7 +55,7 @@ int main(int argc, char *argv[]) {
     std::streambuf *bak[2] = {std::cerr.rdbuf(), std::cout.rdbuf()};
     if (parallel) {
         std::string wd = "np" + std::to_string(rank);
-        boost::filesystem::create_directory(wd);
+        ghc::filesystem::create_directory(wd);
         ::chdir(wd.c_str());
         if (rank > 0) {
             logFile.open("test.log", std::ofstream::trunc);
