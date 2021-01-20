@@ -19,6 +19,8 @@ namespace ignis {
             protected:
                 rpc::driver::IDataFrameId id;
 
+                rpc::driver::IDataFrameId getId();
+
                 IAbstractDataFrame(const rpc::driver::IDataFrameId &id);
 
                 core::IDriverContext &driverContext();
@@ -183,9 +185,14 @@ namespace ignis {
 
             template<typename Key, typename Value>
             class _toPair<std::pair<Key, Value>> {
+            protected:
+                rpc::driver::IDataFrameId getId() = 0;
+
             public:
                 template<typename Tp>
-                std::shared_ptr<IPairDataFrame<Key, Value>> toPair();
+                std::shared_ptr<IPairDataFrame<Key, Value>> toPair() {
+                    return IPairDataFrame<Key, Value>::make(getId());
+                }
             };
 
             template<typename Tp>
@@ -410,6 +417,14 @@ namespace ignis {
                     return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs(numPartitions));
                 }
 
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>> groupByKey(const ISource &src) {
+                    return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs(src));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>> groupByKey(int64_t numPartitions, const ISource &src) {
+                    return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs(numPartitions, src));
+                }
+
                 std::shared_ptr<IPairDataFrame<Key, Value>> reduceByKey(const ISource &src, bool localReduce = true) {
                     return IPairDataFrame<Key, Value>::make(this->reduceByKeyAbs(src, localReduce));
                 }
@@ -492,7 +507,7 @@ namespace ignis {
                 sampleByKey(bool withReplacement, const std::unordered_map<Key, int64_t> &fractions, int seed) {
                     ISource fractions_src("");
                     fractions_src.addParam("fractions", fractions);
-                    return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, fractions, seed));
+                    return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, fractions_src, seed));
                 }
 
                 std::unordered_map<Key, int64_t> countByKey() {
@@ -500,7 +515,9 @@ namespace ignis {
                     auto counts =
                             this->driverContext().template collect<std::unordered_map<Key, int64_t>>(countByKeyAbs(tp));
                     for (int64_t i = 1; i < counts.size(); i++) {
-                        counts[0].insert(counts[i].begin(), counts[i].end());
+                        for(auto& item: counts[i]){
+                            counts[0][item.first] += item.second;
+                        }
                     }
                     return counts[0];
                 }
@@ -510,7 +527,9 @@ namespace ignis {
                     auto counts = this->driverContext().template collect<std::unordered_map<Value, int64_t>>(
                             countByKeyAbs(tp));
                     for (int64_t i = 1; i < counts.size(); i++) {
-                        counts[0].insert(counts[i].begin(), counts[i].end());
+                        for(auto& item: counts[i]){
+                            counts[0][item.first] += item.second;
+                        }
                     }
                     return counts[0];
                 }
@@ -541,12 +560,6 @@ namespace ignis {
             std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Tp>>>
             IDataFrame<Tp>::groupBy(const ISource &src, int64_t numPartitions) {
                 return IPairDataFrame<Key, executor::api::IVector<Tp>>::make(groupByAbs(src, numPartitions));
-            }
-
-            template<typename Key, typename Value>
-            template<typename Tp>
-            std::shared_ptr<IPairDataFrame<Key, Value>> _toPair<std::pair<Key, Value>>::toPair() {
-                return IPairDataFrame<Key, Value>::make(this->id);
             }
 
         }// namespace api

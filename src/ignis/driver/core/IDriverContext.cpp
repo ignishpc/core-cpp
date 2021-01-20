@@ -26,6 +26,7 @@ int64_t IDriverContext::saveContext() {
 
 void IDriverContext::clearContext() {
     IGNIS_RPC_TRY()
+    std::lock_guard<std::mutex> lock(mutex);
     executor_data->deletePartitions();
     executor_data->clearVariables();
     IGNIS_RPC_CATCH()

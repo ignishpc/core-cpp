@@ -6,6 +6,10 @@
 using namespace ignis::driver::api;
 using ignis::rpc::driver::IDataFrameId;
 
+ignis::rpc::driver::IDataFrameId IAbstractDataFrame::getId(){
+    return this->id;
+}
+
 IAbstractDataFrame::IAbstractDataFrame(const IDataFrameId &id) : id(id) {}
 
 ignis::driver::core::IDriverContext &IAbstractDataFrame::driverContext() { return Ignis::driverContext(); }

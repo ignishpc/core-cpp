@@ -77,7 +77,6 @@ ignis::executor::api::IVector<Tp> IDriverContextClass::collect(int64_t id) {
         for (auto &tp : *group) { elems += tp->size(); }
         executor::api::IVector<Tp> result;
         result.reserve(elems);
-        for (auto &tp : *group) { elems += tp->size(); }
 
         for (auto &tp : *group) {
             auto reader = tp->readIterator();
