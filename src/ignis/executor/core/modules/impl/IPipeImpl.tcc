@@ -201,7 +201,7 @@ void IPipeImplCLass::mapPartitions() {
     Function function;
 
     function.before(context);
-    IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
+    IGNIS_LOG(info) << "General: mapPartitions " << input->partitions() << " partitions";
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
     {
@@ -231,7 +231,7 @@ void IPipeImplCLass::mapPartitionsWithIndex(bool preservesPartitioning) {
     Function function;
 
     function.before(context);
-    IGNIS_LOG(info) << "General: flatmap " << input->partitions() << " partitions";
+    IGNIS_LOG(info) << "General: mapPartitionsWithIndex " << input->partitions() << " partitions";
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
     {
@@ -478,7 +478,7 @@ void IPipeImplCLass::values() {
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Tp::second_type>(input->partitions());
     bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
 
-    IGNIS_LOG(info) << "General: keys " << input->partitions() << " partitions";
+    IGNIS_LOG(info) << "General: values " << input->partitions() << " partitions";
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
     {
