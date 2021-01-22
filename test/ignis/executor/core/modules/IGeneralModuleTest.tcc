@@ -36,7 +36,7 @@ void IGeneralModuleTestClass::filterTest(const std::string &name, int cores, con
     auto result = getFromPartitions<Tp>();
 
     int j = 0;
-    for (int i = 0; i < result.size(); i++) {
+    for (int i = 0; i < elems.size(); i++) {
         if (elems[i] % 2 == 0) { CPPUNIT_ASSERT_EQUAL(elems[i], result[j++]); }
     }
 }
