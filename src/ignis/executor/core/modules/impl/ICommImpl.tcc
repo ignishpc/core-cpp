@@ -42,14 +42,14 @@ std::vector<std::string> ICommImplClass::getPartitions(const int8_t protocol, in
             offset += sz;
             zlib->flush();
             zlib->reset();
+            partitions.push_back(buffer->getBufferAsString());
             buffer->resetBuffer();
         }
 
     } else if (group->partitions() > 0) {
         int64_t elements = 0;
         for (auto &part : (*group)) { elements += part->size(); }
-        storage::IMemoryPartition<Tp> part;
-        (1024 * 1024, cmp);
+        storage::IMemoryPartition<Tp> part(1024 * 1024);
         auto writer = part.writeIterator();
         int64_t partition_elems = elements / minPartitions;
         int64_t remainder = elements % minPartitions;
@@ -61,7 +61,7 @@ std::vector<std::string> ICommImplClass::getPartitions(const int8_t protocol, in
             ew = partition_elems;
             if (p < remainder) { ew++; }
 
-            for (; ew > 0 && i < group->partitions();) {
+            while (ew > 0 && i < group->partitions()) {
                 if (er == 0) {
                     er = (*group)[i]->size();
                     it = (*group)[i++]->readIterator();
