@@ -77,7 +77,9 @@ void IVoidPartition::clear() {
         buffer->resetBuffer();
     } else {
         file->flush();
-        ::ftruncate64(file->getFD(), 0);
+        if (::ftruncate64(file->getFD(), 0) != 0) {
+            throw exception::ILogicError("error: " + path + " truncate error");
+        }
     }
 }
 
