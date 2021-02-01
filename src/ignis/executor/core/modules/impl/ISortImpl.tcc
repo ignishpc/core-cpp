@@ -482,7 +482,15 @@ void ISortImplClass::max_impl(Cmp comparator) {
     IGNIS_LOG(info) << "Sort: max/min";
     auto result = executor_data->getPartitionTools().newMemoryPartition<Tp>(1);
     for (auto &part : *input) {
-        if (part->size() > 0) { result->writeIterator()->write(part->readIterator()->next()); }
+        if (part->size() > 0) {
+            result->writeIterator()->write(part->readIterator()->next());
+            break;
+        }
+    }
+
+    if(result->size() == 0){
+        executor_data->setPartitions(output);
+        return;
     }
 
     Tp &elem = (*result)[0];

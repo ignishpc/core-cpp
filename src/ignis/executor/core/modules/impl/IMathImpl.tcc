@@ -1,5 +1,6 @@
 
 #include "IMathImpl.h"
+#include <random>
 
 #define IMathImplClass ignis::executor::core::modules::impl::IMathImpl
 
@@ -15,12 +16,15 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
 #pragma omp parallel
     {
         IGNIS_OMP_TRY()
+        std::mt19937 gen(seed + executor_data->getContext().threadId());
+        std::uniform_int_distribution<int> dist;
+
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto size = (*input)[p]->size();
             auto part = (*input)[p];
-            if(!executor_data->getPartitionTools().isMemory(*part)){
+            if (!executor_data->getPartitionTools().isMemory(*part)) {
                 auto aux = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
                 part->copyTo(*aux);
                 part = aux;
@@ -30,7 +34,7 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
                 for (size_t i = 0; i < num[p]; i++) {
                     for (size_t j = 0; j < num[p]; j++) {
                         double prob = ((double) num[p]) / (size - j);
-                        double random = ((double) rand() / (RAND_MAX));
+                        double random = ((double) dist(gen) / dist.max());
                         if (random < prob) {
                             writer->write(men[j]);
                             break;
@@ -41,7 +45,7 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
                 size_t picked = 0;
                 for (size_t i = 0; i < size; i++) {
                     double prob = ((double) (num[p] - picked)) / (size - i);
-                    double random = ((double) rand() / (RAND_MAX));
+                    double random = ((double) dist(gen) / dist.max());
                     if (random < prob) {
                         writer->write(men[i]);
                         picked += 1;
@@ -70,7 +74,7 @@ int64_t IMathImplClass::count() {
 template<typename Tp>
 void IMathImplClass::sampleByKey(const bool withReplacement, const int32_t seed) {
     IGNIS_TRY()
-    //TODO
+    throw exception::IInvalidArgument("Not Implemented Error");
     IGNIS_CATCH()
 }
 
@@ -78,7 +82,6 @@ template<typename Tp>
 void IMathImplClass::countByKey() {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<Tp>();
-    auto &context = executor_data->getContext();
     auto threads = executor_data->getContext().cores();
 
     std::unordered_map<typename Tp::first_type, int64_t> acum[threads];
@@ -120,7 +123,6 @@ template<typename Tp>
 void IMathImplClass::countByValue() {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<Tp>();
-    auto &context = executor_data->getContext();
     auto threads = executor_data->getContext().cores();
 
     std::unordered_map<typename Tp::second_type, int64_t> acum[threads];

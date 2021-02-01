@@ -102,6 +102,7 @@ void IReduceImplClass::aggregate() {
     }
     IGNIS_OMP_EXCEPTION_END()
 
+    function.after(context);
     output->add(partial_reduce);
     executor_data->setPartitions(output);
     IGNIS_CATCH()
@@ -182,11 +183,11 @@ void IReduceImplClass::groupByKey(int64_t numPartitions) {
     keyExchanging<Tp>();
 
     auto input = executor_data->getPartitions<Tp>();
+    const bool cache = input->cache();
     auto output =
             executor_data->getPartitionTools()
                     .newPartitionGroup<std::pair<typename Tp::first_type, api::IVector<typename Tp::second_type>>>(
                             numPartitions);
-    auto &context = executor_data->getContext();
     IGNIS_LOG(info) << "Reduce: reducing key elements";
 
     IGNIS_OMP_EXCEPTION_INIT()
@@ -204,7 +205,7 @@ void IReduceImplClass::groupByKey(int64_t numPartitions) {
                     auto &elem = men_part[i];
                     acum[std::move(elem.first)].push_back(std::move(elem.second));
                 }
-                part.clear();
+                if (!cache) { part.clear(); }
                 auto writer = (*output)[p]->writeIterator();
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 for (auto &elem : acum) { men_writer.write(std::move(elem)); }
@@ -214,7 +215,7 @@ void IReduceImplClass::groupByKey(int64_t numPartitions) {
                     auto &elem = reader->next();
                     acum[std::move(elem.first)].push_back(std::move(elem.second));
                 }
-                part.clear();
+                if (!cache) { part.clear(); }
                 auto writer = (*output)[p]->writeIterator();
                 for (auto &elem : acum) { writer->write(std::move(elem)); }
             }
@@ -394,7 +395,7 @@ void IReduceImplClass::localReduceByKey(Function &f) {
     auto output = input;
     if (output->cache()) {
         output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-        for (int64_t p = 0; p < output->partitions(); p++) {
+        for (int64_t p = 0; p < input->partitions(); p++) {
             output->add(executor_data->getPartitionTools().newPartition<Tp>((*input)[0]->type()));
         }
     }
@@ -523,17 +524,7 @@ void IReduceImplClass::keyHashing(int64_t numPartitions) {
             executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
     const bool cache = input->cache();
     const std::hash<typename Tp::first_type> hash;
-    IGNIS_LOG(info) << "Reduce: creating" << numPartitions << " new partitions with key hashing";
-
-    if (numPartitions == 1) {
-        for (int64_t p = 0; p < input->partitions(); p++) {
-            if (cache) {
-                (*input)[p]->copyTo(*(*output)[0]);
-            } else {
-                (*input)[p]->moveTo(*(*output)[0]);
-            }
-        }
-    }
+    IGNIS_LOG(info) << "Reduce: creating " << numPartitions << " new partitions with key hashing";
 
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel

@@ -424,6 +424,7 @@ void IPipeImplCLass::take(int64_t num) {
                     count++;
                     writer->write(reader->next());
                 }
+                output->add(cut);
             }
             break;
         }

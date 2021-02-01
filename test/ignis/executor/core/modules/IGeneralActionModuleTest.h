@@ -15,7 +15,7 @@ namespace ignis {
                     CPPUNIT_TEST(treeReduceIntTest);
                     CPPUNIT_TEST(treeReduceStringTest);
                     CPPUNIT_TEST(aggregateIntToStringTest);
-                    CPPUNIT_TEST(treeAggregateStringToIntTest);
+                    CPPUNIT_TEST(treeAggregateStringTest);
                     CPPUNIT_TEST(foldIntTest);
                     CPPUNIT_TEST(treeFoldStringTest);
                     CPPUNIT_TEST(takeStringTest);
@@ -48,7 +48,7 @@ namespace ignis {
                         aggregateTest<int>("ZeroString", "ReduceIntToString", "ReduceString", 2, "Memory");
                     }
 
-                    void treeAggregateStringToIntTest() {
+                    void treeAggregateStringTest() {
                         treeAggregateTest<std::string>("ZeroString", "ReduceString", "ReduceString", 2, "RawMemory");
                     }
 
