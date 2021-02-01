@@ -47,7 +47,9 @@ template<typename Tp>
 void IDiskPartitionClass<Tp>::clear() {
     this->zlib->flush();
     this->elems = 0;
-    ::ftruncate64(file->getFD(), 0);
+    if (::ftruncate64(file->getFD(), 0) != 0) {
+        throw exception::IInvalidArgument("error: " + path + " truncate error");
+    }
     writeHeader();
 }
 
@@ -68,7 +70,9 @@ template<typename Tp>
 void IDiskPartitionClass<Tp>::sync() {
     writeHeader();
     transport::IFileTransport file_header(path + ".header", false, true);
-    ::ftruncate64(file_header.getFD(), 0);
+    if (::ftruncate64(file_header.getFD(), 0) != 0) {
+        throw exception::IInvalidArgument("error: " + path + ".header truncate error");
+    }
     file_header.write((uint8_t *) header.c_str(), this->header_size);
     IRawPartition<Tp>::sync();
 }
