@@ -22,10 +22,20 @@ int64_t IPropertyParser::getNumber(const std::string &key) {
         int64_t n = stol(value, &end);
         if (value.length() != end) { parserError(key, value, end); }
         return n;
+    } catch (std::exception &ex) { throw exception::IInvalidArgument(key + " must be a integer, find '" + value + "'"); }
+}
+
+double IPropertyParser::getDouble(const std::string &key){
+    std::string &value = getString(key);
+    try {
+        size_t end;
+        double n = stod(value, &end);
+        if (value.length() != end) { parserError(key, value, end); }
+        return n;
     } catch (std::exception &ex) { throw exception::IInvalidArgument(key + " must be a number, find '" + value + "'"); }
 }
 
-int64_t IPropertyParser::getMinNumber(const std::string &key, const int64_t &min) {
+int64_t IPropertyParser::getMinNumber(const std::string &key, const int64_t min) {
     auto value = getNumber(key);
     if (value < min) {
         std::stringstream ss;
@@ -35,7 +45,7 @@ int64_t IPropertyParser::getMinNumber(const std::string &key, const int64_t &min
     return value;
 }
 
-int64_t IPropertyParser::getMaxNumber(const std::string &key, const int64_t &max) {
+int64_t IPropertyParser::getMaxNumber(const std::string &key, const int64_t max) {
     auto value = getNumber(key);
     if (value > max) {
         std::stringstream ss;
@@ -45,8 +55,38 @@ int64_t IPropertyParser::getMaxNumber(const std::string &key, const int64_t &max
     return value;
 }
 
-int64_t IPropertyParser::getRangeNumber(const std::string &key, const int64_t &min, const int64_t &max) {
+int64_t IPropertyParser::getRangeNumber(const std::string &key, const int64_t min, const int64_t max) {
     auto value = getMinNumber(key, min);
+    if (value > max) {
+        std::stringstream ss;
+        ss << key << " error " << value << " is greater than " << value;
+        throw exception::IInvalidArgument(ss.str());
+    }
+    return value;
+}
+
+double IPropertyParser::getMinDouble(const std::string &key, const double min) {
+    auto value = getDouble(key);
+    if (value < min) {
+        std::stringstream ss;
+        ss << key << " error " << value << " is less than " << value;
+        throw exception::IInvalidArgument(ss.str());
+    }
+    return value;
+}
+
+double IPropertyParser::getMaxDouble(const std::string &key, const double max) {
+    auto value = getDouble(key);
+    if (value > max) {
+        std::stringstream ss;
+        ss << key << " error " << value << " is greater than " << value;
+        throw exception::IInvalidArgument(ss.str());
+    }
+    return value;
+}
+
+double IPropertyParser::getRangeDouble(const std::string &key, const double min, const double max) {
+    auto value = getMinDouble(key, min);
     if (value > max) {
         std::stringstream ss;
         ss << key << " error " << value << " is greater than " << value;

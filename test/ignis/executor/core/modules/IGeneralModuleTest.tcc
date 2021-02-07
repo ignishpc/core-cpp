@@ -5,7 +5,7 @@
 
 IGeneralModuleTestClass::IGeneralModuleTest() : general(std::make_shared<IGeneralModule>(executor_data)) {
     auto &props = executor_data->getContext().props();
-    props["ignis.modules.sort.samples"] = "2";
+    props["ignis.modules.sort.samples"] = "0.1";
 }
 
 void IGeneralModuleTestClass::setUp() {}

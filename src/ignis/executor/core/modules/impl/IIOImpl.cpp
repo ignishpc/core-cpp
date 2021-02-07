@@ -3,8 +3,8 @@
 #include "ignis/executor/api/IJsonValue.h"
 #include "ignis/executor/core/storage/IVoidPartition.h"
 #include <algorithm>
-#include <ghc/filesystem.hpp>
 #include <fstream>
+#include <ghc/filesystem.hpp>
 #include <rapidjson/error/en.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/reader.h>
@@ -38,7 +38,7 @@ std::ifstream IIOImpl::openFileRead(const std::string &path) {
     std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
     if (!file.good()) { throw exception::IInvalidArgument(path + " cannot be opened"); }
     IGNIS_LOG(info) << "IO: file opening successful";
-    return std::move(file);
+    return file;
 }
 
 std::ofstream IIOImpl::openFileWrite(const std::string &path) {
@@ -54,81 +54,110 @@ std::ofstream IIOImpl::openFileWrite(const std::string &path) {
     std::ofstream file(path, std::ifstream::out | std::ifstream::binary | std::fstream::trunc);
     if (!file.good()) { throw exception::IInvalidArgument(path + " cannot be opened"); }
     IGNIS_LOG(info) << "IO: file created successful";
-    return std::move(file);
+    return file;
 }
 
 void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: reading text file";
-    auto file = openFileRead(path);
     auto size = ghc::filesystem::file_size(path);
-    auto executorId = executor_data->getContext().executorId();
-    auto executors = executor_data->getContext().executors();
-    size_t ex_chunk = size / executors;
-    size_t ex_chunk_init = executorId * ex_chunk;
-    size_t ex_chunk_end = ex_chunk_init + ex_chunk;
-    size_t minPartitionSize = executor_data->getProperties().partitionMinimal();
-    minPartitions = (int64_t) std::ceil(minPartitions / (float) executors);
-
-
     IGNIS_LOG(info) << "IO: file has " << size << " Bytes";
-
-    if (executorId > 0) {
-        file.seekg(ex_chunk_init > 0 ? ex_chunk_init - 1 : ex_chunk_init);
-        int value;
-        while ((value = file.get()) != '\n' && value != EOF)
-            ;
-        ex_chunk_init = file.tellg();
-        if (executorId == executors - 1) { ex_chunk_end = size; }
-    }
-
-    if (ex_chunk / minPartitionSize < minPartitions) { minPartitionSize = ex_chunk / minPartitions; }
-
-    auto partitionGroup = executor_data->getPartitionTools().newPartitionGroup<std::string>();
-    auto partition = executor_data->getPartitionTools().newPartition<std::string>();
-    auto write_iterator = partition->writeIterator();
-    partitionGroup->add(partition);
-    size_t partitionInit = ex_chunk_init;
+    auto result = executor_data->getPartitionTools().newPartitionGroup<std::string>();
+    decltype(result) thread_groups[executor_data->getCores()];
+    size_t total_bytes = 0;
     size_t elements = 0;
-    std::string buffer;
 
-    while (file.tellg() < ex_chunk_end) {
-        if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
-            partition = executor_data->getPartitionTools().newPartition<std::string>();
-            write_iterator = partition->writeIterator();
-            partitionGroup->add(partition);
-            partitionInit = file.tellg();
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel reduction(+ : total_bytes, elements) firstprivate(minPartitions)
+    {
+        IGNIS_OMP_TRY()
+        std::ifstream file;
+#pragma omp critical
+        { file = openFileRead(path); };
+        auto id = executor_data->getContext().threadId();
+        auto globalThreadId = executor_data->getContext().executorId() * executor_data->getCores() + id;
+        auto threads = executor_data->getContext().executors() * executor_data->getCores();
+        size_t ex_chunk = size / threads;
+        size_t ex_chunk_init = globalThreadId * ex_chunk;
+        size_t ex_chunk_end = ex_chunk_init + ex_chunk;
+        size_t minPartitionSize = executor_data->getProperties().partitionMinimal();
+        minPartitions = (int64_t) std::ceil(minPartitions / (float) threads);
+
+        if (globalThreadId > 0) {
+            file.seekg(ex_chunk_init > 0 ? ex_chunk_init - 1 : ex_chunk_init);
+            int value;
+            while ((value = file.get()) != '\n' && value != EOF) {}
+            ex_chunk_init = file.tellg();
+            if (globalThreadId == threads - 1) { ex_chunk_end = size; }
         }
-        std::getline(file, buffer, '\n');
-        elements++;
-        write_iterator->write(buffer);
-    }
-    ex_chunk_end = file.tellg();
-    IGNIS_LOG(info) << "IO: created  " << partitionGroup->partitions() << " partitions, " << elements << " lines and "
-                    << ex_chunk_end - ex_chunk_init << " Bytes read ";
 
-    executor_data->setPartitions(partitionGroup);
+        if (ex_chunk / minPartitionSize < minPartitions) { minPartitionSize = ex_chunk / minPartitions; }
+
+        thread_groups[id] = executor_data->getPartitionTools().newPartitionGroup<std::string>();
+        auto partition = executor_data->getPartitionTools().newPartition<std::string>();
+        auto write_iterator = partition->writeIterator();
+        thread_groups[id]->add(partition);
+        size_t partitionInit = ex_chunk_init;
+        std::string buffer;
+
+        while (file.tellg() < ex_chunk_end) {
+            if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
+                partition = executor_data->getPartitionTools().newPartition<std::string>();
+                write_iterator = partition->writeIterator();
+                thread_groups[id]->add(partition);
+                partitionInit = file.tellg();
+            }
+            std::getline(file, buffer, '\n');
+            elements++;
+            write_iterator->write(buffer);
+        }
+        total_bytes += (size_t) file.tellg() - ex_chunk_init;
+
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+
+    for (auto group : thread_groups) {
+        for (auto part : *group) { result->add(part); }
+    }
+
+    IGNIS_LOG(info) << "IO: created  " << result->partitions() << " partitions, " << elements << " lines and "
+                    << total_bytes << " Bytes read ";
+
+    executor_data->setPartitions(result);
     IGNIS_CATCH()
 }
 
 void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t partitions) {
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: reading partitions text file";
-    auto group = executor_data->getPartitionTools().newPartitionGroup<std::string>();
+    auto group = executor_data->getPartitionTools().newPartitionGroup<std::string>(partitions);
 
-    for (int64_t p = 0; p < partitions; p++) {
-        auto file_name = partitionFileName(path, first + p);
-        auto file = openFileRead(file_name);
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < partitions; p++) {
+            std::ifstream file;
+#pragma omp critical
+            {
+                auto file_name = partitionFileName(path, first + p);
+                file = openFileRead(path);
+            };
 
-        auto partition = executor_data->getPartitionTools().newPartition<std::string>();
-        auto write_iterator = partition->writeIterator();
-        std::string buffer;
-        while (!file.eof()) {
-            std::getline(file, buffer, '\n');
-            write_iterator->write(buffer);
+            auto partition = (*group)[p];
+            auto write_iterator = partition->writeIterator();
+            std::string buffer;
+            while (!file.eof()) {
+                std::getline(file, buffer, '\n');
+                write_iterator->write(buffer);
+            }
         }
-        group->add(partition);
+        IGNIS_OMP_CATCH()
     }
+    IGNIS_OMP_EXCEPTION_END()
+    executor_data->setPartitions(group);
     IGNIS_CATCH()
 }
 
@@ -147,6 +176,8 @@ void IIOImpl::partitionObjectFileVoid(const std::string &path, int64_t first, in
 
         group->add(partition);
     }
+
+    executor_data->setPartitions(group);
     IGNIS_CATCH()
 }
 
@@ -226,28 +257,39 @@ void IIOImpl::partitionJsonFileVoid(const std::string &path, int64_t first, int6
     IGNIS_LOG(info) << "IO: reading partitions json file";
     auto group = executor_data->getPartitionTools().newPartitionGroup<api::IJsonValue>(partitions);
 
-    for (int64_t p = 0; p < group->partitions(); p++) {
-        auto file_name = partitionFileName(path, first + p);
-        auto file = openFileRead(file_name);
-        rapidjson::IStreamWrapper wrapper(file);
-        rapidjson::Reader reader;
-        PartitionJsonHandler handler;
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < partitions; p++) {
+            std::ifstream file;
+#pragma omp critical
+            {
+                auto file_name = partitionFileName(path, first + p);
+                file = openFileRead(path);
+            };
+            rapidjson::IStreamWrapper wrapper(file);
+            rapidjson::Reader reader;
+            PartitionJsonHandler handler;
 
-        if (!reader.Parse<rapidjson::kParseIterativeFlag>(wrapper, handler)) {
-            std::string error = rapidjson::GetParseError_En(reader.GetParseErrorCode());
+            if (!reader.Parse<rapidjson::kParseIterativeFlag>(wrapper, handler)) {
+                std::string error = rapidjson::GetParseError_En(reader.GetParseErrorCode());
 
-            throw exception::IInvalidArgument(path + " is not valid. " + error + " at offset " +
-                                              std::to_string(reader.GetErrorOffset()));
+                throw exception::IInvalidArgument(path + " is not valid. " + error + " at offset " +
+                                                  std::to_string(reader.GetErrorOffset()));
+            }
+            if (!handler.root().isArray()) { throw exception::IInvalidArgument(path + " is not a json array"); }
+
+            auto write_iterator = (*group)[p]->writeIterator();
+            for (const api::IJsonValue &value : handler.root().getArray()) {
+                api::IJsonValue &noconst = const_cast<api::IJsonValue &>(value);
+                write_iterator->write(std::move(noconst));
+            }
         }
-        if (!handler.root().isArray()) { throw exception::IInvalidArgument(path + " is not a json array"); }
-
-        auto write_iterator = (*group)[p]->writeIterator();
-        for (const api::IJsonValue &value : handler.root().getArray()) {
-            api::IJsonValue &noconst = const_cast<api::IJsonValue &>(value);
-            write_iterator->write(std::move(noconst));
-        }
+        IGNIS_OMP_CATCH()
     }
-
+    IGNIS_OMP_EXCEPTION_END()
     executor_data->setPartitions(group);
     IGNIS_CATCH()
 }

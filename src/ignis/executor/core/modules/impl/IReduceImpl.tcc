@@ -83,7 +83,7 @@ void IReduceImplClass::aggregate() {
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>();
     auto input = executor_data->getPartitions<typename Function::_T2_type>();
     auto partial_reduce = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(
-            executor_data->getContext().cores());
+            executor_data->getCores());
     IGNIS_LOG(info) << "Reduce: aggregating " << input->partitions() << " partitions locally";
 
     IGNIS_OMP_EXCEPTION_INIT()
@@ -334,7 +334,7 @@ inline void IReduceImplClass::finalTreeReduce(Function &f, storage::IMemoryParti
 
     IGNIS_LOG(info) << "Reduce: reducing all elements in the executor";
     if (partial.size() > 1) {
-        if (executor_data->getContext().cores() == 1) {
+        if (executor_data->getCores() == 1) {
             partial[0] = reducePartition(f, partial);
         } else {
             IGNIS_OMP_EXCEPTION_INIT()

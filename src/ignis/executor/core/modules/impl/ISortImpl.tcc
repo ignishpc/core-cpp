@@ -199,8 +199,20 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions) {
     }
 
     /*Generates pivots to separate the elements in order*/
-    int64_t samples = executor_data->getProperties().sortSamples();
-    if (partitions > 0) { samples *= partitions / input->partitions() + 1; }
+    double sr = executor_data->getProperties().sortSamples();
+    int64_t samples;
+    if (sr > 1) {
+        samples = (int64_t) sr;
+    } else {
+        int64_t send[]{0, 0};
+        int64_t rcv[2];
+        send[0] = input->partitions();
+        for (auto part : *input) { send[1] += part->size(); }
+        executor_data->mpi().native().Allreduce(send, rcv, 2, MPI::LONG, MPI::SUM);
+        samples = std::ceil((double)rcv[1] / rcv[0] * sr);
+    }
+
+    if (partitions > 0) { samples = std::ceil((double) partitions / input->partitions() * samples); }
     IGNIS_LOG(info) << "Sort: selecting " << samples << " pivots";
     auto pivots = selectPivots(*input, samples);
 
@@ -282,6 +294,12 @@ ISortImplClass::selectPivots(storage::IPartitionGroup<Tp> &group, int64_t sample
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < group.partitions(); p++) {
+            if (group[p]->size() < samples) {
+                group[p]->copyTo(*pivots);
+                writer = pivots->writeIterator();
+                continue;
+            }
+
             auto skip = (group[p]->size() - samples) / (samples + 1);
             auto reader = group[p]->readIterator();
             for (int n = 0; n < samples; n++) {
@@ -345,6 +363,12 @@ ISortImplClass::selectMemoryPivots(storage::IPartitionGroup<Tp> &group, int64_t 
     auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
 
     for (int64_t p = 0; p < group.partitions(); p++) {
+        if (group[p]->size() < samples) {
+            auto &men_part = executor_data->getPartitionTools().toMemory(*(group[p]));
+            for (auto &elem : men_part) { men_writer.write(elem); }
+            continue;
+        }
+
         auto skip = (group[p]->size() - samples) / (samples + 1);
         auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
         auto pos = skip;
@@ -488,7 +512,7 @@ void ISortImplClass::max_impl(Cmp comparator) {
         }
     }
 
-    if(result->size() == 0){
+    if (result->size() == 0) {
         executor_data->setPartitions(output);
         return;
     }

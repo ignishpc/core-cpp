@@ -22,12 +22,12 @@ namespace ignis {
 
                     void tearDown() override;
 
-                    void textFile1() { textFileTest(1); }
+                    void textFile1() { /*textFileTest(1, 1);*/ }
 
-                    void textFileN() { textFileTest(8); }
+                    void textFileN() { textFileTest(8, 2); }
 
                 private:
-                    void textFileTest(int n);
+                    void textFileTest(int n, int cores);
 
                     std::shared_ptr<IIOModule> io;
                 };

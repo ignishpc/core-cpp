@@ -1,8 +1,8 @@
 
 #include "IExecutorData.h"
 #include "selector/ISelector.h"
-#include <ghc/filesystem.hpp>
 #include <fstream>
+#include <ghc/filesystem.hpp>
 #include <omp.h>
 
 using namespace ignis::executor::core;
@@ -34,7 +34,9 @@ IPartitionTools &IExecutorData::getPartitionTools() { return partition_tools; }
 
 IMpi IExecutorData::mpi() { return _mpi; }
 
-void IExecutorData::setCores(int cores) { omp_set_num_threads(cores); }
+void IExecutorData::setCores(int cores) { omp_set_num_threads(this->cores = cores); }
+
+int IExecutorData::getCores() { return this->cores; }
 
 std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source, bool withBackup) {
     IGNIS_LOG(info) << "Loading function";

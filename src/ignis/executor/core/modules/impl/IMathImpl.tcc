@@ -82,7 +82,7 @@ template<typename Tp>
 void IMathImplClass::countByKey() {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<Tp>();
-    auto threads = executor_data->getContext().cores();
+    auto threads = executor_data->getCores();
 
     std::unordered_map<typename Tp::first_type, int64_t> acum[threads];
     IGNIS_LOG(info) << "Math: counting local keys " << input->partitions() << " partitions";
@@ -123,7 +123,7 @@ template<typename Tp>
 void IMathImplClass::countByValue() {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<Tp>();
-    auto threads = executor_data->getContext().cores();
+    auto threads = executor_data->getCores();
 
     std::unordered_map<typename Tp::second_type, int64_t> acum[threads];
     IGNIS_LOG(info) << "Math: counting local values " << input->partitions() << " partitions";

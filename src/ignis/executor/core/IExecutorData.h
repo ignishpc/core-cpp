@@ -76,6 +76,8 @@ namespace ignis {
 
                 void setCores(int cores);
 
+                int getCores();
+
                 virtual ~IExecutorData();
 
             private:
@@ -89,6 +91,7 @@ namespace ignis {
                 IPartitionTools partition_tools;
                 IMpi _mpi;
                 api::IContext context;
+                int cores;
             };
         }// namespace core
     }    // namespace executor

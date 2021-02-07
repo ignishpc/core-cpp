@@ -14,7 +14,8 @@ void IIOModuleTest::setUp() {}
 
 void IIOModuleTest::tearDown() {}
 
-void IIOModuleTest::textFileTest(int n) {
+void IIOModuleTest::textFileTest(int n, int cores) {
+    executor_data->setCores(cores);
     srand(0);
     const char alphanum[] = "0123456789"
                             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -27,7 +28,8 @@ void IIOModuleTest::textFileTest(int n) {
     std::string line;
 
     for (int l = 0; l < 10000; l++) {
-        for (int i = 0; i < rand() % 100; ++i) { line += alphanum[rand() % (sizeof(alphanum) - 1)]; }
+        int lc = rand() % 100;
+        for (int i = 0; i < lc; ++i) { line += alphanum[rand() % (sizeof(alphanum) - 1)]; }
         file << line << std::endl;
         lines.push_back(std::move(line));
     }

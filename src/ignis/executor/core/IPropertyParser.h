@@ -20,7 +20,7 @@ namespace ignis {
 
                 int64_t partitionMinimal() { return getSize("ignis.partition.minimal"); }
 
-                int64_t sortSamples() { return getMinNumber("ignis.modules.sort.samples", 1); }
+                double sortSamples() { return getMinDouble("ignis.modules.sort.samples", 0); }
 
                 int64_t ioOverwrite() { return getBoolean("ignis.modules.io.overwrite"); }
 
@@ -50,11 +50,19 @@ namespace ignis {
 
                 int64_t getNumber(const std::string &key);
 
-                int64_t getMinNumber(const std::string &key, const int64_t &min);
+                double getDouble(const std::string &key);
 
-                int64_t getMaxNumber(const std::string &key, const int64_t &max);
+                int64_t getMinNumber(const std::string &key, const int64_t min);
 
-                int64_t getRangeNumber(const std::string &key, const int64_t &min, const int64_t &max);
+                int64_t getMaxNumber(const std::string &key, const int64_t max);
+
+                int64_t getRangeNumber(const std::string &key, const int64_t min, const int64_t max);
+
+                double getMinDouble(const std::string &key, const double min);
+
+                double getMaxDouble(const std::string &key, const double max);
+
+                double getRangeDouble(const std::string &key, const double min, const double max);
 
                 size_t getSize(const std::string &key);
 
