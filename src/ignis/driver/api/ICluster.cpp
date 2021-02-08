@@ -29,6 +29,18 @@ ICluster::ICluster(const std::string &name, const std::shared_ptr<IProperties> &
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
+void ICluster::start(){
+    try {
+        Ignis::clientPool->getClient()->getClusterService().start(id);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+void ICluster::destroy(){
+    try {
+        Ignis::clientPool->getClient()->getClusterService().destroy(id);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
 void ICluster::setName(const std::string &name) {
     try {
         Ignis::clientPool->getClient()->getClusterService().setName(id, name);

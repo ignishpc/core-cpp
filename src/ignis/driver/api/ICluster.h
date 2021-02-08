@@ -20,6 +20,10 @@ namespace ignis {
 
                 ICluster(const std::string &name, const std::shared_ptr<IProperties> &properties);
 
+                void start();
+
+                void destroy();
+
                 void setName(const std::string &name);
 
                 void execute(const std::vector<std::string> &cmd);

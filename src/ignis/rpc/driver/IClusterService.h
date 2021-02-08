@@ -22,6 +22,8 @@ namespace ignis { namespace rpc { namespace driver {
 class IClusterServiceIf {
  public:
   virtual ~IClusterServiceIf() {}
+  virtual void start(const int64_t id) = 0;
+  virtual void destroy(const int64_t id) = 0;
   virtual int64_t newInstance0() = 0;
   virtual int64_t newInstance1a(const std::string& name) = 0;
   virtual int64_t newInstance1b(const int64_t properties) = 0;
@@ -60,6 +62,12 @@ class IClusterServiceIfSingletonFactory : virtual public IClusterServiceIfFactor
 class IClusterServiceNull : virtual public IClusterServiceIf {
  public:
   virtual ~IClusterServiceNull() {}
+  void start(const int64_t /* id */) {
+    return;
+  }
+  void destroy(const int64_t /* id */) {
+    return;
+  }
   int64_t newInstance0() {
     int64_t _return = 0;
     return _return;
@@ -91,6 +99,178 @@ class IClusterServiceNull : virtual public IClusterServiceIf {
   void sendCompressedFile(const int64_t /* id */, const std::string& /* source */, const std::string& /* target */) {
     return;
   }
+};
+
+typedef struct _IClusterService_start_args__isset {
+  _IClusterService_start_args__isset() : id(false) {}
+  bool id :1;
+} _IClusterService_start_args__isset;
+
+class IClusterService_start_args {
+ public:
+
+  IClusterService_start_args(const IClusterService_start_args&);
+  IClusterService_start_args& operator=(const IClusterService_start_args&);
+  IClusterService_start_args() : id(0) {
+  }
+
+  virtual ~IClusterService_start_args() noexcept;
+  int64_t id;
+
+  _IClusterService_start_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  bool operator == (const IClusterService_start_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_start_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_start_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_start_pargs {
+ public:
+
+
+  virtual ~IClusterService_start_pargs() noexcept;
+  const int64_t* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_start_result {
+ public:
+
+  IClusterService_start_result(const IClusterService_start_result&);
+  IClusterService_start_result& operator=(const IClusterService_start_result&);
+  IClusterService_start_result() {
+  }
+
+  virtual ~IClusterService_start_result() noexcept;
+
+  bool operator == (const IClusterService_start_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IClusterService_start_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_start_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_start_presult {
+ public:
+
+
+  virtual ~IClusterService_start_presult() noexcept;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IClusterService_destroy_args__isset {
+  _IClusterService_destroy_args__isset() : id(false) {}
+  bool id :1;
+} _IClusterService_destroy_args__isset;
+
+class IClusterService_destroy_args {
+ public:
+
+  IClusterService_destroy_args(const IClusterService_destroy_args&);
+  IClusterService_destroy_args& operator=(const IClusterService_destroy_args&);
+  IClusterService_destroy_args() : id(0) {
+  }
+
+  virtual ~IClusterService_destroy_args() noexcept;
+  int64_t id;
+
+  _IClusterService_destroy_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  bool operator == (const IClusterService_destroy_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IClusterService_destroy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_destroy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_destroy_pargs {
+ public:
+
+
+  virtual ~IClusterService_destroy_pargs() noexcept;
+  const int64_t* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_destroy_result {
+ public:
+
+  IClusterService_destroy_result(const IClusterService_destroy_result&);
+  IClusterService_destroy_result& operator=(const IClusterService_destroy_result&);
+  IClusterService_destroy_result() {
+  }
+
+  virtual ~IClusterService_destroy_result() noexcept;
+
+  bool operator == (const IClusterService_destroy_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IClusterService_destroy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IClusterService_destroy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IClusterService_destroy_presult {
+ public:
+
+
+  virtual ~IClusterService_destroy_presult() noexcept;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 
@@ -1130,6 +1310,12 @@ class IClusterServiceClient : virtual public IClusterServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void start(const int64_t id);
+  void send_start(const int64_t id);
+  void recv_start();
+  void destroy(const int64_t id);
+  void send_destroy(const int64_t id);
+  void recv_destroy();
   int64_t newInstance0();
   void send_newInstance0();
   int64_t recv_newInstance0();
@@ -1172,6 +1358,8 @@ class IClusterServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IClusterServiceProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_start(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_destroy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance0(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance1a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance1b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1184,6 +1372,8 @@ class IClusterServiceProcessor : public ::apache::thrift::TDispatchProcessor {
  public:
   IClusterServiceProcessor(::std::shared_ptr<IClusterServiceIf> iface) :
     iface_(iface) {
+    processMap_["start"] = &IClusterServiceProcessor::process_start;
+    processMap_["destroy"] = &IClusterServiceProcessor::process_destroy;
     processMap_["newInstance0"] = &IClusterServiceProcessor::process_newInstance0;
     processMap_["newInstance1a"] = &IClusterServiceProcessor::process_newInstance1a;
     processMap_["newInstance1b"] = &IClusterServiceProcessor::process_newInstance1b;
@@ -1221,6 +1411,24 @@ class IClusterServiceMultiface : virtual public IClusterServiceIf {
     ifaces_.push_back(iface);
   }
  public:
+  void start(const int64_t id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->start(id);
+    }
+    ifaces_[i]->start(id);
+  }
+
+  void destroy(const int64_t id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->destroy(id);
+    }
+    ifaces_[i]->destroy(id);
+  }
+
   int64_t newInstance0() {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -1334,6 +1542,12 @@ class IClusterServiceConcurrentClient : virtual public IClusterServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void start(const int64_t id);
+  int32_t send_start(const int64_t id);
+  void recv_start(const int32_t seqid);
+  void destroy(const int64_t id);
+  int32_t send_destroy(const int64_t id);
+  void recv_destroy(const int32_t seqid);
   int64_t newInstance0();
   int32_t send_newInstance0();
   int64_t recv_newInstance0(const int32_t seqid);

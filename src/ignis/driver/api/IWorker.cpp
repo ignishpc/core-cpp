@@ -34,6 +34,18 @@ IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &na
 
 std::shared_ptr<ICluster> IWorker::getCluster() { return cluster; }
 
+void IWorker::start(){
+    try {
+        Ignis::clientPool->getClient()->getWorkerService().start(id);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+void IWorker::destroy(){
+    try {
+        Ignis::clientPool->getClient()->getWorkerService().destroy(id);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
 void IWorker::setName(const std::string &name) {
     try {
         Ignis::clientPool->getClient()->getWorkerService().setName(id, name);

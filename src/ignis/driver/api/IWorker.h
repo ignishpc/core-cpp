@@ -23,6 +23,10 @@ namespace ignis {
 
                 std::shared_ptr<ICluster> getCluster();
 
+                void start();
+
+                void destroy();
+
                 void setName(const std::string &name);
 
                 template<typename C>

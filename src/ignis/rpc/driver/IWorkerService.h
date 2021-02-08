@@ -22,6 +22,8 @@ namespace ignis { namespace rpc { namespace driver {
 class IWorkerServiceIf {
  public:
   virtual ~IWorkerServiceIf() {}
+  virtual void start(const IWorkerId& id) = 0;
+  virtual void destroy(const IWorkerId& id) = 0;
   virtual void newInstance(IWorkerId& _return, const int64_t id, const std::string& type) = 0;
   virtual void newInstance3a(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type) = 0;
   virtual void newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores) = 0;
@@ -69,6 +71,12 @@ class IWorkerServiceIfSingletonFactory : virtual public IWorkerServiceIfFactory 
 class IWorkerServiceNull : virtual public IWorkerServiceIf {
  public:
   virtual ~IWorkerServiceNull() {}
+  void start(const IWorkerId& /* id */) {
+    return;
+  }
+  void destroy(const IWorkerId& /* id */) {
+    return;
+  }
   void newInstance(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* type */) {
     return;
   }
@@ -123,6 +131,178 @@ class IWorkerServiceNull : virtual public IWorkerServiceIf {
   void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
+};
+
+typedef struct _IWorkerService_start_args__isset {
+  _IWorkerService_start_args__isset() : id(false) {}
+  bool id :1;
+} _IWorkerService_start_args__isset;
+
+class IWorkerService_start_args {
+ public:
+
+  IWorkerService_start_args(const IWorkerService_start_args&);
+  IWorkerService_start_args& operator=(const IWorkerService_start_args&);
+  IWorkerService_start_args() {
+  }
+
+  virtual ~IWorkerService_start_args() noexcept;
+  IWorkerId id;
+
+  _IWorkerService_start_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  bool operator == (const IWorkerService_start_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_start_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_start_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_start_pargs {
+ public:
+
+
+  virtual ~IWorkerService_start_pargs() noexcept;
+  const IWorkerId* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_start_result {
+ public:
+
+  IWorkerService_start_result(const IWorkerService_start_result&);
+  IWorkerService_start_result& operator=(const IWorkerService_start_result&);
+  IWorkerService_start_result() {
+  }
+
+  virtual ~IWorkerService_start_result() noexcept;
+
+  bool operator == (const IWorkerService_start_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IWorkerService_start_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_start_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_start_presult {
+ public:
+
+
+  virtual ~IWorkerService_start_presult() noexcept;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_destroy_args__isset {
+  _IWorkerService_destroy_args__isset() : id(false) {}
+  bool id :1;
+} _IWorkerService_destroy_args__isset;
+
+class IWorkerService_destroy_args {
+ public:
+
+  IWorkerService_destroy_args(const IWorkerService_destroy_args&);
+  IWorkerService_destroy_args& operator=(const IWorkerService_destroy_args&);
+  IWorkerService_destroy_args() {
+  }
+
+  virtual ~IWorkerService_destroy_args() noexcept;
+  IWorkerId id;
+
+  _IWorkerService_destroy_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  bool operator == (const IWorkerService_destroy_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_destroy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_destroy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_destroy_pargs {
+ public:
+
+
+  virtual ~IWorkerService_destroy_pargs() noexcept;
+  const IWorkerId* id;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_destroy_result {
+ public:
+
+  IWorkerService_destroy_result(const IWorkerService_destroy_result&);
+  IWorkerService_destroy_result& operator=(const IWorkerService_destroy_result&);
+  IWorkerService_destroy_result() {
+  }
+
+  virtual ~IWorkerService_destroy_result() noexcept;
+
+  bool operator == (const IWorkerService_destroy_result & /* rhs */) const
+  {
+    return true;
+  }
+  bool operator != (const IWorkerService_destroy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_destroy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_destroy_presult {
+ public:
+
+
+  virtual ~IWorkerService_destroy_presult() noexcept;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 typedef struct _IWorkerService_newInstance_args__isset {
@@ -2389,6 +2569,12 @@ class IWorkerServiceClient : virtual public IWorkerServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void start(const IWorkerId& id);
+  void send_start(const IWorkerId& id);
+  void recv_start();
+  void destroy(const IWorkerId& id);
+  void send_destroy(const IWorkerId& id);
+  void recv_destroy();
   void newInstance(IWorkerId& _return, const int64_t id, const std::string& type);
   void send_newInstance(const int64_t id, const std::string& type);
   void recv_newInstance(IWorkerId& _return);
@@ -2458,6 +2644,8 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IWorkerServiceProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_start(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_destroy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2479,6 +2667,8 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
  public:
   IWorkerServiceProcessor(::std::shared_ptr<IWorkerServiceIf> iface) :
     iface_(iface) {
+    processMap_["start"] = &IWorkerServiceProcessor::process_start;
+    processMap_["destroy"] = &IWorkerServiceProcessor::process_destroy;
     processMap_["newInstance"] = &IWorkerServiceProcessor::process_newInstance;
     processMap_["newInstance3a"] = &IWorkerServiceProcessor::process_newInstance3a;
     processMap_["newInstance3b"] = &IWorkerServiceProcessor::process_newInstance3b;
@@ -2525,6 +2715,24 @@ class IWorkerServiceMultiface : virtual public IWorkerServiceIf {
     ifaces_.push_back(iface);
   }
  public:
+  void start(const IWorkerId& id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->start(id);
+    }
+    ifaces_[i]->start(id);
+  }
+
+  void destroy(const IWorkerId& id) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->destroy(id);
+    }
+    ifaces_[i]->destroy(id);
+  }
+
   void newInstance(IWorkerId& _return, const int64_t id, const std::string& type) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -2736,6 +2944,12 @@ class IWorkerServiceConcurrentClient : virtual public IWorkerServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void start(const IWorkerId& id);
+  int32_t send_start(const IWorkerId& id);
+  void recv_start(const int32_t seqid);
+  void destroy(const IWorkerId& id);
+  int32_t send_destroy(const IWorkerId& id);
+  void recv_destroy(const int32_t seqid);
   void newInstance(IWorkerId& _return, const int64_t id, const std::string& type);
   int32_t send_newInstance(const int64_t id, const std::string& type);
   void recv_newInstance(IWorkerId& _return, const int32_t seqid);
