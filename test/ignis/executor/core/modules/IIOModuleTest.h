@@ -13,6 +13,7 @@ namespace ignis {
                     CPPUNIT_TEST_SUITE(IIOModuleTest);
                     CPPUNIT_TEST(textFile1);
                     CPPUNIT_TEST(textFileN);
+                    CPPUNIT_TEST(saveAsTextFile);
                     CPPUNIT_TEST_SUITE_END();
 
                 public:
@@ -22,12 +23,16 @@ namespace ignis {
 
                     void tearDown() override;
 
-                    void textFile1() { /*textFileTest(1, 1);*/ }
+                    void textFile1() { textFileTest(1, 1); }
 
                     void textFileN() { textFileTest(8, 2); }
 
+                    void saveAsTextFile() { saveAsTextFileTest(8, 2); }
+
                 private:
                     void textFileTest(int n, int cores);
+
+                    void saveAsTextFileTest(int n, int cores);
 
                     std::shared_ptr<IIOModule> io;
                 };

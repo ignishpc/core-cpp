@@ -8,6 +8,7 @@
 #include "ignis/executor/core/io/IJsonWriter.h"
 #include "ignis/executor/core/io/INativeReader.h"
 #include "ignis/executor/core/io/INativeWriter.h"
+#include "ignis/executor/core/io/IPrinter.h"
 #include <vector>
 
 namespace ignis {
@@ -226,6 +227,26 @@ namespace ignis {
                         (*this)(in, obj);
                         return obj;
                     }
+                };
+
+                template<typename _Alloc>
+                struct IPrinterType<api::IVector<bool, _Alloc>> {
+                    inline void operator()(std::ostream &out, const api::IVector<bool, _Alloc> &obj, int64_t level) {
+                        printer(out, (std::vector<char, _Alloc> &) obj, level);
+                    }
+
+                private:
+                    IPrinterType<std::vector<char, _Alloc>> printer;
+                };
+
+                template<typename Tp, typename _Alloc>
+                struct IPrinterType<api::IVector<Tp, _Alloc>> {
+                    inline void operator()(std::ostream &out, const api::IVector<Tp, _Alloc> &obj, int64_t level) {
+                        printer(out, obj, level);
+                    }
+
+                private:
+                    IPrinterType<std::vector<Tp, _Alloc>> printer;
                 };
 
                 template<typename Tp, typename _Alloc>

@@ -8,6 +8,7 @@ IIOModuleTest::IIOModuleTest() : io(std::make_shared<IIOModule>(executor_data)) 
     auto &props = executor_data->getContext().props();
     props["ignis.partition.minimal"] = "10MB";
     props["ignis.partition.type"] = "Memory";
+    props["ignis.modules.io.overwrite"] = "false";
 }
 
 void IIOModuleTest::setUp() {}
@@ -50,4 +51,27 @@ void IIOModuleTest::textFileTest(int n, int cores) {
         CPPUNIT_ASSERT_EQUAL(lines.size(), result.size());
         for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(lines[i], result[i]); }
     }
+}
+
+void IIOModuleTest::saveAsTextFileTest(int n,int cores){
+    executor_data->setCores(cores);
+    srand(0);
+    const char alphanum[] = "0123456789"
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            "abcdefghijklmnopqrstuvwxyz";
+
+    auto id = executor_data->getContext().executorId();
+    registerType<std::string>();
+    api::IVector<std::string> lines;
+    std::string line;
+
+    for (int l = 0; l < 10000; l++) {
+        int lc = rand() % 100;
+        for (int i = 0; i < lc; ++i) { line += alphanum[rand() % (sizeof(alphanum) - 1)]; }
+        lines.push_back(std::move(line));
+    }
+
+    loadToPartitions(lines, n);
+
+    io->saveAsTextFile("./tmpsave", cores * id);
 }
