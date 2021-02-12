@@ -100,17 +100,34 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
         size_t partitionInit = ex_chunk_init;
         std::string buffer;
 
-        while (file.tellg() < ex_chunk_end) {
-            if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
-                partition = executor_data->getPartitionTools().newPartition<std::string>();
-                write_iterator = partition->writeIterator();
-                thread_groups[id]->add(partition);
-                partitionInit = file.tellg();
+        if (executor_data->getPartitionTools().isMemory(*partition)) {
+            auto part_men = executor_data->getPartitionTools().toMemory(partition);
+            while (file.tellg() < ex_chunk_end) {
+                if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
+                    part_men->fit();
+                    part_men = executor_data->getPartitionTools().newMemoryPartition<std::string>();
+                    thread_groups[id]->add(part_men);
+                    partitionInit = file.tellg();
+                }
+                std::getline(file, buffer, '\n');
+                elements++;
+                part_men->inner().push_back(buffer);
             }
-            std::getline(file, buffer, '\n');
-            elements++;
-            write_iterator->write(buffer);
+        } else {
+            while (file.tellg() < ex_chunk_end) {
+                if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
+                    partition->fit();
+                    partition = executor_data->getPartitionTools().newPartition<std::string>();
+                    write_iterator = partition->writeIterator();
+                    thread_groups[id]->add(partition);
+                    partitionInit = file.tellg();
+                }
+                std::getline(file, buffer, '\n');
+                elements++;
+                write_iterator->write(buffer);
+            }
         }
+
         total_bytes += (size_t) file.tellg() - ex_chunk_init;
 
         IGNIS_OMP_CATCH()
@@ -153,6 +170,7 @@ void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t 
                 std::getline(file, buffer, '\n');
                 write_iterator->write(buffer);
             }
+            partition->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -174,6 +192,7 @@ void IIOImpl::partitionObjectFileVoid(const std::string &path, int64_t first, in
         auto partition = executor_data->getPartitionTools().newVoidPartition(ghc::filesystem::file_size(file_name));
         partition->read(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(transport));
 
+        partition->fit();
         group->add(partition);
     }
 

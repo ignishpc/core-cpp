@@ -140,8 +140,14 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
             };
 
             auto &part = *(*group)[p];
-            io::IPrinter<api::IReadIterator<Tp>> printer;
-            printer(file, *part.readIterator());
+            if (executor_data->getPartitionTools().isMemory(part)) {
+                auto &men_part = executor_data->getPartitionTools().toMemory(part);
+                io::IPrinter<typename std::remove_reference<decltype(men_part.inner())>::type> printer;
+                printer(file, men_part.inner());
+            } else {
+                io::IPrinter<api::IReadIterator<Tp>> printer;
+                printer(file, *part.readIterator());
+            }
         }
         IGNIS_OMP_CATCH()
     }
