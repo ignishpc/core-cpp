@@ -84,7 +84,7 @@ struct ignis::executor::core::io::IPrinterType<std::vector<_Tp, _Alloc>> {
         while (begin != end) {
             out << tabs;
             IPrinterType<_Tp>()(out, *begin, level + 1);
-            out << std::endl;
+            out << '\n';
             begin++;
         }
     }
@@ -100,7 +100,7 @@ struct ignis::executor::core::io::IPrinterType<std::list<_Tp, _Alloc>> {
         while (begin != end) {
             out << tabs;
             IPrinterType<_Tp>()(out, *begin, level + 1);
-            out << std::endl;
+            out << '\n';
             begin++;
         }
     }
@@ -116,7 +116,7 @@ struct ignis::executor::core::io::IPrinterType<std::forward_list<_Tp, _Alloc>> {
         while (begin != end) {
             out << tabs;
             IPrinterType<_Tp>()(out, *begin, level + 1);
-            out << std::endl;
+            out << '\n';
             begin++;
         }
     }
@@ -132,7 +132,7 @@ struct ignis::executor::core::io::IPrinterType<std::set<_Key, _Compare, _Alloc>>
         while (begin != end) {
             out << tabs;
             IPrinterType<_Key>()(out, *begin, level + 1);
-            out << std::endl;
+            out << '\n';
             begin++;
         }
     }
@@ -148,7 +148,7 @@ struct ignis::executor::core::io::IPrinterType<std::unordered_set<_Value, _Hash,
         while (begin != end) {
             out << tabs;
             IPrinterType<_Value>()(out, *begin, level + 1);
-            out << std::endl;
+            out << '\n';
             begin++;
         }
     }
@@ -164,7 +164,7 @@ struct ignis::executor::core::io::IPrinterType<std::map<_Key, _Tp, _Compare, _Al
         while (begin != end) {
             out << tabs;
             IPrinterType<std::pair<_Key, _Tp>>()(out, *begin, level + 1);
-            out << std::endl;
+            out << '\n';
             begin++;
         }
     }
@@ -181,7 +181,7 @@ struct ignis::executor::core::io::IPrinterType<std::unordered_map<_Key, _Tp, _Ha
         while (begin != end) {
             out << tabs;
             IPrinterType<std::pair<_Key, _Tp>>()(out, *begin, level + 1);
-            out << std::endl;
+            out << '\n';
             begin++;
         }
     }
@@ -220,7 +220,7 @@ struct ignis::executor::core::io::IPrinterType<ignis::executor::api::IReadIterat
         while (noconst_it.hasNext()) {
             out << tabs;
             IPrinterType<_Tp>()(out, noconst_it.next(), level + 1);
-            out << std::endl;
+            out << '\n';
         }
     }
 };

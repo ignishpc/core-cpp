@@ -98,31 +98,34 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
         auto write_iterator = partition->writeIterator();
         thread_groups[id]->add(partition);
         size_t partitionInit = ex_chunk_init;
+        size_t filepos = ex_chunk_init;
         std::string buffer;
 
         if (executor_data->getPartitionTools().isMemory(*partition)) {
             auto part_men = executor_data->getPartitionTools().toMemory(partition);
-            while (file.tellg() < ex_chunk_end) {
-                if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
+            while (filepos < ex_chunk_end) {
+                if ((filepos - partitionInit) > minPartitionSize) {
                     part_men->fit();
                     part_men = executor_data->getPartitionTools().newMemoryPartition<std::string>();
                     thread_groups[id]->add(part_men);
-                    partitionInit = file.tellg();
+                    partitionInit = filepos;
                 }
                 std::getline(file, buffer, '\n');
+                filepos+= buffer.size() + 1;
                 elements++;
                 part_men->inner().push_back(buffer);
             }
         } else {
-            while (file.tellg() < ex_chunk_end) {
-                if (((size_t) file.tellg() - partitionInit) > minPartitionSize) {
+            while (filepos < ex_chunk_end) {
+                if ((filepos - partitionInit) > minPartitionSize) {
                     partition->fit();
                     partition = executor_data->getPartitionTools().newPartition<std::string>();
                     write_iterator = partition->writeIterator();
                     thread_groups[id]->add(partition);
-                    partitionInit = file.tellg();
+                    partitionInit = filepos;
                 }
                 std::getline(file, buffer, '\n');
+                filepos+= buffer.size() + 1;
                 elements++;
                 write_iterator->write(buffer);
             }
