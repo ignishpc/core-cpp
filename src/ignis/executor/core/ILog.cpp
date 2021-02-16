@@ -1,6 +1,7 @@
 
 #include "ILog.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_sinks.h"
 
 
 using namespace ignis::executor::core;
@@ -9,7 +10,11 @@ spdlog::level::level_enum parse[] = {spdlog::level::trace, spdlog::level::debug,
                                      spdlog::level::warn,  spdlog::level::err,   spdlog::level::critical};
 
 
-void ILog::initLog() { spdlog::default_logger()->set_pattern("%B %d, %Y %I:%M:%S %p <%l> [%s:%#] %v"); }
+void ILog::initLog() {
+    spdlog::set_default_logger(spdlog::stderr_logger_st("ignis"));
+    spdlog::default_logger()->set_pattern("%B %d, %Y %I:%M:%S %p <%l> [%s:%#] %v");
+
+}
 
 ILog::ILog(level l, const std::string &file, int line) : l(l), file(file), line(line) {}
 
