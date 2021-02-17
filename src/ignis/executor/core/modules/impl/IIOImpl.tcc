@@ -116,7 +116,6 @@ void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression,
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
-    executor_data->deletePartitions();
     IGNIS_CATCH()
 }
 
@@ -152,7 +151,6 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
-    executor_data->deletePartitions();
     IGNIS_CATCH()
 }
 
@@ -161,7 +159,6 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: saving as json file";
     auto group = executor_data->getPartitions<Tp>();
-    executor_data->deletePartitions();
 
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
@@ -182,7 +179,6 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
-    executor_data->deletePartitions();
 
     auto header = path + "/json";
     auto file = openFileWrite(header);

@@ -71,6 +71,7 @@ void ICacheImpl::loadContext(const int64_t id) {
     IGNIS_LOG(info) << "CacheContext: loading context " << id;
 
     if (!found) { throw exception::IInvalidArgument("context " + std::to_string(id) + " not found"); }
+    executor_data->clearVariables();
     executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
     context.erase(value);
     IGNIS_CATCH()
