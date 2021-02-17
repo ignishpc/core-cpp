@@ -44,7 +44,7 @@ std::ifstream IIOImpl::openFileRead(const std::string &path) {
 std::ofstream IIOImpl::openFileWrite(const std::string &path) {
     IGNIS_LOG(info) << "IO: creating file " << path;
     if (ghc::filesystem::exists(path)) {
-        if (executor_data->getProperties().ioOverwrite()) {
+        if (!executor_data->getProperties().ioOverwrite()) {
             IGNIS_LOG(warning) << "IO: " << path << " already exists";
             if (!ghc::filesystem::remove(path)) { throw exception::ILogicError(path + " can not be removed"); }
         } else {
