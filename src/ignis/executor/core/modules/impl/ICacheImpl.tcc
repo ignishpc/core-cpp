@@ -61,7 +61,7 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
         IGNIS_LOG(info) << "CacheContext: saving partition in " << storage::IMemoryPartition<Tp>::TYPE << " cache";
         if (!executor_data->getPartitionTools().isMemory(*group_cache)) {
             auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
-            for (int i = 0; i < group_cache->partitions(); i++) {
+            for (int64_t i = 0; i < group_cache->partitions(); i++) {
                 auto part = executor_data->getPartitionTools().newMemoryPartition<Tp>((*group)[i]->size());
                 (*group_cache)[i]->copyTo(*part);
                 group->add(part);
@@ -72,7 +72,7 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
         IGNIS_LOG(info) << "CacheContext: saving partition in " << storage::IRawMemoryPartition<Tp>::TYPE << " cache";
         if (!executor_data->getPartitionTools().isRawMemory(*group_cache)) {
             auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
-            for (int i = 0; i < group_cache->partitions(); i++) {
+            for (int64_t i = 0; i < group_cache->partitions(); i++) {
                 auto part = executor_data->getPartitionTools().newRawMemoryPartition<Tp>((*group)[i]->bytes());
                 (*group_cache)[i]->copyTo(*part);
                 group->add(part);
@@ -84,7 +84,7 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
         if (!executor_data->getPartitionTools().isDisk(*group_cache)) {
             for (auto &part : *group_cache) {
                 auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
-                for (int i = 0; i < group_cache->partitions(); i++) {
+                for (int64_t i = 0; i < group_cache->partitions(); i++) {
                     auto part = executor_data->getPartitionTools().newDiskPartition<Tp>("", true);
                     (*group_cache)[i]->copyTo(*part);
                     group->add(part);

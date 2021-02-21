@@ -40,9 +40,9 @@ IPartitionToolsClass::newPartition(storage::IPartition<Tp> &part) {
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-IPartitionToolsClass::newPartitionGroup(int partitions) {
+IPartitionToolsClass::newPartitionGroup(int64_t partitions) {
     auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
-    for (int i = 0; i < partitions; i++) {
+    for (int64_t i = 0; i < partitions; i++) {
         auto part = newPartition<Tp>();
         group->add(part);
     }
@@ -53,7 +53,7 @@ template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
 IPartitionToolsClass::newPartitionGroup(storage::IPartitionGroup<Tp> &partitions) {
     auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
-    for (int i = 0; i < partitions; i++) {
+    for (int64_t i = 0; i < partitions; i++) {
         auto part = newPartition<Tp>((*group)[i]);
         group->add(part);
     }

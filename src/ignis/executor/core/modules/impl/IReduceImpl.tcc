@@ -580,10 +580,10 @@ void IReduceImplClass::keyExchanging() {
     IGNIS_LOG(info) << "Reduce: exchanging " << numPartitions << " partitions keys";
     auto executor_parts = numPartitions / executors;
     auto remainder = numPartitions % executors;
-    int target = -1;
+    int64_t target = -1;
     int64_t toSend = 0;
 
-    for (int p = 0; p < numPartitions; p++) {
+    for (int64_t p = 0; p < numPartitions; p++) {
         if (toSend == 0) {
             target++;
             toSend = executor_parts;

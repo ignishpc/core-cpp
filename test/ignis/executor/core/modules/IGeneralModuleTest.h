@@ -23,6 +23,7 @@ namespace ignis {
                     CPPUNIT_TEST(groupByIntStringTest);
                     CPPUNIT_TEST(sortIntTest);
                     CPPUNIT_TEST(sortStringTest);
+                    CPPUNIT_TEST(resamplingSortIntTest);
                     CPPUNIT_TEST(flatMapValuesIntTest);
                     CPPUNIT_TEST(mapValuesIntTest);
                     CPPUNIT_TEST(groupByKeyIntStringTest);
@@ -62,6 +63,8 @@ namespace ignis {
                     void sortIntTest() { sortTest<int>("SortInt", 2, "Memory"); }
 
                     void sortStringTest() { sortTest<std::string>("SortString", 2, "RawMemory"); }
+
+                    void resamplingSortIntTest() { sortTest<int>("SortInt", 2, "Memory", true); }
 
                     void flatMapValuesIntTest() { flatMapValuesTest<int>("FlatMapValuesInt", 2, "Memory"); }
 
@@ -110,7 +113,8 @@ namespace ignis {
                     void groupByTest(const std::string &name, int cores, const std::string &partitionType);
 
                     template<typename Tp>
-                    void sortTest(const std::string &name, int cores, const std::string &partitionType);
+                    void sortTest(const std::string &name, int cores, const std::string &partitionType,
+                                  bool resampling = false);
 
                     template<typename Tp>
                     void flatMapValuesTest(const std::string &name, int cores, const std::string &partitionType);

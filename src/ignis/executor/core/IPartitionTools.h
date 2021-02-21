@@ -29,7 +29,7 @@ namespace ignis {
                 inline std::shared_ptr<storage::IPartition<Tp>> newPartition(storage::IPartition<Tp> &part);
 
                 template<typename Tp>
-                inline std::shared_ptr<storage::IPartitionGroup<Tp>> newPartitionGroup(int partitions = 0);
+                inline std::shared_ptr<storage::IPartitionGroup<Tp>> newPartitionGroup(int64_t partitions = 0);
 
                 template<typename Tp>
                 inline std::shared_ptr<storage::IPartitionGroup<Tp>>
@@ -116,7 +116,7 @@ namespace ignis {
 
                 IPropertyParser &properties;
                 api::IContext &context;
-                int partition_id_gen;
+                int64_t partition_id_gen;
             };
         }// namespace core
     }    // namespace executor

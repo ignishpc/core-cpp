@@ -22,6 +22,8 @@ namespace ignis {
 
                 double sortSamples() { return getMinDouble("ignis.modules.sort.samples", 0); }
 
+                bool sortResampling() { return getBoolean("ignis.modules.sort.resampling"); }
+
                 int64_t ioOverwrite() { return getBoolean("ignis.modules.io.overwrite"); }
 
                 int8_t ioCompression() { return getRangeNumber("ignis.modules.io.compression", 0, 9); }

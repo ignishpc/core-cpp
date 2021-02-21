@@ -66,7 +66,7 @@ namespace ignis {
                     private:
                         /*Primary Functions*/
                         template<typename Tp, typename Cmp>
-                        void sort_impl(Cmp comparator, int64_t partitions);
+                        void sort_impl(Cmp comparator, int64_t partitions, bool local_sort=true);
 
                         template<typename Tp, typename Cmp>
                         void parallelLocalSort(storage::IPartitionGroup<Tp> &group, Cmp comparator);

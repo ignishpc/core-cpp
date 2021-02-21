@@ -153,8 +153,10 @@ void IGeneralModuleTestClass::groupByTest(const std::string &name, int cores, co
 }
 
 template<typename Tp>
-void IGeneralModuleTestClass::sortTest(const std::string &name, int cores, const std::string &partitionType) {
+void IGeneralModuleTestClass::sortTest(const std::string &name, int cores, const std::string &partitionType, bool rs) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->getContext().props()["ignis.modules.sort.resampling"] = rs ? "true" : "false";
+
     auto np = executor_data->getContext().executors();
     executor_data->setCores(cores);
     auto elems = IElements<Tp>().create(100 * cores * 2 * np, 0);
