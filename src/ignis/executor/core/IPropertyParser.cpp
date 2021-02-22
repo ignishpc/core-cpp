@@ -153,7 +153,7 @@ size_t IPropertyParser::getSize(const std::string &key) {
 }
 
 bool IPropertyParser::getBoolean(const std::string &key) {
-    return std::regex_search(properties[key], std::regex("y|Y|yes|Yes|YES|true|True|TRUE|on|On|ON"));
+    return std::regex_search(getString(key), std::regex("y|Y|yes|Yes|YES|true|True|TRUE|on|On|ON"));
 }
 
 IPropertyParser::~IPropertyParser() {}

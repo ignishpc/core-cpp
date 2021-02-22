@@ -199,7 +199,9 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
         executor_data->setPartitions(input);
         return;
     }
-    partitions = totalPartitions;
+    if(partitions < 0){
+        partitions = totalPartitions;
+    }
 
     /*Generates pivots to separate the elements in order*/
     double sr = executor_data->getProperties().sortSamples();
