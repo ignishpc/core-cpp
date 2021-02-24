@@ -8,8 +8,7 @@
 using namespace ignis::executor::core;
 
 IExecutorData::IExecutorData()
-    : properties(context.props()), partition_tools(properties, context),
-      _mpi(properties, partition_tools, context) {}
+    : properties(context.props()), partition_tools(properties, context), _mpi(properties, partition_tools, context) {}
 
 bool IExecutorData::hasPartitions() { return (bool) partitions; }
 
@@ -40,12 +39,13 @@ int IExecutorData::getCores() { return this->cores; }
 
 int IExecutorData::getMpiCores() { return context.mpi_thread_group.size(); }
 
-void IExecutorData::enableMpiCores(){
+void IExecutorData::enableMpiCores() {
     int64_t mpiCores = std::ceil(cores * properties.transportCores());
 
     if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1) {
         IGNIS_LOG(info) << "Duplicating mpi group for " << mpiCores << " threads";
         for (int i = 1; i < mpiCores; i++) { context.mpi_thread_group.push_back(context.mpi_thread_group[0].Dup()); }
+        IGNIS_LOG(info) << "Threads mpi group ready";
     }
 }
 
