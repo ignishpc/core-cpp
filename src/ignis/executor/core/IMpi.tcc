@@ -296,23 +296,28 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
             int sz = 0;
             std::vector<int> szv;
             std::vector<int> displs;
+            IGNIS_LOG(info) << "before serialize";
             if (rank != root) {
                 part.write((std::shared_ptr<transport::ITransport> &) buffer, properties.msgCompression());
                 sz = buffer->writeEnd();
                 buffer->resetBuffer();
             }
+            IGNIS_LOG(info) << "after serialize";
             if (rank == root) { szv.resize(executors, sz); }
             group.Gather(&sz, 1, MPI::INT, &szv[0], 1, MPI::INT, root);
             if (rank == root) {
                 displs = this->displs(szv);
                 buffer->getWritePtr(displs.back());
             }
+            IGNIS_LOG(info) << "before gather";
             group.Gatherv(buffer->getWritePtr(sz), sz, MPI::BYTE, buffer->getWritePtr(sz), &szv[0], &displs[0],
                           MPI::BYTE, root);
+            IGNIS_LOG(info) << "after gather";
             if (rank == root) {
                 auto ptr = buffer->getWritePtr(sz);
                 storage::IMemoryPartition<Tp> rcv;
                 for (int i = 0; i < executors; i++) {
+                    IGNIS_LOG(info) << "deserialize " << i << " of " << executors;
                     if (i != rank) {
                         auto view = std::make_shared<transport::IMemoryBuffer>(ptr + displs[i], szv[i]);
                         rcv.read((std::shared_ptr<transport::ITransport> &) view);
