@@ -14,7 +14,7 @@
 template<typename Tp>
 void IMpiClass::gather(storage::IPartition<Tp> &part, int root) {
     if (executors() == 1) { return; }
-    gatherImpl(comm, part, root, true);
+    gatherImpl(native(), part, root, true);
 }
 
 template<typename Tp>
@@ -24,9 +24,9 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
         if (isContiguousType<Tp>()) {
             auto &men = partition_tools.toMemory(part);
             int sz = men.size();
-            comm.Bcast(&sz, 1, MPI::INT, 0);
+            native().Bcast(&sz, 1, MPI::INT, 0);
             if (!isRoot(root)) { men.resize(sz); }
-            comm.Bcast(&men[0], sz * sizeof(Tp), MPI::BYTE, root);
+            native().Bcast(&men[0], sz * sizeof(Tp), MPI::BYTE, root);
         } else {
             auto buffer = std::make_shared<transport::IMemoryBuffer>(part.bytes());
             int sz;
@@ -35,8 +35,8 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
                 sz = buffer->writeEnd();
                 buffer->resetBuffer();
             }
-            comm.Bcast(&sz, 1, MPI::INT, root);
-            comm.Bcast(buffer->getWritePtr(sz), sz, MPI::BYTE, root);
+            native().Bcast(&sz, 1, MPI::INT, root);
+            native().Bcast(buffer->getWritePtr(sz), sz, MPI::BYTE, root);
             if (!isRoot(root)) {
                 buffer->wroteBytes(sz);
                 part.clear();
@@ -47,23 +47,23 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
         auto &raw = partition_tools.toRawMemory(part);
         raw.sync();
         std::pair<int, int> sz(raw.size(), (int) (raw.end() - raw.begin(false)));
-        comm.Bcast(&sz, 2, MPI::INT, root);
+        native().Bcast(&sz, 2, MPI::INT, root);
         if (!isRoot(root)) { raw.resize(sz.first, sz.second); }
-        comm.Bcast(raw.begin(false), sz.second, MPI::BYTE, root);
+        native().Bcast(raw.begin(false), sz.second, MPI::BYTE, root);
     } else {
         auto &disk = partition_tools.toDisk(part);
         disk.sync();
         std::string path = disk.getPath();
         int sz = path.size();
-        comm.Bcast(&sz, 1, MPI::INT, root);
+        native().Bcast(&sz, 1, MPI::INT, root);
         path.resize(sz);
-        comm.Bcast(const_cast<char *>(path.c_str()), sz, MPI::BYTE, root);
+        native().Bcast(const_cast<char *>(path.c_str()), sz, MPI::BYTE, root);
         if (!isRoot(root)) {
             disk.destroy = true;
             auto rcv = partition_tools.copyDiskPartition<Tp>(path);
             std::swap(disk, *rcv);
         }
-        comm.Barrier();
+        native().Barrier();
     }
 }
 
@@ -393,7 +393,7 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
 
 template<typename Tp>
 void IMpiClass::sendRecv(storage::IPartition<Tp> &part, int source, int dest, int tag) {
-    sendRecvImpl(comm, part, source, dest, tag, true);
+    sendRecvImpl(native(), part, source, dest, tag, true);
 }
 
 template<typename Tp>

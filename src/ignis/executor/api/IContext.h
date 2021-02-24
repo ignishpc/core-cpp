@@ -5,6 +5,7 @@
 #include "ignis/executor/core/IVariable.h"
 #include <memory>
 #include <mpi.h>
+#include <vector>
 #include <unordered_map>
 
 namespace ignis {
@@ -43,7 +44,7 @@ namespace ignis {
 
                 std::unordered_map<std::string, std::string> properties;
                 std::unordered_map<std::string, std::shared_ptr<executor::core::IVariable>> variables;
-                MPI::Intracomm mpi_group;
+                std::vector<MPI::Intracomm> mpi_thread_group;
             };
         }// namespace api
     }    // namespace executor

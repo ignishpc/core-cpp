@@ -18,6 +18,8 @@ namespace ignis {
 
                 int cores() { return getNumber("ignis.executor.cores"); }
 
+                double transportCores() { return getRangeDouble("ignis.transport.cores", 0, 1); }
+
                 int64_t partitionMinimal() { return getSize("ignis.partition.minimal"); }
 
                 double sortSamples() { return getMinDouble("ignis.modules.sort.samples", 0); }
@@ -32,15 +34,9 @@ namespace ignis {
 
                 int8_t partitionCompression() { return getRangeNumber("ignis.partition.compression", 0, 9); }
 
-                bool nativeSerialization() { return getString("ignis.partition.serialization") == "native"; }
-
-                int64_t transportMinimal() { return getSize("ignis.transport.minimal"); }
-
                 int64_t transportElemSize() { return getSize("ignis.transport.element.size"); }
 
                 std::string partitionType() { return getString("ignis.partition.type"); }
-
-                std::string jobName() { return getString("ignis.job.name"); }
 
                 std::string jobDirectory() { return getString("ignis.job.directory"); }
 

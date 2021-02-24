@@ -199,9 +199,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
         executor_data->setPartitions(input);
         return;
     }
-    if(partitions < 0){
-        partitions = totalPartitions;
-    }
+    if (partitions < 0) { partitions = totalPartitions; }
 
     /*Generates pivots to separate the elements in order*/
     double sr = executor_data->getProperties().sortSamples();
@@ -257,19 +255,21 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
 
     decltype(input) ranges = generateRanges(*input, *pivots, comparator);
     decltype(input) output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-    auto executor_ranges = (int64_t) std::ceil(ranges->partitions() / (double) executors);
-    int64_t target = -1;
+    auto numRanges= ranges->partitions();
+    auto targets = targetsChunk(ranges->partitions(), executors);
+
     IGNIS_LOG(info) << "Sort: exchanging ranges";
-    for (int64_t p = 0; p < ranges->partitions(); p++) {
-        if (p % executor_ranges == 0) { target++; }
-        executor_data->mpi().gather(*(*ranges)[p], target);
-        if (executor_data->mpi().isRoot(target)) {
+    executor_data->enableMpiCores();
+    int64_t mpiCores = executor_data->getMpiCores();
+#pragma omp parallel for schedule(static, (int) std::ceil(numRanges / (double)mpiCores)) num_threads(mpiCores)
+    for (int64_t p = 0; p < numRanges; p++) {
+        executor_data->mpi().gather(*(*ranges)[p], targets[p]);
+        if (executor_data->mpi().isRoot(targets[p])) {
             output->add((*ranges)[p]);
         } else {
             (*ranges)[p].reset();
         }
     }
-
     /*Sort final partitions*/
     IGNIS_LOG(info) << "Sort: sorting again " << output->partitions() << " partitions locally";
     parallelLocalSort(*output, comparator);

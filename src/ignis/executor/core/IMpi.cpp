@@ -4,14 +4,14 @@
 
 using namespace ignis::executor::core;
 
-IMpi::IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, const MPI::Intracomm &comm)
-    : properties(properties), partition_tools(partition_tools), comm(comm) {}
+IMpi::IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, api::IContext& context)
+    : properties(properties), partition_tools(partition_tools), context(context) {}
 
-bool IMpi::isRoot(int root) { return comm.Get_rank() == root; }
+bool IMpi::isRoot(int root) { return native().Get_rank() == root; }
 
-int IMpi::rank() { return comm.Get_rank(); }
+int IMpi::rank() { return native().Get_rank(); }
 
-int IMpi::executors() { return comm.Get_size(); }
+int IMpi::executors() { return native().Get_size(); }
 
 std::vector<int> IMpi::displs(const std::vector<int> &sz) {
     std::vector<int> d;//Last value is not used by mpi but is used as total size
@@ -21,7 +21,7 @@ std::vector<int> IMpi::displs(const std::vector<int> &sz) {
     return std::move(d);
 }
 
-const MPI::Intracomm &IMpi::native() { return comm; }
+const MPI::Intracomm &IMpi::native() { return context.mpiGroup(); }
 
 std::vector<int> IMpi::szVector(const std::vector<std::pair<int, int>> &elems_szv) {
     std::vector<int> szv;
@@ -40,7 +40,7 @@ void IMpi::move(void *begin, size_t n, size_t displ) {
     if (displ > 0) { std::memcpy(((char *) begin) + displ, begin, n); }
 }
 
-void IMpi::barrier() { comm.Barrier(); }
+void IMpi::barrier() { native().Barrier(); }
 
 void IMpi::driverScatterVoid(const MPI::Intracomm &group,
                              storage::IPartitionGroup<storage::IVoidPartition::VOID_TYPE> &part_group,

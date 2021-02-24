@@ -578,19 +578,14 @@ void IReduceImplClass::keyExchanging() {
     auto executors = executor_data->mpi().executors();
     auto numPartitions = input->partitions();
     IGNIS_LOG(info) << "Reduce: exchanging " << numPartitions << " partitions keys";
-    auto executor_parts = numPartitions / executors;
-    auto remainder = numPartitions % executors;
-    int64_t target = -1;
-    int64_t toSend = 0;
+    auto targets = targetsChunk(numPartitions, executors);
 
+    executor_data->enableMpiCores();
+    int64_t mpiCores = executor_data->getMpiCores();
+#pragma omp parallel for schedule(static, (int) std::ceil(numPartitions / (double)mpiCores)) num_threads(mpiCores)
     for (int64_t p = 0; p < numPartitions; p++) {
-        if (toSend == 0) {
-            target++;
-            toSend = executor_parts;
-            if (target < remainder) { toSend++; }
-        }
-        executor_data->mpi().gather(*(*input)[p], target);
-        if (executor_data->mpi().isRoot(target)) {
+        executor_data->mpi().gather(*(*input)[p], targets[p]);
+        if (executor_data->mpi().isRoot(targets[p])) {
             output->add((*input)[p]);
         } else {
             (*input)[p].reset();

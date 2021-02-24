@@ -9,7 +9,7 @@ using namespace ignis::executor::core;
 
 IExecutorData::IExecutorData()
     : properties(context.props()), partition_tools(properties, context),
-      _mpi(properties, partition_tools, context.mpiGroup()) {}
+      _mpi(properties, partition_tools, context) {}
 
 bool IExecutorData::hasPartitions() { return (bool) partitions; }
 
@@ -32,11 +32,27 @@ IPropertyParser &IExecutorData::getProperties() { return properties; }
 
 IPartitionTools &IExecutorData::getPartitionTools() { return partition_tools; }
 
-IMpi IExecutorData::mpi() { return _mpi; }
+IMpi &IExecutorData::mpi() { return _mpi; }
 
 void IExecutorData::setCores(int cores) { omp_set_num_threads(this->cores = cores); }
 
 int IExecutorData::getCores() { return this->cores; }
+
+int IExecutorData::getMpiCores() { return context.mpi_thread_group.size(); }
+
+void IExecutorData::enableMpiCores(){
+    int64_t mpiCores = std::ceil(cores * properties.transportCores());
+
+    if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1) {
+        IGNIS_LOG(info) << "Duplicating mpi group for " << mpiCores << " threads";
+        for (int i = 1; i < mpiCores; i++) { context.mpi_thread_group.push_back(context.mpi_thread_group[0].Dup()); }
+    }
+}
+
+void IExecutorData::setMpiGroup(const MPI::Intracomm &group) {
+    context.mpi_thread_group.clear();
+    context.mpi_thread_group.push_back(group);
+}
 
 std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source, bool withBackup) {
     IGNIS_LOG(info) << "Loading function";

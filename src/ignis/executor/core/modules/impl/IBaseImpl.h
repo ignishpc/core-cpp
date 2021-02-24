@@ -23,6 +23,8 @@ namespace ignis {
 
                         void registerType(const std::shared_ptr<selector::ITypeSelector> &type);
 
+                        std::vector<int64_t> targetsChunk(int64_t n, int64_t chunks);
+
                         virtual ~IBaseImpl();
 
                     protected:

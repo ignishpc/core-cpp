@@ -79,7 +79,8 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
             group = addComm(group, client_comm, MPI::COMM_SELF, true);
         }
     }
-    const_cast<MPI::Intracomm &>(executor_data->getContext().mpiGroup()) = group;
+
+    executor_data->setMpiGroup(group);
     IGNIS_LOG(info) << "Comm: group ready with " << group.Get_size() << " members";
     IGNIS_CATCH()
 }

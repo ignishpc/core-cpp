@@ -23,7 +23,7 @@ int64_t IIOImplClass::partitionApproxSize() {
         if (executor_data->mpi().isContiguousType<Tp>()) {
             size *= sizeof(Tp);
         } else {
-            size *= sizeof(Tp) + executor_data->getProperties().transportMinimal();
+            size *= sizeof(Tp) + executor_data->getProperties().transportElemSize();
         }
     } else {
         for (auto &partition : *group) { size += partition->bytes(); }

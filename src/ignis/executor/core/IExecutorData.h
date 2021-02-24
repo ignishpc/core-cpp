@@ -72,11 +72,17 @@ namespace ignis {
 
                 IPartitionTools &getPartitionTools();
 
-                IMpi mpi();
+                IMpi &mpi();
 
                 void setCores(int cores);
 
                 int getCores();
+
+                int getMpiCores();
+
+                void enableMpiCores();
+
+                void setMpiGroup(const MPI::Intracomm& group);
 
                 virtual ~IExecutorData();
 

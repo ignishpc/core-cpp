@@ -4,6 +4,7 @@
 
 #include "IPartitionTools.h"
 #include "IPropertyParser.h"
+#include "ignis/executor/api/IContext.h"
 #include "ignis/executor/core/ILog.h"
 #include "storage/IPartition.h"
 #include "storage/IVoidPartition.h"
@@ -14,7 +15,7 @@ namespace ignis {
         namespace core {
             class IMpi {
             public:
-                IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, const MPI::Intracomm &comm);
+                IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, api::IContext& context);
 
                 template<typename Tp>
                 void gather(storage::IPartition<Tp> &part, int root);
@@ -88,7 +89,7 @@ namespace ignis {
 
                 IPropertyParser &properties;
                 IPartitionTools &partition_tools;
-                const MPI::Intracomm &comm;
+                api::IContext& context;
             };
         }// namespace core
     }    // namespace executor
