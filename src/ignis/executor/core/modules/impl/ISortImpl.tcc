@@ -263,6 +263,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
     int64_t mpiCores = executor_data->getMpiCores();
 #pragma omp parallel for schedule(static, (int) std::ceil(numRanges / (double)mpiCores)) num_threads(mpiCores)
     for (int64_t p = 0; p < numRanges; p++) {
+        IGNIS_LOG(info) << "Exchange " << (p + 1) << " of " << numRanges;
         executor_data->mpi().gather(*(*ranges)[p], targets[p]);
         if (executor_data->mpi().isRoot(targets[p])) {
             output->add((*ranges)[p]);
