@@ -55,7 +55,11 @@ int main(int argc, char *argv[]) {
         }
     };
 
-    MPI::Init(argc, argv);
+    if(std::getenv("MPI_THREAD_MULTIPLE") != nullptr){
+        MPI::Init_thread(argc, argv, MPI_THREAD_MULTIPLE);
+    }else{
+        MPI::Init(argc, argv);
+    }
 
     auto executor_data = std::make_shared<IExecutorData>();
     IExecutorServerModuleImpl server(executor_data);
