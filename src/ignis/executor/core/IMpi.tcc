@@ -297,7 +297,9 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
             std::vector<int> szv;
             std::vector<int> displs;
             if (rank != root) {
+                IGNIS_LOG(info) << "Exchange before serialize elems " << part.size();
                 part.write((std::shared_ptr<transport::ITransport> &) buffer, properties.msgCompression());
+                IGNIS_LOG(info) << "Exchange after serialize sz " << buffer->writeEnd();
                 sz = buffer->writeEnd();
                 buffer->resetBuffer();
             }
@@ -307,19 +309,24 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
                 displs = this->displs(szv);
                 buffer->getWritePtr(displs.back());
             }
+            IGNIS_LOG(info) << "Exchange before gather";
             group.Gatherv(buffer->getWritePtr(sz), sz, MPI::BYTE, buffer->getWritePtr(sz), &szv[0], &displs[0],
                           MPI::BYTE, root);
+            IGNIS_LOG(info) << "Exchange after gather";
             if (rank == root) {
                 auto ptr = buffer->getWritePtr(sz);
                 storage::IMemoryPartition<Tp> rcv;
                 for (int i = 0; i < executors; i++) {
                     if (i != rank) {
                         auto view = std::make_shared<transport::IMemoryBuffer>(ptr + displs[i], szv[i]);
+                        IGNIS_LOG(info) << "Exchange before deserialize " << i + 1 << " of " << executors  << " sz " << szv[i];
                         rcv.read((std::shared_ptr<transport::ITransport> &) view);
                     } else {
+                        IGNIS_LOG(info) << "Exchange before deserialize " << i + 1 << " of " << executors  << " elems " << rcv.size();
                         //Avoid serialization own elements
                         part.moveTo(rcv);
                     }
+                    IGNIS_LOG(info) << "Exchange after deserialize " << i + 1 << " of " << executors;
                 }
                 std::swap(men, rcv);
             }
