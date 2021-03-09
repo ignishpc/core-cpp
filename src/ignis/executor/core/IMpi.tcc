@@ -322,7 +322,7 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
                         IGNIS_LOG(info) << "Exchange before deserialize " << i + 1 << " of " << executors  << " sz " << szv[i];
                         rcv.read((std::shared_ptr<transport::ITransport> &) view);
                     } else {
-                        IGNIS_LOG(info) << "Exchange before deserialize " << i + 1 << " of " << executors  << " elems " << rcv.size();
+                        IGNIS_LOG(info) << "Exchange before deserialize " << i + 1 << " of " << executors  << " elems " << part.size();
                         //Avoid serialization own elements
                         part.moveTo(rcv);
                     }
