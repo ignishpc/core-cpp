@@ -53,6 +53,7 @@ void IIOImplClass::partitionObjectFile(const std::string &path, int64_t first, i
             };
             storage::IDiskPartition<Tp> open(file_name, 0, true, true);
             (*group)[p]->copyFrom(open);
+            (*group)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -82,6 +83,7 @@ void IIOImplClass::partitionJsonFile(const std::string &path, int64_t first, int
             io::IJsonReader<api::IWriteIterator<Tp>> reader;
             auto write_iterator = (*group)[p]->writeIterator();
             reader(file, *write_iterator);
+            (*group)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -94,7 +96,7 @@ template<typename Tp>
 void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression, int64_t first) {
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: saving as object file";
-    auto group = executor_data->getPartitions<Tp>();
+    auto group = executor_data->getAndDeletePartitions<Tp>();
     auto compression = executor_data->getProperties().ioCompression();
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
@@ -112,6 +114,7 @@ void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression,
             storage::IDiskPartition<Tp> save(file_name, compression, true);
             (*group)[p]->copyTo(save);
             save.sync();
+            (*group)[p].reset();
         }
         IGNIS_OMP_CATCH()
     }
@@ -123,7 +126,8 @@ template<typename Tp>
 void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: saving as text file";
-    auto group = executor_data->getPartitions<Tp>();
+    auto group = executor_data->getAndDeletePartitions<Tp>();
+    bool isMemory = executor_data->getPartitionTools().isMemory(*group);
 
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
@@ -139,7 +143,7 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
             };
 
             auto &part = *(*group)[p];
-            if (executor_data->getPartitionTools().isMemory(part)) {
+            if (isMemory) {
                 auto &men_part = executor_data->getPartitionTools().toMemory(part);
                 io::IPrinter<typename std::remove_reference<decltype(men_part.inner())>::type> printer;
                 printer(file, men_part.inner());
@@ -147,6 +151,7 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
                 io::IPrinter<api::IReadIterator<Tp>> printer;
                 printer(file, *part.readIterator());
             }
+            (*group)[p].reset();
         }
         IGNIS_OMP_CATCH()
     }
@@ -158,7 +163,7 @@ template<typename Tp>
 void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool pretty) {
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: saving as json file";
-    auto group = executor_data->getPartitions<Tp>();
+    auto group = executor_data->getAndDeletePartitions<Tp>();
 
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
@@ -175,6 +180,7 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
             auto &part = *(*group)[p];
             io::IJsonWriter<api::IReadIterator<Tp>> writer;
             writer(file, *part.readIterator(), pretty);
+            (*group)[p].reset();
         }
         IGNIS_OMP_CATCH()
     }

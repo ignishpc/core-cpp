@@ -26,13 +26,19 @@ std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>> IExecutorDa
 }
 
 template<typename Tp>
-std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
-IExecutorDataClass::setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>>
+std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>> IExecutorDataClass::getAndDeletePartitions(){
+    auto group = getPartitions<Tp>();
+    deletePartitions();
+    if(group->cache()){
+        return group->shadowCopy();
+    }
+    return group;
+}
 
-                                          &group) {
-    auto old = partitions;
+template<typename Tp>
+void IExecutorDataClass::setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group) {
+    group->fit();
     partitions = std::static_pointer_cast<void>(group);
-    return std::static_pointer_cast<storage::IPartitionGroup<Tp>>(old);
 }
 
 template<typename Tp>

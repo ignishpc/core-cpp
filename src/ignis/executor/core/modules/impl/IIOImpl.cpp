@@ -308,6 +308,7 @@ void IIOImpl::partitionJsonFileVoid(const std::string &path, int64_t first, int6
                 api::IJsonValue &noconst = const_cast<api::IJsonValue &>(value);
                 write_iterator->write(std::move(noconst));
             }
+            (*group)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }

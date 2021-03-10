@@ -53,6 +53,9 @@ namespace ignis {
                         inline void basicReduce(Function &f, storage::IMemoryPartition<Tp> &result);
 
                         template<typename Function, typename Tp>
+                        inline void basicFold(Function &f, storage::IMemoryPartition<Tp> &result);
+
+                        template<typename Function, typename Tp>
                         inline Tp reducePartition(Function &f, storage::IPartition<Tp> &part);
 
                         template<typename Function, typename Tp>

@@ -6,9 +6,11 @@
 template<typename Function>
 void IPipeImplCLass::map() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T_type>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>(input->partitions());
     auto &context = executor_data->getContext();
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
     Function function;
 
     function.before(context);
@@ -21,8 +23,7 @@ void IPipeImplCLass::map() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 for (size_t i = 0; i < sz; i++) { men_writer.write(function.call(men_part[i], context)); }
@@ -30,6 +31,8 @@ void IPipeImplCLass::map() {
                 auto reader = (*input)[p]->readIterator();
                 for (size_t i = 0; i < sz; i++) { writer->write(function.call(reader->next(), context)); }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -42,9 +45,11 @@ void IPipeImplCLass::map() {
 template<typename Function>
 void IPipeImplCLass::filter() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T_type>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_T_type>(input->partitions());
-    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
+    bool cache = input->cache() && isMemory;
     auto &context = executor_data->getContext();
     Function function;
 
@@ -58,8 +63,7 @@ void IPipeImplCLass::filter() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*input) &&
-                executor_data->getPartitionTools().isMemory(*output)) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 if (cache) {
@@ -86,6 +90,8 @@ void IPipeImplCLass::filter() {
                     }
                 }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -98,9 +104,11 @@ void IPipeImplCLass::filter() {
 template<typename Function>
 void IPipeImplCLass::flatmap() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T_type>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
             input->partitions());
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
     auto &context = executor_data->getContext();
     Function function;
 
@@ -114,8 +122,7 @@ void IPipeImplCLass::flatmap() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 for (size_t i = 0; i < sz; i++) {
@@ -129,6 +136,8 @@ void IPipeImplCLass::flatmap() {
                     for (auto it = result.begin(); it != result.end(); it++) { writer->write(std::move(*it)); }
                 }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -141,10 +150,12 @@ void IPipeImplCLass::flatmap() {
 template<typename Function>
 void IPipeImplCLass::keyBy() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T_type>();
     auto output = executor_data->getPartitionTools()
                           .newPartitionGroup<std::pair<typename Function::_R_type, typename Function::_T_type>>(
                                   input->partitions());
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
     bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
     auto &context = executor_data->getContext();
     Function function;
@@ -159,8 +170,7 @@ void IPipeImplCLass::keyBy() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 if (cache) {
@@ -182,6 +192,8 @@ void IPipeImplCLass::keyBy() {
                             function.call(elem, context), std::move(elem)));
                 }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -194,7 +206,7 @@ void IPipeImplCLass::keyBy() {
 template<typename Function>
 void IPipeImplCLass::mapPartitions() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T_type::value_type>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
             input->partitions());
     auto &context = executor_data->getContext();
@@ -212,6 +224,8 @@ void IPipeImplCLass::mapPartitions() {
             auto reader = (*input)[p]->readIterator();
             auto result = function.call(*reader, context);
             for (auto it = result.begin(); it != result.end(); it++) { writer->write(std::move(*it)); }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -224,7 +238,7 @@ void IPipeImplCLass::mapPartitions() {
 template<typename Function>
 void IPipeImplCLass::mapPartitionsWithIndex(bool preservesPartitioning) {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T2_type::value_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T2_type::value_type>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
             input->partitions());
     auto &context = executor_data->getContext();
@@ -242,6 +256,8 @@ void IPipeImplCLass::mapPartitionsWithIndex(bool preservesPartitioning) {
             auto reader = (*input)[p]->readIterator();
             auto result = function.call(p, *reader, context);
             for (auto it = result.begin(); it != result.end(); it++) { writer->write(std::move(*it)); }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -350,8 +366,9 @@ void IPipeImplCLass::mapExecutorTo() {
 template<typename Function>
 void IPipeImplCLass::foreach () {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T_type>();
     auto &context = executor_data->getContext();
+    bool isMemory = executor_data->getPartitionTools().isMemory(*input);
     Function function;
 
     function.before(context);
@@ -363,13 +380,14 @@ void IPipeImplCLass::foreach () {
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p])) {
+            if (isMemory) {
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 for (size_t i = 0; i < sz; i++) { function.call(men_part[i], context); }
             } else {
                 auto reader = (*input)[p]->readIterator();
                 for (size_t i = 0; i < sz; i++) { function.call(reader->next(), context); }
             }
+            (*input)[p].reset();
         }
         IGNIS_OMP_CATCH()
     }
@@ -382,7 +400,7 @@ void IPipeImplCLass::foreach () {
 template<typename Function>
 void IPipeImplCLass::foreachPartition() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<typename Function::_T_type::value_type>();
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T_type::value_type>();
     auto &context = executor_data->getContext();
     Function function;
 
@@ -396,6 +414,7 @@ void IPipeImplCLass::foreachPartition() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto reader = (*input)[p]->readIterator();
             function.call(*reader, context);
+            (*input)[p].reset();
         }
         IGNIS_OMP_CATCH()
     }
@@ -438,9 +457,11 @@ void IPipeImplCLass::take(int64_t num) {
 template<typename Tp>
 void IPipeImplCLass::keys() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<Tp>();
+    auto input = executor_data->getAndDeletePartitions<Tp>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Tp::first_type>(input->partitions());
-    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
+    bool cache = input->cache() && isMemory;
 
     IGNIS_LOG(info) << "General: keys " << input->partitions() << " partitions";
     IGNIS_OMP_EXCEPTION_INIT()
@@ -451,8 +472,7 @@ void IPipeImplCLass::keys() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 if (cache) {
@@ -464,6 +484,8 @@ void IPipeImplCLass::keys() {
                 auto reader = (*input)[p]->readIterator();
                 for (size_t i = 0; i < sz; i++) { writer->write(reader->next().first); }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -475,9 +497,11 @@ void IPipeImplCLass::keys() {
 template<typename Tp>
 void IPipeImplCLass::values() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<Tp>();
+    auto input = executor_data->getAndDeletePartitions<Tp>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Tp::second_type>(input->partitions());
-    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
+    bool cache = input->cache() && isMemory;
 
     IGNIS_LOG(info) << "General: values " << input->partitions() << " partitions";
     IGNIS_OMP_EXCEPTION_INIT()
@@ -488,8 +512,7 @@ void IPipeImplCLass::values() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 if (cache) {
@@ -501,6 +524,8 @@ void IPipeImplCLass::values() {
                 auto reader = (*input)[p]->readIterator();
                 for (size_t i = 0; i < sz; i++) { writer->write(reader->next().second); }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -512,11 +537,13 @@ void IPipeImplCLass::values() {
 template<typename Tp, typename Function>
 void IPipeImplCLass::flatMapValues() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<Tp>();
+    auto input = executor_data->getAndDeletePartitions<Tp>();
     auto output =
             executor_data->getPartitionTools()
                     .newPartitionGroup<std::pair<typename Tp::first_type, typename Function::_R_type::value_type>>(
                             input->partitions());
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
     auto &context = executor_data->getContext();
     Function function;
 
@@ -530,8 +557,7 @@ void IPipeImplCLass::flatMapValues() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 for (size_t i = 0; i < sz; i++) {
@@ -552,6 +578,8 @@ void IPipeImplCLass::flatMapValues() {
                     }
                 }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -564,11 +592,13 @@ void IPipeImplCLass::flatMapValues() {
 template<typename Tp, typename Function>
 void IPipeImplCLass::mapValues() {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<Tp>();
+    auto input = executor_data->getAndDeletePartitions<Tp>();
     auto output = executor_data->getPartitionTools()
                           .newPartitionGroup<std::pair<typename Tp::first_type, typename Function::_R_type>>(
                                   input->partitions());
-    bool cache = input->cache() && executor_data->getPartitionTools().isMemory(*input);
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
+    bool cache = input->cache() && isMemory;
     auto &context = executor_data->getContext();
     Function function;
 
@@ -582,8 +612,7 @@ void IPipeImplCLass::mapValues() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto sz = (*input)[p]->size();
-            if (executor_data->getPartitionTools().isMemory(*(*input)[p]) &&
-                executor_data->getPartitionTools().isMemory(*(*output)[p])) {
+            if (isMemory) {
                 auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
                 auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
                 if (cache) {
@@ -605,6 +634,8 @@ void IPipeImplCLass::mapValues() {
                             std::move(pair.first), function.call(pair.second, context)));
                 }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }

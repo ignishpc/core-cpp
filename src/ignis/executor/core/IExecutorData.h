@@ -32,8 +32,10 @@ namespace ignis {
                 std::shared_ptr<storage::IPartitionGroup<Tp>> getPartitions(bool no_check = false);
 
                 template<typename Tp>
-                std::shared_ptr<storage::IPartitionGroup<Tp>>
-                setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group);
+                std::shared_ptr<storage::IPartitionGroup<Tp>> getAndDeletePartitions();
+
+                template<typename Tp>
+               void setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group);
 
                 bool hasPartitions();
 

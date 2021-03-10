@@ -83,7 +83,9 @@ void IVoidPartition::clear() {
     }
 }
 
-void IVoidPartition::fit() {}
+void IVoidPartition::fit() {
+    if (path.empty()) { buffer->setBufferSize(buffer->getBufferSize()); }
+}
 
 std::shared_ptr<core::transport::ITransport> IVoidPartition::readTransport() {
     if (path.empty()) {

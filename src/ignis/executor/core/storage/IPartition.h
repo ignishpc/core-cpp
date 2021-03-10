@@ -91,8 +91,16 @@ namespace ignis {
 
                     std::shared_ptr<IPartitionGroup<Tp>> shadowCopy() {
                         auto newGroup = std::make_shared<IPartitionGroup<Tp>>();
+                        newGroup->cache() = cache();
                         for (auto &p : *this) { newGroup->add(p); }
                         return newGroup;
+                    }
+
+                    void fit() {
+                        //protect fit from casting
+                        if(RTTInfo::from<Tp>() == elemType()){
+                            for (auto &p : *this) { p->fit(); }
+                        }
                     }
 
                     bool &cache() { return _cache; }

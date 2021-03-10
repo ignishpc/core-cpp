@@ -100,7 +100,7 @@ std::string IDynamicTypes::compiler(const std::string &type, const std::string &
     file.close();
 
 
-    int error = std::system(("mpic++ -O2 -shared -fPIC -o -ligniscore" + fileLibrary + " " + fileSource).c_str());
+    int error = std::system(("mpic++ -O3 -shared -fPIC -o -ligniscore" + fileLibrary + " " + fileSource).c_str());
     if (error != 0) {
         throw exception::ILogicError("mpic++ exited with exit value " + std::to_string(error) + " " + fileSource);
     }

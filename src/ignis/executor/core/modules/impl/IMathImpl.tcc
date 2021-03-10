@@ -7,7 +7,8 @@
 template<typename Tp>
 void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_t> &num, const int32_t seed) {
     IGNIS_TRY()
-    auto input = executor_data->getPartitions<Tp>();
+    auto input = executor_data->getAndDeletePartitions<Tp>();
+    bool isMemory = executor_data->getPartitionTools().isMemory(*input);
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>(input->partitions());
     auto &context = executor_data->getContext();
 
@@ -24,7 +25,7 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
             auto writer = (*output)[p]->writeIterator();
             auto size = (*input)[p]->size();
             auto part = (*input)[p];
-            if (!executor_data->getPartitionTools().isMemory(*part)) {
+            if (!isMemory) {
                 auto aux = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
                 part->copyTo(*aux);
                 part = aux;
@@ -52,6 +53,8 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
                     }
                 }
             }
+            (*input)[p].reset();
+            (*output)[p]->fit();
         }
         IGNIS_OMP_CATCH()
     }
@@ -82,6 +85,7 @@ template<typename Tp>
 void IMathImplClass::countByKey() {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<Tp>();
+    bool isMemory = executor_data->getPartitionTools().isMemory(*input);
     auto threads = executor_data->getCores();
 
     std::unordered_map<typename Tp::first_type, int64_t> acum[threads];
@@ -94,7 +98,7 @@ void IMathImplClass::countByKey() {
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto &part = *(*input)[p];
-            if (executor_data->getPartitionTools().isMemory(part)) {
+            if (isMemory) {
                 auto &men_part = executor_data->getPartitionTools().toMemory(part);
                 for (int64_t i = 0; i < men_part.size(); i++) { acum[thread][men_part[i].first]++; }
             } else {
@@ -123,6 +127,7 @@ template<typename Tp>
 void IMathImplClass::countByValue() {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<Tp>();
+    bool isMemory = executor_data->getPartitionTools().isMemory(*input);
     auto threads = executor_data->getCores();
 
     std::unordered_map<typename Tp::second_type, int64_t> acum[threads];
@@ -135,7 +140,7 @@ void IMathImplClass::countByValue() {
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto &part = *(*input)[p];
-            if (executor_data->getPartitionTools().isMemory(part)) {
+            if (isMemory) {
                 auto &men_part = executor_data->getPartitionTools().toMemory(part);
                 for (int64_t i = 0; i < men_part.size(); i++) { acum[thread][men_part[i].second]++; }
             } else {

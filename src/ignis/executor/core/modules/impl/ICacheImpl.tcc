@@ -44,7 +44,7 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
         return;
     }
 
-    group_cache = executor_data->getPartitions<Tp>(true);
+    group_cache = executor_data->getPartitions<Tp>();
     int8_t level_sel = level;
 
     if (level == 1) {//PRESERVE
@@ -107,6 +107,7 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
     } else {
         throw exception::IInvalidArgument("CacheContext: cache level " + std::to_string(level) + " is not valid");
     }
+    group_cache->cache() = true;
 
     _cache[id] = std::static_pointer_cast<void>(group_cache);
 

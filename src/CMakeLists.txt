@@ -83,6 +83,7 @@ set(SOURCE_FILES
         #Modules Impl
         ignis/executor/core/modules/impl/IBaseImpl.cpp
         ignis/executor/core/modules/impl/IBaseImpl.h
+        ignis/executor/core/modules/impl/IBaseImpl.tcc
         ignis/executor/core/modules/impl/ICacheImpl.cpp
         ignis/executor/core/modules/impl/ICacheImpl.h
         ignis/executor/core/modules/impl/ICacheImpl.tcc

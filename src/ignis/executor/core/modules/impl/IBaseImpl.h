@@ -23,7 +23,8 @@ namespace ignis {
 
                         void registerType(const std::shared_ptr<selector::ITypeSelector> &type);
 
-                        std::vector<int64_t> targetsChunk(int64_t n, int64_t chunks);
+                        template<typename Tp>
+                        void exchange(storage::IPartitionGroup<Tp>& in, storage::IPartitionGroup<Tp>& out);
 
                         virtual ~IBaseImpl();
 
@@ -35,5 +36,7 @@ namespace ignis {
         }        // namespace core
     }            // namespace executor
 }// namespace ignis
+
+#include "IBaseImpl.tcc"
 
 #endif

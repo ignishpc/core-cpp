@@ -253,24 +253,13 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
     IGNIS_LOG(info) << "Sort: broadcasting pivots ranges";
     executor_data->mpi().bcast(*pivots, 0);
 
-    decltype(input) ranges = generateRanges(*input, *pivots, comparator);
-    decltype(input) output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+    auto ranges = generateRanges(*input, *pivots, comparator);
+    auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
     auto numRanges= ranges->partitions();
-    auto targets = targetsChunk(ranges->partitions(), executors);
 
     IGNIS_LOG(info) << "Sort: exchanging ranges";
-    executor_data->enableMpiCores();
-    int64_t mpiCores = executor_data->getMpiCores();
-#pragma omp parallel for schedule(static, (int) std::ceil(numRanges / (double)mpiCores)) num_threads(mpiCores)
-    for (int64_t p = 0; p < numRanges; p++) {
-        IGNIS_LOG(info) << "Exchange " << (p + 1) << " of " << numRanges;
-        executor_data->mpi().gather(*(*ranges)[p], targets[p]);
-        if (executor_data->mpi().isRoot(targets[p])) {
-            output->add((*ranges)[p]);
-        } else {
-            (*ranges)[p].reset();
-        }
-    }
+    exchange<Tp>(*ranges, *output);
+
     /*Sort final partitions*/
     IGNIS_LOG(info) << "Sort: sorting again " << output->partitions() << " partitions locally";
     parallelLocalSort(*output, comparator);
