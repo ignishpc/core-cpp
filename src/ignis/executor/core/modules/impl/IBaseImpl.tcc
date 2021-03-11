@@ -36,19 +36,27 @@ void IBaseImplClass::exchange(storage::IPartitionGroup<Tp> &in, storage::IPartit
 
     executor_data->enableMpiCores();
     int64_t mpiCores = executor_data->getMpiCores();
-#pragma omp parallel for schedule(static, 1) num_threads(mpiCores)
-    for (int64_t i = 0; i < numPartitions; i++) {
-        int64_t p = parts_targets[i].first;
-        int64_t target = parts_targets[i].second;
 
-        executor_data->mpi().gather(*in[p], target);
-        if (executor_data->mpi().isRoot(target)) {
-            in[p]->fit();
-            out.add(in[p]);
-        } else {
-            in[p].reset();
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel num_threads(mpiCores)
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(static, 1)
+        for (int64_t i = 0; i < numPartitions; i++) {
+            int64_t p = parts_targets[i].first;
+            int64_t target = parts_targets[i].second;
+
+            executor_data->mpi().gather(*in[p], target);
+            if (executor_data->mpi().isRoot(target)) {
+                in[p]->fit();
+                out.add(in[p]);
+            } else {
+                in[p].reset();
+            }
         }
+        IGNIS_OMP_CATCH()
     }
+    IGNIS_OMP_EXCEPTION_END()
 }
 
 #undef IBaseImplClass
