@@ -45,7 +45,7 @@ void IExecutorData::enableMpiCores() {
     if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1) {
         IGNIS_LOG(info) << "Duplicating mpi group for " << mpiCores << " threads";
         for (int i = 1; i < mpiCores; i++) {
-            context.mpi_thread_group.push_back(context.mpi_thread_group[0].Dup());
+            context.mpi_thread_group.push_back(context.mpi_thread_group[i - 1].Dup());
             IGNIS_LOG(info) << "mpi group " << context.mpi_thread_group.size() << " ready";
         }
     }
