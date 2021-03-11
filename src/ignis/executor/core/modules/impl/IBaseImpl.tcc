@@ -40,7 +40,6 @@ void IBaseImplClass::exchange(storage::IPartitionGroup<Tp> &in, storage::IPartit
     for (int64_t i = 0; i < numPartitions; i++) {
         int64_t p = parts_targets[i].first;
         int64_t target = parts_targets[i].second;
-        IGNIS_LOG(info) << "Exchange " << i << " of " << numPartitions;
 
         executor_data->mpi().gather(*in[p], target);
         if (executor_data->mpi().isRoot(target)) {
