@@ -48,6 +48,16 @@ namespace ignis {
                 }
             };
 
+            template<typename Tp>
+            struct is_view{
+                const static bool value = false;
+            };
+
+            template<typename Tp>
+            struct is_view<IViewAllocator<Tp>>{
+                const static bool value = true;
+            };
+
             /*avoid error of vector<bool> specialization*/
             template<typename Tp, typename _Alloc = std::allocator<typename IVectorType<Tp>::type>>
             class IVector : public std::vector<typename IVectorType<Tp>::type, _Alloc> {
@@ -62,10 +72,6 @@ namespace ignis {
                     this->_M_impl._M_end_of_storage = this->_M_impl._M_finish;
                 }
 
-                bool is_view(const IViewAllocator<Tp> &) { return true; }
-
-                bool is_view(...) { return false; }
-
             public:
                 using std::vector<typename IVectorType<Tp>::type, _Alloc>::vector;
 
@@ -78,7 +84,7 @@ namespace ignis {
                 }
 
                 ~IVector() {
-                    if (is_view(_Alloc())) {
+                    if (is_view<_Alloc>::value) {
                         this->_M_impl._M_start = (Pointer) nullptr;
                         this->_M_impl._M_finish = (Pointer) nullptr;
                         this->_M_impl._M_end_of_storage = nullptr;

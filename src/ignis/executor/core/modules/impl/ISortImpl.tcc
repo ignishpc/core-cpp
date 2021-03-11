@@ -254,8 +254,9 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
     executor_data->mpi().bcast(*pivots, 0);
 
     auto ranges = generateRanges(*input, *pivots, comparator);
+    pivots.reset();
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-    auto numRanges= ranges->partitions();
+    auto numRanges = ranges->partitions();
 
     IGNIS_LOG(info) << "Sort: exchanging ranges";
     exchange<Tp>(*ranges, *output);
@@ -347,7 +348,7 @@ ISortImplClass::generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMe
                 auto &elem = reader->next();
                 writers[searchRange(elem, pivots, comparator)]->write(elem);
             }
-            group[p]->clear();
+            group[p].reset();
         }
 #pragma omp critical
         for (int64_t p = 0; p < thread_ranges->partitions(); p++) { (*thread_ranges)[p]->moveTo(*((*ranges)[p])); }
@@ -443,7 +444,7 @@ ISortImplClass::generateMemoryRanges(storage::IPartitionGroup<Tp> &group, storag
                     ranges_stack.emplace_back(r, last);
                 }
             }
-            group[p]->clear();
+            group[p].reset();
         }
 #pragma omp critical
         for (int64_t p = 0; p < thread_ranges->partitions(); p++) { (*thread_ranges)[p]->moveTo(*((*ranges)[p])); }
