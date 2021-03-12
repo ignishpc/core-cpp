@@ -185,7 +185,7 @@ set(SOURCE_FILES
         #RPC
         ${rpc})
 
-set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -g -O3")
+set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -g -O0")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
