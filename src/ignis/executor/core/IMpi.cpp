@@ -37,7 +37,7 @@ int IMpi::sumElems(const std::vector<std::pair<int, int>> &elems_szv) {
 }
 
 void IMpi::move(void *begin, size_t n, size_t displ) {
-    if (displ > 0) { std::memcpy(((char *) begin) + displ, begin, n); }
+    if (displ > 0) { std::memmove(((char *) begin) + displ, begin, n); }
 }
 
 void IMpi::barrier() { native().Barrier(); }
