@@ -9,7 +9,6 @@
 #include "ignis/executor/core/modules/ICacheContextModule.h"
 #include "ignis/executor/core/modules/ICommModule.h"
 #include "ignis/executor/core/ICoreTypes.h"
-#include <malloc.h>
 
 
 using namespace ignis::executor::core;
