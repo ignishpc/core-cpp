@@ -17,7 +17,6 @@ using namespace ignis::executor::core::modules;
 using namespace ignis::rpc::executor;
 
 int main(int argc, char *argv[]) {
-    mallopt(M_CHECK_ACTION, 3);
     IGNIS_LOG_INIT();
     if (argc < 3) {
         IGNIS_LOG(error) << "Executor need a server port and compression as argument";

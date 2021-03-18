@@ -49,7 +49,6 @@ void IBaseImplClass::exchange(storage::IPartitionGroup<Tp> &in, storage::IPartit
             executor_data->mpi().gather(*in[p], target);
             if (executor_data->mpi().isRoot(target)) {
                 in[p]->fit();
-                out.add(in[p]);
             } else {
                 in[p].reset();
             }
@@ -57,6 +56,13 @@ void IBaseImplClass::exchange(storage::IPartitionGroup<Tp> &in, storage::IPartit
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
+
+    for (int64_t i = 0; i < numPartitions; i++) {
+        if(in[i]){
+            out.add(in[i]);
+        }
+    }
+    in.clear();
 }
 
 #undef IBaseImplClass
