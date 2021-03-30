@@ -41,7 +41,7 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
         for (int64_t i = 1; i < size; i++) {
             client_comm = MPI::COMM_SELF.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
             int64_t pos;
-            client_comm.Recv(&pos, 1, MPI::LONG_LONG_INT, 0, 1963);
+            client_comm.Recv(&pos, 1, MPI::LONG_LONG_INT, 1, 1963);
             IGNIS_LOG(info) << "Comm: member " << pos << " found";
             client_comms[pos] = client_comm;
         }
@@ -49,7 +49,7 @@ void ICommImpl::joinGroupMembers(const std::string &group_name, const int64_t id
 
         for (int64_t i = 1; i < size; i++) {
             info_comm = client_comms[i];
-            info_comm.Send(&flag, 1, MPI::BOOL, 0, 1963);
+            info_comm.Send(&flag, 1, MPI::BOOL, 1, 1963);
             client_comm = group.Accept(group_name.c_str(), MPI::INFO_NULL, 0);
             group = addComm(group, client_comm, MPI::COMM_SELF, group != MPI::COMM_SELF);
             IGNIS_LOG(info) << "Comm: new member added to the group";
