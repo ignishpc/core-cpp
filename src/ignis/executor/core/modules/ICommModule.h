@@ -14,15 +14,17 @@ namespace ignis {
                 public:
                     ICommModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void createGroup(std::string &_return) override;
+                    void openGroup(std::string &_return) override;
 
-                    void joinGroupMembers(const std::string &group, const int64_t id, const int64_t size) override;
+                    void closeGroup() override;
 
-                    void joinToGroup(const std::string &group, const std::string &id) override;
+                    void joinToGroup(const std::string &id, const bool leader) override;
 
-                    bool hasGroup(const std::string &id) override;
+                    void joinToGroupName(const std::string &id, const bool leader, const std::string &name) override;
 
-                    void destroyGroup(const std::string &id) override;
+                    bool hasGroup(const std::string &name) override;
+
+                    void destroyGroup(const std::string &name) override;
 
                     void destroyGroups() override;
 
@@ -37,22 +39,25 @@ namespace ignis {
 
                     void setPartitions2(const std::vector<std::string> &partitions, const rpc::ISource &src) override;
 
-                    void driverGather(const std::string &id, const rpc::ISource &src) override;
+                    void newEmptyPartitions(const int64_t n) override;
 
-                    void driverGather0(const std::string &id, const rpc::ISource &src) override;
+                    void newEmptyPartitions2(const int64_t n, const rpc::ISource &src) override;
 
-                    void driverScatter(const std::string &id, int64_t partitions) override;
+                    void driverGather(const std::string &group, const rpc::ISource &src) override;
 
-                    void driverScatter3(const std::string &id, int64_t partitions, const rpc::ISource &src) override;
+                    void driverGather0(const std::string &group, const rpc::ISource &src) override;
 
-                    void send(const std::string &id, const int64_t partition, const int64_t dest,
-                              const int64_t tag) override;
+                    void driverScatter(const std::string &group, int64_t partitions) override;
 
-                    void recv(const std::string &id, const int64_t partition, const int64_t source,
-                              const int64_t tag) override;
+                    void driverScatter3(const std::string &group, int64_t partitions, const rpc::ISource &src) override;
 
-                    void recv5(const std::string& id, const int64_t partition, const int64_t source, const int64_t tag,
-                               const rpc::ISource& src) override;
+                    int32_t enableMultithreading(const std::string& group);
+
+                    void send(const std::string &group, const int64_t partition, const int64_t dest,
+                              const int32_t thread) override;
+
+                    void recv(const std::string &group, const int64_t partition, const int64_t source,
+                              const int32_t thread) override;
 
                     virtual ~ICommModule();
 

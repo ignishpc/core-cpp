@@ -36,6 +36,8 @@ namespace ignis {
                     virtual void setPartitions(modules::impl::ICommImpl &impl,
                                                const std::vector<std::string> &partitions) = 0;
 
+                    virtual void newEmptyPartitions(modules::impl::ICommImpl &impl, int64_t n) = 0;
+
                     virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id) = 0;
 
                     virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id) = 0;
@@ -44,10 +46,10 @@ namespace ignis {
                                                int64_t partitions) = 0;
 
                     virtual void send(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t dest, int64_t tag) = 0;
+                                      int64_t dest, int64_t thread) = 0;
 
                     virtual void recv(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t source, int64_t tag) = 0;
+                                      int64_t source, int64_t thread) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
@@ -130,6 +132,10 @@ namespace ignis {
                         impl.setPartitions<Tp>(partitions);
                     }
 
+                    virtual void newEmptyPartitions(modules::impl::ICommImpl &impl, int64_t n) {
+                        impl.newEmptyPartitions<Tp>(n);
+                    }
+
                     virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id) {
                         impl.driverGather<Tp>(id);
                     }
@@ -144,13 +150,13 @@ namespace ignis {
                     }
 
                     virtual void send(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t dest, int64_t tag) {
-                        impl.send<Tp>(id, partition, dest, tag);
+                                      int64_t dest, int64_t thread) {
+                        impl.send<Tp>(id, partition, dest, thread);
                     }
 
                     virtual void recv(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t source, int64_t tag) {
-                        impl.recv<Tp>(id, partition, source, tag);
+                                      int64_t source, int64_t thread) {
+                        impl.recv<Tp>(id, partition, source, thread);
                     }
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {

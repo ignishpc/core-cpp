@@ -42,7 +42,8 @@ int IExecutorData::getMpiCores() { return context.mpi_thread_group.size(); }
 void IExecutorData::enableMpiCores() {
     int64_t mpiCores = std::ceil(cores * properties.transportCores());
 
-    if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1) {
+    if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1 &&
+        context.mpi_thread_group[0].Get_size() > 1) {
         IGNIS_LOG(info) << "Duplicating mpi group for " << mpiCores << " threads";
         for (int i = 1; i < mpiCores; i++) {
             context.mpi_thread_group.push_back(context.mpi_thread_group[i - 1].Dup());
@@ -52,6 +53,7 @@ void IExecutorData::enableMpiCores() {
 }
 
 void IExecutorData::setMpiGroup(const MPI::Intracomm &group) {
+    for (int i = 1; i < context.mpi_thread_group.size(); i++) { context.mpi_thread_group[i].Free(); }
     context.mpi_thread_group.clear();
     context.mpi_thread_group.push_back(group);
 }

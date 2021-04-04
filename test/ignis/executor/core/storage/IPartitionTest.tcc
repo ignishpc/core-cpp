@@ -31,7 +31,7 @@ template<typename Tp>
 void IPartitionTestClass<Tp>::write(IPartition<Tp> &part, IVector<Tp> &elems) {
     auto buffer = std::make_shared<transport::IMemoryBuffer>();
     auto trans = std::make_shared<transport::IZlibTransport>(buffer);
-    part.write(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(buffer), 9);
+    part.write(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(buffer), 0);
     protocol::IObjectProtocol(trans).readObject(elems);
 }
 

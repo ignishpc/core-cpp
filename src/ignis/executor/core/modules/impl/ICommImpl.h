@@ -15,11 +15,13 @@ namespace ignis {
                     public:
                         ICommImpl(std::shared_ptr<IExecutorData> &executorData);
 
-                        std::string createGroup();
+                        std::string openGroup();
 
-                        void joinGroupMembers(const std::string &group, const int64_t id, const int64_t size);
+                        void closeGroup();
 
-                        void joinToGroup(const std::string &group, const std::string &id);
+                        void joinToGroup(const std::string &id, bool leader);
+
+                        void joinToGroupName(const std::string &id, bool leader, const std::string &name);
 
                         bool hasGroup(const std::string &id);
 
@@ -38,31 +40,35 @@ namespace ignis {
                         void setPartitions(const std::vector<std::string> &partitions);
 
                         template<typename Tp>
-                        void driverGather(const std::string &id);
+                        void newEmptyPartitions(int64_t n);
+
+                        void newEmptyPartitionsVoid(int64_t n);
 
                         template<typename Tp>
-                        void driverGather0(const std::string &id);
-
-                        void driverScatterVoid(const std::string &id, int64_t partitions);
+                        void driverGather(const std::string &group);
 
                         template<typename Tp>
-                        void driverScatter(const std::string &id, int64_t partitions);
+                        void driverGather0(const std::string &group);
+
+                        void driverScatterVoid(const std::string &group, int64_t partitions);
 
                         template<typename Tp>
-                        void send(const std::string &id, int64_t partition, int64_t dest, int64_t tag);
+                        void driverScatter(const std::string &group, int64_t partitions);
+
+                        int32_t enableMultithreading(const std::string& group);
 
                         template<typename Tp>
-                        void recv(const std::string &id, int64_t partition, int64_t source, int64_t tag);
+                        void send(const std::string &group, int64_t partition, int64_t dest, int64_t thread);
 
-                        void recvVoid(const std::string &id, int64_t partition, int64_t source, int64_t tag);
+                        template<typename Tp>
+                        void recv(const std::string &group, int64_t partition, int64_t source, int64_t thread);
+
+                        void recvVoid(const std::string &group, int64_t partition, int64_t source, int64_t thread);
 
                         virtual ~ICommImpl();
 
                     private:
-                        MPI::Intracomm addComm(MPI::Intracomm &group, MPI::Intercomm &comm, MPI::Intracomm &local,
-                                               bool detroyGroup = true);
-
-                        MPI::Intracomm joinGroups(MPI::Intracomm &groupLow, MPI::Intracomm &groupUp);
+                        MPI::Intracomm addComm(MPI::Intracomm &group, MPI::Intercomm &comm, bool leader, bool detroyGroup);
 
                         MPI::Intracomm &getGroup(const std::string &id);
 

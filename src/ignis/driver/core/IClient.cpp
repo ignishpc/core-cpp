@@ -5,6 +5,7 @@
 #include <thrift/protocol/TMultiplexedProtocol.h>
 #include <thrift/transport/TSocket.h>
 #include <thrift/transport/TZlibTransport.h>
+#include <thrift/protocol/TCompactProtocol.h>
 
 using namespace ignis::driver::core;
 using namespace ignis::rpc::driver;

@@ -3,14 +3,18 @@
 using namespace ignis::executor::core::transport;
 using namespace apache::thrift::transport;
 
-IZlibTransport::IZlibTransport(std::shared_ptr<TTransport> transport, int16_t comp_level, int urbuf_size,
+IZlibTransport::IZlibTransport(const std::shared_ptr<TTransport> &transport, int16_t comp_level, int urbuf_size,
                                int crbuf_size, int uwbuf_size, int cwbuf_size)
-    : TZlibTransport(transport, urbuf_size, crbuf_size, uwbuf_size, cwbuf_size, comp_level) {}
+    : IVirtualTransport(transport, urbuf_size, crbuf_size, uwbuf_size, cwbuf_size, comp_level),
+      in_compression(comp_level), winit(false), rinit(false) {}
 
 
 void IZlibTransport::reset() {
     urpos_ = 0;
     uwpos_ = 0;
+    rinit = false;
+    winit = false;
+    in_compression = comp_level_;
     input_ended_ = false;
     output_finished_ = false;
     inflateEnd(rstream_);
@@ -20,10 +24,107 @@ void IZlibTransport::reset() {
     initZlib();
 }
 
+std::shared_ptr<TTransport> IZlibTransport::getTransport() { return transport_; }
+
+int16_t IZlibTransport::getInCompression() {
+    if (!rinit) {
+        uint8_t v;
+        read(&v, 0);
+    }
+    return in_compression;
+}
+
+bool IZlibTransport::isOpen() const {
+    if (in_compression > 0) {
+        return TZlibTransport::isOpen();
+    } else {
+        return transport_->isOpen();
+    }
+}
+
+bool IZlibTransport::peek() {
+    if (in_compression > 0) {
+        return TZlibTransport::peek();
+    } else {
+        return transport_->peek();
+    }
+}
+
+uint32_t IZlibTransport::read(uint8_t *buf, uint32_t len) {
+    if (!rinit) {
+        uint8_t v = comp_level_;
+        rinit = transport_->read(&v, 1) > 0;
+        in_compression = v;
+    }
+    if (in_compression > 0) {
+        return TZlibTransport::read(buf, len);
+    } else {
+        return transport_->read(buf, len);
+    }
+}
+
+void IZlibTransport::write(const uint8_t *buf, uint32_t len) {
+    if (!winit) {
+        winit = true;
+        uint8_t v = (uint8_t) comp_level_;
+        transport_->write(&v, 1);
+    }
+    if (in_compression > 0) {
+        TZlibTransport::write(buf, len);
+    } else {
+        transport_->write(buf, len);
+    }
+}
+
+void IZlibTransport::finish() {
+    if (in_compression > 0) { TZlibTransport::finish(); }
+}
+
+const uint8_t *IZlibTransport::borrow(uint8_t *buf, uint32_t *len) {
+    if (!rinit && *len > 0) {
+        uint32_t clen = 1;
+        const uint8_t *cbuf = transport_->borrow(buf, &clen);
+        if (clen >= 1 && cbuf != nullptr) {
+            rinit = true;
+            in_compression = cbuf[0];
+            transport_->consume(1);
+            return transport_->borrow(buf, len);
+        }
+        return cbuf;
+    }
+    if (in_compression > 0) {
+        return TZlibTransport::borrow(buf, len);
+    } else {
+        return transport_->borrow(buf, len);
+    }
+}
+
+void IZlibTransport::consume(uint32_t len) {
+    if (in_compression > 0) {
+        TZlibTransport::consume(len);
+    } else {
+        transport_->consume(len);
+    }
+}
+
+void IZlibTransport::verifyChecksum() {
+    if (in_compression > 0) { TZlibTransport::verifyChecksum(); }
+}
+
+
 /*flush, flushToZlib, flushToTransport, checkZlibRv copied from the parent class.
  * checkZlibRv throws an exception when there is no more data to write and
  * Storages can flush twice to ensure that flush has been called before reading. */
 void IZlibTransport::flush() {
+    if (!winit) {
+        uint8_t tmp;
+        write(&tmp, 0);
+    } else if (in_compression == 0) {
+        transport_->flush();
+        return;
+    }
+    ///////////
+
     if (output_finished_) { throw TTransportException(TTransportException::BAD_ARGS, "flush() called after finish()"); }
 
     flushToZlib(uwbuf_, uwpos_, Z_BLOCK);

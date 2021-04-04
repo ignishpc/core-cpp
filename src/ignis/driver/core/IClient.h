@@ -2,14 +2,14 @@
 #ifndef IGNIS_ICLIENT_H
 #define IGNIS_ICLIENT_H
 
+#include "ignis/executor/core/transport/ITransport.h"
 #include "ignis/rpc/driver/IBackendService.h"
 #include "ignis/rpc/driver/IClusterService.h"
 #include "ignis/rpc/driver/IDataFrameService.h"
 #include "ignis/rpc/driver/IPropertiesService.h"
 #include "ignis/rpc/driver/IWorkerService.h"
 #include <memory>
-#include <thrift/protocol/TCompactProtocol.h>
-#include <thrift/transport/TTransport.h>
+
 
 namespace ignis {
     namespace driver {

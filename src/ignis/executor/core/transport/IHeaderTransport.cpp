@@ -15,7 +15,8 @@ uint32_t IHeaderTransport::read(uint8_t *buf, uint32_t len) {
     if (header.empty()) { return trans->read_virt(buf, len); }
     int bytes = std::min((uint32_t)(header.size() - pos), len);
     std::memcpy(buf, header.c_str() + pos, bytes);
-    if (bytes == header.size()) { header.clear(); }
+    pos += bytes;
+    if (pos == header.size()) { header.clear(); }
     return bytes;
 }
 

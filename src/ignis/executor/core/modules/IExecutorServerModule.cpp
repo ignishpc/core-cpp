@@ -15,7 +15,7 @@ IExecutorServerModule::~IExecutorServerModule() {}
 
 void IExecutorServerModule::serve(const std::string &name, int port, int compression) {
     if (!server) {
-        auto threadManager = concurrency::ThreadManager::newSimpleThreadManager(1);
+        auto threadManager = concurrency::ThreadManager::newSimpleThreadManager(2);
 
         threadManager->threadFactory(std::make_shared<concurrency::ThreadFactory>());
         threadManager->start();

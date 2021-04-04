@@ -174,7 +174,7 @@ void IMemoryBuffer::wroteBytes(uint32_t len) {
     wBase_ += len;
 }
 
-uint32_t IMemoryBuffer::readAll(uint8_t *buf, uint32_t len) { return TBufferBase::readAll(buf, len); }
+uint32_t IMemoryBuffer::readAll(uint8_t *buf, uint32_t len) { return IBufferBase::readAll(buf, len); }
 
 size_t IMemoryBuffer::getBufferSize() const { return bufferSize_; }
 

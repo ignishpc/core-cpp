@@ -92,56 +92,60 @@ void ICommImplClass::setPartitions(const std::vector<std::string> &partitions) {
 }
 
 template<typename Tp>
-void ICommImplClass::driverGather(const std::string &id) {
+void ICommImplClass::newEmptyPartitions(int64_t n) {
     IGNIS_TRY()
-    auto group = getGroup(id);
-    if (group.Get_rank() == 0) {
-        executor_data->setPartitions<Tp>(executor_data->getPartitionTools().newPartitionGroup<Tp>());
-    }
-    executor_data->mpi().driverGather(group, *executor_data->getPartitions<Tp>());
+    auto part_group = executor_data->getPartitionTools().newPartitionGroup<Tp>(n);
+    executor_data->setPartitions<Tp>(part_group);
     IGNIS_CATCH()
 }
 
 template<typename Tp>
-void ICommImplClass::driverGather0(const std::string &id) {
+void ICommImplClass::driverGather(const std::string &group) {
     IGNIS_TRY()
-    auto group = getGroup(id);
-    if (group.Get_rank() == 0) {
+    auto comm = getGroup(group);
+    if (comm.Get_rank() == 0) {
         executor_data->setPartitions<Tp>(executor_data->getPartitionTools().newPartitionGroup<Tp>());
     }
-    executor_data->mpi().driverGather0(group, *executor_data->getPartitions<Tp>());
+    executor_data->mpi().driverGather(comm, *executor_data->getPartitions<Tp>());
     IGNIS_CATCH()
 }
 
 template<typename Tp>
-void ICommImplClass::driverScatter(const std::string &id, int64_t partitions) {
+void ICommImplClass::driverGather0(const std::string &group) {
     IGNIS_TRY()
-    auto group = getGroup(id);
-    if (group.Get_rank() != 0) {
+    auto comm = getGroup(group);
+    if (comm.Get_rank() == 0) {
         executor_data->setPartitions<Tp>(executor_data->getPartitionTools().newPartitionGroup<Tp>());
     }
-    executor_data->mpi().driverScatter(group, *executor_data->getPartitions<Tp>(), partitions);
+    executor_data->mpi().driverGather0(comm, *executor_data->getPartitions<Tp>());
     IGNIS_CATCH()
 }
 
 template<typename Tp>
-void ICommImplClass::send(const std::string &id, int64_t partition, int64_t dest, int64_t tag){
+void ICommImplClass::driverScatter(const std::string &group, int64_t partitions) {
+    IGNIS_TRY()
+    auto comm = getGroup(group);
+    if (comm.Get_rank() != 0) {
+        executor_data->setPartitions<Tp>(executor_data->getPartitionTools().newPartitionGroup<Tp>());
+    }
+    executor_data->mpi().driverScatter(comm, *executor_data->getPartitions<Tp>(), partitions);
+    IGNIS_CATCH()
+}
+
+template<typename Tp>
+void ICommImplClass::send(const std::string &group, int64_t partition, int64_t dest, int64_t thread) {
     auto part_group = executor_data->getPartitions<Tp>();
-    auto group = getGroup(id);
-    executor_data->mpi().send<Tp>(group, *(*part_group)[partition], dest, tag);
+    auto comm = getGroup(group);
+    executor_data->mpi().send<Tp>(comm, *(*part_group)[partition], dest, dest);
 }
 
 template<typename Tp>
-void ICommImplClass::recv(const std::string &id, int64_t partition, int64_t source, int64_t tag){
-    if (!executor_data->hasVariable("new_group")) {
-        executor_data->setVariable("new_group", true);
-        auto part_group = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-        executor_data->setPartitions<Tp>(part_group);
-    }
+void ICommImplClass::recv(const std::string &group, int64_t partition, int64_t source, int64_t thread) {
     auto part_group = executor_data->getPartitions<Tp>();
     while (part_group->partitions() < partition + 1) {
         part_group->add(executor_data->getPartitionTools().newPartition<Tp>());
     }
-    auto group = getGroup(id);
-    executor_data->mpi().recv<Tp>(group, *(*part_group)[partition], source, tag);
+    auto comm = getGroup(group);
+    int tag = comm.Get_rank();
+    executor_data->mpi().recv<Tp>(comm, *(*part_group)[partition], source, tag);
 }

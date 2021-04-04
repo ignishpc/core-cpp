@@ -7,33 +7,39 @@ ICommModule::ICommModule(std::shared_ptr<IExecutorData> &executorData) : IModule
 
 ICommModule::~ICommModule() {}
 
-void ICommModule::createGroup(std::string &_return) {
+void ICommModule::openGroup(std::string &_return) {
     IGNIS_RPC_TRY()
-    _return = impl.createGroup();
+    _return = impl.openGroup();
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::joinGroupMembers(const std::string &group, const int64_t id, const int64_t size) {
+void ICommModule::closeGroup() {
     IGNIS_RPC_TRY()
-    impl.joinGroupMembers(group, id, size);
+    impl.closeGroup();
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::joinToGroup(const std::string &group, const std::string &id) {
+void ICommModule::joinToGroup(const std::string &id, const bool leader) {
     IGNIS_RPC_TRY()
-    impl.joinToGroup(group, id);
+    impl.joinToGroup(id, leader);
     IGNIS_RPC_CATCH()
 }
 
-bool ICommModule::hasGroup(const std::string &id) {
+void ICommModule::joinToGroupName(const std::string &id, const bool leader, const std::string &name) {
     IGNIS_RPC_TRY()
-    return impl.hasGroup(id);
+    impl.joinToGroupName(id, leader, name);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::destroyGroup(const std::string &id) {
+bool ICommModule::hasGroup(const std::string &name) {
     IGNIS_RPC_TRY()
-    impl.destroyGroup(id);
+    return impl.hasGroup(name);
+    IGNIS_RPC_CATCH()
+}
+
+void ICommModule::destroyGroup(const std::string &name) {
+    IGNIS_RPC_TRY()
+    impl.destroyGroup(name);
     IGNIS_RPC_CATCH()
 }
 
@@ -73,61 +79,76 @@ void ICommModule::setPartitions2(const std::vector<std::string> &partitions, con
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverGather(const std::string &id, const ignis::rpc::ISource &src) {
+void ICommModule::newEmptyPartitions(const int64_t n) {
+    IGNIS_RPC_TRY()
+    impl.newEmptyPartitionsVoid(n);
+    IGNIS_RPC_CATCH()
+}
+
+void ICommModule::newEmptyPartitions2(const int64_t n, const ignis::rpc::ISource &src) {
+    IGNIS_RPC_TRY()
+    typeFromSource(src)->newEmptyPartitions(impl, n);
+    IGNIS_RPC_CATCH()
+}
+
+void ICommModule::driverGather(const std::string &group, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
     if (executor_data->hasPartitions()) {
-        typeFromPartition()->driverGather(impl, id);
+        typeFromPartition()->driverGather(impl, group);
     } else {
-        typeFromSource(src)->driverGather(impl, id);
+        typeFromSource(src)->driverGather(impl, group);
     }
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverGather0(const std::string &id, const ignis::rpc::ISource &src) {
+void ICommModule::driverGather0(const std::string &group, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
     if (executor_data->hasPartitions()) {
-        typeFromPartition()->driverGather0(impl, id);
+        typeFromPartition()->driverGather0(impl, group);
     } else {
-        typeFromSource(src)->driverGather0(impl, id);
+        typeFromSource(src)->driverGather0(impl, group);
     }
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverScatter(const std::string &id, int64_t partitions) {
+void ICommModule::driverScatter(const std::string &group, int64_t partitions) {
     IGNIS_RPC_TRY()
     if (executor_data->hasPartitions()) {
-        typeFromPartition()->driverScatter(impl, id, partitions);
+        typeFromPartition()->driverScatter(impl, group, partitions);
     } else {
-        impl.driverScatterVoid(id, partitions);
+        impl.driverScatterVoid(group, partitions);
     }
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::driverScatter3(const std::string &id, int64_t partitions, const ignis::rpc::ISource &src) {
+void ICommModule::driverScatter3(const std::string &group, int64_t partitions, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
     if (executor_data->hasPartitions()) {
-        typeFromPartition()->driverScatter(impl, id, partitions);
+        typeFromPartition()->driverScatter(impl, group, partitions);
     } else {
-        typeFromSource(src)->driverScatter(impl, id, partitions);
+        typeFromSource(src)->driverScatter(impl, group, partitions);
     }
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::send(const std::string &id, const int64_t partition, const int64_t dest, const int64_t tag) {
+int32_t ICommModule::enableMultithreading(const std::string &group) {
     IGNIS_RPC_TRY()
-    typeFromPartition()->send(impl, id, partition, dest, tag);
+    return impl.enableMultithreading(group);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::recv(const std::string &id, const int64_t partition, const int64_t source, const int64_t tag) {
+void ICommModule::send(const std::string &group, const int64_t partition, const int64_t dest, const int32_t thread) {
     IGNIS_RPC_TRY()
-        impl.recvVoid(id, partition, source, tag);
+    typeFromPartition()->send(impl, group, partition, dest, thread);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::recv5(const std::string &id, const int64_t partition, const int64_t source, const int64_t tag,
-                        const ignis::rpc::ISource &src) {
+void ICommModule::recv(const std::string &group, const int64_t partition, const int64_t source, const int32_t thread) {
     IGNIS_RPC_TRY()
-    typeFromSource(src)->recv(impl, id, partition, source, tag);
+    if (executor_data->hasPartitions()) {
+        typeFromPartition()->recv(impl, group, partition, source, thread);
+    } else {
+        impl.recvVoid(group, partition, source, thread);
+    }
     IGNIS_RPC_CATCH()
 }

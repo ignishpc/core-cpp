@@ -2,6 +2,7 @@
 #ifndef IGNIS_IPROTOCOL_H
 #define IGNIS_IPROTOCOL_H
 
+#include "ignis/executor/core/transport/ITransport.h"
 #include <thrift/protocol/TProtocol.h>
 
 namespace ignis {

@@ -151,11 +151,13 @@ set(SOURCE_FILES
         ignis/executor/core/storage/IVoidPartition.cpp
 
         #Transport
+        ignis/executor/core/transport/IBufferBase.h
         ignis/executor/core/transport/IHeaderTransport.cpp
         ignis/executor/core/transport/IHeaderTransport.h
         ignis/executor/core/transport/IMemoryBuffer.cpp
         ignis/executor/core/transport/IMemoryBuffer.h
         ignis/executor/core/transport/ITransport.h
+        ignis/executor/core/transport/ITransportException.h
         ignis/executor/core/transport/IZlibTransport.cpp
         ignis/executor/core/transport/IZlibTransport.h
 

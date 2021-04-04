@@ -2,7 +2,7 @@
 #ifndef IGNIS_IMEMORYBUFFER_H
 #define IGNIS_IMEMORYBUFFER_H
 
-#include <thrift/transport/TBufferTransports.h>
+#include "IBufferBase.h"
 #include <thrift/transport/TTransport.h>
 
 namespace ignis {
@@ -21,8 +21,7 @@ namespace ignis {
                  *
                  */
                 class IMemoryBuffer
-                    : public apache::thrift::transport::TVirtualTransport<IMemoryBuffer,
-                                                                          apache::thrift::transport::TBufferBase> {
+                    : public apache::thrift::transport::TVirtualTransport<IMemoryBuffer,IBufferBase> {
 
                 public:
                     static const uint32_t defaultSize = 1024;
