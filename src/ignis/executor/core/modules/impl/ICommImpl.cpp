@@ -38,7 +38,7 @@ void ICommImpl::joinToGroup(const std::string &id, bool leader) {
     if (root) {
         peer = MPI::COMM_SELF.Accept(id.c_str(), MPI::INFO_NULL, 0);
     } else if (!leader) {
-        peer = comm.Connect(port_name.c_str(), MPI::INFO_NULL, 0);
+        peer = comm.Connect(id.c_str(), MPI::INFO_NULL, 0);
     }
     comm = addComm(comm, peer, leader, comm != MPI::COMM_WORLD);
     executor_data->setMpiGroup(comm);
