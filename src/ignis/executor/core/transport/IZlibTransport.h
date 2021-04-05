@@ -64,6 +64,19 @@ namespace ignis {
                 private:
                     int compression;
                 };
+
+                class TZlibTransportFactoryExt : public apache::thrift::transport::TTransportFactory {
+                public:
+                    TZlibTransportFactoryExt(int compression);
+
+                    std::shared_ptr<ITransport> getTransport(std::shared_ptr<ITransport> trans) override;
+
+                    virtual ~TZlibTransportFactoryExt();
+
+                private:
+                    int compression;
+                };
+
             }// namespace transport
         }    // namespace core
     }        // namespace executor

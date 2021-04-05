@@ -23,7 +23,7 @@ void IExecutorServerModule::serve(const std::string &name, int port, int compres
         server = std::make_shared<apache::thrift::server::TThreadPoolServer>(
                 processor = std::make_shared<apache::thrift::TMultiplexedProcessor>(),
                 std::make_shared<apache::thrift::transport::TServerSocket>(port),
-                std::make_shared<transport::IZlibTransportFactory>(compression),
+                std::make_shared<transport::TZlibTransportFactoryExt>(compression),
                 std::make_shared<apache::thrift::protocol::TCompactProtocolFactory>(), threadManager);
         std::shared_ptr<IExecutorServerModule> this_shared(this, [](IExecutorServerModule *) {});
         processor->registerProcessor(name,

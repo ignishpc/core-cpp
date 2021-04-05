@@ -194,3 +194,11 @@ std::shared_ptr<ITransport> IZlibTransportFactory::getTransport(std::shared_ptr<
 }
 
 IZlibTransportFactory::~IZlibTransportFactory() {}
+
+TZlibTransportFactoryExt::TZlibTransportFactoryExt(int compression) : compression(compression) {}
+
+std::shared_ptr<ITransport> TZlibTransportFactoryExt::getTransport(std::shared_ptr<ITransport> trans) {
+    return std::make_shared<TZlibTransport>(trans, 128, 1024, 128, 1024, compression);
+}
+
+TZlibTransportFactoryExt::~TZlibTransportFactoryExt() {}
