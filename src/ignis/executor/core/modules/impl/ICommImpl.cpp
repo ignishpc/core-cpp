@@ -35,7 +35,11 @@ void ICommImpl::joinToGroup(const std::string &id, bool leader) {
     bool root = executor_data->hasVariable("server");
     MPI::Intracomm comm = executor_data->mpi().native();
     MPI::Intercomm peer;
-    if (root) { peer = MPI::COMM_SELF.Accept(id.c_str(), MPI::INFO_NULL, 0); }
+    if (root) {
+        peer = MPI::COMM_SELF.Accept(id.c_str(), MPI::INFO_NULL, 0);
+    } else if (!leader) {
+        peer = comm.Connect(port_name.c_str(), MPI::INFO_NULL, 0);
+    }
     comm = addComm(comm, peer, leader, comm != MPI::COMM_WORLD);
     executor_data->setMpiGroup(comm);
     IGNIS_CATCH()
@@ -46,7 +50,11 @@ void ICommImpl::joinToGroupName(const std::string &id, bool leader, const std::s
     bool root = executor_data->hasVariable("server");
     MPI::Intracomm comm = executor_data->mpi().native();
     MPI::Intercomm peer;
-    if (root) { peer = MPI::COMM_SELF.Accept(id.c_str(), MPI::INFO_NULL, 0); }
+    if (root) {
+        peer = MPI::COMM_SELF.Accept(id.c_str(), MPI::INFO_NULL, 0);
+    } else if (!leader) {
+        peer = comm.Connect(id.c_str(), MPI::INFO_NULL, 0);
+    }
     comm = addComm(comm, peer, leader, comm != MPI::COMM_WORLD);
     groups[name] = comm;
     IGNIS_CATCH()
