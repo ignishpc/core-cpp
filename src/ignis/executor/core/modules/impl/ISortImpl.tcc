@@ -187,10 +187,8 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
     }
 
     /*Sort each partition*/
-    if (local_sort) {
-        IGNIS_LOG(info) << "Sort: sorting " << input->partitions() << " partitions locally";
-        parallelLocalSort(*input, comparator);
-    }
+    IGNIS_LOG(info) << "Sort: sorting " << input->partitions() << " partitions locally";
+    parallelLocalSort(*input, comparator);
 
     int64_t localPartitions = input->partitions();
     int64_t totalPartitions;
@@ -224,17 +222,16 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
         IGNIS_LOG(info) << "Sort: -- resampling pivots begin --";
         auto tmp = executor_data->getPartitionTools().newPartitionGroup<Tp>(0);
         tmp->add(pivots);
+        tmp->add(executor_data->getPartitionTools().newMemoryPartition<Tp>());
         executor_data->setPartitions<Tp>(tmp);
-        sort_impl<Tp, Cmp>(comparator, executors, false);
-        tmp = executor_data->getPartitions<Tp>();
+        sort_impl<Tp, Cmp>(comparator, executors * executor_data->getCores(), false);
         IGNIS_LOG(info) << "Sort: -- resampling pivots end --";
-
         samples = partitions - 1;
         IGNIS_LOG(info) << "Sort: selecting " << samples << " partition pivots";
-        auto id = executor_data->getContext().executorId();
-        pivots = selectPivots(*tmp, samples / executors + (samples % executors < id ? 1 : 0));
+        pivots = parallelSelectPivots<Tp>(samples);
         IGNIS_LOG(info) << "Sort: collecting pivots";
         executor_data->mpi().gather(*pivots, 0);
+        if (executor_data->mpi().isRoot(0)) { pivots->resize(samples); }
     } else {
         IGNIS_LOG(info) << "Sort: collecting pivots";
         executor_data->mpi().gather(*pivots, 0);
@@ -324,6 +321,54 @@ ISortImplClass::selectPivots(storage::IPartitionGroup<Tp> &group, int64_t sample
     return pivots;
 }
 
+template<typename Tp>
+std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
+ISortImplClass::parallelSelectPivots(int64_t samples) {
+    bool root = executor_data->mpi().isRoot(0);
+    auto executors = executor_data->mpi().executors();
+    auto result = executor_data->getPartitionTools().newMemoryPartition<Tp>(samples);
+    std::vector<int64_t> aux;
+    int64_t sz = 0;
+    int64_t skip, init;
+    auto tmp = executor_data->getAndDeletePartitions<Tp>();
+    for (auto &part : *tmp) { sz += part->size(); }
+    if (root) { aux.resize(executors); }
+
+    executor_data->mpi().native().Gather(&sz, 1, MPI::LONG_LONG, &aux[0], 1, MPI::LONG_LONG, 0);
+    if (root) {
+        sz = 0;
+        for (auto v : aux) { sz += v; }
+        skip = (sz - samples) / (samples + 1);
+    }
+    executor_data->mpi().native().Bcast(&skip, 1, MPI::LONG_LONG, 0);
+
+    if (root) {
+        aux.resize(executors, 0);
+        int64_t d = 0;
+        int64_t tmp;
+        for (int64_t i = 0; i < executors; i++) {
+            tmp = skip - d;
+            d = (aux[i] + d) % (skip + 1);
+            aux[i] = tmp;
+        }
+    }
+    executor_data->mpi().native().Scatter(&aux[0], 1, MPI::LONG_LONG, &init, 1, MPI::LONG_LONG, 0);
+
+    auto writer = result->writeIterator();
+    auto mwriter = executor_data->getPartitionTools().toMemory(*writer);
+    int64_t pos = init;
+    for (auto part : *tmp) {
+        auto array = executor_data->getPartitionTools().toMemory(*part);
+        while (pos < array.size()) {
+            mwriter.write(array[pos++]);
+            pos += skip;
+        }
+        pos -= array.size();
+    }
+
+    return result;
+}
+
 template<typename Tp, typename Cmp>
 std::shared_ptr<ignis::executor::core::storage::IPartitionGroup<Tp>>
 ISortImplClass::generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots,
@@ -411,6 +456,7 @@ ISortImplClass::generateMemoryRanges(storage::IPartitionGroup<Tp> &group, storag
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < group.partitions(); p++) {
             auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
+            if (part.empty()) { continue; }
             std::vector<std::pair<int64_t, int64_t>> elems_stack;
             std::vector<std::pair<int64_t, int64_t>> ranges_stack;
 

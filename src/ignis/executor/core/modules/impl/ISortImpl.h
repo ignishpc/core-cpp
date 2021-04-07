@@ -75,6 +75,9 @@ namespace ignis {
                         std::shared_ptr<storage::IMemoryPartition<Tp>> selectPivots(storage::IPartitionGroup<Tp> &group,
                                                                                     int64_t samples);
 
+                        template<typename Tp>
+                        std::shared_ptr<storage::IMemoryPartition<Tp>> parallelSelectPivots(int64_t samples);
+
                         template<typename Tp, typename Cmp>
                         std::shared_ptr<storage::IPartitionGroup<Tp>>
                         generateRanges(storage::IPartitionGroup<Tp> &group, storage::IMemoryPartition<Tp> &pivots,
