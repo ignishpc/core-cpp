@@ -47,6 +47,8 @@ namespace ignis {
                         std::ofstream openFileWrite(const std::string &path);
 
                         virtual ~IIOImpl();
+                    private:
+                        int ioCores();
                     };
                 }// namespace impl
             }    // namespace modules

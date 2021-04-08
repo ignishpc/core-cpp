@@ -40,7 +40,7 @@ void IIOImplClass::partitionObjectFile(const std::string &path, int64_t first, i
     auto group = executor_data->getPartitionTools().newPartitionGroup<Tp>(partitions);
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel
+#pragma omp parallel num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
@@ -69,7 +69,7 @@ void IIOImplClass::partitionJsonFile(const std::string &path, int64_t first, int
     auto group = executor_data->getPartitionTools().newPartitionGroup<Tp>(partitions);
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel
+#pragma omp parallel num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
@@ -99,7 +99,7 @@ void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression,
     auto group = executor_data->getAndDeletePartitions<Tp>();
     auto compression = executor_data->getProperties().ioCompression();
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel
+#pragma omp parallel num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
@@ -130,7 +130,7 @@ void IIOImplClass::saveAsTextFile(const std::string &path, int64_t first) {
     bool isMemory = executor_data->getPartitionTools().isMemory(*group);
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel
+#pragma omp parallel num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
@@ -166,7 +166,7 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
     auto group = executor_data->getAndDeletePartitions<Tp>();
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel
+#pragma omp parallel num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)

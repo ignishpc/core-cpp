@@ -68,7 +68,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
     size_t elements = 0;
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel reduction(+ : total_bytes, elements) firstprivate(minPartitions)
+#pragma omp parallel reduction(+ : total_bytes, elements) firstprivate(minPartitions) num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
         std::ifstream file;
@@ -111,7 +111,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
                     partitionInit = filepos;
                 }
                 std::getline(file, buffer, '\n');
-                filepos+= buffer.size() + 1;
+                filepos += buffer.size() + 1;
                 elements++;
                 part_men->inner().push_back(buffer);
             }
@@ -125,7 +125,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
                     partitionInit = filepos;
                 }
                 std::getline(file, buffer, '\n');
-                filepos+= buffer.size() + 1;
+                filepos += buffer.size() + 1;
                 elements++;
                 write_iterator->write(buffer);
             }
@@ -154,7 +154,7 @@ void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t 
     auto group = executor_data->getPartitionTools().newPartitionGroup<std::string>(partitions);
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel
+#pragma omp parallel num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
@@ -280,7 +280,7 @@ void IIOImpl::partitionJsonFileVoid(const std::string &path, int64_t first, int6
     auto group = executor_data->getPartitionTools().newPartitionGroup<api::IJsonValue>(partitions);
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel
+#pragma omp parallel num_threads(ioCores())
     {
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
@@ -315,4 +315,8 @@ void IIOImpl::partitionJsonFileVoid(const std::string &path, int64_t first, int6
     IGNIS_OMP_EXCEPTION_END()
     executor_data->setPartitions(group);
     IGNIS_CATCH()
+}
+
+int IIOImpl::ioCores() {
+    return std::max(1, (int) std::ceil(executor_data->getProperties().ioCores() * executor_data->getCores()));
 }

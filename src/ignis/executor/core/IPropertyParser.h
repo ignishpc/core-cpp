@@ -28,6 +28,8 @@ namespace ignis {
 
                 int64_t ioOverwrite() { return getBoolean("ignis.modules.io.overwrite"); }
 
+                double ioCores() { return getRangeDouble("ignis.modules.io.cores", 0, 1); }
+
                 int8_t ioCompression() { return getRangeNumber("ignis.modules.io.compression", 0, 9); }
 
                 int8_t msgCompression() { return getRangeNumber("ignis.transport.compression", 0, 9); }
