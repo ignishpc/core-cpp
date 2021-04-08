@@ -222,7 +222,6 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
         IGNIS_LOG(info) << "Sort: -- resampling pivots begin --";
         auto tmp = executor_data->getPartitionTools().newPartitionGroup<Tp>(0);
         tmp->add(pivots);
-        tmp->add(executor_data->getPartitionTools().newMemoryPartition<Tp>());
         executor_data->setPartitions<Tp>(tmp);
         sort_impl<Tp, Cmp>(comparator, executors * executor_data->getCores(), false);
         IGNIS_LOG(info) << "Sort: -- resampling pivots end --";
