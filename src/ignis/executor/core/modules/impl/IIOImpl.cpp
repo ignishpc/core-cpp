@@ -318,5 +318,9 @@ void IIOImpl::partitionJsonFileVoid(const std::string &path, int64_t first, int6
 }
 
 int IIOImpl::ioCores() {
+    double cores = executor_data->getProperties().ioCores();
+    if (cores > 1) {
+        return std::min(executor_data->getCores(), (int) std::ceil(executor_data->getProperties().ioCores()));
+    }
     return std::max(1, (int) std::ceil(executor_data->getProperties().ioCores() * executor_data->getCores()));
 }

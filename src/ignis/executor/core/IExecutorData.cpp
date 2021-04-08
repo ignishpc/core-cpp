@@ -40,7 +40,13 @@ int IExecutorData::getCores() { return this->cores; }
 int IExecutorData::getMpiCores() { return context.mpi_thread_group.size(); }
 
 void IExecutorData::enableMpiCores() {
-    int64_t mpiCores = std::ceil(cores * properties.transportCores());
+    double ratio = properties.transportCores();
+    int64_t mpiCores;
+    if (ratio > 1) {
+        mpiCores = std::min(cores, (int) std::ceil(ratio));
+    } else {
+        mpiCores = std::ceil(cores * ratio);
+    }
 
     if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1 &&
         context.mpi_thread_group[0].Get_size() > 1) {

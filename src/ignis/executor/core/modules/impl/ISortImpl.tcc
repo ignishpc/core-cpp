@@ -202,7 +202,7 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
     /*Generates pivots to separate the elements in order*/
     double sr = executor_data->getProperties().sortSamples();
     int64_t samples;
-    if (sr > 1) {
+    if (sr > 1 || sr == 0) {
         samples = (int64_t) sr;
     } else {
         int64_t send[]{0, 0};

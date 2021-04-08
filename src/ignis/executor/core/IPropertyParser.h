@@ -18,7 +18,7 @@ namespace ignis {
 
                 int cores() { return getNumber("ignis.executor.cores"); }
 
-                double transportCores() { return getRangeDouble("ignis.transport.cores", 0, 1); }
+                double transportCores() { return getMinDouble("ignis.transport.cores", 0); }
 
                 int64_t partitionMinimal() { return getSize("ignis.partition.minimal"); }
 
@@ -28,7 +28,7 @@ namespace ignis {
 
                 int64_t ioOverwrite() { return getBoolean("ignis.modules.io.overwrite"); }
 
-                double ioCores() { return getRangeDouble("ignis.modules.io.cores", 0, 1); }
+                double ioCores() { return getMinDouble("ignis.modules.io.cores", 0); }
 
                 int8_t ioCompression() { return getRangeNumber("ignis.modules.io.compression", 0, 9); }
 
