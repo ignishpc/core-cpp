@@ -41,7 +41,7 @@ void IBaseImplClass::exchange(storage::IPartitionGroup<Tp> &in, storage::IPartit
 #pragma omp parallel num_threads(mpiCores)
     {
         IGNIS_OMP_TRY()
-#pragma omp for schedule(dynamic, 1)
+#pragma omp for schedule(static, 1)
         for (int64_t i = 0; i < numPartitions; i++) {
             int64_t p = parts_targets[i].first;
             int64_t target = parts_targets[i].second;
