@@ -48,11 +48,12 @@ void IExecutorData::enableMpiCores() {
         mpiCores = std::ceil(cores * ratio);
     }
 
-    if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1 &&
-        context.mpi_thread_group[0].Get_size() > 1) {
+    if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1) {
+        context.mpi_thread_group[0].Set_name("ignis_thread_0");
         IGNIS_LOG(info) << "Duplicating mpi group for " << mpiCores << " threads";
         for (int i = 1; i < mpiCores; i++) {
             context.mpi_thread_group.push_back(context.mpi_thread_group[i - 1].Dup());
+            context.mpi_thread_group.back().Set_name(("ignis_thread_" + std::to_string(i)).c_str());
             IGNIS_LOG(info) << "mpi group " << context.mpi_thread_group.size() << " ready";
         }
     }

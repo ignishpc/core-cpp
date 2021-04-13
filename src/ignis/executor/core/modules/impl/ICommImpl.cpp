@@ -4,7 +4,9 @@
 
 using namespace ignis::executor::core::modules::impl;
 
-ICommImpl::ICommImpl(std::shared_ptr<IExecutorData> &executorData) : IBaseImpl(executorData) {}
+ICommImpl::ICommImpl(std::shared_ptr<IExecutorData> &executorData) : IBaseImpl(executorData) {
+    const_cast<MPI::Intracomm &>(executor_data->mpi().native()).Set_errhandler(MPI::ERRORS_THROW_EXCEPTIONS);
+}
 
 ICommImpl::~ICommImpl() {}
 
@@ -41,6 +43,7 @@ void ICommImpl::joinToGroup(const std::string &id, bool leader) {
         peer = comm.Connect(id.c_str(), MPI::INFO_NULL, 0);
     }
     comm = addComm(comm, peer, leader, comm != MPI::COMM_WORLD);
+    comm.Set_errhandler(MPI::ERRORS_THROW_EXCEPTIONS);
     executor_data->setMpiGroup(comm);
     IGNIS_CATCH()
 }
@@ -56,6 +59,7 @@ void ICommImpl::joinToGroupName(const std::string &id, bool leader, const std::s
         peer = comm.Connect(id.c_str(), MPI::INFO_NULL, 0);
     }
     comm = addComm(comm, peer, leader, comm != MPI::COMM_WORLD);
+    comm.Set_errhandler(MPI::ERRORS_THROW_EXCEPTIONS);
     groups[name] = comm;
     IGNIS_CATCH()
 }
