@@ -63,20 +63,21 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
     auto size = ghc::filesystem::file_size(path);
     IGNIS_LOG(info) << "IO: file has " << size << " Bytes";
     auto result = executor_data->getPartitionTools().newPartitionGroup<std::string>();
-    decltype(result) thread_groups[ioCores()];
+    auto io_cores = ioCores();
+    decltype(result) thread_groups[io_cores];
     size_t total_bytes = 0;
     size_t elements = 0;
 
     IGNIS_OMP_EXCEPTION_INIT()
-#pragma omp parallel reduction(+ : total_bytes, elements) firstprivate(minPartitions) num_threads(ioCores())
+#pragma omp parallel reduction(+ : total_bytes, elements) firstprivate(minPartitions) num_threads(io_cores)
     {
         IGNIS_OMP_TRY()
         std::ifstream file;
 #pragma omp critical
         { file = openFileRead(path); };
         auto id = executor_data->getContext().threadId();
-        auto globalThreadId = executor_data->getContext().executorId() * executor_data->getCores() + id;
-        auto threads = executor_data->getContext().executors() * executor_data->getCores();
+        auto globalThreadId = executor_data->getContext().executorId() * io_cores + id;
+        auto threads = executor_data->getContext().executors() * io_cores;
         size_t ex_chunk = size / threads;
         size_t ex_chunk_init = globalThreadId * ex_chunk;
         size_t ex_chunk_end = ex_chunk_init + ex_chunk;
