@@ -63,7 +63,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
     auto size = ghc::filesystem::file_size(path);
     IGNIS_LOG(info) << "IO: file has " << size << " Bytes";
     auto result = executor_data->getPartitionTools().newPartitionGroup<std::string>();
-    decltype(result) thread_groups[executor_data->getCores()];
+    decltype(result) thread_groups[ioCores()];
     size_t total_bytes = 0;
     size_t elements = 0;
 
