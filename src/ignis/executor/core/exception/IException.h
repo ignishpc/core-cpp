@@ -4,6 +4,7 @@
 
 #include "ignis/executor/core/RTTInfo.h"
 #include <memory>
+#include <mpi.h>
 #include <stdexcept>
 
 namespace ignis {
@@ -69,6 +70,12 @@ namespace ignis {
     }                                                                                                                  \
     catch (std::exception & ex) {                                                                                      \
         throw ignis::executor::core::exception::IException(ex);                                                        \
+    }                                                                                                                  \
+    catch (MPI::Exception & ex) {                                                                                      \
+        throw ignis::executor::core::exception::IException(std::string("MPI::Exception ") + ex.Get_error_string());                 \
+    }                                                                                                                  \
+    catch (...) {                                                                                                      \
+        throw ignis::executor::core::exception::IException("unknown exception");                                       \
     }
 
 #define IGNIS_RPC_TRY() try {
@@ -88,6 +95,20 @@ namespace ignis {
         eex.__set__cause("");                                                                                          \
         IGNIS_LOG(error) << ex.what();                                                                                 \
         throw eex;                                                                                                     \
+    }                                                                                                                  \
+    catch (MPI::Exception & ex) {                                                                                      \
+        ignis::rpc::IExecutorException eex;                                                                            \
+        eex.__set_message(std::string("MPI::Exception ") + ex.Get_error_string());                                                  \
+        eex.__set__cause("");                                                                                          \
+        IGNIS_LOG(error) << "MPI::Exception " << ex.Get_error_string();                                                 \
+        throw eex;                                                                                                     \
+    }                                                                                                                  \
+    catch (...) {                                                                                                      \
+        ignis::rpc::IExecutorException eex;                                                                            \
+        eex.__set_message("unknown exception");                                                                        \
+        eex.__set__cause("");                                                                                          \
+        IGNIS_LOG(error) << "unknown exception";                                                                       \
+        throw eex;                                                                                                     \
     }
 
 #define IGNIS_OMP_EXCEPTION_INIT()                                                                                     \
@@ -102,7 +123,16 @@ namespace ignis {
     }                                                                                                                  \
     catch (std::exception & ex) {                                                                                      \
         ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(ex);                 \
+    }                                                                                                                  \
+    catch (MPI::Exception & ex) {                                                                                      \
+        ignis_parallel_exception = std::make_shared<ignis::executor::core::exception::IException>(                     \
+                std::string("MPI::Exception ") + ex.Get_error_string());                                                            \
+    }                                                                                                                  \
+    catch (...) {                                                                                                      \
+        ignis_parallel_exception =                                                                                     \
+                std::make_shared<ignis::executor::core::exception::IException>("unknown exception");                   \
     }
+
 
 #define IGNIS_OMP_EXCEPTION_END()                                                                                      \
     if (ignis_parallel_exception) { throw ignis::executor::core::exception::IException(*ignis_parallel_exception); }
