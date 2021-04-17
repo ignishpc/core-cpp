@@ -4,6 +4,51 @@
 #define IPipeImplCLass ignis::executor::core::modules::impl::IPipeImpl
 
 template<typename Function>
+void IPipeImplCLass::execute() {
+    IGNIS_TRY()
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    IGNIS_LOG(info) << "General: execute";
+    function.call(context);
+    function.after(context);
+    IGNIS_CATCH()
+}
+
+template<typename Function, typename R>
+void IPipeImplCLass::executeTo() {
+    IGNIS_TRY()
+    auto output = executor_data->getPartitionTools().newPartitionGroup<R>();
+    auto &context = executor_data->getContext();
+    Function function;
+    function.before(context);
+    IGNIS_LOG(info) << "General: executeTo";
+
+    auto newParts = function.call(context);
+
+    IGNIS_LOG(info) << "General: moving elements to partitions";
+    for (auto &v : newParts) {
+        auto part = executor_data->getPartitionTools().newMemoryPartition<R>(0);
+        std::swap(v, part->inner());
+        output->add(part);
+    }
+
+    if (executor_data->getProperties().partitionType() != storage::IMemoryPartition<R>::TYPE) {
+        IGNIS_LOG(info) << "General: saving partitions from memory";
+        for (int64_t i = 0; i < output->partitions(); i++) {
+            auto &oldPart = (*output)[i];
+            auto part = executor_data->getPartitionTools().newPartition<R>(*oldPart);
+            oldPart->moveTo(*part);
+            oldPart = part;
+        }
+    }
+    function.after(context);
+    executor_data->setPartitions(output);
+
+    IGNIS_CATCH()
+}
+
+template<typename Function>
 void IPipeImplCLass::map() {
     IGNIS_TRY()
     auto input = executor_data->getAndDeletePartitions<typename Function::_T_type>();
@@ -421,6 +466,38 @@ void IPipeImplCLass::foreachPartition() {
     IGNIS_OMP_EXCEPTION_END()
     function.after(context);
     executor_data->deletePartitions();
+    IGNIS_CATCH()
+}
+
+template<typename Function, typename Tp>
+void IPipeImplCLass::foreachExecutor() {
+    IGNIS_TRY()
+        auto input = executor_data->getPartitions<Tp>();
+        auto inMemory = executor_data->getPartitionTools().isMemory(*input);
+        auto &context = executor_data->getContext();
+        Function function;
+        function.before(context);
+        IGNIS_LOG(info) << "General: foreachExecutor " << input->partitions() << " partitions";
+        if (!inMemory) {
+            IGNIS_LOG(info) << "General: loading partitions in memory";
+            auto aux = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+            for (auto &part : *input) {
+                auto men = executor_data->getPartitionTools().newMemoryPartition<Tp>(part->size());
+                part->copyTo(*men);
+                aux->add(men);
+            }
+            input = aux;
+        }
+
+        typename Function::_T_type arg;
+        for (auto &part : *input) {
+            auto &men = executor_data->getPartitionTools().toMemory(*part);
+            arg.push_back(&men.inner());
+        }
+
+        function.call(arg, context);
+        function.after(context);
+
     IGNIS_CATCH()
 }
 

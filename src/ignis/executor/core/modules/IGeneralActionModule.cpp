@@ -10,6 +10,12 @@ IGeneralActionModule::IGeneralActionModule(std::shared_ptr<IExecutorData> &execu
 
 IGeneralActionModule::~IGeneralActionModule() {}
 
+void IGeneralActionModule::execute(const ::ignis::rpc::ISource &function) {
+    IGNIS_RPC_TRY()
+    executor_data->loadLibrary(function)->general_action->execute(pipe_impl);
+    IGNIS_RPC_CATCH()
+}
+
 void IGeneralActionModule::reduce(const rpc::ISource &function) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(function)->general_action->reduce(reduce_impl);
@@ -72,6 +78,12 @@ void IGeneralActionModule::foreach_(const rpc::ISource &function) {
 void IGeneralActionModule::foreachPartition(const rpc::ISource &function) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(function)->general_action->foreachPartition(pipe_impl);
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralActionModule::foreachExecutor(const ::ignis::rpc::ISource &function) {
+    IGNIS_RPC_TRY()
+        executor_data->loadLibrary(function)->general_action->foreachExecutor(pipe_impl);
     IGNIS_RPC_CATCH()
 }
 

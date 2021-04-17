@@ -9,6 +9,7 @@ IIOModuleTest::IIOModuleTest() : io(std::make_shared<IIOModule>(executor_data)) 
     props["ignis.partition.minimal"] = "10MB";
     props["ignis.partition.type"] = "Memory";
     props["ignis.modules.io.overwrite"] = "true";
+    props["ignis.modules.io.cores"] = "1";
 }
 
 void IIOModuleTest::setUp() {}

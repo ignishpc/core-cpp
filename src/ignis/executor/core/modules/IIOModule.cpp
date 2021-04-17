@@ -16,17 +16,25 @@ void IIOModule::loadClass(const ::ignis::rpc::ISource &src) {
     IGNIS_RPC_CATCH()
 }
 
+void IIOModule::loadLibrary(const std::string &path) {
+    IGNIS_RPC_TRY()
+    rpc::ISource src;
+    for (auto &f : executor_data->loadLibraryFunctions(path)) {
+        src.obj.name = f;
+        executor_data->loadLibrary(src, true, true);
+    }
+    IGNIS_RPC_CATCH()
+}
+
 int64_t IIOModule::partitionCount() {
     IGNIS_RPC_TRY()
     return executor_data->getPartitions<char>(true)->partitions();
     IGNIS_RPC_CATCH()
 }
 
-void IIOModule::countByPartition(std::vector<int64_t> & _return){
+void IIOModule::countByPartition(std::vector<int64_t> &_return) {
     IGNIS_RPC_TRY()
-        for(auto &part : *(executor_data->getPartitions<char>(true))){
-            _return.push_back(part->size());
-        }
+    for (auto &part : *(executor_data->getPartitions<char>(true))) { _return.push_back(part->size()); }
     IGNIS_RPC_CATCH()
 }
 

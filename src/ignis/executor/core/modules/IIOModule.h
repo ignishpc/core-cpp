@@ -14,11 +14,13 @@ namespace ignis {
                 public:
                     IIOModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void loadClass(const ::ignis::rpc::ISource &src);
+                    void loadClass(const ::ignis::rpc::ISource &src) override;
+
+                    void loadLibrary(const std::string &path) override;
 
                     int64_t partitionCount() override;
 
-                    void countByPartition(std::vector<int64_t> & _return) override;
+                    void countByPartition(std::vector<int64_t> &_return) override;
 
                     int64_t partitionApproxSize() override;
 

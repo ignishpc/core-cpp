@@ -10,6 +10,8 @@ namespace ignis {
             namespace modules {
                 class IGeneralActionModuleTest : public IModuleTest {
                     CPPUNIT_TEST_SUITE(IGeneralActionModuleTest);
+                    CPPUNIT_TEST(executeNoneTest);
+                    CPPUNIT_TEST(loadAndRefNoneTest);
                     CPPUNIT_TEST(reduceIntTest);
                     CPPUNIT_TEST(reduceStringTest);
                     CPPUNIT_TEST(treeReduceIntTest);
@@ -21,6 +23,7 @@ namespace ignis {
                     CPPUNIT_TEST(takeStringTest);
                     CPPUNIT_TEST(foreachIntTest);
                     CPPUNIT_TEST(foreachPartitionStringTest);
+                    CPPUNIT_TEST(foreachExecutorIntTest);
                     CPPUNIT_TEST(topIntTest);
                     CPPUNIT_TEST(customTopStringTest);
                     CPPUNIT_TEST(takeOrderedStringTest);
@@ -35,6 +38,10 @@ namespace ignis {
                     void setUp() override;
 
                     void tearDown() override;
+
+                    void executeNoneTest(){executeTest("NoneFunction");}
+
+                    void loadAndRefNoneTest(){loadAndRefTest("NoneFunction");}
 
                     void reduceIntTest() { reduceTest<int>("ReduceInt", 2, "Memory"); }
 
@@ -66,6 +73,10 @@ namespace ignis {
                         foreachPartitionTest<std::string>("ForeachPartitionString", 2, "RawMemory");
                     }
 
+                    void foreachExecutorIntTest() {
+                        foreachExecutorTest<std::string>("ForeachExecutorString", 2, "RawMemory");
+                    }
+
                     void topIntTest() { topTest<int>(2, "Memory"); }
 
                     void customTopStringTest() { customTopTest<std::string>("SortString", 2, "RawMemory"); }
@@ -88,6 +99,10 @@ namespace ignis {
                         std::sort(e.begin(), e.end());
                         return e;
                     }
+
+                    void executeTest(const std::string &name);
+
+                    void loadAndRefTest(const std::string &name);
 
                     template<typename Tp>
                     void reduceTest(const std::string &name, int cores, const std::string &partitionType);
@@ -119,6 +134,9 @@ namespace ignis {
 
                     template<typename Tp>
                     void foreachPartitionTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void foreachExecutorTest(const std::string &name, int cores, const std::string &partitionType);
 
                     template<typename Tp>
                     void topTest(int cores, const std::string &partitionType);

@@ -2,6 +2,7 @@
 #ifndef IGNIS_IGENERALACTIONSELECTOR_H
 #define IGNIS_IGENERALACTIONSELECTOR_H
 
+#include "ITypeSelector.h"
 #include "ignis/executor/api/IReadIterator.h"
 #include "ignis/executor/core/RTTInfo.h"
 #include "ignis/executor/core/exception/ICompatibilityException.h"
@@ -16,6 +17,8 @@ namespace ignis {
 
                 class IGeneralActionSelector {
                 public:
+                    virtual void execute(modules::impl::IPipeImpl &impl) = 0;
+
                     virtual void reduce(modules::impl::IReduceImpl &impl) = 0;
 
                     virtual void treeReduce(modules::impl::IReduceImpl &impl) = 0;
@@ -32,6 +35,8 @@ namespace ignis {
 
                     virtual void foreachPartition(modules::impl::IPipeImpl &impl) = 0;
 
+                    virtual void foreachExecutor(modules::impl::IPipeImpl &impl) = 0;
+
                     virtual void top(modules::impl::ISortImpl &impl, int64_t n) = 0;
 
                     virtual void takeOrdered(modules::impl::ISortImpl &impl, int64_t n) = 0;
@@ -44,6 +49,8 @@ namespace ignis {
                 template<typename Tp>
                 class IGeneralActionSelectorImpl : public IGeneralActionSelector {
                 public:
+                    virtual void execute(modules::impl::IPipeImpl &impl) { execute_check<Tp>(impl, nullptr); }
+
                     virtual void reduce(modules::impl::IReduceImpl &impl) { reduce_check<Tp>(impl, nullptr); }
 
                     virtual void treeReduce(modules::impl::IReduceImpl &impl) { treeReduce_check<Tp>(impl, nullptr); }
@@ -62,6 +69,10 @@ namespace ignis {
                         foreachPartition_check<Tp>(impl, nullptr);
                     }
 
+                    virtual void foreachExecutor(modules::impl::IPipeImpl &impl) {
+                        foreachExecutor_check<Tp>(impl, nullptr);
+                    }
+
                     virtual void top(modules::impl::ISortImpl &impl, int64_t n) { top_check<Tp>(impl, nullptr, n); }
 
                     virtual void takeOrdered(modules::impl::ISortImpl &impl, int64_t n) {
@@ -73,6 +84,16 @@ namespace ignis {
                     virtual void min(modules::impl::ISortImpl &impl) { min_check<Tp>(impl, nullptr); }
 
                 private:
+                    template<typename Function>
+                    void execute_check(modules::impl::IPipeImpl &impl, typename Function::_IVoidFunction0_type *val) {
+                        impl.execute<Function>();
+                    }
+
+                    template<typename Function>
+                    void execute_check(...) {
+                        throw exception::ICompatibilyException("execute", RTTInfo::from<Function>());
+                    }
+
                     template<typename Function>
                     void reduce_check(modules::impl::IReduceImpl &impl, typename Function::_IFunction2_type *val) {
                         reduce_check<Function>(impl, (typename Function::_T1_type *) nullptr,
@@ -189,6 +210,25 @@ namespace ignis {
                     template<typename Function>
                     void foreachPartition_check(...) {
                         throw exception::ICompatibilyException("foreachPartition", RTTInfo::from<Function>());
+                    }
+
+                    template<typename Function>
+                    void foreachExecutor_check(modules::impl::IPipeImpl &impl,
+                                               typename Function::_IVoidFunction_type *val) {
+                        foreachExecutor_check(impl, (Function *) nullptr,
+                                              (typename Function::_IVoidFunction_type::_T_type *) nullptr);
+                    }
+
+                    template<typename Function, typename Tpv>
+                    void foreachExecutor_check(modules::impl::IPipeImpl &impl, Function *val,
+                                               api::IVector<api::IVector<Tpv> *> *val2) {
+                        impl.registerType(getType<Tpv>());
+                        impl.foreachExecutor<Function, Tpv>();
+                    }
+
+                    template<typename Function, typename Tpv = void>
+                    void foreachExecutor_check(modules::impl::IPipeImpl &impl, Function *f, ...) {
+                        throw exception::ICompatibilyException("foreachExecutor", RTTInfo::from<Function>());
                     }
 
                     template<typename Function>

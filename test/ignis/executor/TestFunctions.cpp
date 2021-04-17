@@ -4,11 +4,30 @@
 #include "ignis/executor/api/function/IFunction0.h"
 #include "ignis/executor/api/function/IFunction2.h"
 #include "ignis/executor/api/function/IVoidFunction.h"
+#include "ignis/executor/api/function/IVoidFunction0.h"
 #include "ignis/executor/api/function/IVoidFunction2.h"
 #include <string>
 #include <vector>
 
 using namespace ignis::executor::api;
+
+class IntSequence : public function::IFunction0<IVector<IVector<int>>> {
+public:
+    IVector<IVector<int>> call(IContext &context) override {
+        IVector<int> result;
+        for (int i = 0; i < 100; i++) { result.push_back(i); }
+        return {result};
+    }
+};
+
+ignis_export(IntSequence, IntSequence);
+
+class NoneFunction : public function::IVoidFunction0 {
+public:
+    void call(IContext &context) override { context.var<bool>("NoneFunction") = true; }
+};
+
+ignis_export(NoneFunction, NoneFunction);
 
 class MapInt : public function::IFunction<int, std::string> {
 public:
@@ -163,7 +182,7 @@ ignis_export(ZeroString, ZeroString);
 
 class ForeachInt : public function::IVoidFunction<int> {
 public:
-    void call(int &elem, IContext &context) override {}
+    void call(int &elem, IContext &context) override { context.var<bool>("ForeachInt") = true; }
 };
 
 ignis_export(ForeachInt, ForeachInt);
@@ -172,7 +191,17 @@ class ForeachPartitionString : public function::IVoidFunction<IReadIterator<std:
 public:
     void call(IReadIterator<std::string> &it, IContext &context) override {
         while (it.hasNext()) { it.next(); }
+        context.var<bool>("ForeachPartitionString") = true;
     }
 };
 
 ignis_export(ForeachPartitionString, ForeachPartitionString);
+
+class ForeachExecutorString : public function::IVoidFunction<IVector<IVector<std::string> *>> {
+public:
+    void call(IVector<IVector<std::string> *> &parts, IContext &context) override {
+        context.var<bool>("ForeachPartitionString") = true;
+    }
+};
+
+ignis_export(ForeachExecutorString, ForeachExecutorString);

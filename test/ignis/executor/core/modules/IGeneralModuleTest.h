@@ -12,6 +12,7 @@ namespace ignis {
 
                 class IGeneralModuleTest : public IModuleTest {
                     CPPUNIT_TEST_SUITE(IGeneralModuleTest);
+                    CPPUNIT_TEST(executeToIntTest);
                     CPPUNIT_TEST(mapIntTest);
                     CPPUNIT_TEST(filterIntTest);
                     CPPUNIT_TEST(flatmapStringTest);
@@ -39,6 +40,8 @@ namespace ignis {
                     void setUp() override;
 
                     void tearDown() override;
+
+                    void executeToIntTest() {executeToTest("IntSequence", "Memory");}
 
                     void mapIntTest() { mapTest<int>("MapInt", 2, "Memory"); }
 
@@ -85,6 +88,9 @@ namespace ignis {
                     void sortByKeyIntStringTest() { sortByKeyTest<int, std::string>(2, "Memory"); }
 
                 private:
+
+                    void executeToTest(const std::string &name, const std::string &partitionType);
+
                     template<typename Tp>
                     void mapTest(const std::string &name, int cores, const std::string &partitionType);
 

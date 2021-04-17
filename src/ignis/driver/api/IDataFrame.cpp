@@ -6,9 +6,7 @@
 using namespace ignis::driver::api;
 using ignis::rpc::driver::IDataFrameId;
 
-ignis::rpc::driver::IDataFrameId IAbstractDataFrame::getId(){
-    return this->id;
-}
+ignis::rpc::driver::IDataFrameId IAbstractDataFrame::getId() { return this->id; }
 
 IAbstractDataFrame::IAbstractDataFrame(const IDataFrameId &id) : id(id) {}
 
@@ -259,6 +257,12 @@ void IAbstractDataFrame::foreach (const ISource &src) {
 void IAbstractDataFrame::foreachPartition(const ISource &src) {
     try {
         Ignis::clientPool->getClient()->getDataFrameService().foreachPartition(id, src.rpc());
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+void IAbstractDataFrame::foreachExecutor(const ISource &src) {
+    try {
+        Ignis::clientPool->getClient()->getDataFrameService().foreachExecutor(id, src.rpc());
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 

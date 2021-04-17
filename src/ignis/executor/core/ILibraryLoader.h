@@ -3,19 +3,20 @@
 #define INGIS_OBJECTLOADER_H
 
 #include <memory>
+#include <vector>
+
 
 namespace ignis {
     namespace executor {
         namespace core {
+            namespace selector {
+                class ISelectorGroup;
+            }
             class ILibraryLoader {
             public:
-                template<typename T>
-                std::shared_ptr<T> load(const std::string &name) {
-                    return std::static_pointer_cast<T>(vload(name));
-                }
+                std::shared_ptr<selector::ISelectorGroup> loadFunction(const std::string &name);
 
-            private:
-                std::shared_ptr<void> vload(const std::string &name);
+                std::vector<std::string> loadLibrary(const std::string &path);
             };
 
         }// namespace core

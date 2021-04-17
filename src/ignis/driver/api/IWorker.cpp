@@ -34,13 +34,13 @@ IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &na
 
 std::shared_ptr<ICluster> IWorker::getCluster() { return cluster; }
 
-void IWorker::start(){
+void IWorker::start() {
     try {
         Ignis::clientPool->getClient()->getWorkerService().start(id);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-void IWorker::destroy(){
+void IWorker::destroy() {
     try {
         Ignis::clientPool->getClient()->getWorkerService().destroy(id);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
@@ -152,6 +152,54 @@ IDataFrameId IWorker::partitionJsonFileAbs(const std::string &path, const ISourc
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getWorkerService().partitionJsonFile3b(_return, id, path, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+void IWorker::loadLibrary(const std::string &path) {
+    try {
+        Ignis::clientPool->getClient()->getWorkerService().loadLibrary(id, path);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+void IWorker::execute(const ISource &src) {
+    try {
+        Ignis::clientPool->getClient()->getWorkerService().execute(id, src.rpc());
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IWorker::executeToAbs(const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getWorkerService().executeTo(_return, id, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+void IWorker::voidCall(const ISource &src) {
+    try {
+        Ignis::clientPool->getClient()->getWorkerService().voidCall(id, src.rpc());
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+void IWorker::voidCallAbs(const rpc::driver::IDataFrameId &df, const ISource &src) {
+    try {
+        Ignis::clientPool->getClient()->getWorkerService().voidCall3(id, df, src.rpc());
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IWorker::callAbs(const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getWorkerService().call(_return, id, src.rpc());
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IWorker::callAbs(const rpc::driver::IDataFrameId &df, const ISource &src) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getWorkerService().call3(_return, id, df, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }

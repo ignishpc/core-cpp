@@ -91,6 +91,31 @@ namespace ignis {
                     return IDataFrame<Tp>::make(partitionJsonFileAbs(path, src));
                 }
 
+                void loadLibrary(const std::string &path);
+
+                void execute(const ISource &src);
+
+                template<typename Tp>
+                std::shared_ptr<IDataFrame<Tp>> executeTo(const ISource &src) {
+                    return IDataFrame<Tp>::make(executeToAbs(src));
+                }
+
+                void voidCall(const ISource &src);
+
+                template<typename Tp>
+                void voidCall(std::shared_ptr<IDataFrame<Tp>> &df, const ISource &src) {
+                    voidCallAbs(df.id, src);
+                }
+
+                template<typename R>
+                std::shared_ptr<IDataFrame<R>> call(const ISource &src) {
+                    return IDataFrame<R>::make(callAbs(src));
+                }
+
+                template<typename Tp, typename R>
+                std::shared_ptr<IDataFrame<R>> call(std::shared_ptr<IDataFrame<Tp>> &df, const ISource &src) {
+                    return IDataFrame<R>::make(callAbs(df.id, src));
+                }
 
             private:
                 rpc::driver::IWorkerId id;
@@ -116,6 +141,14 @@ namespace ignis {
                 rpc::driver::IDataFrameId partitionJsonFileAbs(const std::string &path, bool objectMapping);
 
                 rpc::driver::IDataFrameId partitionJsonFileAbs(const std::string &path, const ISource &src);
+
+                rpc::driver::IDataFrameId executeToAbs(const ISource &src);
+
+                void voidCallAbs(const rpc::driver::IDataFrameId &df, const ISource &src);
+
+                rpc::driver::IDataFrameId callAbs(const ISource &src);
+
+                rpc::driver::IDataFrameId callAbs(const rpc::driver::IDataFrameId &df, const ISource &src);
             };
         }// namespace api
     }    // namespace driver

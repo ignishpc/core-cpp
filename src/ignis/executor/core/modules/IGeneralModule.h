@@ -16,6 +16,8 @@ namespace ignis {
                 public:
                     IGeneralModule(std::shared_ptr<IExecutorData> &executor_data);
 
+                    void executeTo(const ::ignis::rpc::ISource &function) override;
+
                     void map_(const rpc::ISource &function) override;
 
                     void filter(const rpc::ISource &function) override;

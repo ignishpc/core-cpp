@@ -42,6 +42,13 @@ class IWorkerServiceIf {
   virtual void partitionTextFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) = 0;
   virtual void partitionJsonFile3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const bool objectMapping) = 0;
   virtual void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void loadLibrary(const IWorkerId& id, const std::string& lib) = 0;
+  virtual void execute(const IWorkerId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void executeTo( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void voidCall(const IWorkerId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void voidCall3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void call( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void call3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) = 0;
 };
 
 class IWorkerServiceIfFactory {
@@ -129,6 +136,27 @@ class IWorkerServiceNull : virtual public IWorkerServiceIf {
     return;
   }
   void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void loadLibrary(const IWorkerId& /* id */, const std::string& /* lib */) {
+    return;
+  }
+  void execute(const IWorkerId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void executeTo( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void voidCall(const IWorkerId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void voidCall3(const IWorkerId& /* id */, const  ::ignis::rpc::driver::IDataFrameId& /* data */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void call( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void call3( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const  ::ignis::rpc::driver::IDataFrameId& /* data */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
 };
@@ -2544,6 +2572,821 @@ class IWorkerService_partitionJsonFile3b_presult {
 
 };
 
+typedef struct _IWorkerService_loadLibrary_args__isset {
+  _IWorkerService_loadLibrary_args__isset() : id(false), lib(false) {}
+  bool id :1;
+  bool lib :1;
+} _IWorkerService_loadLibrary_args__isset;
+
+class IWorkerService_loadLibrary_args {
+ public:
+
+  IWorkerService_loadLibrary_args(const IWorkerService_loadLibrary_args&);
+  IWorkerService_loadLibrary_args& operator=(const IWorkerService_loadLibrary_args&);
+  IWorkerService_loadLibrary_args() : lib() {
+  }
+
+  virtual ~IWorkerService_loadLibrary_args() noexcept;
+  IWorkerId id;
+  std::string lib;
+
+  _IWorkerService_loadLibrary_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_lib(const std::string& val);
+
+  bool operator == (const IWorkerService_loadLibrary_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(lib == rhs.lib))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_loadLibrary_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_loadLibrary_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_loadLibrary_pargs {
+ public:
+
+
+  virtual ~IWorkerService_loadLibrary_pargs() noexcept;
+  const IWorkerId* id;
+  const std::string* lib;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_loadLibrary_result__isset {
+  _IWorkerService_loadLibrary_result__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_loadLibrary_result__isset;
+
+class IWorkerService_loadLibrary_result {
+ public:
+
+  IWorkerService_loadLibrary_result(const IWorkerService_loadLibrary_result&);
+  IWorkerService_loadLibrary_result& operator=(const IWorkerService_loadLibrary_result&);
+  IWorkerService_loadLibrary_result() {
+  }
+
+  virtual ~IWorkerService_loadLibrary_result() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_loadLibrary_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_loadLibrary_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_loadLibrary_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_loadLibrary_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_loadLibrary_presult__isset {
+  _IWorkerService_loadLibrary_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_loadLibrary_presult__isset;
+
+class IWorkerService_loadLibrary_presult {
+ public:
+
+
+  virtual ~IWorkerService_loadLibrary_presult() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_loadLibrary_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_execute_args__isset {
+  _IWorkerService_execute_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IWorkerService_execute_args__isset;
+
+class IWorkerService_execute_args {
+ public:
+
+  IWorkerService_execute_args(const IWorkerService_execute_args&);
+  IWorkerService_execute_args& operator=(const IWorkerService_execute_args&);
+  IWorkerService_execute_args() {
+  }
+
+  virtual ~IWorkerService_execute_args() noexcept;
+  IWorkerId id;
+   ::ignis::rpc::ISource src;
+
+  _IWorkerService_execute_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IWorkerService_execute_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_execute_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_execute_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_execute_pargs {
+ public:
+
+
+  virtual ~IWorkerService_execute_pargs() noexcept;
+  const IWorkerId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_execute_result__isset {
+  _IWorkerService_execute_result__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_execute_result__isset;
+
+class IWorkerService_execute_result {
+ public:
+
+  IWorkerService_execute_result(const IWorkerService_execute_result&);
+  IWorkerService_execute_result& operator=(const IWorkerService_execute_result&);
+  IWorkerService_execute_result() {
+  }
+
+  virtual ~IWorkerService_execute_result() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_execute_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_execute_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_execute_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_execute_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_execute_presult__isset {
+  _IWorkerService_execute_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_execute_presult__isset;
+
+class IWorkerService_execute_presult {
+ public:
+
+
+  virtual ~IWorkerService_execute_presult() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_execute_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_executeTo_args__isset {
+  _IWorkerService_executeTo_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IWorkerService_executeTo_args__isset;
+
+class IWorkerService_executeTo_args {
+ public:
+
+  IWorkerService_executeTo_args(const IWorkerService_executeTo_args&);
+  IWorkerService_executeTo_args& operator=(const IWorkerService_executeTo_args&);
+  IWorkerService_executeTo_args() {
+  }
+
+  virtual ~IWorkerService_executeTo_args() noexcept;
+  IWorkerId id;
+   ::ignis::rpc::ISource src;
+
+  _IWorkerService_executeTo_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IWorkerService_executeTo_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_executeTo_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_executeTo_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_executeTo_pargs {
+ public:
+
+
+  virtual ~IWorkerService_executeTo_pargs() noexcept;
+  const IWorkerId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_executeTo_result__isset {
+  _IWorkerService_executeTo_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_executeTo_result__isset;
+
+class IWorkerService_executeTo_result {
+ public:
+
+  IWorkerService_executeTo_result(const IWorkerService_executeTo_result&);
+  IWorkerService_executeTo_result& operator=(const IWorkerService_executeTo_result&);
+  IWorkerService_executeTo_result() {
+  }
+
+  virtual ~IWorkerService_executeTo_result() noexcept;
+   ::ignis::rpc::driver::IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_executeTo_result__isset __isset;
+
+  void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_executeTo_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_executeTo_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_executeTo_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_executeTo_presult__isset {
+  _IWorkerService_executeTo_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_executeTo_presult__isset;
+
+class IWorkerService_executeTo_presult {
+ public:
+
+
+  virtual ~IWorkerService_executeTo_presult() noexcept;
+   ::ignis::rpc::driver::IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_executeTo_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_voidCall_args__isset {
+  _IWorkerService_voidCall_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IWorkerService_voidCall_args__isset;
+
+class IWorkerService_voidCall_args {
+ public:
+
+  IWorkerService_voidCall_args(const IWorkerService_voidCall_args&);
+  IWorkerService_voidCall_args& operator=(const IWorkerService_voidCall_args&);
+  IWorkerService_voidCall_args() {
+  }
+
+  virtual ~IWorkerService_voidCall_args() noexcept;
+  IWorkerId id;
+   ::ignis::rpc::ISource src;
+
+  _IWorkerService_voidCall_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IWorkerService_voidCall_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_voidCall_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_voidCall_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_voidCall_pargs {
+ public:
+
+
+  virtual ~IWorkerService_voidCall_pargs() noexcept;
+  const IWorkerId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_voidCall_result__isset {
+  _IWorkerService_voidCall_result__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_voidCall_result__isset;
+
+class IWorkerService_voidCall_result {
+ public:
+
+  IWorkerService_voidCall_result(const IWorkerService_voidCall_result&);
+  IWorkerService_voidCall_result& operator=(const IWorkerService_voidCall_result&);
+  IWorkerService_voidCall_result() {
+  }
+
+  virtual ~IWorkerService_voidCall_result() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_voidCall_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_voidCall_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_voidCall_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_voidCall_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_voidCall_presult__isset {
+  _IWorkerService_voidCall_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_voidCall_presult__isset;
+
+class IWorkerService_voidCall_presult {
+ public:
+
+
+  virtual ~IWorkerService_voidCall_presult() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_voidCall_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_voidCall3_args__isset {
+  _IWorkerService_voidCall3_args__isset() : id(false), data(false), src(false) {}
+  bool id :1;
+  bool data :1;
+  bool src :1;
+} _IWorkerService_voidCall3_args__isset;
+
+class IWorkerService_voidCall3_args {
+ public:
+
+  IWorkerService_voidCall3_args(const IWorkerService_voidCall3_args&);
+  IWorkerService_voidCall3_args& operator=(const IWorkerService_voidCall3_args&);
+  IWorkerService_voidCall3_args() {
+  }
+
+  virtual ~IWorkerService_voidCall3_args() noexcept;
+  IWorkerId id;
+   ::ignis::rpc::driver::IDataFrameId data;
+   ::ignis::rpc::ISource src;
+
+  _IWorkerService_voidCall3_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_data(const  ::ignis::rpc::driver::IDataFrameId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IWorkerService_voidCall3_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(data == rhs.data))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_voidCall3_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_voidCall3_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_voidCall3_pargs {
+ public:
+
+
+  virtual ~IWorkerService_voidCall3_pargs() noexcept;
+  const IWorkerId* id;
+  const  ::ignis::rpc::driver::IDataFrameId* data;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_voidCall3_result__isset {
+  _IWorkerService_voidCall3_result__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_voidCall3_result__isset;
+
+class IWorkerService_voidCall3_result {
+ public:
+
+  IWorkerService_voidCall3_result(const IWorkerService_voidCall3_result&);
+  IWorkerService_voidCall3_result& operator=(const IWorkerService_voidCall3_result&);
+  IWorkerService_voidCall3_result() {
+  }
+
+  virtual ~IWorkerService_voidCall3_result() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_voidCall3_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_voidCall3_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_voidCall3_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_voidCall3_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_voidCall3_presult__isset {
+  _IWorkerService_voidCall3_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IWorkerService_voidCall3_presult__isset;
+
+class IWorkerService_voidCall3_presult {
+ public:
+
+
+  virtual ~IWorkerService_voidCall3_presult() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_voidCall3_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_call_args__isset {
+  _IWorkerService_call_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IWorkerService_call_args__isset;
+
+class IWorkerService_call_args {
+ public:
+
+  IWorkerService_call_args(const IWorkerService_call_args&);
+  IWorkerService_call_args& operator=(const IWorkerService_call_args&);
+  IWorkerService_call_args() {
+  }
+
+  virtual ~IWorkerService_call_args() noexcept;
+  IWorkerId id;
+   ::ignis::rpc::ISource src;
+
+  _IWorkerService_call_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IWorkerService_call_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_call_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_call_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_call_pargs {
+ public:
+
+
+  virtual ~IWorkerService_call_pargs() noexcept;
+  const IWorkerId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_call_result__isset {
+  _IWorkerService_call_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_call_result__isset;
+
+class IWorkerService_call_result {
+ public:
+
+  IWorkerService_call_result(const IWorkerService_call_result&);
+  IWorkerService_call_result& operator=(const IWorkerService_call_result&);
+  IWorkerService_call_result() {
+  }
+
+  virtual ~IWorkerService_call_result() noexcept;
+   ::ignis::rpc::driver::IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_call_result__isset __isset;
+
+  void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_call_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_call_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_call_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_call_presult__isset {
+  _IWorkerService_call_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_call_presult__isset;
+
+class IWorkerService_call_presult {
+ public:
+
+
+  virtual ~IWorkerService_call_presult() noexcept;
+   ::ignis::rpc::driver::IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_call_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_call3_args__isset {
+  _IWorkerService_call3_args__isset() : id(false), data(false), src(false) {}
+  bool id :1;
+  bool data :1;
+  bool src :1;
+} _IWorkerService_call3_args__isset;
+
+class IWorkerService_call3_args {
+ public:
+
+  IWorkerService_call3_args(const IWorkerService_call3_args&);
+  IWorkerService_call3_args& operator=(const IWorkerService_call3_args&);
+  IWorkerService_call3_args() {
+  }
+
+  virtual ~IWorkerService_call3_args() noexcept;
+  IWorkerId id;
+   ::ignis::rpc::driver::IDataFrameId data;
+   ::ignis::rpc::ISource src;
+
+  _IWorkerService_call3_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_data(const  ::ignis::rpc::driver::IDataFrameId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IWorkerService_call3_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(data == rhs.data))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_call3_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_call3_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_call3_pargs {
+ public:
+
+
+  virtual ~IWorkerService_call3_pargs() noexcept;
+  const IWorkerId* id;
+  const  ::ignis::rpc::driver::IDataFrameId* data;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_call3_result__isset {
+  _IWorkerService_call3_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_call3_result__isset;
+
+class IWorkerService_call3_result {
+ public:
+
+  IWorkerService_call3_result(const IWorkerService_call3_result&);
+  IWorkerService_call3_result& operator=(const IWorkerService_call3_result&);
+  IWorkerService_call3_result() {
+  }
+
+  virtual ~IWorkerService_call3_result() noexcept;
+   ::ignis::rpc::driver::IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_call3_result__isset __isset;
+
+  void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_call3_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_call3_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_call3_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_call3_presult__isset {
+  _IWorkerService_call3_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_call3_presult__isset;
+
+class IWorkerService_call3_presult {
+ public:
+
+
+  virtual ~IWorkerService_call3_presult() noexcept;
+   ::ignis::rpc::driver::IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_call3_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class IWorkerServiceClient : virtual public IWorkerServiceIf {
  public:
   IWorkerServiceClient(std::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -2629,6 +3472,27 @@ class IWorkerServiceClient : virtual public IWorkerServiceIf {
   void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
   void send_partitionJsonFile3b(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
   void recv_partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return);
+  void loadLibrary(const IWorkerId& id, const std::string& lib);
+  void send_loadLibrary(const IWorkerId& id, const std::string& lib);
+  void recv_loadLibrary();
+  void execute(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void send_execute(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_execute();
+  void executeTo( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void send_executeTo(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_executeTo( ::ignis::rpc::driver::IDataFrameId& _return);
+  void voidCall(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void send_voidCall(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_voidCall();
+  void voidCall3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  void send_voidCall3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  void recv_voidCall3();
+  void call( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void send_call(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_call( ::ignis::rpc::driver::IDataFrameId& _return);
+  void call3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  void send_call3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  void recv_call3( ::ignis::rpc::driver::IDataFrameId& _return);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -2664,6 +3528,13 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_partitionTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionJsonFile3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionJsonFile3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_loadLibrary(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_execute(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_executeTo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_voidCall(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_voidCall3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_call(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_call3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   IWorkerServiceProcessor(::std::shared_ptr<IWorkerServiceIf> iface) :
     iface_(iface) {
@@ -2687,6 +3558,13 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["partitionTextFile"] = &IWorkerServiceProcessor::process_partitionTextFile;
     processMap_["partitionJsonFile3a"] = &IWorkerServiceProcessor::process_partitionJsonFile3a;
     processMap_["partitionJsonFile3b"] = &IWorkerServiceProcessor::process_partitionJsonFile3b;
+    processMap_["loadLibrary"] = &IWorkerServiceProcessor::process_loadLibrary;
+    processMap_["execute"] = &IWorkerServiceProcessor::process_execute;
+    processMap_["executeTo"] = &IWorkerServiceProcessor::process_executeTo;
+    processMap_["voidCall"] = &IWorkerServiceProcessor::process_voidCall;
+    processMap_["voidCall3"] = &IWorkerServiceProcessor::process_voidCall3;
+    processMap_["call"] = &IWorkerServiceProcessor::process_call;
+    processMap_["call3"] = &IWorkerServiceProcessor::process_call3;
   }
 
   virtual ~IWorkerServiceProcessor() {}
@@ -2912,6 +3790,72 @@ class IWorkerServiceMultiface : virtual public IWorkerServiceIf {
     return;
   }
 
+  void loadLibrary(const IWorkerId& id, const std::string& lib) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->loadLibrary(id, lib);
+    }
+    ifaces_[i]->loadLibrary(id, lib);
+  }
+
+  void execute(const IWorkerId& id, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->execute(id, src);
+    }
+    ifaces_[i]->execute(id, src);
+  }
+
+  void executeTo( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->executeTo(_return, id, src);
+    }
+    ifaces_[i]->executeTo(_return, id, src);
+    return;
+  }
+
+  void voidCall(const IWorkerId& id, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->voidCall(id, src);
+    }
+    ifaces_[i]->voidCall(id, src);
+  }
+
+  void voidCall3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->voidCall3(id, data, src);
+    }
+    ifaces_[i]->voidCall3(id, data, src);
+  }
+
+  void call( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->call(_return, id, src);
+    }
+    ifaces_[i]->call(_return, id, src);
+    return;
+  }
+
+  void call3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->call3(_return, id, data, src);
+    }
+    ifaces_[i]->call3(_return, id, data, src);
+    return;
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -3004,6 +3948,27 @@ class IWorkerServiceConcurrentClient : virtual public IWorkerServiceIf {
   void partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
   int32_t send_partitionJsonFile3b(const IWorkerId& id, const std::string& path, const  ::ignis::rpc::ISource& src);
   void recv_partitionJsonFile3b( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void loadLibrary(const IWorkerId& id, const std::string& lib);
+  int32_t send_loadLibrary(const IWorkerId& id, const std::string& lib);
+  void recv_loadLibrary(const int32_t seqid);
+  void execute(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_execute(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_execute(const int32_t seqid);
+  void executeTo( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_executeTo(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_executeTo( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void voidCall(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_voidCall(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_voidCall(const int32_t seqid);
+  void voidCall3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  int32_t send_voidCall3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  void recv_voidCall3(const int32_t seqid);
+  void call( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_call(const IWorkerId& id, const  ::ignis::rpc::ISource& src);
+  void recv_call( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void call3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  int32_t send_call3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
+  void recv_call3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

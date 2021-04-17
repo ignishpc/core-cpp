@@ -1,8 +1,7 @@
-
 #include "IExecutorData.h"
-#include "selector/ISelector.h"
 #include <fstream>
 #include <ghc/filesystem.hpp>
+#include <ignis/executor/core/selector/ISelector.h>
 #include <omp.h>
 
 using namespace ignis::executor::core;
@@ -65,25 +64,41 @@ void IExecutorData::setMpiGroup(const MPI::Intracomm &group) {
     context.mpi_thread_group.push_back(group);
 }
 
-std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source, bool withBackup) {
-    IGNIS_LOG(info) << "Loading function";
+std::vector<std::string> IExecutorData::loadLibraryFunctions(const std::string &path) {
+    return library_loader.loadLibrary(path);
+}
+
+std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::ISource &source, bool withBackup,
+                                                                     bool fast) {
     if (source.obj.__isset.bytes) { throw exception::IInvalidArgument("C++ not support function serialization"); }
-    auto lib = library_loader.load<selector::ISelectorGroup>(source.obj.name);
-    for (auto &tp : lib->args) {
-        if (types.find(tp.first) == types.end()) { types[tp.first] = std::make_pair(tp.second, lib); }
+    std::shared_ptr<selector::ISelectorGroup> group;
+    if (!source.obj.name.empty() && source.obj.name[0] == '#') {
+        if (functions.find(source.obj.name.substr(1)) == functions.end()) {
+            throw exception::IInvalidArgument("Function " + source.obj.name.substr(1) + " not found");
+        }
+        group = functions[source.obj.name.substr(1)];
+    } else {
+        group = library_loader.loadFunction(source.obj.name);
+        functions[source.obj.name.substr(source.obj.name.find(':') + 1)] = group;
+        for (auto &tp : group->args) {
+            if (types.find(tp.first) == types.end()) { types[tp.first] = std::make_pair(tp.second, group); }
+        }
     }
+
+    if (withBackup) {
+        std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak",
+                             std::ios::app);
+        backup << source.obj.name << "\n";
+    }
+
+    if (fast) { return group; }
 
     if (source.params.size() > 0) {
         IGNIS_LOG(info) << "Loading user variables";
         loadParameters(source);
     }
     IGNIS_LOG(info) << "Function loaded";
-    if (withBackup) {
-        std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak",
-                             std::ios::app);
-        backup << source.obj.name << "\n";
-    }
-    return lib;
+    return group;
 }
 
 void IExecutorData::loadParameters(const rpc::ISource &source) {

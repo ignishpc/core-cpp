@@ -23,6 +23,7 @@ class IIOModuleIf {
  public:
   virtual ~IIOModuleIf() {}
   virtual void loadClass(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void loadLibrary(const std::string& path) = 0;
   virtual int64_t partitionCount() = 0;
   virtual void countByPartition(std::vector<int64_t> & _return) = 0;
   virtual int64_t partitionApproxSize() = 0;
@@ -66,6 +67,9 @@ class IIOModuleNull : virtual public IIOModuleIf {
  public:
   virtual ~IIOModuleNull() {}
   void loadClass(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void loadLibrary(const std::string& /* path */) {
     return;
   }
   int64_t partitionCount() {
@@ -210,6 +214,110 @@ class IIOModule_loadClass_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IIOModule_loadClass_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IIOModule_loadLibrary_args__isset {
+  _IIOModule_loadLibrary_args__isset() : path(false) {}
+  bool path :1;
+} _IIOModule_loadLibrary_args__isset;
+
+class IIOModule_loadLibrary_args {
+ public:
+
+  IIOModule_loadLibrary_args(const IIOModule_loadLibrary_args&);
+  IIOModule_loadLibrary_args& operator=(const IIOModule_loadLibrary_args&);
+  IIOModule_loadLibrary_args() : path() {
+  }
+
+  virtual ~IIOModule_loadLibrary_args() noexcept;
+  std::string path;
+
+  _IIOModule_loadLibrary_args__isset __isset;
+
+  void __set_path(const std::string& val);
+
+  bool operator == (const IIOModule_loadLibrary_args & rhs) const
+  {
+    if (!(path == rhs.path))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_loadLibrary_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_loadLibrary_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_loadLibrary_pargs {
+ public:
+
+
+  virtual ~IIOModule_loadLibrary_pargs() noexcept;
+  const std::string* path;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_loadLibrary_result__isset {
+  _IIOModule_loadLibrary_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_loadLibrary_result__isset;
+
+class IIOModule_loadLibrary_result {
+ public:
+
+  IIOModule_loadLibrary_result(const IIOModule_loadLibrary_result&);
+  IIOModule_loadLibrary_result& operator=(const IIOModule_loadLibrary_result&);
+  IIOModule_loadLibrary_result() {
+  }
+
+  virtual ~IIOModule_loadLibrary_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_loadLibrary_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_loadLibrary_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_loadLibrary_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_loadLibrary_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_loadLibrary_presult__isset {
+  _IIOModule_loadLibrary_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_loadLibrary_presult__isset;
+
+class IIOModule_loadLibrary_presult {
+ public:
+
+
+  virtual ~IIOModule_loadLibrary_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_loadLibrary_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1716,6 +1824,9 @@ class IIOModuleClient : virtual public IIOModuleIf {
   void loadClass(const  ::ignis::rpc::ISource& src);
   void send_loadClass(const  ::ignis::rpc::ISource& src);
   void recv_loadClass();
+  void loadLibrary(const std::string& path);
+  void send_loadLibrary(const std::string& path);
+  void recv_loadLibrary();
   int64_t partitionCount();
   void send_partitionCount();
   int64_t recv_partitionCount();
@@ -1771,6 +1882,7 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_loadClass(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_loadLibrary(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_countByPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionApproxSize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1788,6 +1900,7 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   IIOModuleProcessor(::std::shared_ptr<IIOModuleIf> iface) :
     iface_(iface) {
     processMap_["loadClass"] = &IIOModuleProcessor::process_loadClass;
+    processMap_["loadLibrary"] = &IIOModuleProcessor::process_loadLibrary;
     processMap_["partitionCount"] = &IIOModuleProcessor::process_partitionCount;
     processMap_["countByPartition"] = &IIOModuleProcessor::process_countByPartition;
     processMap_["partitionApproxSize"] = &IIOModuleProcessor::process_partitionApproxSize;
@@ -1836,6 +1949,15 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
       ifaces_[i]->loadClass(src);
     }
     ifaces_[i]->loadClass(src);
+  }
+
+  void loadLibrary(const std::string& path) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->loadLibrary(path);
+    }
+    ifaces_[i]->loadLibrary(path);
   }
 
   int64_t partitionCount() {
@@ -1991,6 +2113,9 @@ class IIOModuleConcurrentClient : virtual public IIOModuleIf {
   void loadClass(const  ::ignis::rpc::ISource& src);
   int32_t send_loadClass(const  ::ignis::rpc::ISource& src);
   void recv_loadClass(const int32_t seqid);
+  void loadLibrary(const std::string& path);
+  int32_t send_loadLibrary(const std::string& path);
+  void recv_loadLibrary(const int32_t seqid);
   int64_t partitionCount();
   int32_t send_partitionCount();
   int64_t recv_partitionCount(const int32_t seqid);

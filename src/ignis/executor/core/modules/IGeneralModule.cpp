@@ -9,6 +9,12 @@ IGeneralModule::IGeneralModule(std::shared_ptr<IExecutorData> &executorData)
 
 IGeneralModule::~IGeneralModule() {}
 
+void IGeneralModule::executeTo(const ::ignis::rpc::ISource &function){
+    IGNIS_RPC_TRY()
+        executor_data->loadLibrary(function)->general->executeTo(pipe_impl);
+    IGNIS_RPC_CATCH()
+}
+
 void IGeneralModule::map_(const rpc::ISource &function) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(function)->general->map(pipe_impl);

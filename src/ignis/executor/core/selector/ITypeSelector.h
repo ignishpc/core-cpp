@@ -406,12 +406,6 @@ namespace ignis {
                         types[RTTInfo::from<Type>().getStandardName()] = std::static_pointer_cast<ITypeSelector>(type);
                     }
 
-                    template<typename IFlatMapFunction>
-                    void add(typename IFlatMapFunction::_IFlatMapFunction_type *f) {
-                        registerType<typename IFlatMapFunction::_T_type>();
-                        registerType<typename IFlatMapFunction::_R_type>();
-                    }
-
                     template<typename IFunction>
                     void add(typename IFunction::_IFunction_type *f) {
                         registerType<typename IFunction::_T_type>();
@@ -430,9 +424,9 @@ namespace ignis {
                         registerType<typename IFunction2::_R_type>();
                     }
 
-                    template<typename IVoidFunction0>
-                    void add(typename IVoidFunction0::_IVoidFunction0_type *f) {
-                        registerType<typename IVoidFunction0::_T_type>();
+                    template<typename IBeforeFunction>
+                    void add(typename IBeforeFunction::_IBeforeFunction_type *f) {
+                        registerType<typename IBeforeFunction::_T_type>();
                     }
 
                     template<typename IVoidFunction>

@@ -19,6 +19,8 @@ namespace ignis {
                 public:
                     virtual void loadClass(api::IContext &context) = 0;
 
+                    virtual void executeTo(modules::impl::IPipeImpl &impl) = 0;
+
                     virtual void map(modules::impl::IPipeImpl &impl) = 0;
 
                     virtual void filter(modules::impl::IPipeImpl &impl) = 0;
@@ -47,6 +49,8 @@ namespace ignis {
                     virtual void loadClass(api::IContext &context) { loadClass_check<Tp>(context, nullptr); };
 
                     virtual void map(modules::impl::IPipeImpl &impl) { map_check<Tp>(impl, nullptr); }
+
+                    virtual void executeTo(modules::impl::IPipeImpl &impl) { executeTo_check<Tp>(impl, nullptr); }
 
                     virtual void filter(modules::impl::IPipeImpl &impl) { filter_check<Tp>(impl, nullptr); }
 
@@ -85,6 +89,23 @@ namespace ignis {
                     template<typename Function>
                     void loadClass_check(...) {
                         throw exception::ICompatibilyException("loadClass", RTTInfo::from<Function>());
+                    }
+
+                    template<typename Function>
+                    void executeTo_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction0_type *val) {
+                        executeTo_check(impl, (Function *) nullptr, (typename Function::_IFunction0_type::_R_type *) nullptr);
+                    }
+
+                    template<typename Function, typename Rv>
+                    void executeTo_check(modules::impl::IPipeImpl &impl, Function *val,
+                                         api::IVector<api::IVector<Rv>> *val2) {
+                        impl.registerType(getType<Rv>());
+                        impl.executeTo<Function, Rv>();
+                    }
+
+                    template<typename Function, typename Rv = void>
+                    void executeTo_check(modules::impl::IPipeImpl &impl, Function *f, ...) {
+                        throw exception::ICompatibilyException("executeTo", RTTInfo::from<Function>());
                     }
 
                     template<typename Function>
@@ -128,8 +149,7 @@ namespace ignis {
 
                     template<typename Function>
                     void keyBy_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction_type *val) {
-                        impl.registerType(
-                                getType<std::pair<typename Function::_R_type, typename Function::_T_type>>());
+                        impl.registerType(getType<std::pair<typename Function::_R_type, typename Function::_T_type>>());
                         impl.keyBy<Function>();
                     }
 
@@ -183,9 +203,7 @@ namespace ignis {
 
                     template<typename Function, typename Tpv>
                     void mapExecutor_check(modules::impl::IPipeImpl &impl, Function *val,
-                                           api::IVector<api::IVector<Tpv> *
-
-                                                        > *val2) {
+                                           api::IVector<api::IVector<Tpv> *> *val2) {
                         impl.registerType(getType<Tpv>());
                         impl.mapExecutor<Function, Tpv>();
                     }
@@ -204,9 +222,7 @@ namespace ignis {
 
                     template<typename Function, typename Tpv, typename Rv>
                     void mapExecutorTo_check(modules::impl::IPipeImpl &impl, Function *val,
-                                             api::IVector<api::IVector<Tpv> *
-
-                                                          > *val2,
+                                             api::IVector<api::IVector<Tpv> *> *val2,
                                              api::IVector<api::IVector<Rv>> *val3) {
                         impl.registerType(getType<Tpv>());
                         impl.registerType(getType<Rv>());

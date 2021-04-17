@@ -35,7 +35,7 @@ namespace ignis {
                 std::shared_ptr<storage::IPartitionGroup<Tp>> getAndDeletePartitions();
 
                 template<typename Tp>
-               void setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group);
+                void setPartitions(const std::shared_ptr<storage::IPartitionGroup<Tp>> &group);
 
                 bool hasPartitions();
 
@@ -58,7 +58,10 @@ namespace ignis {
 
                 std::string infoDirectory();
 
-                std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source, bool withBackup = true);
+                std::vector<std::string> loadLibraryFunctions(const std::string &path);
+
+                std::shared_ptr<selector::ISelectorGroup> loadLibrary(const rpc::ISource &source,
+                                                                      bool withBackup = true, bool fast = false);
 
                 void loadParameters(const rpc::ISource &source);
 
@@ -84,7 +87,7 @@ namespace ignis {
 
                 void enableMpiCores();
 
-                void setMpiGroup(const MPI::Intracomm& group);
+                void setMpiGroup(const MPI::Intracomm &group);
 
                 virtual ~IExecutorData();
 
@@ -94,6 +97,7 @@ namespace ignis {
                 std::map<std::string,
                          std::pair<std::shared_ptr<selector::ITypeSelector>, std::shared_ptr<selector::ISelectorGroup>>>
                         types;
+                std::map<std::string, std::shared_ptr<selector::ISelectorGroup>> functions;
                 ILibraryLoader library_loader;
                 IPropertyParser properties;
                 IPartitionTools partition_tools;

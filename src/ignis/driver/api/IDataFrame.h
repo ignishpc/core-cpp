@@ -100,6 +100,8 @@ namespace ignis {
 
                 void foreachPartition(const ISource &src);
 
+                void foreachExecutor(const ISource &src);
+
                 int64_t topAbs(int64_t num, const rpc::ISource &tp);
 
                 int64_t topAbs(int64_t num, const ISource &cmp, const rpc::ISource &tp);
@@ -328,6 +330,7 @@ namespace ignis {
 
                 using IAbstractDataFrame::foreach;
                 using IAbstractDataFrame::foreachPartition;
+                using IAbstractDataFrame::foreachExecutor;
 
                 executor::api::IVector<Tp> top(int64_t num) {
                     auto tp = driverContext().template registerType<Tp>();

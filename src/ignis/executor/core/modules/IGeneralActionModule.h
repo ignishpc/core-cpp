@@ -14,6 +14,8 @@ namespace ignis {
                 public:
                     IGeneralActionModule(std::shared_ptr<IExecutorData> &executor_data);
 
+                    void execute(const ::ignis::rpc::ISource &src) override;
+
                     void reduce(const rpc::ISource &function) override;
 
                     void treeReduce(const rpc::ISource &function) override;
@@ -35,6 +37,8 @@ namespace ignis {
                     void foreach_(const rpc::ISource &function) override;
 
                     void foreachPartition(const rpc::ISource &function) override;
+
+                    void foreachExecutor(const  ::ignis::rpc::ISource& function) override;
 
                     void top(int64_t num) override;
 

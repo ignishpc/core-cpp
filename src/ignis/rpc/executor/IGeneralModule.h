@@ -22,6 +22,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IGeneralModuleIf {
  public:
   virtual ~IGeneralModuleIf() {}
+  virtual void executeTo(const  ::ignis::rpc::ISource& src) = 0;
   virtual void map_(const  ::ignis::rpc::ISource& src) = 0;
   virtual void filter(const  ::ignis::rpc::ISource& src) = 0;
   virtual void flatmap(const  ::ignis::rpc::ISource& src) = 0;
@@ -76,6 +77,9 @@ class IGeneralModuleIfSingletonFactory : virtual public IGeneralModuleIfFactory 
 class IGeneralModuleNull : virtual public IGeneralModuleIf {
  public:
   virtual ~IGeneralModuleNull() {}
+  void executeTo(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
   void map_(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
@@ -151,6 +155,110 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
   void sortByKey3(const  ::ignis::rpc::ISource& /* src */, const bool /* ascending */, const int64_t /* numPartitions */) {
     return;
   }
+};
+
+typedef struct _IGeneralModule_executeTo_args__isset {
+  _IGeneralModule_executeTo_args__isset() : src(false) {}
+  bool src :1;
+} _IGeneralModule_executeTo_args__isset;
+
+class IGeneralModule_executeTo_args {
+ public:
+
+  IGeneralModule_executeTo_args(const IGeneralModule_executeTo_args&);
+  IGeneralModule_executeTo_args& operator=(const IGeneralModule_executeTo_args&);
+  IGeneralModule_executeTo_args() {
+  }
+
+  virtual ~IGeneralModule_executeTo_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralModule_executeTo_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralModule_executeTo_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_executeTo_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_executeTo_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_executeTo_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_executeTo_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_executeTo_result__isset {
+  _IGeneralModule_executeTo_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_executeTo_result__isset;
+
+class IGeneralModule_executeTo_result {
+ public:
+
+  IGeneralModule_executeTo_result(const IGeneralModule_executeTo_result&);
+  IGeneralModule_executeTo_result& operator=(const IGeneralModule_executeTo_result&);
+  IGeneralModule_executeTo_result() {
+  }
+
+  virtual ~IGeneralModule_executeTo_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_executeTo_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_executeTo_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_executeTo_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_executeTo_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_executeTo_presult__isset {
+  _IGeneralModule_executeTo_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_executeTo_presult__isset;
+
+class IGeneralModule_executeTo_presult {
+ public:
+
+
+  virtual ~IGeneralModule_executeTo_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_executeTo_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 typedef struct _IGeneralModule_map__args__isset {
@@ -2925,6 +3033,9 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void executeTo(const  ::ignis::rpc::ISource& src);
+  void send_executeTo(const  ::ignis::rpc::ISource& src);
+  void recv_executeTo();
   void map_(const  ::ignis::rpc::ISource& src);
   void send_map_(const  ::ignis::rpc::ISource& src);
   void recv_map_();
@@ -3015,6 +3126,7 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef  void (IGeneralModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_executeTo(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_map_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -3043,6 +3155,7 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
  public:
   IGeneralModuleProcessor(::std::shared_ptr<IGeneralModuleIf> iface) :
     iface_(iface) {
+    processMap_["executeTo"] = &IGeneralModuleProcessor::process_executeTo;
     processMap_["map_"] = &IGeneralModuleProcessor::process_map_;
     processMap_["filter"] = &IGeneralModuleProcessor::process_filter;
     processMap_["flatmap"] = &IGeneralModuleProcessor::process_flatmap;
@@ -3096,6 +3209,15 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void executeTo(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->executeTo(src);
+    }
+    ifaces_[i]->executeTo(src);
+  }
+
   void map_(const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -3353,6 +3475,9 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void executeTo(const  ::ignis::rpc::ISource& src);
+  int32_t send_executeTo(const  ::ignis::rpc::ISource& src);
+  void recv_executeTo(const int32_t seqid);
   void map_(const  ::ignis::rpc::ISource& src);
   int32_t send_map_(const  ::ignis::rpc::ISource& src);
   void recv_map_(const int32_t seqid);

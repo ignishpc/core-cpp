@@ -22,6 +22,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IGeneralActionModuleIf {
  public:
   virtual ~IGeneralActionModuleIf() {}
+  virtual void execute(const  ::ignis::rpc::ISource& src) = 0;
   virtual void reduce(const  ::ignis::rpc::ISource& src) = 0;
   virtual void treeReduce(const  ::ignis::rpc::ISource& src) = 0;
   virtual void collect() = 0;
@@ -32,6 +33,7 @@ class IGeneralActionModuleIf {
   virtual void take(const int64_t num) = 0;
   virtual void foreach_(const  ::ignis::rpc::ISource& src) = 0;
   virtual void foreachPartition(const  ::ignis::rpc::ISource& src) = 0;
+  virtual void foreachExecutor(const  ::ignis::rpc::ISource& src) = 0;
   virtual void top(const int64_t num) = 0;
   virtual void top2(const int64_t num, const  ::ignis::rpc::ISource& cmp) = 0;
   virtual void takeOrdered(const int64_t num) = 0;
@@ -67,6 +69,9 @@ class IGeneralActionModuleIfSingletonFactory : virtual public IGeneralActionModu
 class IGeneralActionModuleNull : virtual public IGeneralActionModuleIf {
  public:
   virtual ~IGeneralActionModuleNull() {}
+  void execute(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
   void reduce(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
@@ -97,6 +102,9 @@ class IGeneralActionModuleNull : virtual public IGeneralActionModuleIf {
   void foreachPartition(const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
+  void foreachExecutor(const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
   void top(const int64_t /* num */) {
     return;
   }
@@ -115,6 +123,110 @@ class IGeneralActionModuleNull : virtual public IGeneralActionModuleIf {
   void values() {
     return;
   }
+};
+
+typedef struct _IGeneralActionModule_execute_args__isset {
+  _IGeneralActionModule_execute_args__isset() : src(false) {}
+  bool src :1;
+} _IGeneralActionModule_execute_args__isset;
+
+class IGeneralActionModule_execute_args {
+ public:
+
+  IGeneralActionModule_execute_args(const IGeneralActionModule_execute_args&);
+  IGeneralActionModule_execute_args& operator=(const IGeneralActionModule_execute_args&);
+  IGeneralActionModule_execute_args() {
+  }
+
+  virtual ~IGeneralActionModule_execute_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralActionModule_execute_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralActionModule_execute_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_execute_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_execute_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralActionModule_execute_pargs {
+ public:
+
+
+  virtual ~IGeneralActionModule_execute_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_execute_result__isset {
+  _IGeneralActionModule_execute_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_execute_result__isset;
+
+class IGeneralActionModule_execute_result {
+ public:
+
+  IGeneralActionModule_execute_result(const IGeneralActionModule_execute_result&);
+  IGeneralActionModule_execute_result& operator=(const IGeneralActionModule_execute_result&);
+  IGeneralActionModule_execute_result() {
+  }
+
+  virtual ~IGeneralActionModule_execute_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_execute_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralActionModule_execute_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_execute_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_execute_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_execute_presult__isset {
+  _IGeneralActionModule_execute_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_execute_presult__isset;
+
+class IGeneralActionModule_execute_presult {
+ public:
+
+
+  virtual ~IGeneralActionModule_execute_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_execute_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
 };
 
 typedef struct _IGeneralActionModule_reduce_args__isset {
@@ -1187,6 +1299,110 @@ class IGeneralActionModule_foreachPartition_presult {
 
 };
 
+typedef struct _IGeneralActionModule_foreachExecutor_args__isset {
+  _IGeneralActionModule_foreachExecutor_args__isset() : src(false) {}
+  bool src :1;
+} _IGeneralActionModule_foreachExecutor_args__isset;
+
+class IGeneralActionModule_foreachExecutor_args {
+ public:
+
+  IGeneralActionModule_foreachExecutor_args(const IGeneralActionModule_foreachExecutor_args&);
+  IGeneralActionModule_foreachExecutor_args& operator=(const IGeneralActionModule_foreachExecutor_args&);
+  IGeneralActionModule_foreachExecutor_args() {
+  }
+
+  virtual ~IGeneralActionModule_foreachExecutor_args() noexcept;
+   ::ignis::rpc::ISource src;
+
+  _IGeneralActionModule_foreachExecutor_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IGeneralActionModule_foreachExecutor_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_foreachExecutor_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_foreachExecutor_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralActionModule_foreachExecutor_pargs {
+ public:
+
+
+  virtual ~IGeneralActionModule_foreachExecutor_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_foreachExecutor_result__isset {
+  _IGeneralActionModule_foreachExecutor_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_foreachExecutor_result__isset;
+
+class IGeneralActionModule_foreachExecutor_result {
+ public:
+
+  IGeneralActionModule_foreachExecutor_result(const IGeneralActionModule_foreachExecutor_result&);
+  IGeneralActionModule_foreachExecutor_result& operator=(const IGeneralActionModule_foreachExecutor_result&);
+  IGeneralActionModule_foreachExecutor_result() {
+  }
+
+  virtual ~IGeneralActionModule_foreachExecutor_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_foreachExecutor_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralActionModule_foreachExecutor_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralActionModule_foreachExecutor_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralActionModule_foreachExecutor_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralActionModule_foreachExecutor_presult__isset {
+  _IGeneralActionModule_foreachExecutor_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralActionModule_foreachExecutor_presult__isset;
+
+class IGeneralActionModule_foreachExecutor_presult {
+ public:
+
+
+  virtual ~IGeneralActionModule_foreachExecutor_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralActionModule_foreachExecutor_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _IGeneralActionModule_top_args__isset {
   _IGeneralActionModule_top_args__isset() : num(false) {}
   bool num :1;
@@ -1826,6 +2042,9 @@ class IGeneralActionModuleClient : virtual public IGeneralActionModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void execute(const  ::ignis::rpc::ISource& src);
+  void send_execute(const  ::ignis::rpc::ISource& src);
+  void recv_execute();
   void reduce(const  ::ignis::rpc::ISource& src);
   void send_reduce(const  ::ignis::rpc::ISource& src);
   void recv_reduce();
@@ -1856,6 +2075,9 @@ class IGeneralActionModuleClient : virtual public IGeneralActionModuleIf {
   void foreachPartition(const  ::ignis::rpc::ISource& src);
   void send_foreachPartition(const  ::ignis::rpc::ISource& src);
   void recv_foreachPartition();
+  void foreachExecutor(const  ::ignis::rpc::ISource& src);
+  void send_foreachExecutor(const  ::ignis::rpc::ISource& src);
+  void recv_foreachExecutor();
   void top(const int64_t num);
   void send_top(const int64_t num);
   void recv_top();
@@ -1889,6 +2111,7 @@ class IGeneralActionModuleProcessor : public ::apache::thrift::TDispatchProcesso
   typedef  void (IGeneralActionModuleProcessor::*ProcessFunction)(int32_t, ::apache::thrift::protocol::TProtocol*, ::apache::thrift::protocol::TProtocol*, void*);
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
+  void process_execute(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_reduce(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_treeReduce(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_collect(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1899,6 +2122,7 @@ class IGeneralActionModuleProcessor : public ::apache::thrift::TDispatchProcesso
   void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreach_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreachPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_foreachExecutor(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_top(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_top2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_takeOrdered(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1908,6 +2132,7 @@ class IGeneralActionModuleProcessor : public ::apache::thrift::TDispatchProcesso
  public:
   IGeneralActionModuleProcessor(::std::shared_ptr<IGeneralActionModuleIf> iface) :
     iface_(iface) {
+    processMap_["execute"] = &IGeneralActionModuleProcessor::process_execute;
     processMap_["reduce"] = &IGeneralActionModuleProcessor::process_reduce;
     processMap_["treeReduce"] = &IGeneralActionModuleProcessor::process_treeReduce;
     processMap_["collect"] = &IGeneralActionModuleProcessor::process_collect;
@@ -1918,6 +2143,7 @@ class IGeneralActionModuleProcessor : public ::apache::thrift::TDispatchProcesso
     processMap_["take"] = &IGeneralActionModuleProcessor::process_take;
     processMap_["foreach_"] = &IGeneralActionModuleProcessor::process_foreach_;
     processMap_["foreachPartition"] = &IGeneralActionModuleProcessor::process_foreachPartition;
+    processMap_["foreachExecutor"] = &IGeneralActionModuleProcessor::process_foreachExecutor;
     processMap_["top"] = &IGeneralActionModuleProcessor::process_top;
     processMap_["top2"] = &IGeneralActionModuleProcessor::process_top2;
     processMap_["takeOrdered"] = &IGeneralActionModuleProcessor::process_takeOrdered;
@@ -1952,6 +2178,15 @@ class IGeneralActionModuleMultiface : virtual public IGeneralActionModuleIf {
     ifaces_.push_back(iface);
   }
  public:
+  void execute(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->execute(src);
+    }
+    ifaces_[i]->execute(src);
+  }
+
   void reduce(const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -2042,6 +2277,15 @@ class IGeneralActionModuleMultiface : virtual public IGeneralActionModuleIf {
     ifaces_[i]->foreachPartition(src);
   }
 
+  void foreachExecutor(const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->foreachExecutor(src);
+    }
+    ifaces_[i]->foreachExecutor(src);
+  }
+
   void top(const int64_t num) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -2128,6 +2372,9 @@ class IGeneralActionModuleConcurrentClient : virtual public IGeneralActionModule
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
+  void execute(const  ::ignis::rpc::ISource& src);
+  int32_t send_execute(const  ::ignis::rpc::ISource& src);
+  void recv_execute(const int32_t seqid);
   void reduce(const  ::ignis::rpc::ISource& src);
   int32_t send_reduce(const  ::ignis::rpc::ISource& src);
   void recv_reduce(const int32_t seqid);
@@ -2158,6 +2405,9 @@ class IGeneralActionModuleConcurrentClient : virtual public IGeneralActionModule
   void foreachPartition(const  ::ignis::rpc::ISource& src);
   int32_t send_foreachPartition(const  ::ignis::rpc::ISource& src);
   void recv_foreachPartition(const int32_t seqid);
+  void foreachExecutor(const  ::ignis::rpc::ISource& src);
+  int32_t send_foreachExecutor(const  ::ignis::rpc::ISource& src);
+  void recv_foreachExecutor(const int32_t seqid);
   void top(const int64_t num);
   int32_t send_top(const int64_t num);
   void recv_top(const int32_t seqid);

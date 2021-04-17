@@ -35,6 +35,8 @@
         delete obj;                                                                                                    \
     }
 
+#define create_ignis_library(f, ...) const char *__ignis_library__[] = {f, __VA_ARGS__, NULL}
+
 namespace ignis {
     namespace executor {
         namespace core {

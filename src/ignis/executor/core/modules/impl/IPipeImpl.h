@@ -14,6 +14,12 @@ namespace ignis {
                         IPipeImpl(std::shared_ptr<IExecutorData> &executorData);
 
                         template<typename Function>
+                        void execute();
+
+                        template<typename Function, typename R>
+                        void executeTo();
+
+                        template<typename Function>
                         void map();
 
                         template<typename Function>
@@ -42,6 +48,9 @@ namespace ignis {
 
                         template<typename Function>
                         void foreachPartition();
+
+                        template<typename Function, typename Tp>
+                        void foreachExecutor();
 
                         template<typename Tp>
                         void take(int64_t num);

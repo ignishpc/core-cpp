@@ -13,6 +13,13 @@ void IGeneralModuleTestClass::setUp() {}
 
 void IGeneralModuleTestClass::tearDown() {}
 
+void IGeneralModuleTestClass::executeToTest(const std::string &name, const std::string &partitionType){
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    general->executeTo(newSource(name));
+    auto result = getFromPartitions<int>();
+    CPPUNIT_ASSERT_EQUAL(100, (int)result.size());
+    for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(i, result[i]); }
+}
 
 template<typename Tp>
 void IGeneralModuleTestClass::mapTest(const std::string &name, int cores, const std::string &partitionType) {

@@ -1,6 +1,6 @@
 
-#ifndef IGNIS_IVOIDFUNCTION0_H
-#define IGNIS_IVOIDFUNCTION0_H
+#ifndef IGNIS_IBEFOREFUNCTION_H
+#define IGNIS_IBEFOREFUNCTION_H
 
 #include "ignis/executor/api/IContext.h"
 #include "ignis/executor/core/selector/ISelector.h"
@@ -9,17 +9,15 @@ namespace ignis {
     namespace executor {
         namespace api {
             namespace function {
-                class IVoidFunction0 {
+
+                template<typename T>
+                class IBeforeFunction {
                 public:
-                    typedef IVoidFunction0 _IVoidFunction0_type;
+                    typedef IBeforeFunction<R> _IBeforeFunction_type;
+                    typedef T _T_type;
 
                     virtual void before(IContext &context) {}
 
-                    virtual void call(IContext &context) {
-                        throw executor::core::exception::ILogicError("call function must be implemented");
-                    }
-
-                    virtual void after(IContext &context) {}
                 };
             }// namespace function
         }    // namespace api

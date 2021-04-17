@@ -11,7 +11,7 @@ Tp &IContextClass::var(const std::string &name) {
         variables[name] = value;
         return value->get();
     } else if (it->second) {
-        it->second->basic<Tp>().get();
+        return it->second->basic<Tp>().get();
     } else {
         it->second = it->second->bytes().decode<Tp>();
         return it->second->basic<Tp>().get();

@@ -57,6 +57,7 @@ class IDataFrameServiceIf {
   virtual int64_t take(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) = 0;
   virtual void foreach_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void foreachExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) = 0;
   virtual int64_t top4(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& cmp, const  ::ignis::rpc::ISource& tp) = 0;
   virtual int64_t takeOrdered(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) = 0;
@@ -239,6 +240,9 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
     return;
   }
   void foreachPartition(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void foreachExecutor(const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   int64_t top(const IDataFrameId& /* id */, const int64_t /* num */, const  ::ignis::rpc::ISource& /* tp */) {
@@ -4572,6 +4576,117 @@ class IDataFrameService_foreachPartition_presult {
    ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_foreachPartition_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_foreachExecutor_args__isset {
+  _IDataFrameService_foreachExecutor_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IDataFrameService_foreachExecutor_args__isset;
+
+class IDataFrameService_foreachExecutor_args {
+ public:
+
+  IDataFrameService_foreachExecutor_args(const IDataFrameService_foreachExecutor_args&);
+  IDataFrameService_foreachExecutor_args& operator=(const IDataFrameService_foreachExecutor_args&);
+  IDataFrameService_foreachExecutor_args() {
+  }
+
+  virtual ~IDataFrameService_foreachExecutor_args() noexcept;
+  IDataFrameId id;
+   ::ignis::rpc::ISource src;
+
+  _IDataFrameService_foreachExecutor_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_foreachExecutor_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_foreachExecutor_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_foreachExecutor_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_foreachExecutor_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_foreachExecutor_pargs() noexcept;
+  const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_foreachExecutor_result__isset {
+  _IDataFrameService_foreachExecutor_result__isset() : ex(false) {}
+  bool ex :1;
+} _IDataFrameService_foreachExecutor_result__isset;
+
+class IDataFrameService_foreachExecutor_result {
+ public:
+
+  IDataFrameService_foreachExecutor_result(const IDataFrameService_foreachExecutor_result&);
+  IDataFrameService_foreachExecutor_result& operator=(const IDataFrameService_foreachExecutor_result&);
+  IDataFrameService_foreachExecutor_result() {
+  }
+
+  virtual ~IDataFrameService_foreachExecutor_result() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_foreachExecutor_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_foreachExecutor_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_foreachExecutor_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_foreachExecutor_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_foreachExecutor_presult__isset {
+  _IDataFrameService_foreachExecutor_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IDataFrameService_foreachExecutor_presult__isset;
+
+class IDataFrameService_foreachExecutor_presult {
+ public:
+
+
+  virtual ~IDataFrameService_foreachExecutor_presult() noexcept;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_foreachExecutor_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -8991,6 +9106,9 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void send_foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_foreachPartition();
+  void foreachExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void send_foreachExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_foreachExecutor();
   int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   void send_top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   int64_t recv_top();
@@ -9149,6 +9267,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_take(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreach_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_foreachPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_foreachExecutor(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_top(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_top4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_takeOrdered(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -9221,6 +9340,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["take"] = &IDataFrameServiceProcessor::process_take;
     processMap_["foreach_"] = &IDataFrameServiceProcessor::process_foreach_;
     processMap_["foreachPartition"] = &IDataFrameServiceProcessor::process_foreachPartition;
+    processMap_["foreachExecutor"] = &IDataFrameServiceProcessor::process_foreachExecutor;
     processMap_["top"] = &IDataFrameServiceProcessor::process_top;
     processMap_["top4"] = &IDataFrameServiceProcessor::process_top4;
     processMap_["takeOrdered"] = &IDataFrameServiceProcessor::process_takeOrdered;
@@ -9612,6 +9732,15 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
       ifaces_[i]->foreachPartition(id, src);
     }
     ifaces_[i]->foreachPartition(id, src);
+  }
+
+  void foreachExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->foreachExecutor(id, src);
+    }
+    ifaces_[i]->foreachExecutor(id, src);
   }
 
   int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp) {
@@ -10083,6 +10212,9 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   int32_t send_foreachPartition(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_foreachPartition(const int32_t seqid);
+  void foreachExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  int32_t send_foreachExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_foreachExecutor(const int32_t seqid);
   int64_t top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   int32_t send_top(const IDataFrameId& id, const int64_t num, const  ::ignis::rpc::ISource& tp);
   int64_t recv_top(const int32_t seqid);

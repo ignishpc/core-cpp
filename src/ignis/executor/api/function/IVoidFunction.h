@@ -2,8 +2,8 @@
 #ifndef IGNIS_IVOIDFUNCTION_H
 #define IGNIS_IVOIDFUNCTION_H
 
-#include "../../core/selector/ISelector.h"
-#include "../IContext.h"
+#include "ignis/executor/api/IContext.h"
+#include "ignis/executor/core/selector/ISelector.h"
 
 namespace ignis {
     namespace executor {

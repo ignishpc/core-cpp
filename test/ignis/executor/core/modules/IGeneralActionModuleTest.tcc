@@ -10,6 +10,18 @@ void IGeneralActionModuleTestClass::setUp() {}
 
 void IGeneralActionModuleTestClass::tearDown() {}
 
+void IGeneralActionModuleTestClass::executeTest(const std::string &name) {
+    generalAction->execute(newSource(name));
+    CPPUNIT_ASSERT(executor_data->getContext().isVar(name));
+}
+
+void IGeneralActionModuleTestClass::loadAndRefTest(const std::string &name) {
+    executor_data->loadLibrary(newSource(name))->loadClass(executor_data->getContext());
+    rpc::ISource source;
+    source.obj.name = "#" + name;
+    generalAction->execute(source);
+}
+
 template<typename Tp>
 void IGeneralActionModuleTestClass::reduceTest(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
@@ -177,6 +189,7 @@ void IGeneralActionModuleTestClass::foreachTest(const std::string &name, int cor
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);
     generalAction->foreach_(newSource(name));
+    CPPUNIT_ASSERT(executor_data->getContext().isVar(name));
 }
 
 template<typename Tp>
@@ -187,6 +200,13 @@ void IGeneralActionModuleTestClass::foreachPartitionTest(const std::string &name
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);
     generalAction->foreachPartition(newSource(name));
+    CPPUNIT_ASSERT(executor_data->getContext().isVar(name));
+}
+
+template<typename Tp>
+void IGeneralActionModuleTestClass::foreachExecutorTest(const std::string &name, int cores,
+                                                        const std::string &partitionType) {
+    //TODO
 }
 
 template<typename Tp>
