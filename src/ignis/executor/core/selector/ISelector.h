@@ -11,14 +11,14 @@
 
 #define ignis_export(name, class)                                                                                      \
     extern "C" ignis::executor::core::selector::ISelectorGroup *name##_constructor() {                                 \
-        return new ignis::executor::core::selector::ISelectorGroupImpl<class>();                                       \
+        return new ignis::executor::core::selector::ISelectorGroupImpl<class>(#name);                                       \
     }                                                                                                                  \
                                                                                                                        \
     extern "C" void name##_destructor(ignis::executor::core::selector::ISelectorGroupImpl<class> *obj) { delete obj; }
 
 #define ignis_export_with_key(name, class, keyclass)                                                                   \
     extern "C" ignis::executor::core::selector::ISelectorGroup *name##_constructor() {                                 \
-        return new ignis::executor::core::selector::ISelectorGroupKeyImpl<keyclass, class>();                          \
+        return new ignis::executor::core::selector::ISelectorGroupKeyImpl<keyclass, class>(#name);                          \
     }                                                                                                                  \
                                                                                                                        \
     extern "C" void name##_destructor(ignis::executor::core::selector::ISelectorGroupKeyImpl<keyclass, class> *obj) {  \
@@ -27,7 +27,7 @@
 
 #define ignis_export_with_value(name, class, valueclass)                                                               \
     extern "C" ignis::executor::core::selector::ISelectorGroup *name##_constructor() {                                 \
-        return new ignis::executor::core::selector::ISelectorGroupValueImpl<valueclass, class>();                      \
+        return new ignis::executor::core::selector::ISelectorGroupValueImpl<valueclass, class>(#name);                      \
     }                                                                                                                  \
                                                                                                                        \
     extern "C" void name##_destructor(                                                                                 \
@@ -35,7 +35,7 @@
         delete obj;                                                                                                    \
     }
 
-#define create_ignis_library(f, ...) const char *__ignis_library__[] = {f, __VA_ARGS__, NULL}
+#define create_ignis_library(f, ...) const char *__ignis_library__[] = {#f, #__VA_ARGS__, NULL}
 
 namespace ignis {
     namespace executor {
@@ -44,11 +44,14 @@ namespace ignis {
 
                 class ISelectorGroup {
                 public:
+                    ISelectorGroup(const std::string &name) : name(name) {}
+
                     virtual RTTInfo info() = 0;
 
                     virtual void loadClass(api::IContext &context) = 0;
 
-                    typename ITypeSelectorExtractor::Args args;
+                    const std::string name;
+                    std::vector<std::shared_ptr<ITypeSelector>> args;
                     std::shared_ptr<IGeneralSelector> general;
                     std::shared_ptr<IGeneralActionSelector> general_action;
                     std::shared_ptr<IKeySelector> key;
@@ -62,7 +65,7 @@ namespace ignis {
 
                     virtual void loadClass(api::IContext &context) { general->loadClass(context); }
 
-                    ISelectorGroupImpl() {
+                    ISelectorGroupImpl(const std::string &name) : ISelectorGroup(name) {
                         args = ITypeSelectorExtractor().extract<Tp>();
                         general = std::make_shared<IGeneralSelectorImpl<Tp>>();
                         general_action = std::make_shared<IGeneralActionSelectorImpl<Tp>>();
@@ -74,7 +77,7 @@ namespace ignis {
                 template<typename K, typename Tp>
                 class ISelectorGroupKeyImpl : public ISelectorGroupImpl<Tp> {
                 public:
-                    ISelectorGroupKeyImpl() : ISelectorGroupImpl<Tp>() {
+                    ISelectorGroupKeyImpl(const std::string &name) : ISelectorGroupImpl<Tp>(name) {
                         this->key = std::make_shared<IKeySelectorImpl<K, Tp>>();
                     }
                 };
@@ -82,7 +85,7 @@ namespace ignis {
                 template<typename K, typename Tp>
                 class ISelectorGroupValueImpl : public ISelectorGroupImpl<Tp> {
                 public:
-                    ISelectorGroupValueImpl() : ISelectorGroupImpl<Tp>() {
+                    ISelectorGroupValueImpl(const std::string &name) : ISelectorGroupImpl<Tp>(name) {
                         this->value = std::make_shared<IValueSelectorImpl<K, Tp>>();
                     }
                 };

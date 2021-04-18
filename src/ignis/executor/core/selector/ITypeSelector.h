@@ -13,9 +13,9 @@
 #include <functional>
 #include <ignis/executor/core/modules/impl/IPipeImpl.h>
 #include <ignis/executor/core/modules/impl/IReduceImpl.h>
-#include <map>
 #include <memory>
 #include <type_traits>
+#include <vector>
 
 namespace ignis {
     namespace executor {
@@ -389,21 +389,19 @@ namespace ignis {
 
                 class ITypeSelectorExtractor {
                 public:
-                    typedef std::map<std::string, std::shared_ptr<ITypeSelector>> Args;
 
                     template<typename Tp>
-                    Args extract() {
+                    std::vector<std::shared_ptr<ITypeSelector>> extract() {
                         add<Tp>(nullptr);
                         return types;
                     }
 
                 private:
-                    Args types;
+                    std::vector<std::shared_ptr<ITypeSelector>> types;
 
                     template<typename Type>
                     void registerType() {
-                        auto type = std::make_shared<ITypeSelectorImpl<Type>>();
-                        types[RTTInfo::from<Type>().getStandardName()] = std::static_pointer_cast<ITypeSelector>(type);
+                        types.push_back(std::make_shared<ITypeSelectorImpl<Type>>());
                     }
 
                     template<typename IFunction>

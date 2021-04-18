@@ -118,7 +118,7 @@ std::shared_ptr<selector::ITypeSelector> IModule::typeFromSource(const ignis::rp
     if (!name.empty() && name[0] == ':') { return typeFromName(name.substr(1)); }
     auto lib = executor_data->loadLibrary(source);
     if (lib->args.empty()) { throw exception::ILogicError("Function " + name + " has not type to use"); }
-    auto type = lib->args.begin()->second;
+    auto type = lib->args[0];
     if (lib->args.size() > 1) {
         IGNIS_LOG(warning) << "Function " << name << " has more than one type, using" << type->info().getStandardName();
     }

@@ -23,3 +23,7 @@ std::vector<std::shared_ptr<selector::ITypeSelector>> ICoreTypes::defaultTypes()
             std::make_shared<ITypeSelectorImpl<std::pair<int64_t, int64_t>>>(),
             std::make_shared<ITypeSelectorImpl<std::pair<int64_t, std::string>>>()};
 }
+
+std::vector<std::shared_ptr<selector::ISelectorGroup>> ICoreTypes::defaultFunctions(){
+    return {};
+}

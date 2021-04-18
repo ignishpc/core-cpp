@@ -72,16 +72,17 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
                                                                      bool fast) {
     if (source.obj.__isset.bytes) { throw exception::IInvalidArgument("C++ not support function serialization"); }
     std::shared_ptr<selector::ISelectorGroup> group;
-    if (!source.obj.name.empty() && source.obj.name[0] == '#') {
-        if (functions.find(source.obj.name.substr(1)) == functions.end()) {
-            throw exception::IInvalidArgument("Function " + source.obj.name.substr(1) + " not found");
+    int sep = source.obj.name.find(':');
+    if (sep == -1) {
+        if (functions.find(source.obj.name) == functions.end()) {
+            throw exception::IInvalidArgument("Function " + source.obj.name + " not found");
         }
-        group = functions[source.obj.name.substr(1)];
+        group = functions[source.obj.name];
     } else {
         group = library_loader.loadFunction(source.obj.name);
-        functions[source.obj.name.substr(source.obj.name.find(':') + 1)] = group;
+        registerFunction(group);
         for (auto &tp : group->args) {
-            if (types.find(tp.first) == types.end()) { types[tp.first] = std::make_pair(tp.second, group); }
+            registerType(tp);
         }
     }
 
@@ -138,6 +139,10 @@ ignis::executor::api::IContext &IExecutorData::getContext() { return context; }
 
 void IExecutorData::registerType(const std::shared_ptr<selector::ITypeSelector> &type) {
     types[type->info().getStandardName()] = std::make_pair(type, std::shared_ptr<selector::ISelectorGroup>());
+}
+
+void IExecutorData::registerFunction(const std::shared_ptr<selector::ISelectorGroup> &f){
+    functions[f->name] = f;
 }
 
 bool IExecutorData::hasVariable(const std::string key) { return variables.find(key) != variables.end(); }

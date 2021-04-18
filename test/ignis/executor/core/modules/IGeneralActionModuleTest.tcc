@@ -18,7 +18,7 @@ void IGeneralActionModuleTestClass::executeTest(const std::string &name) {
 void IGeneralActionModuleTestClass::loadAndRefTest(const std::string &name) {
     executor_data->loadLibrary(newSource(name))->loadClass(executor_data->getContext());
     rpc::ISource source;
-    source.obj.name = "#" + name;
+    source.obj.name = name;
     generalAction->execute(source);
 }
 
@@ -206,7 +206,12 @@ void IGeneralActionModuleTestClass::foreachPartitionTest(const std::string &name
 template<typename Tp>
 void IGeneralActionModuleTestClass::foreachExecutorTest(const std::string &name, int cores,
                                                         const std::string &partitionType) {
-    //TODO
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto elems = IElements<Tp>().create(100 * cores * 2, 0);
+    loadToPartitions(elems, cores * 2);
+    generalAction->foreachExecutor(newSource(name));
+    CPPUNIT_ASSERT(executor_data->getContext().isVar(name));
 }
 
 template<typename Tp>

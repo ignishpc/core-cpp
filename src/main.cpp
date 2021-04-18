@@ -52,6 +52,10 @@ int main(int argc, char *argv[]) {
                 executor_data->registerType(dtype);
             }
 
+            for(auto& df : ICoreTypes::defaultFunctions()){
+                executor_data->registerFunction(df);
+            }
+
         }
     };
 

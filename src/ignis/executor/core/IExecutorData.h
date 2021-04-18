@@ -69,6 +69,8 @@ namespace ignis {
 
                 void registerType(const std::shared_ptr<selector::ITypeSelector> &type);
 
+                void registerFunction(const std::shared_ptr<selector::ISelectorGroup> &f);
+
                 std::shared_ptr<selector::ITypeSelector> getType(const std::string &id);
 
                 api::IContext &getContext();

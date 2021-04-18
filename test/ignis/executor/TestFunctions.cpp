@@ -200,7 +200,7 @@ ignis_export(ForeachPartitionString, ForeachPartitionString);
 class ForeachExecutorString : public function::IVoidFunction<IVector<IVector<std::string> *>> {
 public:
     void call(IVector<IVector<std::string> *> &parts, IContext &context) override {
-        context.var<bool>("ForeachPartitionString") = true;
+        context.var<bool>("ForeachExecutorString") = true;
     }
 };
 

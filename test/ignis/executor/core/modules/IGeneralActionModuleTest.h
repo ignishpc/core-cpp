@@ -39,9 +39,9 @@ namespace ignis {
 
                     void tearDown() override;
 
-                    void executeNoneTest(){executeTest("NoneFunction");}
+                    void executeNoneTest() { executeTest("NoneFunction"); }
 
-                    void loadAndRefNoneTest(){loadAndRefTest("NoneFunction");}
+                    void loadAndRefNoneTest() { loadAndRefTest("NoneFunction"); }
 
                     void reduceIntTest() { reduceTest<int>("ReduceInt", 2, "Memory"); }
 
