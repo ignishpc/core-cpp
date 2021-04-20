@@ -3,7 +3,7 @@
 template<typename Tp>
 struct ignis::executor::core::io::INativeReaderType {
 
-    inline void operator()(protocol::IProtocol &protocol, bool &obj) {
+    inline void operator()(protocol::IProtocol &protocol, Tp &obj) {
         bool contiguous;
         protocol.readBool(contiguous);
         if (contiguous) {
@@ -13,8 +13,8 @@ struct ignis::executor::core::io::INativeReaderType {
         }
     }
 
-    inline bool operator()(protocol::IProtocol &protocol) {
-        bool obj;
+    inline Tp operator()(protocol::IProtocol &protocol) {
+        Tp obj;
         (*this)(protocol, obj);
         return obj;
     }

@@ -14,7 +14,7 @@ struct ignis::executor::core::io::isContiguous<std::pair<Tp1, Tp2>> {
 template<typename Tp>
 struct ignis::executor::core::io::INativeWriterType {
 
-    inline void operator()(protocol::IProtocol &protocol, const bool &obj) {
+    inline void operator()(protocol::IProtocol &protocol, const Tp &obj) {
         if (ignis::executor::core::io::isContiguous<Tp>()()) {
             protocol.writeBool(true);
             protocol.getTransport()->write((uint8_t *) &obj, sizeof(Tp));
