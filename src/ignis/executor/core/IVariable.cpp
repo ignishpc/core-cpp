@@ -17,6 +17,5 @@ IBytesVariable::operator bool() { return false; }
 std::shared_ptr<protocol::IObjectProtocol> IBytesVariable::protocol() {
     char *cbytes = const_cast<char *>(value.c_str());
     auto buffer = std::make_shared<core::transport::IMemoryBuffer>((uint8_t *) cbytes, value.size());
-    auto zlib = std::make_shared<core::transport::IZlibTransport>(buffer);
-    return std::make_shared<core::protocol::IObjectProtocol>(zlib);
+    return std::make_shared<core::protocol::IObjectProtocol>(buffer);
 }

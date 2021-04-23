@@ -41,7 +41,7 @@ namespace ignis {
 
                     void tearDown() override;
 
-                    void executeToIntTest() {executeToTest("IntSequence", "Memory");}
+                    void executeToIntTest() { executeToTest("IntSequence", "Memory"); }
 
                     void mapIntTest() { mapTest<int>("MapInt", 2, "Memory"); }
 
@@ -88,7 +88,6 @@ namespace ignis {
                     void sortByKeyIntStringTest() { sortByKeyTest<int, std::string>(2, "Memory"); }
 
                 private:
-
                     void executeToTest(const std::string &name, const std::string &partitionType);
 
                     template<typename Tp>

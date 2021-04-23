@@ -39,6 +39,8 @@ namespace ignis {
 
                 bool hasPartitions();
 
+                bool hasVoidPartitions();
+
                 void deletePartitions();
 
                 template<typename Tp>

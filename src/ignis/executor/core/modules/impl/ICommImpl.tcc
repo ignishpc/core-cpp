@@ -142,9 +142,6 @@ void ICommImplClass::send(const std::string &group, int64_t partition, int64_t d
 template<typename Tp>
 void ICommImplClass::recv(const std::string &group, int64_t partition, int64_t source, int64_t thread) {
     auto part_group = executor_data->getPartitions<Tp>();
-    while (part_group->partitions() < partition + 1) {
-        part_group->add(executor_data->getPartitionTools().newPartition<Tp>());
-    }
     auto comm = getGroup(group);
     int tag = comm.Get_rank();
     executor_data->mpi().recv<Tp>(comm, *(*part_group)[partition], source, tag);

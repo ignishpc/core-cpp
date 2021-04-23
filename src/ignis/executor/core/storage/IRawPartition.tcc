@@ -23,11 +23,7 @@ void IRawPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &trans)
 
     uint8_t bb[256];
     uint32_t read;
-    if (zlib_in->getInCompression() == this->compression && false) { //TODO how implement?
-        while ((read = trans->read(bb, 256)) > 0) { this->zlib->getTransport()->write(bb, read); }
-    }else{
-        while ((read = zlib_in->read(bb, 256)) > 0) { this->zlib->write(bb, read); }
-    }
+    while ((read = zlib_in->read(bb, 256)) > 0) { this->zlib->write(bb, read); }
 }
 
 template<typename Tp>

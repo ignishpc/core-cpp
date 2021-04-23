@@ -39,6 +39,7 @@ set(SOURCE_FILES
         ignis/driver/core/IDriverContext.tcc
 
         #Executor api function
+        ignis/executor/api/function/IBeforeFunction.h
         ignis/executor/api/function/IFunction.h
         ignis/executor/api/function/IFunction0.h
         ignis/executor/api/function/IFunction2.h

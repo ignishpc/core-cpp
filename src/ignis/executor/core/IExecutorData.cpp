@@ -11,6 +11,14 @@ IExecutorData::IExecutorData()
 
 bool IExecutorData::hasPartitions() { return (bool) partitions; }
 
+bool IExecutorData::hasVoidPartitions(){
+    if(!hasPartitions()){
+        return true;
+    }
+    auto parts = getPartitions<storage::IVoidPartition::VOID_TYPE>(true);
+    return parts->empty() || (*parts)[0]->type() == storage::IVoidPartition::TYPE;
+}
+
 void IExecutorData::deletePartitions() { partitions.reset(); }
 
 int64_t IExecutorData::clearVariables() {
@@ -84,12 +92,12 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
         for (auto &tp : group->args) {
             registerType(tp);
         }
-    }
 
-    if (withBackup) {
-        std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak",
-                             std::ios::app);
-        backup << source.obj.name << "\n";
+        if (withBackup) {
+            std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak",
+                                 std::ios::app);
+            backup << source.obj.name << "\n";
+        }
     }
 
     if (fast) { return group; }

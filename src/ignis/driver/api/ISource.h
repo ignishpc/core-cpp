@@ -12,7 +12,7 @@ namespace ignis {
         namespace api {
             class ISource {
             public:
-                ISource(const std::string &src) {
+                ISource(const std::string &src, bool native=false): native(native) {
                     rpc::IEncoded e;
                     e.__set_name(src);
                     inner.__set_obj(e);
@@ -24,7 +24,7 @@ namespace ignis {
                 ISource &addParam(const std::string &name, const Tp &value) {
                     auto buffer = std::make_shared<executor::core::transport::IMemoryBuffer>();
                     executor::core::protocol::IObjectProtocol proto(buffer);
-                    executor::core::io::IWriter<Tp>()(proto, value);
+                    proto.writeObject<Tp>(value, native);
                     inner.params[name] = buffer->getBufferAsString();
                     return *this;
                 }
@@ -33,6 +33,7 @@ namespace ignis {
 
             private:
                 rpc::ISource inner;
+                bool native;
             };
 
         }// namespace api

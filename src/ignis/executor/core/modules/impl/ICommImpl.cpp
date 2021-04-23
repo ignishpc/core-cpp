@@ -136,9 +136,6 @@ int32_t ICommImpl::enableMultithreading(const std::string &group) {
 void ICommImpl::recvVoid(const std::string &group, int64_t partition, int64_t source, int64_t thread) {
     IGNIS_TRY()
     auto part_group = executor_data->getPartitions<storage::IVoidPartition::VOID_TYPE>(true);
-    while (part_group->partitions() < partition + 1) {
-        part_group->add(executor_data->getPartitionTools().newVoidPartition());
-    }
     auto comm = getGroup(group);
     int tag = comm.Get_rank();
     executor_data->mpi().recvVoid(comm, (storage::IVoidPartition &) *(*part_group)[partition], source, tag);

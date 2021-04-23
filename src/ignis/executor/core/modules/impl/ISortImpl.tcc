@@ -230,7 +230,6 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
         pivots = parallelSelectPivots<Tp>(samples);
         IGNIS_LOG(info) << "Sort: collecting pivots";
         executor_data->mpi().gather(*pivots, 0);
-        if (executor_data->mpi().isRoot(0)) { pivots->resize(samples); }
     } else {
         IGNIS_LOG(info) << "Sort: collecting pivots";
         executor_data->mpi().gather(*pivots, 0);
@@ -252,7 +251,6 @@ void ISortImplClass::sort_impl(Cmp comparator, int64_t partitions, bool local_so
     auto ranges = generateRanges(*input, *pivots, comparator);
     pivots.reset();
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
-    auto numRanges = ranges->partitions();
 
     IGNIS_LOG(info) << "Sort: exchanging ranges";
     exchange<Tp>(*ranges, *output);
@@ -307,9 +305,13 @@ ISortImplClass::selectPivots(storage::IPartitionGroup<Tp> &group, int64_t sample
             }
 
             auto skip = (group[p]->size() - samples) / (samples + 1);
+            auto rem = (group[p]->size() - samples) % (samples + 1);
             auto reader = group[p]->readIterator();
             for (int64_t n = 0; n < samples; n++) {
-                for (int64_t i = 0; i < skip; i++) { reader->next(); }
+                for (int64_t i = 0; i < skip; i++) {
+                    reader->next();
+                }
+                if (n < rem) { reader->next(); }
 #pragma omp critical
                 { writer->write(reader->next()); }
             }
@@ -323,44 +325,44 @@ ISortImplClass::selectPivots(storage::IPartitionGroup<Tp> &group, int64_t sample
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IMemoryPartition<Tp>>
 ISortImplClass::parallelSelectPivots(int64_t samples) {
-    bool root = executor_data->mpi().isRoot(0);
+    int rank = executor_data->mpi().rank();
     auto executors = executor_data->mpi().executors();
     auto result = executor_data->getPartitionTools().newMemoryPartition<Tp>(samples);
-    std::vector<int64_t> aux;
-    int64_t sz = 0;
-    int64_t skip, init;
+    std::vector<int64_t> aux(executors, 0);
+    int64_t sz = 0, disp = 0, pos, sample;
     auto tmp = executor_data->getAndDeletePartitions<Tp>();
     for (auto &part : *tmp) { sz += part->size(); }
-    if (root) { aux.resize(executors); }
 
-    executor_data->mpi().native().Gather(&sz, 1, MPI::LONG_LONG, &aux[0], 1, MPI::LONG_LONG, 0);
-    if (root) {
-        sz = 0;
-        for (auto v : aux) { sz += v; }
-        skip = (sz - samples) / (samples + 1);
-    }
-    executor_data->mpi().native().Bcast(&skip, 1, MPI::LONG_LONG, 0);
+    executor_data->mpi().native().Allgather(&sz, 1, MPI::LONG_LONG, &aux[0], 1, MPI::LONG_LONG);
 
-    if (root) {
-        aux.resize(executors, 0);
-        int64_t d = 0;
-        int64_t tmp;
-        for (int64_t i = 0; i < executors; i++) {
-            tmp = skip - d;
-            d = (aux[i] + d) % (skip + 1);
-            aux[i] = tmp;
+    sz = 0;
+    for (int64_t i = 0; i < executors; i++) { sz += aux[i]; }
+    for (int64_t i = 0; i < rank; i++) { disp += aux[i]; }
+
+    auto skip = (sz - samples) / (samples + 1);
+    auto rem = (sz - samples) % (samples + 1);
+
+    pos = skip + (rem > 0 ? 1 : 0);
+    for (sample = 0; sample < samples; sample++) {
+        if (pos >= disp) { break; }
+        if (sample < rem - 1) {
+            pos += skip + 2;
+        } else {
+            pos += skip + 1;
         }
     }
-    executor_data->mpi().native().Scatter(&aux[0], 1, MPI::LONG_LONG, &init, 1, MPI::LONG_LONG, 0);
+    pos -= disp;
 
     auto writer = result->writeIterator();
     auto mwriter = executor_data->getPartitionTools().toMemory(*writer);
-    int64_t pos = init;
+
     for (auto part : *tmp) {
         auto array = executor_data->getPartitionTools().toMemory(*part);
-        while (pos < array.size()) {
+        while (pos < array.size() && sample < samples) {
             mwriter.write(array[pos++]);
             pos += skip;
+            if (sample < rem - 1) { pos++; }
+            sample++;
         }
         pos -= array.size();
     }
@@ -424,11 +426,13 @@ ISortImplClass::selectMemoryPivots(storage::IPartitionGroup<Tp> &group, int64_t 
         }
 
         auto skip = (group[p]->size() - samples) / (samples + 1);
+        auto rem = (group[p]->size() - samples) % (samples + 1);
         auto &part = executor_data->getPartitionTools().toMemory(*group[p]);
-        auto pos = skip;
+        auto pos = skip + (rem > 0 ? 1 : 0);
         for (int64_t n = 0; n < samples; n++) {
             men_writer.write(part[pos++]);
             pos += skip;
+            if (n < rem - 1) { pos++; }
         }
     }
     return pivots;

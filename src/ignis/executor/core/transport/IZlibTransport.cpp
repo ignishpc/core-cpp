@@ -53,7 +53,7 @@ bool IZlibTransport::peek() {
 uint32_t IZlibTransport::read(uint8_t *buf, uint32_t len) {
     if (!rinit) {
         uint8_t v = comp_level_;
-        rinit = transport_->read(&v, 1) > 0;
+        rinit = transport_->readAll(&v, 1) > 0;
         in_compression = v;
     }
     if (in_compression > 0) {
@@ -69,7 +69,7 @@ void IZlibTransport::write(const uint8_t *buf, uint32_t len) {
         uint8_t v = (uint8_t) comp_level_;
         transport_->write(&v, 1);
     }
-    if (in_compression > 0) {
+    if (comp_level_ > 0) {
         TZlibTransport::write(buf, len);
     } else {
         transport_->write(buf, len);
@@ -77,7 +77,7 @@ void IZlibTransport::write(const uint8_t *buf, uint32_t len) {
 }
 
 void IZlibTransport::finish() {
-    if (in_compression > 0) { TZlibTransport::finish(); }
+    if (comp_level_ > 0) { TZlibTransport::finish(); }
 }
 
 const uint8_t *IZlibTransport::borrow(uint8_t *buf, uint32_t *len) {

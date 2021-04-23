@@ -145,7 +145,7 @@ void ICommModule::send(const std::string &group, const int64_t partition, const 
 
 void ICommModule::recv(const std::string &group, const int64_t partition, const int64_t source, const int32_t thread) {
     IGNIS_RPC_TRY()
-    if (executor_data->hasPartitions()) {
+    if (!executor_data->hasVoidPartitions()) {
         typeFromPartition()->recv(impl, group, partition, source, thread);
     } else {
         impl.recvVoid(group, partition, source, thread);
