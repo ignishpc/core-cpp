@@ -16,13 +16,14 @@ namespace ignis {
                 public:
                     std::string operator=(const std::string &value);
 
+                    std::string value;
+
                 private:
                     friend IProperties;
                     Value(IProperties &properties, const std::string &key, const std::string &value);
 
                     IProperties &properties;
                     std::string key;
-                    std::string value;
                 };
 
                 IProperties();

@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
     int port = atoi(argv[1]);
     int compression = atoi(argv[2]);
-    if (port == 0) {
+    if (port == 0 || compression == 0) {
         IGNIS_LOG(error) << "Executor need a valid server port and compression";
         return EXIT_FAILURE;
     }
