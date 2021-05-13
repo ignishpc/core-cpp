@@ -52,7 +52,7 @@ std::vector<std::string> ILibraryLoader::loadLibrary(const std::string &path) {
     std::vector<std::string> functions;
 
     for (int i = 0; __ignis_library__[i] != nullptr; i++) {
-        functions.push_back(std::string(__ignis_library__[i]) + ":" + path);
+        functions.push_back(path + ":" + std::string(__ignis_library__[i]));
     }
     dlclose(library);
 
