@@ -81,7 +81,7 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
     if (source.obj.__isset.bytes) { throw exception::IInvalidArgument("C++ not support function serialization"); }
     std::shared_ptr<selector::ISelectorGroup> group;
     int sep = source.obj.name.find(':');
-    if (sep == -1) {
+    if (sep ==std::string::npos) {
         if (functions.find(source.obj.name) == functions.end()) {
             throw exception::IInvalidArgument("Function " + source.obj.name + " not found");
         }

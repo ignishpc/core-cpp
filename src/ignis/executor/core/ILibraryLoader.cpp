@@ -9,7 +9,7 @@ using namespace ignis::executor::core;
 
 std::shared_ptr<selector::ISelectorGroup> ILibraryLoader::loadFunction(const std::string &name) {
     int sep = name.find(':');
-    if (sep < -1) { throw exception::IInvalidArgument(name + " is not a valid c++ class"); }
+    if (sep == std::string::npos) { throw exception::IInvalidArgument(name + " is not a valid c++ class"); }
 
     std::string path = name.substr(0, sep);
     std::string class_name = name.substr(sep + 1, name.size());
@@ -41,6 +41,8 @@ std::vector<std::string> ILibraryLoader::loadLibrary(const std::string &path) {
     if (!ghc::filesystem::exists(path)) { throw exception::IInvalidArgument(path + " was not found"); }
 
     void *library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);
+
+    if (!library) { throw exception::IInvalidArgument(path + " could not be loaded: " + dlerror()); }
 
     const char **__ignis_library__ = (const char **) dlsym(library, "__ignis_library__");
 
