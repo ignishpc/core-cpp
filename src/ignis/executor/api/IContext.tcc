@@ -10,7 +10,7 @@ Tp &IContextClass::var(const std::string &name) {
         auto value = std::make_shared<executor::core::IBasicVariable<Tp>>();
         variables[name] = value;
         return value->get();
-    } else if (it->second) {
+    } else if (it->second->decoded()) {
         return it->second->basic<Tp>().get();
     } else {
         it->second = it->second->bytes().decode<Tp>();

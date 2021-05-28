@@ -11,10 +11,8 @@ IExecutorData::IExecutorData()
 
 bool IExecutorData::hasPartitions() { return (bool) partitions; }
 
-bool IExecutorData::hasVoidPartitions(){
-    if(!hasPartitions()){
-        return true;
-    }
+bool IExecutorData::hasVoidPartitions() {
+    if (!hasPartitions()) { return true; }
     auto parts = getPartitions<storage::IVoidPartition::VOID_TYPE>(true);
     return parts->empty() || (*parts)[0]->type() == storage::IVoidPartition::TYPE;
 }
@@ -81,7 +79,7 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
     if (source.obj.__isset.bytes) { throw exception::IInvalidArgument("C++ not support function serialization"); }
     std::shared_ptr<selector::ISelectorGroup> group;
     int sep = source.obj.name.find(':');
-    if (sep ==std::string::npos) {
+    if (sep == std::string::npos) {
         if (functions.find(source.obj.name) == functions.end()) {
             throw exception::IInvalidArgument("Function " + source.obj.name + " not found");
         }
@@ -89,9 +87,7 @@ std::shared_ptr<selector::ISelectorGroup> IExecutorData::loadLibrary(const rpc::
     } else {
         group = library_loader.loadFunction(source.obj.name);
         registerFunction(group);
-        for (auto &tp : group->args) {
-            registerType(tp);
-        }
+        for (auto &tp : group->args) { registerType(tp); }
 
         if (withBackup) {
             std::ofstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak",
@@ -126,8 +122,8 @@ void IExecutorData::reloadLibraries() {
         while (!backup.eof()) {
             std::getline(backup, source.obj.name, '\n');
             try {
-                if (loaded.find(source.obj.name) == loaded.end()) {
-                    loadLibrary(source, false);
+                if (!source.obj.name.empty() && loaded.find(source.obj.name) == loaded.end()) {
+                    loadLibrary(source, false, true);
                     loaded.insert(source.obj.name);
                 }
             } catch (exception::IException &ex) { IGNIS_LOG(error) << ex.toString(); } catch (std::exception &ex) {
@@ -149,9 +145,7 @@ void IExecutorData::registerType(const std::shared_ptr<selector::ITypeSelector> 
     types[type->info().getStandardName()] = std::make_pair(type, std::shared_ptr<selector::ISelectorGroup>());
 }
 
-void IExecutorData::registerFunction(const std::shared_ptr<selector::ISelectorGroup> &f){
-    functions[f->name] = f;
-}
+void IExecutorData::registerFunction(const std::shared_ptr<selector::ISelectorGroup> &f) { functions[f->name] = f; }
 
 bool IExecutorData::hasVariable(const std::string key) { return variables.find(key) != variables.end(); }
 

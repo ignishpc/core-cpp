@@ -12,7 +12,7 @@ IBytesVariable::IBytesVariable(const std::string &value) : value(value) {}
 
 IBytesVariable::IBytesVariable(std::string &&value) : value(value) {}
 
-IBytesVariable::operator bool() { return false; }
+bool IBytesVariable::decoded() { return false; }
 
 std::shared_ptr<protocol::IObjectProtocol> IBytesVariable::protocol() {
     char *cbytes = const_cast<char *>(value.c_str());

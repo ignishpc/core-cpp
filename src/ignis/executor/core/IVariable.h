@@ -21,7 +21,7 @@ namespace ignis {
 
             class IVariable {
             public:
-                virtual operator bool() = 0;
+                virtual bool decoded() = 0;
 
                 template<typename Tp>
                 IBasicVariable<Tp> &basic() {
@@ -40,7 +40,7 @@ namespace ignis {
 
                 IBasicVariable(Tp &&value) : value(value) {}
 
-                operator bool() { return true; }
+                bool decoded() { return true; }
 
                 Tp &get() { return get(RTTInfo::from<Tp>()); }
 
@@ -62,7 +62,7 @@ namespace ignis {
 
                 IBytesVariable(std::string &&value);
 
-                operator bool();
+                bool decoded();
 
                 template<typename Tp>
                 std::shared_ptr<IVariable> decode() {
