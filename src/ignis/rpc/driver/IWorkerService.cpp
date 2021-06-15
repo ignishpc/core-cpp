@@ -544,11 +544,11 @@ uint32_t IWorkerService_newInstance_presult::read(::apache::thrift::protocol::TP
 }
 
 
-IWorkerService_newInstance3a_args::~IWorkerService_newInstance3a_args() noexcept {
+IWorkerService_newInstance3_args::~IWorkerService_newInstance3_args() noexcept {
 }
 
 
-uint32_t IWorkerService_newInstance3a_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_newInstance3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -605,10 +605,10 @@ uint32_t IWorkerService_newInstance3a_args::read(::apache::thrift::protocol::TPr
   return xfer;
 }
 
-uint32_t IWorkerService_newInstance3a_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_newInstance3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_newInstance3a_args");
+  xfer += oprot->writeStructBegin("IWorkerService_newInstance3_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64(this->id);
@@ -628,14 +628,14 @@ uint32_t IWorkerService_newInstance3a_args::write(::apache::thrift::protocol::TP
 }
 
 
-IWorkerService_newInstance3a_pargs::~IWorkerService_newInstance3a_pargs() noexcept {
+IWorkerService_newInstance3_pargs::~IWorkerService_newInstance3_pargs() noexcept {
 }
 
 
-uint32_t IWorkerService_newInstance3a_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_newInstance3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_newInstance3a_pargs");
+  xfer += oprot->writeStructBegin("IWorkerService_newInstance3_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->id)));
@@ -655,11 +655,11 @@ uint32_t IWorkerService_newInstance3a_pargs::write(::apache::thrift::protocol::T
 }
 
 
-IWorkerService_newInstance3a_result::~IWorkerService_newInstance3a_result() noexcept {
+IWorkerService_newInstance3_result::~IWorkerService_newInstance3_result() noexcept {
 }
 
 
-uint32_t IWorkerService_newInstance3a_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_newInstance3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -708,11 +708,11 @@ uint32_t IWorkerService_newInstance3a_result::read(::apache::thrift::protocol::T
   return xfer;
 }
 
-uint32_t IWorkerService_newInstance3a_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_newInstance3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IWorkerService_newInstance3a_result");
+  xfer += oprot->writeStructBegin("IWorkerService_newInstance3_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -729,250 +729,11 @@ uint32_t IWorkerService_newInstance3a_result::write(::apache::thrift::protocol::
 }
 
 
-IWorkerService_newInstance3a_presult::~IWorkerService_newInstance3a_presult() noexcept {
+IWorkerService_newInstance3_presult::~IWorkerService_newInstance3_presult() noexcept {
 }
 
 
-uint32_t IWorkerService_newInstance3a_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-IWorkerService_newInstance3b_args::~IWorkerService_newInstance3b_args() noexcept {
-}
-
-
-uint32_t IWorkerService_newInstance3b_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->id);
-          this->__isset.id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->type);
-          this->__isset.type = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->cores);
-          this->__isset.cores = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IWorkerService_newInstance3b_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_newInstance3b_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64(this->id);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->type);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32(this->cores);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_newInstance3b_pargs::~IWorkerService_newInstance3b_pargs() noexcept {
-}
-
-
-uint32_t IWorkerService_newInstance3b_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_newInstance3b_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
-  xfer += oprot->writeI64((*(this->id)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->type)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32((*(this->cores)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_newInstance3b_result::~IWorkerService_newInstance3b_result() noexcept {
-}
-
-
-uint32_t IWorkerService_newInstance3b_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IWorkerService_newInstance3b_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IWorkerService_newInstance3b_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_newInstance3b_presult::~IWorkerService_newInstance3b_presult() noexcept {
-}
-
-
-uint32_t IWorkerService_newInstance3b_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_newInstance3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -1057,24 +818,24 @@ uint32_t IWorkerService_newInstance4_args::read(::apache::thrift::protocol::TPro
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->name);
-          this->__isset.name = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
           xfer += iprot->readString(this->type);
           this->__isset.type = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
+      case 3:
         if (ftype == ::apache::thrift::protocol::T_I32) {
           xfer += iprot->readI32(this->cores);
           this->__isset.cores = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->instances);
+          this->__isset.instances = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1100,16 +861,16 @@ uint32_t IWorkerService_newInstance4_args::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeI64(this->id);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->name);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 2);
   xfer += oprot->writeString(this->type);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 3);
   xfer += oprot->writeI32(this->cores);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("instances", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->instances);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1131,16 +892,16 @@ uint32_t IWorkerService_newInstance4_pargs::write(::apache::thrift::protocol::TP
   xfer += oprot->writeI64((*(this->id)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString((*(this->name)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 2);
   xfer += oprot->writeString((*(this->type)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 3);
   xfer += oprot->writeI32((*(this->cores)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("instances", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32((*(this->instances)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1228,6 +989,277 @@ IWorkerService_newInstance4_presult::~IWorkerService_newInstance4_presult() noex
 
 
 uint32_t IWorkerService_newInstance4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IWorkerService_newInstance5_args::~IWorkerService_newInstance5_args() noexcept {
+}
+
+
+uint32_t IWorkerService_newInstance5_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->id);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->name);
+          this->__isset.name = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->type);
+          this->__isset.type = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->cores);
+          this->__isset.cores = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 5:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->instances);
+          this->__isset.instances = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IWorkerService_newInstance5_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IWorkerService_newInstance5_args");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64(this->id);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->name);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->type);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32(this->cores);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("instances", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32(this->instances);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IWorkerService_newInstance5_pargs::~IWorkerService_newInstance5_pargs() noexcept {
+}
+
+
+uint32_t IWorkerService_newInstance5_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IWorkerService_newInstance5_pargs");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_I64, 1);
+  xfer += oprot->writeI64((*(this->id)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("name", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->name)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("type", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->type)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("cores", ::apache::thrift::protocol::T_I32, 4);
+  xfer += oprot->writeI32((*(this->cores)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("instances", ::apache::thrift::protocol::T_I32, 5);
+  xfer += oprot->writeI32((*(this->instances)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IWorkerService_newInstance5_result::~IWorkerService_newInstance5_result() noexcept {
+}
+
+
+uint32_t IWorkerService_newInstance5_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IWorkerService_newInstance5_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IWorkerService_newInstance5_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IWorkerService_newInstance5_presult::~IWorkerService_newInstance5_presult() noexcept {
+}
+
+
+uint32_t IWorkerService_newInstance5_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6235,18 +6267,18 @@ void IWorkerServiceClient::recv_newInstance(IWorkerId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance failed: unknown result");
 }
 
-void IWorkerServiceClient::newInstance3a(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type)
+void IWorkerServiceClient::newInstance3(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type)
 {
-  send_newInstance3a(id, name, type);
-  recv_newInstance3a(_return);
+  send_newInstance3(id, name, type);
+  recv_newInstance3(_return);
 }
 
-void IWorkerServiceClient::send_newInstance3a(const int64_t id, const std::string& name, const std::string& type)
+void IWorkerServiceClient::send_newInstance3(const int64_t id, const std::string& name, const std::string& type)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("newInstance3a", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("newInstance3", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_newInstance3a_pargs args;
+  IWorkerService_newInstance3_pargs args;
   args.id = &id;
   args.name = &name;
   args.type = &type;
@@ -6257,7 +6289,7 @@ void IWorkerServiceClient::send_newInstance3a(const int64_t id, const std::strin
   oprot_->getTransport()->flush();
 }
 
-void IWorkerServiceClient::recv_newInstance3a(IWorkerId& _return)
+void IWorkerServiceClient::recv_newInstance3(IWorkerId& _return)
 {
 
   int32_t rseqid = 0;
@@ -6277,12 +6309,12 @@ void IWorkerServiceClient::recv_newInstance3a(IWorkerId& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("newInstance3a") != 0) {
+  if (fname.compare("newInstance3") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IWorkerService_newInstance3a_presult result;
+  IWorkerService_newInstance3_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -6295,88 +6327,25 @@ void IWorkerServiceClient::recv_newInstance3a(IWorkerId& _return)
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance3a failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance3 failed: unknown result");
 }
 
-void IWorkerServiceClient::newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores)
+void IWorkerServiceClient::newInstance4(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores, const int32_t instances)
 {
-  send_newInstance3b(id, type, cores);
-  recv_newInstance3b(_return);
-}
-
-void IWorkerServiceClient::send_newInstance3b(const int64_t id, const std::string& type, const int32_t cores)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("newInstance3b", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IWorkerService_newInstance3b_pargs args;
-  args.id = &id;
-  args.type = &type;
-  args.cores = &cores;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IWorkerServiceClient::recv_newInstance3b(IWorkerId& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("newInstance3b") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IWorkerService_newInstance3b_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance3b failed: unknown result");
-}
-
-void IWorkerServiceClient::newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores)
-{
-  send_newInstance4(id, name, type, cores);
+  send_newInstance4(id, type, cores, instances);
   recv_newInstance4(_return);
 }
 
-void IWorkerServiceClient::send_newInstance4(const int64_t id, const std::string& name, const std::string& type, const int32_t cores)
+void IWorkerServiceClient::send_newInstance4(const int64_t id, const std::string& type, const int32_t cores, const int32_t instances)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("newInstance4", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IWorkerService_newInstance4_pargs args;
   args.id = &id;
-  args.name = &name;
   args.type = &type;
   args.cores = &cores;
+  args.instances = &instances;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -6423,6 +6392,71 @@ void IWorkerServiceClient::recv_newInstance4(IWorkerId& _return)
     throw result.ex;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance4 failed: unknown result");
+}
+
+void IWorkerServiceClient::newInstance5(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances)
+{
+  send_newInstance5(id, name, type, cores, instances);
+  recv_newInstance5(_return);
+}
+
+void IWorkerServiceClient::send_newInstance5(const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("newInstance5", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IWorkerService_newInstance5_pargs args;
+  args.id = &id;
+  args.name = &name;
+  args.type = &type;
+  args.cores = &cores;
+  args.instances = &instances;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IWorkerServiceClient::recv_newInstance5(IWorkerId& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("newInstance5") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IWorkerService_newInstance5_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance5 failed: unknown result");
 }
 
 void IWorkerServiceClient::setName(const IWorkerId& id, const std::string& name)
@@ -7897,41 +7931,41 @@ void IWorkerServiceProcessor::process_newInstance(int32_t seqid, ::apache::thrif
   }
 }
 
-void IWorkerServiceProcessor::process_newInstance3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IWorkerServiceProcessor::process_newInstance3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IWorkerService.newInstance3a", callContext);
+    ctx = this->eventHandler_->getContext("IWorkerService.newInstance3", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.newInstance3a");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.newInstance3");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.newInstance3a");
+    this->eventHandler_->preRead(ctx, "IWorkerService.newInstance3");
   }
 
-  IWorkerService_newInstance3a_args args;
+  IWorkerService_newInstance3_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.newInstance3a", bytes);
+    this->eventHandler_->postRead(ctx, "IWorkerService.newInstance3", bytes);
   }
 
-  IWorkerService_newInstance3a_result result;
+  IWorkerService_newInstance3_result result;
   try {
-    iface_->newInstance3a(result.success, args.id, args.name, args.type);
+    iface_->newInstance3(result.success, args.id, args.name, args.type);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.newInstance3a");
+      this->eventHandler_->handlerError(ctx, "IWorkerService.newInstance3");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("newInstance3a", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("newInstance3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -7940,74 +7974,17 @@ void IWorkerServiceProcessor::process_newInstance3a(int32_t seqid, ::apache::thr
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.newInstance3a");
+    this->eventHandler_->preWrite(ctx, "IWorkerService.newInstance3");
   }
 
-  oprot->writeMessageBegin("newInstance3a", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("newInstance3", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.newInstance3a", bytes);
-  }
-}
-
-void IWorkerServiceProcessor::process_newInstance3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = nullptr;
-  if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IWorkerService.newInstance3b", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.newInstance3b");
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.newInstance3b");
-  }
-
-  IWorkerService_newInstance3b_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.newInstance3b", bytes);
-  }
-
-  IWorkerService_newInstance3b_result result;
-  try {
-    iface_->newInstance3b(result.success, args.id, args.type, args.cores);
-    result.__isset.success = true;
-  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.newInstance3b");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("newInstance3b", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.newInstance3b");
-  }
-
-  oprot->writeMessageBegin("newInstance3b", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.newInstance3b", bytes);
+    this->eventHandler_->postWrite(ctx, "IWorkerService.newInstance3", bytes);
   }
 }
 
@@ -8034,7 +8011,7 @@ void IWorkerServiceProcessor::process_newInstance4(int32_t seqid, ::apache::thri
 
   IWorkerService_newInstance4_result result;
   try {
-    iface_->newInstance4(result.success, args.id, args.name, args.type, args.cores);
+    iface_->newInstance4(result.success, args.id, args.type, args.cores, args.instances);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
@@ -8065,6 +8042,63 @@ void IWorkerServiceProcessor::process_newInstance4(int32_t seqid, ::apache::thri
 
   if (this->eventHandler_.get() != nullptr) {
     this->eventHandler_->postWrite(ctx, "IWorkerService.newInstance4", bytes);
+  }
+}
+
+void IWorkerServiceProcessor::process_newInstance5(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("IWorkerService.newInstance5", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.newInstance5");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "IWorkerService.newInstance5");
+  }
+
+  IWorkerService_newInstance5_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "IWorkerService.newInstance5", bytes);
+  }
+
+  IWorkerService_newInstance5_result result;
+  try {
+    iface_->newInstance5(result.success, args.id, args.name, args.type, args.cores, args.instances);
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
+    result.ex = ex;
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "IWorkerService.newInstance5");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("newInstance5", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "IWorkerService.newInstance5");
+  }
+
+  oprot->writeMessageBegin("newInstance5", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "IWorkerService.newInstance5", bytes);
   }
 }
 
@@ -9512,19 +9546,19 @@ void IWorkerServiceConcurrentClient::recv_newInstance(IWorkerId& _return, const 
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::newInstance3a(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type)
+void IWorkerServiceConcurrentClient::newInstance3(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type)
 {
-  int32_t seqid = send_newInstance3a(id, name, type);
-  recv_newInstance3a(_return, seqid);
+  int32_t seqid = send_newInstance3(id, name, type);
+  recv_newInstance3(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_newInstance3a(const int64_t id, const std::string& name, const std::string& type)
+int32_t IWorkerServiceConcurrentClient::send_newInstance3(const int64_t id, const std::string& name, const std::string& type)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("newInstance3a", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("newInstance3", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_newInstance3a_pargs args;
+  IWorkerService_newInstance3_pargs args;
   args.id = &id;
   args.name = &name;
   args.type = &type;
@@ -9538,7 +9572,7 @@ int32_t IWorkerServiceConcurrentClient::send_newInstance3a(const int64_t id, con
   return cseqid;
 }
 
-void IWorkerServiceConcurrentClient::recv_newInstance3a(IWorkerId& _return, const int32_t seqid)
+void IWorkerServiceConcurrentClient::recv_newInstance3(IWorkerId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -9567,7 +9601,7 @@ void IWorkerServiceConcurrentClient::recv_newInstance3a(IWorkerId& _return, cons
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("newInstance3a") != 0) {
+      if (fname.compare("newInstance3") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -9576,7 +9610,7 @@ void IWorkerServiceConcurrentClient::recv_newInstance3a(IWorkerId& _return, cons
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IWorkerService_newInstance3a_presult result;
+      IWorkerService_newInstance3_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -9592,7 +9626,7 @@ void IWorkerServiceConcurrentClient::recv_newInstance3a(IWorkerId& _return, cons
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance3a failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance3 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -9602,103 +9636,13 @@ void IWorkerServiceConcurrentClient::recv_newInstance3a(IWorkerId& _return, cons
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores)
+void IWorkerServiceConcurrentClient::newInstance4(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores, const int32_t instances)
 {
-  int32_t seqid = send_newInstance3b(id, type, cores);
-  recv_newInstance3b(_return, seqid);
-}
-
-int32_t IWorkerServiceConcurrentClient::send_newInstance3b(const int64_t id, const std::string& type, const int32_t cores)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("newInstance3b", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IWorkerService_newInstance3b_pargs args;
-  args.id = &id;
-  args.type = &type;
-  args.cores = &cores;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IWorkerServiceConcurrentClient::recv_newInstance3b(IWorkerId& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("newInstance3b") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IWorkerService_newInstance3b_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance3b failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void IWorkerServiceConcurrentClient::newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores)
-{
-  int32_t seqid = send_newInstance4(id, name, type, cores);
+  int32_t seqid = send_newInstance4(id, type, cores, instances);
   recv_newInstance4(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_newInstance4(const int64_t id, const std::string& name, const std::string& type, const int32_t cores)
+int32_t IWorkerServiceConcurrentClient::send_newInstance4(const int64_t id, const std::string& type, const int32_t cores, const int32_t instances)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -9706,9 +9650,9 @@ int32_t IWorkerServiceConcurrentClient::send_newInstance4(const int64_t id, cons
 
   IWorkerService_newInstance4_pargs args;
   args.id = &id;
-  args.name = &name;
   args.type = &type;
   args.cores = &cores;
+  args.instances = &instances;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -9774,6 +9718,98 @@ void IWorkerServiceConcurrentClient::recv_newInstance4(IWorkerId& _return, const
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance4 failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IWorkerServiceConcurrentClient::newInstance5(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances)
+{
+  int32_t seqid = send_newInstance5(id, name, type, cores, instances);
+  recv_newInstance5(_return, seqid);
+}
+
+int32_t IWorkerServiceConcurrentClient::send_newInstance5(const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("newInstance5", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IWorkerService_newInstance5_pargs args;
+  args.id = &id;
+  args.name = &name;
+  args.type = &type;
+  args.cores = &cores;
+  args.instances = &instances;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IWorkerServiceConcurrentClient::recv_newInstance5(IWorkerId& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("newInstance5") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IWorkerService_newInstance5_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "newInstance5 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

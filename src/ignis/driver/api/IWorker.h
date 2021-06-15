@@ -16,10 +16,10 @@ namespace ignis {
 
                 IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type);
 
-                IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type, int cores);
+                IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type, int cores, int instances);
 
                 IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type,
-                        int cores);
+                        int cores, int instances);
 
                 std::shared_ptr<ICluster> getCluster();
 

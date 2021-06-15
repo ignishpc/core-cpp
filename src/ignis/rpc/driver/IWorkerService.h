@@ -25,9 +25,9 @@ class IWorkerServiceIf {
   virtual void start(const IWorkerId& id) = 0;
   virtual void destroy(const IWorkerId& id) = 0;
   virtual void newInstance(IWorkerId& _return, const int64_t id, const std::string& type) = 0;
-  virtual void newInstance3a(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type) = 0;
-  virtual void newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores) = 0;
-  virtual void newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores) = 0;
+  virtual void newInstance3(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type) = 0;
+  virtual void newInstance4(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores, const int32_t instances) = 0;
+  virtual void newInstance5(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances) = 0;
   virtual void setName(const IWorkerId& id, const std::string& name) = 0;
   virtual void parallelize( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions) = 0;
   virtual void parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
@@ -87,13 +87,13 @@ class IWorkerServiceNull : virtual public IWorkerServiceIf {
   void newInstance(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* type */) {
     return;
   }
-  void newInstance3a(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* name */, const std::string& /* type */) {
+  void newInstance3(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* name */, const std::string& /* type */) {
     return;
   }
-  void newInstance3b(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* type */, const int32_t /* cores */) {
+  void newInstance4(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* type */, const int32_t /* cores */, const int32_t /* instances */) {
     return;
   }
-  void newInstance4(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* name */, const std::string& /* type */, const int32_t /* cores */) {
+  void newInstance5(IWorkerId& /* _return */, const int64_t /* id */, const std::string& /* name */, const std::string& /* type */, const int32_t /* cores */, const int32_t /* instances */) {
     return;
   }
   void setName(const IWorkerId& /* id */, const std::string& /* name */) {
@@ -452,27 +452,27 @@ class IWorkerService_newInstance_presult {
 
 };
 
-typedef struct _IWorkerService_newInstance3a_args__isset {
-  _IWorkerService_newInstance3a_args__isset() : id(false), name(false), type(false) {}
+typedef struct _IWorkerService_newInstance3_args__isset {
+  _IWorkerService_newInstance3_args__isset() : id(false), name(false), type(false) {}
   bool id :1;
   bool name :1;
   bool type :1;
-} _IWorkerService_newInstance3a_args__isset;
+} _IWorkerService_newInstance3_args__isset;
 
-class IWorkerService_newInstance3a_args {
+class IWorkerService_newInstance3_args {
  public:
 
-  IWorkerService_newInstance3a_args(const IWorkerService_newInstance3a_args&);
-  IWorkerService_newInstance3a_args& operator=(const IWorkerService_newInstance3a_args&);
-  IWorkerService_newInstance3a_args() : id(0), name(), type() {
+  IWorkerService_newInstance3_args(const IWorkerService_newInstance3_args&);
+  IWorkerService_newInstance3_args& operator=(const IWorkerService_newInstance3_args&);
+  IWorkerService_newInstance3_args() : id(0), name(), type() {
   }
 
-  virtual ~IWorkerService_newInstance3a_args() noexcept;
+  virtual ~IWorkerService_newInstance3_args() noexcept;
   int64_t id;
   std::string name;
   std::string type;
 
-  _IWorkerService_newInstance3a_args__isset __isset;
+  _IWorkerService_newInstance3_args__isset __isset;
 
   void __set_id(const int64_t val);
 
@@ -480,7 +480,7 @@ class IWorkerService_newInstance3a_args {
 
   void __set_type(const std::string& val);
 
-  bool operator == (const IWorkerService_newInstance3a_args & rhs) const
+  bool operator == (const IWorkerService_newInstance3_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -490,11 +490,11 @@ class IWorkerService_newInstance3a_args {
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_newInstance3a_args &rhs) const {
+  bool operator != (const IWorkerService_newInstance3_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_newInstance3a_args & ) const;
+  bool operator < (const IWorkerService_newInstance3_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -502,11 +502,11 @@ class IWorkerService_newInstance3a_args {
 };
 
 
-class IWorkerService_newInstance3a_pargs {
+class IWorkerService_newInstance3_pargs {
  public:
 
 
-  virtual ~IWorkerService_newInstance3a_pargs() noexcept;
+  virtual ~IWorkerService_newInstance3_pargs() noexcept;
   const int64_t* id;
   const std::string* name;
   const std::string* type;
@@ -515,31 +515,31 @@ class IWorkerService_newInstance3a_pargs {
 
 };
 
-typedef struct _IWorkerService_newInstance3a_result__isset {
-  _IWorkerService_newInstance3a_result__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_newInstance3_result__isset {
+  _IWorkerService_newInstance3_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_newInstance3a_result__isset;
+} _IWorkerService_newInstance3_result__isset;
 
-class IWorkerService_newInstance3a_result {
+class IWorkerService_newInstance3_result {
  public:
 
-  IWorkerService_newInstance3a_result(const IWorkerService_newInstance3a_result&);
-  IWorkerService_newInstance3a_result& operator=(const IWorkerService_newInstance3a_result&);
-  IWorkerService_newInstance3a_result() {
+  IWorkerService_newInstance3_result(const IWorkerService_newInstance3_result&);
+  IWorkerService_newInstance3_result& operator=(const IWorkerService_newInstance3_result&);
+  IWorkerService_newInstance3_result() {
   }
 
-  virtual ~IWorkerService_newInstance3a_result() noexcept;
+  virtual ~IWorkerService_newInstance3_result() noexcept;
   IWorkerId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_newInstance3a_result__isset __isset;
+  _IWorkerService_newInstance3_result__isset __isset;
 
   void __set_success(const IWorkerId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IWorkerService_newInstance3a_result & rhs) const
+  bool operator == (const IWorkerService_newInstance3_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -547,169 +547,43 @@ class IWorkerService_newInstance3a_result {
       return false;
     return true;
   }
-  bool operator != (const IWorkerService_newInstance3a_result &rhs) const {
+  bool operator != (const IWorkerService_newInstance3_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IWorkerService_newInstance3a_result & ) const;
+  bool operator < (const IWorkerService_newInstance3_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IWorkerService_newInstance3a_presult__isset {
-  _IWorkerService_newInstance3a_presult__isset() : success(false), ex(false) {}
+typedef struct _IWorkerService_newInstance3_presult__isset {
+  _IWorkerService_newInstance3_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IWorkerService_newInstance3a_presult__isset;
+} _IWorkerService_newInstance3_presult__isset;
 
-class IWorkerService_newInstance3a_presult {
+class IWorkerService_newInstance3_presult {
  public:
 
 
-  virtual ~IWorkerService_newInstance3a_presult() noexcept;
+  virtual ~IWorkerService_newInstance3_presult() noexcept;
   IWorkerId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IWorkerService_newInstance3a_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _IWorkerService_newInstance3b_args__isset {
-  _IWorkerService_newInstance3b_args__isset() : id(false), type(false), cores(false) {}
-  bool id :1;
-  bool type :1;
-  bool cores :1;
-} _IWorkerService_newInstance3b_args__isset;
-
-class IWorkerService_newInstance3b_args {
- public:
-
-  IWorkerService_newInstance3b_args(const IWorkerService_newInstance3b_args&);
-  IWorkerService_newInstance3b_args& operator=(const IWorkerService_newInstance3b_args&);
-  IWorkerService_newInstance3b_args() : id(0), type(), cores(0) {
-  }
-
-  virtual ~IWorkerService_newInstance3b_args() noexcept;
-  int64_t id;
-  std::string type;
-  int32_t cores;
-
-  _IWorkerService_newInstance3b_args__isset __isset;
-
-  void __set_id(const int64_t val);
-
-  void __set_type(const std::string& val);
-
-  void __set_cores(const int32_t val);
-
-  bool operator == (const IWorkerService_newInstance3b_args & rhs) const
-  {
-    if (!(id == rhs.id))
-      return false;
-    if (!(type == rhs.type))
-      return false;
-    if (!(cores == rhs.cores))
-      return false;
-    return true;
-  }
-  bool operator != (const IWorkerService_newInstance3b_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IWorkerService_newInstance3b_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IWorkerService_newInstance3b_pargs {
- public:
-
-
-  virtual ~IWorkerService_newInstance3b_pargs() noexcept;
-  const int64_t* id;
-  const std::string* type;
-  const int32_t* cores;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IWorkerService_newInstance3b_result__isset {
-  _IWorkerService_newInstance3b_result__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IWorkerService_newInstance3b_result__isset;
-
-class IWorkerService_newInstance3b_result {
- public:
-
-  IWorkerService_newInstance3b_result(const IWorkerService_newInstance3b_result&);
-  IWorkerService_newInstance3b_result& operator=(const IWorkerService_newInstance3b_result&);
-  IWorkerService_newInstance3b_result() {
-  }
-
-  virtual ~IWorkerService_newInstance3b_result() noexcept;
-  IWorkerId success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IWorkerService_newInstance3b_result__isset __isset;
-
-  void __set_success(const IWorkerId& val);
-
-  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
-
-  bool operator == (const IWorkerService_newInstance3b_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IWorkerService_newInstance3b_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IWorkerService_newInstance3b_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IWorkerService_newInstance3b_presult__isset {
-  _IWorkerService_newInstance3b_presult__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IWorkerService_newInstance3b_presult__isset;
-
-class IWorkerService_newInstance3b_presult {
- public:
-
-
-  virtual ~IWorkerService_newInstance3b_presult() noexcept;
-  IWorkerId* success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IWorkerService_newInstance3b_presult__isset __isset;
+  _IWorkerService_newInstance3_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
 typedef struct _IWorkerService_newInstance4_args__isset {
-  _IWorkerService_newInstance4_args__isset() : id(false), name(false), type(false), cores(false) {}
+  _IWorkerService_newInstance4_args__isset() : id(false), type(false), cores(false), instances(false) {}
   bool id :1;
-  bool name :1;
   bool type :1;
   bool cores :1;
+  bool instances :1;
 } _IWorkerService_newInstance4_args__isset;
 
 class IWorkerService_newInstance4_args {
@@ -717,34 +591,34 @@ class IWorkerService_newInstance4_args {
 
   IWorkerService_newInstance4_args(const IWorkerService_newInstance4_args&);
   IWorkerService_newInstance4_args& operator=(const IWorkerService_newInstance4_args&);
-  IWorkerService_newInstance4_args() : id(0), name(), type(), cores(0) {
+  IWorkerService_newInstance4_args() : id(0), type(), cores(0), instances(0) {
   }
 
   virtual ~IWorkerService_newInstance4_args() noexcept;
   int64_t id;
-  std::string name;
   std::string type;
   int32_t cores;
+  int32_t instances;
 
   _IWorkerService_newInstance4_args__isset __isset;
 
   void __set_id(const int64_t val);
 
-  void __set_name(const std::string& val);
-
   void __set_type(const std::string& val);
 
   void __set_cores(const int32_t val);
+
+  void __set_instances(const int32_t val);
 
   bool operator == (const IWorkerService_newInstance4_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
-    if (!(name == rhs.name))
-      return false;
     if (!(type == rhs.type))
       return false;
     if (!(cores == rhs.cores))
+      return false;
+    if (!(instances == rhs.instances))
       return false;
     return true;
   }
@@ -766,9 +640,9 @@ class IWorkerService_newInstance4_pargs {
 
   virtual ~IWorkerService_newInstance4_pargs() noexcept;
   const int64_t* id;
-  const std::string* name;
   const std::string* type;
   const int32_t* cores;
+  const int32_t* instances;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -832,6 +706,146 @@ class IWorkerService_newInstance4_presult {
    ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_newInstance4_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_newInstance5_args__isset {
+  _IWorkerService_newInstance5_args__isset() : id(false), name(false), type(false), cores(false), instances(false) {}
+  bool id :1;
+  bool name :1;
+  bool type :1;
+  bool cores :1;
+  bool instances :1;
+} _IWorkerService_newInstance5_args__isset;
+
+class IWorkerService_newInstance5_args {
+ public:
+
+  IWorkerService_newInstance5_args(const IWorkerService_newInstance5_args&);
+  IWorkerService_newInstance5_args& operator=(const IWorkerService_newInstance5_args&);
+  IWorkerService_newInstance5_args() : id(0), name(), type(), cores(0), instances(0) {
+  }
+
+  virtual ~IWorkerService_newInstance5_args() noexcept;
+  int64_t id;
+  std::string name;
+  std::string type;
+  int32_t cores;
+  int32_t instances;
+
+  _IWorkerService_newInstance5_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  void __set_name(const std::string& val);
+
+  void __set_type(const std::string& val);
+
+  void __set_cores(const int32_t val);
+
+  void __set_instances(const int32_t val);
+
+  bool operator == (const IWorkerService_newInstance5_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    if (!(type == rhs.type))
+      return false;
+    if (!(cores == rhs.cores))
+      return false;
+    if (!(instances == rhs.instances))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_newInstance5_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_newInstance5_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_newInstance5_pargs {
+ public:
+
+
+  virtual ~IWorkerService_newInstance5_pargs() noexcept;
+  const int64_t* id;
+  const std::string* name;
+  const std::string* type;
+  const int32_t* cores;
+  const int32_t* instances;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_newInstance5_result__isset {
+  _IWorkerService_newInstance5_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_newInstance5_result__isset;
+
+class IWorkerService_newInstance5_result {
+ public:
+
+  IWorkerService_newInstance5_result(const IWorkerService_newInstance5_result&);
+  IWorkerService_newInstance5_result& operator=(const IWorkerService_newInstance5_result&);
+  IWorkerService_newInstance5_result() {
+  }
+
+  virtual ~IWorkerService_newInstance5_result() noexcept;
+  IWorkerId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_newInstance5_result__isset __isset;
+
+  void __set_success(const IWorkerId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_newInstance5_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_newInstance5_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_newInstance5_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_newInstance5_presult__isset {
+  _IWorkerService_newInstance5_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_newInstance5_presult__isset;
+
+class IWorkerService_newInstance5_presult {
+ public:
+
+
+  virtual ~IWorkerService_newInstance5_presult() noexcept;
+  IWorkerId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_newInstance5_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -3421,15 +3435,15 @@ class IWorkerServiceClient : virtual public IWorkerServiceIf {
   void newInstance(IWorkerId& _return, const int64_t id, const std::string& type);
   void send_newInstance(const int64_t id, const std::string& type);
   void recv_newInstance(IWorkerId& _return);
-  void newInstance3a(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type);
-  void send_newInstance3a(const int64_t id, const std::string& name, const std::string& type);
-  void recv_newInstance3a(IWorkerId& _return);
-  void newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores);
-  void send_newInstance3b(const int64_t id, const std::string& type, const int32_t cores);
-  void recv_newInstance3b(IWorkerId& _return);
-  void newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores);
-  void send_newInstance4(const int64_t id, const std::string& name, const std::string& type, const int32_t cores);
+  void newInstance3(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type);
+  void send_newInstance3(const int64_t id, const std::string& name, const std::string& type);
+  void recv_newInstance3(IWorkerId& _return);
+  void newInstance4(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores, const int32_t instances);
+  void send_newInstance4(const int64_t id, const std::string& type, const int32_t cores, const int32_t instances);
   void recv_newInstance4(IWorkerId& _return);
+  void newInstance5(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances);
+  void send_newInstance5(const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances);
+  void recv_newInstance5(IWorkerId& _return);
   void setName(const IWorkerId& id, const std::string& name);
   void send_setName(const IWorkerId& id, const std::string& name);
   void recv_setName();
@@ -3511,9 +3525,9 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_start(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_destroy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_newInstance3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_newInstance3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_newInstance3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_newInstance4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_newInstance5(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setName(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_parallelize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_parallelize4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -3541,9 +3555,9 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["start"] = &IWorkerServiceProcessor::process_start;
     processMap_["destroy"] = &IWorkerServiceProcessor::process_destroy;
     processMap_["newInstance"] = &IWorkerServiceProcessor::process_newInstance;
-    processMap_["newInstance3a"] = &IWorkerServiceProcessor::process_newInstance3a;
-    processMap_["newInstance3b"] = &IWorkerServiceProcessor::process_newInstance3b;
+    processMap_["newInstance3"] = &IWorkerServiceProcessor::process_newInstance3;
     processMap_["newInstance4"] = &IWorkerServiceProcessor::process_newInstance4;
+    processMap_["newInstance5"] = &IWorkerServiceProcessor::process_newInstance5;
     processMap_["setName"] = &IWorkerServiceProcessor::process_setName;
     processMap_["parallelize"] = &IWorkerServiceProcessor::process_parallelize;
     processMap_["parallelize4"] = &IWorkerServiceProcessor::process_parallelize4;
@@ -3621,33 +3635,33 @@ class IWorkerServiceMultiface : virtual public IWorkerServiceIf {
     return;
   }
 
-  void newInstance3a(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type) {
+  void newInstance3(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->newInstance3a(_return, id, name, type);
+      ifaces_[i]->newInstance3(_return, id, name, type);
     }
-    ifaces_[i]->newInstance3a(_return, id, name, type);
+    ifaces_[i]->newInstance3(_return, id, name, type);
     return;
   }
 
-  void newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores) {
+  void newInstance4(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores, const int32_t instances) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->newInstance3b(_return, id, type, cores);
+      ifaces_[i]->newInstance4(_return, id, type, cores, instances);
     }
-    ifaces_[i]->newInstance3b(_return, id, type, cores);
+    ifaces_[i]->newInstance4(_return, id, type, cores, instances);
     return;
   }
 
-  void newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores) {
+  void newInstance5(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->newInstance4(_return, id, name, type, cores);
+      ifaces_[i]->newInstance5(_return, id, name, type, cores, instances);
     }
-    ifaces_[i]->newInstance4(_return, id, name, type, cores);
+    ifaces_[i]->newInstance5(_return, id, name, type, cores, instances);
     return;
   }
 
@@ -3897,15 +3911,15 @@ class IWorkerServiceConcurrentClient : virtual public IWorkerServiceIf {
   void newInstance(IWorkerId& _return, const int64_t id, const std::string& type);
   int32_t send_newInstance(const int64_t id, const std::string& type);
   void recv_newInstance(IWorkerId& _return, const int32_t seqid);
-  void newInstance3a(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type);
-  int32_t send_newInstance3a(const int64_t id, const std::string& name, const std::string& type);
-  void recv_newInstance3a(IWorkerId& _return, const int32_t seqid);
-  void newInstance3b(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores);
-  int32_t send_newInstance3b(const int64_t id, const std::string& type, const int32_t cores);
-  void recv_newInstance3b(IWorkerId& _return, const int32_t seqid);
-  void newInstance4(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores);
-  int32_t send_newInstance4(const int64_t id, const std::string& name, const std::string& type, const int32_t cores);
+  void newInstance3(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type);
+  int32_t send_newInstance3(const int64_t id, const std::string& name, const std::string& type);
+  void recv_newInstance3(IWorkerId& _return, const int32_t seqid);
+  void newInstance4(IWorkerId& _return, const int64_t id, const std::string& type, const int32_t cores, const int32_t instances);
+  int32_t send_newInstance4(const int64_t id, const std::string& type, const int32_t cores, const int32_t instances);
   void recv_newInstance4(IWorkerId& _return, const int32_t seqid);
+  void newInstance5(IWorkerId& _return, const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances);
+  int32_t send_newInstance5(const int64_t id, const std::string& name, const std::string& type, const int32_t cores, const int32_t instances);
+  void recv_newInstance5(IWorkerId& _return, const int32_t seqid);
   void setName(const IWorkerId& id, const std::string& name);
   int32_t send_setName(const IWorkerId& id, const std::string& name);
   void recv_setName(const int32_t seqid);

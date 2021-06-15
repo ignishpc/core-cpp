@@ -15,20 +15,22 @@ IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &ty
 IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type)
     : cluster(cluster) {
     try {
-        Ignis::clientPool->getClient()->getWorkerService().newInstance3a(id, cluster->id, name, type);
+        Ignis::clientPool->getClient()->getWorkerService().newInstance3(id, cluster->id, name, type);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type, int cores) : cluster(cluster) {
-    try {
-        Ignis::clientPool->getClient()->getWorkerService().newInstance3b(id, cluster->id, type, cores);
-    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
-}
-
-IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type, int cores)
+IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type, int cores, int instances)
     : cluster(cluster) {
     try {
-        Ignis::clientPool->getClient()->getWorkerService().newInstance4(id, cluster->id, name, type, cores);
+        Ignis::clientPool->getClient()->getWorkerService().newInstance4(id, cluster->id, type, cores, instances);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type, int cores,
+                 int instances)
+    : cluster(cluster) {
+    try {
+        Ignis::clientPool->getClient()->getWorkerService().newInstance5(id, cluster->id, name, type, cores, instances);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
