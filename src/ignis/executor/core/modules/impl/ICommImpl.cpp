@@ -74,8 +74,10 @@ void ICommImpl::destroyGroup(const std::string &name) {
     IGNIS_TRY()
     if (name.empty()) {
         MPI::Intracomm comm = executor_data->mpi().native();
-        comm.Free();
-        executor_data->setMpiGroup(MPI::COMM_WORLD);
+        if(comm != MPI::COMM_WORLD){
+            comm.Free();
+            executor_data->setMpiGroup(MPI::COMM_WORLD);
+        }
         return;
     }
 
