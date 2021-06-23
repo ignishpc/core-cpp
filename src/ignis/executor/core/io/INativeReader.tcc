@@ -37,8 +37,8 @@ struct ignis::executor::core::io::INativeReaderType<std::vector<_Tp, _Alloc>> {
         }
     }
 
-    inline bool operator()(protocol::IProtocol &protocol) {
-        bool obj;
+    inline std::vector<_Tp> operator()(protocol::IProtocol &protocol) {
+        std::vector<_Tp> obj;
         (*this)(protocol, obj);
         return obj;
     }
