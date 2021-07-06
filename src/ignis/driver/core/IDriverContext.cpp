@@ -17,7 +17,7 @@ IDriverContext::~IDriverContext() {}
 
 int64_t IDriverContext::saveContext() {
     IGNIS_RPC_TRY()
-    std::lock_guard<std::mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(mutex);
     auto id = next_context_id++;
     context[id] = std::static_pointer_cast<void>(executor_data->getPartitions<char>(true));
     return id;
@@ -26,7 +26,7 @@ int64_t IDriverContext::saveContext() {
 
 void IDriverContext::clearContext() {
     IGNIS_RPC_TRY()
-    std::lock_guard<std::mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(mutex);
     executor_data->deletePartitions();
     executor_data->clearVariables();
     IGNIS_RPC_CATCH()
@@ -34,7 +34,7 @@ void IDriverContext::clearContext() {
 
 void IDriverContext::loadContext(const int64_t id) {
     IGNIS_RPC_TRY()
-    std::lock_guard<std::mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(mutex);
     auto value = context.find(id);
     if (value == context.end()) { throw exception::IInvalidArgument("context " + std::to_string(id) + " not found"); }
     executor_data->setPartitions<char>(std::static_pointer_cast<storage::IPartitionGroup<char>>(value->second));
@@ -48,7 +48,7 @@ int64_t IDriverContext::parallelize(const std::vector<bool> &&collection) {
         auto partition = std::make_shared<executor::core::storage::IMemoryPartition<bool>>(std::move(v));
         group->add(partition);
 
-        std::lock_guard<std::mutex> lock(mutex);
+        std::lock_guard<std::recursive_mutex> lock(mutex);
         executor_data->setPartitions<bool>(group);
         return this->saveContext();
     } catch (executor::core::exception::IException &ex) {

@@ -55,7 +55,7 @@ namespace ignis {
             private:
                 int64_t next_context_id;
                 std::map<int64_t, std::shared_ptr<void>> context;
-                std::mutex mutex;
+                std::recursive_mutex mutex;
             };
         }// namespace core
     }    // namespace driver
