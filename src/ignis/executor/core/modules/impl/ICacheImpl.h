@@ -20,6 +20,8 @@ namespace ignis {
 
                         void loadContext(const int64_t id);
 
+                        void loadContextAsVariable(const int64_t id, const std::string &name);
+
                         template<typename Tp>
                         void cache(const int64_t id, const int8_t level);
 

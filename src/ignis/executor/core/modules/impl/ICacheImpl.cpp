@@ -77,6 +77,18 @@ void ICacheImpl::loadContext(const int64_t id) {
     IGNIS_CATCH()
 }
 
+void ICacheImpl::loadContextAsVariable(const int64_t id, const std::string &name) {
+    IGNIS_TRY()
+        auto value = context.find(id);
+        IGNIS_LOG(info) << "CacheContext: loading context " << id << " as variable " << name;
+
+        if (value == context.end()) { throw exception::IInvalidArgument("context " + std::to_string(id) + " not found"); }
+
+        executor_data->setVariable(name, std::move(value->second));
+        context.erase(value);
+    IGNIS_CATCH()
+}
+
 
 void ICacheImpl::loadCache(const int64_t id) {
     IGNIS_TRY()

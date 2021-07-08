@@ -9,9 +9,9 @@ IGeneralModule::IGeneralModule(std::shared_ptr<IExecutorData> &executorData)
 
 IGeneralModule::~IGeneralModule() {}
 
-void IGeneralModule::executeTo(const ::ignis::rpc::ISource &function){
+void IGeneralModule::executeTo(const ::ignis::rpc::ISource &function) {
     IGNIS_RPC_TRY()
-        executor_data->loadLibrary(function)->general->executeTo(pipe_impl);
+    executor_data->loadLibrary(function)->general->executeTo(pipe_impl);
     IGNIS_RPC_CATCH()
 }
 
@@ -91,6 +91,42 @@ void IGeneralModule::sortBy(const rpc::ISource &function, bool ascending) {
 void IGeneralModule::sortBy3(const rpc::ISource &function, bool ascending, int64_t numPartitions) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(function)->general->sortBy(sort_impl, ascending, numPartitions);
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::union_(const std::string &other) {
+    IGNIS_RPC_TRY()
+    throw exception::ILogicError("C++: not implemented yet");//TODO
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::union2(const std::string &other, const rpc::ISource &src) {
+    IGNIS_RPC_TRY()
+    throw exception::ILogicError("C++: not implemented yet");//TODO
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::join(const std::string &other, const int64_t numPartitions) {
+    IGNIS_RPC_TRY()
+    throw exception::ILogicError("C++: not implemented yet");//TODO
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::join3(const std::string &other, const int64_t numPartitions, const rpc::ISource &src) {
+    IGNIS_RPC_TRY()
+    throw exception::ILogicError("C++: not implemented yet");//TODO
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::distinct(const int64_t numPartitions) {
+    IGNIS_RPC_TRY()
+    throw exception::ILogicError("C++: not implemented yet");//TODO
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::distinct2(const int64_t numPartitions, const rpc::ISource &src) {
+    IGNIS_RPC_TRY()
+        throw exception::ILogicError("C++: not implemented yet");//TODO
     IGNIS_RPC_CATCH()
 }
 

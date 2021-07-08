@@ -22,6 +22,8 @@ namespace ignis {
 
                     void loadContext(const int64_t id);
 
+                    void loadContextAsVariable(const int64_t id, const std::string& name);
+
                     void cache(const int64_t id, const int8_t level);
 
                     void loadCache(const int64_t id);

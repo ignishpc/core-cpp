@@ -60,6 +60,8 @@ namespace ignis {
                 template<typename Tp>
                 class IPartitionGroup {
                 public:
+                    typedef Tp value_type;
+
                     std::shared_ptr<IPartition<Tp>> &operator[](int64_t index) { return _partitions[index]; }
 
                     typename std::vector<std::shared_ptr<IPartition<Tp>>>::iterator begin() {

@@ -25,6 +25,7 @@ class ICacheContextModuleIf {
   virtual int64_t saveContext() = 0;
   virtual void clearContext() = 0;
   virtual void loadContext(const int64_t id) = 0;
+  virtual void loadContextAsVariable(const int64_t id, const std::string& name) = 0;
   virtual void cache(const int64_t id, const int8_t level) = 0;
   virtual void loadCache(const int64_t id) = 0;
 };
@@ -64,6 +65,9 @@ class ICacheContextModuleNull : virtual public ICacheContextModuleIf {
     return;
   }
   void loadContext(const int64_t /* id */) {
+    return;
+  }
+  void loadContextAsVariable(const int64_t /* id */, const std::string& /* name */) {
     return;
   }
   void cache(const int64_t /* id */, const int8_t /* level */) {
@@ -370,6 +374,117 @@ class ICacheContextModule_loadContext_presult {
 
 };
 
+typedef struct _ICacheContextModule_loadContextAsVariable_args__isset {
+  _ICacheContextModule_loadContextAsVariable_args__isset() : id(false), name(false) {}
+  bool id :1;
+  bool name :1;
+} _ICacheContextModule_loadContextAsVariable_args__isset;
+
+class ICacheContextModule_loadContextAsVariable_args {
+ public:
+
+  ICacheContextModule_loadContextAsVariable_args(const ICacheContextModule_loadContextAsVariable_args&);
+  ICacheContextModule_loadContextAsVariable_args& operator=(const ICacheContextModule_loadContextAsVariable_args&);
+  ICacheContextModule_loadContextAsVariable_args() : id(0), name() {
+  }
+
+  virtual ~ICacheContextModule_loadContextAsVariable_args() noexcept;
+  int64_t id;
+  std::string name;
+
+  _ICacheContextModule_loadContextAsVariable_args__isset __isset;
+
+  void __set_id(const int64_t val);
+
+  void __set_name(const std::string& val);
+
+  bool operator == (const ICacheContextModule_loadContextAsVariable_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(name == rhs.name))
+      return false;
+    return true;
+  }
+  bool operator != (const ICacheContextModule_loadContextAsVariable_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICacheContextModule_loadContextAsVariable_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICacheContextModule_loadContextAsVariable_pargs {
+ public:
+
+
+  virtual ~ICacheContextModule_loadContextAsVariable_pargs() noexcept;
+  const int64_t* id;
+  const std::string* name;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICacheContextModule_loadContextAsVariable_result__isset {
+  _ICacheContextModule_loadContextAsVariable_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICacheContextModule_loadContextAsVariable_result__isset;
+
+class ICacheContextModule_loadContextAsVariable_result {
+ public:
+
+  ICacheContextModule_loadContextAsVariable_result(const ICacheContextModule_loadContextAsVariable_result&);
+  ICacheContextModule_loadContextAsVariable_result& operator=(const ICacheContextModule_loadContextAsVariable_result&);
+  ICacheContextModule_loadContextAsVariable_result() {
+  }
+
+  virtual ~ICacheContextModule_loadContextAsVariable_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICacheContextModule_loadContextAsVariable_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICacheContextModule_loadContextAsVariable_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICacheContextModule_loadContextAsVariable_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICacheContextModule_loadContextAsVariable_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICacheContextModule_loadContextAsVariable_presult__isset {
+  _ICacheContextModule_loadContextAsVariable_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICacheContextModule_loadContextAsVariable_presult__isset;
+
+class ICacheContextModule_loadContextAsVariable_presult {
+ public:
+
+
+  virtual ~ICacheContextModule_loadContextAsVariable_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICacheContextModule_loadContextAsVariable_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 typedef struct _ICacheContextModule_cache_args__isset {
   _ICacheContextModule_cache_args__isset() : id(false), level(false) {}
   bool id :1;
@@ -619,6 +734,9 @@ class ICacheContextModuleClient : virtual public ICacheContextModuleIf {
   void loadContext(const int64_t id);
   void send_loadContext(const int64_t id);
   void recv_loadContext();
+  void loadContextAsVariable(const int64_t id, const std::string& name);
+  void send_loadContextAsVariable(const int64_t id, const std::string& name);
+  void recv_loadContextAsVariable();
   void cache(const int64_t id, const int8_t level);
   void send_cache(const int64_t id, const int8_t level);
   void recv_cache();
@@ -643,6 +761,7 @@ class ICacheContextModuleProcessor : public ::apache::thrift::TDispatchProcessor
   void process_saveContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_clearContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadContext(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_loadContextAsVariable(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_cache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_loadCache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
@@ -651,6 +770,7 @@ class ICacheContextModuleProcessor : public ::apache::thrift::TDispatchProcessor
     processMap_["saveContext"] = &ICacheContextModuleProcessor::process_saveContext;
     processMap_["clearContext"] = &ICacheContextModuleProcessor::process_clearContext;
     processMap_["loadContext"] = &ICacheContextModuleProcessor::process_loadContext;
+    processMap_["loadContextAsVariable"] = &ICacheContextModuleProcessor::process_loadContextAsVariable;
     processMap_["cache"] = &ICacheContextModuleProcessor::process_cache;
     processMap_["loadCache"] = &ICacheContextModuleProcessor::process_loadCache;
   }
@@ -706,6 +826,15 @@ class ICacheContextModuleMultiface : virtual public ICacheContextModuleIf {
       ifaces_[i]->loadContext(id);
     }
     ifaces_[i]->loadContext(id);
+  }
+
+  void loadContextAsVariable(const int64_t id, const std::string& name) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->loadContextAsVariable(id, name);
+    }
+    ifaces_[i]->loadContextAsVariable(id, name);
   }
 
   void cache(const int64_t id, const int8_t level) {
@@ -767,6 +896,9 @@ class ICacheContextModuleConcurrentClient : virtual public ICacheContextModuleIf
   void loadContext(const int64_t id);
   int32_t send_loadContext(const int64_t id);
   void recv_loadContext(const int32_t seqid);
+  void loadContextAsVariable(const int64_t id, const std::string& name);
+  int32_t send_loadContextAsVariable(const int64_t id, const std::string& name);
+  void recv_loadContextAsVariable(const int32_t seqid);
   void cache(const int64_t id, const int8_t level);
   int32_t send_cache(const int64_t id, const int8_t level);
   void recv_cache(const int32_t seqid);

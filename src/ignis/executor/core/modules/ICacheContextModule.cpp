@@ -37,6 +37,12 @@ void ICacheContextModule::loadContext(const int64_t id) {
     IGNIS_RPC_CATCH()
 }
 
+void ICacheContextModule::loadContextAsVariable(const int64_t id, const std::string &name) {
+    IGNIS_RPC_TRY()
+    impl.loadContextAsVariable(id, name);
+    IGNIS_RPC_CATCH()
+}
+
 void ICacheContextModule::cache(const int64_t id, const int8_t level) {
     IGNIS_RPC_TRY()
     typeFromPartition()->cache(impl, id, level);

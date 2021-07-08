@@ -44,6 +44,18 @@ namespace ignis {
 
                     void sortBy3(const rpc::ISource &function, bool ascending, int64_t numPartitions) override;
 
+                    void union_(const std::string &other) override;
+
+                    void union2(const std::string &other, const rpc::ISource &src) override;
+
+                    void join(const std::string &other, const int64_t numPartitions) override;
+
+                    void join3(const std::string &other, const int64_t numPartitions, const rpc::ISource &src) override;
+
+                    void distinct(const int64_t numPartitions) override;
+
+                    void distinct2(const int64_t numPartitions, const rpc::ISource &src) override;
+
                     void flatMapValues(const ::ignis::rpc::ISource &src) override;
 
                     void mapValues(const ::ignis::rpc::ISource &src) override;

@@ -77,6 +77,25 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId sortByAbs(const ISource &src, bool ascending, int64_t numPartitions);
 
+                rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder);
+
+                rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
+                                                   int64_t numPartitions);
+
+                rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
+                                                   const ISource &src);
+
+                rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
+                                                   int64_t numPartitions, const ISource &src);
+
+                rpc::driver::IDataFrameId distinctAbs();
+
+                rpc::driver::IDataFrameId distinctAbs(int64_t numPartitions);
+
+                rpc::driver::IDataFrameId distinctAbs(const ISource &src);
+
+                rpc::driver::IDataFrameId distinctAbs(int64_t numPartitions, const ISource &src);
+
                 /*General Action*/
                 int64_t reduceAbs(const ISource &src, const rpc::ISource &tp);
 
@@ -126,6 +145,15 @@ namespace ignis {
                 int64_t minAbs(const ISource &cmp, const rpc::ISource &tp);
 
                 /*Key-Value*/
+                rpc::driver::IDataFrameId joinAbs(const rpc::driver::IDataFrameId &other);
+
+                rpc::driver::IDataFrameId joinAbs(const rpc::driver::IDataFrameId &other, int64_t numPartitions);
+
+                rpc::driver::IDataFrameId joinAbs(const rpc::driver::IDataFrameId &other, const ISource &src);
+
+                rpc::driver::IDataFrameId joinAbs(const rpc::driver::IDataFrameId &other, int64_t numPartitions,
+                                                  const ISource &src);
+
                 rpc::driver::IDataFrameId flatMapValuesAbs(const ISource &src);
 
                 rpc::driver::IDataFrameId mapValuesAbs(const ISource &src);
@@ -287,6 +315,40 @@ namespace ignis {
                     return IDataFrame<Tp>::make(sortByAbs(src, ascending, numPartitions));
                 }
 
+                std::shared_ptr<IDataFrame<Tp>> _union(const std::shared_ptr<IDataFrame<Tp>> &other,
+                                                       bool preserveOrder) {
+                    return IDataFrame<Tp>::make(unionAbs(other->id, preserveOrder));
+                }
+
+                std::shared_ptr<IDataFrame<Tp>> _union(const std::shared_ptr<IDataFrame<Tp>> &other, bool preserveOrder,
+                                                       int64_t numPartitions) {
+                    return IDataFrame<Tp>::make(unionAbs(other->id, preserveOrder, numPartitions));
+                }
+
+                std::shared_ptr<IDataFrame<Tp>> _union(const std::shared_ptr<IDataFrame<Tp>> &other, bool preserveOrder,
+                                                       const ISource &src) {
+                    return IDataFrame<Tp>::make(unionAbs(other->id, preserveOrder, src));
+                }
+
+                std::shared_ptr<IDataFrame<Tp>> _union(const std::shared_ptr<IDataFrame<Tp>> &other, bool preserveOrder,
+                                                       int64_t numPartitions, const ISource &src) {
+                    return IDataFrame<Tp>::make(unionAbs(other->id, preserveOrder, numPartitions, src));
+                }
+
+                std::shared_ptr<IDataFrame<Tp>> distinct() { return IDataFrame<Tp>::make(distinctAbs()); }
+
+                std::shared_ptr<IDataFrame<Tp>> distinct(int64_t numPartitions) {
+                    return IDataFrame<Tp>::make(distinctAbs(numPartitions));
+                }
+
+                std::shared_ptr<IDataFrame<Tp>> distinct(const ISource &src) {
+                    return IDataFrame<Tp>::make(distinctAbs(src));
+                }
+
+                std::shared_ptr<IDataFrame<Tp>> distinct(int64_t numPartitions, const ISource &src) {
+                    return IDataFrame<Tp>::make(distinctAbs(numPartitions, src));
+                }
+
                 /*General Action*/
                 Tp reduce(const ISource &src) {
                     auto tp = driverContext().template registerType<Tp>();
@@ -329,8 +391,8 @@ namespace ignis {
                 }
 
                 using IAbstractDataFrame::foreach;
-                using IAbstractDataFrame::foreachPartition;
                 using IAbstractDataFrame::foreachExecutor;
+                using IAbstractDataFrame::foreachPartition;
 
                 executor::api::IVector<Tp> top(int64_t num) {
                     auto tp = driverContext().template registerType<Tp>();
@@ -402,6 +464,27 @@ namespace ignis {
 
                 IPairDataFrame() = delete;
 
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                join(const std::shared_ptr<IPairDataFrame<Key, Value>> &other) {
+                    return IPairDataFrame<Key, Value>::make(this->joinAbs(other->id));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                join(const std::shared_ptr<IPairDataFrame<Key, Value>> &other, int64_t numPartitions) {
+                    return IPairDataFrame<Key, Value>::make(this->joinAbs(other->id, numPartitions));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                join(const std::shared_ptr<IPairDataFrame<Key, Value>> &other, const ISource &src) {
+                    return IPairDataFrame<Key, Value>::make(this->joinAbs(other->id, src));
+                }
+
+                std::shared_ptr<IPairDataFrame<Key, Value>>
+                join(const std::shared_ptr<IPairDataFrame<Key, Value>> &other, int64_t numPartitions,
+                     const ISource &src) {
+                    return IPairDataFrame<Key, Value>::make(this->joinAbs(other->id, numPartitions, src));
+                }
+
                 template<typename R>
                 std::shared_ptr<IPairDataFrame<Key, R>> flatMapValues(const ISource &src) {
                     return IPairDataFrame<Key, R>::make(this->flatMapValuesAbs(src));
@@ -424,8 +507,10 @@ namespace ignis {
                     return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs(src));
                 }
 
-                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>> groupByKey(int64_t numPartitions, const ISource &src) {
-                    return IPairDataFrame<Key, executor::api::IVector<Value>>::make(this->groupByKeyAbs(numPartitions, src));
+                std::shared_ptr<IPairDataFrame<Key, executor::api::IVector<Value>>> groupByKey(int64_t numPartitions,
+                                                                                               const ISource &src) {
+                    return IPairDataFrame<Key, executor::api::IVector<Value>>::make(
+                            this->groupByKeyAbs(numPartitions, src));
                 }
 
                 std::shared_ptr<IPairDataFrame<Key, Value>> reduceByKey(const ISource &src, bool localReduce = true) {
@@ -518,9 +603,7 @@ namespace ignis {
                     auto counts =
                             this->driverContext().template collect<std::unordered_map<Key, int64_t>>(countByKeyAbs(tp));
                     for (int64_t i = 1; i < counts.size(); i++) {
-                        for(auto& item: counts[i]){
-                            counts[0][item.first] += item.second;
-                        }
+                        for (auto &item : counts[i]) { counts[0][item.first] += item.second; }
                     }
                     return counts[0];
                 }
@@ -530,9 +613,7 @@ namespace ignis {
                     auto counts = this->driverContext().template collect<std::unordered_map<Value, int64_t>>(
                             countByKeyAbs(tp));
                     for (int64_t i = 1; i < counts.size(); i++) {
-                        for(auto& item: counts[i]){
-                            counts[0][item.first] += item.second;
-                        }
+                        for (auto &item : counts[i]) { counts[0][item.first] += item.second; }
                     }
                     return counts[0];
                 }

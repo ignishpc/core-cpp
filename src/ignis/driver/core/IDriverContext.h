@@ -6,6 +6,7 @@
 #include <memory>
 #include <mutex>
 #include <vector>
+#include <functional>
 
 #include "ignis/executor/api/IVector.h"
 #include "ignis/executor/core/modules/IModule.h"
@@ -25,6 +26,8 @@ namespace ignis {
                 void clearContext();
 
                 void loadContext(const int64_t id);
+
+                void loadContextAsVariable(const int64_t id, const std::string& name);
 
                 void cache(const int64_t id, const int8_t level);
 
@@ -53,9 +56,14 @@ namespace ignis {
                 virtual ~IDriverContext();
 
             private:
-                int64_t next_context_id;
+                int64_t addData(const std::function<std::shared_ptr<void>()>& f);
+
+                std::shared_ptr<void> getContext(int64_t id);
+
+                int64_t next_id;
                 std::map<int64_t, std::shared_ptr<void>> context;
-                std::recursive_mutex mutex;
+                std::map<int64_t, std::function<std::shared_ptr<void>()>> data;
+                std::mutex mutex;
             };
         }// namespace core
     }    // namespace driver
