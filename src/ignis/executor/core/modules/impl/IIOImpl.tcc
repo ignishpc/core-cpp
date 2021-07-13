@@ -13,6 +13,7 @@
 template<typename Tp>
 int64_t IIOImplClass::partitionApproxSize() {
     IGNIS_TRY()
+    IGNIS_LOG(info) << "IO: calculating partition size";
     auto group = executor_data->getPartitions<Tp>();
     if (group->partitions() == 0) { return 0; }
 
