@@ -12,16 +12,16 @@ namespace ignis {
         namespace api {
             class IWorker {
             public:
-                IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type);
+                IWorker(const ICluster &cluster, const std::string &type);
 
-                IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type);
+                IWorker(const ICluster &cluster, const std::string &name, const std::string &type);
 
-                IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type, int cores, int instances);
+                IWorker(const ICluster &cluster, const std::string &type, int cores, int instances);
 
-                IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type,
-                        int cores, int instances);
+                IWorker(const ICluster &cluster, const std::string &name, const std::string &type, int cores,
+                        int instances);
 
-                std::shared_ptr<ICluster> getCluster();
+                ICluster getCluster();
 
                 void start();
 
@@ -30,65 +30,61 @@ namespace ignis {
                 void setName(const std::string &name);
 
                 template<typename C>
-                std::shared_ptr<IDataFrame<typename C::value_type>> parallelize(const C &data, int64_t partitions) {
+                IDataFrame<typename C::value_type> parallelize(const C &data, int64_t partitions) {
                     auto data_id = Ignis::driverContext().parallelize<C>(data);
-                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, partitions));
+                    return IDataFrame<typename C::value_type>(parallelizeAbs(data_id, partitions));
                 }
 
                 template<typename C>
-                std::shared_ptr<IDataFrame<typename C::value_type>> parallelize(const C &data, int64_t partitions,
-                                                                                const ISource &src) {
+                IDataFrame<typename C::value_type> parallelize(const C &data, int64_t partitions, const ISource &src) {
                     auto data_id = Ignis::driverContext().parallelize<C>(data);
-                    return IDataFrame<typename C::value_type>::make(parallelizeAbs(data_id, partitions, src));
+                    return IDataFrame<typename C::value_type>(parallelizeAbs(data_id, partitions, src));
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data) {
-                    return IDataFrame<Tp>::make(importDataFrameAbs(data.id));
+                IDataFrame<Tp> importDataFrame(const IDataFrame<Tp> &data) {
+                    return IDataFrame<Tp>(importDataFrameAbs(data.id));
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data,
-                                                                int64_t partitions) {
-                    return IDataFrame<Tp>::make(importDataFrameAbs(data.id, partitions));
+                IDataFrame<Tp> importDataFrame(const IDataFrame<Tp> &data, int64_t partitions) {
+                    return IDataFrame<Tp>(importDataFrameAbs(data.id, partitions));
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data,
-                                                                const ISource &src) {
-                    return IDataFrame<Tp>::make(importDataFrameAbs(data.id, src));
+                IDataFrame<Tp> importDataFrame(const IDataFrame<Tp> &data, const ISource &src) {
+                    return IDataFrame<Tp>(importDataFrameAbs(data.id, src));
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> importDataFrame(const std::shared_ptr<IDataFrame<Tp>> &data,
-                                                                int64_t partitions, const ISource &src) {
-                    return IDataFrame<Tp>::make(importDataFrameAbs(data.id, partitions, src));
+                IDataFrame<Tp> importDataFrame(const IDataFrame<Tp> &data, int64_t partitions, const ISource &src) {
+                    return IDataFrame<Tp>(importDataFrameAbs(data.id, partitions, src));
                 }
 
-                std::shared_ptr<IDataFrame<std::string>> textFile(const std::string &path);
+                IDataFrame<std::string> textFile(const std::string &path);
 
-                std::shared_ptr<IDataFrame<std::string>> textFile(const std::string &path, int64_t minPartitions);
-
-                template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> partitionObjectFile(const std::string &path) {
-                    return IDataFrame<Tp>::make(partitionObjectFileAbs(path));
-                }
+                IDataFrame<std::string> textFile(const std::string &path, int64_t minPartitions);
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> partitionObjectFile(const std::string &path, const ISource &src) {
-                    return IDataFrame<Tp>::make(partitionObjectFileAbs(path, src));
-                }
-
-                std::shared_ptr<IDataFrame<std::string>> partitionTextFile(const std::string &path);
-
-                template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> partitionJsonFile(const std::string &path, bool objectMapping = false) {
-                    return IDataFrame<Tp>::make(partitionJsonFileAbs(path, objectMapping));
+                IDataFrame<Tp> partitionObjectFile(const std::string &path) {
+                    return IDataFrame<Tp>(partitionObjectFileAbs(path));
                 }
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> partitionJsonFile(const std::string &path, const ISource &src) {
-                    return IDataFrame<Tp>::make(partitionJsonFileAbs(path, src));
+                IDataFrame<Tp> partitionObjectFile(const std::string &path, const ISource &src) {
+                    return IDataFrame<Tp>(partitionObjectFileAbs(path, src));
+                }
+
+                IDataFrame<std::string> partitionTextFile(const std::string &path);
+
+                template<typename Tp>
+                IDataFrame<Tp> partitionJsonFile(const std::string &path, bool objectMapping = false) {
+                    return IDataFrame<Tp>(partitionJsonFileAbs(path, objectMapping));
+                }
+
+                template<typename Tp>
+                IDataFrame<Tp> partitionJsonFile(const std::string &path, const ISource &src) {
+                    return IDataFrame<Tp>(partitionJsonFileAbs(path, src));
                 }
 
                 void loadLibrary(const std::string &path);
@@ -96,30 +92,30 @@ namespace ignis {
                 void execute(const ISource &src);
 
                 template<typename Tp>
-                std::shared_ptr<IDataFrame<Tp>> executeTo(const ISource &src) {
-                    return IDataFrame<Tp>::make(executeToAbs(src));
+                IDataFrame<Tp> executeTo(const ISource &src) {
+                    return IDataFrame<Tp>(executeToAbs(src));
                 }
 
                 void voidCall(const ISource &src);
 
                 template<typename Tp>
-                void voidCall(std::shared_ptr<IDataFrame<Tp>> &df, const ISource &src) {
+                void voidCall(const IDataFrame<Tp> &df, const ISource &src) {
                     voidCallAbs(df.id, src);
                 }
 
                 template<typename R>
-                std::shared_ptr<IDataFrame<R>> call(const ISource &src) {
-                    return IDataFrame<R>::make(callAbs(src));
+                IDataFrame<R> call(const ISource &src) {
+                    return IDataFrame<R>(callAbs(src));
                 }
 
                 template<typename Tp, typename R>
-                std::shared_ptr<IDataFrame<R>> call(std::shared_ptr<IDataFrame<Tp>> &df, const ISource &src) {
-                    return IDataFrame<R>::make(callAbs(df.id, src));
+                IDataFrame<R> call(const IDataFrame<Tp> &df, const ISource &src) {
+                    return IDataFrame<R>(callAbs(df.id, src));
                 }
 
             private:
                 rpc::driver::IWorkerId id;
-                std::shared_ptr<ICluster> cluster;
+                ICluster cluster;
 
                 rpc::driver::IDataFrameId parallelizeAbs(int64_t data_id, int64_t partitions);
 

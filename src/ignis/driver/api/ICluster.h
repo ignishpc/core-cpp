@@ -16,9 +16,9 @@ namespace ignis {
 
                 ICluster(const std::string &name);
 
-                ICluster(const std::shared_ptr<IProperties> &properties);
+                ICluster(const IProperties &properties);
 
-                ICluster(const std::string &name, const std::shared_ptr<IProperties> &properties);
+                ICluster(const std::string &name, const IProperties &properties);
 
                 void start();
 

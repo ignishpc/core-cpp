@@ -17,7 +17,7 @@ IProperties::IProperties(const IProperties &properties) {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-std::string IProperties::setProperty(const std::string &key, const std::string &value) {
+std::string IProperties::set(const std::string &key, const std::string &value) {
     try {
         std::string _return;
         Ignis::clientPool->getClient()->getPropertiesService().setProperty(_return, id, key, value);
@@ -25,7 +25,7 @@ std::string IProperties::setProperty(const std::string &key, const std::string &
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-std::string IProperties::getProperty(const std::string &key) {
+std::string IProperties::get(const std::string &key) {
     try {
         std::string _return;
         Ignis::clientPool->getClient()->getPropertiesService().getProperty(_return, id, key);
@@ -33,7 +33,7 @@ std::string IProperties::getProperty(const std::string &key) {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-std::string IProperties::rmProperty(const std::string &key) {
+std::string IProperties::rm(const std::string &key) {
     try {
         std::string _return;
         Ignis::clientPool->getClient()->getPropertiesService().rmProperty(_return, id, key);
@@ -41,9 +41,9 @@ std::string IProperties::rmProperty(const std::string &key) {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-IProperties::Value IProperties::operator[](const std::string &key) { return Value(*this, key, getProperty(key)); }
+IProperties::Value IProperties::operator[](const std::string &key) { return Value(*this, key, get(key)); }
 
-std::string IProperties::Value::operator=(const std::string &value) { return properties.setProperty(key, value); }
+std::string IProperties::Value::operator=(const std::string &value) { return properties.set(key, value); }
 
 IProperties::Value::Value(IProperties &properties, const std::string &key, const std::string &value)
     : properties(properties), key(key), value(value) {}

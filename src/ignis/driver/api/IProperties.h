@@ -30,11 +30,11 @@ namespace ignis {
 
                 IProperties(const IProperties &properties);
 
-                std::string setProperty(const std::string &key, const std::string &value);
+                std::string set(const std::string &key, const std::string &value);
 
-                std::string getProperty(const std::string &key);
+                std::string get(const std::string &key);
 
-                std::string rmProperty(const std::string &key);
+                std::string rm(const std::string &key);
 
                 Value operator[](const std::string &key);
 

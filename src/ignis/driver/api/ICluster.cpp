@@ -17,15 +17,15 @@ ICluster::ICluster(const std::string &name) {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-ICluster::ICluster(const std::shared_ptr<IProperties> &properties) {
+ICluster::ICluster(const IProperties &properties) {
     try {
-        id = Ignis::clientPool->getClient()->getClusterService().newInstance1b(properties->id);
+        id = Ignis::clientPool->getClient()->getClusterService().newInstance1b(properties.id);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-ICluster::ICluster(const std::string &name, const std::shared_ptr<IProperties> &properties) {
+ICluster::ICluster(const std::string &name, const IProperties &properties) {
     try {
-        id = Ignis::clientPool->getClient()->getClusterService().newInstance2(name, properties->id);
+        id = Ignis::clientPool->getClient()->getClusterService().newInstance2(name, properties.id);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 

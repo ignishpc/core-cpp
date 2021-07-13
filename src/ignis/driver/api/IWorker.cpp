@@ -6,35 +6,35 @@
 using namespace ignis::driver::api;
 using ignis::rpc::driver::IDataFrameId;
 
-IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type) : cluster(cluster) {
+IWorker::IWorker(const ICluster &cluster, const std::string &type) : cluster(cluster) {
     try {
-        Ignis::clientPool->getClient()->getWorkerService().newInstance(id, cluster->id, type);
+        Ignis::clientPool->getClient()->getWorkerService().newInstance(id, cluster.id, type);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type)
+IWorker::IWorker(const ICluster &cluster, const std::string &name, const std::string &type)
     : cluster(cluster) {
     try {
-        Ignis::clientPool->getClient()->getWorkerService().newInstance3(id, cluster->id, name, type);
+        Ignis::clientPool->getClient()->getWorkerService().newInstance3(id, cluster.id, name, type);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &type, int cores, int instances)
+IWorker::IWorker(const ICluster &cluster, const std::string &type, int cores, int instances)
     : cluster(cluster) {
     try {
-        Ignis::clientPool->getClient()->getWorkerService().newInstance4(id, cluster->id, type, cores, instances);
+        Ignis::clientPool->getClient()->getWorkerService().newInstance4(id, cluster.id, type, cores, instances);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-IWorker::IWorker(const std::shared_ptr<ICluster> &cluster, const std::string &name, const std::string &type, int cores,
+IWorker::IWorker(const ICluster &cluster, const std::string &name, const std::string &type, int cores,
                  int instances)
     : cluster(cluster) {
     try {
-        Ignis::clientPool->getClient()->getWorkerService().newInstance5(id, cluster->id, name, type, cores, instances);
+        Ignis::clientPool->getClient()->getWorkerService().newInstance5(id, cluster.id, name, type, cores, instances);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-std::shared_ptr<ICluster> IWorker::getCluster() { return cluster; }
+ICluster IWorker::getCluster() { return cluster; }
 
 void IWorker::start() {
     try {
@@ -102,19 +102,19 @@ IDataFrameId IWorker::importDataFrameAbs(IDataFrameId data, int64_t partitions, 
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-std::shared_ptr<IDataFrame<std::string>> IWorker::textFile(const std::string &path) {
+IDataFrame<std::string> IWorker::textFile(const std::string &path) {
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getWorkerService().textFile(_return, id, path);
-        return IDataFrame<std::string>::make(_return);
+        return IDataFrame<std::string>(_return);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-std::shared_ptr<IDataFrame<std::string>> IWorker::textFile(const std::string &path, int64_t minPartitions) {
+IDataFrame<std::string> IWorker::textFile(const std::string &path, int64_t minPartitions) {
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getWorkerService().textFile3(_return, id, path, minPartitions);
-        return IDataFrame<std::string>::make(_return);
+        return IDataFrame<std::string>(_return);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
@@ -134,11 +134,11 @@ IDataFrameId IWorker::partitionObjectFileAbs(const std::string &path, const ISou
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-std::shared_ptr<IDataFrame<std::string>> IWorker::partitionTextFile(const std::string &path) {
+IDataFrame<std::string> IWorker::partitionTextFile(const std::string &path) {
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getWorkerService().partitionTextFile(_return, id, path);
-        return IDataFrame<std::string>::make(_return);
+        return IDataFrame<std::string>(_return);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
