@@ -59,19 +59,9 @@ int main(int argc, char *argv[]) {
         }
     };
 
-    if(std::getenv("MPI_THREAD_MULTIPLE") != nullptr){
-        MPI::Init_thread(argc, argv, MPI_THREAD_MULTIPLE);
-        IGNIS_LOG(info) << "Mpi started in thread mode";
-    }else{
-        MPI::Init(argc, argv);
-        IGNIS_LOG(info) << "Mpi started";
-    }
-
     auto executor_data = std::make_shared<IExecutorData>();
     IExecutorServerModuleImpl server(executor_data);
     server.serve("IExecutorServer", port, compression);
-
-    MPI::Finalize();
 
     return EXIT_SUCCESS;
 }

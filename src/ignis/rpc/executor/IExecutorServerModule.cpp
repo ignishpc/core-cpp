@@ -57,6 +57,29 @@ uint32_t IExecutorServerModule_start_args::read(::apache::thrift::protocol::TPro
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_MAP) {
+          {
+            this->env.clear();
+            uint32_t _size7;
+            ::apache::thrift::protocol::TType _ktype8;
+            ::apache::thrift::protocol::TType _vtype9;
+            xfer += iprot->readMapBegin(_ktype8, _vtype9, _size7);
+            uint32_t _i11;
+            for (_i11 = 0; _i11 < _size7; ++_i11)
+            {
+              std::string _key12;
+              xfer += iprot->readString(_key12);
+              std::string& _val13 = this->env[_key12];
+              xfer += iprot->readString(_val13);
+            }
+            xfer += iprot->readMapEnd();
+          }
+          this->__isset.env = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -77,11 +100,24 @@ uint32_t IExecutorServerModule_start_args::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 1);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->properties.size()));
-    std::map<std::string, std::string> ::const_iterator _iter7;
-    for (_iter7 = this->properties.begin(); _iter7 != this->properties.end(); ++_iter7)
+    std::map<std::string, std::string> ::const_iterator _iter14;
+    for (_iter14 = this->properties.begin(); _iter14 != this->properties.end(); ++_iter14)
     {
-      xfer += oprot->writeString(_iter7->first);
-      xfer += oprot->writeString(_iter7->second);
+      xfer += oprot->writeString(_iter14->first);
+      xfer += oprot->writeString(_iter14->second);
+    }
+    xfer += oprot->writeMapEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("env", ::apache::thrift::protocol::T_MAP, 2);
+  {
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->env.size()));
+    std::map<std::string, std::string> ::const_iterator _iter15;
+    for (_iter15 = this->env.begin(); _iter15 != this->env.end(); ++_iter15)
+    {
+      xfer += oprot->writeString(_iter15->first);
+      xfer += oprot->writeString(_iter15->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -105,11 +141,24 @@ uint32_t IExecutorServerModule_start_pargs::write(::apache::thrift::protocol::TP
   xfer += oprot->writeFieldBegin("properties", ::apache::thrift::protocol::T_MAP, 1);
   {
     xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->properties)).size()));
-    std::map<std::string, std::string> ::const_iterator _iter8;
-    for (_iter8 = (*(this->properties)).begin(); _iter8 != (*(this->properties)).end(); ++_iter8)
+    std::map<std::string, std::string> ::const_iterator _iter16;
+    for (_iter16 = (*(this->properties)).begin(); _iter16 != (*(this->properties)).end(); ++_iter16)
     {
-      xfer += oprot->writeString(_iter8->first);
-      xfer += oprot->writeString(_iter8->second);
+      xfer += oprot->writeString(_iter16->first);
+      xfer += oprot->writeString(_iter16->second);
+    }
+    xfer += oprot->writeMapEnd();
+  }
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("env", ::apache::thrift::protocol::T_MAP, 2);
+  {
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->env)).size()));
+    std::map<std::string, std::string> ::const_iterator _iter17;
+    for (_iter17 = (*(this->env)).begin(); _iter17 != (*(this->env)).end(); ++_iter17)
+    {
+      xfer += oprot->writeString(_iter17->first);
+      xfer += oprot->writeString(_iter17->second);
     }
     xfer += oprot->writeMapEnd();
   }
@@ -580,19 +629,20 @@ uint32_t IExecutorServerModule_test_presult::read(::apache::thrift::protocol::TP
   return xfer;
 }
 
-void IExecutorServerModuleClient::start(const std::map<std::string, std::string> & properties)
+void IExecutorServerModuleClient::start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env)
 {
-  send_start(properties);
+  send_start(properties, env);
   recv_start();
 }
 
-void IExecutorServerModuleClient::send_start(const std::map<std::string, std::string> & properties)
+void IExecutorServerModuleClient::send_start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("start", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IExecutorServerModule_start_pargs args;
   args.properties = &properties;
+  args.env = &env;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -793,7 +843,7 @@ void IExecutorServerModuleProcessor::process_start(int32_t seqid, ::apache::thri
 
   IExecutorServerModule_start_result result;
   try {
-    iface_->start(args.properties);
+    iface_->start(args.properties, args.env);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -946,13 +996,13 @@ void IExecutorServerModuleProcessor::process_test(int32_t seqid, ::apache::thrif
   return processor;
 }
 
-void IExecutorServerModuleConcurrentClient::start(const std::map<std::string, std::string> & properties)
+void IExecutorServerModuleConcurrentClient::start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env)
 {
-  int32_t seqid = send_start(properties);
+  int32_t seqid = send_start(properties, env);
   recv_start(seqid);
 }
 
-int32_t IExecutorServerModuleConcurrentClient::send_start(const std::map<std::string, std::string> & properties)
+int32_t IExecutorServerModuleConcurrentClient::send_start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -960,6 +1010,7 @@ int32_t IExecutorServerModuleConcurrentClient::send_start(const std::map<std::st
 
   IExecutorServerModule_start_pargs args;
   args.properties = &properties;
+  args.env = &env;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

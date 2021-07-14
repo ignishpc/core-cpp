@@ -22,7 +22,7 @@ namespace ignis { namespace rpc { namespace executor {
 class IExecutorServerModuleIf {
  public:
   virtual ~IExecutorServerModuleIf() {}
-  virtual void start(const std::map<std::string, std::string> & properties) = 0;
+  virtual void start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env) = 0;
   virtual void stop() = 0;
   virtual bool test() = 0;
 };
@@ -54,7 +54,7 @@ class IExecutorServerModuleIfSingletonFactory : virtual public IExecutorServerMo
 class IExecutorServerModuleNull : virtual public IExecutorServerModuleIf {
  public:
   virtual ~IExecutorServerModuleNull() {}
-  void start(const std::map<std::string, std::string> & /* properties */) {
+  void start(const std::map<std::string, std::string> & /* properties */, const std::map<std::string, std::string> & /* env */) {
     return;
   }
   void stop() {
@@ -67,8 +67,9 @@ class IExecutorServerModuleNull : virtual public IExecutorServerModuleIf {
 };
 
 typedef struct _IExecutorServerModule_start_args__isset {
-  _IExecutorServerModule_start_args__isset() : properties(false) {}
+  _IExecutorServerModule_start_args__isset() : properties(false), env(false) {}
   bool properties :1;
+  bool env :1;
 } _IExecutorServerModule_start_args__isset;
 
 class IExecutorServerModule_start_args {
@@ -81,14 +82,19 @@ class IExecutorServerModule_start_args {
 
   virtual ~IExecutorServerModule_start_args() noexcept;
   std::map<std::string, std::string>  properties;
+  std::map<std::string, std::string>  env;
 
   _IExecutorServerModule_start_args__isset __isset;
 
   void __set_properties(const std::map<std::string, std::string> & val);
 
+  void __set_env(const std::map<std::string, std::string> & val);
+
   bool operator == (const IExecutorServerModule_start_args & rhs) const
   {
     if (!(properties == rhs.properties))
+      return false;
+    if (!(env == rhs.env))
       return false;
     return true;
   }
@@ -110,6 +116,7 @@ class IExecutorServerModule_start_pargs {
 
   virtual ~IExecutorServerModule_start_pargs() noexcept;
   const std::map<std::string, std::string> * properties;
+  const std::map<std::string, std::string> * env;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -387,8 +394,8 @@ class IExecutorServerModuleClient : virtual public IExecutorServerModuleIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void start(const std::map<std::string, std::string> & properties);
-  void send_start(const std::map<std::string, std::string> & properties);
+  void start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env);
+  void send_start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env);
   void recv_start();
   void stop();
   void send_stop();
@@ -448,13 +455,13 @@ class IExecutorServerModuleMultiface : virtual public IExecutorServerModuleIf {
     ifaces_.push_back(iface);
   }
  public:
-  void start(const std::map<std::string, std::string> & properties) {
+  void start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->start(properties);
+      ifaces_[i]->start(properties, env);
     }
-    ifaces_[i]->start(properties);
+    ifaces_[i]->start(properties, env);
   }
 
   void stop() {
@@ -507,8 +514,8 @@ class IExecutorServerModuleConcurrentClient : virtual public IExecutorServerModu
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void start(const std::map<std::string, std::string> & properties);
-  int32_t send_start(const std::map<std::string, std::string> & properties);
+  void start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env);
+  int32_t send_start(const std::map<std::string, std::string> & properties, const std::map<std::string, std::string> & env);
   void recv_start(const int32_t seqid);
   void stop();
   int32_t send_stop();

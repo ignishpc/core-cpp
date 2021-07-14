@@ -17,7 +17,8 @@ namespace ignis {
 
                     void serve(const std::string &name, int port, int compression);
 
-                    void start(const std::map<std::string, std::string> &properties) override;
+                    void start(const std::map<std::string, std::string> &properties,
+                               const std::map<std::string, std::string> &env) override;
 
                     void stop() override;
 

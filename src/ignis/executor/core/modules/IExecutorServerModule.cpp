@@ -36,10 +36,22 @@ void IExecutorServerModule::serve(const std::string &name, int port, int compres
     }
 }
 
-void IExecutorServerModule::start(const std::map<std::string, std::string> &properties) {
+void IExecutorServerModule::start(const std::map<std::string, std::string> &properties,
+                                  const std::map<std::string, std::string> &env) {
     IGNIS_RPC_TRY()
     executor_data->getContext().props().insert(properties.begin(), properties.end());
     executor_data->setCores(executor_data->getProperties().cores());
+
+    for (auto &entry : env) { setenv(entry.first.c_str(), entry.second.c_str(), 1); }
+
+    if (std::getenv("MPI_THREAD_MULTIPLE") != nullptr) {
+        MPI::Init_thread(MPI_THREAD_MULTIPLE);
+        IGNIS_LOG(info) << "ServerModule: Mpi started in thread mode";
+    } else {
+        MPI::Init();
+        IGNIS_LOG(info) << "ServerModule: Mpi started";
+    }
+
     createServices(*processor);
     IGNIS_LOG(info) << "ServerModule: cpp executor ready";
     IGNIS_RPC_CATCH()
@@ -49,6 +61,7 @@ void IExecutorServerModule::createServices(TMultiplexedProcessor &processor) {}
 
 void IExecutorServerModule::stop() {
     IGNIS_RPC_TRY()
+    MPI::Finalize();
     if (server) { server->stop(); }
     IGNIS_RPC_CATCH()
 }
