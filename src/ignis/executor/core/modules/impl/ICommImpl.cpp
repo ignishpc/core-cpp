@@ -34,33 +34,13 @@ void ICommImpl::closeGroup() {
 
 void ICommImpl::joinToGroup(const std::string &id, bool leader) {
     IGNIS_TRY()
-    bool root = executor_data->hasVariable("server");
-    MPI::Intracomm comm = executor_data->mpi().native();
-    MPI::Intercomm peer;
-    if (root) {
-        peer = MPI::COMM_SELF.Accept(id.c_str(), MPI::INFO_NULL, 0);
-    } else if (!leader) {
-        peer = comm.Connect(id.c_str(), MPI::INFO_NULL, 0);
-    }
-    comm = addComm(comm, peer, leader, comm != MPI::COMM_WORLD);
-    comm.Set_errhandler(MPI::ERRORS_THROW_EXCEPTIONS);
-    executor_data->setMpiGroup(comm);
+    executor_data->setMpiGroup(joinToGroupImpl(id, leader, id));
     IGNIS_CATCH()
 }
 
 void ICommImpl::joinToGroupName(const std::string &id, bool leader, const std::string &name) {
     IGNIS_TRY()
-    bool root = executor_data->hasVariable("server");
-    MPI::Intracomm comm = executor_data->mpi().native();
-    MPI::Intercomm peer;
-    if (root) {
-        peer = MPI::COMM_SELF.Accept(id.c_str(), MPI::INFO_NULL, 0);
-    } else if (!leader) {
-        peer = comm.Connect(id.c_str(), MPI::INFO_NULL, 0);
-    }
-    comm = addComm(comm, peer, leader, comm != MPI::COMM_WORLD);
-    comm.Set_errhandler(MPI::ERRORS_THROW_EXCEPTIONS);
-    groups[name] = comm;
+    groups[name] = joinToGroupImpl(id, leader, name);
     IGNIS_CATCH()
 }
 
@@ -147,25 +127,33 @@ void ICommImpl::recvVoid(const std::string &group, int64_t partition, int64_t so
     IGNIS_CATCH()
 }
 
-MPI::Intracomm ICommImpl::addComm(MPI::Intracomm &group, MPI::Intercomm &comm, bool leader, bool detroyGroup) {
-    MPI::Intercomm peer;
-    MPI::Intercomm new_comm;
-    MPI::Intracomm new_group;
-
-    if (comm != MPI::COMM_NULL) { peer = comm.Merge(!leader); }
-
-    new_comm = group.Create_intercomm(0, peer, leader ? 1 : 0, 1963);
-
-    new_group = new_comm.Merge(!leader);
-
-    if (comm != MPI::COMM_NULL) { peer.Free(); }
-    new_comm.Free();
-
-    if (detroyGroup) { group.Free(); }
-
-    return new_group;
+MPI::Intracomm ICommImpl::joinToGroupImpl(const std::string &id, bool leader, const std::string &name) {
+    bool root = executor_data->hasVariable("server");
+    MPI::Intracomm comm = executor_data->mpi().native();
+    MPI::Intercomm intercomm;
+    MPI::Intercomm comm1;
+    if(leader){
+        const char * port = root ?  id.c_str() : nullptr;
+        intercomm = comm.Accept(port, MPI::INFO_NULL, 0);
+        comm1 = intercomm.Merge(0);
+        intercomm.Free();
+        if(comm != MPI::COMM_WORLD){
+            comm.Free();
+        }
+        comm = comm1;
+    }else{
+        const char * port = comm.Get_rank() == 0 ?  id.c_str() : nullptr;
+        intercomm = comm.Connect(port, MPI::INFO_NULL, 0);
+        comm1 = intercomm.Merge(0);
+        intercomm.Free();
+        if(comm != MPI::COMM_WORLD){
+            comm.Free();
+        }
+        comm = comm1;
+    }
+    comm.Set_errhandler(MPI::ERRORS_THROW_EXCEPTIONS);
+    return comm;
 }
-
 
 MPI::Intracomm &ICommImpl::getGroup(const std::string &id) {
     auto it = groups.find(id);
