@@ -68,7 +68,7 @@ namespace ignis {
                         virtual ~ICommImpl();
 
                     private:
-                        MPI::Intracomm joinToGroupImpl(const std::string &id, bool leader, const std::string &name);
+                        MPI::Intracomm joinToGroupImpl(const std::string &id, bool leader);
 
                         MPI::Intracomm &getGroup(const std::string &id);
 
