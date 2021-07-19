@@ -136,7 +136,7 @@ MPI::Intracomm ICommImpl::joinToGroupImpl(const std::string &id, bool leader) {
         const char *port = root ? id.c_str() : nullptr;
         intercomm = comm.Accept(port, MPI::INFO_NULL, 0);
     } else {
-        const char *port = comm.Get_rank() == 0 ? id.c_str() : nullptr;
+        const char *port = id.c_str();
         intercomm = comm.Connect(port, MPI::INFO_NULL, 0);
     }
     comm1 = intercomm.Merge(leader ? 0 : 1);
