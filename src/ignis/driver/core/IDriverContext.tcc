@@ -91,5 +91,9 @@ ignis::executor::api::IVector<Tp> IDriverContextClass::collect(int64_t id) {
 
 template<typename Tp>
 Tp IDriverContextClass::collect1(int64_t id) {
-    return collect<Tp>(id)[0];
+    executor::api::IVector<Tp> results = collect<executor::api::IVector<Tp>>(id);
+    if(results.empty()){
+        throw api::IDriverException("Empty collection");
+    }
+    return results[0];
 }
