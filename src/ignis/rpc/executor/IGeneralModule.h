@@ -36,12 +36,16 @@ class IGeneralModuleIf {
   virtual void sort2(const bool ascending, const int64_t numPartitions) = 0;
   virtual void sortBy(const  ::ignis::rpc::ISource& src, const bool ascending) = 0;
   virtual void sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions) = 0;
-  virtual void union_(const std::string& other) = 0;
-  virtual void union2(const std::string& other, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void union_(const std::string& other, const bool preserveOrder) = 0;
+  virtual void union2(const std::string& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src) = 0;
   virtual void join(const std::string& other, const int64_t numPartitions) = 0;
   virtual void join3(const std::string& other, const int64_t numPartitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void distinct(const int64_t numPartitions) = 0;
   virtual void distinct2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void repartition(const int64_t numPartitions, const bool preserveOrdering, const bool global_) = 0;
+  virtual void repartitionByRandom(const int64_t numPartitions) = 0;
+  virtual void repartitionByHash(const int64_t numPartitions) = 0;
+  virtual void repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
   virtual void flatMapValues(const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapValues(const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupByKey(const int64_t numPartitions) = 0;
@@ -125,10 +129,10 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
   void sortBy3(const  ::ignis::rpc::ISource& /* src */, const bool /* ascending */, const int64_t /* numPartitions */) {
     return;
   }
-  void union_(const std::string& /* other */) {
+  void union_(const std::string& /* other */, const bool /* preserveOrder */) {
     return;
   }
-  void union2(const std::string& /* other */, const  ::ignis::rpc::ISource& /* src */) {
+  void union2(const std::string& /* other */, const bool /* preserveOrder */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void join(const std::string& /* other */, const int64_t /* numPartitions */) {
@@ -141,6 +145,18 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
     return;
   }
   void distinct2(const int64_t /* numPartitions */, const  ::ignis::rpc::ISource& /* src */) {
+    return;
+  }
+  void repartition(const int64_t /* numPartitions */, const bool /* preserveOrdering */, const bool /* global_ */) {
+    return;
+  }
+  void repartitionByRandom(const int64_t /* numPartitions */) {
+    return;
+  }
+  void repartitionByHash(const int64_t /* numPartitions */) {
+    return;
+  }
+  void repartitionBy(const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */) {
     return;
   }
   void flatMapValues(const  ::ignis::rpc::ISource& /* src */) {
@@ -1680,8 +1696,9 @@ class IGeneralModule_sortBy3_presult {
 };
 
 typedef struct _IGeneralModule_union__args__isset {
-  _IGeneralModule_union__args__isset() : other(false) {}
+  _IGeneralModule_union__args__isset() : other(false), preserveOrder(false) {}
   bool other :1;
+  bool preserveOrder :1;
 } _IGeneralModule_union__args__isset;
 
 class IGeneralModule_union__args {
@@ -1689,19 +1706,24 @@ class IGeneralModule_union__args {
 
   IGeneralModule_union__args(const IGeneralModule_union__args&);
   IGeneralModule_union__args& operator=(const IGeneralModule_union__args&);
-  IGeneralModule_union__args() : other() {
+  IGeneralModule_union__args() : other(), preserveOrder(0) {
   }
 
   virtual ~IGeneralModule_union__args() noexcept;
   std::string other;
+  bool preserveOrder;
 
   _IGeneralModule_union__args__isset __isset;
 
   void __set_other(const std::string& val);
 
+  void __set_preserveOrder(const bool val);
+
   bool operator == (const IGeneralModule_union__args & rhs) const
   {
     if (!(other == rhs.other))
+      return false;
+    if (!(preserveOrder == rhs.preserveOrder))
       return false;
     return true;
   }
@@ -1723,6 +1745,7 @@ class IGeneralModule_union__pargs {
 
   virtual ~IGeneralModule_union__pargs() noexcept;
   const std::string* other;
+  const bool* preserveOrder;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1784,8 +1807,9 @@ class IGeneralModule_union__presult {
 };
 
 typedef struct _IGeneralModule_union2_args__isset {
-  _IGeneralModule_union2_args__isset() : other(false), src(false) {}
+  _IGeneralModule_union2_args__isset() : other(false), preserveOrder(false), src(false) {}
   bool other :1;
+  bool preserveOrder :1;
   bool src :1;
 } _IGeneralModule_union2_args__isset;
 
@@ -1794,22 +1818,27 @@ class IGeneralModule_union2_args {
 
   IGeneralModule_union2_args(const IGeneralModule_union2_args&);
   IGeneralModule_union2_args& operator=(const IGeneralModule_union2_args&);
-  IGeneralModule_union2_args() : other() {
+  IGeneralModule_union2_args() : other(), preserveOrder(0) {
   }
 
   virtual ~IGeneralModule_union2_args() noexcept;
   std::string other;
+  bool preserveOrder;
    ::ignis::rpc::ISource src;
 
   _IGeneralModule_union2_args__isset __isset;
 
   void __set_other(const std::string& val);
 
+  void __set_preserveOrder(const bool val);
+
   void __set_src(const  ::ignis::rpc::ISource& val);
 
   bool operator == (const IGeneralModule_union2_args & rhs) const
   {
     if (!(other == rhs.other))
+      return false;
+    if (!(preserveOrder == rhs.preserveOrder))
       return false;
     if (!(src == rhs.src))
       return false;
@@ -1833,6 +1862,7 @@ class IGeneralModule_union2_pargs {
 
   virtual ~IGeneralModule_union2_pargs() noexcept;
   const std::string* other;
+  const bool* preserveOrder;
   const  ::ignis::rpc::ISource* src;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2333,6 +2363,443 @@ class IGeneralModule_distinct2_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IGeneralModule_distinct2_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_repartition_args__isset {
+  _IGeneralModule_repartition_args__isset() : numPartitions(false), preserveOrdering(false), global_(false) {}
+  bool numPartitions :1;
+  bool preserveOrdering :1;
+  bool global_ :1;
+} _IGeneralModule_repartition_args__isset;
+
+class IGeneralModule_repartition_args {
+ public:
+
+  IGeneralModule_repartition_args(const IGeneralModule_repartition_args&);
+  IGeneralModule_repartition_args& operator=(const IGeneralModule_repartition_args&);
+  IGeneralModule_repartition_args() : numPartitions(0), preserveOrdering(0), global_(0) {
+  }
+
+  virtual ~IGeneralModule_repartition_args() noexcept;
+  int64_t numPartitions;
+  bool preserveOrdering;
+  bool global_;
+
+  _IGeneralModule_repartition_args__isset __isset;
+
+  void __set_numPartitions(const int64_t val);
+
+  void __set_preserveOrdering(const bool val);
+
+  void __set_global_(const bool val);
+
+  bool operator == (const IGeneralModule_repartition_args & rhs) const
+  {
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    if (!(preserveOrdering == rhs.preserveOrdering))
+      return false;
+    if (!(global_ == rhs.global_))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartition_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartition_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_repartition_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_repartition_pargs() noexcept;
+  const int64_t* numPartitions;
+  const bool* preserveOrdering;
+  const bool* global_;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartition_result__isset {
+  _IGeneralModule_repartition_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartition_result__isset;
+
+class IGeneralModule_repartition_result {
+ public:
+
+  IGeneralModule_repartition_result(const IGeneralModule_repartition_result&);
+  IGeneralModule_repartition_result& operator=(const IGeneralModule_repartition_result&);
+  IGeneralModule_repartition_result() {
+  }
+
+  virtual ~IGeneralModule_repartition_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartition_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_repartition_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartition_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartition_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartition_presult__isset {
+  _IGeneralModule_repartition_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartition_presult__isset;
+
+class IGeneralModule_repartition_presult {
+ public:
+
+
+  virtual ~IGeneralModule_repartition_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartition_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_repartitionByRandom_args__isset {
+  _IGeneralModule_repartitionByRandom_args__isset() : numPartitions(false) {}
+  bool numPartitions :1;
+} _IGeneralModule_repartitionByRandom_args__isset;
+
+class IGeneralModule_repartitionByRandom_args {
+ public:
+
+  IGeneralModule_repartitionByRandom_args(const IGeneralModule_repartitionByRandom_args&);
+  IGeneralModule_repartitionByRandom_args& operator=(const IGeneralModule_repartitionByRandom_args&);
+  IGeneralModule_repartitionByRandom_args() : numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_repartitionByRandom_args() noexcept;
+  int64_t numPartitions;
+
+  _IGeneralModule_repartitionByRandom_args__isset __isset;
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_repartitionByRandom_args & rhs) const
+  {
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartitionByRandom_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartitionByRandom_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_repartitionByRandom_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_repartitionByRandom_pargs() noexcept;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartitionByRandom_result__isset {
+  _IGeneralModule_repartitionByRandom_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartitionByRandom_result__isset;
+
+class IGeneralModule_repartitionByRandom_result {
+ public:
+
+  IGeneralModule_repartitionByRandom_result(const IGeneralModule_repartitionByRandom_result&);
+  IGeneralModule_repartitionByRandom_result& operator=(const IGeneralModule_repartitionByRandom_result&);
+  IGeneralModule_repartitionByRandom_result() {
+  }
+
+  virtual ~IGeneralModule_repartitionByRandom_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartitionByRandom_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_repartitionByRandom_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartitionByRandom_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartitionByRandom_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartitionByRandom_presult__isset {
+  _IGeneralModule_repartitionByRandom_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartitionByRandom_presult__isset;
+
+class IGeneralModule_repartitionByRandom_presult {
+ public:
+
+
+  virtual ~IGeneralModule_repartitionByRandom_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartitionByRandom_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_repartitionByHash_args__isset {
+  _IGeneralModule_repartitionByHash_args__isset() : numPartitions(false) {}
+  bool numPartitions :1;
+} _IGeneralModule_repartitionByHash_args__isset;
+
+class IGeneralModule_repartitionByHash_args {
+ public:
+
+  IGeneralModule_repartitionByHash_args(const IGeneralModule_repartitionByHash_args&);
+  IGeneralModule_repartitionByHash_args& operator=(const IGeneralModule_repartitionByHash_args&);
+  IGeneralModule_repartitionByHash_args() : numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_repartitionByHash_args() noexcept;
+  int64_t numPartitions;
+
+  _IGeneralModule_repartitionByHash_args__isset __isset;
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_repartitionByHash_args & rhs) const
+  {
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartitionByHash_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartitionByHash_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_repartitionByHash_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_repartitionByHash_pargs() noexcept;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartitionByHash_result__isset {
+  _IGeneralModule_repartitionByHash_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartitionByHash_result__isset;
+
+class IGeneralModule_repartitionByHash_result {
+ public:
+
+  IGeneralModule_repartitionByHash_result(const IGeneralModule_repartitionByHash_result&);
+  IGeneralModule_repartitionByHash_result& operator=(const IGeneralModule_repartitionByHash_result&);
+  IGeneralModule_repartitionByHash_result() {
+  }
+
+  virtual ~IGeneralModule_repartitionByHash_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartitionByHash_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_repartitionByHash_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartitionByHash_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartitionByHash_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartitionByHash_presult__isset {
+  _IGeneralModule_repartitionByHash_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartitionByHash_presult__isset;
+
+class IGeneralModule_repartitionByHash_presult {
+ public:
+
+
+  virtual ~IGeneralModule_repartitionByHash_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartitionByHash_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IGeneralModule_repartitionBy_args__isset {
+  _IGeneralModule_repartitionBy_args__isset() : src(false), numPartitions(false) {}
+  bool src :1;
+  bool numPartitions :1;
+} _IGeneralModule_repartitionBy_args__isset;
+
+class IGeneralModule_repartitionBy_args {
+ public:
+
+  IGeneralModule_repartitionBy_args(const IGeneralModule_repartitionBy_args&);
+  IGeneralModule_repartitionBy_args& operator=(const IGeneralModule_repartitionBy_args&);
+  IGeneralModule_repartitionBy_args() : numPartitions(0) {
+  }
+
+  virtual ~IGeneralModule_repartitionBy_args() noexcept;
+   ::ignis::rpc::ISource src;
+  int64_t numPartitions;
+
+  _IGeneralModule_repartitionBy_args__isset __isset;
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IGeneralModule_repartitionBy_args & rhs) const
+  {
+    if (!(src == rhs.src))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartitionBy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartitionBy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IGeneralModule_repartitionBy_pargs {
+ public:
+
+
+  virtual ~IGeneralModule_repartitionBy_pargs() noexcept;
+  const  ::ignis::rpc::ISource* src;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartitionBy_result__isset {
+  _IGeneralModule_repartitionBy_result__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartitionBy_result__isset;
+
+class IGeneralModule_repartitionBy_result {
+ public:
+
+  IGeneralModule_repartitionBy_result(const IGeneralModule_repartitionBy_result&);
+  IGeneralModule_repartitionBy_result& operator=(const IGeneralModule_repartitionBy_result&);
+  IGeneralModule_repartitionBy_result() {
+  }
+
+  virtual ~IGeneralModule_repartitionBy_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartitionBy_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IGeneralModule_repartitionBy_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IGeneralModule_repartitionBy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IGeneralModule_repartitionBy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IGeneralModule_repartitionBy_presult__isset {
+  _IGeneralModule_repartitionBy_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IGeneralModule_repartitionBy_presult__isset;
+
+class IGeneralModule_repartitionBy_presult {
+ public:
+
+
+  virtual ~IGeneralModule_repartitionBy_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IGeneralModule_repartitionBy_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -3758,11 +4225,11 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   void sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void send_sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void recv_sortBy3();
-  void union_(const std::string& other);
-  void send_union_(const std::string& other);
+  void union_(const std::string& other, const bool preserveOrder);
+  void send_union_(const std::string& other, const bool preserveOrder);
   void recv_union_();
-  void union2(const std::string& other, const  ::ignis::rpc::ISource& src);
-  void send_union2(const std::string& other, const  ::ignis::rpc::ISource& src);
+  void union2(const std::string& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
+  void send_union2(const std::string& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
   void recv_union2();
   void join(const std::string& other, const int64_t numPartitions);
   void send_join(const std::string& other, const int64_t numPartitions);
@@ -3776,6 +4243,18 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   void distinct2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
   void send_distinct2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
   void recv_distinct2();
+  void repartition(const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  void send_repartition(const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  void recv_repartition();
+  void repartitionByRandom(const int64_t numPartitions);
+  void send_repartitionByRandom(const int64_t numPartitions);
+  void recv_repartitionByRandom();
+  void repartitionByHash(const int64_t numPartitions);
+  void send_repartitionByHash(const int64_t numPartitions);
+  void recv_repartitionByHash();
+  void repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void send_repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void recv_repartitionBy();
   void flatMapValues(const  ::ignis::rpc::ISource& src);
   void send_flatMapValues(const  ::ignis::rpc::ISource& src);
   void recv_flatMapValues();
@@ -3847,6 +4326,10 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_join3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_distinct(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_distinct2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatMapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapValues(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_groupByKey(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -3882,6 +4365,10 @@ class IGeneralModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["join3"] = &IGeneralModuleProcessor::process_join3;
     processMap_["distinct"] = &IGeneralModuleProcessor::process_distinct;
     processMap_["distinct2"] = &IGeneralModuleProcessor::process_distinct2;
+    processMap_["repartition"] = &IGeneralModuleProcessor::process_repartition;
+    processMap_["repartitionByRandom"] = &IGeneralModuleProcessor::process_repartitionByRandom;
+    processMap_["repartitionByHash"] = &IGeneralModuleProcessor::process_repartitionByHash;
+    processMap_["repartitionBy"] = &IGeneralModuleProcessor::process_repartitionBy;
     processMap_["flatMapValues"] = &IGeneralModuleProcessor::process_flatMapValues;
     processMap_["mapValues"] = &IGeneralModuleProcessor::process_mapValues;
     processMap_["groupByKey"] = &IGeneralModuleProcessor::process_groupByKey;
@@ -4048,22 +4535,22 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
     ifaces_[i]->sortBy3(src, ascending, numPartitions);
   }
 
-  void union_(const std::string& other) {
+  void union_(const std::string& other, const bool preserveOrder) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->union_(other);
+      ifaces_[i]->union_(other, preserveOrder);
     }
-    ifaces_[i]->union_(other);
+    ifaces_[i]->union_(other, preserveOrder);
   }
 
-  void union2(const std::string& other, const  ::ignis::rpc::ISource& src) {
+  void union2(const std::string& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->union2(other, src);
+      ifaces_[i]->union2(other, preserveOrder, src);
     }
-    ifaces_[i]->union2(other, src);
+    ifaces_[i]->union2(other, preserveOrder, src);
   }
 
   void join(const std::string& other, const int64_t numPartitions) {
@@ -4100,6 +4587,42 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
       ifaces_[i]->distinct2(numPartitions, src);
     }
     ifaces_[i]->distinct2(numPartitions, src);
+  }
+
+  void repartition(const int64_t numPartitions, const bool preserveOrdering, const bool global_) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartition(numPartitions, preserveOrdering, global_);
+    }
+    ifaces_[i]->repartition(numPartitions, preserveOrdering, global_);
+  }
+
+  void repartitionByRandom(const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartitionByRandom(numPartitions);
+    }
+    ifaces_[i]->repartitionByRandom(numPartitions);
+  }
+
+  void repartitionByHash(const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartitionByHash(numPartitions);
+    }
+    ifaces_[i]->repartitionByHash(numPartitions);
+  }
+
+  void repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartitionBy(src, numPartitions);
+    }
+    ifaces_[i]->repartitionBy(src, numPartitions);
   }
 
   void flatMapValues(const  ::ignis::rpc::ISource& src) {
@@ -4284,11 +4807,11 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   void sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   int32_t send_sortBy3(const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions);
   void recv_sortBy3(const int32_t seqid);
-  void union_(const std::string& other);
-  int32_t send_union_(const std::string& other);
+  void union_(const std::string& other, const bool preserveOrder);
+  int32_t send_union_(const std::string& other, const bool preserveOrder);
   void recv_union_(const int32_t seqid);
-  void union2(const std::string& other, const  ::ignis::rpc::ISource& src);
-  int32_t send_union2(const std::string& other, const  ::ignis::rpc::ISource& src);
+  void union2(const std::string& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
+  int32_t send_union2(const std::string& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
   void recv_union2(const int32_t seqid);
   void join(const std::string& other, const int64_t numPartitions);
   int32_t send_join(const std::string& other, const int64_t numPartitions);
@@ -4302,6 +4825,18 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   void distinct2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
   int32_t send_distinct2(const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
   void recv_distinct2(const int32_t seqid);
+  void repartition(const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  int32_t send_repartition(const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  void recv_repartition(const int32_t seqid);
+  void repartitionByRandom(const int64_t numPartitions);
+  int32_t send_repartitionByRandom(const int64_t numPartitions);
+  void recv_repartitionByRandom(const int32_t seqid);
+  void repartitionByHash(const int64_t numPartitions);
+  int32_t send_repartitionByHash(const int64_t numPartitions);
+  void recv_repartitionByHash(const int32_t seqid);
+  void repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  int32_t send_repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void recv_repartitionBy(const int32_t seqid);
   void flatMapValues(const  ::ignis::rpc::ISource& src);
   int32_t send_flatMapValues(const  ::ignis::rpc::ISource& src);
   void recv_flatMapValues(const int32_t seqid);

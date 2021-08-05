@@ -1,6 +1,5 @@
 
 #include "IModule.h"
-#include "ignis/executor/core/IDynamicTypes.h"
 #include "ignis/executor/core/RTTInfo.h"
 #include "ignis/executor/core/exception/ILogicError.h"
 #include "ignis/executor/core/io/IReader.h"
@@ -11,39 +10,37 @@
 using namespace ignis::executor::core;
 using namespace ignis::executor::core::modules;
 
-IModule::IModule(std::shared_ptr<IExecutorData> &executor_data) : executor_data(executor_data) {}
+IModule::IModule(std::shared_ptr<IExecutorData> &executor_data)
+    : executor_data(executor_data), dynamic_types(executor_data->getProperties()) {}
 
 IModule::~IModule() {}
 
 std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromPartition() {
-    IGNIS_LOG(info) << "Cheeking partition type";
+    IGNIS_LOG(info) << "Module: Cheeking partition type";
     auto type = executor_data->getPartitions<int>(true)->elemType();
     if (type.isVoid()) {
         auto voidParts = executor_data->getPartitions<int>(true);
         std::string typeName;
-        IGNIS_LOG(warning) << "Forced to search type in binary objects, it must be slow in some case, "
+        IGNIS_LOG(warning) << "Module: Forced to search type in binary objects, it must be slow in some case, "
                               "use src parameter in function to avoid";
         for (auto part : *voidParts) {
             if (part->size() > 0) {
                 auto &voidPart = reinterpret_cast<storage::IVoidPartition &>(*part);
                 auto transport = voidPart.readTransport();
-                typeName = IDynamicTypes::typeFromBytes(transport);
+                typeName = dynamic_types.typeFromBytes(transport);
                 break;
             }
         }
         auto type = executor_data->getType(typeName);
         if (type) { return type; }
-        IGNIS_LOG(warning) << "Type found but it is not compiled, now the executor tries to compile it. "
+        IGNIS_LOG(warning) << "Module:  Type found but it is not compiled, now the executor tries to compile it. "
                               "The compilation process must be slow in some case, "
                               "the result will be stored in the job folder. "
                               "Use src parameter in function to avoid";
 
-        auto folder = executor_data->getProperties().jobDirectory() + "/cpptypes";
-        executor_data->getPartitionTools().createDirectoryIfNotExists(folder);
-
         if (!typeName.empty()) {
-            auto lib = IDynamicTypes::compiler(typeName, folder);
-            IGNIS_LOG(info) << "Compilation successful, use '" + lib +
+            auto lib = dynamic_types.compileType(typeName);
+            IGNIS_LOG(info) << "Module: Compilation successful, use '" + lib +
                                        "' as src parameter in function to avoid future recompilation";
             rpc::ISource source;
             source.obj.__set_name(lib);
@@ -67,7 +64,7 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
             RTTInfo::from<double>().getStandardName(),     //I_DOUBLE = 0x6,
             RTTInfo::from<std::string>().getStandardName(),//I_STRING = 0x7,
     };
-    IGNIS_LOG(info) << "Cheeking incoming partition type";
+    IGNIS_LOG(info) << "Module: Cheeking partition type";
     std::string type_name = "";
     try {
         auto buffer = std::make_shared<transport::IMemoryBuffer>((uint8_t *) const_cast<char *>(header.c_str()),
@@ -92,9 +89,9 @@ std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFro
     } catch (std::exception &ex) { IGNIS_LOG(warning) << "exception: " << ex.what(); }
 
     if (type_name.empty()) {
-        throw exception::ILogicError("Incoming partition type not found or is too complex.");
+        throw exception::ILogicError("Module: Incoming partition type not found or is too complex.");
     } else {
-        IGNIS_LOG(info) << "Partition type found: " << type_name;
+        IGNIS_LOG(info) << "Module: Partition type found: " << type_name;
     }
 
     return typeFromName(type_name);
@@ -120,7 +117,8 @@ std::shared_ptr<selector::ITypeSelector> IModule::typeFromSource(const ignis::rp
     if (lib->args.empty()) { throw exception::ILogicError("Function " + name + " has not type to use"); }
     auto type = lib->args[0];
     if (lib->args.size() > 1) {
-        IGNIS_LOG(warning) << "Function " << name << " has more than one type, using" << type->info().getStandardName();
+        IGNIS_LOG(warning) << "Module: Function " << name << " has more than one type, using"
+                           << type->info().getStandardName();
     }
     lib->loadClass(executor_data->getContext());
     return type;

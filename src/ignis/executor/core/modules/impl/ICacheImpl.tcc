@@ -126,3 +126,5 @@ void ICacheImplClass::loadFromDisk(const std::vector<std::string> &groupInfo) {
     _cache[id] = std::static_pointer_cast<void>(group);
     IGNIS_CATCH()
 }
+
+#undef ICacheImplClass

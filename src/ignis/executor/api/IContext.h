@@ -18,7 +18,7 @@ namespace ignis {
             public:
                 IContext();
 
-                int cores();
+                int threads();
 
                 int executors();
 

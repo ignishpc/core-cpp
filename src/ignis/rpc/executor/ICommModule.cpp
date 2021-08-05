@@ -3687,218 +3687,11 @@ uint32_t ICommModule_driverScatter3_presult::read(::apache::thrift::protocol::TP
 }
 
 
-ICommModule_enableMultithreading_args::~ICommModule_enableMultithreading_args() noexcept {
+ICommModule_importData_args::~ICommModule_importData_args() noexcept {
 }
 
 
-uint32_t ICommModule_enableMultithreading_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->group);
-          this->__isset.group = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t ICommModule_enableMultithreading_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("ICommModule_enableMultithreading_args");
-
-  xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->group);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-ICommModule_enableMultithreading_pargs::~ICommModule_enableMultithreading_pargs() noexcept {
-}
-
-
-uint32_t ICommModule_enableMultithreading_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("ICommModule_enableMultithreading_pargs");
-
-  xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->group)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-ICommModule_enableMultithreading_result::~ICommModule_enableMultithreading_result() noexcept {
-}
-
-
-uint32_t ICommModule_enableMultithreading_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->success);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t ICommModule_enableMultithreading_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("ICommModule_enableMultithreading_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_I32, 0);
-    xfer += oprot->writeI32(this->success);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-ICommModule_enableMultithreading_presult::~ICommModule_enableMultithreading_presult() noexcept {
-}
-
-
-uint32_t ICommModule_enableMultithreading_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32((*(this->success)));
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-ICommModule_send_args::~ICommModule_send_args() noexcept {
-}
-
-
-uint32_t ICommModule_send_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t ICommModule_importData_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -3928,260 +3721,17 @@ uint32_t ICommModule_send_args::read(::apache::thrift::protocol::TProtocol* ipro
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->partition);
-          this->__isset.partition = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->dest);
-          this->__isset.dest = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->thread);
-          this->__isset.thread = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t ICommModule_send_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("ICommModule_send_args");
-
-  xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString(this->group);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("partition", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->partition);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("dest", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64(this->dest);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("thread", ::apache::thrift::protocol::T_I32, 4);
-  xfer += oprot->writeI32(this->thread);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-ICommModule_send_pargs::~ICommModule_send_pargs() noexcept {
-}
-
-
-uint32_t ICommModule_send_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("ICommModule_send_pargs");
-
-  xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
-  xfer += oprot->writeString((*(this->group)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("partition", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->partition)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("dest", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64((*(this->dest)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("thread", ::apache::thrift::protocol::T_I32, 4);
-  xfer += oprot->writeI32((*(this->thread)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-ICommModule_send_result::~ICommModule_send_result() noexcept {
-}
-
-
-uint32_t ICommModule_send_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t ICommModule_send_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("ICommModule_send_result");
-
-  if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-ICommModule_send_presult::~ICommModule_send_presult() noexcept {
-}
-
-
-uint32_t ICommModule_send_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-ICommModule_recv_args::~ICommModule_recv_args() noexcept {
-}
-
-
-uint32_t ICommModule_recv_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->group);
-          this->__isset.group = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->partition);
-          this->__isset.partition = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->source);
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->source);
           this->__isset.source = true;
         } else {
           xfer += iprot->skip(ftype);
         }
         break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->thread);
-          this->__isset.thread = true;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->threads);
+          this->__isset.threads = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -4198,25 +3748,21 @@ uint32_t ICommModule_recv_args::read(::apache::thrift::protocol::TProtocol* ipro
   return xfer;
 }
 
-uint32_t ICommModule_recv_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t ICommModule_importData_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("ICommModule_recv_args");
+  xfer += oprot->writeStructBegin("ICommModule_importData_args");
 
   xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString(this->group);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("partition", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64(this->partition);
+  xfer += oprot->writeFieldBegin("source", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->source);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("source", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64(this->source);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("thread", ::apache::thrift::protocol::T_I32, 4);
-  xfer += oprot->writeI32(this->thread);
+  xfer += oprot->writeFieldBegin("threads", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->threads);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -4225,29 +3771,25 @@ uint32_t ICommModule_recv_args::write(::apache::thrift::protocol::TProtocol* opr
 }
 
 
-ICommModule_recv_pargs::~ICommModule_recv_pargs() noexcept {
+ICommModule_importData_pargs::~ICommModule_importData_pargs() noexcept {
 }
 
 
-uint32_t ICommModule_recv_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t ICommModule_importData_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("ICommModule_recv_pargs");
+  xfer += oprot->writeStructBegin("ICommModule_importData_pargs");
 
   xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->group)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("partition", ::apache::thrift::protocol::T_I64, 2);
-  xfer += oprot->writeI64((*(this->partition)));
+  xfer += oprot->writeFieldBegin("source", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->source)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("source", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64((*(this->source)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("thread", ::apache::thrift::protocol::T_I32, 4);
-  xfer += oprot->writeI32((*(this->thread)));
+  xfer += oprot->writeFieldBegin("threads", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64((*(this->threads)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -4256,11 +3798,11 @@ uint32_t ICommModule_recv_pargs::write(::apache::thrift::protocol::TProtocol* op
 }
 
 
-ICommModule_recv_result::~ICommModule_recv_result() noexcept {
+ICommModule_importData_result::~ICommModule_importData_result() noexcept {
 }
 
 
-uint32_t ICommModule_recv_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t ICommModule_importData_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4301,11 +3843,11 @@ uint32_t ICommModule_recv_result::read(::apache::thrift::protocol::TProtocol* ip
   return xfer;
 }
 
-uint32_t ICommModule_recv_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t ICommModule_importData_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("ICommModule_recv_result");
+  xfer += oprot->writeStructBegin("ICommModule_importData_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -4318,11 +3860,246 @@ uint32_t ICommModule_recv_result::write(::apache::thrift::protocol::TProtocol* o
 }
 
 
-ICommModule_recv_presult::~ICommModule_recv_presult() noexcept {
+ICommModule_importData_presult::~ICommModule_importData_presult() noexcept {
 }
 
 
-uint32_t ICommModule_recv_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t ICommModule_importData_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+ICommModule_importData4_args::~ICommModule_importData4_args() noexcept {
+}
+
+
+uint32_t ICommModule_importData4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->group);
+          this->__isset.group = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_BOOL) {
+          xfer += iprot->readBool(this->source);
+          this->__isset.source = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I64) {
+          xfer += iprot->readI64(this->threads);
+          this->__isset.threads = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 4:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ICommModule_importData4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ICommModule_importData4_args");
+
+  xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString(this->group);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("source", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool(this->source);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("threads", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64(this->threads);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_importData4_pargs::~ICommModule_importData4_pargs() noexcept {
+}
+
+
+uint32_t ICommModule_importData4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("ICommModule_importData4_pargs");
+
+  xfer += oprot->writeFieldBegin("group", ::apache::thrift::protocol::T_STRING, 1);
+  xfer += oprot->writeString((*(this->group)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("source", ::apache::thrift::protocol::T_BOOL, 2);
+  xfer += oprot->writeBool((*(this->source)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("threads", ::apache::thrift::protocol::T_I64, 3);
+  xfer += oprot->writeI64((*(this->threads)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_importData4_result::~ICommModule_importData4_result() noexcept {
+}
+
+
+uint32_t ICommModule_importData4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t ICommModule_importData4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("ICommModule_importData4_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+ICommModule_importData4_presult::~ICommModule_importData4_presult() noexcept {
+}
+
+
+uint32_t ICommModule_importData4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -5403,19 +5180,21 @@ void ICommModuleClient::recv_driverScatter3()
   return;
 }
 
-int32_t ICommModuleClient::enableMultithreading(const std::string& group)
+void ICommModuleClient::importData(const std::string& group, const bool source, const int64_t threads)
 {
-  send_enableMultithreading(group);
-  return recv_enableMultithreading();
+  send_importData(group, source, threads);
+  recv_importData();
 }
 
-void ICommModuleClient::send_enableMultithreading(const std::string& group)
+void ICommModuleClient::send_importData(const std::string& group, const bool source, const int64_t threads)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("enableMultithreading", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("importData", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  ICommModule_enableMultithreading_pargs args;
+  ICommModule_importData_pargs args;
   args.group = &group;
+  args.source = &source;
+  args.threads = &threads;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -5423,7 +5202,7 @@ void ICommModuleClient::send_enableMultithreading(const std::string& group)
   oprot_->getTransport()->flush();
 }
 
-int32_t ICommModuleClient::recv_enableMultithreading()
+void ICommModuleClient::recv_importData()
 {
 
   int32_t rseqid = 0;
@@ -5443,76 +5222,12 @@ int32_t ICommModuleClient::recv_enableMultithreading()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("enableMultithreading") != 0) {
+  if (fname.compare("importData") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  int32_t _return;
-  ICommModule_enableMultithreading_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    return _return;
-  }
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "enableMultithreading failed: unknown result");
-}
-
-void ICommModuleClient::send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread)
-{
-  send_send(group, partition, dest, thread);
-  recv_send();
-}
-
-void ICommModuleClient::send_send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("send", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  ICommModule_send_pargs args;
-  args.group = &group;
-  args.partition = &partition;
-  args.dest = &dest;
-  args.thread = &thread;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void ICommModuleClient::recv_send()
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("send") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  ICommModule_send_presult result;
+  ICommModule_importData_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -5523,22 +5238,22 @@ void ICommModuleClient::recv_send()
   return;
 }
 
-void ICommModuleClient::recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread)
+void ICommModuleClient::importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src)
 {
-  send_recv(group, partition, source, thread);
-  recv_recv();
+  send_importData4(group, source, threads, src);
+  recv_importData4();
 }
 
-void ICommModuleClient::send_recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread)
+void ICommModuleClient::send_importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("recv", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("importData4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  ICommModule_recv_pargs args;
+  ICommModule_importData4_pargs args;
   args.group = &group;
-  args.partition = &partition;
   args.source = &source;
-  args.thread = &thread;
+  args.threads = &threads;
+  args.src = &src;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -5546,7 +5261,7 @@ void ICommModuleClient::send_recv(const std::string& group, const int64_t partit
   oprot_->getTransport()->flush();
 }
 
-void ICommModuleClient::recv_recv()
+void ICommModuleClient::recv_importData4()
 {
 
   int32_t rseqid = 0;
@@ -5566,12 +5281,12 @@ void ICommModuleClient::recv_recv()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("recv") != 0) {
+  if (fname.compare("importData4") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  ICommModule_recv_presult result;
+  ICommModule_importData4_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -6614,41 +6329,40 @@ void ICommModuleProcessor::process_driverScatter3(int32_t seqid, ::apache::thrif
   }
 }
 
-void ICommModuleProcessor::process_enableMultithreading(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void ICommModuleProcessor::process_importData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("ICommModule.enableMultithreading", callContext);
+    ctx = this->eventHandler_->getContext("ICommModule.importData", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ICommModule.enableMultithreading");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ICommModule.importData");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "ICommModule.enableMultithreading");
+    this->eventHandler_->preRead(ctx, "ICommModule.importData");
   }
 
-  ICommModule_enableMultithreading_args args;
+  ICommModule_importData_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "ICommModule.enableMultithreading", bytes);
+    this->eventHandler_->postRead(ctx, "ICommModule.importData", bytes);
   }
 
-  ICommModule_enableMultithreading_result result;
+  ICommModule_importData_result result;
   try {
-    result.success = iface_->enableMultithreading(args.group);
-    result.__isset.success = true;
+    iface_->importData(args.group, args.source, args.threads);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "ICommModule.enableMultithreading");
+      this->eventHandler_->handlerError(ctx, "ICommModule.importData");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("enableMultithreading", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("importData", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -6657,54 +6371,54 @@ void ICommModuleProcessor::process_enableMultithreading(int32_t seqid, ::apache:
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "ICommModule.enableMultithreading");
+    this->eventHandler_->preWrite(ctx, "ICommModule.importData");
   }
 
-  oprot->writeMessageBegin("enableMultithreading", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("importData", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "ICommModule.enableMultithreading", bytes);
+    this->eventHandler_->postWrite(ctx, "ICommModule.importData", bytes);
   }
 }
 
-void ICommModuleProcessor::process_send(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void ICommModuleProcessor::process_importData4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("ICommModule.send", callContext);
+    ctx = this->eventHandler_->getContext("ICommModule.importData4", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ICommModule.send");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ICommModule.importData4");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "ICommModule.send");
+    this->eventHandler_->preRead(ctx, "ICommModule.importData4");
   }
 
-  ICommModule_send_args args;
+  ICommModule_importData4_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "ICommModule.send", bytes);
+    this->eventHandler_->postRead(ctx, "ICommModule.importData4", bytes);
   }
 
-  ICommModule_send_result result;
+  ICommModule_importData4_result result;
   try {
-    iface_->send(args.group, args.partition, args.dest, args.thread);
+    iface_->importData4(args.group, args.source, args.threads, args.src);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "ICommModule.send");
+      this->eventHandler_->handlerError(ctx, "ICommModule.importData4");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("send", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("importData4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -6713,73 +6427,17 @@ void ICommModuleProcessor::process_send(int32_t seqid, ::apache::thrift::protoco
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "ICommModule.send");
+    this->eventHandler_->preWrite(ctx, "ICommModule.importData4");
   }
 
-  oprot->writeMessageBegin("send", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("importData4", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "ICommModule.send", bytes);
-  }
-}
-
-void ICommModuleProcessor::process_recv(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = nullptr;
-  if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("ICommModule.recv", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "ICommModule.recv");
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "ICommModule.recv");
-  }
-
-  ICommModule_recv_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "ICommModule.recv", bytes);
-  }
-
-  ICommModule_recv_result result;
-  try {
-    iface_->recv(args.group, args.partition, args.source, args.thread);
-  } catch ( ::ignis::rpc::IExecutorException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "ICommModule.recv");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("recv", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "ICommModule.recv");
-  }
-
-  oprot->writeMessageBegin("recv", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "ICommModule.recv", bytes);
+    this->eventHandler_->postWrite(ctx, "ICommModule.importData4", bytes);
   }
 }
 
@@ -8303,20 +7961,22 @@ void ICommModuleConcurrentClient::recv_driverScatter3(const int32_t seqid)
   } // end while(true)
 }
 
-int32_t ICommModuleConcurrentClient::enableMultithreading(const std::string& group)
+void ICommModuleConcurrentClient::importData(const std::string& group, const bool source, const int64_t threads)
 {
-  int32_t seqid = send_enableMultithreading(group);
-  return recv_enableMultithreading(seqid);
+  int32_t seqid = send_importData(group, source, threads);
+  recv_importData(seqid);
 }
 
-int32_t ICommModuleConcurrentClient::send_enableMultithreading(const std::string& group)
+int32_t ICommModuleConcurrentClient::send_importData(const std::string& group, const bool source, const int64_t threads)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("enableMultithreading", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("importData", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  ICommModule_enableMultithreading_pargs args;
+  ICommModule_importData_pargs args;
   args.group = &group;
+  args.source = &source;
+  args.threads = &threads;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -8327,7 +7987,7 @@ int32_t ICommModuleConcurrentClient::send_enableMultithreading(const std::string
   return cseqid;
 }
 
-int32_t ICommModuleConcurrentClient::recv_enableMultithreading(const int32_t seqid)
+void ICommModuleConcurrentClient::recv_importData(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -8356,7 +8016,7 @@ int32_t ICommModuleConcurrentClient::recv_enableMultithreading(const int32_t seq
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("enableMultithreading") != 0) {
+      if (fname.compare("importData") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -8365,98 +8025,7 @@ int32_t ICommModuleConcurrentClient::recv_enableMultithreading(const int32_t seq
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      int32_t _return;
-      ICommModule_enableMultithreading_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        sentry.commit();
-        return _return;
-      }
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "enableMultithreading failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void ICommModuleConcurrentClient::send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread)
-{
-  int32_t seqid = send_send(group, partition, dest, thread);
-  recv_send(seqid);
-}
-
-int32_t ICommModuleConcurrentClient::send_send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("send", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  ICommModule_send_pargs args;
-  args.group = &group;
-  args.partition = &partition;
-  args.dest = &dest;
-  args.thread = &thread;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void ICommModuleConcurrentClient::recv_send(const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("send") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      ICommModule_send_presult result;
+      ICommModule_importData_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -8476,23 +8045,23 @@ void ICommModuleConcurrentClient::recv_send(const int32_t seqid)
   } // end while(true)
 }
 
-void ICommModuleConcurrentClient::recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread)
+void ICommModuleConcurrentClient::importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_recv(group, partition, source, thread);
-  recv_recv(seqid);
+  int32_t seqid = send_importData4(group, source, threads, src);
+  recv_importData4(seqid);
 }
 
-int32_t ICommModuleConcurrentClient::send_recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread)
+int32_t ICommModuleConcurrentClient::send_importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("recv", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("importData4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  ICommModule_recv_pargs args;
+  ICommModule_importData4_pargs args;
   args.group = &group;
-  args.partition = &partition;
   args.source = &source;
-  args.thread = &thread;
+  args.threads = &threads;
+  args.src = &src;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -8503,7 +8072,7 @@ int32_t ICommModuleConcurrentClient::send_recv(const std::string& group, const i
   return cseqid;
 }
 
-void ICommModuleConcurrentClient::recv_recv(const int32_t seqid)
+void ICommModuleConcurrentClient::recv_importData4(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -8532,7 +8101,7 @@ void ICommModuleConcurrentClient::recv_recv(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("recv") != 0) {
+      if (fname.compare("importData4") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -8541,7 +8110,7 @@ void ICommModuleConcurrentClient::recv_recv(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      ICommModule_recv_presult result;
+      ICommModule_importData4_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

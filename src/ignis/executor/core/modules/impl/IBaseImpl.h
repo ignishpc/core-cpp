@@ -30,6 +30,13 @@ namespace ignis {
 
                     protected:
                         std::shared_ptr<IExecutorData> executor_data;
+
+                    private:
+                        template<typename Tp>
+                        void exchange_sync(storage::IPartitionGroup<Tp>& in, storage::IPartitionGroup<Tp>& out);
+
+                        template<typename Tp>
+                        void exchange_async(storage::IPartitionGroup<Tp>& in, storage::IPartitionGroup<Tp>& out);
                     };
                 }// namespace impl
             }    // namespace modules

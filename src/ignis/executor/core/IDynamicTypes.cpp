@@ -7,10 +7,10 @@
 #include "ignis/executor/core/transport/IZlibTransport.h"
 #include <algorithm>
 #include <boost/algorithm/string/replace.hpp>
-#include <ghc/filesystem.hpp>
 #include <boost/interprocess/sync/file_lock.hpp>
 #include <boost/interprocess/sync/scoped_lock.hpp>
 #include <fstream>
+#include <ghc/filesystem.hpp>
 #include <iostream>
 #include <memory>
 #include <unordered_map>
@@ -18,6 +18,7 @@
 
 using namespace ignis::executor::core;
 
+IDynamicTypes::IDynamicTypes(IPropertyParser &properties) : properties(properties) {}
 
 std::string IDynamicTypes::typeFromBytes(std::shared_ptr<transport::ITransport> &trans, bool inColl) {
     auto zlib = std::make_shared<transport::IZlibTransport>(trans);
@@ -73,12 +74,21 @@ std::string IDynamicTypes::typeFromBytes(std::shared_ptr<transport::ITransport> 
     return typeName;
 }
 
-std::string IDynamicTypes::compiler(const std::string &type, const std::string &folder) {
-    if (std::system("mpic++ --version") == 0) { throw exception::ILogicError("mpic++ compiler not found in path"); }
+std::string IDynamicTypes::compileType(const std::string &type) {
+    if (std::system("g++ --version") == 0) { throw exception::ILogicError("g++ compiler not found in path"); }
     auto fileName = type;
     boost::replace_all(fileName, "::", ".");
     boost::replace_all(fileName, "<", "(");
     boost::replace_all(fileName, ">", ")");
+    std::string folder = properties.jobDirectory() + "/cpptypes";
+    if (!ghc::filesystem::is_directory(folder)) {
+        std::error_code error;
+        ghc::filesystem::create_directories(folder, error);
+        if (error && !ghc::filesystem::is_directory(folder)) {
+            throw exception::IInvalidArgument("Unable to create directory " + folder + " " + error.message());
+        }
+    }
+
     boost::interprocess::file_lock lock(folder.c_str());
     boost::interprocess::scoped_lock<boost::interprocess::file_lock> slock(lock);
     auto fileSource = folder + "/" + fileName + ".cpp";
@@ -91,18 +101,17 @@ std::string IDynamicTypes::compiler(const std::string &type, const std::string &
                       "#include <ignis/executor/core/io/IReader.h> //include all default headers\n"
                       "#include <ignis/executor/api/IVector.h>\n" +
                       "#include <ignis/executor/api/IJson.h>\n" +
-                      "#include <ignis/executor/api/function/IVoidFunction.h>\n" + "\n" +
-                      "class AutoType : public ignis::executor::api::function::IVoidFunction<" + type + "> {};" + "\n" +
-                      "ignis_export(AutoType, AutoType)" + "\n";
+                      "#include <ignis/executor/api/function/IBeforeFunction.h>\n" + "\n" +
+                      "class AutoType : public ignis::executor::api::function::IBeforeFunction<" + type + "> {};" +
+                      "\n" + "ignis_export(AutoType, AutoType)" + "\n";
 
-    std::ofstream file(fileSource, std::ifstream::out | std::ifstream::binary | std::fstream::trunc);
-    file << sourceCode;
-    file.close();
+    std::ofstream(fileSource, std::ifstream::out | std::ifstream::binary | std::fstream::trunc) << sourceCode;
+    std::string headers = std::string(std::getenv("IGNIS_HOME")) + "/core/cpp/include";
+    std::string cmd = "g++ -I " + headers + " -g -O3 -shared -fPIC -o " + fileLibrary + " " + fileSource;
 
-
-    int error = std::system(("mpic++ -O3 -shared -fPIC -o -ligniscore" + fileLibrary + " " + fileSource).c_str());
+    int error = std::system(cmd.c_str());
     if (error != 0) {
-        throw exception::ILogicError("mpic++ exited with exit value " + std::to_string(error) + " " + fileSource);
+        throw exception::ILogicError("g++ exited with exit value " + std::to_string(error) + " " + fileSource);
     }
 
     return libraryName;

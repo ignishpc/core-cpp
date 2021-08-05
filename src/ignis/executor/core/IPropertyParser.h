@@ -40,6 +40,8 @@ namespace ignis {
 
                 std::string partitionType() { return getString("ignis.partition.type"); }
 
+                std::string exchangeType() { return getString("ignis.modules.exchange.type"); }
+
                 std::string jobDirectory() { return getString("ignis.job.directory"); }
 
                 std::string executorDirectory() { return getString("ignis.executor.directory"); }

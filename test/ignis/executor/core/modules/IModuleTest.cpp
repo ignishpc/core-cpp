@@ -12,6 +12,7 @@ IModuleTest::IModuleTest()
     props["ignis.transport.compression"] = "6";
     props["ignis.partition.compression"] = "6";
     props["ignis.partition.serialization"] = "native";
+    props["ignis.modules.exchange.type"] = "sync";
     props["ignis.transport.cores"] = "0";
     props["ignis.executor.directory"] = "./";
 }

@@ -4,11 +4,11 @@
 using namespace ignis::executor::core::modules;
 
 IMathModule::IMathModule(std::shared_ptr<IExecutorData> &executorData)
-    : IModule(executorData), math_impl(executorData), sort_impl(executorData) {}
+    : IModule(executorData), math_impl(executorData), sort_impl(executorData) , reduce_impl(executorData){}
 
 IMathModule::~IMathModule() {}
 
-void IMathModule::sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed) {
+void IMathModule::sample(const bool withReplacement, const std::vector<int64_t> &num, const int32_t seed) {
     IGNIS_RPC_TRY()
     typeFromPartition()->sample(math_impl, withReplacement, num, seed);
     IGNIS_RPC_CATCH()
@@ -47,7 +47,10 @@ void IMathModule::min1(const rpc::ISource &cmp) {
 void IMathModule::sampleByKey(const bool withReplacement, const rpc::ISource &fractions, const int32_t seed) {
     IGNIS_RPC_TRY()
     executor_data->loadParameters(fractions);
-    typeFromPartition()->sampleByKey(math_impl, withReplacement, seed);
+    auto selector = typeFromPartition();
+    int64_t numPartitions = selector->sampleByKeyFilter(math_impl);
+    selector->groupByKey(reduce_impl, numPartitions);
+    selector->sampleByKey(math_impl, withReplacement, seed);
     IGNIS_RPC_CATCH()
 }
 

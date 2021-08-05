@@ -87,21 +87,43 @@ void IMpi::driverScatterVoid(const MPI::Intracomm &group,
     }
 }
 
+IMpi::MsgOpt IMpi::getMsgOpt(const MPI::Intracomm &group, const std::string &ptype, bool send, int other, int tag){
+    auto id = group.Get_rank();
+    int source = send ? id : other;
+    int dest = send ? other : id;
+    MsgOpt opt;
+
+    if (id == source) {
+        int8_t protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
+        std::string storage = ptype;
+        int length = storage.length();
+        group.Send(&protocol, 1, MPI::BYTE, dest, tag);
+        group.Recv(&opt.same_protocol, 1, MPI::BOOL, dest, tag);
+        group.Send(&length, 1, MPI::INT, dest, tag);
+        group.Send(const_cast<char *>(storage.c_str()), length, MPI::BYTE, dest, tag);
+        group.Recv(&opt.same_storage, 1, MPI::BOOL, dest, tag);
+    } else {
+        int8_t protocol;
+        std::string storage;
+        int length;
+        group.Recv(&protocol, 1, MPI::BYTE, source, tag);
+        opt.same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
+        group.Send(&opt.same_protocol, 1, MPI::BOOL, source, tag);
+        group.Recv(&length, 1, MPI::INT, source, tag);
+        storage.resize(length);
+        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, source, tag);
+        opt.same_storage = ptype == storage;
+        group.Send(&opt.same_storage, 1, MPI::BOOL, source, tag);
+    }
+    return opt;
+}
+
 void IMpi::recvVoid(const MPI::Intracomm &group, storage::IVoidPartition &part, int source, int tag) {
-    bool same_protocol;
-    bool same_storage;
+    MsgOpt opt = getMsgOpt(group, part.type(), false, source, tag);
+    recvVoid(group, part, source,tag, opt);
+}
 
-    int8_t protocol;
-    std::string storage;
-    int length;
-    group.Recv(&protocol, 1, MPI::BYTE, source, tag);
-    same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
-    group.Send(&same_protocol, 1, MPI::BOOL, source, tag);
-    group.Recv(&length, 1, MPI::INT, source, tag);
-    group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, source, tag);
-    same_storage = part.type() == storage;
-    group.Send(&same_storage, 1, MPI::BOOL, source, tag);
-
+void IMpi::recvVoid(const MPI::Intracomm &group, storage::IVoidPartition &part, int source, int tag, const MsgOpt &o){
     auto buffer = std::make_shared<transport::IMemoryBuffer>(part.bytes());
     int sz;
 

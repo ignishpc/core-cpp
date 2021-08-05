@@ -51,13 +51,9 @@ namespace ignis {
 
                     void driverScatter3(const std::string &group, int64_t partitions, const rpc::ISource &src) override;
 
-                    int32_t enableMultithreading(const std::string& group);
+                    virtual void importData(const std::string& group, const bool source, const int64_t threads) override;
 
-                    void send(const std::string &group, const int64_t partition, const int64_t dest,
-                              const int32_t thread) override;
-
-                    void recv(const std::string &group, const int64_t partition, const int64_t source,
-                              const int32_t thread) override;
+                    virtual void importData4(const std::string& group, const bool source, const int64_t threads, const  rpc::ISource& src) override;
 
                     virtual ~ICommModule();
 

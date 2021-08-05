@@ -88,7 +88,7 @@ namespace ignis {
                     const uint8_t *borrow(uint8_t *buf, uint32_t *len) {
                         if (TDB_LIKELY(static_cast<ptrdiff_t>(*len) <= rBound_ - rBase_)) {
                             // With strict aliasing, writing to len shouldn't force us to
-                            // refetch rBase_ from memory.  TODO(dreiss): Verify this.
+                            // refetch rBase_ from memory.
                             *len = static_cast<uint32_t>(rBound_ - rBase_);
                             return rBase_;
                         }

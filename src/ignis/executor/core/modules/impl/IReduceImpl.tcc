@@ -254,6 +254,7 @@ void IReduceImplClass::aggregateByKey(int64_t numPartitions, bool hashing) {
 
 template<typename Tp, typename Function>
 void IReduceImplClass::foldByKey(int64_t numPartitions, bool localFold) {
+    IGNIS_TRY()
     auto &context = executor_data->getContext();
     Function f;
     f.before(context);
@@ -271,6 +272,180 @@ void IReduceImplClass::foldByKey(int64_t numPartitions, bool localFold) {
         localAggregateByKey<Function, Tp>(f);
     }
     f.after(context);
+    IGNIS_CATCH()
+}
+
+template<typename Tp>
+void IReduceImplClass::union_(const std::string &other, bool preserveOrder) {
+    IGNIS_TRY()
+    auto input = executor_data->getAndDeletePartitions<Tp>();
+    auto input2 = executor_data->getContext().var<decltype(input)>(other);
+    auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+    IGNIS_LOG(info) << "Reduce: union " << input->partitions() << " and " << input2->partitions() << " partitions";
+    std::string storage;
+    if (input->partitions() > 0) {
+        storage = (*input)[0]->type();
+        if (input2->partitions() > 0) {
+            if ((*input)[0]->type() != (*input2)[0]->type()) {
+                for (int64_t i = 0; i < input2->partitions(); i++) {
+                    auto new_part = executor_data->getPartitionTools().newPartition<Tp>((*input)[0]->type());
+                    (*input2)[i]->copyTo(*new_part);
+                    (*input2)[i] = new_part;
+                }
+            }
+        }
+    } else {
+        storage = executor_data->getProperties().partitionType();
+    }
+    if (preserveOrder) {
+        IGNIS_LOG(info) << "Reduce: union using order mode";
+        int64_t executors = executor_data->getContext().executors();
+        int64_t rank = executor_data->getContext().executorId();
+        int64_t count = input->partitions();
+        int64_t global_count = 0;
+        int64_t offset = 0;
+        std::vector<int64_t> exec_counts(executors);
+        int64_t count2 = input2->partitions();
+        int64_t global_count2 = 0;
+        int64_t offset2 = 0;
+        std::vector<int64_t> exec_counts2(executors);
+        executor_data->mpi().native().Allgather(&count, 1, MPI::LONG_LONG, &exec_counts[0], 1, MPI::LONG_LONG);
+        executor_data->mpi().native().Allgather(&count2, 1, MPI::LONG_LONG, &exec_counts2[0], 1, MPI::LONG_LONG);
+
+        for (int64_t i = 0; i < executors; i++) {
+            if (i == rank) {
+                offset = global_count;
+                offset2 = global_count2;
+            }
+            global_count += exec_counts[i];
+            global_count2 += exec_counts2[i];
+        }
+        auto tmp = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+        auto create = [&](int64_t n) {
+            for (int64_t i = 0; i < n; i++) { tmp->add(executor_data->getPartitionTools().newPartition<Tp>(storage)); }
+        };
+
+        create(offset);
+        for (auto part : *input) { tmp->add(part); }
+        create(global_count - tmp->partitions());
+        create(offset2);
+        for (auto part : *input2) { tmp->add(part); }
+        create(global_count + global_count2 - tmp->partitions());
+        exchange(*tmp, *output);
+    } else {
+        IGNIS_LOG(info) << "Reduce: union using fast mode";
+        for (auto part : *input) { output->add(part); }
+        for (auto part : *input2) { output->add(part); }
+    }
+
+    executor_data->setPartitions(output);
+    IGNIS_CATCH()
+}
+
+template<typename Tp>
+void IReduceImplClass::join(const std::string &other, int64_t numPartitions) {
+    IGNIS_TRY()
+    IGNIS_LOG(info) << "Reduce: preparing first partitions";
+    keyHashing<Tp>(numPartitions);
+    keyExchanging<Tp>();
+    auto input = executor_data->getAndDeletePartitions<Tp>();
+
+    IGNIS_LOG(info) << "Reduce: preparing second partitions";
+    executor_data->setPartitions(executor_data->getContext().var<decltype(input)>(other));
+    keyHashing<Tp>(numPartitions);
+    keyExchanging<Tp>();
+    auto input2 = executor_data->getAndDeletePartitions<Tp>();
+
+    IGNIS_LOG(info) << "Reduce: joining key elements";
+    typedef std::pair<typename Tp::second_type, typename Tp::second_type> Value_Type;
+    typedef std::pair<typename Tp::first_type, Value_Type> Return_Type;
+    auto output = executor_data->getPartitionTools().newPartitionGroup<Return_Type>(numPartitions);
+
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+        std::unordered_map<typename Tp::first_type, std::vector<typename Tp::second_type>> acum;
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto reader = (*input)[p]->readIterator();
+            while (reader->hasNext()) {
+                auto &elem = reader->next();
+                acum[elem.first].push_back(elem.second);
+            }
+
+            reader = (*input2)[p]->readIterator();
+            while (reader->hasNext()) {
+                auto &elem = reader->next();
+                auto it = acum.find(elem.first);
+                if (it != acum.end()) {
+                    for (const auto &value : it->second) {
+                        writer->write(Return_Type(it->first, Value_Type(value, elem.second)));
+                    }
+                }
+            }
+            acum.clear();
+        }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+
+    executor_data->setPartitions(output);
+    IGNIS_CATCH()
+}
+
+template<typename Tp>
+void IReduceImplClass::distinct(int64_t numPartitions) {
+    IGNIS_TRY()
+    auto input = executor_data->getPartitions<Tp>();
+    IGNIS_LOG(info) << "Reduce: distinct " << numPartitions << " partitions";
+    auto tmp = executor_data->getPartitionTools().newPartitionGroup<Tp>(numPartitions);
+    const bool in_men = executor_data->getPartitionTools().isMemory(*input) &&
+                        executor_data->getPartitionTools().isMemory(*tmp) && !input->cache();
+    const std::hash<Tp> hash;
+    IGNIS_LOG(info) << "Reduce: creating " << numPartitions << " new partitions with hashing";
+
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+        auto thread_ranges = executor_data->getPartitionTools().newPartitionGroup<Tp>(tmp->partitions());
+        std::vector<std::shared_ptr<api::IWriteIterator<Tp>>> writers;
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) {
+            writers.push_back((*thread_ranges)[p]->writeIterator());
+        }
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto reader = (*input)[p]->readIterator();
+            if (in_men) {
+                auto &men_reader = executor_data->getPartitionTools().toMemory(*reader);
+                while (men_reader.hasNext()) {
+                    auto &elem = men_reader.next();
+                    static_cast<storage::IMemoryWriteIterator<Tp> &>(*writers[hash(elem) % numPartitions])
+                            .write(std::move(elem));
+                }
+
+            } else {
+                while (reader->hasNext()) {
+                    auto &elem = reader->next();
+                    writers[hash(elem) % numPartitions]->write(elem);
+                }
+            }
+            (*input)[p]->clear();
+        }
+#pragma omp critical
+        for (int64_t p = 0; p < thread_ranges->partitions(); p++) { (*thread_ranges)[p]->moveTo(*((*tmp)[p])); }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>(numPartitions);
+
+    distinctFilter<Tp>(*tmp);
+    exchange(*tmp, *output);
+    distinctFilter<Tp>(*output);
+    executor_data->setPartitions(output);
+    IGNIS_CATCH()
 }
 
 template<typename Function, typename Tp>
@@ -546,8 +721,7 @@ void IReduceImplClass::keyHashing(int64_t numPartitions) {
             } else {
                 while (reader->hasNext()) {
                     auto &elem = reader->next();
-                    static_cast<storage::IMemoryWriteIterator<Tp> &>(*writers[hash(elem.first) % numPartitions])
-                            .write(std::move(elem));
+                    writers[hash(elem.first) % numPartitions]->write(std::move(elem));
                 }
                 if (!cache) { (*input)[p]->clear(); }
             }
@@ -570,6 +744,48 @@ void IReduceImplClass::keyExchanging() {
     exchange<Tp>(*input, *output);
 
     executor_data->setPartitions(output);
+}
+
+template<typename Tp>
+inline void IReduceImplClass::distinctFilter(storage::IPartitionGroup<Tp> &parts) {
+
+    const bool in_men = executor_data->getPartitionTools().isMemory(parts);
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+        std::unordered_set<Tp> distinct;
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < parts.partitions(); p++) {
+            auto new_part = executor_data->getPartitionTools().newPartition<Tp>();
+            auto writer = new_part->writeIterator();
+            if(in_men){
+                auto &men_part = executor_data->getPartitionTools().toMemory(*parts[p]);
+                for (int64_t i = 0; i < men_part.size(); i++) {
+                    auto &elem = men_part[i];
+                    auto it = distinct.find(elem);
+                    if(it == distinct.end()){
+                        writer->write(elem);
+                    }
+                    distinct.insert(elem);
+                }
+            }else{
+                auto reader = parts[p]->readIterator();
+                while (reader->hasNext()) {
+                    auto &elem = reader->next();
+                    auto it = distinct.find(elem);
+                    if(it == distinct.end()){
+                        writer->write(elem);
+                    }
+                    distinct.insert(elem);
+                }
+            }
+            parts[p] = new_part;
+            distinct.clear();
+        }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
 }
 
 #undef IReduceImplClass

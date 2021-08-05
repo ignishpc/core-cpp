@@ -9,7 +9,7 @@ IContext::IContext() : mpi_thread_group(1, MPI::COMM_WORLD) {}
 
 IContext::~IContext() {}
 
-int IContext::cores() { return omp_get_num_threads(); }
+int IContext::threads() { return omp_get_max_threads(); }
 
 int IContext::executors() { return mpiGroup().Get_size(); }
 

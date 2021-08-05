@@ -7,7 +7,8 @@
 using namespace ignis::executor::core;
 
 IExecutorData::IExecutorData()
-    : properties(context.props()), partition_tools(properties, context), _mpi(properties, partition_tools, context) {}
+    : properties(context.props()), partition_tools(properties, context), _mpi(properties, partition_tools, context),
+      library_loader(properties) {}
 
 bool IExecutorData::hasPartitions() { return (bool) partitions; }
 
@@ -38,9 +39,9 @@ IPartitionTools &IExecutorData::getPartitionTools() { return partition_tools; }
 
 IMpi &IExecutorData::mpi() { return _mpi; }
 
-void IExecutorData::setCores(int cores) { omp_set_num_threads(this->cores = cores); }
+void IExecutorData::setCores(int cores) { omp_set_num_threads(cores); }
 
-int IExecutorData::getCores() { return this->cores; }
+int IExecutorData::getCores() { return omp_get_max_threads(); }
 
 int IExecutorData::getMpiCores() { return context.mpi_thread_group.size(); }
 
@@ -48,26 +49,41 @@ void IExecutorData::enableMpiCores() {
     double ratio = properties.transportCores();
     int64_t mpiCores;
     if (ratio > 1) {
-        mpiCores = std::min(cores, (int) std::ceil(ratio));
+        mpiCores = std::min(getCores(), (int) std::ceil(ratio));
     } else {
-        mpiCores = std::ceil(cores * ratio);
+        mpiCores = std::ceil(getCores() * ratio);
     }
 
     if (mpiCores > 1 && context.mpi_thread_group.size() == 1 && context.executors() > 1) {
-        context.mpi_thread_group[0].Set_name("ignis_thread_0");
-        IGNIS_LOG(info) << "Duplicating mpi group for " << mpiCores << " threads";
-        for (int i = 1; i < mpiCores; i++) {
-            context.mpi_thread_group.push_back(context.mpi_thread_group[i - 1].Dup());
-            context.mpi_thread_group.back().Set_name(("ignis_thread_" + std::to_string(i)).c_str());
-            IGNIS_LOG(info) << "mpi group " << context.mpi_thread_group.size() << " ready";
-        }
+        context.mpi_thread_group = duplicate(context.mpi_thread_group[0], mpiCores);
     }
 }
 
+std::vector<MPI::Intracomm> IExecutorData::duplicate(const MPI::Intracomm &comm, int64_t threads) {
+    std::vector<MPI::Intracomm> result;
+    result.push_back(comm);
+    if (threads == 1) { return result; };
+    result.back().Set_name("ignis_thread_0");
+    IGNIS_LOG(info) << "Duplicating mpi group for " << threads << " threads";
+    for (int64_t i = 1; i < threads; i++) {
+        result.push_back(result.back().Dup());
+        result.back().Set_name(("ignis_thread_" + std::to_string(i)).c_str());
+        IGNIS_LOG(info) << "mpi group " << i << " ready";
+    }
+    return result;
+}
+
 void IExecutorData::setMpiGroup(const MPI::Intracomm &group) {
-    for (int i = 1; i < context.mpi_thread_group.size(); i++) { context.mpi_thread_group[i].Free(); }
     context.mpi_thread_group.clear();
     context.mpi_thread_group.push_back(group);
+}
+
+void IExecutorData::destroyMpiGroup() {
+    for (auto comm : context.mpi_thread_group) {
+        if (comm != MPI::COMM_WORLD) { comm.Free(); }
+    }
+    context.mpi_thread_group.clear();
+    setMpiGroup(MPI::COMM_WORLD);
 }
 
 std::vector<std::string> IExecutorData::loadLibraryFunctions(const std::string &path) {

@@ -9,6 +9,7 @@
 #include "ignis/executor/core/modules/impl/IIOImpl.h"
 #include "ignis/executor/core/modules/impl/IPipeImpl.h"
 #include "ignis/executor/core/modules/impl/ISortImpl.h"
+#include <ignis/executor/core/modules/impl/IRepartitionImpl.h>
 
 namespace ignis {
     namespace executor {
@@ -40,6 +41,8 @@ namespace ignis {
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
                     virtual void sortBy(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
+
+                    virtual void repartitionBy(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
                 };
 
 
@@ -80,6 +83,10 @@ namespace ignis {
                         sortBy_check<Tp>(impl, nullptr, ascending, numPartitions);
                     }
 
+                    virtual void repartitionBy(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
+                        repartitionBy_check<Tp>(impl, nullptr, numPartitions);
+                    }
+
                 private:
                     template<typename Function>
                     void loadClass_check(api::IContext &context, decltype(&Function::before) *val) {
@@ -93,7 +100,8 @@ namespace ignis {
 
                     template<typename Function>
                     void executeTo_check(modules::impl::IPipeImpl &impl, typename Function::_IFunction0_type *val) {
-                        executeTo_check(impl, (Function *) nullptr, (typename Function::_IFunction0_type::_R_type *) nullptr);
+                        executeTo_check(impl, (Function *) nullptr,
+                                        (typename Function::_IFunction0_type::_R_type *) nullptr);
                     }
 
                     template<typename Function, typename Rv>
@@ -264,6 +272,29 @@ namespace ignis {
                     void sortBy_check(...) {
                         throw exception::ICompatibilyException("sortBy", RTTInfo::from<Function>());
                     }
+
+                    template<typename Function>
+                    void repartitionBy_check(modules::impl::IRepartitionImpl &impl, typename Function::_IFunction_type *val, int64_t numPartitions) {
+                        repartitionBy_check<Function>(impl, val, (typename Function::_R_type *) nullptr, numPartitions);
+                    }
+
+                    template<typename Function>
+                    void repartitionBy_check(modules::impl::IRepartitionImpl &impl, typename Function::_IFunction_type *val,
+                                             int64_t *val2, int64_t numPartitions) {
+                        impl.repartitionBy<Function>(numPartitions);
+                    }
+
+                    template<typename Function>
+                    void repartitionBy_check(modules::impl::IRepartitionImpl &impl, typename Function::_IFunction_type *val,
+                                             int32_t *val2, int64_t numPartitions) {
+                        impl.repartitionBy<Function>(numPartitions);
+                    }
+
+                    template<typename Function>
+                    void repartitionBy_check(...) {
+                        throw exception::ICompatibilyException("repartitionBy", RTTInfo::from<Function>());
+                    }
+
                 };
             }// namespace selector
         }    // namespace core

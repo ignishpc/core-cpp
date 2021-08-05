@@ -39,8 +39,7 @@ namespace ignis {
                 inline std::shared_ptr<storage::IMemoryPartition<Tp>> newMemoryPartition(int64_t elems = 1000);
 
                 template<typename Tp>
-                inline std::shared_ptr<storage::IRawMemoryPartition<Tp>> newRawMemoryPartition(int64_t sz = 120 * 1024 *
-                                                                                                            1024);
+                inline std::shared_ptr<storage::IRawMemoryPartition<Tp>> newRawMemoryPartition(int64_t sz = 120 * 1024);
 
                 template<typename Tp>
                 inline std::shared_ptr<storage::IDiskPartition<Tp>>
@@ -50,7 +49,7 @@ namespace ignis {
                 inline std::shared_ptr<storage::IDiskPartition<Tp>>
                 copyDiskPartition(const std::string &path, const std::string &name = "", bool persist = false);
 
-                std::shared_ptr<storage::IVoidPartition> newVoidPartition(int64_t sz = 120 * 1024 * 1024);
+                std::shared_ptr<storage::IVoidPartition> newVoidPartition(int64_t sz = 120 * 1024);
 
                 template<typename Tp>
                 inline bool isMemory(storage::IPartitionGroup<Tp> &group);

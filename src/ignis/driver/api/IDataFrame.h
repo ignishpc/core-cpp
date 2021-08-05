@@ -36,10 +36,6 @@ namespace ignis {
                 void uncache();
 
                 /*IO*/
-                rpc::driver::IDataFrameId repartitionAbs(int64_t numPartitions);
-
-                rpc::driver::IDataFrameId coalesceAbs(int64_t numPartitions, bool shuffle);
-
                 int64_t partitions();
 
                 void saveAsObjectFile(const std::string &path, int compression = 6);
@@ -49,6 +45,14 @@ namespace ignis {
                 void saveAsJsonFile(const std::string &path, bool pretty = true);
 
                 /*General*/
+                rpc::driver::IDataFrameId repartitionAbs(int64_t numPartitions, bool preserveOrdering, bool global);
+
+                rpc::driver::IDataFrameId repartitionByRandomAbs(int64_t numPartitions);
+
+                rpc::driver::IDataFrameId repartitionByHashAbs(int64_t numPartitions);
+
+                rpc::driver::IDataFrameId repartitionByAbs(const ISource &src, int64_t numPartitions);
+
                 rpc::driver::IDataFrameId mapAbs(const ISource &src);
 
                 rpc::driver::IDataFrameId filterAbs(const ISource &src);
@@ -237,22 +241,29 @@ namespace ignis {
                 using IAbstractDataFrame::unpersist;
 
                 /*IO*/
-                template<typename R>
-                IDataFrame<R> repartition(int64_t numPartitions) {
-                    return IDataFrame<R>(repartitionAbs(numPartitions));
-                }
-
-                template<typename R>
-                IDataFrame<R> coalesce(int64_t numPartitions, bool shuffle) {
-                    return IDataFrame<R>(coalesceAbs(numPartitions, shuffle));
-                }
-
                 using IAbstractDataFrame::partitions;
                 using IAbstractDataFrame::saveAsJsonFile;
                 using IAbstractDataFrame::saveAsObjectFile;
                 using IAbstractDataFrame::saveAsTextFile;
 
                 /*General*/
+                IDataFrame<Tp> repartition(int64_t numPartitions, bool preserveOrdering, bool global){
+                    return IDataFrame<Tp>(repartitionAbs(numPartitions,preserveOrdering,global));
+                }
+
+                IDataFrame<Tp> repartitionByRandom(int64_t numPartitions){
+                    return IDataFrame<Tp>(repartitionByRandomAbs(numPartitions));
+                }
+
+                IDataFrame<Tp> repartitionByHash(int64_t numPartitions){
+                    return IDataFrame<Tp>(repartitionByHashAbs(numPartitions));
+                }
+
+                IDataFrame<Tp> repartitionBy(const ISource &src, int64_t numPartitions){
+                    return IDataFrame<Tp>(repartitionByAbs(src, numPartitions));
+                }
+
+
                 template<typename R>
                 IDataFrame<R> map(const ISource &src) {
                     return IDataFrame<R>(mapAbs(src));
@@ -564,7 +575,7 @@ namespace ignis {
                     return this->driverContext().template collect<Value>(valuesAbs(tp));
                 }
 
-                IPairDataFrame<Key, Value> sampleByKey(bool withReplacement, const std::map<Key, int64_t> &fractions,
+                IPairDataFrame<Key, Value> sampleByKey(bool withReplacement, const std::map<Key, double> &fractions,
                                                        int seed) {
                     ISource fractions_src("");
                     fractions_src.addParam("fractions", fractions);
@@ -572,7 +583,7 @@ namespace ignis {
                 }
 
                 IPairDataFrame<Key, Value> sampleByKey(bool withReplacement,
-                                                       const std::unordered_map<Key, int64_t> &fractions, int seed) {
+                                                       const std::unordered_map<Key, double> &fractions, int seed) {
                     ISource fractions_src("");
                     fractions_src.addParam("fractions", fractions);
                     return IPairDataFrame<Key, Value>::make(this->sampleByKeyAbs(withReplacement, fractions_src, seed));

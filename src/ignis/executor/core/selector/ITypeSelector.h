@@ -13,6 +13,7 @@
 #include <functional>
 #include <ignis/executor/core/modules/impl/IPipeImpl.h>
 #include <ignis/executor/core/modules/impl/IReduceImpl.h>
+#include <ignis/executor/core/modules/impl/IRepartitionImpl.h>
 #include <memory>
 #include <type_traits>
 #include <vector>
@@ -45,15 +46,26 @@ namespace ignis {
                     virtual void driverScatter(modules::impl::ICommImpl &impl, const std::string &id,
                                                int64_t partitions) = 0;
 
-                    virtual void send(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t dest, int64_t thread) = 0;
-
-                    virtual void recv(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t source, int64_t thread) = 0;
+                    virtual void importData(modules::impl::ICommImpl &impl, const std::string &group, bool source,
+                                            int64_t threads) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) = 0;
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) = 0;
+
+                    virtual void union_(modules::impl::IReduceImpl &impl, const std::string &other, bool preserveOrder) = 0;
+
+                    virtual void join(modules::impl::IReduceImpl &impl, const std::string &other,
+                                      int64_t numPartitions) = 0;
+
+                    virtual void distinct(modules::impl::IReduceImpl &impl, int64_t numPartitions) = 0;
+
+                    virtual void repartition(modules::impl::IRepartitionImpl &impl, int64_t numPartitions,
+                                             bool preserveOrdering, bool global) = 0;
+
+                    virtual void repartitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
+
+                    virtual void repartitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
 
                     virtual void take(modules::impl::IPipeImpl &impl, int64_t num) = 0;
 
@@ -88,6 +100,8 @@ namespace ignis {
                                                 bool pretty) = 0;
 
                     /*Key-Value*/
+                    virtual int64_t sampleByKeyFilter(modules::impl::IMathImpl &impl) = 0;
+
                     virtual void sampleByKey(modules::impl::IMathImpl &impl, bool withReplacement, int32_t seed) = 0;
 
                     virtual void countByKey(modules::impl::IMathImpl &impl) = 0;
@@ -149,14 +163,9 @@ namespace ignis {
                         impl.driverScatter<Tp>(id, partitions);
                     }
 
-                    virtual void send(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t dest, int64_t thread) {
-                        impl.send<Tp>(id, partition, dest, thread);
-                    }
-
-                    virtual void recv(modules::impl::ICommImpl &impl, const std::string &id, int64_t partition,
-                                      int64_t source, int64_t thread) {
-                        impl.recv<Tp>(id, partition, source, thread);
+                    virtual void importData(modules::impl::ICommImpl &impl, const std::string &group, bool source,
+                                            int64_t threads) {
+                        impl.importData<Tp>(group, source, threads);
                     }
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending) {
@@ -165,6 +174,32 @@ namespace ignis {
 
                     virtual void sort(modules::impl::ISortImpl &impl, bool ascending, int64_t numPartitions) {
                         sort_check<Tp>(impl, nullptr, ascending, numPartitions);
+                    }
+
+                    virtual void union_(modules::impl::IReduceImpl &impl, const std::string &other, bool preserveOrder) {
+                        impl.union_<Tp>(other, preserveOrder);
+                    }
+
+                    virtual void join(modules::impl::IReduceImpl &impl, const std::string &other,
+                                      int64_t numPartitions) {
+                        join_check<Tp>(impl, nullptr, other, numPartitions);
+                    }
+
+                    virtual void distinct(modules::impl::IReduceImpl &impl, int64_t numPartitions) {
+                        distinct_check<Tp>(impl, nullptr, numPartitions);
+                    }
+
+                    virtual void repartition(modules::impl::IRepartitionImpl &impl, int64_t numPartitions,
+                                             bool preserveOrdering, bool global) {
+                        impl.repartition<Tp>(numPartitions, preserveOrdering, global);
+                    }
+
+                    virtual void repartitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
+                        impl.repartitionByRandom<Tp>(numPartitions);
+                    }
+
+                    virtual void repartitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
+                        repartitionByHash_check<Tp>(impl, nullptr, numPartitions);
                     }
 
                     virtual void take(modules::impl::IPipeImpl &impl, int64_t num) { impl.take<Tp>(num); }
@@ -215,6 +250,10 @@ namespace ignis {
                     }
 
                     /*Key-Value*/
+                    virtual int64_t sampleByKeyFilter(modules::impl::IMathImpl &impl) {
+                        return sampleByKeyFilter_check<Tp>(impl, nullptr);
+                    }
+
                     virtual void sampleByKey(modules::impl::IMathImpl &impl, bool withReplacement, int32_t seed) {
                         sampleByKey_check<Tp>(impl, nullptr, withReplacement, seed);
                     }
@@ -254,6 +293,40 @@ namespace ignis {
                     template<typename C>
                     void sort_check(...) {
                         throw exception::ICompatibilyException("sort", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void join_check(modules::impl::IReduceImpl &impl, typename IHasHash<typename C::first_type>::result,
+                                    const std::string &other, int64_t numPartitions) {
+                        impl.join<Tp>(other, numPartitions);
+                    }
+
+                    template<typename C>
+                    void join_check(...) {
+                        throw exception::ICompatibilyException("join", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void distinct_check(modules::impl::IReduceImpl &impl, typename IHasHash<C>::result,
+                                        int64_t numPartitions) {
+                        impl.distinct<Tp>(numPartitions);
+                    }
+
+                    template<typename C>
+                    void distinct_check(...) {
+                        throw exception::ICompatibilyException("distinct", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void repartitionByHash_check(modules::impl::IRepartitionImpl &impl,
+                                                 typename IHasHash<C>::result val,
+                                                 int64_t numPartitions) {
+                        impl.repartitionByHash<C>(numPartitions);
+                    }
+
+                    template<typename C>
+                    void repartitionByHash_check(...) {
+                        throw exception::ICompatibilyException("repartitionByHash", RTTInfo::from<C>());
                     }
 
                     template<typename C>
@@ -299,8 +372,20 @@ namespace ignis {
 
                     /*Key-Value*/
                     template<typename C>
-                    void sampleByKey_check(modules::impl::IMathImpl &impl, typename C::second_type *val,
-                                           bool withReplacement, int32_t seed) {
+                    int64_t sampleByKeyFilter_check(modules::impl::IMathImpl &impl,
+                                                    typename IHasHash<typename C::first_type>::result val) {
+                        return impl.sampleByKeyFilter<C>();
+                    }
+
+                    template<typename C>
+                    int64_t sampleByKeyFilter_check(...) {
+                        throw exception::ICompatibilyException("sampleByKey", RTTInfo::from<C>());
+                    }
+
+                    template<typename C>
+                    void sampleByKey_check(modules::impl::IMathImpl &impl,
+                                           typename IHasHash<typename C::first_type>::result val, bool withReplacement,
+                                           int32_t seed) {
                         impl.sampleByKey<C>(withReplacement, seed);
                     }
 
@@ -389,7 +474,6 @@ namespace ignis {
 
                 class ITypeSelectorExtractor {
                 public:
-
                     template<typename Tp>
                     std::vector<std::shared_ptr<ITypeSelector>> extract() {
                         add<Tp>(nullptr);

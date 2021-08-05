@@ -5,6 +5,7 @@
 #include "ignis/executor/core/IExecutorData.h"
 #include "ignis/executor/core/ILog.h"
 #include "ignis/executor/core/selector/ISelector.h"
+#include "ignis/executor/core/IDynamicTypes.h"
 #include "ignis/rpc/IExecutorException_types.h"
 
 namespace ignis {
@@ -27,6 +28,7 @@ namespace ignis {
                     virtual ~IModule();
 
                 protected:
+                    IDynamicTypes dynamic_types;
                     std::shared_ptr<IExecutorData> executor_data;
                 };
             }// namespace modules

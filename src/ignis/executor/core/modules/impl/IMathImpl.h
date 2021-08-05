@@ -20,6 +20,9 @@ namespace ignis {
                         int64_t count();
 
                         template<typename Tp>
+                        int64_t sampleByKeyFilter();
+
+                        template<typename Tp>
                         void sampleByKey(const bool withReplacement, const int32_t seed);
 
                         template<typename Tp>

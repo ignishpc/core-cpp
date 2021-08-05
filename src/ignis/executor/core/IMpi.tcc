@@ -249,9 +249,16 @@ void IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGr
     }
 }
 
+
 template<typename Tp>
 void IMpiClass::send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag) {
-    sendRecv(group, part, group.Get_rank(), dest, tag);
+    MsgOpt opt = getMsgOpt(group, part.type(), true, dest, tag);
+    sendRecv(group, part, group.Get_rank(), dest, tag, opt);
+}
+
+template<typename Tp>
+void IMpiClass::send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag, const MsgOpt &o){
+    sendRecv(group, part, group.Get_rank(), dest, tag, o);
 }
 
 template<typename Tp>
@@ -261,12 +268,30 @@ void IMpiClass::send(storage::IPartition<Tp> &part, int dest, int tag) {
 
 template<typename Tp>
 void IMpiClass::recv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int tag) {
-    sendRecv(group, part, source, group.Get_rank(), tag);
+    MsgOpt opt = getMsgOpt(group, part.type(), false, source, tag);
+    sendRecv(group, part, source, group.Get_rank(), tag, opt);
+}
+
+template<typename Tp>
+void IMpiClass::recv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int tag, const MsgOpt &o) {
+    sendRecv(group, part, source, group.Get_rank(), tag, o);
 }
 
 template<typename Tp>
 void IMpiClass::recv(storage::IPartition<Tp> &part, int source, int tag) {
     sendRecv(part, source, rank(), tag);
+}
+
+template<typename Tp>
+void IMpiClass::sendRcv(storage::IPartition<Tp> &sendp, storage::IPartition<Tp> &rcvp, int other, int tag) {
+    //possible optimization, implement as sendRcv so that both processes serialize and deserialize at the same time.
+    if (rank() > other) {
+        send(native(), sendp, other, tag);
+        recv(native(), rcvp, other, tag);
+    } else {
+        recv(native(), rcvp, other, tag);
+        send(native(), sendp, other, tag);
+    }
 }
 
 template<typename Tp>
@@ -397,36 +422,11 @@ void IMpiClass::sendRecv(storage::IPartition<Tp> &part, int source, int dest, in
 }
 
 template<typename Tp>
-void IMpiClass::sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int dest, int tag) {
+void IMpiClass::sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int dest, int tag,
+                         const MsgOpt &opt) {
     auto id = group.Get_rank();
-    bool same_protocol;
-    bool same_storage;
-
-    if (id == source) {
-        int8_t protocol = core::protocol::IObjectProtocol::CPP_PROTOCOL;
-        std::string storage = part.type();
-        int length = storage.length();
-        group.Send(&protocol, 1, MPI::BYTE, dest, tag);
-        group.Recv(&same_protocol, 1, MPI::BOOL, dest, tag);
-        group.Send(&length, 1, MPI::INT, dest, tag);
-        group.Send(const_cast<char *>(storage.c_str()), length, MPI::BYTE, dest, tag);
-        group.Recv(&same_storage, 1, MPI::BOOL, dest, tag);
-    } else {
-        int8_t protocol;
-        std::string storage;
-        int length;
-        group.Recv(&protocol, 1, MPI::BYTE, source, tag);
-        same_protocol = protocol == core::protocol::IObjectProtocol::CPP_PROTOCOL;
-        group.Send(&same_protocol, 1, MPI::BOOL, source, tag);
-        group.Recv(&length, 1, MPI::INT, source, tag);
-        storage.resize(length);
-        group.Recv(const_cast<char *>(storage.c_str()), length, MPI::BYTE, source, tag);
-        same_storage = part.type() == storage;
-        group.Send(&same_storage, 1, MPI::BOOL, source, tag);
-    }
-
-    if (same_storage) {
-        sendRecvImpl(group, part, source, dest, tag, same_protocol);
+    if (opt.same_storage) {
+        sendRecvImpl(group, part, source, dest, tag, opt.same_protocol);
     } else {
         auto buffer = std::make_shared<transport::IMemoryBuffer>(part.bytes());
         int sz;

@@ -15,7 +15,7 @@ namespace ignis {
         namespace core {
             class IMpi {
             public:
-                IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, api::IContext& context);
+                IMpi(IPropertyParser &properties, IPartitionTools &partition_tools, api::IContext &context);
 
                 template<typename Tp>
                 void gather(storage::IPartition<Tp> &part, int root);
@@ -37,8 +37,18 @@ namespace ignis {
                                        storage::IPartitionGroup<storage::IVoidPartition::VOID_TYPE> &part_group,
                                        int64_t partitions);
 
+                typedef struct {
+                    bool same_protocol, same_storage;
+                } MsgOpt;
+
+                MsgOpt getMsgOpt(const MPI::Intracomm &group, const std::string &ptype, bool send, int other, int tag);
+
                 template<typename Tp>
                 void send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag);
+
+                template<typename Tp>
+                void send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag,
+                          const MsgOpt &o);
 
                 template<typename Tp>
                 void send(storage::IPartition<Tp> &part, int dest, int tag);
@@ -46,10 +56,20 @@ namespace ignis {
                 template<typename Tp>
                 void recv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int tag);
 
+                template<typename Tp>
+                void recv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int tag,
+                          const MsgOpt &o);
+
                 void recvVoid(const MPI::Intracomm &group, storage::IVoidPartition &part, int source, int tag);
+
+                void recvVoid(const MPI::Intracomm &group, storage::IVoidPartition &part, int source, int tag,
+                              const MsgOpt &o);
 
                 template<typename Tp>
                 void recv(storage::IPartition<Tp> &part, int source, int tag);
+
+                template<typename Tp>
+                void sendRcv(storage::IPartition<Tp> &send, storage::IPartition<Tp> &rcv, int other, int tag);
 
                 void barrier();
 
@@ -74,22 +94,23 @@ namespace ignis {
                 void move(void *begin, size_t n, size_t displ);
 
                 template<typename Tp>
-                void gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int root, bool same_protocol);
+                void gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int root,
+                                bool same_protocol);
 
                 template<typename Tp>
                 void sendRecv(storage::IPartition<Tp> &part, int source, int dest, int tag);
 
                 template<typename Tp>
                 void sendRecv(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int dest,
-                              int tag);
+                              int tag, const MsgOpt &o);
 
                 template<typename Tp>
                 void sendRecvImpl(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int source, int dest,
-                              int tag, bool same_protocol);
+                                  int tag, bool same_protocol);
 
                 IPropertyParser &properties;
                 IPartitionTools &partition_tools;
-                api::IContext& context;
+                api::IContext &context;
             };
         }// namespace core
     }    // namespace executor

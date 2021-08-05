@@ -41,10 +41,16 @@ namespace ignis {
                         void aggregateByKey(int64_t numPartitions, bool hashing);
 
                         template<typename Tp, typename Function>
-                        void foldByKey();
-
-                        template<typename Tp, typename Function>
                         void foldByKey(int64_t numPartitions, bool localFold);
+
+                        template<typename Tp>
+                        void union_(const std::string &other, bool preserveOrder);
+
+                        template<typename Tp>
+                        void join(const std::string &other, int64_t numPartitions);
+
+                        template<typename Tp>
+                        void distinct(int64_t numPartitions);
 
                         virtual ~IReduceImpl();
 
@@ -78,6 +84,10 @@ namespace ignis {
 
                         template<typename Tp>
                         inline void keyExchanging();
+
+                        template<typename Tp>
+                        inline void distinctFilter(storage::IPartitionGroup<Tp>& parts);
+
                     };
                 }// namespace impl
             }    // namespace modules

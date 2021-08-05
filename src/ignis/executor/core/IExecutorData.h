@@ -92,9 +92,15 @@ namespace ignis {
 
                 int getMpiCores();
 
+
+
                 void enableMpiCores();
 
+                std::vector<MPI::Intracomm> duplicate(const MPI::Intracomm& comm, int64_t threads);
+
                 void setMpiGroup(const MPI::Intracomm &group);
+
+                void destroyMpiGroup();
 
                 virtual ~IExecutorData();
 
@@ -110,7 +116,6 @@ namespace ignis {
                 IPartitionTools partition_tools;
                 IMpi _mpi;
                 api::IContext context;
-                int cores;
             };
         }// namespace core
     }    // namespace executor

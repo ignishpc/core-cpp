@@ -42,22 +42,6 @@ void IAbstractDataFrame::uncache() {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-IDataFrameId IAbstractDataFrame::repartitionAbs(int64_t numPartitions) {
-    try {
-        IDataFrameId _return;
-        Ignis::clientPool->getClient()->getDataFrameService().repartition(_return, id, numPartitions);
-        return _return;
-    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
-}
-
-IDataFrameId IAbstractDataFrame::coalesceAbs(int64_t numPartitions, bool shuffle) {
-    try {
-        IDataFrameId _return;
-        Ignis::clientPool->getClient()->getDataFrameService().coalesce(_return, id, numPartitions, shuffle);
-        return _return;
-    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
-}
-
 int64_t IAbstractDataFrame::partitions() {
     try {
         return Ignis::clientPool->getClient()->getDataFrameService().partitions(id);
@@ -81,6 +65,41 @@ void IAbstractDataFrame::saveAsJsonFile(const std::string &path, bool pretty) {
         Ignis::clientPool->getClient()->getDataFrameService().saveAsJsonFile(id, path, pretty);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
+
+
+IDataFrameId IAbstractDataFrame::repartitionAbs(int64_t numPartitions, bool preserveOrdering, bool global) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().repartition(_return, id, numPartitions, preserveOrdering,
+                                                                          global);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IAbstractDataFrame::repartitionByRandomAbs(int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().repartitionByRandom(_return, id, numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IAbstractDataFrame::repartitionByHashAbs(int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().repartitionByHash(_return, id, numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
+IDataFrameId IAbstractDataFrame::repartitionByAbs(const ISource &src, int64_t numPartitions) {
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool->getClient()->getDataFrameService().repartitionBy(_return, id, src.rpc(), numPartitions);
+        return _return;
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
+}
+
 
 IDataFrameId IAbstractDataFrame::mapAbs(const ISource &src) {
     try {
@@ -205,7 +224,7 @@ IDataFrameId IAbstractDataFrame::unionAbs(const rpc::driver::IDataFrameId &other
 }
 
 IDataFrameId IAbstractDataFrame::unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
-                                        int64_t numPartitions) {
+                                          int64_t numPartitions) {
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getDataFrameService().union4a(_return, id, other, preserveOrder, numPartitions);
@@ -214,7 +233,7 @@ IDataFrameId IAbstractDataFrame::unionAbs(const rpc::driver::IDataFrameId &other
 }
 
 IDataFrameId IAbstractDataFrame::unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
-                                        const ISource &src) {
+                                          const ISource &src) {
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getDataFrameService().union4b(_return, id, other, preserveOrder, src.rpc());
@@ -223,7 +242,7 @@ IDataFrameId IAbstractDataFrame::unionAbs(const rpc::driver::IDataFrameId &other
 }
 
 IDataFrameId IAbstractDataFrame::unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
-                                        int64_t numPartitions, const ISource &src) {
+                                          int64_t numPartitions, const ISource &src) {
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getDataFrameService().union5(_return, id, other, preserveOrder, numPartitions,
@@ -427,7 +446,7 @@ IDataFrameId IAbstractDataFrame::joinAbs(const rpc::driver::IDataFrameId &other,
 }
 
 IDataFrameId IAbstractDataFrame::joinAbs(const rpc::driver::IDataFrameId &other, int64_t numPartitions,
-                                      const ISource &src) {
+                                         const ISource &src) {
     try {
         IDataFrameId _return;
         Ignis::clientPool->getClient()->getDataFrameService().join4(_return, id, other, numPartitions, src.rpc());

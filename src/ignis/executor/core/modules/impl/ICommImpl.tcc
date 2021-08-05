@@ -58,6 +58,7 @@ std::vector<std::string> ICommImplClass::getPartitions(const int8_t protocol, in
         auto it = (*group)[0]->readIterator();
         for (int64_t p = 0; p < minPartitions; p++) {
             part.clear();
+            writer = part.writeIterator();
             ew = partition_elems;
             if (p < remainder) { ew++; }
 
@@ -133,16 +134,71 @@ void ICommImplClass::driverScatter(const std::string &group, int64_t partitions)
 }
 
 template<typename Tp>
-void ICommImplClass::send(const std::string &group, int64_t partition, int64_t dest, int64_t thread) {
-    auto part_group = executor_data->getPartitions<Tp>();
-    auto comm = getGroup(group);
-    executor_data->mpi().send<Tp>(comm, *(*part_group)[partition], dest, dest);
+void ICommImplClass::importData(const std::string &group, bool source, int64_t threads) {
+    auto import_comm = getGroup(group);
+    auto executors = import_comm.Get_size();
+    int64_t me = import_comm.Get_rank();
+    std::vector<std::pair<int64_t, int64_t>> ranges;
+    std::vector<int64_t> queue;
+    int64_t offset = importDataAux(import_comm, source, ranges, queue);
+    if (source) {
+        IGNIS_LOG(info) << "General: importData sending partitions";
+    } else {
+        IGNIS_LOG(info) << "General: importData receiving partitions";
+    }
+
+    auto parts =
+            source ? executor_data->getAndDeletePartitions<Tp>()
+                   : executor_data->getPartitionTools().newPartitionGroup<Tp>(ranges[me].second - ranges[me].first);
+
+    auto shared = *parts;
+    auto threads_comm = executor_data->duplicate(import_comm, threads);
+
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel num_threads(threads)
+    {
+        IGNIS_OMP_TRY()
+        auto comm = threads_comm[executor_data->getContext().threadId()];
+#pragma omp for schedule(static, 1)
+        for (int64_t i = 0; i < queue.size(); i++) {
+            int64_t other = queue[i];
+            bool ignore = true;
+            if (other == executors) { continue; }
+            if (source) {
+                for (int64_t j = ranges[other].first; j < ranges[other].second; j++) {
+                    ignore &= shared[j - offset]->empty();
+                }
+                comm.Send(&ignore, 1, MPI::BOOL, other, 0);
+            } else {
+                comm.Recv(&ignore, 1, MPI::BOOL, other, 0);
+            }
+            if (ignore) { continue; }
+            IMpi::MsgOpt opt = executor_data->mpi().getMsgOpt(comm, shared[0]->type(), source, other, 0);
+            int64_t its;
+            int64_t first;
+            if (source) {
+                first = ranges[other].first;
+                its = ranges[other].second - ranges[other].first;
+            } else {
+                first = ranges[me].first;
+                its = ranges[me].second - ranges[me].first;
+            }
+            for (int64_t j = 0; j < its; j++) {
+                if (source) {
+                    executor_data->mpi().send(comm, *shared[first - offset + j], other, 0, opt);
+                    shared[first - offset + j].reset();
+                } else {
+                    executor_data->mpi().recv(comm, *shared[first - offset + j], other, 0, opt);
+                }
+            }
+        }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+
+    for (int64_t i = 1; i < threads_comm.size(); i++) { threads_comm[i].Free(); }
+
+    executor_data->setPartitions(parts);
 }
 
-template<typename Tp>
-void ICommImplClass::recv(const std::string &group, int64_t partition, int64_t source, int64_t thread) {
-    auto part_group = executor_data->getPartitions<Tp>();
-    auto comm = getGroup(group);
-    int tag = comm.Get_rank();
-    executor_data->mpi().recv<Tp>(comm, *(*part_group)[partition], source, tag);
-}
+#undef ICommImplClass

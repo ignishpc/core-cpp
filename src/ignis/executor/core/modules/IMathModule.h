@@ -6,6 +6,7 @@
 #include "ignis/rpc/executor/IMathModule.h"
 #include "impl/IMathImpl.h"
 #include "impl/ISortImpl.h"
+#include "impl/IReduceImpl.h"
 
 namespace ignis {
     namespace executor {
@@ -39,6 +40,7 @@ namespace ignis {
                 private:
                     impl::IMathImpl math_impl;
                     impl::ISortImpl sort_impl;
+                    impl::IReduceImpl reduce_impl;
                 };
             }// namespace modules
         }    // namespace core

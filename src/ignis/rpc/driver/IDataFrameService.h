@@ -27,12 +27,14 @@ class IDataFrameServiceIf {
   virtual void cache(const IDataFrameId& id) = 0;
   virtual void unpersist(const IDataFrameId& id) = 0;
   virtual void uncache(const IDataFrameId& id) = 0;
-  virtual void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
-  virtual void coalesce(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool shuffle) = 0;
   virtual int64_t partitions(const IDataFrameId& id) = 0;
   virtual void saveAsObjectFile(const IDataFrameId& id, const std::string& path, const int8_t compression) = 0;
   virtual void saveAsTextFile(const IDataFrameId& id, const std::string& path) = 0;
   virtual void saveAsJsonFile(const IDataFrameId& id, const std::string& path, const bool pretty) = 0;
+  virtual void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_) = 0;
+  virtual void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
+  virtual void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
+  virtual void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
   virtual void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void filter(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void flatmap(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
@@ -155,12 +157,6 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void uncache(const IDataFrameId& /* id */) {
     return;
   }
-  void repartition(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
-    return;
-  }
-  void coalesce(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */, const bool /* shuffle */) {
-    return;
-  }
   int64_t partitions(const IDataFrameId& /* id */) {
     int64_t _return = 0;
     return _return;
@@ -172,6 +168,18 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
     return;
   }
   void saveAsJsonFile(const IDataFrameId& /* id */, const std::string& /* path */, const bool /* pretty */) {
+    return;
+  }
+  void repartition(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */, const bool /* preserveOrdering */, const bool /* global_ */) {
+    return;
+  }
+  void repartitionByRandom(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
+    return;
+  }
+  void repartitionByHash(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
+    return;
+  }
+  void repartitionBy(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */) {
     return;
   }
   void map_(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
@@ -945,251 +953,6 @@ class IDataFrameService_uncache_presult {
 
 };
 
-typedef struct _IDataFrameService_repartition_args__isset {
-  _IDataFrameService_repartition_args__isset() : id(false), numPartitions(false) {}
-  bool id :1;
-  bool numPartitions :1;
-} _IDataFrameService_repartition_args__isset;
-
-class IDataFrameService_repartition_args {
- public:
-
-  IDataFrameService_repartition_args(const IDataFrameService_repartition_args&);
-  IDataFrameService_repartition_args& operator=(const IDataFrameService_repartition_args&);
-  IDataFrameService_repartition_args() : numPartitions(0) {
-  }
-
-  virtual ~IDataFrameService_repartition_args() noexcept;
-  IDataFrameId id;
-  int64_t numPartitions;
-
-  _IDataFrameService_repartition_args__isset __isset;
-
-  void __set_id(const IDataFrameId& val);
-
-  void __set_numPartitions(const int64_t val);
-
-  bool operator == (const IDataFrameService_repartition_args & rhs) const
-  {
-    if (!(id == rhs.id))
-      return false;
-    if (!(numPartitions == rhs.numPartitions))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_repartition_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_repartition_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IDataFrameService_repartition_pargs {
- public:
-
-
-  virtual ~IDataFrameService_repartition_pargs() noexcept;
-  const IDataFrameId* id;
-  const int64_t* numPartitions;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_repartition_result__isset {
-  _IDataFrameService_repartition_result__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_repartition_result__isset;
-
-class IDataFrameService_repartition_result {
- public:
-
-  IDataFrameService_repartition_result(const IDataFrameService_repartition_result&);
-  IDataFrameService_repartition_result& operator=(const IDataFrameService_repartition_result&);
-  IDataFrameService_repartition_result() {
-  }
-
-  virtual ~IDataFrameService_repartition_result() noexcept;
-  IDataFrameId success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_repartition_result__isset __isset;
-
-  void __set_success(const IDataFrameId& val);
-
-  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
-
-  bool operator == (const IDataFrameService_repartition_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_repartition_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_repartition_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_repartition_presult__isset {
-  _IDataFrameService_repartition_presult__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_repartition_presult__isset;
-
-class IDataFrameService_repartition_presult {
- public:
-
-
-  virtual ~IDataFrameService_repartition_presult() noexcept;
-  IDataFrameId* success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_repartition_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _IDataFrameService_coalesce_args__isset {
-  _IDataFrameService_coalesce_args__isset() : id(false), numPartitions(false), shuffle(false) {}
-  bool id :1;
-  bool numPartitions :1;
-  bool shuffle :1;
-} _IDataFrameService_coalesce_args__isset;
-
-class IDataFrameService_coalesce_args {
- public:
-
-  IDataFrameService_coalesce_args(const IDataFrameService_coalesce_args&);
-  IDataFrameService_coalesce_args& operator=(const IDataFrameService_coalesce_args&);
-  IDataFrameService_coalesce_args() : numPartitions(0), shuffle(0) {
-  }
-
-  virtual ~IDataFrameService_coalesce_args() noexcept;
-  IDataFrameId id;
-  int64_t numPartitions;
-  bool shuffle;
-
-  _IDataFrameService_coalesce_args__isset __isset;
-
-  void __set_id(const IDataFrameId& val);
-
-  void __set_numPartitions(const int64_t val);
-
-  void __set_shuffle(const bool val);
-
-  bool operator == (const IDataFrameService_coalesce_args & rhs) const
-  {
-    if (!(id == rhs.id))
-      return false;
-    if (!(numPartitions == rhs.numPartitions))
-      return false;
-    if (!(shuffle == rhs.shuffle))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_coalesce_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_coalesce_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IDataFrameService_coalesce_pargs {
- public:
-
-
-  virtual ~IDataFrameService_coalesce_pargs() noexcept;
-  const IDataFrameId* id;
-  const int64_t* numPartitions;
-  const bool* shuffle;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_coalesce_result__isset {
-  _IDataFrameService_coalesce_result__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_coalesce_result__isset;
-
-class IDataFrameService_coalesce_result {
- public:
-
-  IDataFrameService_coalesce_result(const IDataFrameService_coalesce_result&);
-  IDataFrameService_coalesce_result& operator=(const IDataFrameService_coalesce_result&);
-  IDataFrameService_coalesce_result() {
-  }
-
-  virtual ~IDataFrameService_coalesce_result() noexcept;
-  IDataFrameId success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_coalesce_result__isset __isset;
-
-  void __set_success(const IDataFrameId& val);
-
-  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
-
-  bool operator == (const IDataFrameService_coalesce_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_coalesce_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_coalesce_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_coalesce_presult__isset {
-  _IDataFrameService_coalesce_presult__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_coalesce_presult__isset;
-
-class IDataFrameService_coalesce_presult {
- public:
-
-
-  virtual ~IDataFrameService_coalesce_presult() noexcept;
-  IDataFrameId* success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_coalesce_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
 typedef struct _IDataFrameService_partitions_args__isset {
   _IDataFrameService_partitions_args__isset() : id(false) {}
   bool id :1;
@@ -1644,6 +1407,503 @@ class IDataFrameService_saveAsJsonFile_presult {
    ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_saveAsJsonFile_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_repartition_args__isset {
+  _IDataFrameService_repartition_args__isset() : id(false), numPartitions(false), preserveOrdering(false), global_(false) {}
+  bool id :1;
+  bool numPartitions :1;
+  bool preserveOrdering :1;
+  bool global_ :1;
+} _IDataFrameService_repartition_args__isset;
+
+class IDataFrameService_repartition_args {
+ public:
+
+  IDataFrameService_repartition_args(const IDataFrameService_repartition_args&);
+  IDataFrameService_repartition_args& operator=(const IDataFrameService_repartition_args&);
+  IDataFrameService_repartition_args() : numPartitions(0), preserveOrdering(0), global_(0) {
+  }
+
+  virtual ~IDataFrameService_repartition_args() noexcept;
+  IDataFrameId id;
+  int64_t numPartitions;
+  bool preserveOrdering;
+  bool global_;
+
+  _IDataFrameService_repartition_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  void __set_preserveOrdering(const bool val);
+
+  void __set_global_(const bool val);
+
+  bool operator == (const IDataFrameService_repartition_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    if (!(preserveOrdering == rhs.preserveOrdering))
+      return false;
+    if (!(global_ == rhs.global_))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartition_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartition_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_repartition_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_repartition_pargs() noexcept;
+  const IDataFrameId* id;
+  const int64_t* numPartitions;
+  const bool* preserveOrdering;
+  const bool* global_;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartition_result__isset {
+  _IDataFrameService_repartition_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartition_result__isset;
+
+class IDataFrameService_repartition_result {
+ public:
+
+  IDataFrameService_repartition_result(const IDataFrameService_repartition_result&);
+  IDataFrameService_repartition_result& operator=(const IDataFrameService_repartition_result&);
+  IDataFrameService_repartition_result() {
+  }
+
+  virtual ~IDataFrameService_repartition_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartition_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_repartition_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartition_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartition_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartition_presult__isset {
+  _IDataFrameService_repartition_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartition_presult__isset;
+
+class IDataFrameService_repartition_presult {
+ public:
+
+
+  virtual ~IDataFrameService_repartition_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartition_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_repartitionByRandom_args__isset {
+  _IDataFrameService_repartitionByRandom_args__isset() : id(false), numPartitions(false) {}
+  bool id :1;
+  bool numPartitions :1;
+} _IDataFrameService_repartitionByRandom_args__isset;
+
+class IDataFrameService_repartitionByRandom_args {
+ public:
+
+  IDataFrameService_repartitionByRandom_args(const IDataFrameService_repartitionByRandom_args&);
+  IDataFrameService_repartitionByRandom_args& operator=(const IDataFrameService_repartitionByRandom_args&);
+  IDataFrameService_repartitionByRandom_args() : numPartitions(0) {
+  }
+
+  virtual ~IDataFrameService_repartitionByRandom_args() noexcept;
+  IDataFrameId id;
+  int64_t numPartitions;
+
+  _IDataFrameService_repartitionByRandom_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IDataFrameService_repartitionByRandom_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartitionByRandom_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartitionByRandom_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_repartitionByRandom_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_repartitionByRandom_pargs() noexcept;
+  const IDataFrameId* id;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartitionByRandom_result__isset {
+  _IDataFrameService_repartitionByRandom_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartitionByRandom_result__isset;
+
+class IDataFrameService_repartitionByRandom_result {
+ public:
+
+  IDataFrameService_repartitionByRandom_result(const IDataFrameService_repartitionByRandom_result&);
+  IDataFrameService_repartitionByRandom_result& operator=(const IDataFrameService_repartitionByRandom_result&);
+  IDataFrameService_repartitionByRandom_result() {
+  }
+
+  virtual ~IDataFrameService_repartitionByRandom_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartitionByRandom_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_repartitionByRandom_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartitionByRandom_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartitionByRandom_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartitionByRandom_presult__isset {
+  _IDataFrameService_repartitionByRandom_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartitionByRandom_presult__isset;
+
+class IDataFrameService_repartitionByRandom_presult {
+ public:
+
+
+  virtual ~IDataFrameService_repartitionByRandom_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartitionByRandom_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_repartitionByHash_args__isset {
+  _IDataFrameService_repartitionByHash_args__isset() : id(false), numPartitions(false) {}
+  bool id :1;
+  bool numPartitions :1;
+} _IDataFrameService_repartitionByHash_args__isset;
+
+class IDataFrameService_repartitionByHash_args {
+ public:
+
+  IDataFrameService_repartitionByHash_args(const IDataFrameService_repartitionByHash_args&);
+  IDataFrameService_repartitionByHash_args& operator=(const IDataFrameService_repartitionByHash_args&);
+  IDataFrameService_repartitionByHash_args() : numPartitions(0) {
+  }
+
+  virtual ~IDataFrameService_repartitionByHash_args() noexcept;
+  IDataFrameId id;
+  int64_t numPartitions;
+
+  _IDataFrameService_repartitionByHash_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IDataFrameService_repartitionByHash_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartitionByHash_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartitionByHash_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_repartitionByHash_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_repartitionByHash_pargs() noexcept;
+  const IDataFrameId* id;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartitionByHash_result__isset {
+  _IDataFrameService_repartitionByHash_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartitionByHash_result__isset;
+
+class IDataFrameService_repartitionByHash_result {
+ public:
+
+  IDataFrameService_repartitionByHash_result(const IDataFrameService_repartitionByHash_result&);
+  IDataFrameService_repartitionByHash_result& operator=(const IDataFrameService_repartitionByHash_result&);
+  IDataFrameService_repartitionByHash_result() {
+  }
+
+  virtual ~IDataFrameService_repartitionByHash_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartitionByHash_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_repartitionByHash_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartitionByHash_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartitionByHash_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartitionByHash_presult__isset {
+  _IDataFrameService_repartitionByHash_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartitionByHash_presult__isset;
+
+class IDataFrameService_repartitionByHash_presult {
+ public:
+
+
+  virtual ~IDataFrameService_repartitionByHash_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartitionByHash_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_repartitionBy_args__isset {
+  _IDataFrameService_repartitionBy_args__isset() : id(false), src(false), numPartitions(false) {}
+  bool id :1;
+  bool src :1;
+  bool numPartitions :1;
+} _IDataFrameService_repartitionBy_args__isset;
+
+class IDataFrameService_repartitionBy_args {
+ public:
+
+  IDataFrameService_repartitionBy_args(const IDataFrameService_repartitionBy_args&);
+  IDataFrameService_repartitionBy_args& operator=(const IDataFrameService_repartitionBy_args&);
+  IDataFrameService_repartitionBy_args() : numPartitions(0) {
+  }
+
+  virtual ~IDataFrameService_repartitionBy_args() noexcept;
+  IDataFrameId id;
+   ::ignis::rpc::ISource src;
+  int64_t numPartitions;
+
+  _IDataFrameService_repartitionBy_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  void __set_numPartitions(const int64_t val);
+
+  bool operator == (const IDataFrameService_repartitionBy_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    if (!(numPartitions == rhs.numPartitions))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartitionBy_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartitionBy_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_repartitionBy_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_repartitionBy_pargs() noexcept;
+  const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* src;
+  const int64_t* numPartitions;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartitionBy_result__isset {
+  _IDataFrameService_repartitionBy_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartitionBy_result__isset;
+
+class IDataFrameService_repartitionBy_result {
+ public:
+
+  IDataFrameService_repartitionBy_result(const IDataFrameService_repartitionBy_result&);
+  IDataFrameService_repartitionBy_result& operator=(const IDataFrameService_repartitionBy_result&);
+  IDataFrameService_repartitionBy_result() {
+  }
+
+  virtual ~IDataFrameService_repartitionBy_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartitionBy_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_repartitionBy_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_repartitionBy_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_repartitionBy_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_repartitionBy_presult__isset {
+  _IDataFrameService_repartitionBy_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_repartitionBy_presult__isset;
+
+class IDataFrameService_repartitionBy_presult {
+ public:
+
+
+  virtual ~IDataFrameService_repartitionBy_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_repartitionBy_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -10568,12 +10828,6 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void uncache(const IDataFrameId& id);
   void send_uncache(const IDataFrameId& id);
   void recv_uncache();
-  void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  void send_repartition(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_repartition(IDataFrameId& _return);
-  void coalesce(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool shuffle);
-  void send_coalesce(const IDataFrameId& id, const int64_t numPartitions, const bool shuffle);
-  void recv_coalesce(IDataFrameId& _return);
   int64_t partitions(const IDataFrameId& id);
   void send_partitions(const IDataFrameId& id);
   int64_t recv_partitions();
@@ -10586,6 +10840,18 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void saveAsJsonFile(const IDataFrameId& id, const std::string& path, const bool pretty);
   void send_saveAsJsonFile(const IDataFrameId& id, const std::string& path, const bool pretty);
   void recv_saveAsJsonFile();
+  void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  void send_repartition(const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  void recv_repartition(IDataFrameId& _return);
+  void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  void send_repartitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_repartitionByRandom(IDataFrameId& _return);
+  void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  void send_repartitionByHash(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_repartitionByHash(IDataFrameId& _return);
+  void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void send_repartitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void recv_repartitionBy(IDataFrameId& _return);
   void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void send_map_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_map_(IDataFrameId& _return);
@@ -10825,12 +11091,14 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_cache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_unpersist(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_uncache(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_repartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_coalesce(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_repartitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_map_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -10910,12 +11178,14 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["cache"] = &IDataFrameServiceProcessor::process_cache;
     processMap_["unpersist"] = &IDataFrameServiceProcessor::process_unpersist;
     processMap_["uncache"] = &IDataFrameServiceProcessor::process_uncache;
-    processMap_["repartition"] = &IDataFrameServiceProcessor::process_repartition;
-    processMap_["coalesce"] = &IDataFrameServiceProcessor::process_coalesce;
     processMap_["partitions"] = &IDataFrameServiceProcessor::process_partitions;
     processMap_["saveAsObjectFile"] = &IDataFrameServiceProcessor::process_saveAsObjectFile;
     processMap_["saveAsTextFile"] = &IDataFrameServiceProcessor::process_saveAsTextFile;
     processMap_["saveAsJsonFile"] = &IDataFrameServiceProcessor::process_saveAsJsonFile;
+    processMap_["repartition"] = &IDataFrameServiceProcessor::process_repartition;
+    processMap_["repartitionByRandom"] = &IDataFrameServiceProcessor::process_repartitionByRandom;
+    processMap_["repartitionByHash"] = &IDataFrameServiceProcessor::process_repartitionByHash;
+    processMap_["repartitionBy"] = &IDataFrameServiceProcessor::process_repartitionBy;
     processMap_["map_"] = &IDataFrameServiceProcessor::process_map_;
     processMap_["filter"] = &IDataFrameServiceProcessor::process_filter;
     processMap_["flatmap"] = &IDataFrameServiceProcessor::process_flatmap;
@@ -11060,26 +11330,6 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     ifaces_[i]->uncache(id);
   }
 
-  void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->repartition(_return, id, numPartitions);
-    }
-    ifaces_[i]->repartition(_return, id, numPartitions);
-    return;
-  }
-
-  void coalesce(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool shuffle) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->coalesce(_return, id, numPartitions, shuffle);
-    }
-    ifaces_[i]->coalesce(_return, id, numPartitions, shuffle);
-    return;
-  }
-
   int64_t partitions(const IDataFrameId& id) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -11114,6 +11364,46 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
       ifaces_[i]->saveAsJsonFile(id, path, pretty);
     }
     ifaces_[i]->saveAsJsonFile(id, path, pretty);
+  }
+
+  void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartition(_return, id, numPartitions, preserveOrdering, global_);
+    }
+    ifaces_[i]->repartition(_return, id, numPartitions, preserveOrdering, global_);
+    return;
+  }
+
+  void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartitionByRandom(_return, id, numPartitions);
+    }
+    ifaces_[i]->repartitionByRandom(_return, id, numPartitions);
+    return;
+  }
+
+  void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartitionByHash(_return, id, numPartitions);
+    }
+    ifaces_[i]->repartitionByHash(_return, id, numPartitions);
+    return;
+  }
+
+  void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->repartitionBy(_return, id, src, numPartitions);
+    }
+    ifaces_[i]->repartitionBy(_return, id, src, numPartitions);
+    return;
   }
 
   void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) {
@@ -11854,12 +12144,6 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void uncache(const IDataFrameId& id);
   int32_t send_uncache(const IDataFrameId& id);
   void recv_uncache(const int32_t seqid);
-  void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  int32_t send_repartition(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_repartition(IDataFrameId& _return, const int32_t seqid);
-  void coalesce(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool shuffle);
-  int32_t send_coalesce(const IDataFrameId& id, const int64_t numPartitions, const bool shuffle);
-  void recv_coalesce(IDataFrameId& _return, const int32_t seqid);
   int64_t partitions(const IDataFrameId& id);
   int32_t send_partitions(const IDataFrameId& id);
   int64_t recv_partitions(const int32_t seqid);
@@ -11872,6 +12156,18 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void saveAsJsonFile(const IDataFrameId& id, const std::string& path, const bool pretty);
   int32_t send_saveAsJsonFile(const IDataFrameId& id, const std::string& path, const bool pretty);
   void recv_saveAsJsonFile(const int32_t seqid);
+  void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  int32_t send_repartition(const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
+  void recv_repartition(IDataFrameId& _return, const int32_t seqid);
+  void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  int32_t send_repartitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_repartitionByRandom(IDataFrameId& _return, const int32_t seqid);
+  void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  int32_t send_repartitionByHash(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_repartitionByHash(IDataFrameId& _return, const int32_t seqid);
+  void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  int32_t send_repartitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void recv_repartitionBy(IDataFrameId& _return, const int32_t seqid);
   void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   int32_t send_map_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_map_(IDataFrameId& _return, const int32_t seqid);

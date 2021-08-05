@@ -5,11 +5,12 @@ using namespace ignis::executor::core::modules;
 
 
 IGeneralModule::IGeneralModule(std::shared_ptr<IExecutorData> &executorData)
-    : IModule(executorData), pipe_impl(executorData), sort_impl(executorData), reduce_impl(executorData) {}
+    : IModule(executorData), pipe_impl(executorData), sort_impl(executorData), reduce_impl(executorData),
+      repartition_impl(executorData) {}
 
 IGeneralModule::~IGeneralModule() {}
 
-void IGeneralModule::executeTo(const ::ignis::rpc::ISource &function) {
+void IGeneralModule::executeTo(const rpc::ISource &function) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(function)->general->executeTo(pipe_impl);
     IGNIS_RPC_CATCH()
@@ -33,7 +34,7 @@ void IGeneralModule::flatmap(const rpc::ISource &function) {
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::keyBy(const ::ignis::rpc::ISource &src) {
+void IGeneralModule::keyBy(const rpc::ISource &src) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(src)->general->keyBy(pipe_impl);
     IGNIS_RPC_CATCH()
@@ -94,49 +95,73 @@ void IGeneralModule::sortBy3(const rpc::ISource &function, bool ascending, int64
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::union_(const std::string &other) {
+void IGeneralModule::union_(const std::string &other, const bool preserveOrder) {
     IGNIS_RPC_TRY()
-    throw exception::ILogicError("C++: not implemented yet");//TODO
+    typeFromPartition()->union_(reduce_impl, other, preserveOrder);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::union2(const std::string &other, const rpc::ISource &src) {
+void IGeneralModule::union2(const std::string &other, const bool preserveOrder, const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-    throw exception::ILogicError("C++: not implemented yet");//TODO
+    typeFromSource(src)->union_(reduce_impl, other, preserveOrder);
     IGNIS_RPC_CATCH()
 }
 
 void IGeneralModule::join(const std::string &other, const int64_t numPartitions) {
     IGNIS_RPC_TRY()
-    throw exception::ILogicError("C++: not implemented yet");//TODO
+    typeFromPartition()->join(reduce_impl, other, numPartitions);
     IGNIS_RPC_CATCH()
 }
 
 void IGeneralModule::join3(const std::string &other, const int64_t numPartitions, const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-    throw exception::ILogicError("C++: not implemented yet");//TODO
+    typeFromSource(src)->join(reduce_impl, other, numPartitions);
     IGNIS_RPC_CATCH()
 }
 
 void IGeneralModule::distinct(const int64_t numPartitions) {
     IGNIS_RPC_TRY()
-    throw exception::ILogicError("C++: not implemented yet");//TODO
+    typeFromPartition()->distinct(reduce_impl, numPartitions);
     IGNIS_RPC_CATCH()
 }
 
 void IGeneralModule::distinct2(const int64_t numPartitions, const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-        throw exception::ILogicError("C++: not implemented yet");//TODO
+    typeFromSource(src)->distinct(reduce_impl, numPartitions);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::flatMapValues(const ::ignis::rpc::ISource &src) {
+void IGeneralModule::repartition(const int64_t numPartitions, const bool preserveOrdering, const bool global_) {
+    IGNIS_RPC_TRY()
+    typeFromPartition()->repartition(repartition_impl, numPartitions, preserveOrdering, global_);
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::repartitionByRandom(const int64_t numPartitions) {
+    IGNIS_RPC_TRY()
+    typeFromPartition()->repartitionByRandom(repartition_impl, numPartitions);
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::repartitionByHash(const int64_t numPartitions) {
+    IGNIS_RPC_TRY()
+    typeFromPartition()->repartitionByHash(repartition_impl, numPartitions);
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::repartitionBy(const rpc::ISource &src, const int64_t numPartitions) {
+    IGNIS_RPC_TRY()
+    executor_data->loadLibrary(src)->general->repartitionBy(repartition_impl, numPartitions);
+    IGNIS_RPC_CATCH()
+}
+
+void IGeneralModule::flatMapValues(const rpc::ISource &src) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(src)->key->flatMapValues(pipe_impl);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::mapValues(const ::ignis::rpc::ISource &src) {
+void IGeneralModule::mapValues(const rpc::ISource &src) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(src)->key->mapValues(pipe_impl);
     IGNIS_RPC_CATCH()
@@ -148,28 +173,27 @@ void IGeneralModule::groupByKey(const int64_t numPartitions) {
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::groupByKey2(const int64_t numPartitions, const ::ignis::rpc::ISource &src) {
+void IGeneralModule::groupByKey2(const int64_t numPartitions, const rpc::ISource &src) {
     IGNIS_RPC_TRY()
     typeFromSource(src)->groupByKey(reduce_impl, numPartitions);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::reduceByKey(const ::ignis::rpc::ISource &src, const int64_t numPartitions, bool localReduce) {
+void IGeneralModule::reduceByKey(const rpc::ISource &src, const int64_t numPartitions, bool localReduce) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(src)->key->reduceByKey(reduce_impl, numPartitions, localReduce);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::aggregateByKey(const ::ignis::rpc::ISource &zero, const ::ignis::rpc::ISource &seqOp,
-                                    const int64_t numPartitions) {
+void IGeneralModule::aggregateByKey(const rpc::ISource &zero, const rpc::ISource &seqOp, const int64_t numPartitions) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(zero)->general_action->zero(reduce_impl);
     executor_data->loadLibrary(seqOp)->key->aggregateByKey(reduce_impl, numPartitions, true);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::aggregateByKey4(const ::ignis::rpc::ISource &zero, const ::ignis::rpc::ISource &seqOp,
-                                     const ::ignis::rpc::ISource &combOp, const int64_t numPartitions) {
+void IGeneralModule::aggregateByKey4(const rpc::ISource &zero, const rpc::ISource &seqOp, const rpc::ISource &combOp,
+                                     const int64_t numPartitions) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(zero)->general_action->zero(reduce_impl);
     executor_data->loadLibrary(seqOp)->key->aggregateByKey(reduce_impl, numPartitions, false);
@@ -177,8 +201,8 @@ void IGeneralModule::aggregateByKey4(const ::ignis::rpc::ISource &zero, const ::
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::foldByKey(const ::ignis::rpc::ISource &zero, const ::ignis::rpc::ISource &src,
-                               const int64_t numPartitions, bool localFold) {
+void IGeneralModule::foldByKey(const rpc::ISource &zero, const rpc::ISource &src, const int64_t numPartitions,
+                               bool localFold) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(zero)->general_action->zero(reduce_impl);
     executor_data->loadLibrary(src)->key->foldByKey(reduce_impl, numPartitions, localFold);
@@ -197,13 +221,13 @@ void IGeneralModule::sortByKey2a(const bool ascending, const int64_t numPartitio
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::sortByKey2b(const ::ignis::rpc::ISource &src, const bool ascending) {
+void IGeneralModule::sortByKey2b(const rpc::ISource &src, const bool ascending) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(src)->value->sortByKey(sort_impl, ascending);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::sortByKey3(const ::ignis::rpc::ISource &src, const bool ascending, const int64_t numPartitions) {
+void IGeneralModule::sortByKey3(const rpc::ISource &src, const bool ascending, const int64_t numPartitions) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(src)->value->sortByKey(sort_impl, ascending, numPartitions);
     IGNIS_RPC_CATCH()

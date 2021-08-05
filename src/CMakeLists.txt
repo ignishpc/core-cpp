@@ -13,6 +13,7 @@ FILE(GLOB rpc
 
 set(SOURCE_FILES
         #Driver api
+        ignis/driver/api.h
         ignis/driver/api/ICluster.cpp
         ignis/driver/api/ICluster.h
         ignis/driver/api/IDataFrame.cpp
@@ -103,6 +104,9 @@ set(SOURCE_FILES
         ignis/executor/core/modules/impl/IReduceImpl.cpp
         ignis/executor/core/modules/impl/IReduceImpl.h
         ignis/executor/core/modules/impl/IReduceImpl.tcc
+        ignis/executor/core/modules/impl/IRepartitionImpl.cpp
+        ignis/executor/core/modules/impl/IRepartitionImpl.tcc
+        ignis/executor/core/modules/impl/IRepartitionImpl.h
         ignis/executor/core/modules/impl/ISortImpl.cpp
         ignis/executor/core/modules/impl/ISortImpl.h
         ignis/executor/core/modules/impl/ISortImpl.tcc
@@ -168,6 +172,7 @@ set(SOURCE_FILES
         ignis/executor/core/IExecutorData.cpp
         ignis/executor/core/IExecutorData.h
         ignis/executor/core/IExecutorData.tcc
+        ignis/executor/core/ILambda.h
         ignis/executor/core/ILibraryLoader.cpp
         ignis/executor/core/ILibraryLoader.h
         ignis/executor/core/ILog.cpp

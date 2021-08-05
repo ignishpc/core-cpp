@@ -55,7 +55,7 @@ namespace ignis {
                         template<typename Tp>
                         void driverScatter(const std::string &group, int64_t partitions);
 
-                        int32_t enableMultithreading(const std::string& group);
+                        int32_t enableMultithreading(const std::string &group);
 
                         template<typename Tp>
                         void send(const std::string &group, int64_t partition, int64_t dest, int64_t thread);
@@ -65,9 +65,18 @@ namespace ignis {
 
                         void recvVoid(const std::string &group, int64_t partition, int64_t source, int64_t thread);
 
+                        template<typename Tp>
+                        void importData(const std::string &group, bool source, int64_t threads);
+
+                        void importDataVoid(const std::string &group, bool source, int64_t threads);
+
                         virtual ~ICommImpl();
 
                     private:
+                        int64_t importDataAux(const MPI::Intracomm &group, bool source,
+                                           std::vector<std::pair<int64_t, int64_t>> &ranges,
+                                           std::vector<int64_t> &queue);
+
                         MPI::Intracomm joinToGroupImpl(const std::string &id, bool leader);
 
                         MPI::Intracomm &getGroup(const std::string &id);

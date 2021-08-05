@@ -40,9 +40,8 @@ class ICommModuleIf {
   virtual void driverGather0(const std::string& group, const  ::ignis::rpc::ISource& src) = 0;
   virtual void driverScatter(const std::string& group, const int64_t partitions) = 0;
   virtual void driverScatter3(const std::string& group, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
-  virtual int32_t enableMultithreading(const std::string& group) = 0;
-  virtual void send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread) = 0;
-  virtual void recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread) = 0;
+  virtual void importData(const std::string& group, const bool source, const int64_t threads) = 0;
+  virtual void importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src) = 0;
 };
 
 class ICommModuleIfFactory {
@@ -128,14 +127,10 @@ class ICommModuleNull : virtual public ICommModuleIf {
   void driverScatter3(const std::string& /* group */, const int64_t /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
-  int32_t enableMultithreading(const std::string& /* group */) {
-    int32_t _return = 0;
-    return _return;
-  }
-  void send(const std::string& /* group */, const int64_t /* partition */, const int64_t /* dest */, const int32_t /* thread */) {
+  void importData(const std::string& /* group */, const bool /* source */, const int64_t /* threads */) {
     return;
   }
-  void recv(const std::string& /* group */, const int64_t /* partition */, const int64_t /* source */, const int32_t /* thread */) {
+  void importData4(const std::string& /* group */, const bool /* source */, const int64_t /* threads */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
 };
@@ -2081,292 +2076,49 @@ class ICommModule_driverScatter3_presult {
 
 };
 
-typedef struct _ICommModule_enableMultithreading_args__isset {
-  _ICommModule_enableMultithreading_args__isset() : group(false) {}
+typedef struct _ICommModule_importData_args__isset {
+  _ICommModule_importData_args__isset() : group(false), source(false), threads(false) {}
   bool group :1;
-} _ICommModule_enableMultithreading_args__isset;
-
-class ICommModule_enableMultithreading_args {
- public:
-
-  ICommModule_enableMultithreading_args(const ICommModule_enableMultithreading_args&);
-  ICommModule_enableMultithreading_args& operator=(const ICommModule_enableMultithreading_args&);
-  ICommModule_enableMultithreading_args() : group() {
-  }
-
-  virtual ~ICommModule_enableMultithreading_args() noexcept;
-  std::string group;
-
-  _ICommModule_enableMultithreading_args__isset __isset;
-
-  void __set_group(const std::string& val);
-
-  bool operator == (const ICommModule_enableMultithreading_args & rhs) const
-  {
-    if (!(group == rhs.group))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_enableMultithreading_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_enableMultithreading_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ICommModule_enableMultithreading_pargs {
- public:
-
-
-  virtual ~ICommModule_enableMultithreading_pargs() noexcept;
-  const std::string* group;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_enableMultithreading_result__isset {
-  _ICommModule_enableMultithreading_result__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _ICommModule_enableMultithreading_result__isset;
-
-class ICommModule_enableMultithreading_result {
- public:
-
-  ICommModule_enableMultithreading_result(const ICommModule_enableMultithreading_result&);
-  ICommModule_enableMultithreading_result& operator=(const ICommModule_enableMultithreading_result&);
-  ICommModule_enableMultithreading_result() : success(0) {
-  }
-
-  virtual ~ICommModule_enableMultithreading_result() noexcept;
-  int32_t success;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_enableMultithreading_result__isset __isset;
-
-  void __set_success(const int32_t val);
-
-  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
-
-  bool operator == (const ICommModule_enableMultithreading_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_enableMultithreading_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_enableMultithreading_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_enableMultithreading_presult__isset {
-  _ICommModule_enableMultithreading_presult__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _ICommModule_enableMultithreading_presult__isset;
-
-class ICommModule_enableMultithreading_presult {
- public:
-
-
-  virtual ~ICommModule_enableMultithreading_presult() noexcept;
-  int32_t* success;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_enableMultithreading_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _ICommModule_send_args__isset {
-  _ICommModule_send_args__isset() : group(false), partition(false), dest(false), thread(false) {}
-  bool group :1;
-  bool partition :1;
-  bool dest :1;
-  bool thread :1;
-} _ICommModule_send_args__isset;
-
-class ICommModule_send_args {
- public:
-
-  ICommModule_send_args(const ICommModule_send_args&);
-  ICommModule_send_args& operator=(const ICommModule_send_args&);
-  ICommModule_send_args() : group(), partition(0), dest(0), thread(0) {
-  }
-
-  virtual ~ICommModule_send_args() noexcept;
-  std::string group;
-  int64_t partition;
-  int64_t dest;
-  int32_t thread;
-
-  _ICommModule_send_args__isset __isset;
-
-  void __set_group(const std::string& val);
-
-  void __set_partition(const int64_t val);
-
-  void __set_dest(const int64_t val);
-
-  void __set_thread(const int32_t val);
-
-  bool operator == (const ICommModule_send_args & rhs) const
-  {
-    if (!(group == rhs.group))
-      return false;
-    if (!(partition == rhs.partition))
-      return false;
-    if (!(dest == rhs.dest))
-      return false;
-    if (!(thread == rhs.thread))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_send_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_send_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ICommModule_send_pargs {
- public:
-
-
-  virtual ~ICommModule_send_pargs() noexcept;
-  const std::string* group;
-  const int64_t* partition;
-  const int64_t* dest;
-  const int32_t* thread;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_send_result__isset {
-  _ICommModule_send_result__isset() : ex(false) {}
-  bool ex :1;
-} _ICommModule_send_result__isset;
-
-class ICommModule_send_result {
- public:
-
-  ICommModule_send_result(const ICommModule_send_result&);
-  ICommModule_send_result& operator=(const ICommModule_send_result&);
-  ICommModule_send_result() {
-  }
-
-  virtual ~ICommModule_send_result() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_send_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
-
-  bool operator == (const ICommModule_send_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_send_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_send_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_send_presult__isset {
-  _ICommModule_send_presult__isset() : ex(false) {}
-  bool ex :1;
-} _ICommModule_send_presult__isset;
-
-class ICommModule_send_presult {
- public:
-
-
-  virtual ~ICommModule_send_presult() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_send_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _ICommModule_recv_args__isset {
-  _ICommModule_recv_args__isset() : group(false), partition(false), source(false), thread(false) {}
-  bool group :1;
-  bool partition :1;
   bool source :1;
-  bool thread :1;
-} _ICommModule_recv_args__isset;
+  bool threads :1;
+} _ICommModule_importData_args__isset;
 
-class ICommModule_recv_args {
+class ICommModule_importData_args {
  public:
 
-  ICommModule_recv_args(const ICommModule_recv_args&);
-  ICommModule_recv_args& operator=(const ICommModule_recv_args&);
-  ICommModule_recv_args() : group(), partition(0), source(0), thread(0) {
+  ICommModule_importData_args(const ICommModule_importData_args&);
+  ICommModule_importData_args& operator=(const ICommModule_importData_args&);
+  ICommModule_importData_args() : group(), source(0), threads(0) {
   }
 
-  virtual ~ICommModule_recv_args() noexcept;
+  virtual ~ICommModule_importData_args() noexcept;
   std::string group;
-  int64_t partition;
-  int64_t source;
-  int32_t thread;
+  bool source;
+  int64_t threads;
 
-  _ICommModule_recv_args__isset __isset;
+  _ICommModule_importData_args__isset __isset;
 
   void __set_group(const std::string& val);
 
-  void __set_partition(const int64_t val);
+  void __set_source(const bool val);
 
-  void __set_source(const int64_t val);
+  void __set_threads(const int64_t val);
 
-  void __set_thread(const int32_t val);
-
-  bool operator == (const ICommModule_recv_args & rhs) const
+  bool operator == (const ICommModule_importData_args & rhs) const
   {
     if (!(group == rhs.group))
-      return false;
-    if (!(partition == rhs.partition))
       return false;
     if (!(source == rhs.source))
       return false;
-    if (!(thread == rhs.thread))
+    if (!(threads == rhs.threads))
       return false;
     return true;
   }
-  bool operator != (const ICommModule_recv_args &rhs) const {
+  bool operator != (const ICommModule_importData_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const ICommModule_recv_args & ) const;
+  bool operator < (const ICommModule_importData_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -2374,70 +2126,194 @@ class ICommModule_recv_args {
 };
 
 
-class ICommModule_recv_pargs {
+class ICommModule_importData_pargs {
  public:
 
 
-  virtual ~ICommModule_recv_pargs() noexcept;
+  virtual ~ICommModule_importData_pargs() noexcept;
   const std::string* group;
-  const int64_t* partition;
-  const int64_t* source;
-  const int32_t* thread;
+  const bool* source;
+  const int64_t* threads;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _ICommModule_recv_result__isset {
-  _ICommModule_recv_result__isset() : ex(false) {}
+typedef struct _ICommModule_importData_result__isset {
+  _ICommModule_importData_result__isset() : ex(false) {}
   bool ex :1;
-} _ICommModule_recv_result__isset;
+} _ICommModule_importData_result__isset;
 
-class ICommModule_recv_result {
+class ICommModule_importData_result {
  public:
 
-  ICommModule_recv_result(const ICommModule_recv_result&);
-  ICommModule_recv_result& operator=(const ICommModule_recv_result&);
-  ICommModule_recv_result() {
+  ICommModule_importData_result(const ICommModule_importData_result&);
+  ICommModule_importData_result& operator=(const ICommModule_importData_result&);
+  ICommModule_importData_result() {
   }
 
-  virtual ~ICommModule_recv_result() noexcept;
+  virtual ~ICommModule_importData_result() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _ICommModule_recv_result__isset __isset;
+  _ICommModule_importData_result__isset __isset;
 
   void __set_ex(const  ::ignis::rpc::IExecutorException& val);
 
-  bool operator == (const ICommModule_recv_result & rhs) const
+  bool operator == (const ICommModule_importData_result & rhs) const
   {
     if (!(ex == rhs.ex))
       return false;
     return true;
   }
-  bool operator != (const ICommModule_recv_result &rhs) const {
+  bool operator != (const ICommModule_importData_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const ICommModule_recv_result & ) const;
+  bool operator < (const ICommModule_importData_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _ICommModule_recv_presult__isset {
-  _ICommModule_recv_presult__isset() : ex(false) {}
+typedef struct _ICommModule_importData_presult__isset {
+  _ICommModule_importData_presult__isset() : ex(false) {}
   bool ex :1;
-} _ICommModule_recv_presult__isset;
+} _ICommModule_importData_presult__isset;
 
-class ICommModule_recv_presult {
+class ICommModule_importData_presult {
  public:
 
 
-  virtual ~ICommModule_recv_presult() noexcept;
+  virtual ~ICommModule_importData_presult() noexcept;
    ::ignis::rpc::IExecutorException ex;
 
-  _ICommModule_recv_presult__isset __isset;
+  _ICommModule_importData_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _ICommModule_importData4_args__isset {
+  _ICommModule_importData4_args__isset() : group(false), source(false), threads(false), src(false) {}
+  bool group :1;
+  bool source :1;
+  bool threads :1;
+  bool src :1;
+} _ICommModule_importData4_args__isset;
+
+class ICommModule_importData4_args {
+ public:
+
+  ICommModule_importData4_args(const ICommModule_importData4_args&);
+  ICommModule_importData4_args& operator=(const ICommModule_importData4_args&);
+  ICommModule_importData4_args() : group(), source(0), threads(0) {
+  }
+
+  virtual ~ICommModule_importData4_args() noexcept;
+  std::string group;
+  bool source;
+  int64_t threads;
+   ::ignis::rpc::ISource src;
+
+  _ICommModule_importData4_args__isset __isset;
+
+  void __set_group(const std::string& val);
+
+  void __set_source(const bool val);
+
+  void __set_threads(const int64_t val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const ICommModule_importData4_args & rhs) const
+  {
+    if (!(group == rhs.group))
+      return false;
+    if (!(source == rhs.source))
+      return false;
+    if (!(threads == rhs.threads))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_importData4_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_importData4_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class ICommModule_importData4_pargs {
+ public:
+
+
+  virtual ~ICommModule_importData4_pargs() noexcept;
+  const std::string* group;
+  const bool* source;
+  const int64_t* threads;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_importData4_result__isset {
+  _ICommModule_importData4_result__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_importData4_result__isset;
+
+class ICommModule_importData4_result {
+ public:
+
+  ICommModule_importData4_result(const ICommModule_importData4_result&);
+  ICommModule_importData4_result& operator=(const ICommModule_importData4_result&);
+  ICommModule_importData4_result() {
+  }
+
+  virtual ~ICommModule_importData4_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_importData4_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const ICommModule_importData4_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const ICommModule_importData4_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const ICommModule_importData4_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _ICommModule_importData4_presult__isset {
+  _ICommModule_importData4_presult__isset() : ex(false) {}
+  bool ex :1;
+} _ICommModule_importData4_presult__isset;
+
+class ICommModule_importData4_presult {
+ public:
+
+
+  virtual ~ICommModule_importData4_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _ICommModule_importData4_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -2522,15 +2398,12 @@ class ICommModuleClient : virtual public ICommModuleIf {
   void driverScatter3(const std::string& group, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void send_driverScatter3(const std::string& group, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void recv_driverScatter3();
-  int32_t enableMultithreading(const std::string& group);
-  void send_enableMultithreading(const std::string& group);
-  int32_t recv_enableMultithreading();
-  void send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread);
-  void send_send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread);
-  void recv_send();
-  void recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread);
-  void send_recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread);
-  void recv_recv();
+  void importData(const std::string& group, const bool source, const int64_t threads);
+  void send_importData(const std::string& group, const bool source, const int64_t threads);
+  void recv_importData();
+  void importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src);
+  void send_importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src);
+  void recv_importData4();
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -2564,9 +2437,8 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_driverGather0(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverScatter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverScatter3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_enableMultithreading(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_send(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_recv(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_importData(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_importData4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   ICommModuleProcessor(::std::shared_ptr<ICommModuleIf> iface) :
     iface_(iface) {
@@ -2588,9 +2460,8 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["driverGather0"] = &ICommModuleProcessor::process_driverGather0;
     processMap_["driverScatter"] = &ICommModuleProcessor::process_driverScatter;
     processMap_["driverScatter3"] = &ICommModuleProcessor::process_driverScatter3;
-    processMap_["enableMultithreading"] = &ICommModuleProcessor::process_enableMultithreading;
-    processMap_["send"] = &ICommModuleProcessor::process_send;
-    processMap_["recv"] = &ICommModuleProcessor::process_recv;
+    processMap_["importData"] = &ICommModuleProcessor::process_importData;
+    processMap_["importData4"] = &ICommModuleProcessor::process_importData4;
   }
 
   virtual ~ICommModuleProcessor() {}
@@ -2784,31 +2655,22 @@ class ICommModuleMultiface : virtual public ICommModuleIf {
     ifaces_[i]->driverScatter3(group, partitions, src);
   }
 
-  int32_t enableMultithreading(const std::string& group) {
+  void importData(const std::string& group, const bool source, const int64_t threads) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->enableMultithreading(group);
+      ifaces_[i]->importData(group, source, threads);
     }
-    return ifaces_[i]->enableMultithreading(group);
+    ifaces_[i]->importData(group, source, threads);
   }
 
-  void send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread) {
+  void importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->send(group, partition, dest, thread);
+      ifaces_[i]->importData4(group, source, threads, src);
     }
-    ifaces_[i]->send(group, partition, dest, thread);
-  }
-
-  void recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->recv(group, partition, source, thread);
-    }
-    ifaces_[i]->recv(group, partition, source, thread);
+    ifaces_[i]->importData4(group, source, threads, src);
   }
 
 };
@@ -2897,15 +2759,12 @@ class ICommModuleConcurrentClient : virtual public ICommModuleIf {
   void driverScatter3(const std::string& group, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   int32_t send_driverScatter3(const std::string& group, const int64_t partitions, const  ::ignis::rpc::ISource& src);
   void recv_driverScatter3(const int32_t seqid);
-  int32_t enableMultithreading(const std::string& group);
-  int32_t send_enableMultithreading(const std::string& group);
-  int32_t recv_enableMultithreading(const int32_t seqid);
-  void send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread);
-  int32_t send_send(const std::string& group, const int64_t partition, const int64_t dest, const int32_t thread);
-  void recv_send(const int32_t seqid);
-  void recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread);
-  int32_t send_recv(const std::string& group, const int64_t partition, const int64_t source, const int32_t thread);
-  void recv_recv(const int32_t seqid);
+  void importData(const std::string& group, const bool source, const int64_t threads);
+  int32_t send_importData(const std::string& group, const bool source, const int64_t threads);
+  void recv_importData(const int32_t seqid);
+  void importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src);
+  int32_t send_importData4(const std::string& group, const bool source, const int64_t threads, const  ::ignis::rpc::ISource& src);
+  void recv_importData4(const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;

@@ -53,11 +53,7 @@ bool ICommImpl::hasGroup(const std::string &name) {
 void ICommImpl::destroyGroup(const std::string &name) {
     IGNIS_TRY()
     if (name.empty()) {
-        MPI::Intracomm comm = executor_data->mpi().native();
-        if (comm != MPI::COMM_WORLD) {
-            comm.Free();
-            executor_data->setMpiGroup(MPI::COMM_WORLD);
-        }
+        executor_data->destroyMpiGroup();
         return;
     }
 
@@ -73,11 +69,7 @@ void ICommImpl::destroyGroups() {
     IGNIS_TRY()
     for (auto &elem : groups) { elem.second.Free(); }
     groups.clear();
-    MPI::Intracomm comm = executor_data->mpi().native();
-    if (comm != MPI::COMM_WORLD) {
-        comm.Free();
-        executor_data->setMpiGroup(MPI::COMM_WORLD);
-    }
+    executor_data->destroyMpiGroup();
     IGNIS_CATCH()
 }
 
@@ -113,20 +105,6 @@ void ICommImpl::driverScatterVoid(const std::string &group, int64_t partitions) 
     IGNIS_CATCH()
 }
 
-int32_t ICommImpl::enableMultithreading(const std::string &group) {
-    return 1;//TODO
-}
-
-void ICommImpl::recvVoid(const std::string &group, int64_t partition, int64_t source, int64_t thread) {
-    IGNIS_TRY()
-    auto part_group = executor_data->getPartitions<storage::IVoidPartition::VOID_TYPE>(true);
-    auto comm = getGroup(group);
-    int tag = comm.Get_rank();
-    executor_data->mpi().recvVoid(comm, (storage::IVoidPartition &) *(*part_group)[partition], source, tag);
-
-    IGNIS_CATCH()
-}
-
 MPI::Intracomm ICommImpl::joinToGroupImpl(const std::string &id, bool leader) {
     bool root = executor_data->hasVariable("server");
     MPI::Intracomm comm = executor_data->mpi().native();
@@ -150,4 +128,130 @@ MPI::Intracomm &ICommImpl::getGroup(const std::string &id) {
     auto it = groups.find(id);
     if (it == groups.end()) { throw ignis::executor::core::exception::ILogicError("Group " + id + " not found"); }
     return it->second;
+}
+
+int64_t ICommImpl::importDataAux(const MPI::Intracomm &group, bool source,
+                                 std::vector<std::pair<int64_t, int64_t>> &ranges, std::vector<int64_t> &queue) {
+    int64_t rank = group.Get_rank();
+    int64_t local_rank = executor_data->mpi().rank();
+    int64_t executors = group.Get_size();
+    int64_t local_executors = executor_data->getContext().executors();
+    int64_t remote_executors = executors - local_executors;
+    int64_t local_root = rank == executor_data->mpi().rank() ? 0 : remote_executors;
+    int64_t remote_root = local_root == 0 ? remote_executors : 0;
+    int64_t source_root = source ? local_root : remote_root;
+    int64_t target_executors = source ? local_executors : remote_executors;
+    int64_t count = 0;
+    int64_t numPartitions = 0;
+    if (source) {
+        auto input = executor_data->getPartitions<char>(true);
+        for (auto part : *input) { count += part->size(); }
+        numPartitions = input->partitions();
+    }
+    group.Allreduce(MPI::IN_PLACE, &numPartitions, 1, MPI::LONG_LONG, MPI::SUM);
+    IGNIS_LOG(info) << "General: importData " << numPartitions << "partitions";
+    int64_t block = numPartitions / target_executors;
+    int64_t remainder = numPartitions % target_executors;
+
+    int64_t last = 0;
+    int64_t end;
+    for (int64_t i = 0; i < target_executors; i++) {
+        end = last + block + 1;
+        if (i < remainder) { end += 1; }
+        ranges.emplace_back(last, end);
+    }
+
+    if (source_root == 0) {
+        std::vector<std::pair<int64_t, int64_t>> init(executors - target_executors, std::pair<int64_t, int64_t>(0, 0));
+        ranges.insert(ranges.begin(), init.begin(), init.end());
+    } else {
+        auto aux = std::pair<int64_t, int64_t>(ranges.back().second, ranges.back().second);
+        std::vector<std::pair<int64_t, int64_t>> init(executors - target_executors, aux);
+        ranges.insert(ranges.end(), init.begin(), init.end());
+    }
+
+    std::vector<int64_t> global_queue;
+    int64_t m = executors % 2 == 0 ? executors : executors + 1;
+    int64_t id = 0;
+    int64_t id2 = m * m - 2;
+    for (int64_t i = 0; i < m - 1; i++) {
+        if (rank == id % (m - 1)) { global_queue.push_back(m - 1); }
+        if (rank == m - 1) { global_queue.push_back(id % (m - 1)); }
+        id += 1;
+        for (int64_t j = 0; j < m / 2; j++) {
+            if (rank == id % (m - 1)) { global_queue.push_back(id2 % (m - 1)); }
+            if (rank == id2 % (m - 1)) { global_queue.push_back(id % (m - 1)); }
+            id += 1;
+            id2 -= 1;
+        }
+    }
+
+    for (auto other : global_queue) {
+        if (local_root > 0) {
+            if (other < local_root) { queue.push_back(other); }
+        } else {
+            if (other >= remote_root) { queue.push_back(other); }
+        }
+    }
+
+    if (source) {
+        std::vector<int64_t> executors_count(executors);
+        int64_t offset = 0;
+        executor_data->mpi().native().Allgather(&count, 1, MPI::LONG, &executors_count[0], 1, MPI::LONG);
+        for (int64_t i = 0; i < local_rank; i++) { offset += executors_count[i]; }
+        return offset;
+    }
+    return ranges[rank].first;
+}
+
+void ICommImpl::importDataVoid(const std::string &group, bool source, int64_t threads) {
+    auto import_comm = getGroup(group);
+    auto executors = import_comm.Get_size();
+    int64_t me = import_comm.Get_rank();
+    std::vector<std::pair<int64_t, int64_t>> ranges;
+    std::vector<int64_t> queue;
+    int64_t offset = importDataAux(import_comm, source, ranges, queue);
+    IGNIS_LOG(info) << "General: importData receiving partitions";
+
+    auto parts = std::make_shared<storage::IPartitionGroup<storage::IVoidPartition::VOID_TYPE>>();
+    for (int64_t i = 0; i < ranges[me].second - ranges[me].first; i++) {
+        parts->add(executor_data->getPartitionTools().newVoidPartition());
+    }
+
+    auto shared = *parts;
+    auto threads_comm = executor_data->duplicate(import_comm, threads);
+
+    IGNIS_OMP_EXCEPTION_INIT()
+    #pragma omp parallel num_threads(threads)
+    {
+        IGNIS_OMP_TRY()
+        auto comm = threads_comm[executor_data->getContext().threadId()];
+    #pragma omp for schedule(static, 1)
+        for (int64_t i = 0; i < queue.size(); i++) {
+            int64_t other = queue[i];
+            bool ignore;
+            if (other == executors) { continue; }
+
+            comm.Recv(&ignore, 1, MPI::BOOL, other, 0);
+
+            if (ignore) { continue; }
+            IMpi::MsgOpt opt = executor_data->mpi().getMsgOpt(comm, shared[0]->type(), source, other, 0);
+            int64_t its;
+            int64_t first;
+
+            first = ranges[me].first;
+            its = ranges[me].second - ranges[me].first;
+
+            for (int64_t j = 0; j < its; j++) {
+                executor_data->mpi().recvVoid(comm, (storage::IVoidPartition &) *shared[first - offset + j], other, 0,
+                                              opt);
+            }
+        }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+
+    for (int64_t i = 1; i < threads_comm.size(); i++) { threads_comm[i].Free(); }
+
+    executor_data->setPartitions(parts);
 }

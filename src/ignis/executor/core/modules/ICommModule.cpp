@@ -131,24 +131,15 @@ void ICommModule::driverScatter3(const std::string &group, int64_t partitions, c
     IGNIS_RPC_CATCH()
 }
 
-int32_t ICommModule::enableMultithreading(const std::string &group) {
+void ICommModule::importData(const std::string &group, const bool source, const int64_t threads) {
     IGNIS_RPC_TRY()
-    return impl.enableMultithreading(group);
+    typeFromPartition()->importData(impl, group, source, threads);
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::send(const std::string &group, const int64_t partition, const int64_t dest, const int32_t thread) {
+void ICommModule::importData4(const std::string &group, const bool source, const int64_t threads,
+                              const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-    typeFromPartition()->send(impl, group, partition, dest, thread);
-    IGNIS_RPC_CATCH()
-}
-
-void ICommModule::recv(const std::string &group, const int64_t partition, const int64_t source, const int32_t thread) {
-    IGNIS_RPC_TRY()
-    if (!executor_data->hasVoidPartitions()) {
-        typeFromPartition()->recv(impl, group, partition, source, thread);
-    } else {
-        impl.recvVoid(group, partition, source, thread);
-    }
+    typeFromSource(src)->importData(impl, group, source, threads);
     IGNIS_RPC_CATCH()
 }
