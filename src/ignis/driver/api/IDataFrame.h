@@ -47,11 +47,11 @@ namespace ignis {
                 /*General*/
                 rpc::driver::IDataFrameId repartitionAbs(int64_t numPartitions, bool preserveOrdering, bool global);
 
-                rpc::driver::IDataFrameId repartitionByRandomAbs(int64_t numPartitions);
+                rpc::driver::IDataFrameId partitionByRandomAbs(int64_t numPartitions);
 
-                rpc::driver::IDataFrameId repartitionByHashAbs(int64_t numPartitions);
+                rpc::driver::IDataFrameId partitionByHashAbs(int64_t numPartitions);
 
-                rpc::driver::IDataFrameId repartitionByAbs(const ISource &src, int64_t numPartitions);
+                rpc::driver::IDataFrameId partitionByAbs(const ISource &src, int64_t numPartitions);
 
                 rpc::driver::IDataFrameId mapAbs(const ISource &src);
 
@@ -84,13 +84,7 @@ namespace ignis {
                 rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder);
 
                 rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
-                                                   int64_t numPartitions);
-
-                rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
                                                    const ISource &src);
-
-                rpc::driver::IDataFrameId unionAbs(const rpc::driver::IDataFrameId &other, bool preserveOrder,
-                                                   int64_t numPartitions, const ISource &src);
 
                 rpc::driver::IDataFrameId distinctAbs();
 
@@ -251,16 +245,16 @@ namespace ignis {
                     return IDataFrame<Tp>(repartitionAbs(numPartitions,preserveOrdering,global));
                 }
 
-                IDataFrame<Tp> repartitionByRandom(int64_t numPartitions){
-                    return IDataFrame<Tp>(repartitionByRandomAbs(numPartitions));
+                IDataFrame<Tp> partitionByRandom(int64_t numPartitions){
+                    return IDataFrame<Tp>(partitionByRandomAbs(numPartitions));
                 }
 
-                IDataFrame<Tp> repartitionByHash(int64_t numPartitions){
-                    return IDataFrame<Tp>(repartitionByHashAbs(numPartitions));
+                IDataFrame<Tp> partitionByHash(int64_t numPartitions){
+                    return IDataFrame<Tp>(partitionByHashAbs(numPartitions));
                 }
 
-                IDataFrame<Tp> repartitionBy(const ISource &src, int64_t numPartitions){
-                    return IDataFrame<Tp>(repartitionByAbs(src, numPartitions));
+                IDataFrame<Tp> partitionBy(const ISource &src, int64_t numPartitions){
+                    return IDataFrame<Tp>(partitionByAbs(src, numPartitions));
                 }
 
 
@@ -328,17 +322,8 @@ namespace ignis {
                     return IDataFrame<Tp>(unionAbs(other.id, preserveOrder));
                 }
 
-                IDataFrame<Tp> _union(const IDataFrame<Tp> &other, bool preserveOrder, int64_t numPartitions) {
-                    return IDataFrame<Tp>(unionAbs(other.id, preserveOrder, numPartitions));
-                }
-
                 IDataFrame<Tp> _union(const IDataFrame<Tp> &other, bool preserveOrder, const ISource &src) {
                     return IDataFrame<Tp>(unionAbs(other.id, preserveOrder, src));
-                }
-
-                IDataFrame<Tp> _union(const IDataFrame<Tp> &other, bool preserveOrder, int64_t numPartitions,
-                                      const ISource &src) {
-                    return IDataFrame<Tp>(unionAbs(other.id, preserveOrder, numPartitions, src));
                 }
 
                 IDataFrame<Tp> distinct() { return IDataFrame<Tp>(distinctAbs()); }

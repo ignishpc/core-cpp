@@ -39,10 +39,6 @@ namespace ignis {
 
                     void setPartitions2(const std::vector<std::string> &partitions, const rpc::ISource &src) override;
 
-                    void newEmptyPartitions(const int64_t n) override;
-
-                    void newEmptyPartitions2(const int64_t n, const rpc::ISource &src) override;
-
                     void driverGather(const std::string &group, const rpc::ISource &src) override;
 
                     void driverGather0(const std::string &group, const rpc::ISource &src) override;

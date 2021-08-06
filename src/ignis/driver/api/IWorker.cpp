@@ -78,26 +78,10 @@ IDataFrameId IWorker::importDataFrameAbs(IDataFrameId data) {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
-IDataFrameId IWorker::importDataFrameAbs(IDataFrameId data, int64_t partitions) {
-    try {
-        IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().importDataFrame3a(_return, id, data, partitions);
-        return _return;
-    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
-}
-
 IDataFrameId IWorker::importDataFrameAbs(IDataFrameId data, const ISource &src) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().importDataFrame3b(_return, id, data, src.rpc());
-        return _return;
-    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
-}
-
-IDataFrameId IWorker::importDataFrameAbs(IDataFrameId data, int64_t partitions, const ISource &src) {
-    try {
-        IDataFrameId _return;
-        Ignis::clientPool->getClient()->getWorkerService().importDataFrame4(_return, id, data, partitions, src.rpc());
+        Ignis::clientPool->getClient()->getWorkerService().importDataFrame3(_return, id, data, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }

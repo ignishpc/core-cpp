@@ -34,8 +34,6 @@ class ICommModuleIf {
   virtual void getPartitions2(std::vector<std::string> & _return, const int8_t protocol, const int64_t minPartitions) = 0;
   virtual void setPartitions(const std::vector<std::string> & partitions) = 0;
   virtual void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src) = 0;
-  virtual void newEmptyPartitions(const int64_t n) = 0;
-  virtual void newEmptyPartitions2(const int64_t n, const  ::ignis::rpc::ISource& src) = 0;
   virtual void driverGather(const std::string& group, const  ::ignis::rpc::ISource& src) = 0;
   virtual void driverGather0(const std::string& group, const  ::ignis::rpc::ISource& src) = 0;
   virtual void driverScatter(const std::string& group, const int64_t partitions) = 0;
@@ -107,12 +105,6 @@ class ICommModuleNull : virtual public ICommModuleIf {
     return;
   }
   void setPartitions2(const std::vector<std::string> & /* partitions */, const  ::ignis::rpc::ISource& /* src */) {
-    return;
-  }
-  void newEmptyPartitions(const int64_t /* n */) {
-    return;
-  }
-  void newEmptyPartitions2(const int64_t /* n */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void driverGather(const std::string& /* group */, const  ::ignis::rpc::ISource& /* src */) {
@@ -1410,221 +1402,6 @@ class ICommModule_setPartitions2_presult {
 
 };
 
-typedef struct _ICommModule_newEmptyPartitions_args__isset {
-  _ICommModule_newEmptyPartitions_args__isset() : n(false) {}
-  bool n :1;
-} _ICommModule_newEmptyPartitions_args__isset;
-
-class ICommModule_newEmptyPartitions_args {
- public:
-
-  ICommModule_newEmptyPartitions_args(const ICommModule_newEmptyPartitions_args&);
-  ICommModule_newEmptyPartitions_args& operator=(const ICommModule_newEmptyPartitions_args&);
-  ICommModule_newEmptyPartitions_args() : n(0) {
-  }
-
-  virtual ~ICommModule_newEmptyPartitions_args() noexcept;
-  int64_t n;
-
-  _ICommModule_newEmptyPartitions_args__isset __isset;
-
-  void __set_n(const int64_t val);
-
-  bool operator == (const ICommModule_newEmptyPartitions_args & rhs) const
-  {
-    if (!(n == rhs.n))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_newEmptyPartitions_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_newEmptyPartitions_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ICommModule_newEmptyPartitions_pargs {
- public:
-
-
-  virtual ~ICommModule_newEmptyPartitions_pargs() noexcept;
-  const int64_t* n;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_newEmptyPartitions_result__isset {
-  _ICommModule_newEmptyPartitions_result__isset() : ex(false) {}
-  bool ex :1;
-} _ICommModule_newEmptyPartitions_result__isset;
-
-class ICommModule_newEmptyPartitions_result {
- public:
-
-  ICommModule_newEmptyPartitions_result(const ICommModule_newEmptyPartitions_result&);
-  ICommModule_newEmptyPartitions_result& operator=(const ICommModule_newEmptyPartitions_result&);
-  ICommModule_newEmptyPartitions_result() {
-  }
-
-  virtual ~ICommModule_newEmptyPartitions_result() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_newEmptyPartitions_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
-
-  bool operator == (const ICommModule_newEmptyPartitions_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_newEmptyPartitions_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_newEmptyPartitions_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_newEmptyPartitions_presult__isset {
-  _ICommModule_newEmptyPartitions_presult__isset() : ex(false) {}
-  bool ex :1;
-} _ICommModule_newEmptyPartitions_presult__isset;
-
-class ICommModule_newEmptyPartitions_presult {
- public:
-
-
-  virtual ~ICommModule_newEmptyPartitions_presult() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_newEmptyPartitions_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _ICommModule_newEmptyPartitions2_args__isset {
-  _ICommModule_newEmptyPartitions2_args__isset() : n(false), src(false) {}
-  bool n :1;
-  bool src :1;
-} _ICommModule_newEmptyPartitions2_args__isset;
-
-class ICommModule_newEmptyPartitions2_args {
- public:
-
-  ICommModule_newEmptyPartitions2_args(const ICommModule_newEmptyPartitions2_args&);
-  ICommModule_newEmptyPartitions2_args& operator=(const ICommModule_newEmptyPartitions2_args&);
-  ICommModule_newEmptyPartitions2_args() : n(0) {
-  }
-
-  virtual ~ICommModule_newEmptyPartitions2_args() noexcept;
-  int64_t n;
-   ::ignis::rpc::ISource src;
-
-  _ICommModule_newEmptyPartitions2_args__isset __isset;
-
-  void __set_n(const int64_t val);
-
-  void __set_src(const  ::ignis::rpc::ISource& val);
-
-  bool operator == (const ICommModule_newEmptyPartitions2_args & rhs) const
-  {
-    if (!(n == rhs.n))
-      return false;
-    if (!(src == rhs.src))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_newEmptyPartitions2_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_newEmptyPartitions2_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class ICommModule_newEmptyPartitions2_pargs {
- public:
-
-
-  virtual ~ICommModule_newEmptyPartitions2_pargs() noexcept;
-  const int64_t* n;
-  const  ::ignis::rpc::ISource* src;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_newEmptyPartitions2_result__isset {
-  _ICommModule_newEmptyPartitions2_result__isset() : ex(false) {}
-  bool ex :1;
-} _ICommModule_newEmptyPartitions2_result__isset;
-
-class ICommModule_newEmptyPartitions2_result {
- public:
-
-  ICommModule_newEmptyPartitions2_result(const ICommModule_newEmptyPartitions2_result&);
-  ICommModule_newEmptyPartitions2_result& operator=(const ICommModule_newEmptyPartitions2_result&);
-  ICommModule_newEmptyPartitions2_result() {
-  }
-
-  virtual ~ICommModule_newEmptyPartitions2_result() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_newEmptyPartitions2_result__isset __isset;
-
-  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
-
-  bool operator == (const ICommModule_newEmptyPartitions2_result & rhs) const
-  {
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const ICommModule_newEmptyPartitions2_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const ICommModule_newEmptyPartitions2_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _ICommModule_newEmptyPartitions2_presult__isset {
-  _ICommModule_newEmptyPartitions2_presult__isset() : ex(false) {}
-  bool ex :1;
-} _ICommModule_newEmptyPartitions2_presult__isset;
-
-class ICommModule_newEmptyPartitions2_presult {
- public:
-
-
-  virtual ~ICommModule_newEmptyPartitions2_presult() noexcept;
-   ::ignis::rpc::IExecutorException ex;
-
-  _ICommModule_newEmptyPartitions2_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
 typedef struct _ICommModule_driverGather_args__isset {
   _ICommModule_driverGather_args__isset() : group(false), src(false) {}
   bool group :1;
@@ -2380,12 +2157,6 @@ class ICommModuleClient : virtual public ICommModuleIf {
   void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
   void send_setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
   void recv_setPartitions2();
-  void newEmptyPartitions(const int64_t n);
-  void send_newEmptyPartitions(const int64_t n);
-  void recv_newEmptyPartitions();
-  void newEmptyPartitions2(const int64_t n, const  ::ignis::rpc::ISource& src);
-  void send_newEmptyPartitions2(const int64_t n, const  ::ignis::rpc::ISource& src);
-  void recv_newEmptyPartitions2();
   void driverGather(const std::string& group, const  ::ignis::rpc::ISource& src);
   void send_driverGather(const std::string& group, const  ::ignis::rpc::ISource& src);
   void recv_driverGather();
@@ -2431,8 +2202,6 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_getPartitions2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_setPartitions2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_newEmptyPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_newEmptyPartitions2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverGather(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverGather0(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_driverScatter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -2454,8 +2223,6 @@ class ICommModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["getPartitions2"] = &ICommModuleProcessor::process_getPartitions2;
     processMap_["setPartitions"] = &ICommModuleProcessor::process_setPartitions;
     processMap_["setPartitions2"] = &ICommModuleProcessor::process_setPartitions2;
-    processMap_["newEmptyPartitions"] = &ICommModuleProcessor::process_newEmptyPartitions;
-    processMap_["newEmptyPartitions2"] = &ICommModuleProcessor::process_newEmptyPartitions2;
     processMap_["driverGather"] = &ICommModuleProcessor::process_driverGather;
     processMap_["driverGather0"] = &ICommModuleProcessor::process_driverGather0;
     processMap_["driverScatter"] = &ICommModuleProcessor::process_driverScatter;
@@ -2601,24 +2368,6 @@ class ICommModuleMultiface : virtual public ICommModuleIf {
     ifaces_[i]->setPartitions2(partitions, src);
   }
 
-  void newEmptyPartitions(const int64_t n) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->newEmptyPartitions(n);
-    }
-    ifaces_[i]->newEmptyPartitions(n);
-  }
-
-  void newEmptyPartitions2(const int64_t n, const  ::ignis::rpc::ISource& src) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->newEmptyPartitions2(n, src);
-    }
-    ifaces_[i]->newEmptyPartitions2(n, src);
-  }
-
   void driverGather(const std::string& group, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
@@ -2741,12 +2490,6 @@ class ICommModuleConcurrentClient : virtual public ICommModuleIf {
   void setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
   int32_t send_setPartitions2(const std::vector<std::string> & partitions, const  ::ignis::rpc::ISource& src);
   void recv_setPartitions2(const int32_t seqid);
-  void newEmptyPartitions(const int64_t n);
-  int32_t send_newEmptyPartitions(const int64_t n);
-  void recv_newEmptyPartitions(const int32_t seqid);
-  void newEmptyPartitions2(const int64_t n, const  ::ignis::rpc::ISource& src);
-  int32_t send_newEmptyPartitions2(const int64_t n, const  ::ignis::rpc::ISource& src);
-  void recv_newEmptyPartitions2(const int32_t seqid);
   void driverGather(const std::string& group, const  ::ignis::rpc::ISource& src);
   int32_t send_driverGather(const std::string& group, const  ::ignis::rpc::ISource& src);
   void recv_driverGather(const int32_t seqid);

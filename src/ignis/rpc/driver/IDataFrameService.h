@@ -32,9 +32,9 @@ class IDataFrameServiceIf {
   virtual void saveAsTextFile(const IDataFrameId& id, const std::string& path) = 0;
   virtual void saveAsJsonFile(const IDataFrameId& id, const std::string& path, const bool pretty) = 0;
   virtual void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_) = 0;
-  virtual void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
-  virtual void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
-  virtual void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
+  virtual void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
+  virtual void partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
+  virtual void partitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
   virtual void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void filter(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void flatmap(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
@@ -50,9 +50,7 @@ class IDataFrameServiceIf {
   virtual void sortBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending) = 0;
   virtual void sortBy3(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool ascending, const int64_t numPartitions) = 0;
   virtual void union_(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder) = 0;
-  virtual void union4a(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions) = 0;
-  virtual void union4b(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src) = 0;
-  virtual void union5(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void union4(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src) = 0;
   virtual void join(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other) = 0;
   virtual void join3a(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const int64_t numPartitions) = 0;
   virtual void join3b(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const  ::ignis::rpc::ISource& src) = 0;
@@ -173,13 +171,13 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void repartition(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */, const bool /* preserveOrdering */, const bool /* global_ */) {
     return;
   }
-  void repartitionByRandom(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
+  void partitionByRandom(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
     return;
   }
-  void repartitionByHash(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
+  void partitionByHash(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) {
     return;
   }
-  void repartitionBy(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */) {
+  void partitionBy(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const int64_t /* numPartitions */) {
     return;
   }
   void map_(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) {
@@ -227,13 +225,7 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void union_(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const IDataFrameId& /* other */, const bool /* preserveOrder */) {
     return;
   }
-  void union4a(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const IDataFrameId& /* other */, const bool /* preserveOrder */, const int64_t /* numPartitions */) {
-    return;
-  }
-  void union4b(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const IDataFrameId& /* other */, const bool /* preserveOrder */, const  ::ignis::rpc::ISource& /* src */) {
-    return;
-  }
-  void union5(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const IDataFrameId& /* other */, const bool /* preserveOrder */, const int64_t /* numPartitions */, const  ::ignis::rpc::ISource& /* src */) {
+  void union4(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const IDataFrameId& /* other */, const bool /* preserveOrder */, const  ::ignis::rpc::ISource& /* src */) {
     return;
   }
   void join(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const IDataFrameId& /* other */) {
@@ -1545,31 +1537,31 @@ class IDataFrameService_repartition_presult {
 
 };
 
-typedef struct _IDataFrameService_repartitionByRandom_args__isset {
-  _IDataFrameService_repartitionByRandom_args__isset() : id(false), numPartitions(false) {}
+typedef struct _IDataFrameService_partitionByRandom_args__isset {
+  _IDataFrameService_partitionByRandom_args__isset() : id(false), numPartitions(false) {}
   bool id :1;
   bool numPartitions :1;
-} _IDataFrameService_repartitionByRandom_args__isset;
+} _IDataFrameService_partitionByRandom_args__isset;
 
-class IDataFrameService_repartitionByRandom_args {
+class IDataFrameService_partitionByRandom_args {
  public:
 
-  IDataFrameService_repartitionByRandom_args(const IDataFrameService_repartitionByRandom_args&);
-  IDataFrameService_repartitionByRandom_args& operator=(const IDataFrameService_repartitionByRandom_args&);
-  IDataFrameService_repartitionByRandom_args() : numPartitions(0) {
+  IDataFrameService_partitionByRandom_args(const IDataFrameService_partitionByRandom_args&);
+  IDataFrameService_partitionByRandom_args& operator=(const IDataFrameService_partitionByRandom_args&);
+  IDataFrameService_partitionByRandom_args() : numPartitions(0) {
   }
 
-  virtual ~IDataFrameService_repartitionByRandom_args() noexcept;
+  virtual ~IDataFrameService_partitionByRandom_args() noexcept;
   IDataFrameId id;
   int64_t numPartitions;
 
-  _IDataFrameService_repartitionByRandom_args__isset __isset;
+  _IDataFrameService_partitionByRandom_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
   void __set_numPartitions(const int64_t val);
 
-  bool operator == (const IDataFrameService_repartitionByRandom_args & rhs) const
+  bool operator == (const IDataFrameService_partitionByRandom_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -1577,11 +1569,11 @@ class IDataFrameService_repartitionByRandom_args {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_repartitionByRandom_args &rhs) const {
+  bool operator != (const IDataFrameService_partitionByRandom_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_repartitionByRandom_args & ) const;
+  bool operator < (const IDataFrameService_partitionByRandom_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1589,11 +1581,11 @@ class IDataFrameService_repartitionByRandom_args {
 };
 
 
-class IDataFrameService_repartitionByRandom_pargs {
+class IDataFrameService_partitionByRandom_pargs {
  public:
 
 
-  virtual ~IDataFrameService_repartitionByRandom_pargs() noexcept;
+  virtual ~IDataFrameService_partitionByRandom_pargs() noexcept;
   const IDataFrameId* id;
   const int64_t* numPartitions;
 
@@ -1601,31 +1593,31 @@ class IDataFrameService_repartitionByRandom_pargs {
 
 };
 
-typedef struct _IDataFrameService_repartitionByRandom_result__isset {
-  _IDataFrameService_repartitionByRandom_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_partitionByRandom_result__isset {
+  _IDataFrameService_partitionByRandom_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_repartitionByRandom_result__isset;
+} _IDataFrameService_partitionByRandom_result__isset;
 
-class IDataFrameService_repartitionByRandom_result {
+class IDataFrameService_partitionByRandom_result {
  public:
 
-  IDataFrameService_repartitionByRandom_result(const IDataFrameService_repartitionByRandom_result&);
-  IDataFrameService_repartitionByRandom_result& operator=(const IDataFrameService_repartitionByRandom_result&);
-  IDataFrameService_repartitionByRandom_result() {
+  IDataFrameService_partitionByRandom_result(const IDataFrameService_partitionByRandom_result&);
+  IDataFrameService_partitionByRandom_result& operator=(const IDataFrameService_partitionByRandom_result&);
+  IDataFrameService_partitionByRandom_result() {
   }
 
-  virtual ~IDataFrameService_repartitionByRandom_result() noexcept;
+  virtual ~IDataFrameService_partitionByRandom_result() noexcept;
   IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_repartitionByRandom_result__isset __isset;
+  _IDataFrameService_partitionByRandom_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_repartitionByRandom_result & rhs) const
+  bool operator == (const IDataFrameService_partitionByRandom_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -1633,62 +1625,62 @@ class IDataFrameService_repartitionByRandom_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_repartitionByRandom_result &rhs) const {
+  bool operator != (const IDataFrameService_partitionByRandom_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_repartitionByRandom_result & ) const;
+  bool operator < (const IDataFrameService_partitionByRandom_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_repartitionByRandom_presult__isset {
-  _IDataFrameService_repartitionByRandom_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_partitionByRandom_presult__isset {
+  _IDataFrameService_partitionByRandom_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_repartitionByRandom_presult__isset;
+} _IDataFrameService_partitionByRandom_presult__isset;
 
-class IDataFrameService_repartitionByRandom_presult {
+class IDataFrameService_partitionByRandom_presult {
  public:
 
 
-  virtual ~IDataFrameService_repartitionByRandom_presult() noexcept;
+  virtual ~IDataFrameService_partitionByRandom_presult() noexcept;
   IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_repartitionByRandom_presult__isset __isset;
+  _IDataFrameService_partitionByRandom_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IDataFrameService_repartitionByHash_args__isset {
-  _IDataFrameService_repartitionByHash_args__isset() : id(false), numPartitions(false) {}
+typedef struct _IDataFrameService_partitionByHash_args__isset {
+  _IDataFrameService_partitionByHash_args__isset() : id(false), numPartitions(false) {}
   bool id :1;
   bool numPartitions :1;
-} _IDataFrameService_repartitionByHash_args__isset;
+} _IDataFrameService_partitionByHash_args__isset;
 
-class IDataFrameService_repartitionByHash_args {
+class IDataFrameService_partitionByHash_args {
  public:
 
-  IDataFrameService_repartitionByHash_args(const IDataFrameService_repartitionByHash_args&);
-  IDataFrameService_repartitionByHash_args& operator=(const IDataFrameService_repartitionByHash_args&);
-  IDataFrameService_repartitionByHash_args() : numPartitions(0) {
+  IDataFrameService_partitionByHash_args(const IDataFrameService_partitionByHash_args&);
+  IDataFrameService_partitionByHash_args& operator=(const IDataFrameService_partitionByHash_args&);
+  IDataFrameService_partitionByHash_args() : numPartitions(0) {
   }
 
-  virtual ~IDataFrameService_repartitionByHash_args() noexcept;
+  virtual ~IDataFrameService_partitionByHash_args() noexcept;
   IDataFrameId id;
   int64_t numPartitions;
 
-  _IDataFrameService_repartitionByHash_args__isset __isset;
+  _IDataFrameService_partitionByHash_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
   void __set_numPartitions(const int64_t val);
 
-  bool operator == (const IDataFrameService_repartitionByHash_args & rhs) const
+  bool operator == (const IDataFrameService_partitionByHash_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -1696,11 +1688,11 @@ class IDataFrameService_repartitionByHash_args {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_repartitionByHash_args &rhs) const {
+  bool operator != (const IDataFrameService_partitionByHash_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_repartitionByHash_args & ) const;
+  bool operator < (const IDataFrameService_partitionByHash_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1708,11 +1700,11 @@ class IDataFrameService_repartitionByHash_args {
 };
 
 
-class IDataFrameService_repartitionByHash_pargs {
+class IDataFrameService_partitionByHash_pargs {
  public:
 
 
-  virtual ~IDataFrameService_repartitionByHash_pargs() noexcept;
+  virtual ~IDataFrameService_partitionByHash_pargs() noexcept;
   const IDataFrameId* id;
   const int64_t* numPartitions;
 
@@ -1720,31 +1712,31 @@ class IDataFrameService_repartitionByHash_pargs {
 
 };
 
-typedef struct _IDataFrameService_repartitionByHash_result__isset {
-  _IDataFrameService_repartitionByHash_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_partitionByHash_result__isset {
+  _IDataFrameService_partitionByHash_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_repartitionByHash_result__isset;
+} _IDataFrameService_partitionByHash_result__isset;
 
-class IDataFrameService_repartitionByHash_result {
+class IDataFrameService_partitionByHash_result {
  public:
 
-  IDataFrameService_repartitionByHash_result(const IDataFrameService_repartitionByHash_result&);
-  IDataFrameService_repartitionByHash_result& operator=(const IDataFrameService_repartitionByHash_result&);
-  IDataFrameService_repartitionByHash_result() {
+  IDataFrameService_partitionByHash_result(const IDataFrameService_partitionByHash_result&);
+  IDataFrameService_partitionByHash_result& operator=(const IDataFrameService_partitionByHash_result&);
+  IDataFrameService_partitionByHash_result() {
   }
 
-  virtual ~IDataFrameService_repartitionByHash_result() noexcept;
+  virtual ~IDataFrameService_partitionByHash_result() noexcept;
   IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_repartitionByHash_result__isset __isset;
+  _IDataFrameService_partitionByHash_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_repartitionByHash_result & rhs) const
+  bool operator == (const IDataFrameService_partitionByHash_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -1752,58 +1744,58 @@ class IDataFrameService_repartitionByHash_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_repartitionByHash_result &rhs) const {
+  bool operator != (const IDataFrameService_partitionByHash_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_repartitionByHash_result & ) const;
+  bool operator < (const IDataFrameService_partitionByHash_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_repartitionByHash_presult__isset {
-  _IDataFrameService_repartitionByHash_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_partitionByHash_presult__isset {
+  _IDataFrameService_partitionByHash_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_repartitionByHash_presult__isset;
+} _IDataFrameService_partitionByHash_presult__isset;
 
-class IDataFrameService_repartitionByHash_presult {
+class IDataFrameService_partitionByHash_presult {
  public:
 
 
-  virtual ~IDataFrameService_repartitionByHash_presult() noexcept;
+  virtual ~IDataFrameService_partitionByHash_presult() noexcept;
   IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_repartitionByHash_presult__isset __isset;
+  _IDataFrameService_partitionByHash_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
 };
 
-typedef struct _IDataFrameService_repartitionBy_args__isset {
-  _IDataFrameService_repartitionBy_args__isset() : id(false), src(false), numPartitions(false) {}
+typedef struct _IDataFrameService_partitionBy_args__isset {
+  _IDataFrameService_partitionBy_args__isset() : id(false), src(false), numPartitions(false) {}
   bool id :1;
   bool src :1;
   bool numPartitions :1;
-} _IDataFrameService_repartitionBy_args__isset;
+} _IDataFrameService_partitionBy_args__isset;
 
-class IDataFrameService_repartitionBy_args {
+class IDataFrameService_partitionBy_args {
  public:
 
-  IDataFrameService_repartitionBy_args(const IDataFrameService_repartitionBy_args&);
-  IDataFrameService_repartitionBy_args& operator=(const IDataFrameService_repartitionBy_args&);
-  IDataFrameService_repartitionBy_args() : numPartitions(0) {
+  IDataFrameService_partitionBy_args(const IDataFrameService_partitionBy_args&);
+  IDataFrameService_partitionBy_args& operator=(const IDataFrameService_partitionBy_args&);
+  IDataFrameService_partitionBy_args() : numPartitions(0) {
   }
 
-  virtual ~IDataFrameService_repartitionBy_args() noexcept;
+  virtual ~IDataFrameService_partitionBy_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource src;
   int64_t numPartitions;
 
-  _IDataFrameService_repartitionBy_args__isset __isset;
+  _IDataFrameService_partitionBy_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
@@ -1811,7 +1803,7 @@ class IDataFrameService_repartitionBy_args {
 
   void __set_numPartitions(const int64_t val);
 
-  bool operator == (const IDataFrameService_repartitionBy_args & rhs) const
+  bool operator == (const IDataFrameService_partitionBy_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -1821,11 +1813,11 @@ class IDataFrameService_repartitionBy_args {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_repartitionBy_args &rhs) const {
+  bool operator != (const IDataFrameService_partitionBy_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_repartitionBy_args & ) const;
+  bool operator < (const IDataFrameService_partitionBy_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -1833,11 +1825,11 @@ class IDataFrameService_repartitionBy_args {
 };
 
 
-class IDataFrameService_repartitionBy_pargs {
+class IDataFrameService_partitionBy_pargs {
  public:
 
 
-  virtual ~IDataFrameService_repartitionBy_pargs() noexcept;
+  virtual ~IDataFrameService_partitionBy_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* src;
   const int64_t* numPartitions;
@@ -1846,31 +1838,31 @@ class IDataFrameService_repartitionBy_pargs {
 
 };
 
-typedef struct _IDataFrameService_repartitionBy_result__isset {
-  _IDataFrameService_repartitionBy_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_partitionBy_result__isset {
+  _IDataFrameService_partitionBy_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_repartitionBy_result__isset;
+} _IDataFrameService_partitionBy_result__isset;
 
-class IDataFrameService_repartitionBy_result {
+class IDataFrameService_partitionBy_result {
  public:
 
-  IDataFrameService_repartitionBy_result(const IDataFrameService_repartitionBy_result&);
-  IDataFrameService_repartitionBy_result& operator=(const IDataFrameService_repartitionBy_result&);
-  IDataFrameService_repartitionBy_result() {
+  IDataFrameService_partitionBy_result(const IDataFrameService_partitionBy_result&);
+  IDataFrameService_partitionBy_result& operator=(const IDataFrameService_partitionBy_result&);
+  IDataFrameService_partitionBy_result() {
   }
 
-  virtual ~IDataFrameService_repartitionBy_result() noexcept;
+  virtual ~IDataFrameService_partitionBy_result() noexcept;
   IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_repartitionBy_result__isset __isset;
+  _IDataFrameService_partitionBy_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_repartitionBy_result & rhs) const
+  bool operator == (const IDataFrameService_partitionBy_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -1878,32 +1870,32 @@ class IDataFrameService_repartitionBy_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_repartitionBy_result &rhs) const {
+  bool operator != (const IDataFrameService_partitionBy_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_repartitionBy_result & ) const;
+  bool operator < (const IDataFrameService_partitionBy_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_repartitionBy_presult__isset {
-  _IDataFrameService_repartitionBy_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_partitionBy_presult__isset {
+  _IDataFrameService_partitionBy_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_repartitionBy_presult__isset;
+} _IDataFrameService_partitionBy_presult__isset;
 
-class IDataFrameService_repartitionBy_presult {
+class IDataFrameService_partitionBy_presult {
  public:
 
 
-  virtual ~IDataFrameService_repartitionBy_presult() noexcept;
+  virtual ~IDataFrameService_partitionBy_presult() noexcept;
   IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_repartitionBy_presult__isset __isset;
+  _IDataFrameService_partitionBy_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -3750,162 +3742,29 @@ class IDataFrameService_union__presult {
 
 };
 
-typedef struct _IDataFrameService_union4a_args__isset {
-  _IDataFrameService_union4a_args__isset() : id(false), other(false), preserveOrder(false), numPartitions(false) {}
-  bool id :1;
-  bool other :1;
-  bool preserveOrder :1;
-  bool numPartitions :1;
-} _IDataFrameService_union4a_args__isset;
-
-class IDataFrameService_union4a_args {
- public:
-
-  IDataFrameService_union4a_args(const IDataFrameService_union4a_args&);
-  IDataFrameService_union4a_args& operator=(const IDataFrameService_union4a_args&);
-  IDataFrameService_union4a_args() : preserveOrder(0), numPartitions(0) {
-  }
-
-  virtual ~IDataFrameService_union4a_args() noexcept;
-  IDataFrameId id;
-  IDataFrameId other;
-  bool preserveOrder;
-  int64_t numPartitions;
-
-  _IDataFrameService_union4a_args__isset __isset;
-
-  void __set_id(const IDataFrameId& val);
-
-  void __set_other(const IDataFrameId& val);
-
-  void __set_preserveOrder(const bool val);
-
-  void __set_numPartitions(const int64_t val);
-
-  bool operator == (const IDataFrameService_union4a_args & rhs) const
-  {
-    if (!(id == rhs.id))
-      return false;
-    if (!(other == rhs.other))
-      return false;
-    if (!(preserveOrder == rhs.preserveOrder))
-      return false;
-    if (!(numPartitions == rhs.numPartitions))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_union4a_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_union4a_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IDataFrameService_union4a_pargs {
- public:
-
-
-  virtual ~IDataFrameService_union4a_pargs() noexcept;
-  const IDataFrameId* id;
-  const IDataFrameId* other;
-  const bool* preserveOrder;
-  const int64_t* numPartitions;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_union4a_result__isset {
-  _IDataFrameService_union4a_result__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_union4a_result__isset;
-
-class IDataFrameService_union4a_result {
- public:
-
-  IDataFrameService_union4a_result(const IDataFrameService_union4a_result&);
-  IDataFrameService_union4a_result& operator=(const IDataFrameService_union4a_result&);
-  IDataFrameService_union4a_result() {
-  }
-
-  virtual ~IDataFrameService_union4a_result() noexcept;
-  IDataFrameId success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_union4a_result__isset __isset;
-
-  void __set_success(const IDataFrameId& val);
-
-  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
-
-  bool operator == (const IDataFrameService_union4a_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_union4a_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_union4a_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_union4a_presult__isset {
-  _IDataFrameService_union4a_presult__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_union4a_presult__isset;
-
-class IDataFrameService_union4a_presult {
- public:
-
-
-  virtual ~IDataFrameService_union4a_presult() noexcept;
-  IDataFrameId* success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_union4a_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _IDataFrameService_union4b_args__isset {
-  _IDataFrameService_union4b_args__isset() : id(false), other(false), preserveOrder(false), src(false) {}
+typedef struct _IDataFrameService_union4_args__isset {
+  _IDataFrameService_union4_args__isset() : id(false), other(false), preserveOrder(false), src(false) {}
   bool id :1;
   bool other :1;
   bool preserveOrder :1;
   bool src :1;
-} _IDataFrameService_union4b_args__isset;
+} _IDataFrameService_union4_args__isset;
 
-class IDataFrameService_union4b_args {
+class IDataFrameService_union4_args {
  public:
 
-  IDataFrameService_union4b_args(const IDataFrameService_union4b_args&);
-  IDataFrameService_union4b_args& operator=(const IDataFrameService_union4b_args&);
-  IDataFrameService_union4b_args() : preserveOrder(0) {
+  IDataFrameService_union4_args(const IDataFrameService_union4_args&);
+  IDataFrameService_union4_args& operator=(const IDataFrameService_union4_args&);
+  IDataFrameService_union4_args() : preserveOrder(0) {
   }
 
-  virtual ~IDataFrameService_union4b_args() noexcept;
+  virtual ~IDataFrameService_union4_args() noexcept;
   IDataFrameId id;
   IDataFrameId other;
   bool preserveOrder;
    ::ignis::rpc::ISource src;
 
-  _IDataFrameService_union4b_args__isset __isset;
+  _IDataFrameService_union4_args__isset __isset;
 
   void __set_id(const IDataFrameId& val);
 
@@ -3915,7 +3774,7 @@ class IDataFrameService_union4b_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  bool operator == (const IDataFrameService_union4b_args & rhs) const
+  bool operator == (const IDataFrameService_union4_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
@@ -3927,11 +3786,11 @@ class IDataFrameService_union4b_args {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_union4b_args &rhs) const {
+  bool operator != (const IDataFrameService_union4_args &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_union4b_args & ) const;
+  bool operator < (const IDataFrameService_union4_args & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
@@ -3939,11 +3798,11 @@ class IDataFrameService_union4b_args {
 };
 
 
-class IDataFrameService_union4b_pargs {
+class IDataFrameService_union4_pargs {
  public:
 
 
-  virtual ~IDataFrameService_union4b_pargs() noexcept;
+  virtual ~IDataFrameService_union4_pargs() noexcept;
   const IDataFrameId* id;
   const IDataFrameId* other;
   const bool* preserveOrder;
@@ -3953,31 +3812,31 @@ class IDataFrameService_union4b_pargs {
 
 };
 
-typedef struct _IDataFrameService_union4b_result__isset {
-  _IDataFrameService_union4b_result__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_union4_result__isset {
+  _IDataFrameService_union4_result__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_union4b_result__isset;
+} _IDataFrameService_union4_result__isset;
 
-class IDataFrameService_union4b_result {
+class IDataFrameService_union4_result {
  public:
 
-  IDataFrameService_union4b_result(const IDataFrameService_union4b_result&);
-  IDataFrameService_union4b_result& operator=(const IDataFrameService_union4b_result&);
-  IDataFrameService_union4b_result() {
+  IDataFrameService_union4_result(const IDataFrameService_union4_result&);
+  IDataFrameService_union4_result& operator=(const IDataFrameService_union4_result&);
+  IDataFrameService_union4_result() {
   }
 
-  virtual ~IDataFrameService_union4b_result() noexcept;
+  virtual ~IDataFrameService_union4_result() noexcept;
   IDataFrameId success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_union4b_result__isset __isset;
+  _IDataFrameService_union4_result__isset __isset;
 
   void __set_success(const IDataFrameId& val);
 
   void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
 
-  bool operator == (const IDataFrameService_union4b_result & rhs) const
+  bool operator == (const IDataFrameService_union4_result & rhs) const
   {
     if (!(success == rhs.success))
       return false;
@@ -3985,172 +3844,32 @@ class IDataFrameService_union4b_result {
       return false;
     return true;
   }
-  bool operator != (const IDataFrameService_union4b_result &rhs) const {
+  bool operator != (const IDataFrameService_union4_result &rhs) const {
     return !(*this == rhs);
   }
 
-  bool operator < (const IDataFrameService_union4b_result & ) const;
+  bool operator < (const IDataFrameService_union4_result & ) const;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
 };
 
-typedef struct _IDataFrameService_union4b_presult__isset {
-  _IDataFrameService_union4b_presult__isset() : success(false), ex(false) {}
+typedef struct _IDataFrameService_union4_presult__isset {
+  _IDataFrameService_union4_presult__isset() : success(false), ex(false) {}
   bool success :1;
   bool ex :1;
-} _IDataFrameService_union4b_presult__isset;
+} _IDataFrameService_union4_presult__isset;
 
-class IDataFrameService_union4b_presult {
+class IDataFrameService_union4_presult {
  public:
 
 
-  virtual ~IDataFrameService_union4b_presult() noexcept;
+  virtual ~IDataFrameService_union4_presult() noexcept;
   IDataFrameId* success;
    ::ignis::rpc::driver::IDriverException ex;
 
-  _IDataFrameService_union4b_presult__isset __isset;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-
-};
-
-typedef struct _IDataFrameService_union5_args__isset {
-  _IDataFrameService_union5_args__isset() : id(false), other(false), preserveOrder(false), numPartitions(false), src(false) {}
-  bool id :1;
-  bool other :1;
-  bool preserveOrder :1;
-  bool numPartitions :1;
-  bool src :1;
-} _IDataFrameService_union5_args__isset;
-
-class IDataFrameService_union5_args {
- public:
-
-  IDataFrameService_union5_args(const IDataFrameService_union5_args&);
-  IDataFrameService_union5_args& operator=(const IDataFrameService_union5_args&);
-  IDataFrameService_union5_args() : preserveOrder(0), numPartitions(0) {
-  }
-
-  virtual ~IDataFrameService_union5_args() noexcept;
-  IDataFrameId id;
-  IDataFrameId other;
-  bool preserveOrder;
-  int64_t numPartitions;
-   ::ignis::rpc::ISource src;
-
-  _IDataFrameService_union5_args__isset __isset;
-
-  void __set_id(const IDataFrameId& val);
-
-  void __set_other(const IDataFrameId& val);
-
-  void __set_preserveOrder(const bool val);
-
-  void __set_numPartitions(const int64_t val);
-
-  void __set_src(const  ::ignis::rpc::ISource& val);
-
-  bool operator == (const IDataFrameService_union5_args & rhs) const
-  {
-    if (!(id == rhs.id))
-      return false;
-    if (!(other == rhs.other))
-      return false;
-    if (!(preserveOrder == rhs.preserveOrder))
-      return false;
-    if (!(numPartitions == rhs.numPartitions))
-      return false;
-    if (!(src == rhs.src))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_union5_args &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_union5_args & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-
-class IDataFrameService_union5_pargs {
- public:
-
-
-  virtual ~IDataFrameService_union5_pargs() noexcept;
-  const IDataFrameId* id;
-  const IDataFrameId* other;
-  const bool* preserveOrder;
-  const int64_t* numPartitions;
-  const  ::ignis::rpc::ISource* src;
-
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_union5_result__isset {
-  _IDataFrameService_union5_result__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_union5_result__isset;
-
-class IDataFrameService_union5_result {
- public:
-
-  IDataFrameService_union5_result(const IDataFrameService_union5_result&);
-  IDataFrameService_union5_result& operator=(const IDataFrameService_union5_result&);
-  IDataFrameService_union5_result() {
-  }
-
-  virtual ~IDataFrameService_union5_result() noexcept;
-  IDataFrameId success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_union5_result__isset __isset;
-
-  void __set_success(const IDataFrameId& val);
-
-  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
-
-  bool operator == (const IDataFrameService_union5_result & rhs) const
-  {
-    if (!(success == rhs.success))
-      return false;
-    if (!(ex == rhs.ex))
-      return false;
-    return true;
-  }
-  bool operator != (const IDataFrameService_union5_result &rhs) const {
-    return !(*this == rhs);
-  }
-
-  bool operator < (const IDataFrameService_union5_result & ) const;
-
-  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
-  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
-
-};
-
-typedef struct _IDataFrameService_union5_presult__isset {
-  _IDataFrameService_union5_presult__isset() : success(false), ex(false) {}
-  bool success :1;
-  bool ex :1;
-} _IDataFrameService_union5_presult__isset;
-
-class IDataFrameService_union5_presult {
- public:
-
-
-  virtual ~IDataFrameService_union5_presult() noexcept;
-  IDataFrameId* success;
-   ::ignis::rpc::driver::IDriverException ex;
-
-  _IDataFrameService_union5_presult__isset __isset;
+  _IDataFrameService_union4_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -10843,15 +10562,15 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
   void send_repartition(const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
   void recv_repartition(IDataFrameId& _return);
-  void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  void send_repartitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_repartitionByRandom(IDataFrameId& _return);
-  void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  void send_repartitionByHash(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_repartitionByHash(IDataFrameId& _return);
-  void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  void send_repartitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  void recv_repartitionBy(IDataFrameId& _return);
+  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  void send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_partitionByRandom(IDataFrameId& _return);
+  void partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  void send_partitionByHash(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_partitionByHash(IDataFrameId& _return);
+  void partitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void send_partitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void recv_partitionBy(IDataFrameId& _return);
   void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void send_map_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_map_(IDataFrameId& _return);
@@ -10897,15 +10616,9 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void union_(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder);
   void send_union_(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder);
   void recv_union_(IDataFrameId& _return);
-  void union4a(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions);
-  void send_union4a(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions);
-  void recv_union4a(IDataFrameId& _return);
-  void union4b(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
-  void send_union4b(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
-  void recv_union4b(IDataFrameId& _return);
-  void union5(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
-  void send_union5(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
-  void recv_union5(IDataFrameId& _return);
+  void union4(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
+  void send_union4(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
+  void recv_union4(IDataFrameId& _return);
   void join(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other);
   void send_join(const IDataFrameId& id, const IDataFrameId& other);
   void recv_join(IDataFrameId& _return);
@@ -11096,9 +10809,9 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_saveAsTextFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_saveAsJsonFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_repartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_repartitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_repartitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_repartitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_partitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_map_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -11114,9 +10827,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_sortBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_sortBy3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_union_(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_union4a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_union4b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
-  void process_union5(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_union4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_join(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_join3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_join3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -11183,9 +10894,9 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["saveAsTextFile"] = &IDataFrameServiceProcessor::process_saveAsTextFile;
     processMap_["saveAsJsonFile"] = &IDataFrameServiceProcessor::process_saveAsJsonFile;
     processMap_["repartition"] = &IDataFrameServiceProcessor::process_repartition;
-    processMap_["repartitionByRandom"] = &IDataFrameServiceProcessor::process_repartitionByRandom;
-    processMap_["repartitionByHash"] = &IDataFrameServiceProcessor::process_repartitionByHash;
-    processMap_["repartitionBy"] = &IDataFrameServiceProcessor::process_repartitionBy;
+    processMap_["partitionByRandom"] = &IDataFrameServiceProcessor::process_partitionByRandom;
+    processMap_["partitionByHash"] = &IDataFrameServiceProcessor::process_partitionByHash;
+    processMap_["partitionBy"] = &IDataFrameServiceProcessor::process_partitionBy;
     processMap_["map_"] = &IDataFrameServiceProcessor::process_map_;
     processMap_["filter"] = &IDataFrameServiceProcessor::process_filter;
     processMap_["flatmap"] = &IDataFrameServiceProcessor::process_flatmap;
@@ -11201,9 +10912,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["sortBy"] = &IDataFrameServiceProcessor::process_sortBy;
     processMap_["sortBy3"] = &IDataFrameServiceProcessor::process_sortBy3;
     processMap_["union_"] = &IDataFrameServiceProcessor::process_union_;
-    processMap_["union4a"] = &IDataFrameServiceProcessor::process_union4a;
-    processMap_["union4b"] = &IDataFrameServiceProcessor::process_union4b;
-    processMap_["union5"] = &IDataFrameServiceProcessor::process_union5;
+    processMap_["union4"] = &IDataFrameServiceProcessor::process_union4;
     processMap_["join"] = &IDataFrameServiceProcessor::process_join;
     processMap_["join3a"] = &IDataFrameServiceProcessor::process_join3a;
     processMap_["join3b"] = &IDataFrameServiceProcessor::process_join3b;
@@ -11376,33 +11085,33 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
+  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->repartitionByRandom(_return, id, numPartitions);
+      ifaces_[i]->partitionByRandom(_return, id, numPartitions);
     }
-    ifaces_[i]->repartitionByRandom(_return, id, numPartitions);
+    ifaces_[i]->partitionByRandom(_return, id, numPartitions);
     return;
   }
 
-  void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
+  void partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->repartitionByHash(_return, id, numPartitions);
+      ifaces_[i]->partitionByHash(_return, id, numPartitions);
     }
-    ifaces_[i]->repartitionByHash(_return, id, numPartitions);
+    ifaces_[i]->partitionByHash(_return, id, numPartitions);
     return;
   }
 
-  void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) {
+  void partitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->repartitionBy(_return, id, src, numPartitions);
+      ifaces_[i]->partitionBy(_return, id, src, numPartitions);
     }
-    ifaces_[i]->repartitionBy(_return, id, src, numPartitions);
+    ifaces_[i]->partitionBy(_return, id, src, numPartitions);
     return;
   }
 
@@ -11556,33 +11265,13 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  void union4a(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions) {
+  void union4(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->union4a(_return, id, other, preserveOrder, numPartitions);
+      ifaces_[i]->union4(_return, id, other, preserveOrder, src);
     }
-    ifaces_[i]->union4a(_return, id, other, preserveOrder, numPartitions);
-    return;
-  }
-
-  void union4b(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->union4b(_return, id, other, preserveOrder, src);
-    }
-    ifaces_[i]->union4b(_return, id, other, preserveOrder, src);
-    return;
-  }
-
-  void union5(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src) {
-    size_t sz = ifaces_.size();
-    size_t i = 0;
-    for (; i < (sz - 1); ++i) {
-      ifaces_[i]->union5(_return, id, other, preserveOrder, numPartitions, src);
-    }
-    ifaces_[i]->union5(_return, id, other, preserveOrder, numPartitions, src);
+    ifaces_[i]->union4(_return, id, other, preserveOrder, src);
     return;
   }
 
@@ -12159,15 +11848,15 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
   int32_t send_repartition(const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
   void recv_repartition(IDataFrameId& _return, const int32_t seqid);
-  void repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  int32_t send_repartitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_repartitionByRandom(IDataFrameId& _return, const int32_t seqid);
-  void repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
-  int32_t send_repartitionByHash(const IDataFrameId& id, const int64_t numPartitions);
-  void recv_repartitionByHash(IDataFrameId& _return, const int32_t seqid);
-  void repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  int32_t send_repartitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
-  void recv_repartitionBy(IDataFrameId& _return, const int32_t seqid);
+  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  int32_t send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_partitionByRandom(IDataFrameId& _return, const int32_t seqid);
+  void partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions);
+  int32_t send_partitionByHash(const IDataFrameId& id, const int64_t numPartitions);
+  void recv_partitionByHash(IDataFrameId& _return, const int32_t seqid);
+  void partitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  int32_t send_partitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions);
+  void recv_partitionBy(IDataFrameId& _return, const int32_t seqid);
   void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   int32_t send_map_(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_map_(IDataFrameId& _return, const int32_t seqid);
@@ -12213,15 +11902,9 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void union_(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder);
   int32_t send_union_(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder);
   void recv_union_(IDataFrameId& _return, const int32_t seqid);
-  void union4a(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions);
-  int32_t send_union4a(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions);
-  void recv_union4a(IDataFrameId& _return, const int32_t seqid);
-  void union4b(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
-  int32_t send_union4b(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
-  void recv_union4b(IDataFrameId& _return, const int32_t seqid);
-  void union5(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
-  int32_t send_union5(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src);
-  void recv_union5(IDataFrameId& _return, const int32_t seqid);
+  void union4(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
+  int32_t send_union4(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src);
+  void recv_union4(IDataFrameId& _return, const int32_t seqid);
   void join(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other);
   int32_t send_join(const IDataFrameId& id, const IDataFrameId& other);
   void recv_join(IDataFrameId& _return, const int32_t seqid);

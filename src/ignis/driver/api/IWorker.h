@@ -47,18 +47,8 @@ namespace ignis {
                 }
 
                 template<typename Tp>
-                IDataFrame<Tp> importDataFrame(const IDataFrame<Tp> &data, int64_t partitions) {
-                    return IDataFrame<Tp>(importDataFrameAbs(data.id, partitions));
-                }
-
-                template<typename Tp>
                 IDataFrame<Tp> importDataFrame(const IDataFrame<Tp> &data, const ISource &src) {
                     return IDataFrame<Tp>(importDataFrameAbs(data.id, src));
-                }
-
-                template<typename Tp>
-                IDataFrame<Tp> importDataFrame(const IDataFrame<Tp> &data, int64_t partitions, const ISource &src) {
-                    return IDataFrame<Tp>(importDataFrameAbs(data.id, partitions, src));
                 }
 
                 IDataFrame<std::string> textFile(const std::string &path);
@@ -123,12 +113,7 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId importDataFrameAbs(rpc::driver::IDataFrameId data);
 
-                rpc::driver::IDataFrameId importDataFrameAbs(rpc::driver::IDataFrameId data, int64_t partitions);
-
                 rpc::driver::IDataFrameId importDataFrameAbs(rpc::driver::IDataFrameId data, const ISource &src);
-
-                rpc::driver::IDataFrameId importDataFrameAbs(rpc::driver::IDataFrameId data, int64_t partitions,
-                                                             const ISource &src);
 
                 rpc::driver::IDataFrameId partitionObjectFileAbs(const std::string &path);
 

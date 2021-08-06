@@ -262,10 +262,10 @@ void IRepartitionImplClass::local_repartition(int64_t numPartitions) {
 }
 
 template<typename Tp>
-void IRepartitionImplClass::repartitionByRandom(int64_t numPartitions) {
+void IRepartitionImplClass::partitionByRandom(int64_t numPartitions) {
     IGNIS_TRY()
     auto &context = executor_data->getContext();
-    repartitionBy_impl<Tp>(
+    partitionBy_impl<Tp>(
             [](const Tp &obj) {
                 static thread_local std::mt19937 gen;
                 static thread_local std::uniform_int_distribution<int> dist;
@@ -276,10 +276,10 @@ void IRepartitionImplClass::repartitionByRandom(int64_t numPartitions) {
 }
 
 template<typename Tp>
-void IRepartitionImplClass::repartitionByHash(int64_t numPartitions) {
+void IRepartitionImplClass::partitionByHash(int64_t numPartitions) {
     IGNIS_TRY()
     auto &context = executor_data->getContext();
-    repartitionBy_impl<Tp>(
+    partitionBy_impl<Tp>(
             [](const Tp &obj) {
                 const static std::hash<Tp> hash;
                 return hash(obj);
@@ -289,24 +289,24 @@ void IRepartitionImplClass::repartitionByHash(int64_t numPartitions) {
 }
 
 template<typename Function>
-void IRepartitionImplClass::repartitionBy(int64_t numPartitions) {
+void IRepartitionImplClass::partitionBy(int64_t numPartitions) {
     IGNIS_TRY()
     auto &context = executor_data->getContext();
     Function f;
     f.before(context);
-    repartitionBy_impl<typename Function::_T_type>(
+    partitionBy_impl<typename Function::_T_type>(
             [&f, &context](typename Function::_T_type &obj) { return f.call(obj, context); }, numPartitions);
     f.after(context);
     IGNIS_CATCH()
 }
 
 template<typename Tp, typename Particioner>
-void IRepartitionImplClass::repartitionBy_impl(Particioner f, int64_t numPartitions) {
+void IRepartitionImplClass::partitionBy_impl(Particioner f, int64_t numPartitions) {
     auto input = executor_data->getAndDeletePartitions<Tp>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
     bool isMemory = executor_data->getPartitionTools().isMemory(*input);
 
-    IGNIS_LOG(info) << "Repartition: repartitionBy in " << input->partitions() << " partitions";
+    IGNIS_LOG(info) << "Repartition: partitionBy in " << input->partitions() << " partitions";
     auto global = executor_data->getPartitionTools().newPartitionGroup<Tp>(numPartitions);
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel

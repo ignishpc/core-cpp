@@ -37,8 +37,6 @@ namespace ignis {
                     virtual void setPartitions(modules::impl::ICommImpl &impl,
                                                const std::vector<std::string> &partitions) = 0;
 
-                    virtual void newEmptyPartitions(modules::impl::ICommImpl &impl, int64_t n) = 0;
-
                     virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id) = 0;
 
                     virtual void driverGather0(modules::impl::ICommImpl &impl, const std::string &id) = 0;
@@ -63,9 +61,9 @@ namespace ignis {
                     virtual void repartition(modules::impl::IRepartitionImpl &impl, int64_t numPartitions,
                                              bool preserveOrdering, bool global) = 0;
 
-                    virtual void repartitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
+                    virtual void partitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
 
-                    virtual void repartitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
+                    virtual void partitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
 
                     virtual void take(modules::impl::IPipeImpl &impl, int64_t num) = 0;
 
@@ -146,10 +144,6 @@ namespace ignis {
                         impl.setPartitions<Tp>(partitions);
                     }
 
-                    virtual void newEmptyPartitions(modules::impl::ICommImpl &impl, int64_t n) {
-                        impl.newEmptyPartitions<Tp>(n);
-                    }
-
                     virtual void driverGather(modules::impl::ICommImpl &impl, const std::string &id) {
                         impl.driverGather<Tp>(id);
                     }
@@ -194,12 +188,12 @@ namespace ignis {
                         impl.repartition<Tp>(numPartitions, preserveOrdering, global);
                     }
 
-                    virtual void repartitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
-                        impl.repartitionByRandom<Tp>(numPartitions);
+                    virtual void partitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
+                        impl.partitionByRandom<Tp>(numPartitions);
                     }
 
-                    virtual void repartitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
-                        repartitionByHash_check<Tp>(impl, nullptr, numPartitions);
+                    virtual void partitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
+                        partitionByHash_check<Tp>(impl, nullptr, numPartitions);
                     }
 
                     virtual void take(modules::impl::IPipeImpl &impl, int64_t num) { impl.take<Tp>(num); }
@@ -318,15 +312,15 @@ namespace ignis {
                     }
 
                     template<typename C>
-                    void repartitionByHash_check(modules::impl::IRepartitionImpl &impl,
+                    void partitionByHash_check(modules::impl::IRepartitionImpl &impl,
                                                  typename IHasHash<C>::result val,
                                                  int64_t numPartitions) {
-                        impl.repartitionByHash<C>(numPartitions);
+                        impl.partitionByHash<C>(numPartitions);
                     }
 
                     template<typename C>
-                    void repartitionByHash_check(...) {
-                        throw exception::ICompatibilyException("repartitionByHash", RTTInfo::from<C>());
+                    void partitionByHash_check(...) {
+                        throw exception::ICompatibilyException("partitionByHash", RTTInfo::from<C>());
                     }
 
                     template<typename C>

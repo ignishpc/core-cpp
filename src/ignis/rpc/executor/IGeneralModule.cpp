@@ -4176,11 +4176,11 @@ uint32_t IGeneralModule_repartition_presult::read(::apache::thrift::protocol::TP
 }
 
 
-IGeneralModule_repartitionByRandom_args::~IGeneralModule_repartitionByRandom_args() noexcept {
+IGeneralModule_partitionByRandom_args::~IGeneralModule_partitionByRandom_args() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByRandom_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionByRandom_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4221,10 +4221,10 @@ uint32_t IGeneralModule_repartitionByRandom_args::read(::apache::thrift::protoco
   return xfer;
 }
 
-uint32_t IGeneralModule_repartitionByRandom_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionByRandom_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionByRandom_args");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionByRandom_args");
 
   xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64(this->numPartitions);
@@ -4236,14 +4236,14 @@ uint32_t IGeneralModule_repartitionByRandom_args::write(::apache::thrift::protoc
 }
 
 
-IGeneralModule_repartitionByRandom_pargs::~IGeneralModule_repartitionByRandom_pargs() noexcept {
+IGeneralModule_partitionByRandom_pargs::~IGeneralModule_partitionByRandom_pargs() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByRandom_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionByRandom_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionByRandom_pargs");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionByRandom_pargs");
 
   xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->numPartitions)));
@@ -4255,11 +4255,11 @@ uint32_t IGeneralModule_repartitionByRandom_pargs::write(::apache::thrift::proto
 }
 
 
-IGeneralModule_repartitionByRandom_result::~IGeneralModule_repartitionByRandom_result() noexcept {
+IGeneralModule_partitionByRandom_result::~IGeneralModule_partitionByRandom_result() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByRandom_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionByRandom_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4300,11 +4300,11 @@ uint32_t IGeneralModule_repartitionByRandom_result::read(::apache::thrift::proto
   return xfer;
 }
 
-uint32_t IGeneralModule_repartitionByRandom_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionByRandom_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionByRandom_result");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionByRandom_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -4317,11 +4317,11 @@ uint32_t IGeneralModule_repartitionByRandom_result::write(::apache::thrift::prot
 }
 
 
-IGeneralModule_repartitionByRandom_presult::~IGeneralModule_repartitionByRandom_presult() noexcept {
+IGeneralModule_partitionByRandom_presult::~IGeneralModule_partitionByRandom_presult() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByRandom_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionByRandom_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4363,11 +4363,11 @@ uint32_t IGeneralModule_repartitionByRandom_presult::read(::apache::thrift::prot
 }
 
 
-IGeneralModule_repartitionByHash_args::~IGeneralModule_repartitionByHash_args() noexcept {
+IGeneralModule_partitionByHash_args::~IGeneralModule_partitionByHash_args() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByHash_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionByHash_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4408,10 +4408,10 @@ uint32_t IGeneralModule_repartitionByHash_args::read(::apache::thrift::protocol:
   return xfer;
 }
 
-uint32_t IGeneralModule_repartitionByHash_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionByHash_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionByHash_args");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionByHash_args");
 
   xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64(this->numPartitions);
@@ -4423,14 +4423,14 @@ uint32_t IGeneralModule_repartitionByHash_args::write(::apache::thrift::protocol
 }
 
 
-IGeneralModule_repartitionByHash_pargs::~IGeneralModule_repartitionByHash_pargs() noexcept {
+IGeneralModule_partitionByHash_pargs::~IGeneralModule_partitionByHash_pargs() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByHash_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionByHash_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionByHash_pargs");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionByHash_pargs");
 
   xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->numPartitions)));
@@ -4442,11 +4442,11 @@ uint32_t IGeneralModule_repartitionByHash_pargs::write(::apache::thrift::protoco
 }
 
 
-IGeneralModule_repartitionByHash_result::~IGeneralModule_repartitionByHash_result() noexcept {
+IGeneralModule_partitionByHash_result::~IGeneralModule_partitionByHash_result() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByHash_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionByHash_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4487,11 +4487,11 @@ uint32_t IGeneralModule_repartitionByHash_result::read(::apache::thrift::protoco
   return xfer;
 }
 
-uint32_t IGeneralModule_repartitionByHash_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionByHash_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionByHash_result");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionByHash_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -4504,11 +4504,11 @@ uint32_t IGeneralModule_repartitionByHash_result::write(::apache::thrift::protoc
 }
 
 
-IGeneralModule_repartitionByHash_presult::~IGeneralModule_repartitionByHash_presult() noexcept {
+IGeneralModule_partitionByHash_presult::~IGeneralModule_partitionByHash_presult() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionByHash_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionByHash_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4550,11 +4550,11 @@ uint32_t IGeneralModule_repartitionByHash_presult::read(::apache::thrift::protoc
 }
 
 
-IGeneralModule_repartitionBy_args::~IGeneralModule_repartitionBy_args() noexcept {
+IGeneralModule_partitionBy_args::~IGeneralModule_partitionBy_args() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionBy_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionBy_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4603,10 +4603,10 @@ uint32_t IGeneralModule_repartitionBy_args::read(::apache::thrift::protocol::TPr
   return xfer;
 }
 
-uint32_t IGeneralModule_repartitionBy_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionBy_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionBy_args");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionBy_args");
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->src.write(oprot);
@@ -4622,14 +4622,14 @@ uint32_t IGeneralModule_repartitionBy_args::write(::apache::thrift::protocol::TP
 }
 
 
-IGeneralModule_repartitionBy_pargs::~IGeneralModule_repartitionBy_pargs() noexcept {
+IGeneralModule_partitionBy_pargs::~IGeneralModule_partitionBy_pargs() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionBy_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionBy_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionBy_pargs");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionBy_pargs");
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->src)).write(oprot);
@@ -4645,11 +4645,11 @@ uint32_t IGeneralModule_repartitionBy_pargs::write(::apache::thrift::protocol::T
 }
 
 
-IGeneralModule_repartitionBy_result::~IGeneralModule_repartitionBy_result() noexcept {
+IGeneralModule_partitionBy_result::~IGeneralModule_partitionBy_result() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionBy_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionBy_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -4690,11 +4690,11 @@ uint32_t IGeneralModule_repartitionBy_result::read(::apache::thrift::protocol::T
   return xfer;
 }
 
-uint32_t IGeneralModule_repartitionBy_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IGeneralModule_partitionBy_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IGeneralModule_repartitionBy_result");
+  xfer += oprot->writeStructBegin("IGeneralModule_partitionBy_result");
 
   if (this->__isset.ex) {
     xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
@@ -4707,11 +4707,11 @@ uint32_t IGeneralModule_repartitionBy_result::write(::apache::thrift::protocol::
 }
 
 
-IGeneralModule_repartitionBy_presult::~IGeneralModule_repartitionBy_presult() noexcept {
+IGeneralModule_partitionBy_presult::~IGeneralModule_partitionBy_presult() noexcept {
 }
 
 
-uint32_t IGeneralModule_repartitionBy_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IGeneralModule_partitionBy_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -8427,18 +8427,18 @@ void IGeneralModuleClient::recv_repartition()
   return;
 }
 
-void IGeneralModuleClient::repartitionByRandom(const int64_t numPartitions)
+void IGeneralModuleClient::partitionByRandom(const int64_t numPartitions)
 {
-  send_repartitionByRandom(numPartitions);
-  recv_repartitionByRandom();
+  send_partitionByRandom(numPartitions);
+  recv_partitionByRandom();
 }
 
-void IGeneralModuleClient::send_repartitionByRandom(const int64_t numPartitions)
+void IGeneralModuleClient::send_partitionByRandom(const int64_t numPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IGeneralModule_repartitionByRandom_pargs args;
+  IGeneralModule_partitionByRandom_pargs args;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
 
@@ -8447,7 +8447,7 @@ void IGeneralModuleClient::send_repartitionByRandom(const int64_t numPartitions)
   oprot_->getTransport()->flush();
 }
 
-void IGeneralModuleClient::recv_repartitionByRandom()
+void IGeneralModuleClient::recv_partitionByRandom()
 {
 
   int32_t rseqid = 0;
@@ -8467,12 +8467,12 @@ void IGeneralModuleClient::recv_repartitionByRandom()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("repartitionByRandom") != 0) {
+  if (fname.compare("partitionByRandom") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IGeneralModule_repartitionByRandom_presult result;
+  IGeneralModule_partitionByRandom_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -8483,18 +8483,18 @@ void IGeneralModuleClient::recv_repartitionByRandom()
   return;
 }
 
-void IGeneralModuleClient::repartitionByHash(const int64_t numPartitions)
+void IGeneralModuleClient::partitionByHash(const int64_t numPartitions)
 {
-  send_repartitionByHash(numPartitions);
-  recv_repartitionByHash();
+  send_partitionByHash(numPartitions);
+  recv_partitionByHash();
 }
 
-void IGeneralModuleClient::send_repartitionByHash(const int64_t numPartitions)
+void IGeneralModuleClient::send_partitionByHash(const int64_t numPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IGeneralModule_repartitionByHash_pargs args;
+  IGeneralModule_partitionByHash_pargs args;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
 
@@ -8503,7 +8503,7 @@ void IGeneralModuleClient::send_repartitionByHash(const int64_t numPartitions)
   oprot_->getTransport()->flush();
 }
 
-void IGeneralModuleClient::recv_repartitionByHash()
+void IGeneralModuleClient::recv_partitionByHash()
 {
 
   int32_t rseqid = 0;
@@ -8523,12 +8523,12 @@ void IGeneralModuleClient::recv_repartitionByHash()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("repartitionByHash") != 0) {
+  if (fname.compare("partitionByHash") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IGeneralModule_repartitionByHash_presult result;
+  IGeneralModule_partitionByHash_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -8539,18 +8539,18 @@ void IGeneralModuleClient::recv_repartitionByHash()
   return;
 }
 
-void IGeneralModuleClient::repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+void IGeneralModuleClient::partitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
-  send_repartitionBy(src, numPartitions);
-  recv_repartitionBy();
+  send_partitionBy(src, numPartitions);
+  recv_partitionBy();
 }
 
-void IGeneralModuleClient::send_repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+void IGeneralModuleClient::send_partitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IGeneralModule_repartitionBy_pargs args;
+  IGeneralModule_partitionBy_pargs args;
   args.src = &src;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -8560,7 +8560,7 @@ void IGeneralModuleClient::send_repartitionBy(const  ::ignis::rpc::ISource& src,
   oprot_->getTransport()->flush();
 }
 
-void IGeneralModuleClient::recv_repartitionBy()
+void IGeneralModuleClient::recv_partitionBy()
 {
 
   int32_t rseqid = 0;
@@ -8580,12 +8580,12 @@ void IGeneralModuleClient::recv_repartitionBy()
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("repartitionBy") != 0) {
+  if (fname.compare("partitionBy") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IGeneralModule_repartitionBy_presult result;
+  IGeneralModule_partitionBy_presult result;
   result.read(iprot_);
   iprot_->readMessageEnd();
   iprot_->getTransport()->readEnd();
@@ -10478,40 +10478,40 @@ void IGeneralModuleProcessor::process_repartition(int32_t seqid, ::apache::thrif
   }
 }
 
-void IGeneralModuleProcessor::process_repartitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IGeneralModuleProcessor::process_partitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IGeneralModule.repartitionByRandom", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.partitionByRandom", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.repartitionByRandom");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.partitionByRandom");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IGeneralModule.repartitionByRandom");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.partitionByRandom");
   }
 
-  IGeneralModule_repartitionByRandom_args args;
+  IGeneralModule_partitionByRandom_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IGeneralModule.repartitionByRandom", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.partitionByRandom", bytes);
   }
 
-  IGeneralModule_repartitionByRandom_result result;
+  IGeneralModule_partitionByRandom_result result;
   try {
-    iface_->repartitionByRandom(args.numPartitions);
+    iface_->partitionByRandom(args.numPartitions);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IGeneralModule.repartitionByRandom");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.partitionByRandom");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -10520,54 +10520,54 @@ void IGeneralModuleProcessor::process_repartitionByRandom(int32_t seqid, ::apach
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IGeneralModule.repartitionByRandom");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.partitionByRandom");
   }
 
-  oprot->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IGeneralModule.repartitionByRandom", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.partitionByRandom", bytes);
   }
 }
 
-void IGeneralModuleProcessor::process_repartitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IGeneralModuleProcessor::process_partitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IGeneralModule.repartitionByHash", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.partitionByHash", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.repartitionByHash");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.partitionByHash");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IGeneralModule.repartitionByHash");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.partitionByHash");
   }
 
-  IGeneralModule_repartitionByHash_args args;
+  IGeneralModule_partitionByHash_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IGeneralModule.repartitionByHash", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.partitionByHash", bytes);
   }
 
-  IGeneralModule_repartitionByHash_result result;
+  IGeneralModule_partitionByHash_result result;
   try {
-    iface_->repartitionByHash(args.numPartitions);
+    iface_->partitionByHash(args.numPartitions);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IGeneralModule.repartitionByHash");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.partitionByHash");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -10576,54 +10576,54 @@ void IGeneralModuleProcessor::process_repartitionByHash(int32_t seqid, ::apache:
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IGeneralModule.repartitionByHash");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.partitionByHash");
   }
 
-  oprot->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IGeneralModule.repartitionByHash", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.partitionByHash", bytes);
   }
 }
 
-void IGeneralModuleProcessor::process_repartitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IGeneralModuleProcessor::process_partitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IGeneralModule.repartitionBy", callContext);
+    ctx = this->eventHandler_->getContext("IGeneralModule.partitionBy", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.repartitionBy");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.partitionBy");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IGeneralModule.repartitionBy");
+    this->eventHandler_->preRead(ctx, "IGeneralModule.partitionBy");
   }
 
-  IGeneralModule_repartitionBy_args args;
+  IGeneralModule_partitionBy_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IGeneralModule.repartitionBy", bytes);
+    this->eventHandler_->postRead(ctx, "IGeneralModule.partitionBy", bytes);
   }
 
-  IGeneralModule_repartitionBy_result result;
+  IGeneralModule_partitionBy_result result;
   try {
-    iface_->repartitionBy(args.src, args.numPartitions);
+    iface_->partitionBy(args.src, args.numPartitions);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IGeneralModule.repartitionBy");
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.partitionBy");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -10632,17 +10632,17 @@ void IGeneralModuleProcessor::process_repartitionBy(int32_t seqid, ::apache::thr
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IGeneralModule.repartitionBy");
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.partitionBy");
   }
 
-  oprot->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IGeneralModule.repartitionBy", bytes);
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.partitionBy", bytes);
   }
 }
 
@@ -13062,19 +13062,19 @@ void IGeneralModuleConcurrentClient::recv_repartition(const int32_t seqid)
   } // end while(true)
 }
 
-void IGeneralModuleConcurrentClient::repartitionByRandom(const int64_t numPartitions)
+void IGeneralModuleConcurrentClient::partitionByRandom(const int64_t numPartitions)
 {
-  int32_t seqid = send_repartitionByRandom(numPartitions);
-  recv_repartitionByRandom(seqid);
+  int32_t seqid = send_partitionByRandom(numPartitions);
+  recv_partitionByRandom(seqid);
 }
 
-int32_t IGeneralModuleConcurrentClient::send_repartitionByRandom(const int64_t numPartitions)
+int32_t IGeneralModuleConcurrentClient::send_partitionByRandom(const int64_t numPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IGeneralModule_repartitionByRandom_pargs args;
+  IGeneralModule_partitionByRandom_pargs args;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
 
@@ -13086,7 +13086,7 @@ int32_t IGeneralModuleConcurrentClient::send_repartitionByRandom(const int64_t n
   return cseqid;
 }
 
-void IGeneralModuleConcurrentClient::recv_repartitionByRandom(const int32_t seqid)
+void IGeneralModuleConcurrentClient::recv_partitionByRandom(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -13115,7 +13115,7 @@ void IGeneralModuleConcurrentClient::recv_repartitionByRandom(const int32_t seqi
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("repartitionByRandom") != 0) {
+      if (fname.compare("partitionByRandom") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -13124,7 +13124,7 @@ void IGeneralModuleConcurrentClient::recv_repartitionByRandom(const int32_t seqi
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IGeneralModule_repartitionByRandom_presult result;
+      IGeneralModule_partitionByRandom_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -13144,19 +13144,19 @@ void IGeneralModuleConcurrentClient::recv_repartitionByRandom(const int32_t seqi
   } // end while(true)
 }
 
-void IGeneralModuleConcurrentClient::repartitionByHash(const int64_t numPartitions)
+void IGeneralModuleConcurrentClient::partitionByHash(const int64_t numPartitions)
 {
-  int32_t seqid = send_repartitionByHash(numPartitions);
-  recv_repartitionByHash(seqid);
+  int32_t seqid = send_partitionByHash(numPartitions);
+  recv_partitionByHash(seqid);
 }
 
-int32_t IGeneralModuleConcurrentClient::send_repartitionByHash(const int64_t numPartitions)
+int32_t IGeneralModuleConcurrentClient::send_partitionByHash(const int64_t numPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IGeneralModule_repartitionByHash_pargs args;
+  IGeneralModule_partitionByHash_pargs args;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
 
@@ -13168,7 +13168,7 @@ int32_t IGeneralModuleConcurrentClient::send_repartitionByHash(const int64_t num
   return cseqid;
 }
 
-void IGeneralModuleConcurrentClient::recv_repartitionByHash(const int32_t seqid)
+void IGeneralModuleConcurrentClient::recv_partitionByHash(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -13197,7 +13197,7 @@ void IGeneralModuleConcurrentClient::recv_repartitionByHash(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("repartitionByHash") != 0) {
+      if (fname.compare("partitionByHash") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -13206,7 +13206,7 @@ void IGeneralModuleConcurrentClient::recv_repartitionByHash(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IGeneralModule_repartitionByHash_presult result;
+      IGeneralModule_partitionByHash_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -13226,19 +13226,19 @@ void IGeneralModuleConcurrentClient::recv_repartitionByHash(const int32_t seqid)
   } // end while(true)
 }
 
-void IGeneralModuleConcurrentClient::repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+void IGeneralModuleConcurrentClient::partitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
-  int32_t seqid = send_repartitionBy(src, numPartitions);
-  recv_repartitionBy(seqid);
+  int32_t seqid = send_partitionBy(src, numPartitions);
+  recv_partitionBy(seqid);
 }
 
-int32_t IGeneralModuleConcurrentClient::send_repartitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+int32_t IGeneralModuleConcurrentClient::send_partitionBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IGeneralModule_repartitionBy_pargs args;
+  IGeneralModule_partitionBy_pargs args;
   args.src = &src;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -13251,7 +13251,7 @@ int32_t IGeneralModuleConcurrentClient::send_repartitionBy(const  ::ignis::rpc::
   return cseqid;
 }
 
-void IGeneralModuleConcurrentClient::recv_repartitionBy(const int32_t seqid)
+void IGeneralModuleConcurrentClient::recv_partitionBy(const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -13280,7 +13280,7 @@ void IGeneralModuleConcurrentClient::recv_repartitionBy(const int32_t seqid)
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("repartitionBy") != 0) {
+      if (fname.compare("partitionBy") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -13289,7 +13289,7 @@ void IGeneralModuleConcurrentClient::recv_repartitionBy(const int32_t seqid)
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IGeneralModule_repartitionBy_presult result;
+      IGeneralModule_partitionBy_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();

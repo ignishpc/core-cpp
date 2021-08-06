@@ -2079,11 +2079,11 @@ uint32_t IDataFrameService_repartition_presult::read(::apache::thrift::protocol:
 }
 
 
-IDataFrameService_repartitionByRandom_args::~IDataFrameService_repartitionByRandom_args() noexcept {
+IDataFrameService_partitionByRandom_args::~IDataFrameService_partitionByRandom_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByRandom_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionByRandom_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2132,10 +2132,10 @@ uint32_t IDataFrameService_repartitionByRandom_args::read(::apache::thrift::prot
   return xfer;
 }
 
-uint32_t IDataFrameService_repartitionByRandom_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionByRandom_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionByRandom_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionByRandom_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -2151,14 +2151,14 @@ uint32_t IDataFrameService_repartitionByRandom_args::write(::apache::thrift::pro
 }
 
 
-IDataFrameService_repartitionByRandom_pargs::~IDataFrameService_repartitionByRandom_pargs() noexcept {
+IDataFrameService_partitionByRandom_pargs::~IDataFrameService_partitionByRandom_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByRandom_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionByRandom_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionByRandom_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionByRandom_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -2174,11 +2174,11 @@ uint32_t IDataFrameService_repartitionByRandom_pargs::write(::apache::thrift::pr
 }
 
 
-IDataFrameService_repartitionByRandom_result::~IDataFrameService_repartitionByRandom_result() noexcept {
+IDataFrameService_partitionByRandom_result::~IDataFrameService_partitionByRandom_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByRandom_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionByRandom_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2227,11 +2227,11 @@ uint32_t IDataFrameService_repartitionByRandom_result::read(::apache::thrift::pr
   return xfer;
 }
 
-uint32_t IDataFrameService_repartitionByRandom_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionByRandom_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionByRandom_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionByRandom_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -2248,11 +2248,11 @@ uint32_t IDataFrameService_repartitionByRandom_result::write(::apache::thrift::p
 }
 
 
-IDataFrameService_repartitionByRandom_presult::~IDataFrameService_repartitionByRandom_presult() noexcept {
+IDataFrameService_partitionByRandom_presult::~IDataFrameService_partitionByRandom_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByRandom_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionByRandom_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2302,11 +2302,11 @@ uint32_t IDataFrameService_repartitionByRandom_presult::read(::apache::thrift::p
 }
 
 
-IDataFrameService_repartitionByHash_args::~IDataFrameService_repartitionByHash_args() noexcept {
+IDataFrameService_partitionByHash_args::~IDataFrameService_partitionByHash_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByHash_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionByHash_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2355,10 +2355,10 @@ uint32_t IDataFrameService_repartitionByHash_args::read(::apache::thrift::protoc
   return xfer;
 }
 
-uint32_t IDataFrameService_repartitionByHash_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionByHash_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionByHash_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionByHash_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -2374,14 +2374,14 @@ uint32_t IDataFrameService_repartitionByHash_args::write(::apache::thrift::proto
 }
 
 
-IDataFrameService_repartitionByHash_pargs::~IDataFrameService_repartitionByHash_pargs() noexcept {
+IDataFrameService_partitionByHash_pargs::~IDataFrameService_partitionByHash_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByHash_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionByHash_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionByHash_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionByHash_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -2397,11 +2397,11 @@ uint32_t IDataFrameService_repartitionByHash_pargs::write(::apache::thrift::prot
 }
 
 
-IDataFrameService_repartitionByHash_result::~IDataFrameService_repartitionByHash_result() noexcept {
+IDataFrameService_partitionByHash_result::~IDataFrameService_partitionByHash_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByHash_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionByHash_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2450,11 +2450,11 @@ uint32_t IDataFrameService_repartitionByHash_result::read(::apache::thrift::prot
   return xfer;
 }
 
-uint32_t IDataFrameService_repartitionByHash_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionByHash_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionByHash_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionByHash_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -2471,11 +2471,11 @@ uint32_t IDataFrameService_repartitionByHash_result::write(::apache::thrift::pro
 }
 
 
-IDataFrameService_repartitionByHash_presult::~IDataFrameService_repartitionByHash_presult() noexcept {
+IDataFrameService_partitionByHash_presult::~IDataFrameService_partitionByHash_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionByHash_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionByHash_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2525,11 +2525,11 @@ uint32_t IDataFrameService_repartitionByHash_presult::read(::apache::thrift::pro
 }
 
 
-IDataFrameService_repartitionBy_args::~IDataFrameService_repartitionBy_args() noexcept {
+IDataFrameService_partitionBy_args::~IDataFrameService_partitionBy_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionBy_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionBy_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2586,10 +2586,10 @@ uint32_t IDataFrameService_repartitionBy_args::read(::apache::thrift::protocol::
   return xfer;
 }
 
-uint32_t IDataFrameService_repartitionBy_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionBy_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionBy_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionBy_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -2609,14 +2609,14 @@ uint32_t IDataFrameService_repartitionBy_args::write(::apache::thrift::protocol:
 }
 
 
-IDataFrameService_repartitionBy_pargs::~IDataFrameService_repartitionBy_pargs() noexcept {
+IDataFrameService_partitionBy_pargs::~IDataFrameService_partitionBy_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionBy_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionBy_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionBy_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionBy_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -2636,11 +2636,11 @@ uint32_t IDataFrameService_repartitionBy_pargs::write(::apache::thrift::protocol
 }
 
 
-IDataFrameService_repartitionBy_result::~IDataFrameService_repartitionBy_result() noexcept {
+IDataFrameService_partitionBy_result::~IDataFrameService_partitionBy_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionBy_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionBy_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2689,11 +2689,11 @@ uint32_t IDataFrameService_repartitionBy_result::read(::apache::thrift::protocol
   return xfer;
 }
 
-uint32_t IDataFrameService_repartitionBy_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_partitionBy_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_repartitionBy_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_partitionBy_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -2710,11 +2710,11 @@ uint32_t IDataFrameService_repartitionBy_result::write(::apache::thrift::protoco
 }
 
 
-IDataFrameService_repartitionBy_presult::~IDataFrameService_repartitionBy_presult() noexcept {
+IDataFrameService_partitionBy_presult::~IDataFrameService_partitionBy_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_repartitionBy_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_partitionBy_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6237,266 +6237,11 @@ uint32_t IDataFrameService_union__presult::read(::apache::thrift::protocol::TPro
 }
 
 
-IDataFrameService_union4a_args::~IDataFrameService_union4a_args() noexcept {
+IDataFrameService_union4_args::~IDataFrameService_union4_args() noexcept {
 }
 
 
-uint32_t IDataFrameService_union4a_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->id.read(iprot);
-          this->__isset.id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->other.read(iprot);
-          this->__isset.other = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->preserveOrder);
-          this->__isset.preserveOrder = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->numPartitions);
-          this->__isset.numPartitions = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IDataFrameService_union4a_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_union4a_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += this->id.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("other", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->other.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("preserveOrder", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool(this->preserveOrder);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 4);
-  xfer += oprot->writeI64(this->numPartitions);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IDataFrameService_union4a_pargs::~IDataFrameService_union4a_pargs() noexcept {
-}
-
-
-uint32_t IDataFrameService_union4a_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_union4a_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += (*(this->id)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("other", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += (*(this->other)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("preserveOrder", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool((*(this->preserveOrder)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 4);
-  xfer += oprot->writeI64((*(this->numPartitions)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IDataFrameService_union4a_result::~IDataFrameService_union4a_result() noexcept {
-}
-
-
-uint32_t IDataFrameService_union4a_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IDataFrameService_union4a_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IDataFrameService_union4a_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IDataFrameService_union4a_presult::~IDataFrameService_union4a_presult() noexcept {
-}
-
-
-uint32_t IDataFrameService_union4a_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-IDataFrameService_union4b_args::~IDataFrameService_union4b_args() noexcept {
-}
-
-
-uint32_t IDataFrameService_union4b_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_union4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6561,10 +6306,10 @@ uint32_t IDataFrameService_union4b_args::read(::apache::thrift::protocol::TProto
   return xfer;
 }
 
-uint32_t IDataFrameService_union4b_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_union4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_union4b_args");
+  xfer += oprot->writeStructBegin("IDataFrameService_union4_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -6588,14 +6333,14 @@ uint32_t IDataFrameService_union4b_args::write(::apache::thrift::protocol::TProt
 }
 
 
-IDataFrameService_union4b_pargs::~IDataFrameService_union4b_pargs() noexcept {
+IDataFrameService_union4_pargs::~IDataFrameService_union4_pargs() noexcept {
 }
 
 
-uint32_t IDataFrameService_union4b_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_union4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_union4b_pargs");
+  xfer += oprot->writeStructBegin("IDataFrameService_union4_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -6619,11 +6364,11 @@ uint32_t IDataFrameService_union4b_pargs::write(::apache::thrift::protocol::TPro
 }
 
 
-IDataFrameService_union4b_result::~IDataFrameService_union4b_result() noexcept {
+IDataFrameService_union4_result::~IDataFrameService_union4_result() noexcept {
 }
 
 
-uint32_t IDataFrameService_union4b_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_union4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6672,11 +6417,11 @@ uint32_t IDataFrameService_union4b_result::read(::apache::thrift::protocol::TPro
   return xfer;
 }
 
-uint32_t IDataFrameService_union4b_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IDataFrameService_union4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IDataFrameService_union4b_result");
+  xfer += oprot->writeStructBegin("IDataFrameService_union4_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -6693,282 +6438,11 @@ uint32_t IDataFrameService_union4b_result::write(::apache::thrift::protocol::TPr
 }
 
 
-IDataFrameService_union4b_presult::~IDataFrameService_union4b_presult() noexcept {
+IDataFrameService_union4_presult::~IDataFrameService_union4_presult() noexcept {
 }
 
 
-uint32_t IDataFrameService_union4b_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-IDataFrameService_union5_args::~IDataFrameService_union5_args() noexcept {
-}
-
-
-uint32_t IDataFrameService_union5_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->id.read(iprot);
-          this->__isset.id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->other.read(iprot);
-          this->__isset.other = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->preserveOrder);
-          this->__isset.preserveOrder = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->numPartitions);
-          this->__isset.numPartitions = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 5:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->src.read(iprot);
-          this->__isset.src = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IDataFrameService_union5_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_union5_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += this->id.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("other", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->other.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("preserveOrder", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool(this->preserveOrder);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 4);
-  xfer += oprot->writeI64(this->numPartitions);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 5);
-  xfer += this->src.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IDataFrameService_union5_pargs::~IDataFrameService_union5_pargs() noexcept {
-}
-
-
-uint32_t IDataFrameService_union5_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IDataFrameService_union5_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += (*(this->id)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("other", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += (*(this->other)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("preserveOrder", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool((*(this->preserveOrder)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 4);
-  xfer += oprot->writeI64((*(this->numPartitions)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 5);
-  xfer += (*(this->src)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IDataFrameService_union5_result::~IDataFrameService_union5_result() noexcept {
-}
-
-
-uint32_t IDataFrameService_union5_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IDataFrameService_union5_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IDataFrameService_union5_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IDataFrameService_union5_presult::~IDataFrameService_union5_presult() noexcept {
-}
-
-
-uint32_t IDataFrameService_union5_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IDataFrameService_union4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -20152,18 +19626,18 @@ void IDataFrameServiceClient::recv_repartition(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartition failed: unknown result");
 }
 
-void IDataFrameServiceClient::repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
 {
-  send_repartitionByRandom(id, numPartitions);
-  recv_repartitionByRandom(_return);
+  send_partitionByRandom(id, numPartitions);
+  recv_partitionByRandom(_return);
 }
 
-void IDataFrameServiceClient::send_repartitionByRandom(const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_repartitionByRandom_pargs args;
+  IDataFrameService_partitionByRandom_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -20173,7 +19647,7 @@ void IDataFrameServiceClient::send_repartitionByRandom(const IDataFrameId& id, c
   oprot_->getTransport()->flush();
 }
 
-void IDataFrameServiceClient::recv_repartitionByRandom(IDataFrameId& _return)
+void IDataFrameServiceClient::recv_partitionByRandom(IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -20193,12 +19667,12 @@ void IDataFrameServiceClient::recv_repartitionByRandom(IDataFrameId& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("repartitionByRandom") != 0) {
+  if (fname.compare("partitionByRandom") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IDataFrameService_repartitionByRandom_presult result;
+  IDataFrameService_partitionByRandom_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -20211,21 +19685,21 @@ void IDataFrameServiceClient::recv_repartitionByRandom(IDataFrameId& _return)
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartitionByRandom failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionByRandom failed: unknown result");
 }
 
-void IDataFrameServiceClient::repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
 {
-  send_repartitionByHash(id, numPartitions);
-  recv_repartitionByHash(_return);
+  send_partitionByHash(id, numPartitions);
+  recv_partitionByHash(_return);
 }
 
-void IDataFrameServiceClient::send_repartitionByHash(const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::send_partitionByHash(const IDataFrameId& id, const int64_t numPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_repartitionByHash_pargs args;
+  IDataFrameService_partitionByHash_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -20235,7 +19709,7 @@ void IDataFrameServiceClient::send_repartitionByHash(const IDataFrameId& id, con
   oprot_->getTransport()->flush();
 }
 
-void IDataFrameServiceClient::recv_repartitionByHash(IDataFrameId& _return)
+void IDataFrameServiceClient::recv_partitionByHash(IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -20255,12 +19729,12 @@ void IDataFrameServiceClient::recv_repartitionByHash(IDataFrameId& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("repartitionByHash") != 0) {
+  if (fname.compare("partitionByHash") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IDataFrameService_repartitionByHash_presult result;
+  IDataFrameService_partitionByHash_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -20273,21 +19747,21 @@ void IDataFrameServiceClient::recv_repartitionByHash(IDataFrameId& _return)
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartitionByHash failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionByHash failed: unknown result");
 }
 
-void IDataFrameServiceClient::repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+void IDataFrameServiceClient::partitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
-  send_repartitionBy(id, src, numPartitions);
-  recv_repartitionBy(_return);
+  send_partitionBy(id, src, numPartitions);
+  recv_partitionBy(_return);
 }
 
-void IDataFrameServiceClient::send_repartitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+void IDataFrameServiceClient::send_partitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_repartitionBy_pargs args;
+  IDataFrameService_partitionBy_pargs args;
   args.id = &id;
   args.src = &src;
   args.numPartitions = &numPartitions;
@@ -20298,7 +19772,7 @@ void IDataFrameServiceClient::send_repartitionBy(const IDataFrameId& id, const  
   oprot_->getTransport()->flush();
 }
 
-void IDataFrameServiceClient::recv_repartitionBy(IDataFrameId& _return)
+void IDataFrameServiceClient::recv_partitionBy(IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -20318,12 +19792,12 @@ void IDataFrameServiceClient::recv_repartitionBy(IDataFrameId& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("repartitionBy") != 0) {
+  if (fname.compare("partitionBy") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IDataFrameService_repartitionBy_presult result;
+  IDataFrameService_partitionBy_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -20336,7 +19810,7 @@ void IDataFrameServiceClient::recv_repartitionBy(IDataFrameId& _return)
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartitionBy failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionBy failed: unknown result");
 }
 
 void IDataFrameServiceClient::map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
@@ -21277,82 +20751,18 @@ void IDataFrameServiceClient::recv_union_(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union_ failed: unknown result");
 }
 
-void IDataFrameServiceClient::union4a(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions)
+void IDataFrameServiceClient::union4(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
 {
-  send_union4a(id, other, preserveOrder, numPartitions);
-  recv_union4a(_return);
+  send_union4(id, other, preserveOrder, src);
+  recv_union4(_return);
 }
 
-void IDataFrameServiceClient::send_union4a(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions)
+void IDataFrameServiceClient::send_union4(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("union4a", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("union4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_union4a_pargs args;
-  args.id = &id;
-  args.other = &other;
-  args.preserveOrder = &preserveOrder;
-  args.numPartitions = &numPartitions;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IDataFrameServiceClient::recv_union4a(IDataFrameId& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("union4a") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IDataFrameService_union4a_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union4a failed: unknown result");
-}
-
-void IDataFrameServiceClient::union4b(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
-{
-  send_union4b(id, other, preserveOrder, src);
-  recv_union4b(_return);
-}
-
-void IDataFrameServiceClient::send_union4b(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("union4b", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IDataFrameService_union4b_pargs args;
+  IDataFrameService_union4_pargs args;
   args.id = &id;
   args.other = &other;
   args.preserveOrder = &preserveOrder;
@@ -21364,7 +20774,7 @@ void IDataFrameServiceClient::send_union4b(const IDataFrameId& id, const IDataFr
   oprot_->getTransport()->flush();
 }
 
-void IDataFrameServiceClient::recv_union4b(IDataFrameId& _return)
+void IDataFrameServiceClient::recv_union4(IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -21384,12 +20794,12 @@ void IDataFrameServiceClient::recv_union4b(IDataFrameId& _return)
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("union4b") != 0) {
+  if (fname.compare("union4") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IDataFrameService_union4b_presult result;
+  IDataFrameService_union4_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -21402,72 +20812,7 @@ void IDataFrameServiceClient::recv_union4b(IDataFrameId& _return)
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union4b failed: unknown result");
-}
-
-void IDataFrameServiceClient::union5(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
-{
-  send_union5(id, other, preserveOrder, numPartitions, src);
-  recv_union5(_return);
-}
-
-void IDataFrameServiceClient::send_union5(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("union5", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IDataFrameService_union5_pargs args;
-  args.id = &id;
-  args.other = &other;
-  args.preserveOrder = &preserveOrder;
-  args.numPartitions = &numPartitions;
-  args.src = &src;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IDataFrameServiceClient::recv_union5(IDataFrameId& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("union5") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IDataFrameService_union5_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union5 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union4 failed: unknown result");
 }
 
 void IDataFrameServiceClient::join(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other)
@@ -25370,41 +24715,41 @@ void IDataFrameServiceProcessor::process_repartition(int32_t seqid, ::apache::th
   }
 }
 
-void IDataFrameServiceProcessor::process_repartitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_partitionByRandom(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.repartitionByRandom", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.partitionByRandom", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.repartitionByRandom");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.partitionByRandom");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.repartitionByRandom");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.partitionByRandom");
   }
 
-  IDataFrameService_repartitionByRandom_args args;
+  IDataFrameService_partitionByRandom_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.repartitionByRandom", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.partitionByRandom", bytes);
   }
 
-  IDataFrameService_repartitionByRandom_result result;
+  IDataFrameService_partitionByRandom_result result;
   try {
-    iface_->repartitionByRandom(result.success, args.id, args.numPartitions);
+    iface_->partitionByRandom(result.success, args.id, args.numPartitions);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.repartitionByRandom");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.partitionByRandom");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -25413,55 +24758,55 @@ void IDataFrameServiceProcessor::process_repartitionByRandom(int32_t seqid, ::ap
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.repartitionByRandom");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.partitionByRandom");
   }
 
-  oprot->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.repartitionByRandom", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.partitionByRandom", bytes);
   }
 }
 
-void IDataFrameServiceProcessor::process_repartitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_partitionByHash(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.repartitionByHash", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.partitionByHash", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.repartitionByHash");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.partitionByHash");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.repartitionByHash");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.partitionByHash");
   }
 
-  IDataFrameService_repartitionByHash_args args;
+  IDataFrameService_partitionByHash_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.repartitionByHash", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.partitionByHash", bytes);
   }
 
-  IDataFrameService_repartitionByHash_result result;
+  IDataFrameService_partitionByHash_result result;
   try {
-    iface_->repartitionByHash(result.success, args.id, args.numPartitions);
+    iface_->partitionByHash(result.success, args.id, args.numPartitions);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.repartitionByHash");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.partitionByHash");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -25470,55 +24815,55 @@ void IDataFrameServiceProcessor::process_repartitionByHash(int32_t seqid, ::apac
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.repartitionByHash");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.partitionByHash");
   }
 
-  oprot->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.repartitionByHash", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.partitionByHash", bytes);
   }
 }
 
-void IDataFrameServiceProcessor::process_repartitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_partitionBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.repartitionBy", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.partitionBy", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.repartitionBy");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.partitionBy");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.repartitionBy");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.partitionBy");
   }
 
-  IDataFrameService_repartitionBy_args args;
+  IDataFrameService_partitionBy_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.repartitionBy", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.partitionBy", bytes);
   }
 
-  IDataFrameService_repartitionBy_result result;
+  IDataFrameService_partitionBy_result result;
   try {
-    iface_->repartitionBy(result.success, args.id, args.src, args.numPartitions);
+    iface_->partitionBy(result.success, args.id, args.src, args.numPartitions);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.repartitionBy");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.partitionBy");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -25527,17 +24872,17 @@ void IDataFrameServiceProcessor::process_repartitionBy(int32_t seqid, ::apache::
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.repartitionBy");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.partitionBy");
   }
 
-  oprot->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.repartitionBy", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.partitionBy", bytes);
   }
 }
 
@@ -26396,41 +25741,41 @@ void IDataFrameServiceProcessor::process_union_(int32_t seqid, ::apache::thrift:
   }
 }
 
-void IDataFrameServiceProcessor::process_union4a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IDataFrameServiceProcessor::process_union4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.union4a", callContext);
+    ctx = this->eventHandler_->getContext("IDataFrameService.union4", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.union4a");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.union4");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.union4a");
+    this->eventHandler_->preRead(ctx, "IDataFrameService.union4");
   }
 
-  IDataFrameService_union4a_args args;
+  IDataFrameService_union4_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.union4a", bytes);
+    this->eventHandler_->postRead(ctx, "IDataFrameService.union4", bytes);
   }
 
-  IDataFrameService_union4a_result result;
+  IDataFrameService_union4_result result;
   try {
-    iface_->union4a(result.success, args.id, args.other, args.preserveOrder, args.numPartitions);
+    iface_->union4(result.success, args.id, args.other, args.preserveOrder, args.src);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.union4a");
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.union4");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("union4a", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("union4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -26439,131 +25784,17 @@ void IDataFrameServiceProcessor::process_union4a(int32_t seqid, ::apache::thrift
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.union4a");
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.union4");
   }
 
-  oprot->writeMessageBegin("union4a", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("union4", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.union4a", bytes);
-  }
-}
-
-void IDataFrameServiceProcessor::process_union4b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = nullptr;
-  if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.union4b", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.union4b");
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.union4b");
-  }
-
-  IDataFrameService_union4b_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.union4b", bytes);
-  }
-
-  IDataFrameService_union4b_result result;
-  try {
-    iface_->union4b(result.success, args.id, args.other, args.preserveOrder, args.src);
-    result.__isset.success = true;
-  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.union4b");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("union4b", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.union4b");
-  }
-
-  oprot->writeMessageBegin("union4b", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.union4b", bytes);
-  }
-}
-
-void IDataFrameServiceProcessor::process_union5(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = nullptr;
-  if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IDataFrameService.union5", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.union5");
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IDataFrameService.union5");
-  }
-
-  IDataFrameService_union5_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IDataFrameService.union5", bytes);
-  }
-
-  IDataFrameService_union5_result result;
-  try {
-    iface_->union5(result.success, args.id, args.other, args.preserveOrder, args.numPartitions, args.src);
-    result.__isset.success = true;
-  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IDataFrameService.union5");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("union5", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IDataFrameService.union5");
-  }
-
-  oprot->writeMessageBegin("union5", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IDataFrameService.union5", bytes);
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.union4", bytes);
   }
 }
 
@@ -30431,19 +29662,19 @@ void IDataFrameServiceConcurrentClient::recv_repartition(IDataFrameId& _return, 
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::repartitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceConcurrentClient::partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
 {
-  int32_t seqid = send_repartitionByRandom(id, numPartitions);
-  recv_repartitionByRandom(_return, seqid);
+  int32_t seqid = send_partitionByRandom(id, numPartitions);
+  recv_partitionByRandom(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_repartitionByRandom(const IDataFrameId& id, const int64_t numPartitions)
+int32_t IDataFrameServiceConcurrentClient::send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("repartitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_repartitionByRandom_pargs args;
+  IDataFrameService_partitionByRandom_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -30456,7 +29687,7 @@ int32_t IDataFrameServiceConcurrentClient::send_repartitionByRandom(const IDataF
   return cseqid;
 }
 
-void IDataFrameServiceConcurrentClient::recv_repartitionByRandom(IDataFrameId& _return, const int32_t seqid)
+void IDataFrameServiceConcurrentClient::recv_partitionByRandom(IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -30485,7 +29716,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByRandom(IDataFrameId& _
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("repartitionByRandom") != 0) {
+      if (fname.compare("partitionByRandom") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -30494,7 +29725,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByRandom(IDataFrameId& _
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IDataFrameService_repartitionByRandom_presult result;
+      IDataFrameService_partitionByRandom_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -30510,7 +29741,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByRandom(IDataFrameId& _
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartitionByRandom failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionByRandom failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -30520,19 +29751,19 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByRandom(IDataFrameId& _
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::repartitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceConcurrentClient::partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
 {
-  int32_t seqid = send_repartitionByHash(id, numPartitions);
-  recv_repartitionByHash(_return, seqid);
+  int32_t seqid = send_partitionByHash(id, numPartitions);
+  recv_partitionByHash(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_repartitionByHash(const IDataFrameId& id, const int64_t numPartitions)
+int32_t IDataFrameServiceConcurrentClient::send_partitionByHash(const IDataFrameId& id, const int64_t numPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("repartitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionByHash", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_repartitionByHash_pargs args;
+  IDataFrameService_partitionByHash_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
   args.write(oprot_);
@@ -30545,7 +29776,7 @@ int32_t IDataFrameServiceConcurrentClient::send_repartitionByHash(const IDataFra
   return cseqid;
 }
 
-void IDataFrameServiceConcurrentClient::recv_repartitionByHash(IDataFrameId& _return, const int32_t seqid)
+void IDataFrameServiceConcurrentClient::recv_partitionByHash(IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -30574,7 +29805,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByHash(IDataFrameId& _re
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("repartitionByHash") != 0) {
+      if (fname.compare("partitionByHash") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -30583,7 +29814,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByHash(IDataFrameId& _re
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IDataFrameService_repartitionByHash_presult result;
+      IDataFrameService_partitionByHash_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -30599,7 +29830,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByHash(IDataFrameId& _re
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartitionByHash failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionByHash failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -30609,19 +29840,19 @@ void IDataFrameServiceConcurrentClient::recv_repartitionByHash(IDataFrameId& _re
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::repartitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+void IDataFrameServiceConcurrentClient::partitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
-  int32_t seqid = send_repartitionBy(id, src, numPartitions);
-  recv_repartitionBy(_return, seqid);
+  int32_t seqid = send_partitionBy(id, src, numPartitions);
+  recv_partitionBy(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_repartitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
+int32_t IDataFrameServiceConcurrentClient::send_partitionBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("repartitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("partitionBy", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_repartitionBy_pargs args;
+  IDataFrameService_partitionBy_pargs args;
   args.id = &id;
   args.src = &src;
   args.numPartitions = &numPartitions;
@@ -30635,7 +29866,7 @@ int32_t IDataFrameServiceConcurrentClient::send_repartitionBy(const IDataFrameId
   return cseqid;
 }
 
-void IDataFrameServiceConcurrentClient::recv_repartitionBy(IDataFrameId& _return, const int32_t seqid)
+void IDataFrameServiceConcurrentClient::recv_partitionBy(IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -30664,7 +29895,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionBy(IDataFrameId& _return
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("repartitionBy") != 0) {
+      if (fname.compare("partitionBy") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -30673,7 +29904,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionBy(IDataFrameId& _return
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IDataFrameService_repartitionBy_presult result;
+      IDataFrameService_partitionBy_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -30689,7 +29920,7 @@ void IDataFrameServiceConcurrentClient::recv_repartitionBy(IDataFrameId& _return
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartitionBy failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionBy failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);
@@ -32042,110 +31273,19 @@ void IDataFrameServiceConcurrentClient::recv_union_(IDataFrameId& _return, const
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::union4a(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions)
+void IDataFrameServiceConcurrentClient::union4(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_union4a(id, other, preserveOrder, numPartitions);
-  recv_union4a(_return, seqid);
+  int32_t seqid = send_union4(id, other, preserveOrder, src);
+  recv_union4(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_union4a(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions)
+int32_t IDataFrameServiceConcurrentClient::send_union4(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("union4a", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("union4", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IDataFrameService_union4a_pargs args;
-  args.id = &id;
-  args.other = &other;
-  args.preserveOrder = &preserveOrder;
-  args.numPartitions = &numPartitions;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IDataFrameServiceConcurrentClient::recv_union4a(IDataFrameId& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("union4a") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IDataFrameService_union4a_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union4a failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void IDataFrameServiceConcurrentClient::union4b(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
-{
-  int32_t seqid = send_union4b(id, other, preserveOrder, src);
-  recv_union4b(_return, seqid);
-}
-
-int32_t IDataFrameServiceConcurrentClient::send_union4b(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("union4b", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IDataFrameService_union4b_pargs args;
+  IDataFrameService_union4_pargs args;
   args.id = &id;
   args.other = &other;
   args.preserveOrder = &preserveOrder;
@@ -32160,7 +31300,7 @@ int32_t IDataFrameServiceConcurrentClient::send_union4b(const IDataFrameId& id, 
   return cseqid;
 }
 
-void IDataFrameServiceConcurrentClient::recv_union4b(IDataFrameId& _return, const int32_t seqid)
+void IDataFrameServiceConcurrentClient::recv_union4(IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -32189,7 +31329,7 @@ void IDataFrameServiceConcurrentClient::recv_union4b(IDataFrameId& _return, cons
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("union4b") != 0) {
+      if (fname.compare("union4") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -32198,7 +31338,7 @@ void IDataFrameServiceConcurrentClient::recv_union4b(IDataFrameId& _return, cons
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IDataFrameService_union4b_presult result;
+      IDataFrameService_union4_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -32214,99 +31354,7 @@ void IDataFrameServiceConcurrentClient::recv_union4b(IDataFrameId& _return, cons
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union4b failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void IDataFrameServiceConcurrentClient::union5(IDataFrameId& _return, const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
-{
-  int32_t seqid = send_union5(id, other, preserveOrder, numPartitions, src);
-  recv_union5(_return, seqid);
-}
-
-int32_t IDataFrameServiceConcurrentClient::send_union5(const IDataFrameId& id, const IDataFrameId& other, const bool preserveOrder, const int64_t numPartitions, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("union5", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IDataFrameService_union5_pargs args;
-  args.id = &id;
-  args.other = &other;
-  args.preserveOrder = &preserveOrder;
-  args.numPartitions = &numPartitions;
-  args.src = &src;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IDataFrameServiceConcurrentClient::recv_union5(IDataFrameId& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("union5") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IDataFrameService_union5_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union5 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "union4 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

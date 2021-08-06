@@ -88,14 +88,6 @@ void ICommImpl::setPartitionsVoid(const std::vector<std::string> &partitions) {
     IGNIS_CATCH()
 }
 
-void ICommImpl::newEmptyPartitionsVoid(int64_t n) {
-    IGNIS_TRY()
-    auto part_group = executor_data->getPartitionTools().newPartitionGroup<storage::IVoidPartition::VOID_TYPE>();
-    for (int64_t i = 0; i < n; i++) { part_group->add(executor_data->getPartitionTools().newVoidPartition()); }
-    executor_data->setPartitions<storage::IVoidPartition::VOID_TYPE>(part_group);
-    IGNIS_CATCH()
-}
-
 void ICommImpl::driverScatterVoid(const std::string &group, int64_t partitions) {
     IGNIS_TRY()
     auto comm = getGroup(group);

@@ -2229,250 +2229,11 @@ uint32_t IWorkerService_importDataFrame_presult::read(::apache::thrift::protocol
 }
 
 
-IWorkerService_importDataFrame3a_args::~IWorkerService_importDataFrame3a_args() noexcept {
+IWorkerService_importDataFrame3_args::~IWorkerService_importDataFrame3_args() noexcept {
 }
 
 
-uint32_t IWorkerService_importDataFrame3a_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->id.read(iprot);
-          this->__isset.id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->data.read(iprot);
-          this->__isset.data = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->partitions);
-          this->__isset.partitions = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IWorkerService_importDataFrame3a_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3a_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += this->id.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->data.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64(this->partitions);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame3a_pargs::~IWorkerService_importDataFrame3a_pargs() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame3a_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3a_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += (*(this->id)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += (*(this->data)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64((*(this->partitions)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame3a_result::~IWorkerService_importDataFrame3a_result() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame3a_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IWorkerService_importDataFrame3a_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3a_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame3a_presult::~IWorkerService_importDataFrame3a_presult() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame3a_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame3b_args::~IWorkerService_importDataFrame3b_args() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame3b_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_importDataFrame3_args::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2529,10 +2290,10 @@ uint32_t IWorkerService_importDataFrame3b_args::read(::apache::thrift::protocol:
   return xfer;
 }
 
-uint32_t IWorkerService_importDataFrame3b_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_importDataFrame3_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3b_args");
+  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3_args");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += this->id.write(oprot);
@@ -2552,14 +2313,14 @@ uint32_t IWorkerService_importDataFrame3b_args::write(::apache::thrift::protocol
 }
 
 
-IWorkerService_importDataFrame3b_pargs::~IWorkerService_importDataFrame3b_pargs() noexcept {
+IWorkerService_importDataFrame3_pargs::~IWorkerService_importDataFrame3_pargs() noexcept {
 }
 
 
-uint32_t IWorkerService_importDataFrame3b_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_importDataFrame3_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
   uint32_t xfer = 0;
   ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3b_pargs");
+  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3_pargs");
 
   xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
   xfer += (*(this->id)).write(oprot);
@@ -2579,11 +2340,11 @@ uint32_t IWorkerService_importDataFrame3b_pargs::write(::apache::thrift::protoco
 }
 
 
-IWorkerService_importDataFrame3b_result::~IWorkerService_importDataFrame3b_result() noexcept {
+IWorkerService_importDataFrame3_result::~IWorkerService_importDataFrame3_result() noexcept {
 }
 
 
-uint32_t IWorkerService_importDataFrame3b_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_importDataFrame3_result::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -2632,11 +2393,11 @@ uint32_t IWorkerService_importDataFrame3b_result::read(::apache::thrift::protoco
   return xfer;
 }
 
-uint32_t IWorkerService_importDataFrame3b_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+uint32_t IWorkerService_importDataFrame3_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
 
   uint32_t xfer = 0;
 
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3b_result");
+  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame3_result");
 
   if (this->__isset.success) {
     xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
@@ -2653,266 +2414,11 @@ uint32_t IWorkerService_importDataFrame3b_result::write(::apache::thrift::protoc
 }
 
 
-IWorkerService_importDataFrame3b_presult::~IWorkerService_importDataFrame3b_presult() noexcept {
+IWorkerService_importDataFrame3_presult::~IWorkerService_importDataFrame3_presult() noexcept {
 }
 
 
-uint32_t IWorkerService_importDataFrame3b_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += (*(this->success)).read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame4_args::~IWorkerService_importDataFrame4_args() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame4_args::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->id.read(iprot);
-          this->__isset.id = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 2:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->data.read(iprot);
-          this->__isset.data = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_I64) {
-          xfer += iprot->readI64(this->partitions);
-          this->__isset.partitions = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 4:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->src.read(iprot);
-          this->__isset.src = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IWorkerService_importDataFrame4_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame4_args");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += this->id.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += this->data.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64(this->partitions);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
-  xfer += this->src.write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame4_pargs::~IWorkerService_importDataFrame4_pargs() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame4_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
-  uint32_t xfer = 0;
-  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame4_pargs");
-
-  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
-  xfer += (*(this->id)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("data", ::apache::thrift::protocol::T_STRUCT, 2);
-  xfer += (*(this->data)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("partitions", ::apache::thrift::protocol::T_I64, 3);
-  xfer += oprot->writeI64((*(this->partitions)));
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 4);
-  xfer += (*(this->src)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame4_result::~IWorkerService_importDataFrame4_result() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame4_result::read(::apache::thrift::protocol::TProtocol* iprot) {
-
-  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
-  uint32_t xfer = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TType ftype;
-  int16_t fid;
-
-  xfer += iprot->readStructBegin(fname);
-
-  using ::apache::thrift::protocol::TProtocolException;
-
-
-  while (true)
-  {
-    xfer += iprot->readFieldBegin(fname, ftype, fid);
-    if (ftype == ::apache::thrift::protocol::T_STOP) {
-      break;
-    }
-    switch (fid)
-    {
-      case 0:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->success.read(iprot);
-          this->__isset.success = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      case 1:
-        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
-          xfer += this->ex.read(iprot);
-          this->__isset.ex = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
-      default:
-        xfer += iprot->skip(ftype);
-        break;
-    }
-    xfer += iprot->readFieldEnd();
-  }
-
-  xfer += iprot->readStructEnd();
-
-  return xfer;
-}
-
-uint32_t IWorkerService_importDataFrame4_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
-
-  uint32_t xfer = 0;
-
-  xfer += oprot->writeStructBegin("IWorkerService_importDataFrame4_result");
-
-  if (this->__isset.success) {
-    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
-    xfer += this->success.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  } else if (this->__isset.ex) {
-    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
-    xfer += this->ex.write(oprot);
-    xfer += oprot->writeFieldEnd();
-  }
-  xfer += oprot->writeFieldStop();
-  xfer += oprot->writeStructEnd();
-  return xfer;
-}
-
-
-IWorkerService_importDataFrame4_presult::~IWorkerService_importDataFrame4_presult() noexcept {
-}
-
-
-uint32_t IWorkerService_importDataFrame4_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+uint32_t IWorkerService_importDataFrame3_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -6705,81 +6211,18 @@ void IWorkerServiceClient::recv_importDataFrame( ::ignis::rpc::driver::IDataFram
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame failed: unknown result");
 }
 
-void IWorkerServiceClient::importDataFrame3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions)
+void IWorkerServiceClient::importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
 {
-  send_importDataFrame3a(id, data, partitions);
-  recv_importDataFrame3a(_return);
+  send_importDataFrame3(id, data, src);
+  recv_importDataFrame3(_return);
 }
 
-void IWorkerServiceClient::send_importDataFrame3a(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions)
+void IWorkerServiceClient::send_importDataFrame3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
-  oprot_->writeMessageBegin("importDataFrame3a", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("importDataFrame3", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_importDataFrame3a_pargs args;
-  args.id = &id;
-  args.data = &data;
-  args.partitions = &partitions;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IWorkerServiceClient::recv_importDataFrame3a( ::ignis::rpc::driver::IDataFrameId& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("importDataFrame3a") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IWorkerService_importDataFrame3a_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame3a failed: unknown result");
-}
-
-void IWorkerServiceClient::importDataFrame3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
-{
-  send_importDataFrame3b(id, data, src);
-  recv_importDataFrame3b(_return);
-}
-
-void IWorkerServiceClient::send_importDataFrame3b(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("importDataFrame3b", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IWorkerService_importDataFrame3b_pargs args;
+  IWorkerService_importDataFrame3_pargs args;
   args.id = &id;
   args.data = &data;
   args.src = &src;
@@ -6790,7 +6233,7 @@ void IWorkerServiceClient::send_importDataFrame3b(const IWorkerId& id, const  ::
   oprot_->getTransport()->flush();
 }
 
-void IWorkerServiceClient::recv_importDataFrame3b( ::ignis::rpc::driver::IDataFrameId& _return)
+void IWorkerServiceClient::recv_importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return)
 {
 
   int32_t rseqid = 0;
@@ -6810,12 +6253,12 @@ void IWorkerServiceClient::recv_importDataFrame3b( ::ignis::rpc::driver::IDataFr
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  if (fname.compare("importDataFrame3b") != 0) {
+  if (fname.compare("importDataFrame3") != 0) {
     iprot_->skip(::apache::thrift::protocol::T_STRUCT);
     iprot_->readMessageEnd();
     iprot_->getTransport()->readEnd();
   }
-  IWorkerService_importDataFrame3b_presult result;
+  IWorkerService_importDataFrame3_presult result;
   result.success = &_return;
   result.read(iprot_);
   iprot_->readMessageEnd();
@@ -6828,71 +6271,7 @@ void IWorkerServiceClient::recv_importDataFrame3b( ::ignis::rpc::driver::IDataFr
   if (result.__isset.ex) {
     throw result.ex;
   }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame3b failed: unknown result");
-}
-
-void IWorkerServiceClient::importDataFrame4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions, const  ::ignis::rpc::ISource& src)
-{
-  send_importDataFrame4(id, data, partitions, src);
-  recv_importDataFrame4(_return);
-}
-
-void IWorkerServiceClient::send_importDataFrame4(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = 0;
-  oprot_->writeMessageBegin("importDataFrame4", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IWorkerService_importDataFrame4_pargs args;
-  args.id = &id;
-  args.data = &data;
-  args.partitions = &partitions;
-  args.src = &src;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-}
-
-void IWorkerServiceClient::recv_importDataFrame4( ::ignis::rpc::driver::IDataFrameId& _return)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  iprot_->readMessageBegin(fname, mtype, rseqid);
-  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-    ::apache::thrift::TApplicationException x;
-    x.read(iprot_);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-    throw x;
-  }
-  if (mtype != ::apache::thrift::protocol::T_REPLY) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  if (fname.compare("importDataFrame4") != 0) {
-    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-    iprot_->readMessageEnd();
-    iprot_->getTransport()->readEnd();
-  }
-  IWorkerService_importDataFrame4_presult result;
-  result.success = &_return;
-  result.read(iprot_);
-  iprot_->readMessageEnd();
-  iprot_->getTransport()->readEnd();
-
-  if (result.__isset.success) {
-    // _return pointer has now been filled
-    return;
-  }
-  if (result.__isset.ex) {
-    throw result.ex;
-  }
-  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame4 failed: unknown result");
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame3 failed: unknown result");
 }
 
 void IWorkerServiceClient::textFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path)
@@ -8329,41 +7708,41 @@ void IWorkerServiceProcessor::process_importDataFrame(int32_t seqid, ::apache::t
   }
 }
 
-void IWorkerServiceProcessor::process_importDataFrame3a(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+void IWorkerServiceProcessor::process_importDataFrame3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
   if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IWorkerService.importDataFrame3a", callContext);
+    ctx = this->eventHandler_->getContext("IWorkerService.importDataFrame3", callContext);
   }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.importDataFrame3a");
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.importDataFrame3");
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.importDataFrame3a");
+    this->eventHandler_->preRead(ctx, "IWorkerService.importDataFrame3");
   }
 
-  IWorkerService_importDataFrame3a_args args;
+  IWorkerService_importDataFrame3_args args;
   args.read(iprot);
   iprot->readMessageEnd();
   uint32_t bytes = iprot->getTransport()->readEnd();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.importDataFrame3a", bytes);
+    this->eventHandler_->postRead(ctx, "IWorkerService.importDataFrame3", bytes);
   }
 
-  IWorkerService_importDataFrame3a_result result;
+  IWorkerService_importDataFrame3_result result;
   try {
-    iface_->importDataFrame3a(result.success, args.id, args.data, args.partitions);
+    iface_->importDataFrame3(result.success, args.id, args.data, args.src);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.importDataFrame3a");
+      this->eventHandler_->handlerError(ctx, "IWorkerService.importDataFrame3");
     }
 
     ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("importDataFrame3a", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    oprot->writeMessageBegin("importDataFrame3", ::apache::thrift::protocol::T_EXCEPTION, seqid);
     x.write(oprot);
     oprot->writeMessageEnd();
     oprot->getTransport()->writeEnd();
@@ -8372,131 +7751,17 @@ void IWorkerServiceProcessor::process_importDataFrame3a(int32_t seqid, ::apache:
   }
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.importDataFrame3a");
+    this->eventHandler_->preWrite(ctx, "IWorkerService.importDataFrame3");
   }
 
-  oprot->writeMessageBegin("importDataFrame3a", ::apache::thrift::protocol::T_REPLY, seqid);
+  oprot->writeMessageBegin("importDataFrame3", ::apache::thrift::protocol::T_REPLY, seqid);
   result.write(oprot);
   oprot->writeMessageEnd();
   bytes = oprot->getTransport()->writeEnd();
   oprot->getTransport()->flush();
 
   if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.importDataFrame3a", bytes);
-  }
-}
-
-void IWorkerServiceProcessor::process_importDataFrame3b(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = nullptr;
-  if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IWorkerService.importDataFrame3b", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.importDataFrame3b");
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.importDataFrame3b");
-  }
-
-  IWorkerService_importDataFrame3b_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.importDataFrame3b", bytes);
-  }
-
-  IWorkerService_importDataFrame3b_result result;
-  try {
-    iface_->importDataFrame3b(result.success, args.id, args.data, args.src);
-    result.__isset.success = true;
-  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.importDataFrame3b");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("importDataFrame3b", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.importDataFrame3b");
-  }
-
-  oprot->writeMessageBegin("importDataFrame3b", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.importDataFrame3b", bytes);
-  }
-}
-
-void IWorkerServiceProcessor::process_importDataFrame4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
-{
-  void* ctx = nullptr;
-  if (this->eventHandler_.get() != nullptr) {
-    ctx = this->eventHandler_->getContext("IWorkerService.importDataFrame4", callContext);
-  }
-  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IWorkerService.importDataFrame4");
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preRead(ctx, "IWorkerService.importDataFrame4");
-  }
-
-  IWorkerService_importDataFrame4_args args;
-  args.read(iprot);
-  iprot->readMessageEnd();
-  uint32_t bytes = iprot->getTransport()->readEnd();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postRead(ctx, "IWorkerService.importDataFrame4", bytes);
-  }
-
-  IWorkerService_importDataFrame4_result result;
-  try {
-    iface_->importDataFrame4(result.success, args.id, args.data, args.partitions, args.src);
-    result.__isset.success = true;
-  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
-    result.ex = ex;
-    result.__isset.ex = true;
-  } catch (const std::exception& e) {
-    if (this->eventHandler_.get() != nullptr) {
-      this->eventHandler_->handlerError(ctx, "IWorkerService.importDataFrame4");
-    }
-
-    ::apache::thrift::TApplicationException x(e.what());
-    oprot->writeMessageBegin("importDataFrame4", ::apache::thrift::protocol::T_EXCEPTION, seqid);
-    x.write(oprot);
-    oprot->writeMessageEnd();
-    oprot->getTransport()->writeEnd();
-    oprot->getTransport()->flush();
-    return;
-  }
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->preWrite(ctx, "IWorkerService.importDataFrame4");
-  }
-
-  oprot->writeMessageBegin("importDataFrame4", ::apache::thrift::protocol::T_REPLY, seqid);
-  result.write(oprot);
-  oprot->writeMessageEnd();
-  bytes = oprot->getTransport()->writeEnd();
-  oprot->getTransport()->flush();
-
-  if (this->eventHandler_.get() != nullptr) {
-    this->eventHandler_->postWrite(ctx, "IWorkerService.importDataFrame4", bytes);
+    this->eventHandler_->postWrite(ctx, "IWorkerService.importDataFrame3", bytes);
   }
 }
 
@@ -10172,109 +9437,19 @@ void IWorkerServiceConcurrentClient::recv_importDataFrame( ::ignis::rpc::driver:
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::importDataFrame3a( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions)
+void IWorkerServiceConcurrentClient::importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_importDataFrame3a(id, data, partitions);
-  recv_importDataFrame3a(_return, seqid);
+  int32_t seqid = send_importDataFrame3(id, data, src);
+  recv_importDataFrame3(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_importDataFrame3a(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions)
+int32_t IWorkerServiceConcurrentClient::send_importDataFrame3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("importDataFrame3a", ::apache::thrift::protocol::T_CALL, cseqid);
+  oprot_->writeMessageBegin("importDataFrame3", ::apache::thrift::protocol::T_CALL, cseqid);
 
-  IWorkerService_importDataFrame3a_pargs args;
-  args.id = &id;
-  args.data = &data;
-  args.partitions = &partitions;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IWorkerServiceConcurrentClient::recv_importDataFrame3a( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("importDataFrame3a") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IWorkerService_importDataFrame3a_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame3a failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void IWorkerServiceConcurrentClient::importDataFrame3b( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
-{
-  int32_t seqid = send_importDataFrame3b(id, data, src);
-  recv_importDataFrame3b(_return, seqid);
-}
-
-int32_t IWorkerServiceConcurrentClient::send_importDataFrame3b(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("importDataFrame3b", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IWorkerService_importDataFrame3b_pargs args;
+  IWorkerService_importDataFrame3_pargs args;
   args.id = &id;
   args.data = &data;
   args.src = &src;
@@ -10288,7 +9463,7 @@ int32_t IWorkerServiceConcurrentClient::send_importDataFrame3b(const IWorkerId& 
   return cseqid;
 }
 
-void IWorkerServiceConcurrentClient::recv_importDataFrame3b( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
+void IWorkerServiceConcurrentClient::recv_importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
 {
 
   int32_t rseqid = 0;
@@ -10317,7 +9492,7 @@ void IWorkerServiceConcurrentClient::recv_importDataFrame3b( ::ignis::rpc::drive
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
       }
-      if (fname.compare("importDataFrame3b") != 0) {
+      if (fname.compare("importDataFrame3") != 0) {
         iprot_->skip(::apache::thrift::protocol::T_STRUCT);
         iprot_->readMessageEnd();
         iprot_->getTransport()->readEnd();
@@ -10326,7 +9501,7 @@ void IWorkerServiceConcurrentClient::recv_importDataFrame3b( ::ignis::rpc::drive
         using ::apache::thrift::protocol::TProtocolException;
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
-      IWorkerService_importDataFrame3b_presult result;
+      IWorkerService_importDataFrame3_presult result;
       result.success = &_return;
       result.read(iprot_);
       iprot_->readMessageEnd();
@@ -10342,98 +9517,7 @@ void IWorkerServiceConcurrentClient::recv_importDataFrame3b( ::ignis::rpc::drive
         throw result.ex;
       }
       // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame3b failed: unknown result");
-    }
-    // seqid != rseqid
-    this->sync_->updatePending(fname, mtype, rseqid);
-
-    // this will temporarily unlock the readMutex, and let other clients get work done
-    this->sync_->waitForWork(seqid);
-  } // end while(true)
-}
-
-void IWorkerServiceConcurrentClient::importDataFrame4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions, const  ::ignis::rpc::ISource& src)
-{
-  int32_t seqid = send_importDataFrame4(id, data, partitions, src);
-  recv_importDataFrame4(_return, seqid);
-}
-
-int32_t IWorkerServiceConcurrentClient::send_importDataFrame4(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const int64_t partitions, const  ::ignis::rpc::ISource& src)
-{
-  int32_t cseqid = this->sync_->generateSeqId();
-  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
-  oprot_->writeMessageBegin("importDataFrame4", ::apache::thrift::protocol::T_CALL, cseqid);
-
-  IWorkerService_importDataFrame4_pargs args;
-  args.id = &id;
-  args.data = &data;
-  args.partitions = &partitions;
-  args.src = &src;
-  args.write(oprot_);
-
-  oprot_->writeMessageEnd();
-  oprot_->getTransport()->writeEnd();
-  oprot_->getTransport()->flush();
-
-  sentry.commit();
-  return cseqid;
-}
-
-void IWorkerServiceConcurrentClient::recv_importDataFrame4( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid)
-{
-
-  int32_t rseqid = 0;
-  std::string fname;
-  ::apache::thrift::protocol::TMessageType mtype;
-
-  // the read mutex gets dropped and reacquired as part of waitForWork()
-  // The destructor of this sentry wakes up other clients
-  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
-
-  while(true) {
-    if(!this->sync_->getPending(fname, mtype, rseqid)) {
-      iprot_->readMessageBegin(fname, mtype, rseqid);
-    }
-    if(seqid == rseqid) {
-      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
-        ::apache::thrift::TApplicationException x;
-        x.read(iprot_);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-        sentry.commit();
-        throw x;
-      }
-      if (mtype != ::apache::thrift::protocol::T_REPLY) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-      }
-      if (fname.compare("importDataFrame4") != 0) {
-        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
-        iprot_->readMessageEnd();
-        iprot_->getTransport()->readEnd();
-
-        // in a bad state, don't commit
-        using ::apache::thrift::protocol::TProtocolException;
-        throw TProtocolException(TProtocolException::INVALID_DATA);
-      }
-      IWorkerService_importDataFrame4_presult result;
-      result.success = &_return;
-      result.read(iprot_);
-      iprot_->readMessageEnd();
-      iprot_->getTransport()->readEnd();
-
-      if (result.__isset.success) {
-        // _return pointer has now been filled
-        sentry.commit();
-        return;
-      }
-      if (result.__isset.ex) {
-        sentry.commit();
-        throw result.ex;
-      }
-      // in a bad state, don't commit
-      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame4 failed: unknown result");
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame3 failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

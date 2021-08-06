@@ -19,18 +19,18 @@ namespace ignis {
                         void repartition(int64_t numPartitions, bool preserveOrdering, bool global);
 
                         template<typename Tp>
-                        void repartitionByRandom(int64_t numPartitions);
+                        void partitionByRandom(int64_t numPartitions);
 
                         template<typename Tp>
-                        void repartitionByHash(int64_t numPartitions);
+                        void partitionByHash(int64_t numPartitions);
 
                         template<typename Function>
-                        void repartitionBy(int64_t numPartitions);
+                        void partitionBy(int64_t numPartitions);
 
                     private:
 
                         template<typename Tp, typename Particioner>
-                        void repartitionBy_impl(Particioner f, int64_t numPartitions);
+                        void partitionBy_impl(Particioner f, int64_t numPartitions);
 
                         template<typename Tp>
                         void local_repartition(int64_t numPartitions);

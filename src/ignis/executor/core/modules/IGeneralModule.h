@@ -60,11 +60,11 @@ namespace ignis {
                     void repartition(const int64_t numPartitions, const bool preserveOrdering,
                                      const bool global_) override;
 
-                    void repartitionByRandom(const int64_t numPartitions) override;
+                    void partitionByRandom(const int64_t numPartitions) override;
 
-                    void repartitionByHash(const int64_t numPartitions) override;
+                    void partitionByHash(const int64_t numPartitions) override;
 
-                    void repartitionBy(const rpc::ISource &src, const int64_t numPartitions) override;
+                    void partitionBy(const rpc::ISource &src, const int64_t numPartitions) override;
 
                     void flatMapValues(const rpc::ISource &src) override;
 

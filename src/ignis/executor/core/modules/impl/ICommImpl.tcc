@@ -93,14 +93,6 @@ void ICommImplClass::setPartitions(const std::vector<std::string> &partitions) {
 }
 
 template<typename Tp>
-void ICommImplClass::newEmptyPartitions(int64_t n) {
-    IGNIS_TRY()
-    auto part_group = executor_data->getPartitionTools().newPartitionGroup<Tp>(n);
-    executor_data->setPartitions<Tp>(part_group);
-    IGNIS_CATCH()
-}
-
-template<typename Tp>
 void ICommImplClass::driverGather(const std::string &group) {
     IGNIS_TRY()
     auto comm = getGroup(group);

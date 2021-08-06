@@ -137,21 +137,21 @@ void IGeneralModule::repartition(const int64_t numPartitions, const bool preserv
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::repartitionByRandom(const int64_t numPartitions) {
+void IGeneralModule::partitionByRandom(const int64_t numPartitions) {
     IGNIS_RPC_TRY()
-    typeFromPartition()->repartitionByRandom(repartition_impl, numPartitions);
+    typeFromPartition()->partitionByRandom(repartition_impl, numPartitions);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::repartitionByHash(const int64_t numPartitions) {
+void IGeneralModule::partitionByHash(const int64_t numPartitions) {
     IGNIS_RPC_TRY()
-    typeFromPartition()->repartitionByHash(repartition_impl, numPartitions);
+    typeFromPartition()->partitionByHash(repartition_impl, numPartitions);
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::repartitionBy(const rpc::ISource &src, const int64_t numPartitions) {
+void IGeneralModule::partitionBy(const rpc::ISource &src, const int64_t numPartitions) {
     IGNIS_RPC_TRY()
-    executor_data->loadLibrary(src)->general->repartitionBy(repartition_impl, numPartitions);
+    executor_data->loadLibrary(src)->general->partitionBy(repartition_impl, numPartitions);
     IGNIS_RPC_CATCH()
 }
 

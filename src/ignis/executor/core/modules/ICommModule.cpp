@@ -79,18 +79,6 @@ void ICommModule::setPartitions2(const std::vector<std::string> &partitions, con
     IGNIS_RPC_CATCH()
 }
 
-void ICommModule::newEmptyPartitions(const int64_t n) {
-    IGNIS_RPC_TRY()
-    impl.newEmptyPartitionsVoid(n);
-    IGNIS_RPC_CATCH()
-}
-
-void ICommModule::newEmptyPartitions2(const int64_t n, const ignis::rpc::ISource &src) {
-    IGNIS_RPC_TRY()
-    typeFromSource(src)->newEmptyPartitions(impl, n);
-    IGNIS_RPC_CATCH()
-}
-
 void ICommModule::driverGather(const std::string &group, const ignis::rpc::ISource &src) {
     IGNIS_RPC_TRY()
     if (executor_data->hasPartitions()) {
