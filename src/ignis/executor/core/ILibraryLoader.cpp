@@ -120,6 +120,7 @@ std::string ILibraryLoader::compile(const std::string &str) {
 std::string ILibraryLoader::loadLambda(const std::string &str) {
     auto sourceCode = std::string() +
                       "#include <ignis/executor/core/ILambda.h>"
+                      "using ignis::executor::api::IContext;"
                       "auto lambda =" + str + ";\n"
                       "ignis_lambda_export(lambda)\n";
     return "Lambda:" + compile(sourceCode);
