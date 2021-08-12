@@ -365,7 +365,7 @@ void IReduceImplClass::join(const std::string &other, int64_t numPartitions) {
 #pragma omp parallel
     {
         IGNIS_OMP_TRY()
-        std::unordered_map<typename Tp::first_type, std::vector<typename Tp::second_type>> acum;
+        std::unordered_map<typename Tp::first_type, api::IVector<typename Tp::second_type>> acum;
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();

@@ -48,7 +48,9 @@ std::shared_ptr<selector::ISelectorGroup> ILibraryLoader::loadFunction(const std
 
 std::vector<std::string> ILibraryLoader::loadLibrary(const std::string &path2) {
     std::string path = path2;
-    if (path.rfind("c++", 0) != std::string::npos) { path = loadSource(path); }
+    if (path.rfind("#", 0) != std::string::npos || path.rfind(";", 0) != std::string::npos) {
+        path = loadSource(path);
+    }
     if (!ghc::filesystem::exists(path)) { throw exception::IInvalidArgument(path + " was not found"); }
 
     void *library = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL | RTLD_DEEPBIND);

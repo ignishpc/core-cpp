@@ -143,7 +143,7 @@ void IMathImplClass::sampleByKey(const bool withReplacement, const int32_t seed)
     std::vector<int64_t> num;
     IGNIS_TRY()
     auto input = executor_data->getAndDeletePartitions<
-            std::pair<typename Tp::first_type, std::vector<typename Tp::second_type>>>();
+            std::pair<typename Tp::first_type, api::IVector<typename Tp::second_type>>>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
     auto fractions = executor_data->getContext().var<std::unordered_map<typename Tp::first_type, double>>("fractions");
     num.resize(fractions.size());
