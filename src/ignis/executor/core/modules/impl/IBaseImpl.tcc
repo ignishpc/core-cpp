@@ -17,7 +17,7 @@ void IBaseImplClass::exchange(storage::IPartitionGroup<Tp> &in, storage::IPartit
     bool sync;
     if (type == "sync") {
         sync = true;
-    } else if (type == "sync") {
+    } else if (type == "async") {
         sync = false;
     } else {
         IGNIS_LOG(info) << "Base: detecting exchange type";
@@ -29,8 +29,7 @@ void IBaseImplClass::exchange(storage::IPartitionGroup<Tp> &in, storage::IPartit
         if (executor_data->mpi().isRoot(0)) {
             int64_t n = data[0];
             int64_t n_zero = data[1];
-            int64_t e = executor_data->getContext().executors();
-            sync = n_zero < (n / e);
+            sync = n_zero < (n / executors);
         }
         executor_data->mpi().native().Bcast(&sync, 1, MPI::BOOL, 0);
     }
@@ -100,7 +99,6 @@ void IBaseImplClass::exchange_sync(storage::IPartitionGroup<Tp> &in, storage::IP
 template<typename Tp>
 void IBaseImplClass::exchange_async(storage::IPartitionGroup<Tp> &in, storage::IPartitionGroup<Tp> &out) {
     auto executors = executor_data->mpi().executors();
-    int64_t me = executor_data->getContext().executorId();
     auto rank = executor_data->mpi().rank();
     auto numPartitions = in.partitions();
     int64_t block = numPartitions / executors;
@@ -144,14 +142,14 @@ void IBaseImplClass::exchange_async(storage::IPartitionGroup<Tp> &in, storage::I
             bool ignore = true;
             bool ignore_other;
             if (other == executors) { continue; }
-            for (int64_t j = ranges[other].first; j < ranges[other].second; j++) { ignore &= in[j]->empty(); }
+            for (int64_t j = ranges[other].first; j < ranges[other].second; j++) { ignore = ignore && in[j]->empty(); }
             executor_data->mpi().native().Sendrecv(&ignore, 1, MPI::BOOL, other, 0, &ignore_other, 1, MPI::BOOL, other,
                                                    1);
             if (ignore && ignore_other) { continue; }
             int64_t other_part = ranges[other].first;
             int64_t other_end = ranges[other].second;
-            int64_t me_part = ranges[me].first;
-            int64_t me_end = ranges[me].second;
+            int64_t me_part = ranges[rank].first;
+            int64_t me_end = ranges[rank].second;
             int64_t its = std::max(other_end - other_part, me_end - me_part);
 
             for (int64_t j = 0; j < its; j++) {

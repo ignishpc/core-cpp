@@ -158,7 +158,7 @@ void ICommImplClass::importData(const std::string &group, bool source, int64_t t
             if (other == executors) { continue; }
             if (source) {
                 for (int64_t j = ranges[other].first; j < ranges[other].second; j++) {
-                    ignore &= shared[j - offset]->empty();
+                    ignore = ignore && shared[j - offset]->empty();
                 }
                 comm.Send(&ignore, 1, MPI::BOOL, other, 0);
             } else {

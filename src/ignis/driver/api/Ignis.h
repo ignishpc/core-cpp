@@ -32,7 +32,7 @@ namespace ignis {
 
                 static core::IDriverContext &driverContext();
 
-                static std::shared_ptr<core::IClientPool> clientPool;
+                static core::IClientPool &clientPool();
             };
         }// namespace api
     }    // namespace driver

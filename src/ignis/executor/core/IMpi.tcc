@@ -286,11 +286,11 @@ template<typename Tp>
 void IMpiClass::sendRcv(storage::IPartition<Tp> &sendp, storage::IPartition<Tp> &rcvp, int other, int tag) {
     //possible optimization, implement as sendRcv so that both processes serialize and deserialize at the same time.
     if (rank() > other) {
-        send(native(), sendp, other, tag);
-        recv(native(), rcvp, other, tag);
+        send(sendp, other, tag);
+        recv(rcvp, other, tag);
     } else {
-        recv(native(), rcvp, other, tag);
-        send(native(), sendp, other, tag);
+        recv(rcvp, other, tag);
+        send(sendp, other, tag);
     }
 }
 

@@ -7,20 +7,20 @@ using namespace ignis::driver::api;
 
 IProperties::IProperties() {
     try {
-        id = Ignis::clientPool->getClient()->getPropertiesService().newInstance();
+        id = Ignis::clientPool().getClient()->getPropertiesService().newInstance();
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
 IProperties::IProperties(const IProperties &properties) {
     try {
-        id = Ignis::clientPool->getClient()->getPropertiesService().newInstance2(properties.id);
+        id = Ignis::clientPool().getClient()->getPropertiesService().newInstance2(properties.id);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
 std::string IProperties::set(const std::string &key, const std::string &value) {
     try {
         std::string _return;
-        Ignis::clientPool->getClient()->getPropertiesService().setProperty(_return, id, key, value);
+        Ignis::clientPool().getClient()->getPropertiesService().setProperty(_return, id, key, value);
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
@@ -28,7 +28,7 @@ std::string IProperties::set(const std::string &key, const std::string &value) {
 std::string IProperties::get(const std::string &key) {
     try {
         std::string _return;
-        Ignis::clientPool->getClient()->getPropertiesService().getProperty(_return, id, key);
+        Ignis::clientPool().getClient()->getPropertiesService().getProperty(_return, id, key);
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
@@ -36,7 +36,7 @@ std::string IProperties::get(const std::string &key) {
 std::string IProperties::rm(const std::string &key) {
     try {
         std::string _return;
-        Ignis::clientPool->getClient()->getPropertiesService().rmProperty(_return, id, key);
+        Ignis::clientPool().getClient()->getPropertiesService().rmProperty(_return, id, key);
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
@@ -50,38 +50,38 @@ IProperties::Value::Value(IProperties &properties, const std::string &key, const
 
 bool IProperties::contains(const std::string &key) {
     try {
-        return Ignis::clientPool->getClient()->getPropertiesService().contains(id, key);
+        return Ignis::clientPool().getClient()->getPropertiesService().contains(id, key);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
 std::map<std::string, std::string> IProperties::toMap(bool defaults) {
     try {
         std::map<std::string, std::string> _return;
-        Ignis::clientPool->getClient()->getPropertiesService().toMap(_return, id, defaults);
+        Ignis::clientPool().getClient()->getPropertiesService().toMap(_return, id, defaults);
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
 void IProperties::fromMap(const std::map<std::string, std::string> &map) {
     try {
-        Ignis::clientPool->getClient()->getPropertiesService().fromMap(id, map);
+        Ignis::clientPool().getClient()->getPropertiesService().fromMap(id, map);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
 void IProperties::load(const std::string &path) {
     try {
-        Ignis::clientPool->getClient()->getPropertiesService().load(id, path);
+        Ignis::clientPool().getClient()->getPropertiesService().load(id, path);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
 void IProperties::store(const std::string &path) {
     try {
-        Ignis::clientPool->getClient()->getPropertiesService().store(id, path);
+        Ignis::clientPool().getClient()->getPropertiesService().store(id, path);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
 
 void IProperties::clear() {
     try {
-        Ignis::clientPool->getClient()->getPropertiesService().clear(id);
+        Ignis::clientPool().getClient()->getPropertiesService().clear(id);
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex._cause); }
 }
