@@ -399,7 +399,7 @@ template<typename Tp>
 void IReduceImplClass::distinct(int64_t numPartitions) {
     IGNIS_TRY()
     auto input = executor_data->getPartitions<Tp>();
-    IGNIS_LOG(info) << "Reduce: distinct " << numPartitions << " partitions";
+    IGNIS_LOG(info) << "Reduce: distinct " << input->partitions() << " partitions";
     auto tmp = executor_data->getPartitionTools().newPartitionGroup<Tp>(numPartitions);
     const bool in_men = executor_data->getPartitionTools().isMemory(*input) &&
                         executor_data->getPartitionTools().isMemory(*tmp) && !input->cache();
@@ -432,14 +432,14 @@ void IReduceImplClass::distinct(int64_t numPartitions) {
                     writers[hash(elem) % numPartitions]->write(elem);
                 }
             }
-            (*input)[p]->clear();
+            (*input)[p].reset();
         }
 #pragma omp critical
         for (int64_t p = 0; p < thread_ranges->partitions(); p++) { (*thread_ranges)[p]->moveTo(*((*tmp)[p])); }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
-    auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>(numPartitions);
+    auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
 
     distinctFilter<Tp>(*tmp);
     exchange(*tmp, *output);

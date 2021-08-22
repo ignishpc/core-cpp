@@ -165,7 +165,6 @@ void ICommImplClass::importData(const std::string &group, bool source, int64_t t
                 comm.Recv(&ignore, 1, MPI::BOOL, other, 0);
             }
             if (ignore) { continue; }
-            IMpi::MsgOpt opt = executor_data->mpi().getMsgOpt(comm, shared[0]->type(), source, other, 0);
             int64_t its;
             int64_t first;
             if (source) {
@@ -175,6 +174,7 @@ void ICommImplClass::importData(const std::string &group, bool source, int64_t t
                 first = ranges[me].first;
                 its = ranges[me].second - ranges[me].first;
             }
+            IMpi::MsgOpt opt = executor_data->mpi().getMsgOpt(comm, shared[first]->type(), source, other, 0);
             for (int64_t j = 0; j < its; j++) {
                 if (source) {
                     executor_data->mpi().send(comm, *shared[first - offset + j], other, 0, opt);

@@ -189,7 +189,7 @@ int64_t ICommImpl::importDataAux(const MPI::Intracomm &group, bool source,
     if (source) {
         std::vector<int64_t> executors_count(executors);
         int64_t offset = 0;
-        executor_data->mpi().native().Allgather(&count, 1, MPI::LONG, &executors_count[0], 1, MPI::LONG);
+        executor_data->mpi().native().Allgather(&count, 1, MPI::LONG_LONG, &executors_count[0], 1, MPI::LONG_LONG);
         for (int64_t i = 0; i < local_rank; i++) { offset += executors_count[i]; }
         return offset;
     }

@@ -9,8 +9,9 @@
 template<typename Tp>
 void IRepartitionImplClass::repartition(int64_t numPartitions, bool preserveOrdering, bool global) {
     IGNIS_TRY()
-    if (!global) { local_repartition<Tp>(numPartitions); }
-    if (preserveOrdering) {
+    if (!global) {
+        local_repartition<Tp>(numPartitions);
+    } else if (preserveOrdering) {
         ordered_repartition<Tp>(numPartitions);
     } else {
         unordered_repartition<Tp>(numPartitions);
@@ -34,7 +35,7 @@ void IRepartitionImplClass::ordered_repartition(int64_t numPartitions) {
         local_offset.push_back(part->size());
     }
     executor_data->mpi().native().Allgather(&local_count, 1, MPI::LONG, &executors_count[0], 1, MPI::LONG);
-    for (int64_t i = 0; i < rank; i++) {
+    for (int64_t i = 0; i < executors; i++) {
         if (i < rank) { global_offset += executors_count[i]; }
         global_count += executors_count[i];
     }
@@ -101,7 +102,7 @@ void IRepartitionImplClass::ordered_repartition(int64_t numPartitions) {
     }
     IGNIS_OMP_EXCEPTION_END()
     IGNIS_LOG(info) << "Repartition: exchanging new partitions";
-    auto tmp = executor_data->getPartitionTools().newPartitionGroup<std::pair<int64_t, Tp>>(numPartitions);
+    auto tmp = executor_data->getPartitionTools().newPartitionGroup<std::pair<int64_t, Tp>>();
     exchange(*global, *tmp);
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
 
@@ -116,13 +117,13 @@ void IRepartitionImplClass::ordered_repartition(int64_t numPartitions) {
             auto new_part = executor_data->getPartitionTools().newPartition<Tp>();
             auto writer = new_part->writeIterator();
             auto men_part = executor_data->getPartitionTools().newMemoryPartition<std::pair<int64_t, Tp>>(part->size());
+            part->moveTo(*men_part);
             auto men_part2 = *men_part;
-            (*tmp)[p]->moveTo(*men_part);
-            std::vector<int64_t> first(executors, -1);
+            std::vector<int64_t> first(executors, 0);
             for (int64_t i = men_part2.size() - 1; i > -1; i++) { first[men_part2[i].first] = i; }
             for (int64_t e = 0; e < first.size(); e++) {
                 for (int64_t i = first[e]; i < men_part2.size() && men_part2[i].first == e; i++) {
-                    writer->write(men_part2[i].second);
+                    writer->write(std::move(men_part2[i].second));
                 }
             }
             part.reset();
@@ -331,7 +332,7 @@ void IRepartitionImplClass::partitionBy_impl(Particioner f, int64_t numPartition
             (*input)[p].reset();
         }
 #pragma omp critical
-        for (int64_t p = 0; p < local->partitions(); p++) { (*local)[p]->moveTo(*((*output)[p])); }
+        for (int64_t p = 0; p < local->partitions(); p++) { (*local)[p]->moveTo(*((*global)[p])); }
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()

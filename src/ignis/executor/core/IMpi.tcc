@@ -249,7 +249,6 @@ void IMpiClass::driverScatter(const MPI::Intracomm &group, storage::IPartitionGr
     }
 }
 
-
 template<typename Tp>
 void IMpiClass::send(const MPI::Intracomm &group, storage::IPartition<Tp> &part, int dest, int tag) {
     MsgOpt opt = getMsgOpt(group, part.type(), true, dest, tag);
