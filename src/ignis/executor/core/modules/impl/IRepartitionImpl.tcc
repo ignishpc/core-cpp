@@ -145,45 +145,49 @@ void IRepartitionImplClass::unordered_repartition(int64_t numPartitions) {
     int64_t local_count = 0;
     int64_t global_count = 0;
     int64_t msg_max = 0;
+    int64_t msg_num = 0;
     for (auto part : *input) {
         local_count += part->size();
         if (part->size() > msg_max) { msg_max = part->size(); }
     }
     IGNIS_LOG(info) << "Repartition: unordered repartition from " << input->partitions() << " partitions";
-    executor_data->mpi().native().Allgather(&local_count, 1, MPI::LONG, &executors_count[0], 1, MPI::LONG);
-    executor_data->mpi().native().Allreduce(MPI_IN_PLACE, &msg_max, 1, MPI::LONG, MPI::MAX);
+    executor_data->mpi().native().Allgather(&local_count, 1, MPI::LONG_LONG, &executors_count[0], 1, MPI::LONG_LONG);
+    executor_data->mpi().native().Allreduce(MPI_IN_PLACE, &msg_max, 1, MPI::LONG_LONG, MPI::MAX);
 
     int64_t average = global_count / executors;
     std::vector<int64_t> executors_overhead(executors);
     for (int64_t i = 0; i < executors; i++) { executors_overhead[i] = average - executors_count[i]; }
-    std::vector<std::tuple<int64_t, int64_t, int64_t>> src_target_size(executors);
+    std::vector<std::tuple<int64_t, int64_t, int64_t>> src_target_size;
     std::vector<int64_t> msg_count(executors, 0);
+    int64_t other = 0;
     for (int64_t i = 0; i < executors; i++) {
-        for (int64_t j = i + 1; j < executors; j++) {
-            if (executors_overhead[i] > -1) { break; }
-            if (executors_overhead[j] > 0) {
-                int64_t elems;
-                if (executors_overhead[j] + executors_overhead[i] > 0) {
-                    elems = -executors_overhead[i];
-                    executors_overhead[j] -= elems;
-                    executors_overhead[i] = 0;
-                } else {
-                    elems = executors_overhead[j];
-                    executors_overhead[j] = 0;
-                    executors_overhead[i] += elems;
-                }
+        while (executors_overhead[i] >= 0 && other < executors) {
+            if (executors_overhead[other] <= 0) {
+                other++;
+                continue;
+            }
+            int64_t elems;
+            if (executors_overhead[other] + executors_overhead[i] > 0) {
+                elems = -executors_overhead[i];
+                executors_overhead[other] -= elems;
+                executors_overhead[i] = 0;
+            } else {
+                elems = executors_overhead[other];
+                executors_overhead[other] = 0;
+                executors_overhead[i] += elems;
+                other++;
+            }
 
-                while (elems > 0) {
-                    int64_t total = std::min(elems, msg_max);
-                    src_target_size.emplace_back(j, i, total);
-                    elems -= total;
-                    msg_count[i]++;
-                    if (msg_count[i] > msg_max) { msg_max = msg_count[i]; }
-                }
+            while (elems > 0) {
+                int64_t total = std::min(elems, msg_max);
+                src_target_size.emplace_back(other, i, total);
+                elems -= total;
+                msg_count[i]++;
+                if (msg_count[i] > msg_num) { msg_num = msg_count[i]; }
             }
         }
     }
-    auto shared = executor_data->getPartitionTools().newPartitionGroup<Tp>(msg_max * executors);
+    auto shared = executor_data->getPartitionTools().newPartitionGroup<Tp>(msg_num * executors);
 
     auto src = *input;
     auto src_part = src[src.partitions() - 1];
@@ -192,7 +196,7 @@ void IRepartitionImplClass::unordered_repartition(int64_t numPartitions) {
     for (auto &entry : src_target_size) {
         if (std::get<0>(entry) == rank) {
             int64_t elems = std::get<2>(entry);
-            int64_t target = msg_max * std::get<1>(entry);
+            int64_t target = msg_num * std::get<1>(entry);
             while (!(*shared)[target]->empty()) { target++; }
             auto writer = (*shared)[target]->writeIterator();
 
@@ -231,18 +235,20 @@ template<typename Tp>
 void IRepartitionImplClass::local_repartition(int64_t numPartitions) {
     auto input = executor_data->getAndDeletePartitions<Tp>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
+    int64_t executors = executor_data->getContext().executors();
     int64_t elements = 0;
     for (auto &part : (*input)) { elements += part->size(); }
-    int64_t localPartitions = numPartitions / executor_data->getContext().executors();
-    if (numPartitions % executor_data->getContext().executors() > executor_data->getContext().executorId()) {
+    int64_t localPartitions = numPartitions / executors;
+    if (numPartitions % executors > executor_data->getContext().executorId()) {
         localPartitions++;
     }
     IGNIS_LOG(info) << "Repartition: local repartition from " << input->partitions() << " to " << localPartitions
                     << " partitions";
     int64_t partition_elems = elements / localPartitions;
     int64_t remainder = elements % localPartitions;
-    int64_t i = 0;
-    int64_t ew = 0, er = 0;
+    int64_t i = 1;
+    int64_t ew = 0;
+    int64_t er = (*input)[0]->size();
     auto it = (*input)[0]->readIterator();
     for (int64_t p = 0; p < localPartitions; p++) {
         auto part = executor_data->getPartitionTools().newPartition<Tp>();
@@ -250,8 +256,9 @@ void IRepartitionImplClass::local_repartition(int64_t numPartitions) {
         ew = partition_elems;
         if (p < remainder) { ew++; }
 
-        while (ew > 0 && i < input->partitions()) {
+        while (ew > 0 && (i < input->partitions() || er > 0)) {
             if (er == 0) {
+                (*input)[i - 1].reset();
                 er = (*input)[i]->size();
                 it = (*input)[i++]->readIterator();
             }
@@ -260,12 +267,13 @@ void IRepartitionImplClass::local_repartition(int64_t numPartitions) {
         part->fit();
         output->add(part);
     }
+
+    executor_data->setPartitions(output);
 }
 
 template<typename Tp>
 void IRepartitionImplClass::partitionByRandom(int64_t numPartitions) {
     IGNIS_TRY()
-    auto &context = executor_data->getContext();
     partitionBy_impl<Tp>(
             [](const Tp &obj) {
                 static thread_local std::mt19937 gen;
@@ -279,7 +287,6 @@ void IRepartitionImplClass::partitionByRandom(int64_t numPartitions) {
 template<typename Tp>
 void IRepartitionImplClass::partitionByHash(int64_t numPartitions) {
     IGNIS_TRY()
-    auto &context = executor_data->getContext();
     partitionBy_impl<Tp>(
             [](const Tp &obj) {
                 const static std::hash<Tp> hash;
