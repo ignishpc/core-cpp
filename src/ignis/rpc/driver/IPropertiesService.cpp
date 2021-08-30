@@ -1608,7 +1608,7 @@ uint32_t IPropertiesService_fromMap_args::read(::apache::thrift::protocol::TProt
       case 2:
         if (ftype == ::apache::thrift::protocol::T_MAP) {
           {
-            this->_map.clear();
+            this->map_.clear();
             uint32_t _size15;
             ::apache::thrift::protocol::TType _ktype16;
             ::apache::thrift::protocol::TType _vtype17;
@@ -1618,12 +1618,12 @@ uint32_t IPropertiesService_fromMap_args::read(::apache::thrift::protocol::TProt
             {
               std::string _key20;
               xfer += iprot->readString(_key20);
-              std::string& _val21 = this->_map[_key20];
+              std::string& _val21 = this->map_[_key20];
               xfer += iprot->readString(_val21);
             }
             xfer += iprot->readMapEnd();
           }
-          this->__isset._map = true;
+          this->__isset.map_ = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -1649,11 +1649,11 @@ uint32_t IPropertiesService_fromMap_args::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeI64(this->id);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("_map", ::apache::thrift::protocol::T_MAP, 2);
+  xfer += oprot->writeFieldBegin("map_", ::apache::thrift::protocol::T_MAP, 2);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->_map.size()));
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>(this->map_.size()));
     std::map<std::string, std::string> ::const_iterator _iter22;
-    for (_iter22 = this->_map.begin(); _iter22 != this->_map.end(); ++_iter22)
+    for (_iter22 = this->map_.begin(); _iter22 != this->map_.end(); ++_iter22)
     {
       xfer += oprot->writeString(_iter22->first);
       xfer += oprot->writeString(_iter22->second);
@@ -1681,11 +1681,11 @@ uint32_t IPropertiesService_fromMap_pargs::write(::apache::thrift::protocol::TPr
   xfer += oprot->writeI64((*(this->id)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("_map", ::apache::thrift::protocol::T_MAP, 2);
+  xfer += oprot->writeFieldBegin("map_", ::apache::thrift::protocol::T_MAP, 2);
   {
-    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->_map)).size()));
+    xfer += oprot->writeMapBegin(::apache::thrift::protocol::T_STRING, ::apache::thrift::protocol::T_STRING, static_cast<uint32_t>((*(this->map_)).size()));
     std::map<std::string, std::string> ::const_iterator _iter23;
-    for (_iter23 = (*(this->_map)).begin(); _iter23 != (*(this->_map)).end(); ++_iter23)
+    for (_iter23 = (*(this->map_)).begin(); _iter23 != (*(this->map_)).end(); ++_iter23)
     {
       xfer += oprot->writeString(_iter23->first);
       xfer += oprot->writeString(_iter23->second);
@@ -2832,20 +2832,20 @@ void IPropertiesServiceClient::recv_toMap(std::map<std::string, std::string> & _
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "toMap failed: unknown result");
 }
 
-void IPropertiesServiceClient::fromMap(const int64_t id, const std::map<std::string, std::string> & _map)
+void IPropertiesServiceClient::fromMap(const int64_t id, const std::map<std::string, std::string> & map_)
 {
-  send_fromMap(id, _map);
+  send_fromMap(id, map_);
   recv_fromMap();
 }
 
-void IPropertiesServiceClient::send_fromMap(const int64_t id, const std::map<std::string, std::string> & _map)
+void IPropertiesServiceClient::send_fromMap(const int64_t id, const std::map<std::string, std::string> & map_)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("fromMap", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IPropertiesService_fromMap_pargs args;
   args.id = &id;
-  args._map = &_map;
+  args.map_ = &map_;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -3500,7 +3500,7 @@ void IPropertiesServiceProcessor::process_fromMap(int32_t seqid, ::apache::thrif
 
   IPropertiesService_fromMap_result result;
   try {
-    iface_->fromMap(args.id, args._map);
+    iface_->fromMap(args.id, args.map_);
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = ex;
     result.__isset.ex = true;
@@ -4329,13 +4329,13 @@ void IPropertiesServiceConcurrentClient::recv_toMap(std::map<std::string, std::s
   } // end while(true)
 }
 
-void IPropertiesServiceConcurrentClient::fromMap(const int64_t id, const std::map<std::string, std::string> & _map)
+void IPropertiesServiceConcurrentClient::fromMap(const int64_t id, const std::map<std::string, std::string> & map_)
 {
-  int32_t seqid = send_fromMap(id, _map);
+  int32_t seqid = send_fromMap(id, map_);
   recv_fromMap(seqid);
 }
 
-int32_t IPropertiesServiceConcurrentClient::send_fromMap(const int64_t id, const std::map<std::string, std::string> & _map)
+int32_t IPropertiesServiceConcurrentClient::send_fromMap(const int64_t id, const std::map<std::string, std::string> & map_)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -4343,7 +4343,7 @@ int32_t IPropertiesServiceConcurrentClient::send_fromMap(const int64_t id, const
 
   IPropertiesService_fromMap_pargs args;
   args.id = &id;
-  args._map = &_map;
+  args.map_ = &map_;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

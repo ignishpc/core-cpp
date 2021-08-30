@@ -29,22 +29,22 @@ class IDriverException : public ::apache::thrift::TException {
 
   IDriverException(const IDriverException&);
   IDriverException& operator=(const IDriverException&);
-  IDriverException() : message(), _cause() {
+  IDriverException() : message(), cause_() {
   }
 
   virtual ~IDriverException() noexcept;
   std::string message;
-  std::string _cause;
+  std::string cause_;
 
   void __set_message(const std::string& val);
 
-  void __set__cause(const std::string& val);
+  void __set_cause_(const std::string& val);
 
   bool operator == (const IDriverException & rhs) const
   {
     if (!(message == rhs.message))
       return false;
-    if (!(_cause == rhs._cause))
+    if (!(cause_ == rhs.cause_))
       return false;
     return true;
   }

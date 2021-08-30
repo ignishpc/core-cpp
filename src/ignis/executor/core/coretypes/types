@@ -1,0 +1,35 @@
+bool
+int8_t
+int32_t
+int64_t
+double
+std::string
+std::pair<int64_t, int64_t>
+std::pair<int64_t, double>
+std::pair<int64_t, std::string>
+std::pair<double, int64_t>
+std::pair<double, double>
+std::pair<double, std::string>
+std::pair<std::string, int64_t>
+std::pair<std::string, double>
+std::pair<std::string, std::string>
+//GroupBy key defaults
+std::pair<int64_t, std::vector<int64_t>>
+std::pair<int64_t, std::vector<double>>
+std::pair<int64_t, std::vector<std::string>>
+std::pair<double, std::vector<int64_t>>
+std::pair<double, std::vector<double>>
+std::pair<double, std::vector<std::string>>
+std::pair<std::string, std::vector<int64_t>>
+std::pair<std::string, std::vector<double>>
+std::pair<std::string, std::vector<std::string>>
+//Join defaults
+std::pair<int64_t, std::pair<int64_t, int64_t>>
+std::pair<int64_t, std::pair<double, double>>
+std::pair<int64_t, std::pair<std::string, std::string>>
+std::pair<double, std::pair<int64_t, int64_t>>
+std::pair<double, std::pair<double, double>>
+std::pair<double, std::pair<std::string, std::string>>
+std::pair<std::string, std::pair<int64_t, int64_t>>
+std::pair<std::string, std::pair<double, double>>
+std::pair<std::string, std::pair<std::string, std::string>>

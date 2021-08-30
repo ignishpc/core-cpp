@@ -13,7 +13,7 @@ namespace ignis {
                 template<typename T>
                 class IBeforeFunction {
                 public:
-                    typedef IBeforeFunction<R> _IBeforeFunction_type;
+                    typedef IBeforeFunction<T> _IBeforeFunction_type;
                     typedef T _T_type;
 
                     virtual void before(IContext &context) {}

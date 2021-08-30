@@ -22,8 +22,8 @@ void IDriverException::__set_message(const std::string& val) {
   this->message = val;
 }
 
-void IDriverException::__set__cause(const std::string& val) {
-  this->_cause = val;
+void IDriverException::__set_cause_(const std::string& val) {
+  this->cause_ = val;
 }
 std::ostream& operator<<(std::ostream& out, const IDriverException& obj)
 {
@@ -45,7 +45,7 @@ uint32_t IDriverException::read(::apache::thrift::protocol::TProtocol* iprot) {
   using ::apache::thrift::protocol::TProtocolException;
 
   bool isset_message = false;
-  bool isset__cause = false;
+  bool isset_cause_ = false;
 
   while (true)
   {
@@ -65,8 +65,8 @@ uint32_t IDriverException::read(::apache::thrift::protocol::TProtocol* iprot) {
         break;
       case 2:
         if (ftype == ::apache::thrift::protocol::T_STRING) {
-          xfer += iprot->readString(this->_cause);
-          isset__cause = true;
+          xfer += iprot->readString(this->cause_);
+          isset_cause_ = true;
         } else {
           xfer += iprot->skip(ftype);
         }
@@ -82,7 +82,7 @@ uint32_t IDriverException::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   if (!isset_message)
     throw TProtocolException(TProtocolException::INVALID_DATA);
-  if (!isset__cause)
+  if (!isset_cause_)
     throw TProtocolException(TProtocolException::INVALID_DATA);
   return xfer;
 }
@@ -96,8 +96,8 @@ uint32_t IDriverException::write(::apache::thrift::protocol::TProtocol* oprot) c
   xfer += oprot->writeString(this->message);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("_cause", ::apache::thrift::protocol::T_STRING, 2);
-  xfer += oprot->writeString(this->_cause);
+  xfer += oprot->writeFieldBegin("cause_", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->cause_);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -108,23 +108,23 @@ uint32_t IDriverException::write(::apache::thrift::protocol::TProtocol* oprot) c
 void swap(IDriverException &a, IDriverException &b) {
   using ::std::swap;
   swap(a.message, b.message);
-  swap(a._cause, b._cause);
+  swap(a.cause_, b.cause_);
 }
 
 IDriverException::IDriverException(const IDriverException& other0) : TException() {
   message = other0.message;
-  _cause = other0._cause;
+  cause_ = other0.cause_;
 }
 IDriverException& IDriverException::operator=(const IDriverException& other1) {
   message = other1.message;
-  _cause = other1._cause;
+  cause_ = other1.cause_;
   return *this;
 }
 void IDriverException::printTo(std::ostream& out) const {
   using ::apache::thrift::to_string;
   out << "IDriverException(";
   out << "message=" << to_string(message);
-  out << ", " << "_cause=" << to_string(_cause);
+  out << ", " << "cause_=" << to_string(cause_);
   out << ")";
 }
 

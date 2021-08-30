@@ -1,0 +1,61 @@
+struct itos : public function::IFunction<int64_t, std::string> {
+
+    std::string call(int64_t &v, IContext &context) { return std::to_string(v); }
+};
+
+struct stoi : public function::IFunction<std::string, int64_t> {
+
+    int64_t call(std::string &v, IContext &context) { return std::stoi(v); }
+};
+
+struct dtos : public function::IFunction<double, std::string> {
+
+    std::string call(double &v, IContext &context) { return std::to_string(v); }
+};
+
+struct stod : public function::IFunction<std::string, double> {
+
+    double call(std::string &v, IContext &context) { return std::stod(v); }
+};
+
+struct ssplit : public function::IFunction<std::string, IVector<std::string>> {
+    char delimiter;
+
+    void before(IContext &context) {
+        if (context.isVar("delimiter")) {
+            delimiter = context.var<std::string>("delimiter").at(0);
+        } else {
+            delimiter = ',';
+        }
+    }
+
+    IVector<std::string> call(std::string &v, IContext &context) {
+        IVector<std::string> tokens;
+        std::string token;
+        std::istringstream tokenStream(v);
+        while (std::getline(tokenStream, token, delimiter)) { tokens.push_back(token); }
+        return tokens;
+    }
+};
+
+struct sjoin : public function::IFunction2<std::string, std::string, std::string> {
+    std::string delimiter;
+
+    void before(IContext &context) {
+        if (context.isVar("delimiter")) {
+            delimiter = context.var<std::string>("delimiter");
+        } else {
+            delimiter = "";
+        }
+    }
+
+    std::string call(std::string &v1, std::string &v2, IContext &context) { return v1 + delimiter + v2; }
+};
+
+struct dsum : public function::IFunction2<double, double, double> {
+    double call(double &v1, double &v2, IContext &context) { return v1 + v2; }
+};
+
+struct isum : public function::IFunction2<int64_t, int64_t, int64_t> {
+    int64_t call(int64_t &v1, int64_t &v2, IContext &context) { return v1 + v2; }
+};

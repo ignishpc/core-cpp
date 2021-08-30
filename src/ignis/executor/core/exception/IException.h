@@ -85,28 +85,28 @@ namespace ignis {
     catch (ignis::executor::core::exception::IException & ex) {                                                        \
         ignis::rpc::IExecutorException eex;                                                                            \
         eex.__set_message(ex.what());                                                                                  \
-        eex.__set__cause(ex.toString());                                                                               \
+        eex.__set_cause_(ex.toString());                                                                               \
         IGNIS_LOG(error) << ex.toString();                                                                             \
         throw eex;                                                                                                     \
     }                                                                                                                  \
     catch (std::exception & ex) {                                                                                      \
         ignis::rpc::IExecutorException eex;                                                                            \
         eex.__set_message(ex.what());                                                                                  \
-        eex.__set__cause("");                                                                                          \
+        eex.__set_cause_("");                                                                                          \
         IGNIS_LOG(error) << ex.what();                                                                                 \
         throw eex;                                                                                                     \
     }                                                                                                                  \
     catch (MPI::Exception & ex) {                                                                                      \
         ignis::rpc::IExecutorException eex;                                                                            \
         eex.__set_message(std::string("MPI::Exception ") + ex.Get_error_string());                                                  \
-        eex.__set__cause("");                                                                                          \
+        eex.__set_cause_("");                                                                                          \
         IGNIS_LOG(error) << "MPI::Exception " << ex.Get_error_string();                                                 \
         throw eex;                                                                                                     \
     }                                                                                                                  \
     catch (...) {                                                                                                      \
         ignis::rpc::IExecutorException eex;                                                                            \
         eex.__set_message("unknown exception");                                                                        \
-        eex.__set__cause("");                                                                                          \
+        eex.__set_cause_("");                                                                                          \
         IGNIS_LOG(error) << "unknown exception";                                                                       \
         throw eex;                                                                                                     \
     }

@@ -29,7 +29,7 @@ class IPropertiesServiceIf {
   virtual void rmProperty(std::string& _return, const int64_t id, const std::string& key) = 0;
   virtual bool contains(const int64_t id, const std::string& key) = 0;
   virtual void toMap(std::map<std::string, std::string> & _return, const int64_t id, const bool defaults) = 0;
-  virtual void fromMap(const int64_t id, const std::map<std::string, std::string> & _map) = 0;
+  virtual void fromMap(const int64_t id, const std::map<std::string, std::string> & map_) = 0;
   virtual void load(const int64_t id, const std::string& path) = 0;
   virtual void store(const int64_t id, const std::string& path) = 0;
   virtual void clear(const int64_t id) = 0;
@@ -86,7 +86,7 @@ class IPropertiesServiceNull : virtual public IPropertiesServiceIf {
   void toMap(std::map<std::string, std::string> & /* _return */, const int64_t /* id */, const bool /* defaults */) {
     return;
   }
-  void fromMap(const int64_t /* id */, const std::map<std::string, std::string> & /* _map */) {
+  void fromMap(const int64_t /* id */, const std::map<std::string, std::string> & /* map_ */) {
     return;
   }
   void load(const int64_t /* id */, const std::string& /* path */) {
@@ -915,9 +915,9 @@ class IPropertiesService_toMap_presult {
 };
 
 typedef struct _IPropertiesService_fromMap_args__isset {
-  _IPropertiesService_fromMap_args__isset() : id(false), _map(false) {}
+  _IPropertiesService_fromMap_args__isset() : id(false), map_(false) {}
   bool id :1;
-  bool _map :1;
+  bool map_ :1;
 } _IPropertiesService_fromMap_args__isset;
 
 class IPropertiesService_fromMap_args {
@@ -930,19 +930,19 @@ class IPropertiesService_fromMap_args {
 
   virtual ~IPropertiesService_fromMap_args() noexcept;
   int64_t id;
-  std::map<std::string, std::string>  _map;
+  std::map<std::string, std::string>  map_;
 
   _IPropertiesService_fromMap_args__isset __isset;
 
   void __set_id(const int64_t val);
 
-  void __set__map(const std::map<std::string, std::string> & val);
+  void __set_map_(const std::map<std::string, std::string> & val);
 
   bool operator == (const IPropertiesService_fromMap_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
-    if (!(_map == rhs._map))
+    if (!(map_ == rhs.map_))
       return false;
     return true;
   }
@@ -964,7 +964,7 @@ class IPropertiesService_fromMap_pargs {
 
   virtual ~IPropertiesService_fromMap_pargs() noexcept;
   const int64_t* id;
-  const std::map<std::string, std::string> * _map;
+  const std::map<std::string, std::string> * map_;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -1397,8 +1397,8 @@ class IPropertiesServiceClient : virtual public IPropertiesServiceIf {
   void toMap(std::map<std::string, std::string> & _return, const int64_t id, const bool defaults);
   void send_toMap(const int64_t id, const bool defaults);
   void recv_toMap(std::map<std::string, std::string> & _return);
-  void fromMap(const int64_t id, const std::map<std::string, std::string> & _map);
-  void send_fromMap(const int64_t id, const std::map<std::string, std::string> & _map);
+  void fromMap(const int64_t id, const std::map<std::string, std::string> & map_);
+  void send_fromMap(const int64_t id, const std::map<std::string, std::string> & map_);
   void recv_fromMap();
   void load(const int64_t id, const std::string& path);
   void send_load(const int64_t id, const std::string& path);
@@ -1544,13 +1544,13 @@ class IPropertiesServiceMultiface : virtual public IPropertiesServiceIf {
     return;
   }
 
-  void fromMap(const int64_t id, const std::map<std::string, std::string> & _map) {
+  void fromMap(const int64_t id, const std::map<std::string, std::string> & map_) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->fromMap(id, _map);
+      ifaces_[i]->fromMap(id, map_);
     }
-    ifaces_[i]->fromMap(id, _map);
+    ifaces_[i]->fromMap(id, map_);
   }
 
   void load(const int64_t id, const std::string& path) {
@@ -1633,8 +1633,8 @@ class IPropertiesServiceConcurrentClient : virtual public IPropertiesServiceIf {
   void toMap(std::map<std::string, std::string> & _return, const int64_t id, const bool defaults);
   int32_t send_toMap(const int64_t id, const bool defaults);
   void recv_toMap(std::map<std::string, std::string> & _return, const int32_t seqid);
-  void fromMap(const int64_t id, const std::map<std::string, std::string> & _map);
-  int32_t send_fromMap(const int64_t id, const std::map<std::string, std::string> & _map);
+  void fromMap(const int64_t id, const std::map<std::string, std::string> & map_);
+  int32_t send_fromMap(const int64_t id, const std::map<std::string, std::string> & map_);
   void recv_fromMap(const int32_t seqid);
   void load(const int64_t id, const std::string& path);
   int32_t send_load(const int64_t id, const std::string& path);

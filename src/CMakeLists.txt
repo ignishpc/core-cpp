@@ -193,12 +193,16 @@ set(SOURCE_FILES
         #RPC
         ${rpc})
 
-set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -g -O3")
+FILE(GLOB autogen
+        ignis/executor/core/coretypes/autogen/*cpp)
+
+
+set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -O3")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(igniscore SHARED ${SOURCE_FILES})
-add_library(igniscore_types SHARED ignis/executor/core/ICoreTypes.cpp)
+add_library(igniscore_types SHARED ${autogen})
 add_executable(ignis-cpp main.cpp)
 
 TARGET_LINK_LIBRARIES(igniscore thrift dl backtrace thriftz z)
