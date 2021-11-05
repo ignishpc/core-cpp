@@ -1,6 +1,7 @@
 
 #include "IJsonReader.h"
 
+#include "ignis/executor/api/IWriteIterator.h"
 #include <forward_list>
 #include <list>
 #include <map>
@@ -326,4 +327,20 @@ struct ignis::executor::core::io::IJsonReaderType<std::shared_ptr<_Tp>> {
 
 private:
     IJsonReaderType<_Tp> reader;
+};
+
+template<typename _Tp>
+struct ignis::executor::core::io::IJsonReaderType<ignis::executor::api::IWriteIterator<_Tp>> {
+    inline void operator()(JsonNode &in, ignis::executor::api::IWriteIterator<_Tp> &obj) {
+        checkJsonTypeAux<std::vector<_Tp>>(in.IsArray());
+        IJsonReaderType<_Tp> reader;
+        auto array = in.GetArray();
+        for (auto &value : array) {
+            obj.write(reader(value));
+        }
+    }
+
+    inline ignis::executor::api::IWriteIterator<_Tp> operator()(JsonNode &in) {
+        return ignis::executor::api::IWriteIterator<_Tp>();
+    }
 };

@@ -197,7 +197,13 @@ FILE(GLOB autogen
         ignis/executor/core/coretypes/autogen/*cpp)
 
 
-set(CMAKE_CXX_FLAGS "-fPIC -rdynamic -pthread -fopenmp -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -rdynamic -pthread -fopenmp")
+
+if(BUILD_TESTING OR BUILD_COVERAGE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 

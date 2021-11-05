@@ -11,7 +11,7 @@ namespace ignis {
             class IWriteIterator {
             public:
                 typedef Tp value_type;
-                typedef IReadIterator<Tp> _IWriteIterator_type;
+                typedef IWriteIterator<Tp> _IWriteIterator_type;
 
                 virtual void write(Tp &obj) { throw core::exception::ILogicError("not implemented"); }
 

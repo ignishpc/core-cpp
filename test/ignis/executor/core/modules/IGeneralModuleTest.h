@@ -24,6 +24,10 @@ namespace ignis {
                     CPPUNIT_TEST(groupByIntStringTest);
                     CPPUNIT_TEST(sortIntTest);
                     CPPUNIT_TEST(sortStringTest);
+                    CPPUNIT_TEST(distinctIntTest);
+                    CPPUNIT_TEST(joinStringIntTest);
+                    CPPUNIT_TEST(unionIntTest);
+                    CPPUNIT_TEST(unionUnorderedStringTest);
                     CPPUNIT_TEST(resamplingSortIntTest);
                     CPPUNIT_TEST(flatMapValuesIntTest);
                     CPPUNIT_TEST(mapValuesIntTest);
@@ -32,6 +36,12 @@ namespace ignis {
                     CPPUNIT_TEST(aggregateByKeyIntIntTest);
                     CPPUNIT_TEST(foldByKeyIntIntTest);
                     CPPUNIT_TEST(sortByKeyIntStringTest);
+                    CPPUNIT_TEST(repartitionLocalIntTest);
+                    CPPUNIT_TEST(repartitionOrderedIntTest);
+                    CPPUNIT_TEST(repartitionUnorderedStringTest);
+                    CPPUNIT_TEST(partitionByStringTest);
+                    CPPUNIT_TEST(partitionByRandomIntTest);
+                    CPPUNIT_TEST(partitionByHashStringTest);
                     CPPUNIT_TEST_SUITE_END();
 
                 public:
@@ -69,6 +79,14 @@ namespace ignis {
 
                     void resamplingSortIntTest() { sortTest<int>("SortInt", 2, "Memory", true); }
 
+                    void distinctIntTest() { distinctTest<int>(2, "Memory"); }
+
+                    void joinStringIntTest() { joinTest<std::string, int>(2, "RawMemory"); }
+
+                    void unionIntTest() { unionTest<int>(2, "Memory", true); }
+
+                    void unionUnorderedStringTest() { unionTest<int>(2, "RawMemory", false); }
+
                     void flatMapValuesIntTest() { flatMapValuesTest<int>("FlatMapValuesInt", 2, "Memory"); }
 
                     void mapValuesIntTest() { mapValuesTest<int>("MapValuesInt", 2, "RawMemory"); }
@@ -86,6 +104,18 @@ namespace ignis {
                     void foldByKeyIntIntTest() { foldByKeyTest<int, int>("ZeroInt", "ReduceInt", 2, "Memory"); }
 
                     void sortByKeyIntStringTest() { sortByKeyTest<int, std::string>(2, "Memory"); }
+
+                    void repartitionOrderedIntTest() { repartitionTest<int>(2, "Memory", true, true); }
+
+                    void repartitionUnorderedStringTest() { repartitionTest<std::string>(2, "RawMemory", false, true); }
+
+                    void repartitionLocalIntTest() { repartitionTest<int>(2, "Memory", false, false); }
+
+                    void partitionByStringTest() { partitionByTest<std::string>("PartitionByStr", 2, "RawMemory"); }
+
+                    void partitionByRandomIntTest() { partitionByRandomTest<int>(2, "Memory"); }
+
+                    void partitionByHashStringTest() { partitionByHashTest<std::string>(2, "RawMemory"); }
 
                 private:
                     void executeToTest(const std::string &name, const std::string &partitionType);
@@ -122,6 +152,15 @@ namespace ignis {
                                   bool resampling = false);
 
                     template<typename Tp>
+                    void distinctTest(int cores, const std::string &partitionType);
+
+                    template<typename Key, typename Value>
+                    void joinTest(int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void unionTest(int cores, const std::string &partitionType, bool preserveOrder);
+
+                    template<typename Tp>
                     void flatMapValuesTest(const std::string &name, int cores, const std::string &partitionType);
 
                     template<typename Tp>
@@ -142,6 +181,19 @@ namespace ignis {
 
                     template<typename Key, typename Value>
                     void sortByKeyTest(int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void repartitionTest(int cores, const std::string &partitionType, bool preserveOrdering,
+                                         bool global);
+
+                    template<typename Tp>
+                    void partitionByTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void partitionByRandomTest(int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void partitionByHashTest(int cores, const std::string &partitionType);
 
                     std::shared_ptr<IGeneralModule> general;
                 };

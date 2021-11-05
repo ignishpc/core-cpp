@@ -27,6 +27,8 @@ namespace ignis {
 
                     virtual size_t bytes();
 
+                    virtual void sync();
+
                     virtual void reserve(size_t bytes);
 
                     virtual ~IRawMemoryPartition();

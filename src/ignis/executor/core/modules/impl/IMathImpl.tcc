@@ -18,7 +18,6 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
     {
         IGNIS_OMP_TRY()
         std::mt19937 gen(seed + executor_data->getContext().threadId());
-        std::uniform_int_distribution<int> dist;
 
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < input->partitions(); p++) {
@@ -32,19 +31,14 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
             }
             auto &men = executor_data->getPartitionTools().toMemory(*part);
             if (withReplacement) {
+                std::uniform_int_distribution<int> dist(0, men.size() - 1);
                 for (size_t i = 0; i < num[p]; i++) {
-                    for (size_t j = 0; j < num[p]; j++) {
-                        double prob = ((double) num[p]) / (size - j);
-                        double random = ((double) dist(gen) / dist.max());
-                        if (random < prob) {
-                            writer->write(men[j]);
-                            break;
-                        }
-                    }
+                    writer->write(men[dist(gen)]);
                 }
             } else {
                 size_t picked = 0;
-                for (size_t i = 0; i < size; i++) {
+                std::uniform_int_distribution<int> dist;
+                for (size_t i = 0; i < size && num[p]  > picked; i++) {
                     double prob = ((double) (num[p] - picked)) / (size - i);
                     double random = ((double) dist(gen) / dist.max());
                     if (random < prob) {
@@ -60,17 +54,6 @@ void IMathImplClass::sample(const bool withReplacement, const std::vector<int64_
     }
     IGNIS_OMP_EXCEPTION_END()
     executor_data->setPartitions(output);
-    IGNIS_CATCH()
-}
-
-template<typename Tp>
-int64_t IMathImplClass::count() {
-    IGNIS_TRY()
-    auto input = executor_data->getPartitions<Tp>();
-    IGNIS_LOG(info) << "Math: count " << input->partitions() << " partitions";
-    int64_t count = 0;
-    for (auto &part : *input) { count += part->size(); }
-    return count;
     IGNIS_CATCH()
 }
 
@@ -114,9 +97,9 @@ int64_t IMathImplClass::sampleByKeyFilter() {
                     auto &elem = reader->next();
                     if (check(elem)) {
                         if (cache) {
-                            writer->write(std::move(elem));
-                        } else {
                             writer->write(elem);
+                        } else {
+                            writer->write(std::move(elem));
                         }
                     }
                 }
@@ -163,7 +146,7 @@ void IMathImplClass::sampleByKey(const bool withReplacement, const int32_t seed)
             while (reader->hasNext()) {
                 auto &elem = reader->next();
                 int64_t pos = pmap[elem.first];
-                num[pos] = elem.second.size();
+                num[pos] = elem.second.size() * fractions[elem.first];
                 auto writer = (*output)[pos]->writeIterator();
                 for (const auto &value : elem.second) {
                     writer->write(Tp(elem.first, value));
@@ -203,15 +186,22 @@ void IMathImplClass::countByKey() {
                 for (int64_t i = 0; i < part.size(); i++) { acum[thread][reader->next().first]++; }
             }
         }
-        int64_t pivotUp = threads;
-        int64_t pivotDown;
-        while (pivotUp - 1 > thread) {
-            pivotDown = (int64_t) std::floor(pivotUp / 2.0);
-            pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
-            if (thread < pivotDown) {
-                for (auto &entry : acum[thread + pivotUp]) { acum[thread][entry.first] += entry.second; }
+
+        int64_t distance = 1;
+        int64_t order = 1;
+        auto threadId = executor_data->getContext().threadId();
+        while(order < threads){
+#pragma omp barrier
+            order *= 2;
+            if (threadId % order == 0){
+                int64_t other = threadId + distance;
+                distance = order;
+                if(other >= threads){
+                    continue;
+                }
+                for (auto &entry : acum[other]) { acum[thread][entry.first] += entry.second; }
+                acum[other].clear();
             }
-            acum[thread + pivotUp].clear();
         }
         IGNIS_OMP_CATCH()
     }
@@ -245,16 +235,24 @@ void IMathImplClass::countByValue() {
                 for (int64_t i = 0; i < part.size(); i++) { acum[thread][reader->next().second]++; }
             }
         }
-        int64_t pivotUp = threads;
-        int64_t pivotDown;
-        while (pivotUp - 1 > thread) {
-            pivotDown = (int64_t) std::floor(pivotUp / 2.0);
-            pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
-            if (thread < pivotDown) {
-                for (auto &entry : acum[thread + pivotUp]) { acum[thread][entry.first] += entry.second; }
+
+        int64_t distance = 0;
+        int64_t order = 1;
+        auto threadId = executor_data->getContext().threadId();
+        while(distance < threads){
+#pragma omp barrier
+            distance += 1;
+            order *= 2;
+            if (threadId % order == 0){
+                int64_t other = threadId + distance;
+                if(other >= threads){
+                    continue;
+                }
+                for (auto &entry : acum[other]) { acum[thread][entry.first] += entry.second; }
+                acum[other].clear();
             }
-            acum[thread + pivotUp].clear();
         }
+
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
@@ -265,36 +263,33 @@ void IMathImplClass::countByValue() {
 template<typename Tp>
 void IMathImplClass::countByReduce(std::unordered_map<Tp, int64_t> &acum) {
     IGNIS_LOG(info) << "Math: reducing global counting";
-    auto elem_part = executor_data->getPartitionTools().newMemoryPartition<std::pair<Tp, int64_t>>();
-    auto rank = executor_data->mpi().rank();
-    int64_t pivotUp;
-    int64_t pivotDown;
-    pivotUp = executor_data->mpi().executors();
-    while (pivotUp > 1) {
-        pivotDown = (int64_t) std::floor(pivotUp / 2.0);
-        pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
-        if (rank < pivotDown) {
-            executor_data->mpi().recv(*elem_part, rank + pivotUp, 0);
-            for (int64_t i = 0; i < elem_part->size(); i++) { acum[(*elem_part)[i].first] += (*elem_part)[i].second; }
-        } else if (rank >= pivotUp) {
-            auto writer = elem_part->writeIterator();
-            auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-            for (auto &entry : acum) { men_writer.write(std::move(entry)); }
-            acum.clear();
-            executor_data->mpi().send(*elem_part, rank - pivotUp, 0);
-        }
-        elem_part->clear();
+    auto executors = executor_data->mpi().executors();
+    auto group = executor_data->getPartitionTools().newPartitionGroup<std::pair<Tp, int64_t>>(executors);
+    auto tmp = executor_data->getPartitionTools().newPartitionGroup<std::pair<Tp, int64_t>>();
+    std::vector<std::shared_ptr<api::IWriteIterator<std::pair<Tp, int64_t>>>> writers;
+    for (int64_t p = 0; p < executors; p++) {
+        writers.push_back((*group)[p]->writeIterator());
+    }
+    std::hash<Tp> hash;
+    for(auto& it: acum){
+        writers[hash(it.first) % executors]->write(it);
+    }
+    exchange(*group, *tmp);
+    acum.clear();
+    auto reader = (*tmp)[0]->readIterator();
+    while (reader->hasNext()) {
+        auto& elem = reader->next();
+        acum[elem.first]+=elem.second;
+    }
+
+    auto part = executor_data->getPartitionTools().newMemoryPartition<std::pair<Tp, int64_t>>();
+    auto writer = part->writeIterator();
+    for(auto& it: acum){
+        writer->write(it);
     }
 
     auto output = executor_data->getPartitionTools().newPartitionGroup<std::pair<Tp, int64_t>>();
-    if (executor_data->mpi().isRoot(0)) {
-        auto writer = elem_part->writeIterator();
-        auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
-        for (auto &entry : acum) { men_writer.write(std::move(entry)); }
-        acum.clear();
-        output->add(elem_part);
-    }
-
+    output->add(part);
     executor_data->setPartitions(output);
 }
 

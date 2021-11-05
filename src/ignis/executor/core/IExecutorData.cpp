@@ -82,7 +82,6 @@ void IExecutorData::destroyMpiGroup() {
     for (auto comm : context.mpi_thread_group) {
         if (comm != MPI::COMM_WORLD) { comm.Free(); }
     }
-    context.mpi_thread_group.clear();
     setMpiGroup(MPI::COMM_WORLD);
 }
 

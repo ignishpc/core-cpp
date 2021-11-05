@@ -9,7 +9,9 @@ const std::string IRawMemoryPartitionClass<Tp>::TYPE = "RawMemory";
 template<typename Tp>
 IRawMemoryPartitionClass<Tp>::IRawMemoryPartition(size_t bytes, int8_t compression)
     : IRawMemoryPartition(std::make_shared<transport::IMemoryBuffer>(bytes + IRawMemoryPartitionClass<Tp>::HEADER),
-                          compression) {}
+                          compression) {
+    clear();
+}
 
 template<typename Tp>
 IRawMemoryPartitionClass<Tp>::IRawMemoryPartition(std::shared_ptr<transport::IMemoryBuffer> &&bb, int8_t compression)
@@ -29,7 +31,7 @@ template<typename Tp>
 void IRawMemoryPartitionClass<Tp>::clear() {
     buffer->resetBuffer();
     this->elems = 0;
-    this->writeHeader();
+    this->sync();
 }
 
 template<typename Tp>
@@ -52,6 +54,12 @@ size_t IRawMemoryPartitionClass<Tp>::bytes() {
 }
 
 template<typename Tp>
+void IRawMemoryPartitionClass<Tp>::sync(){
+    storage::IRawPartition<Tp>::sync();
+    writeHeader();
+}
+
+template<typename Tp>
 uint8_t *IRawMemoryPartitionClass<Tp>::begin(bool header) {
     uint8_t *ptr;
     size_t sz;
@@ -71,7 +79,7 @@ uint8_t *IRawMemoryPartitionClass<Tp>::end() {
 
 template<typename Tp>
 void IRawMemoryPartitionClass<Tp>::reserve(size_t bytes) {
-    if (bytes < buffer->getBufferSize() - IRawMemoryPartitionClass<Tp>::HEADER) {
+    if (bytes + IRawMemoryPartitionClass<Tp>::HEADER > buffer->getBufferSize() ) {
         buffer->setBufferSize(bytes + IRawMemoryPartitionClass<Tp>::HEADER);
     }
 }

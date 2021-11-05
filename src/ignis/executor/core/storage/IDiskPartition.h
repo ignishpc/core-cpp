@@ -51,7 +51,6 @@ namespace ignis {
                     std::shared_ptr<transport::IFileTransport> file;
                     std::string path;
                     std::string header;
-                    int copies;
                     bool destroy;
                 };
             }// namespace storage

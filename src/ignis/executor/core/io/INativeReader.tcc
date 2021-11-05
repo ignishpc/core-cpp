@@ -7,6 +7,7 @@ struct ignis::executor::core::io::INativeReaderType {
         bool contiguous;
         protocol.readBool(contiguous);
         if (contiguous) {
+            checkNativeType<Tp>(protocol);
             protocol.getTransport()->read((uint8_t *) &obj, sizeof(Tp));
         } else {
             IReaderType<Tp>()(protocol, obj);
@@ -27,6 +28,7 @@ struct ignis::executor::core::io::INativeReaderType<std::vector<_Tp, _Alloc>> {
         bool contiguous;
         protocol.readBool(contiguous);
         if (contiguous) {
+            checkNativeType<std::vector<_Tp>>(protocol);
             int64_t len;
             protocol.readI64(len);
             auto first = obj.size();

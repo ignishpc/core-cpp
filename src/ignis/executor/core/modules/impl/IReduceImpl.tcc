@@ -279,7 +279,7 @@ template<typename Tp>
 void IReduceImplClass::union_(const std::string &other, bool preserveOrder) {
     IGNIS_TRY()
     auto input = executor_data->getAndDeletePartitions<Tp>();
-    auto input2 = executor_data->getContext().var<decltype(input)>(other);
+    auto input2 = executor_data->getVariable<decltype(input)>(other);
     auto output = executor_data->getPartitionTools().newPartitionGroup<Tp>();
     IGNIS_LOG(info) << "Reduce: union " << input->partitions() << " and " << input2->partitions() << " partitions";
     std::string storage;
@@ -351,7 +351,7 @@ void IReduceImplClass::join(const std::string &other, int64_t numPartitions) {
     auto input = executor_data->getAndDeletePartitions<Tp>();
 
     IGNIS_LOG(info) << "Reduce: preparing second partitions";
-    executor_data->setPartitions(executor_data->getContext().var<decltype(input)>(other));
+    executor_data->setPartitions(executor_data->getVariable<decltype(input)>(other));
     keyHashing<Tp>(numPartitions);
     keyExchanging<Tp>();
     auto input2 = executor_data->getAndDeletePartitions<Tp>();
@@ -502,12 +502,11 @@ inline void IReduceImplClass::finalTreeReduce(Function &f, storage::IMemoryParti
 #pragma omp parallel
             {
                 IGNIS_OMP_TRY()
-                auto id = executor_data->getContext().threadId();
                 int64_t n = partial.size();
                 int64_t n2 = n / 2;
-                while (n2 > id) {
+                while (n2 > 0) {
 #pragma omp for schedule(static)
-                    for (int64_t i = 0; i < n2; i++) { partial[i] = f.call(partial[i], partial[n - i], context); }
+                    for (int64_t i = 0; i < n2; i++) { partial[i] = f.call(partial[i], partial[n - i - 1], context); }
                     n = (int64_t) std::ceil(n / 2.0);
                     n2 = n / 2;
                 }
@@ -519,17 +518,26 @@ inline void IReduceImplClass::finalTreeReduce(Function &f, storage::IMemoryParti
     }
 
     IGNIS_LOG(info) << "Reduce: performing a final tree reduce";
-    while (pivotUp > 1) {
-        pivotDown = (int64_t) std::floor(pivotUp / 2.0);
-        pivotUp = (int64_t) std::ceil(pivotUp / 2.0);
-        if (rank < pivotDown) {
-            executor_data->mpi().recv(partial, rank + pivotUp, 0);
+    int64_t distance = 1;
+    int64_t order = 1;
+    while(order < executors){
+        order *= 2;
+        if (rank % order == 0){
+            int64_t other = rank + distance;
+            distance = order;
+            if(other >= executors){
+                continue;
+            }
+            executor_data->mpi().recv(partial, other, 0);
             partial[0] = f.call(partial[0], partial[1], context);
             partial.resize(1);
-        } else if (rank >= pivotUp) {
-            executor_data->mpi().send(partial, rank - pivotUp, 0);
+        }else{
+            int64_t other = rank - distance;
+            executor_data->mpi().send(partial, other, 0);
+            break;
         }
     }
+
     if (executor_data->mpi().isRoot(0) && partial.size() > 0) {
         auto result = executor_data->getPartitionTools().newMemoryPartition<typename Function::_R_type>(1);
         result->writeIterator()->write(std::move(partial[0]));

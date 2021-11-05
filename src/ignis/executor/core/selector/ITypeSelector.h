@@ -71,8 +71,6 @@ namespace ignis {
 
                     virtual void takeOrdered(modules::impl::ISortImpl &impl, int64_t num) = 0;
 
-                    virtual int64_t count(modules::impl::IMathImpl &impl) = 0;
-
                     virtual void max(modules::impl::ISortImpl &impl) = 0;
 
                     virtual void min(modules::impl::ISortImpl &impl) = 0;
@@ -203,8 +201,6 @@ namespace ignis {
                     virtual void takeOrdered(modules::impl::ISortImpl &impl, int64_t num) {
                         takeOrdered_check<Tp>(impl, nullptr, num);
                     }
-
-                    virtual int64_t count(modules::impl::IMathImpl &impl) { return impl.count<Tp>(); }
 
                     virtual void max(modules::impl::ISortImpl &impl) { max_check<Tp>(impl, nullptr); }
 

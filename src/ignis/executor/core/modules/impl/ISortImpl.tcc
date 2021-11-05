@@ -58,8 +58,8 @@ void ISortImplClass::topBy(int64_t n) {
     function.before(context);
     take_ordered_impl<typename Function::_T1_type>(
             [&context, &function](const typename Function::_T1_type &lhs, const typename Function::_T2_type &rhs) {
-                return !function.call(const_cast<typename Function::_T1_type &>(lhs),
-                                      const_cast<typename Function::_T2_type &>(rhs), context);
+                return function.call(const_cast<typename Function::_T1_type &>(rhs),
+                                      const_cast<typename Function::_T2_type &>(lhs), context);
             },
             n);
     function.after(context);
@@ -102,7 +102,7 @@ template<typename Tp>
 void ISortImplClass::min() {
     IGNIS_TRY()
     std::less<Tp> comparator;
-    max_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) { return !comparator(lhs, rhs); });
+    max_impl<Tp>([&comparator](const Tp &lhs, const Tp &rhs) { return comparator(rhs, lhs); });
     IGNIS_CATCH()
 }
 
@@ -129,8 +129,8 @@ void ISortImplClass::minBy() {
     function.before(context);
     max_impl<typename Function::_T1_type>(
             [&context, &function](const typename Function::_T1_type &lhs, const typename Function::_T2_type &rhs) {
-                return !function.call(const_cast<typename Function::_T1_type &>(lhs),
-                                      const_cast<typename Function::_T2_type &>(rhs), context);
+                return function.call(const_cast<typename Function::_T1_type &>(rhs),
+                                      const_cast<typename Function::_T2_type &>(lhs), context);
             });
     function.after(context);
     IGNIS_CATCH()
@@ -576,7 +576,7 @@ void ISortImplClass::take_ordered_add(Cmp comparator, storage::IMemoryPartition<
         return;
     }
     if (inner.size() == n) {
-        if (comparator(inner.back(), elem)) {
+        if (comparator(inner.back(), elem) || !comparator(elem, inner.back())) {
             return;
         } else {
             inner.pop_back();
@@ -593,20 +593,20 @@ void ISortImplClass::max_impl(Cmp comparator) {
     bool inMemory = executor_data->getPartitionTools().isMemory(*input);
 
     IGNIS_LOG(info) << "Sort: max/min";
-    auto result = executor_data->getPartitionTools().newMemoryPartition<Tp>(1);
+    Tp elem;
+    bool empty = true;
     for (auto &part : *input) {
         if (part->size() > 0) {
-            result->writeIterator()->write(part->readIterator()->next());
+            elem = part->readIterator()->next();
+            empty = false;
             break;
         }
     }
 
-    if (result->size() == 0) {
+    if (empty) {
         executor_data->setPartitions(output);
         return;
     }
-
-    Tp &elem = (*result)[0];
 
     IGNIS_LOG(info) << "Sort: local max/min";
     IGNIS_OMP_EXCEPTION_INIT()
@@ -639,10 +639,17 @@ void ISortImplClass::max_impl(Cmp comparator) {
     IGNIS_OMP_EXCEPTION_END()
 
     IGNIS_LOG(info) << "Sort: global max/min";
+    auto result = executor_data->getPartitionTools().newMemoryPartition<Tp>(1);
+    result->writeIterator()->write(elem);
     executor_data->mpi().gather(*result, 0);
     if (executor_data->mpi().isRoot(0)) {
-        sortPartition(*result, comparator);
+        for(auto& item: *result){
+            if (comparator(elem, item)) {
+                elem = item;
+            }
+        }
         result->resize(1);
+        (*result)[0] = elem;
         output->add(result);
     }
     executor_data->setPartitions(output);

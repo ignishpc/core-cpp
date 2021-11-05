@@ -2,10 +2,9 @@
 #ifndef IGNIS_IWRITER_H
 #define IGNIS_IWRITER_H
 
-
-#include "../RTTInfo.h"
-#include "../exception/ILogicError.h"
-#include "../protocol/IProtocol.h"
+#include "ignis/executor/core/RTTInfo.h"
+#include "ignis/executor/core/exception/ILogicError.h"
+#include "ignis/executor/core/protocol/IProtocol.h"
 #include "IEnumTypes.h"
 
 namespace ignis {

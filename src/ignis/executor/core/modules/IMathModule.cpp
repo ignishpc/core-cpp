@@ -16,7 +16,7 @@ void IMathModule::sample(const bool withReplacement, const std::vector<int64_t> 
 
 int64_t IMathModule::count() {
     IGNIS_RPC_TRY()
-    return typeFromPartition()->count(math_impl);
+    return math_impl.count();
     IGNIS_RPC_CATCH()
 }
 

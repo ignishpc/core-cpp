@@ -1,6 +1,7 @@
 
 #include "IMpiTest.h"
 #include <ghc/filesystem.hpp>
+#include "ignis/executor/core/modules/impl/IBaseImpl.h"
 
 #define IMpiTestClass ignis::executor::core::IMpiTest
 
@@ -233,6 +234,78 @@ void IMpiTestClass<Ps>::driverScatterVoidTest() {
         }
 
         CPPUNIT_ASSERT(local_elems == result);
+    }
+
+    executor_data->mpi().barrier();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::syncExchangeTest(){
+    executor_data->getContext().props()["ignis.modules.exchange.type"] = "sync";
+    executor_data->getContext().props()["ignis.transport.cores"] = "0";
+    exchange();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::syncExchangeCoresTest(){
+    executor_data->getContext().props()["ignis.modules.exchange.type"] = "sync";
+    executor_data->getContext().props()["ignis.transport.cores"] = "1";
+    executor_data->setCores(2);
+    exchange();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::asyncExchangeTest(){
+    executor_data->getContext().props()["ignis.modules.exchange.type"] = "async";
+    executor_data->getContext().props()["ignis.transport.cores"] = "0";
+    exchange();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::asyncExchangeCoresTest(){
+    executor_data->getContext().props()["ignis.modules.exchange.type"] = "async";
+    executor_data->getContext().props()["ignis.transport.cores"] = "1";
+    executor_data->setCores(2);
+    exchange();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::autoExchangeTest(){
+    executor_data->getContext().props()["ignis.modules.exchange.type"] = "auto";
+    executor_data->getContext().props()["ignis.transport.cores"] = "0";
+    exchange();
+}
+
+template<typename Ps>
+void IMpiTestClass<Ps>::exchange(){
+    int n = 100;
+    int np = 4;
+    auto executors = executor_data->mpi().executors();
+    auto rank = executor_data->mpi().rank();
+    api::IVector<Tp> elems = IElements<Tp>().create(n * executors * np, 0);
+    api::IVector<std::shared_ptr<storage::IPartition<Tp>>> parts;
+    storage::IPartitionGroup<Tp> local_parts;
+
+    for(int64_t i=0; i< executors * np;i++){
+        parts.push_back(create());
+        auto view = elems.view(n * i, n * (i + 1));
+        insert((api::IVector<Tp> &)view, *parts.back());
+        if (i % executors == rank){
+            local_parts.add(parts.back()->clone());
+        }else{
+            local_parts.add(create());
+        }
+    }
+
+    storage::IPartitionGroup<Tp> result;
+    auto ref_parts = parts.view(rank * np, (rank + 1) * np);
+    modules::impl::IBaseImpl(executor_data).exchange<Tp>(local_parts, result);
+
+    for(int64_t i=0; i< np;i++){
+        api::IVector<Tp> a,b;
+        get(a, *result[i]);
+        get(b, *ref_parts[i]);
+        CPPUNIT_ASSERT(a == b);
     }
 
     executor_data->mpi().barrier();

@@ -17,6 +17,8 @@
 #include "ignis/executor/core/modules/IGeneralActionModuleTest.h"
 #include "ignis/executor/core/modules/IGeneralModuleTest.h"
 #include "ignis/executor/core/modules/IIOModuleTest.h"
+#include "ignis/executor/core/modules/IMathModuleTest.h"
+#include "ignis/executor/core/modules/ICommModuleTest.h"
 
 
 #define MPI_TEST "mpi_test"
@@ -45,10 +47,12 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(IMpiTest<storage::IDiskPartition<int>>, MP
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::IGeneralModuleTest, MODULE_TEST);
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::IGeneralActionModuleTest, MODULE_TEST);
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::IIOModuleTest, MODULE_TEST);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::IMathModuleTest, MODULE_TEST);
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(modules::ICommModuleTest, MPI_TEST);
 
 
 int main(int argc, char *argv[]) {
-    MPI::Init(argc, argv);
+    MPI::Init_thread(MPI_THREAD_MULTIPLE);
     int rank = MPI::COMM_WORLD.Get_rank();
     bool parallel = MPI::COMM_WORLD.Get_size() > 1;
     std::ofstream logFile;

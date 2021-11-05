@@ -1,0 +1,17 @@
+#!/bin/bash
+
+mpirun "$@" @PROJECT_BINARY_DIR@/ignistest
+if [ $? -eq 0 ] && [ "@BUILD_COVERAGE@" == "ON" ]; then
+    path="$(dirname "$0")"/coverage
+    mkdir -p $path
+    rm -f $path/*
+    printf "\nGenerating coverage...\n"
+    gcovr -d -j -p -r @CMAKE_SOURCE_DIR@ --object-directory @CMAKE_BINARY_DIR@ --print-summary --branches --html --html-details -o $path/ignicpp-cov.html \
+      -e "@CMAKE_SOURCE_DIR@/test" -e "@CMAKE_SOURCE_DIR@/src/ignis/driver" -e "@CMAKE_SOURCE_DIR@/src/ignis/rpc" \
+      -e "@CMAKE_SOURCE_DIR@/src/ignis/executor/core/coretypes" -e "@CMAKE_SOURCE_DIR@/src/ignis/executor/api/function"
+    printf "\n"
+    printf "Coverage: (HTML version: file://"$path"/ignicpp-cov.html)\n"
+fi
+
+
+

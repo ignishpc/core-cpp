@@ -18,7 +18,7 @@ namespace ignis {
                     inner.__set_obj(e);
                 }
 
-                ISource(const char *src) { ISource(std::string(src)); }
+                ISource(const char *src) : ISource(std::string(src)){}
 
                 template<typename Tp>
                 ISource &addParam(const std::string &name, const Tp &value) {

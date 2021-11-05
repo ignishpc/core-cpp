@@ -401,7 +401,7 @@ void IMpiClass::gatherImpl(const MPI::Intracomm &group, storage::IPartition<Tp> 
             for (int i = 0; i < executors; i++) {
                 if (i != root) {
                     std::string src(full_path, displs[i], szv[i]);
-                    storage::IDiskPartition<Tp> aux(src, properties.partitionCompression(), false, true);
+                    storage::IDiskPartition<Tp> aux(src, properties.partitionCompression(), true, true);
                     aux.copyTo(rcv);
                 } else {
                     part.moveTo(rcv);

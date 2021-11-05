@@ -90,15 +90,6 @@ namespace ignis {
                     void valuesStringIntTest() { valuesTest<std::string, int>(2, "RawMemory"); }
 
                 private:
-                    template<typename Tp2>
-                    Tp2 normalize(Tp2 e) {
-                        return e;
-                    }
-
-                    std::string normalize(std::string e) {
-                        std::sort(e.begin(), e.end());
-                        return e;
-                    }
 
                     void executeTest(const std::string &name);
 

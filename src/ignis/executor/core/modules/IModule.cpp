@@ -17,94 +17,40 @@ IModule::~IModule() {}
 
 std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromPartition() {
     IGNIS_LOG(info) << "Module: Cheeking partition type";
-    auto type = executor_data->getPartitions<int>(true)->elemType();
-    if (type.isVoid()) {
+    auto group = executor_data->getPartitions<int>(true);
+    auto type = group->elemType();
+    if (group->partitions() > 0 && (*group)[0]->type() == storage::IVoidPartition::TYPE) {
         auto voidParts = executor_data->getPartitions<int>(true);
         std::string typeName;
         IGNIS_LOG(warning) << "Module: Forced to search type in binary objects, it must be slow in some case, "
                               "use src parameter in function to avoid";
         for (auto part : *voidParts) {
-            if (part->size() > 0) {
+            if (part->bytes() > 0) {
                 auto &voidPart = reinterpret_cast<storage::IVoidPartition &>(*part);
                 auto transport = voidPart.readTransport();
                 typeName = dynamic_types.typeFromBytes(transport);
-                break;
+                if (!typeName.empty()){
+                    break;
+                }
             }
         }
         auto type = executor_data->getType(typeName);
         if (type) { return type; }
-        IGNIS_LOG(warning) << "Module:  Type found but it is not compiled, now the executor tries to compile it. "
-                              "The compilation process must be slow in some case, "
-                              "the result will be stored in the job folder. "
-                              "Use src parameter in function to avoid";
-
-        if (!typeName.empty()) {
-            auto lib = dynamic_types.compileType(typeName);
-            IGNIS_LOG(info) << "Module: Compilation successful, use '" + lib +
-                                       "' as src parameter in function to avoid future recompilation";
-            rpc::ISource source;
-            source.obj.__set_name(lib);
-            return typeFromSource(source);
-        }
-
+        if (!typeName.empty()) { return compileFromName(typeName); }
         throw exception::ILogicError("The C ++ executor cannot identify the type of this partition");
     }
     return typeFromName(type.getStandardName());
 }
 
-std::shared_ptr<ignis::executor::core::selector::ITypeSelector> IModule::typeFromHeader(const std::string &header) {
-    const int N_NAMED_TYPES = 8;
-    const static std::string BASIC_NAMED_TYPES[]{
-            RTTInfo::from<void>().getStandardName(),       //I_VOID = 0x0,
-            RTTInfo::from<bool>().getStandardName(),       //I_BOOL = 0x1,
-            RTTInfo::from<int8_t>().getStandardName(),     //I_I08 = 0x2,
-            RTTInfo::from<int16_t>().getStandardName(),    //I_I16 = 0x3,
-            RTTInfo::from<int32_t>().getStandardName(),    //I_I32 = 0x4,
-            RTTInfo::from<int64_t>().getStandardName(),    //I_I64 = 0x5,
-            RTTInfo::from<double>().getStandardName(),     //I_DOUBLE = 0x6,
-            RTTInfo::from<std::string>().getStandardName(),//I_STRING = 0x7,
-    };
-    IGNIS_LOG(info) << "Module: Cheeking partition type";
-    std::string type_name = "";
-    try {
-        auto buffer = std::make_shared<transport::IMemoryBuffer>((uint8_t *) const_cast<char *>(header.c_str()),
-                                                                 header.size());
-        auto proto = std::make_shared<protocol::IObjectProtocol>(buffer);
-        proto->readSerialization();
-        auto tp = io::readTypeAux(*proto);
-        auto sz = io::readSizeAux(*proto);
-
-        if (tp == io::IEnumTypes::I_LIST) {
-            auto elem_tp = io::readTypeAux(*proto);
-            if (0 < elem_tp && elem_tp < N_NAMED_TYPES) { type_name = BASIC_NAMED_TYPES[elem_tp]; }
-        } else if (tp == io::IEnumTypes::I_PAIR_LIST) {
-            auto first_tp = io::readTypeAux(*proto);
-            auto second_tp = io::readTypeAux(*proto);
-            if (0 < first_tp && first_tp < N_NAMED_TYPES && 0 < second_tp && second_tp < N_NAMED_TYPES) {
-                type_name = "std::pair<" + BASIC_NAMED_TYPES[first_tp] + "" + BASIC_NAMED_TYPES[second_tp] + ">";
-            }
-        } else if (tp == io::IEnumTypes::I_BINARY) {
-            type_name = RTTInfo::from<uint8_t>().getStandardName();
-        }
-    } catch (std::exception &ex) { IGNIS_LOG(warning) << "exception: " << ex.what(); }
-
-    if (type_name.empty()) {
-        throw exception::ILogicError("Module: Incoming partition type not found or is too complex.");
-    } else {
-        IGNIS_LOG(info) << "Module: Partition type found: " << type_name;
-    }
-
-    return typeFromName(type_name);
-}
-
 std::shared_ptr<selector::ITypeSelector> IModule::typeFromName(const std::string &name) {
     auto type = executor_data->getType(name);
     if (!type) {
-        throw exception::ILogicError(
-                "Type '" + name +
-                "' is not in the registry, that means  that the type is not compiled in the executor. "
-                "By default only the combinations of the most used types are compiled, the rest are loaded "
-                "from the libraries used by the user.");
+        IGNIS_LOG(warning)
+                << "Type '" + name +
+                           "' is not in the registry, that means  that the type is not compiled in the executor. "
+                           "By default only the combinations of the most used types are compiled, the rest are loaded "
+                           "from the libraries used by the user.";
+        if (!name.empty()) { return compileFromName(name); }
     }
 
     return type;
@@ -122,4 +68,17 @@ std::shared_ptr<selector::ITypeSelector> IModule::typeFromSource(const ignis::rp
     }
     lib->loadClass(executor_data->getContext());
     return type;
+}
+
+std::shared_ptr<selector::ITypeSelector> IModule::compileFromName(const std::string &name) {
+    IGNIS_LOG(warning) << "Module:  Type found but it is not compiled, now the executor tries to compile it. "
+                          "The compilation process must be slow in some case, "
+                          "the result will be stored in the job folder. "
+                          "Use src parameter in function to avoid";
+    auto lib = dynamic_types.compileType(name);
+    IGNIS_LOG(info) << "Module: Compilation successful, use '" + lib +
+                               "' as src parameter in function to avoid future recompilation";
+    rpc::ISource source;
+    source.obj.__set_name(lib);
+    return typeFromSource(source);
 }

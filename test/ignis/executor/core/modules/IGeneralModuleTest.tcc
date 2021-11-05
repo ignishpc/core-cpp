@@ -13,11 +13,11 @@ void IGeneralModuleTestClass::setUp() {}
 
 void IGeneralModuleTestClass::tearDown() {}
 
-void IGeneralModuleTestClass::executeToTest(const std::string &name, const std::string &partitionType){
+void IGeneralModuleTestClass::executeToTest(const std::string &name, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
     general->executeTo(newSource(name));
     auto result = getFromPartitions<int>();
-    CPPUNIT_ASSERT_EQUAL(100, (int)result.size());
+    CPPUNIT_ASSERT_EQUAL(100, (int) result.size());
     for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(i, result[i]); }
 }
 
@@ -189,6 +189,104 @@ void IGeneralModuleTestClass::sortTest(const std::string &name, int cores, const
 }
 
 template<typename Tp>
+void IGeneralModuleTestClass::distinctTest(int cores, const std::string &partitionType) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto elems = IElements<Tp>().create(100 * cores * 2, 0);
+    std::set<Tp> distinct(elems.begin(), elems.end());
+    registerType<Tp>();
+    loadToPartitions(elems, cores * 2);
+
+    general->distinct(4);
+
+    auto result = getFromPartitions<Tp>();
+    loadToPartitions(result, 1);
+    executor_data->mpi().gather(*((*executor_data->getPartitions<Tp>())[0]), 0);
+    result = getFromPartitions<Tp>();
+
+    if (executor_data->mpi().isRoot(0)) {
+        CPPUNIT_ASSERT_EQUAL(distinct.size(), result.size());
+        CPPUNIT_ASSERT(std::set<Tp>(result.begin(), result.end()) == distinct);
+    }
+}
+
+template<typename Key, typename Value>
+void IGeneralModuleTestClass::joinTest(int cores, const std::string &partitionType) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto np = executor_data->getContext().executors();
+    auto elems = IElements<std::pair<Key, Value>>().create(100 * cores * 2, 0);
+    auto elems2 = IElements<std::pair<Key, Value>>().create(100 * cores * 2, 1);
+    auto local_elems = rankVector(elems);
+    auto local_elems2 = rankVector(elems2);
+
+    registerType<std::pair<Key, Value>>();
+    loadToPartitions(local_elems2, 2);
+    executor_data->setVariable("other", executor_data->getPartitions<std::pair<Key, Value>>());
+    loadToPartitions(local_elems, 2);
+
+    general->join("other", 2);
+    auto result = getFromPartitions<std::pair<Key, std::pair<Value, Value>>>();
+
+    loadToPartitions(result, 1);
+    executor_data->mpi().gather(*((*executor_data->getPartitions<std::pair<Key, std::pair<Value, Value>>>())[0]), 0);
+    result = getFromPartitions<std::pair<Key, std::pair<Value, Value>>>();
+
+    if (executor_data->mpi().isRoot(0)) {
+        std::map<Key, api::IVector<Value>> m1;
+        for (auto &entry : elems) { m1[entry.first].push_back(entry.second); }
+
+        api::IVector<std::pair<Key, std::pair<Value, Value>>> expected;
+        for (auto &entry : elems2) {
+            if (m1.find(entry.first) != m1.end()) {
+                for (auto &value : m1[entry.first]) {
+                    expected.emplace_back(entry.first, std::make_pair(entry.second, value));
+                }
+            }
+        }
+        std::sort(result.begin(), result.end());
+        std::sort(expected.begin(), expected.end());
+        CPPUNIT_ASSERT(result == expected);
+    }
+}
+
+template<typename Tp>
+void IGeneralModuleTestClass::unionTest(int cores, const std::string &partitionType, bool preserveOrder) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto np = executor_data->getContext().executors();
+    auto elems = IElements<Tp>().create(100 * cores * 2, 0);
+    auto elems2 = IElements<Tp>().create(100 * cores * 2, 1);
+    auto local_elems = rankVector(elems);
+    auto local_elems2 = rankVector(elems2);
+
+    registerType<Tp>();
+    loadToPartitions(local_elems2, 2);
+    executor_data->setVariable("other", executor_data->getPartitions<Tp>());
+    loadToPartitions(local_elems, 2);
+
+    general->union_("other", preserveOrder);
+    auto result = getFromPartitions<Tp>();
+
+    loadToPartitions(result, 1);
+    executor_data->mpi().gather(*((*executor_data->getPartitions<Tp>())[0]), 0);
+    result = getFromPartitions<Tp>();
+
+    if (executor_data->mpi().isRoot(0)) {
+        CPPUNIT_ASSERT_EQUAL(elems.size() + elems2.size(), result.size());
+
+        api::IVector<Tp> expected(elems.begin(), elems.end());
+        expected.insert(expected.end(), elems2.begin(), elems2.end());
+
+        if (!preserveOrder) {
+            std::sort(result.begin(), result.end());
+            std::sort(expected.begin(), expected.end());
+        }
+        CPPUNIT_ASSERT(result == expected);
+    }
+}
+
+template<typename Tp>
 void IGeneralModuleTestClass::flatMapValuesTest(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
     executor_data->setCores(cores);
@@ -277,7 +375,9 @@ void IGeneralModuleTestClass::reduceByKeyTest(const std::string &name, int cores
     result = getFromPartitions<std::pair<Key, Value>>();
 
     if (executor_data->mpi().isRoot(0)) {
-        for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(acums[result[i].first], result[i].second); }
+        for (int i = 0; i < result.size(); i++) {
+            CPPUNIT_ASSERT_EQUAL(normalize(acums[result[i].first]), normalize(result[i].second));
+        }
     }
 }
 
@@ -308,7 +408,9 @@ void IGeneralModuleTestClass::aggregateByKeyTest(const std::string &zero, const 
     result = getFromPartitions<std::pair<Key, std::string>>();
 
     if (executor_data->mpi().isRoot(0)) {
-        for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(acums[result[i].first], result[i].second); }
+        for (int i = 0; i < result.size(); i++) {
+            CPPUNIT_ASSERT_EQUAL(normalize(acums[result[i].first]), normalize(result[i].second));
+        }
     }
 }
 
@@ -342,7 +444,9 @@ void IGeneralModuleTestClass::foldByKeyTest(const std::string &zero, const std::
     result = getFromPartitions<std::pair<Key, Value>>();
 
     if (executor_data->mpi().isRoot(0)) {
-        for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(acums[result[i].first], result[i].second); }
+        for (int i = 0; i < result.size(); i++) {
+            CPPUNIT_ASSERT_EQUAL(normalize(acums[result[i].first]), normalize(result[i].second));
+        }
     }
 }
 
@@ -373,6 +477,137 @@ void IGeneralModuleTestClass::sortByKeyTest(int cores, const std::string &partit
         CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());
         std::sort(elems_keys.begin(), elems_keys.end());
         for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(elems_keys[i], result[i].first); }
+    }
+}
+
+template<typename Tp>
+void IGeneralModuleTestClass::repartitionTest(int cores, const std::string &partitionType, bool preserveOrdering,
+                                              bool global) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto np = executor_data->getContext().executors();
+    auto rank = executor_data->mpi().rank();
+
+    auto elems = IElements<Tp>().create(100 * cores * 2 * np, 0);
+    auto local_elems = rankVector(elems);
+    if (rank == 0) { local_elems.insert(local_elems.begin(), elems.begin(), elems.begin() + 100); }
+    elems.insert(elems.begin(), elems.begin(), elems.begin() + 100);
+    loadToPartitions(local_elems, cores * 2);
+    registerType<Tp>();
+
+    general->repartition(2 + np - 1, preserveOrdering, global);
+
+    for (auto &part : *executor_data->getPartitions<Tp>()) { CPPUNIT_ASSERT_GREATER((size_t) 50, part->size()); }
+
+    auto result = getFromPartitions<Tp>();
+
+    loadToPartitions(result, 1);
+    executor_data->mpi().gather(*((*executor_data->getPartitions<Tp>())[0]), 0);
+    result = getFromPartitions<Tp>();
+
+    if (executor_data->mpi().isRoot(0)) {
+        CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());
+        if (preserveOrdering || !global) {
+            CPPUNIT_ASSERT(elems == result);
+        } else {
+            std::unordered_map<Tp, int64_t> expected;
+            for (auto &e : elems) { expected[e]++; }
+            for (auto &e : result) { expected[e]--; }
+            for (auto &entry : expected) { CPPUNIT_ASSERT_EQUAL((int64_t) 0, entry.second); }
+        }
+    }
+}
+
+template<typename Tp>
+void IGeneralModuleTestClass::partitionByTest(const std::string &name, int cores, const std::string &partitionType) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto np = executor_data->getContext().executors();
+    auto rank = executor_data->mpi().rank();
+
+    auto elems = IElements<Tp>().create(100 * cores * 2 * np, 0);
+    auto local_elems = rankVector(elems);
+    if (rank == 0) { local_elems.insert(local_elems.begin(), elems.begin(), elems.begin() + 100); }
+    elems.insert(elems.begin(), elems.begin(), elems.begin() + 100);
+    loadToPartitions(local_elems, cores * 2);
+    registerType<Tp>();
+
+    general->partitionBy(newSource(name), 2 * np - 1);
+
+    auto result = getFromPartitions<Tp>();
+
+    loadToPartitions(result, 1);
+    executor_data->mpi().gather(*((*executor_data->getPartitions<Tp>())[0]), 0);
+    result = getFromPartitions<Tp>();
+
+    if (executor_data->mpi().isRoot(0)) {
+        CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());
+        std::unordered_map<Tp, int64_t> expected;
+        for (auto &e : elems) { expected[e]++; }
+        for (auto &e : result) { expected[e]--; }
+        for (auto &entry : expected) { CPPUNIT_ASSERT_EQUAL((int64_t) 0, entry.second); }
+    }
+}
+
+template<typename Tp>
+void IGeneralModuleTestClass::partitionByRandomTest(int cores, const std::string &partitionType) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto np = executor_data->getContext().executors();
+    auto rank = executor_data->mpi().rank();
+
+    auto elems = IElements<Tp>().create(100 * cores * 2 * np, 0);
+    auto local_elems = rankVector(elems);
+    if (rank == 0) { local_elems.insert(local_elems.begin(), elems.begin(), elems.begin() + 100); }
+    elems.insert(elems.begin(), elems.begin(), elems.begin() + 100);
+    loadToPartitions(local_elems, cores * 2);
+    registerType<Tp>();
+
+    general->partitionByRandom(2 * np - 1);
+
+    auto result = getFromPartitions<Tp>();
+
+    loadToPartitions(result, 1);
+    executor_data->mpi().gather(*((*executor_data->getPartitions<Tp>())[0]), 0);
+    result = getFromPartitions<Tp>();
+
+    if (executor_data->mpi().isRoot(0)) {
+        CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());
+        std::unordered_map<Tp, int64_t> expected;
+        for (auto &e : elems) { expected[e]++; }
+        for (auto &e : result) { expected[e]--; }
+        for (auto &entry : expected) { CPPUNIT_ASSERT_EQUAL((int64_t) 0, entry.second); }
+    }
+}
+
+template<typename Tp>
+void IGeneralModuleTestClass::partitionByHashTest(int cores, const std::string &partitionType) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto np = executor_data->getContext().executors();
+    auto rank = executor_data->mpi().rank();
+
+    auto elems = IElements<Tp>().create(100 * cores * 2 * np, 0);
+    auto local_elems = rankVector(elems);
+    if (rank == 0) { local_elems.insert(local_elems.begin(), elems.begin(), elems.begin() + 100); }
+    elems.insert(elems.begin(), elems.begin(), elems.begin() + 100);
+    loadToPartitions(local_elems, cores * 2);
+    registerType<Tp>();
+
+    general->partitionByHash(2 * np - 1);
+
+    auto result = getFromPartitions<Tp>();
+
+    loadToPartitions(result, 1);
+    executor_data->mpi().gather(*((*executor_data->getPartitions<Tp>())[0]), 0);
+    result = getFromPartitions<Tp>();
+
+    if (executor_data->mpi().isRoot(0)) {
+        CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());
+        std::unordered_map<Tp, int64_t> expected;
+        for (auto &e : elems) { expected[e]++; }
+        for (auto &e : result) { expected[e]--; }
+        for (auto &entry : expected) { CPPUNIT_ASSERT_EQUAL((int64_t) 0, entry.second); }
     }
 }
 

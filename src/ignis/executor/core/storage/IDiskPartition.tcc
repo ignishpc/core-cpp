@@ -1,5 +1,6 @@
 
 #include "IDiskPartition.h"
+#include <ghc/filesystem.hpp>
 #include "ignis/executor/core/exception/IInvalidArgument.h"
 #include "ignis/executor/core/transport/IHeaderTransport.h"
 #include "ignis/executor/core/transport/IMemoryBuffer.h"
@@ -18,7 +19,7 @@ template<typename Tp>
 IDiskPartitionClass<Tp>::IDiskPartition(std::shared_ptr<transport::IFileTransport> &&trans, std::string &path,
                                         int8_t compression, bool persist, bool read)
     : IRawPartition<Tp>((std::shared_ptr<transport::ITransport> &) trans, compression), path(path), file(trans),
-      destroy(!persist), copies(0) {
+      destroy(!persist){
     /*Flush out zlib header*/
     transport::IFileTransport tmp(path, false, true);
     uint8_t byte = 0;
@@ -38,7 +39,15 @@ IDiskPartitionClass<Tp>::IDiskPartition(std::shared_ptr<transport::IFileTranspor
 
 template<typename Tp>
 std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> IDiskPartitionClass<Tp>::clone() {
-    auto newPartition = std::make_shared<IDiskPartition<Tp>>(path + "_" + std::to_string(copies++), this->compression);
+    std::shared_ptr<ignis::executor::core::storage::IPartition<Tp>> newPartition;
+    auto newPath = path;
+    int64_t i = 0;
+#pragma omp critical
+    {
+        while (ghc::filesystem::exists(newPath + "." + std::to_string(i))) { i++; }
+        newPath += "." + std::to_string(i);
+        newPartition = std::make_shared<IDiskPartition<Tp>>(newPath, this->compression);
+    }
     this->copyTo(*newPartition);
     return newPartition;
 }
@@ -50,7 +59,7 @@ void IDiskPartitionClass<Tp>::clear() {
     if (::ftruncate64(file->getFD(), 0) != 0) {
         throw exception::ILogicError("error: " + path + " truncate error");
     }
-    writeHeader();
+    sync();
 }
 
 template<typename Tp>

@@ -60,15 +60,23 @@ void IIOModule::partitionObjectFile(const std::string &path, int64_t first, int6
     IGNIS_RPC_TRY()
     try {
         IGNIS_LOG(info) << "IO: reading header";
-        auto header_name = impl.partitionFileName(path, first) + ".header";
+        auto file_name = impl.partitionFileName(path, first);
+        impl.openFileRead(file_name);
+
+        auto header_name = file_name + ".header";
         auto header_file = impl.openFileRead(header_name);
 
         std::string header(100, 0);
         header_file.read(const_cast<char *>(header.c_str()), 100);
         header.resize(header_file.gcount());
 
-        auto type = typeFromHeader(header);
-        typeFromHeader(header)->partitionObjectFile(impl, path, first, partitions);
+        auto file = std::make_shared<transport::IFileTransport>(file_name);
+        auto merged = std::make_shared<transport::IHeaderTransport>(
+                (std::shared_ptr<core::transport::ITransport> &) file, header);
+
+        std::string type = dynamic_types.typeFromBytes((std::shared_ptr<core::transport::ITransport> &) merged);
+
+        typeFromName(type)->partitionObjectFile(impl, path, first, partitions);
         return;
     } catch (exception::IException &ex) {
         IGNIS_LOG(warning) << "IO: Deserialization failed, avoiding for now: " << ex.what();
@@ -94,21 +102,8 @@ void IIOModule::partitionTextFile(const std::string &path, const int64_t first, 
 void IIOModule::partitionJsonFile4a(const std::string &path, const int64_t first, const int64_t partitions,
                                     const bool objectMapping) {
     IGNIS_RPC_TRY()
-    try {
-        if (objectMapping) {
-            IGNIS_LOG(info) << "IO: reading header";
-            auto header_name = path + "/json.header";
-            auto header_file = impl.openFileRead(header_name);
-
-            std::string header(100, 0);
-            header_file.read(const_cast<char *>(header.c_str()), 100);
-            header.resize(header_file.gcount());
-
-            auto type = typeFromHeader(header);
-            typeFromHeader(header)->partitionJsonFile(impl, path, first, partitions);
-            return;
-        }
-    } catch (exception::IException &ex) { IGNIS_LOG(warning) << "IO: ObjectMapping failed, avoiding: " << ex.what(); }
+    IGNIS_LOG(info) << "IO: reading header";
+    if (objectMapping) { IGNIS_LOG(warning) << "IO: ObjectMapping=true ignored without src param"; }
     impl.partitionJsonFileVoid(path, first, partitions);
     IGNIS_RPC_CATCH()
 }

@@ -19,7 +19,6 @@ void IRawPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &trans)
     auto zlib_in = std::make_shared<transport::IZlibTransport>(trans);
     this->readHeader(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(zlib_in));
     this->sync();
-    writeHeader();
 
     uint8_t bb[256];
     uint32_t read;
@@ -29,7 +28,6 @@ void IRawPartitionClass<Tp>::read(std::shared_ptr<transport::ITransport> &trans)
 template<typename Tp>
 void IRawPartitionClass<Tp>::write(std::shared_ptr<transport::ITransport> &trans, int8_t compression) {
     this->sync();
-    writeHeader();
     auto source = readTransport();
 
     uint8_t bb[256];
@@ -92,7 +90,6 @@ void IRawPartitionClass<Tp>::copyFrom(IPartition<Tp> &source) {
         auto &raw_source = reinterpret_cast<IRawPartition<Tp> &>(source);
         raw_source.sync();
         sync();
-        writeHeader();
         this->elems += raw_source.elems;
         uint8_t bb[256];
         uint32_t read;

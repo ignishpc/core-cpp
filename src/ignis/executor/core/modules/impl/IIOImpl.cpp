@@ -34,6 +34,7 @@ std::string IIOImpl::partitionFileName(const std::string &path, int64_t index) {
 std::ifstream IIOImpl::openFileRead(const std::string &path) {
     IGNIS_LOG(info) << "IO: opening file " << path;
     if (!ghc::filesystem::exists(path)) { throw exception::IInvalidArgument(path + " was not found"); }
+    if (!ghc::filesystem::is_regular_file(path)) { throw exception::IInvalidArgument(path + " was not a file"); }
 
     std::ifstream file(path, std::ifstream::in | std::ifstream::binary);
     if (!file.good()) { throw exception::IInvalidArgument(path + " cannot be opened"); }
@@ -72,9 +73,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
 #pragma omp parallel reduction(+ : total_bytes, elements) firstprivate(minPartitions) num_threads(io_cores)
     {
         IGNIS_OMP_TRY()
-        std::ifstream file;
-#pragma omp critical
-        { file = openFileRead(path); };
+        std::ifstream file = openFileRead(path);
         auto id = executor_data->getContext().threadId();
         auto globalThreadId = executor_data->getContext().executorId() * io_cores + id;
         auto threads = executor_data->getContext().executors() * io_cores;
@@ -160,18 +159,12 @@ void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t 
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < partitions; p++) {
-            std::ifstream file;
-#pragma omp critical
-            {
-                auto file_name = partitionFileName(path, first + p);
-                file = openFileRead(path);
-            };
-
+            auto file_name = partitionFileName(path, first + p);
+            std::ifstream file = openFileRead(file_name);
             auto partition = (*group)[p];
             auto write_iterator = partition->writeIterator();
             std::string buffer;
-            while (!file.eof()) {
-                std::getline(file, buffer, '\n');
+            while (std::getline(file, buffer, '\n')) {
                 write_iterator->write(buffer);
             }
             partition->fit();
@@ -191,9 +184,12 @@ void IIOImpl::partitionObjectFileVoid(const std::string &path, int64_t first, in
     for (int64_t p = 0; p < partitions; p++) {
         auto file_name = partitionFileName(path, first + p);
         openFileRead(file_name);//Only to check
+        auto header = std::make_shared<transport::IFileTransport>(file_name + ".header");
         auto transport = std::make_shared<transport::IFileTransport>(file_name);
 
-        auto partition = executor_data->getPartitionTools().newVoidPartition(ghc::filesystem::file_size(file_name));
+        auto partition =
+                executor_data->getPartitionTools().newVoidPartition(100 + ghc::filesystem::file_size(file_name));
+        partition->read(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(header));
         partition->read(reinterpret_cast<std::shared_ptr<transport::ITransport> &>(transport));
 
         partition->fit();
@@ -286,12 +282,8 @@ void IIOImpl::partitionJsonFileVoid(const std::string &path, int64_t first, int6
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < partitions; p++) {
-            std::ifstream file;
-#pragma omp critical
-            {
-                auto file_name = partitionFileName(path, first + p);
-                file = openFileRead(path);
-            };
+            auto file_name = partitionFileName(path, first + p) + ".json";
+            std::ifstream file = openFileRead(file_name);
             rapidjson::IStreamWrapper wrapper(file);
             rapidjson::Reader reader;
             PartitionJsonHandler handler;

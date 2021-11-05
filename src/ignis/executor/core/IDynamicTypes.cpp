@@ -7,8 +7,6 @@
 #include "ignis/executor/core/transport/IZlibTransport.h"
 #include <algorithm>
 #include <boost/algorithm/string/replace.hpp>
-#include <boost/interprocess/sync/file_lock.hpp>
-#include <boost/interprocess/sync/scoped_lock.hpp>
 #include <fstream>
 #include <ghc/filesystem.hpp>
 #include <iostream>
@@ -25,7 +23,16 @@ std::string IDynamicTypes::typeFromBytes(std::shared_ptr<transport::ITransport> 
     protocol::IObjectProtocol protocol(zlib);
 
     std::string typeName;
-    protocol.readSerialization();
+    bool native = protocol.readSerialization(true);
+    if (native) {
+        bool contiguous;
+        protocol.readBool(contiguous);
+        if (contiguous) {
+            std::string type;
+            protocol.readBinary(type);
+            return type;
+        }
+    }
     int8_t tp;
     protocol.readByte(tp);
     if (inColl) {
@@ -75,12 +82,13 @@ std::string IDynamicTypes::typeFromBytes(std::shared_ptr<transport::ITransport> 
 }
 
 std::string IDynamicTypes::compileType(const std::string &type) {
-    if (std::system("g++ --version") == 0) { throw exception::ILogicError("g++ compiler not found in path"); }
+    if (std::system("g++ --version >/dev/null") < 0) { throw exception::ILogicError("g++ compiler not found in path"); }
     auto fileName = type;
     boost::replace_all(fileName, "::", ".");
     boost::replace_all(fileName, "<", "(");
     boost::replace_all(fileName, ">", ")");
-    std::string folder = properties.jobDirectory() + "/cpptypes";
+    boost::replace_all(fileName, " ", "");
+    std::string folder = properties.executorDirectory() + "/cpptypes";
     if (!ghc::filesystem::is_directory(folder)) {
         std::error_code error;
         ghc::filesystem::create_directories(folder, error);
@@ -89,25 +97,23 @@ std::string IDynamicTypes::compileType(const std::string &type) {
         }
     }
 
-    boost::interprocess::file_lock lock(folder.c_str());
-    boost::interprocess::scoped_lock<boost::interprocess::file_lock> slock(lock);
     auto fileSource = folder + "/" + fileName + ".cpp";
     auto fileLibrary = folder + "/" + fileName + ".so";
-    auto libraryName = "AutoType:" + fileLibrary;
+    auto libraryName = fileLibrary + ":AutoType";
 
     if (ghc::filesystem::exists(fileLibrary)) { return libraryName; }
 
     auto sourceCode = std::string() +
                       "#include <ignis/executor/core/io/IReader.h> //include all default headers\n"
                       "#include <ignis/executor/api/IVector.h>\n" +
-                      "#include <ignis/executor/api/IJson.h>\n" +
+                      "#include <ignis/executor/api/IJsonValue.h>\n" +
                       "#include <ignis/executor/api/function/IBeforeFunction.h>\n" + "\n" +
                       "class AutoType : public ignis::executor::api::function::IBeforeFunction<" + type + "> {};" +
                       "\n" + "ignis_export(AutoType, AutoType)" + "\n";
 
     std::ofstream(fileSource, std::ifstream::out | std::ifstream::binary | std::fstream::trunc) << sourceCode;
     std::string headers = std::string(std::getenv("IGNIS_HOME")) + "/core/cpp/include";
-    std::string cmd = "g++ -I " + headers + " -g -O3 -shared -fPIC -o " + fileLibrary + " " + fileSource;
+    std::string cmd = "g++ -I " + headers + " -g -O3 -shared -fPIC -o \"" + fileLibrary + "\" \"" + fileSource + "\"";
 
     int error = std::system(cmd.c_str());
     if (error != 0) {

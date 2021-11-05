@@ -11,9 +11,14 @@ namespace ignis {
             namespace modules {
                 class IIOModuleTest : public IModuleTest {
                     CPPUNIT_TEST_SUITE(IIOModuleTest);
-                    CPPUNIT_TEST(textFile1);
-                    CPPUNIT_TEST(textFileN);
-                    CPPUNIT_TEST(saveAsTextFile);
+                    CPPUNIT_TEST(voidTest);
+                    CPPUNIT_TEST(textFile1Test);
+                    CPPUNIT_TEST(textFileNTest);
+                    CPPUNIT_TEST(saveAsTextFileTest);
+                    CPPUNIT_TEST(partitionTextFileTest);
+                    CPPUNIT_TEST(partitionJsonFileTest);
+                    CPPUNIT_TEST(partitionJsonFileMapTest);
+                    CPPUNIT_TEST(partitionObjectFileTest);
                     CPPUNIT_TEST_SUITE_END();
 
                 public:
@@ -23,16 +28,30 @@ namespace ignis {
 
                     void tearDown() override;
 
-                    void textFile1() { textFileTest(1, 1); }
+                    void voidTest() {voidWithCompileTest(false);}
 
-                    void textFileN() { textFileTest(8, 2); }
+                    void textFile1Test() { textFileTest(1, 1); }
 
-                    void saveAsTextFile() { saveAsTextFileTest(8, 2); }
+                    void textFileNTest() { textFileTest(8, 2); }
+
+                    void saveAsTextFileTest() { saveAsTextFileTest(8, 2); }
+
+                    void partitionTextFileTest();
+
+                    void partitionJsonFileTest(){partitionJsonFileTestImpl(false);}
+
+                    void partitionJsonFileMapTest(){partitionJsonFileTestImpl(true);}
+
+                    void partitionObjectFileTest();
 
                 private:
+                    void voidWithCompileTest(bool compileTest);
+
                     void textFileTest(int n, int cores);
 
                     void saveAsTextFileTest(int n, int cores);
+
+                    void partitionJsonFileTestImpl(bool objMap);
 
                     std::shared_ptr<IIOModule> io;
                 };

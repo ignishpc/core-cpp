@@ -16,7 +16,6 @@ namespace ignis {
                         template<typename Tp>
                         void sample(const bool withReplacement, const std::vector<int64_t> & num, const int32_t seed);
 
-                        template<typename Tp>
                         int64_t count();
 
                         template<typename Tp>

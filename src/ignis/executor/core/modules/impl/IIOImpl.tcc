@@ -46,12 +46,8 @@ void IIOImplClass::partitionObjectFile(const std::string &path, int64_t first, i
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < partitions; p++) {
-            std::string file_name;
-#pragma omp critical
-            {
-                auto file_name = partitionFileName(path, first + p);
-                openFileRead(path);//Only to check
-            };
+            std::string file_name = partitionFileName(path, first + p);
+            openFileRead(file_name);//Only to check
             storage::IDiskPartition<Tp> open(file_name, 0, true, true);
             (*group)[p]->copyFrom(open);
             (*group)[p]->fit();
@@ -75,12 +71,8 @@ void IIOImplClass::partitionJsonFile(const std::string &path, int64_t first, int
         IGNIS_OMP_TRY()
 #pragma omp for schedule(dynamic)
         for (int64_t p = 0; p < partitions; p++) {
-            std::ifstream file;
-#pragma omp critical
-            {
-                auto file_name = partitionFileName(path, first + p);
-                file = openFileRead(path);
-            };
+            auto file_name = partitionFileName(path, first + p)  + ".json";
+            std::ifstream file = openFileRead(file_name);
             io::IJsonReader<api::IWriteIterator<Tp>> reader;
             auto write_iterator = (*group)[p]->writeIterator();
             reader(file, *write_iterator);
@@ -109,7 +101,7 @@ void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression,
 #pragma omp critical
             {
                 file_name = partitionFileName(path, first + p);
-                openFileWrite(path);//Only to check
+                openFileWrite(file_name);//Only to check
             };
 
             storage::IDiskPartition<Tp> save(file_name, compression, true);
@@ -175,7 +167,7 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
             std::ofstream file;
 #pragma omp critical
             {
-                auto file_name = partitionFileName(path, first + p);
+                auto file_name = partitionFileName(path, first + p) + ".json";
                 file = openFileWrite(file_name);
             };
             auto &part = *(*group)[p];
@@ -186,11 +178,6 @@ void IIOImplClass::saveAsJsonFile(const std::string &path, int64_t first, bool p
         IGNIS_OMP_CATCH()
     }
     IGNIS_OMP_EXCEPTION_END()
-
-    auto header = path + "/json";
-    auto file = openFileWrite(header);
-    storage::IDiskPartition<Tp> st(header, 0, true);
-    st.sync();
 
     IGNIS_CATCH()
 }

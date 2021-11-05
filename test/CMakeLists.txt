@@ -8,6 +8,8 @@ set(SOURCE_FILES
         ignis/executor/core/IElements.tcc
 
         #Modules Tests
+        ignis/executor/core/modules/ICommModuleTest.h
+        ignis/executor/core/modules/ICommModuleTest.tcc
         ignis/executor/core/modules/IGeneralActionModuleTest.h
         ignis/executor/core/modules/IGeneralActionModuleTest.tcc
         ignis/executor/core/modules/IGeneralModuleTest.h
@@ -15,6 +17,8 @@ set(SOURCE_FILES
         ignis/executor/core/modules/IIOModuleTest.h
         ignis/executor/core/modules/IIOModuleTest.tcc
         ignis/executor/core/modules/IIOModuleTest.cpp
+        ignis/executor/core/modules/IMathModuleTest.h
+        ignis/executor/core/modules/IMathModuleTest.tcc
         ignis/executor/core/modules/IModuleTest.cpp
         ignis/executor/core/modules/IModuleTest.h
         ignis/executor/core/modules/IModuleTest.tcc
@@ -33,12 +37,16 @@ set(SOURCE_FILES
 
         main.cpp)
 
-set(CMAKE_CXX_FLAGS "-g -O0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fopenmp")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ../src)
 
 add_executable(ignistest ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(ignistest cppunit igniscore)
 
-set(CMAKE_CXX_FLAGS "-g -O0 -rdynamic -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -rdynamic -fPIC")
 add_library(testfunctions SHARED ignis/executor/TestFunctions.cpp)
+
+if(BUILD_COVERAGE)
+    configure_file(run-tests.sh.in run-tests.sh)
+endif()

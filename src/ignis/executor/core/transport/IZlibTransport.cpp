@@ -119,7 +119,7 @@ void IZlibTransport::flush() {
     if (!winit) {
         uint8_t tmp;
         write(&tmp, 0);
-    } else if (in_compression == 0) {
+    } else if (comp_level_ == 0) {
         transport_->flush();
         return;
     }

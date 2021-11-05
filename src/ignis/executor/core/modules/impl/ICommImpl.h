@@ -73,7 +73,7 @@ namespace ignis {
                         virtual ~ICommImpl();
 
                     private:
-                        int64_t importDataAux(const MPI::Intracomm &group, bool source,
+                        void importDataAux(const MPI::Intracomm &group, bool source,
                                            std::vector<std::pair<int64_t, int64_t>> &ranges,
                                            std::vector<int64_t> &queue);
 

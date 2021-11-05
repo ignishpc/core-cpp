@@ -1,5 +1,5 @@
-#include "INativeWriter.h"
 
+#include "INativeWriter.h"
 
 template<typename Tp>
 struct ignis::executor::core::io::isContiguous {
@@ -17,6 +17,7 @@ struct ignis::executor::core::io::INativeWriterType {
     inline void operator()(protocol::IProtocol &protocol, const Tp &obj) {
         if (ignis::executor::core::io::isContiguous<Tp>()()) {
             protocol.writeBool(true);
+            writeNativeType<Tp>(protocol);
             protocol.getTransport()->write((uint8_t *) &obj, sizeof(Tp));
         } else {
             protocol.writeBool(false);
@@ -31,6 +32,7 @@ struct ignis::executor::core::io::INativeWriterType<std::vector<_Tp, _Alloc>> {
     inline void operator()(protocol::IProtocol &protocol, const std::vector<_Tp, _Alloc> &obj) {
         if (ignis::executor::core::io::isContiguous<_Tp>()()) {
             protocol.writeBool(true);
+            writeNativeType<std::vector<_Tp>>(protocol);
             protocol.writeI64(obj.size());
             protocol.getTransport()->write((uint8_t *) &obj[0], (uint32_t) obj.size() * sizeof(_Tp));
         } else {

@@ -38,7 +38,7 @@ void IGeneralActionModuleTestClass::reduceTest(const std::string &name, int core
         CPPUNIT_ASSERT_EQUAL(1, (int) result.size());
         Tp expected_result = elems[0];
         for (int i = 1; i < elems.size(); i++) { expected_result += elems[i]; }
-        CPPUNIT_ASSERT_EQUAL(expected_result, result[0]);
+        CPPUNIT_ASSERT_EQUAL(normalize(expected_result), normalize(result[0]));
     } else {
         CPPUNIT_ASSERT_EQUAL(0, (int) result.size());
     }
@@ -87,7 +87,7 @@ void IGeneralActionModuleTestClass::aggregateTest(const std::string &zero, const
         CPPUNIT_ASSERT_EQUAL(1, (int) result.size());
         std::stringstream expected_result;
         for (int i = 0; i < elems.size(); i++) { expected_result << elems[i]; }
-        CPPUNIT_ASSERT_EQUAL(expected_result.str(), result[0]);
+        CPPUNIT_ASSERT_EQUAL(normalize(expected_result.str()), normalize(result[0]));
     } else {
         CPPUNIT_ASSERT_EQUAL(0, (int) result.size());
     }
@@ -137,7 +137,7 @@ void IGeneralActionModuleTestClass::foldTest(const std::string &zero, const std:
         CPPUNIT_ASSERT_EQUAL(1, (int) result.size());
         Tp expected_result = elems[0];
         for (int i = 1; i < elems.size(); i++) { expected_result += elems[i]; }
-        CPPUNIT_ASSERT_EQUAL(expected_result, result[0]);
+        CPPUNIT_ASSERT_EQUAL(normalize(expected_result), normalize(result[0]));
     } else {
         CPPUNIT_ASSERT_EQUAL(0, (int) result.size());
     }

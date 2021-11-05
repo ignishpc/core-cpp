@@ -315,7 +315,8 @@ struct ignis::executor::core::io::IReaderType<std::map<_Key, _Tp, _Compare, _All
         checkTypeAux<_Key>(r_key.readType(protocol));
         checkTypeAux<_Tp>(r_value.readType(protocol));
         for (decltype(size) i = 0; i < size; i++) {
-            obj[std::move(IReaderType<_Key>()(protocol))] = std::move(IReaderType<_Tp>()(protocol));
+            auto key = IReaderType<_Key>()(protocol);
+            obj[std::move(key)] = std::move(IReaderType<_Tp>()(protocol));
         }
     }
 
@@ -338,7 +339,8 @@ struct ignis::executor::core::io::IReaderType<std::unordered_map<_Key, _Tp, _Has
         checkTypeAux<_Tp>(r_value.readType(protocol));
         obj.reserve(size);
         for (decltype(size) i = 0; i < size; i++) {
-            obj[std::move(IReaderType<_Key>()(protocol))] = std::move(IReaderType<_Tp>()(protocol));
+            auto key = IReaderType<_Key>()(protocol);
+            obj[std::move(key)] = std::move(IReaderType<_Tp>()(protocol));
         }
     }
 

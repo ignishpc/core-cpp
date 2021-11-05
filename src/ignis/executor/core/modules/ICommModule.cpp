@@ -121,13 +121,21 @@ void ICommModule::driverScatter3(const std::string &group, int64_t partitions, c
 
 void ICommModule::importData(const std::string &group, const bool source, const int64_t threads) {
     IGNIS_RPC_TRY()
-    typeFromPartition()->importData(impl, group, source, threads);
+    if (executor_data->hasPartitions()) {
+        typeFromPartition()->importData(impl, group, source, threads);
+    } else {
+        impl.importDataVoid(group, source, threads);
+    }
     IGNIS_RPC_CATCH()
 }
 
 void ICommModule::importData4(const std::string &group, const bool source, const int64_t threads,
                               const rpc::ISource &src) {
     IGNIS_RPC_TRY()
-    typeFromSource(src)->importData(impl, group, source, threads);
+    if (executor_data->hasPartitions()) {
+        typeFromPartition()->importData(impl, group, source, threads);
+    }else{
+        typeFromSource(src)->importData(impl, group, source, threads);
+    }
     IGNIS_RPC_CATCH()
 }

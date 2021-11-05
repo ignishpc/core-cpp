@@ -36,7 +36,7 @@ namespace ignis {
 
                     template<typename Tp>
                     void readObject(Tp &obj) {
-                        if (readSerialization()) {
+                        if (readSerialization(true)) {
                             io::INativeReader<Tp> reader;
                             reader(*this, obj);
                         } else {

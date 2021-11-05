@@ -29,6 +29,11 @@ namespace ignis {
                 CPPUNIT_TEST(driverGatherTest);
                 CPPUNIT_TEST(driverScatterTest);
                 CPPUNIT_TEST(driverScatterVoidTest);
+                CPPUNIT_TEST(syncExchangeTest);
+                CPPUNIT_TEST(syncExchangeCoresTest);
+                CPPUNIT_TEST(asyncExchangeTest);
+                CPPUNIT_TEST(asyncExchangeCoresTest);
+                CPPUNIT_TEST(autoExchangeTest);
                 CPPUNIT_TEST_SUITE_END();
 
             public:
@@ -58,10 +63,22 @@ namespace ignis {
 
                 void driverScatterVoidTest();
 
+                void syncExchangeTest();
+
+                void syncExchangeCoresTest();
+
+                void asyncExchangeTest();
+
+                void asyncExchangeCoresTest();
+
+                void autoExchangeTest();
+
                 void tearDown();
 
             private:
                 void gatherTest(int root);
+
+                void exchange();
 
                 void sendRcvGroupTest(const std::string &partitionType);
 

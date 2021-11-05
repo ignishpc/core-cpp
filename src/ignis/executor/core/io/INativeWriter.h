@@ -9,6 +9,11 @@ namespace ignis {
         namespace core {
             namespace io {
 
+                template<typename T>
+                inline void writeNativeType(protocol::IProtocol &protocol) {
+                    protocol.writeBinary(RTTInfo::from<T>().getStandardName());
+                }
+
                 template<typename Tp>
                 struct isContiguous;
 

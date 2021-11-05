@@ -31,6 +31,16 @@ namespace ignis {
                     api::IVector<Tp> getFromPartitions();
 
                 protected:
+                    template<typename Tp2>
+                    Tp2 normalize(Tp2 e) {
+                        return e;
+                    }
+
+                    std::string normalize(std::string e) {
+                        std::sort(e.begin(), e.end());
+                        return e;
+                    }
+
                     std::string library;
                     std::shared_ptr<IExecutorData> executor_data;
                     std::shared_ptr<modules::impl::IBaseImpl> base_impl;
