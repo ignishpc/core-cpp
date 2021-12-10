@@ -1,8 +1,9 @@
 
 ARG REGISTRY=""
+ARG NAMESPACE="ignishpc"
 ARG TAG=""
-FROM ${REGISTRY}ignishpc/cpp-builder${TAG} as cpp-builder
-FROM ${REGISTRY}ignishpc/common${TAG}
+FROM ${REGISTRY}${NAMESPACE}cpp-builder${TAG} as cpp-builder
+FROM ${REGISTRY}${NAMESPACE}common${TAG}
 ARG RELPATH=""
 
 COPY --from=cpp-builder ${IGNIS_HOME} ${IGNIS_HOME}
