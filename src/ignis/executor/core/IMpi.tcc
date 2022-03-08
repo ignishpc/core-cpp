@@ -24,7 +24,7 @@ void IMpiClass::bcast(storage::IPartition<Tp> &part, int root) {
         if (isContiguousType<Tp>()) {
             auto &men = partition_tools.toMemory(part);
             int sz = men.size();
-            native().Bcast(&sz, 1, MPI::INT, 0);
+            native().Bcast(&sz, 1, MPI::INT, root);
             if (!isRoot(root)) { men.resize(sz); }
             native().Bcast(&men[0], sz * sizeof(Tp), MPI::BYTE, root);
         } else {
@@ -114,9 +114,8 @@ void IMpiClass::driverGather(const MPI::Intracomm &group, storage::IPartitionGro
     }
 
     IGNIS_LOG(info) << "Comm: driverGather storage: " << storage << ", operations: " << max_partition;
-    if (storage == storage::IDiskPartition<Tp>::TYPE && !same_protocol) {
-        //Other languages can use their own serialization, so driver will use RawMemory
-        storage = storage::IRawMemoryPartition<Tp>::TYPE;
+    if (storage != storage::IMemoryPartition<Tp>::TYPE && !same_protocol) {
+        //Other languages can use their own serialization, so it must convert to IGNIS_PROTOCOL
     }
 
     std::shared_ptr<storage::IPartition<Tp>> part_sp;

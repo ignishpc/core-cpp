@@ -90,7 +90,6 @@ void IIOImplClass::saveAsObjectFile(const std::string &path, int8_t compression,
     IGNIS_TRY()
     IGNIS_LOG(info) << "IO: saving as object file";
     auto group = executor_data->getAndDeletePartitions<Tp>();
-    auto compression = executor_data->getProperties().ioCompression();
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel num_threads(ioCores())
     {

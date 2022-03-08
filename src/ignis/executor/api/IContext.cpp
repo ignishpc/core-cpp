@@ -17,6 +17,10 @@ int IContext::executorId() { return mpiGroup().Get_rank(); }
 
 int IContext::threadId() { return omp_get_thread_num(); }
 
+void IContext::clearVars(){
+    variables.clear();
+}
+
 const MPI::Intracomm &IContext::mpiGroup() {
     if(mpi_thread_group.size() == 1){
         return mpi_thread_group[0];

@@ -37,6 +37,8 @@ namespace ignis {
 
                 bool rmVar(const std::string &name);
 
+                void clearVars();
+
                 virtual ~IContext();
 
             private:

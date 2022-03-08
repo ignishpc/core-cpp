@@ -268,6 +268,7 @@ const uint8_t *IMemoryBuffer::borrowSlow(uint8_t *buf, uint32_t *len) {
 
 void IMemoryBuffer::setBufferSize(size_t new_size) {
     if (!owner_) { throw TTransportException("resize in buffer we don't own"); }
+    if(new_size > this->maxBufferSize_){ throw TTransportException("resize more than Maximum buffer size");}
     if (bufferSize_ == new_size) { return; }
     // Allocate into a new pointer so we don't bork ours if it fails.
     uint8_t *new_buffer = static_cast<uint8_t *>(std::realloc(buffer_, new_size));

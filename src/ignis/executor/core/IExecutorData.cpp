@@ -131,7 +131,7 @@ void IExecutorData::reloadLibraries() {
     auto backup_path = infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak";
     if (ghc::filesystem::exists(backup_path)) {
         IGNIS_LOG(info) << "Function backup found, loading";
-        std::ifstream backup(infoDirectory() + "/sources" + std::to_string(context.executorId()) + ".bak");
+        std::ifstream backup(backup_path);
         rpc::ISource source;
         std::set<std::string> loaded;
         while (!backup.eof()) {
