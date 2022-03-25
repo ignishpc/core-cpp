@@ -66,22 +66,6 @@ void IBaseImplClass::exchange_sync(storage::IPartitionGroup<Tp> &in, storage::IP
     std::remove_if(parts_targets.begin(), parts_targets.end(),
                    [&none](std::pair<int64_t, int64_t> &e) { return e == none; });
 
-    for (int64_t i = 0; i < block; i++) {
-        for (int64_t j = 0; j < executors; j++) {
-            if (j < remainder) {
-                parts_targets.emplace_back(block * j + i + j, j);
-            } else {
-                parts_targets.emplace_back(block * j + i + remainder, j);
-            }
-        }
-    }
-
-    if (block > 0) {
-        for (int64_t j = 0; j < remainder; j++) { parts_targets.emplace_back(block * j + block, j); }
-    } else {
-        for (int64_t j = 0; j < remainder; j++) { parts_targets.emplace_back(j, j); }
-    }
-
     executor_data->enableMpiCores();
     int64_t mpiCores = executor_data->getMpiCores();
 
