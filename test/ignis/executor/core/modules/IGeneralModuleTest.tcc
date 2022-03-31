@@ -215,17 +215,17 @@ void IGeneralModuleTestClass::joinTest(int cores, const std::string &partitionTy
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
     executor_data->setCores(cores);
     auto np = executor_data->getContext().executors();
-    auto elems = IElements<std::pair<Key, Value>>().create(100 * cores * 2, 0);
-    auto elems2 = IElements<std::pair<Key, Value>>().create(100 * cores * 2, 1);
+    auto elems = IElements<std::pair<Key, Value>>().create(100 * cores * 2 * np, 0);
+    auto elems2 = IElements<std::pair<Key, Value>>().create(100 * cores * 2 * np, 1);
     auto local_elems = rankVector(elems);
     auto local_elems2 = rankVector(elems2);
 
     registerType<std::pair<Key, Value>>();
-    loadToPartitions(local_elems2, 2);
+    loadToPartitions(local_elems2, cores * 2);
     executor_data->setVariable("other", executor_data->getPartitions<std::pair<Key, Value>>());
-    loadToPartitions(local_elems, 2);
+    loadToPartitions(local_elems, cores * 2);
 
-    general->join("other", 2);
+    general->join("other", cores * 2);
     auto result = getFromPartitions<std::pair<Key, std::pair<Value, Value>>>();
 
     loadToPartitions(result, 1);
@@ -255,15 +255,15 @@ void IGeneralModuleTestClass::unionTest(int cores, const std::string &partitionT
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
     executor_data->setCores(cores);
     auto np = executor_data->getContext().executors();
-    auto elems = IElements<Tp>().create(100 * cores * 2, 0);
-    auto elems2 = IElements<Tp>().create(100 * cores * 2, 1);
+    auto elems = IElements<Tp>().create(100 * cores * 2 * np, 0);
+    auto elems2 = IElements<Tp>().create(100 * cores * 2 * np, 1);
     auto local_elems = rankVector(elems);
     auto local_elems2 = rankVector(elems2);
 
     registerType<Tp>();
-    loadToPartitions(local_elems2, 2);
+    loadToPartitions(local_elems2, cores * 2);
     executor_data->setVariable("other", executor_data->getPartitions<Tp>());
-    loadToPartitions(local_elems, 2);
+    loadToPartitions(local_elems, cores * 2);
 
     general->union_("other", preserveOrder);
     auto result = getFromPartitions<Tp>();
