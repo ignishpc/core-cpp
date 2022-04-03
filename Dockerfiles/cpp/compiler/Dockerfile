@@ -1,6 +1,6 @@
 
 ARG REGISTRY=""
-ARG NAMESPACE="ignishpc"
+ARG NAMESPACE="ignishpc/"
 ARG TAG=""
 FROM ${REGISTRY}${NAMESPACE}cpp-builder${TAG} as cpp-builder
 FROM ${REGISTRY}${NAMESPACE}common${TAG}
