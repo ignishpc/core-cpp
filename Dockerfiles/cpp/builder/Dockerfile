@@ -62,7 +62,7 @@ RUN cd ${IGNIS_HOME} && \
 	cp /usr/include/zlib.h core/cpp/include/ && \
 	cp /usr/include/zconf.h core/cpp/include/ && \
 	mkdir -p core/cpp/lib && \
-	cp -P /usr/lib/x86_64-linux-gnu/libgomp.so* core/cpp/lib && \
+	find /usr/lib/ -name 'libgomp.so*' -exec cp "{}" core/cpp/lib/  \; && \
 	cp -R ${IGNIS_DEVEL}/thrift/lib/* core/cpp/lib && \
 	cp -R ${IGNIS_DEVEL}/mpi/lib/* core/cpp/lib
 
