@@ -35,7 +35,7 @@ namespace ignis {
                         void mapPartitions();
 
                         template<typename Function>
-                        void mapPartitionsWithIndex(bool preservesPartitioning);
+                        void mapPartitionsWithIndex();
 
                         template<typename Function, typename Tp>
                         void mapExecutor();

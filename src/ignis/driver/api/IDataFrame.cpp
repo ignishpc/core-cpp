@@ -133,20 +133,18 @@ IDataFrameId IAbstractDataFrame::keyByAbs(const ISource &src) {
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex.cause_); }
 }
 
-IDataFrameId IAbstractDataFrame::mapPartitionsAbs(const ISource &src, bool preservesPartitioning) {
+IDataFrameId IAbstractDataFrame::mapPartitionsAbs(const ISource &src) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool().getClient()->getDataFrameService().mapPartitions(_return, id, src.rpc(),
-                                                                            preservesPartitioning);
+        Ignis::clientPool().getClient()->getDataFrameService().mapPartitions(_return, id, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex.cause_); }
 }
 
-IDataFrameId IAbstractDataFrame::mapPartitionsWithIndexAbs(const ISource &src, bool preservesPartitioning) {
+IDataFrameId IAbstractDataFrame::mapPartitionsWithIndexAbs(const ISource &src) {
     try {
         IDataFrameId _return;
-        Ignis::clientPool().getClient()->getDataFrameService().mapPartitionsWithIndex(_return, id, src.rpc(),
-                                                                                     preservesPartitioning);
+        Ignis::clientPool().getClient()->getDataFrameService().mapPartitionsWithIndex(_return, id, src.rpc());
         return _return;
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex.cause_); }
 }

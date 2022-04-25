@@ -32,7 +32,7 @@ namespace ignis {
 
                     virtual void mapPartitions(modules::impl::IPipeImpl &impl) = 0;
 
-                    virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) = 0;
+                    virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl) = 0;
 
                     virtual void mapExecutor(modules::impl::IPipeImpl &impl) = 0;
 
@@ -65,8 +65,8 @@ namespace ignis {
                         mapPartitions_check<Tp>(impl, nullptr, nullptr);
                     }
 
-                    virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl, bool preservesPartitioning) {
-                        mapPartitionsWithIndex_check<Tp>(impl, nullptr, nullptr, preservesPartitioning);
+                    virtual void mapPartitionsWithIndex(modules::impl::IPipeImpl &impl) {
+                        mapPartitionsWithIndex_check<Tp>(impl, nullptr, nullptr);
                     }
 
                     virtual void mapExecutor(modules::impl::IPipeImpl &impl) { mapExecutor_check<Tp>(impl, nullptr); }
@@ -183,18 +183,15 @@ namespace ignis {
                     template<typename Function>
                     void mapPartitionsWithIndex_check(
                             modules::impl::IPipeImpl &impl, typename Function::_IFunction2_type::_R_type::iterator *val,
-                            typename Function::_IFunction2_type::_T2_type::_IReadIterator_type *val2,
-                            bool preservesPartitioning) {
-                        mapPartitionsWithIndex_check<Function>(impl, (typename Function::_T1_type *) nullptr,
-                                                               preservesPartitioning);
+                            typename Function::_IFunction2_type::_T2_type::_IReadIterator_type *val2) {
+                        mapPartitionsWithIndex_check<Function>(impl, (typename Function::_T1_type *) nullptr);
                     }
 
                     template<typename Function>
-                    void mapPartitionsWithIndex_check(modules::impl::IPipeImpl &impl, int64_t *val,
-                                                      bool preservesPartitioning) {
+                    void mapPartitionsWithIndex_check(modules::impl::IPipeImpl &impl, int64_t *val) {
                         impl.registerType(getType<typename Function::_IFunction2_type::_R_type::value_type>());
                         impl.registerType(getType<typename Function::_IFunction2_type::_T2_type::value_type>());
-                        impl.mapPartitionsWithIndex<Function>(preservesPartitioning);
+                        impl.mapPartitionsWithIndex<Function>();
                     }
 
                     template<typename Function>

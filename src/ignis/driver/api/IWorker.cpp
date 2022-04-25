@@ -86,6 +86,22 @@ IDataFrameId IWorker::importDataFrameAbs(IDataFrameId data, const ISource &src) 
     } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex.cause_); }
 }
 
+IDataFrame<std::string> IWorker::plainFile(const std::string &path, char delim){
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool().getClient()->getWorkerService().plainFile(_return, id, path, delim);
+        return IDataFrame<std::string>(_return);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex.cause_); }
+}
+
+IDataFrame<std::string> IWorker::plainFile(const std::string &path, int64_t minPartitions, char delim){
+    try {
+        IDataFrameId _return;
+        Ignis::clientPool().getClient()->getWorkerService().plainFile4(_return, id, path, minPartitions, delim);
+        return IDataFrame<std::string>(_return);
+    } catch (rpc::driver::IDriverException &ex) { throw IDriverException(ex.message, ex.cause_); }
+}
+
 IDataFrame<std::string> IWorker::textFile(const std::string &path) {
     try {
         IDataFrameId _return;

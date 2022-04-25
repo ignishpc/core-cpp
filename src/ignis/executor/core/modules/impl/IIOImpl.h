@@ -17,6 +17,8 @@ namespace ignis {
                         template<typename Tp>
                         int64_t partitionApproxSize();
 
+                        void plainFile(const std::string &path, int64_t minPartitions, char delim);
+
                         void textFile(const std::string &path, int64_t minPartitions);
 
                         void partitionObjectFileVoid(const std::string &path, int64_t first, int64_t partitions);

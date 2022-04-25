@@ -39,8 +39,8 @@ class IDataFrameServiceIf {
   virtual void filter(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void flatmap(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void keyBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
-  virtual void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
-  virtual void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
+  virtual void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapExecutor(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapExecutorTo(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
@@ -192,10 +192,10 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void keyBy(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) override {
     return;
   }
-  void mapPartitions(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const bool /* preservesPartitioning */) override {
+  void mapPartitions(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) override {
     return;
   }
-  void mapPartitionsWithIndex(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */, const bool /* preservesPartitioning */) override {
+  void mapPartitionsWithIndex(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) override {
     return;
   }
   void mapExecutor(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) override {
@@ -2392,10 +2392,9 @@ class IDataFrameService_keyBy_presult {
 };
 
 typedef struct _IDataFrameService_mapPartitions_args__isset {
-  _IDataFrameService_mapPartitions_args__isset() : id(false), src(false), preservesPartitioning(false) {}
+  _IDataFrameService_mapPartitions_args__isset() : id(false), src(false) {}
   bool id :1;
   bool src :1;
-  bool preservesPartitioning :1;
 } _IDataFrameService_mapPartitions_args__isset;
 
 class IDataFrameService_mapPartitions_args {
@@ -2403,14 +2402,12 @@ class IDataFrameService_mapPartitions_args {
 
   IDataFrameService_mapPartitions_args(const IDataFrameService_mapPartitions_args&);
   IDataFrameService_mapPartitions_args& operator=(const IDataFrameService_mapPartitions_args&);
-  IDataFrameService_mapPartitions_args() noexcept
-                                       : preservesPartitioning(0) {
+  IDataFrameService_mapPartitions_args() noexcept {
   }
 
   virtual ~IDataFrameService_mapPartitions_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource src;
-  bool preservesPartitioning;
 
   _IDataFrameService_mapPartitions_args__isset __isset;
 
@@ -2418,15 +2415,11 @@ class IDataFrameService_mapPartitions_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  void __set_preservesPartitioning(const bool val);
-
   bool operator == (const IDataFrameService_mapPartitions_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(src == rhs.src))
-      return false;
-    if (!(preservesPartitioning == rhs.preservesPartitioning))
       return false;
     return true;
   }
@@ -2449,7 +2442,6 @@ class IDataFrameService_mapPartitions_pargs {
   virtual ~IDataFrameService_mapPartitions_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* src;
-  const bool* preservesPartitioning;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -2519,10 +2511,9 @@ class IDataFrameService_mapPartitions_presult {
 };
 
 typedef struct _IDataFrameService_mapPartitionsWithIndex_args__isset {
-  _IDataFrameService_mapPartitionsWithIndex_args__isset() : id(false), src(false), preservesPartitioning(false) {}
+  _IDataFrameService_mapPartitionsWithIndex_args__isset() : id(false), src(false) {}
   bool id :1;
   bool src :1;
-  bool preservesPartitioning :1;
 } _IDataFrameService_mapPartitionsWithIndex_args__isset;
 
 class IDataFrameService_mapPartitionsWithIndex_args {
@@ -2530,14 +2521,12 @@ class IDataFrameService_mapPartitionsWithIndex_args {
 
   IDataFrameService_mapPartitionsWithIndex_args(const IDataFrameService_mapPartitionsWithIndex_args&);
   IDataFrameService_mapPartitionsWithIndex_args& operator=(const IDataFrameService_mapPartitionsWithIndex_args&);
-  IDataFrameService_mapPartitionsWithIndex_args() noexcept
-                                                : preservesPartitioning(0) {
+  IDataFrameService_mapPartitionsWithIndex_args() noexcept {
   }
 
   virtual ~IDataFrameService_mapPartitionsWithIndex_args() noexcept;
   IDataFrameId id;
    ::ignis::rpc::ISource src;
-  bool preservesPartitioning;
 
   _IDataFrameService_mapPartitionsWithIndex_args__isset __isset;
 
@@ -2545,15 +2534,11 @@ class IDataFrameService_mapPartitionsWithIndex_args {
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  void __set_preservesPartitioning(const bool val);
-
   bool operator == (const IDataFrameService_mapPartitionsWithIndex_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(src == rhs.src))
-      return false;
-    if (!(preservesPartitioning == rhs.preservesPartitioning))
       return false;
     return true;
   }
@@ -2576,7 +2561,6 @@ class IDataFrameService_mapPartitionsWithIndex_pargs {
   virtual ~IDataFrameService_mapPartitionsWithIndex_pargs() noexcept;
   const IDataFrameId* id;
   const  ::ignis::rpc::ISource* src;
-  const bool* preservesPartitioning;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -10663,11 +10647,11 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void keyBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   void send_keyBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_keyBy(IDataFrameId& _return);
-  void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override;
-  void send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
+  void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
+  void send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapPartitions(IDataFrameId& _return);
-  void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override;
-  void send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
+  void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
+  void send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapPartitionsWithIndex(IDataFrameId& _return);
   void mapExecutor(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   void send_mapExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
@@ -11235,23 +11219,23 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override {
+  void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->mapPartitions(_return, id, src, preservesPartitioning);
+      ifaces_[i]->mapPartitions(_return, id, src);
     }
-    ifaces_[i]->mapPartitions(_return, id, src, preservesPartitioning);
+    ifaces_[i]->mapPartitions(_return, id, src);
     return;
   }
 
-  void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override {
+  void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->mapPartitionsWithIndex(_return, id, src, preservesPartitioning);
+      ifaces_[i]->mapPartitionsWithIndex(_return, id, src);
     }
-    ifaces_[i]->mapPartitionsWithIndex(_return, id, src, preservesPartitioning);
+    ifaces_[i]->mapPartitionsWithIndex(_return, id, src);
     return;
   }
 
@@ -11949,11 +11933,11 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void keyBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   int32_t send_keyBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_keyBy(IDataFrameId& _return, const int32_t seqid);
-  void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override;
-  int32_t send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
+  void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
+  int32_t send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapPartitions(IDataFrameId& _return, const int32_t seqid);
-  void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override;
-  int32_t send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
+  void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
+  int32_t send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapPartitionsWithIndex(IDataFrameId& _return, const int32_t seqid);
   void mapExecutor(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   int32_t send_mapExecutor(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);

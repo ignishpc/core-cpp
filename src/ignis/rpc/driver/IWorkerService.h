@@ -33,6 +33,8 @@ class IWorkerServiceIf {
   virtual void parallelize4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const int64_t dataId, const int64_t partitions, const  ::ignis::rpc::ISource& src) = 0;
   virtual void importDataFrame( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data) = 0;
   virtual void importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int8_t delim) = 0;
+  virtual void plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim) = 0;
   virtual void textFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) = 0;
   virtual void textFile3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions) = 0;
   virtual void partitionObjectFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) = 0;
@@ -107,6 +109,12 @@ class IWorkerServiceNull : virtual public IWorkerServiceIf {
     return;
   }
   void importDataFrame3( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const  ::ignis::rpc::driver::IDataFrameId& /* data */, const  ::ignis::rpc::ISource& /* src */) override {
+    return;
+  }
+  void plainFile( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */, const int8_t /* delim */) override {
+    return;
+  }
+  void plainFile4( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */, const int64_t /* minPartitions */, const int8_t /* delim */) override {
     return;
   }
   void textFile( ::ignis::rpc::driver::IDataFrameId& /* _return */, const IWorkerId& /* id */, const std::string& /* path */) override {
@@ -1472,6 +1480,270 @@ class IWorkerService_importDataFrame3_presult {
    ::ignis::rpc::driver::IDriverException ex;
 
   _IWorkerService_importDataFrame3_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_plainFile_args__isset {
+  _IWorkerService_plainFile_args__isset() : id(false), path(false), delim(false) {}
+  bool id :1;
+  bool path :1;
+  bool delim :1;
+} _IWorkerService_plainFile_args__isset;
+
+class IWorkerService_plainFile_args {
+ public:
+
+  IWorkerService_plainFile_args(const IWorkerService_plainFile_args&);
+  IWorkerService_plainFile_args& operator=(const IWorkerService_plainFile_args&);
+  IWorkerService_plainFile_args() noexcept
+                                : path(),
+                                  delim(0) {
+  }
+
+  virtual ~IWorkerService_plainFile_args() noexcept;
+  IWorkerId id;
+  std::string path;
+  int8_t delim;
+
+  _IWorkerService_plainFile_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_path(const std::string& val);
+
+  void __set_delim(const int8_t val);
+
+  bool operator == (const IWorkerService_plainFile_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(path == rhs.path))
+      return false;
+    if (!(delim == rhs.delim))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_plainFile_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_plainFile_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_plainFile_pargs {
+ public:
+
+
+  virtual ~IWorkerService_plainFile_pargs() noexcept;
+  const IWorkerId* id;
+  const std::string* path;
+  const int8_t* delim;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_plainFile_result__isset {
+  _IWorkerService_plainFile_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_plainFile_result__isset;
+
+class IWorkerService_plainFile_result {
+ public:
+
+  IWorkerService_plainFile_result(const IWorkerService_plainFile_result&);
+  IWorkerService_plainFile_result& operator=(const IWorkerService_plainFile_result&);
+  IWorkerService_plainFile_result() noexcept {
+  }
+
+  virtual ~IWorkerService_plainFile_result() noexcept;
+   ::ignis::rpc::driver::IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_plainFile_result__isset __isset;
+
+  void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_plainFile_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_plainFile_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_plainFile_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_plainFile_presult__isset {
+  _IWorkerService_plainFile_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_plainFile_presult__isset;
+
+class IWorkerService_plainFile_presult {
+ public:
+
+
+  virtual ~IWorkerService_plainFile_presult() noexcept;
+   ::ignis::rpc::driver::IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_plainFile_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IWorkerService_plainFile4_args__isset {
+  _IWorkerService_plainFile4_args__isset() : id(false), path(false), minPartitions(false), delim(false) {}
+  bool id :1;
+  bool path :1;
+  bool minPartitions :1;
+  bool delim :1;
+} _IWorkerService_plainFile4_args__isset;
+
+class IWorkerService_plainFile4_args {
+ public:
+
+  IWorkerService_plainFile4_args(const IWorkerService_plainFile4_args&);
+  IWorkerService_plainFile4_args& operator=(const IWorkerService_plainFile4_args&);
+  IWorkerService_plainFile4_args() noexcept
+                                 : path(),
+                                   minPartitions(0),
+                                   delim(0) {
+  }
+
+  virtual ~IWorkerService_plainFile4_args() noexcept;
+  IWorkerId id;
+  std::string path;
+  int64_t minPartitions;
+  int8_t delim;
+
+  _IWorkerService_plainFile4_args__isset __isset;
+
+  void __set_id(const IWorkerId& val);
+
+  void __set_path(const std::string& val);
+
+  void __set_minPartitions(const int64_t val);
+
+  void __set_delim(const int8_t val);
+
+  bool operator == (const IWorkerService_plainFile4_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(path == rhs.path))
+      return false;
+    if (!(minPartitions == rhs.minPartitions))
+      return false;
+    if (!(delim == rhs.delim))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_plainFile4_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_plainFile4_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IWorkerService_plainFile4_pargs {
+ public:
+
+
+  virtual ~IWorkerService_plainFile4_pargs() noexcept;
+  const IWorkerId* id;
+  const std::string* path;
+  const int64_t* minPartitions;
+  const int8_t* delim;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_plainFile4_result__isset {
+  _IWorkerService_plainFile4_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_plainFile4_result__isset;
+
+class IWorkerService_plainFile4_result {
+ public:
+
+  IWorkerService_plainFile4_result(const IWorkerService_plainFile4_result&);
+  IWorkerService_plainFile4_result& operator=(const IWorkerService_plainFile4_result&);
+  IWorkerService_plainFile4_result() noexcept {
+  }
+
+  virtual ~IWorkerService_plainFile4_result() noexcept;
+   ::ignis::rpc::driver::IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_plainFile4_result__isset __isset;
+
+  void __set_success(const  ::ignis::rpc::driver::IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IWorkerService_plainFile4_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IWorkerService_plainFile4_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IWorkerService_plainFile4_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IWorkerService_plainFile4_presult__isset {
+  _IWorkerService_plainFile4_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IWorkerService_plainFile4_presult__isset;
+
+class IWorkerService_plainFile4_presult {
+ public:
+
+
+  virtual ~IWorkerService_plainFile4_presult() noexcept;
+   ::ignis::rpc::driver::IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IWorkerService_plainFile4_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -3221,6 +3493,12 @@ class IWorkerServiceClient : virtual public IWorkerServiceIf {
   void importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) override;
   void send_importDataFrame3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
   void recv_importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return);
+  void plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int8_t delim) override;
+  void send_plainFile(const IWorkerId& id, const std::string& path, const int8_t delim);
+  void recv_plainFile( ::ignis::rpc::driver::IDataFrameId& _return);
+  void plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim) override;
+  void send_plainFile4(const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim);
+  void recv_plainFile4( ::ignis::rpc::driver::IDataFrameId& _return);
   void textFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) override;
   void send_textFile(const IWorkerId& id, const std::string& path);
   void recv_textFile( ::ignis::rpc::driver::IDataFrameId& _return);
@@ -3289,6 +3567,8 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_parallelize4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_importDataFrame3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_plainFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_plainFile4(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -3317,6 +3597,8 @@ class IWorkerServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["parallelize4"] = &IWorkerServiceProcessor::process_parallelize4;
     processMap_["importDataFrame"] = &IWorkerServiceProcessor::process_importDataFrame;
     processMap_["importDataFrame3"] = &IWorkerServiceProcessor::process_importDataFrame3;
+    processMap_["plainFile"] = &IWorkerServiceProcessor::process_plainFile;
+    processMap_["plainFile4"] = &IWorkerServiceProcessor::process_plainFile4;
     processMap_["textFile"] = &IWorkerServiceProcessor::process_textFile;
     processMap_["textFile3"] = &IWorkerServiceProcessor::process_textFile3;
     processMap_["partitionObjectFile"] = &IWorkerServiceProcessor::process_partitionObjectFile;
@@ -3463,6 +3745,26 @@ class IWorkerServiceMultiface : virtual public IWorkerServiceIf {
       ifaces_[i]->importDataFrame3(_return, id, data, src);
     }
     ifaces_[i]->importDataFrame3(_return, id, data, src);
+    return;
+  }
+
+  void plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int8_t delim) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->plainFile(_return, id, path, delim);
+    }
+    ifaces_[i]->plainFile(_return, id, path, delim);
+    return;
+  }
+
+  void plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->plainFile4(_return, id, path, minPartitions, delim);
+    }
+    ifaces_[i]->plainFile4(_return, id, path, minPartitions, delim);
     return;
   }
 
@@ -3667,6 +3969,12 @@ class IWorkerServiceConcurrentClient : virtual public IWorkerServiceIf {
   void importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src) override;
   int32_t send_importDataFrame3(const IWorkerId& id, const  ::ignis::rpc::driver::IDataFrameId& data, const  ::ignis::rpc::ISource& src);
   void recv_importDataFrame3( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int8_t delim) override;
+  int32_t send_plainFile(const IWorkerId& id, const std::string& path, const int8_t delim);
+  void recv_plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
+  void plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim) override;
+  int32_t send_plainFile4(const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim);
+  void recv_plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);
   void textFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path) override;
   int32_t send_textFile(const IWorkerId& id, const std::string& path);
   void recv_textFile( ::ignis::rpc::driver::IDataFrameId& _return, const int32_t seqid);

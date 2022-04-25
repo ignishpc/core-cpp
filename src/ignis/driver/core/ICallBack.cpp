@@ -37,7 +37,7 @@ ICallBack::ICallBack(int port, int compression) {
     auto executor_data = std::make_shared<IExecutorData>();
     driverContext = std::make_shared<IDriverContext>(executor_data);
     auto server = std::make_shared<IExecutorServerModuleImpl>(executor_data, driverContext);
-    std::thread([=]() { server->serve("IExecutorServer", port, compression); }).detach();
+    std::thread([=]() { server->serve("IExecutorServer", port, compression, true); }).detach();
     this->server = server;
 }
 

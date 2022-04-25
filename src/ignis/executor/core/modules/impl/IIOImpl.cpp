@@ -58,9 +58,9 @@ std::ofstream IIOImpl::openFileWrite(const std::string &path) {
     return file;
 }
 
-void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
+void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, char delim) {
     IGNIS_TRY()
-    IGNIS_LOG(info) << "IO: reading text file";
+    IGNIS_LOG(info) << (delim == '\n' ? "IO: reading text file" : "IO: reading plain file");
     auto size = ghc::filesystem::file_size(path);
     IGNIS_LOG(info) << "IO: file has " << size << " Bytes";
     auto result = executor_data->getPartitionTools().newPartitionGroup<std::string>();
@@ -86,7 +86,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
         if (globalThreadId > 0) {
             file.seekg(ex_chunk_init > 0 ? ex_chunk_init - 1 : ex_chunk_init);
             int value;
-            while ((value = file.get()) != '\n' && value != EOF) {}
+            while ((value = file.get()) != delim && value != EOF) {}
             ex_chunk_init = file.tellg();
             if (globalThreadId == threads - 1) { ex_chunk_end = size; }
         }
@@ -110,7 +110,7 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
                     thread_groups[id]->add(part_men);
                     partitionInit = filepos;
                 }
-                std::getline(file, buffer, '\n');
+                std::getline(file, buffer, delim);
                 filepos += buffer.size() + 1;
                 elements++;
                 part_men->inner().push_back(buffer);
@@ -146,6 +146,10 @@ void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
 
     executor_data->setPartitions(result);
     IGNIS_CATCH()
+}
+
+void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
+    return plainFile(path, minPartitions, '\n');
 }
 
 void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t partitions) {

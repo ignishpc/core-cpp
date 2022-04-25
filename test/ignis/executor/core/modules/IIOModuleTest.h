@@ -14,6 +14,8 @@ namespace ignis {
                     CPPUNIT_TEST(voidTest);
                     CPPUNIT_TEST(textFile1Test);
                     CPPUNIT_TEST(textFileNTest);
+                    CPPUNIT_TEST(plainFile1Test);
+                    CPPUNIT_TEST(plainFileNTest);
                     CPPUNIT_TEST(saveAsTextFileTest);
                     CPPUNIT_TEST(partitionTextFileTest);
                     CPPUNIT_TEST(partitionJsonFileTest);
@@ -34,6 +36,10 @@ namespace ignis {
 
                     void textFileNTest() { textFileTest(8, 2); }
 
+                    void plainFile1Test() { plainFileTest(1, 1); }
+
+                    void plainFileNTest() { plainFileTest(8, 2); }
+
                     void saveAsTextFileTest() { saveAsTextFileTest(8, 2); }
 
                     void partitionTextFileTest();
@@ -48,6 +54,8 @@ namespace ignis {
                     void voidWithCompileTest(bool compileTest);
 
                     void textFileTest(int n, int cores);
+
+                    void plainFileTest(int n, int cores);
 
                     void saveAsTextFileTest(int n, int cores);
 

@@ -61,9 +61,9 @@ namespace ignis {
 
                 rpc::driver::IDataFrameId keyByAbs(const ISource &src);
 
-                rpc::driver::IDataFrameId mapPartitionsAbs(const ISource &src, bool preservesPartitioning);
+                rpc::driver::IDataFrameId mapPartitionsAbs(const ISource &src);
 
-                rpc::driver::IDataFrameId mapPartitionsWithIndexAbs(const ISource &src, bool preservesPartitioning);
+                rpc::driver::IDataFrameId mapPartitionsWithIndexAbs(const ISource &src);
 
                 rpc::driver::IDataFrameId mapExecutorAbs(const ISource &src);
 
@@ -277,18 +277,17 @@ namespace ignis {
                 IPairDataFrame<Key, Tp> keyBy(const ISource &src);
 
                 template<typename R>
-                IDataFrame<R> mapPartitions(const ISource &src, bool preservesPartitioning = true) {
-                    return IDataFrame<R>(mapPartitionsAbs(src, preservesPartitioning));
+                IDataFrame<R> mapPartitions(const ISource &src) {
+                    return IDataFrame<R>(mapPartitionsAbs(src));
                 }
 
                 template<typename R>
-                IDataFrame<R> mapPartitionsWithIndex(const ISource &src, bool preservesPartitioning = true) {
-                    return IDataFrame<R>(mapPartitionsWithIndexAbs(src, preservesPartitioning));
+                IDataFrame<R> mapPartitionsWithIndex(const ISource &src) {
+                    return IDataFrame<R>(mapPartitionsWithIndexAbs(src));
                 }
 
-                template<typename R>
-                IDataFrame<R> mapExecutor(const ISource &src) {
-                    return IDataFrame<R>(mapExecutorAbs(src));
+                IDataFrame<Tp> mapExecutor(const ISource &src) {
+                    return IDataFrame<Tp>(mapExecutorAbs(src));
                 }
 
                 template<typename R>
@@ -352,14 +351,16 @@ namespace ignis {
                     return driverContext().template collect<Tp>(collectAbs(tp));
                 }
 
-                Tp aggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
-                    auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(aggregateAbs(zero, seqOp, combOp, tp));
+                template<typename R>
+                R aggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
+                    auto tp = driverContext().template registerType<R>();
+                    return driverContext().template collect1<R>(aggregateAbs(zero, seqOp, combOp, tp));
                 }
 
-                Tp treeAggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
-                    auto tp = driverContext().template registerType<Tp>();
-                    return driverContext().template collect1<Tp>(treeAggregateAbs(zero, seqOp, combOp, tp));
+                template<typename R>
+                R treeAggregate(const ISource &zero, const ISource &seqOp, const ISource &combOp) {
+                    auto tp = driverContext().template registerType<R>();
+                    return driverContext().template collect1<R>(treeAggregateAbs(zero, seqOp, combOp, tp));
                 }
 
                 Tp fold(const ISource &zero, const ISource &src) {

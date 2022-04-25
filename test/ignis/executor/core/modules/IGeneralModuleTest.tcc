@@ -101,7 +101,7 @@ void IGeneralModuleTestClass::mapPartitionsWithIndexTest(const std::string &name
     executor_data->setCores(cores);
     auto elems = IElements<Tp>().create(100 * cores * 2, 0);
     loadToPartitions(elems, cores * 2);
-    general->mapPartitionsWithIndex(newSource(name), false);
+    general->mapPartitionsWithIndex(newSource(name));
     auto result = getFromPartitions<std::string>();
 
     CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());

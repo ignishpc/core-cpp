@@ -29,7 +29,7 @@ namespace ignis {
 
                     void mapPartitions(const rpc::ISource &function) override;
 
-                    void mapPartitionsWithIndex(const rpc::ISource &function, bool preservesPartitioning) override;
+                    void mapPartitionsWithIndex(const rpc::ISource &function) override;
 
                     void mapExecutor(const rpc::ISource &function) override;
 

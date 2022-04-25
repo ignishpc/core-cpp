@@ -27,6 +27,8 @@ class IIOModuleIf {
   virtual int64_t partitionCount() = 0;
   virtual void countByPartition(std::vector<int64_t> & _return) = 0;
   virtual int64_t partitionApproxSize() = 0;
+  virtual void plainFile(const std::string& path, const int8_t delim) = 0;
+  virtual void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) = 0;
   virtual void textFile(const std::string& path) = 0;
   virtual void textFile2(const std::string& path, const int64_t minPartitions) = 0;
   virtual void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
@@ -82,6 +84,12 @@ class IIOModuleNull : virtual public IIOModuleIf {
   int64_t partitionApproxSize() override {
     int64_t _return = 0;
     return _return;
+  }
+  void plainFile(const std::string& /* path */, const int8_t /* delim */) override {
+    return;
+  }
+  void plainFile3(const std::string& /* path */, const int64_t /* minPartitions */, const int8_t /* delim */) override {
+    return;
   }
   void textFile(const std::string& /* path */) override {
     return;
@@ -621,6 +629,240 @@ class IIOModule_partitionApproxSize_presult {
    ::ignis::rpc::IExecutorException ex;
 
   _IIOModule_partitionApproxSize_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IIOModule_plainFile_args__isset {
+  _IIOModule_plainFile_args__isset() : path(false), delim(false) {}
+  bool path :1;
+  bool delim :1;
+} _IIOModule_plainFile_args__isset;
+
+class IIOModule_plainFile_args {
+ public:
+
+  IIOModule_plainFile_args(const IIOModule_plainFile_args&);
+  IIOModule_plainFile_args& operator=(const IIOModule_plainFile_args&);
+  IIOModule_plainFile_args() noexcept
+                           : path(),
+                             delim(0) {
+  }
+
+  virtual ~IIOModule_plainFile_args() noexcept;
+  std::string path;
+  int8_t delim;
+
+  _IIOModule_plainFile_args__isset __isset;
+
+  void __set_path(const std::string& val);
+
+  void __set_delim(const int8_t val);
+
+  bool operator == (const IIOModule_plainFile_args & rhs) const
+  {
+    if (!(path == rhs.path))
+      return false;
+    if (!(delim == rhs.delim))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_plainFile_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_plainFile_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_plainFile_pargs {
+ public:
+
+
+  virtual ~IIOModule_plainFile_pargs() noexcept;
+  const std::string* path;
+  const int8_t* delim;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_plainFile_result__isset {
+  _IIOModule_plainFile_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_plainFile_result__isset;
+
+class IIOModule_plainFile_result {
+ public:
+
+  IIOModule_plainFile_result(const IIOModule_plainFile_result&);
+  IIOModule_plainFile_result& operator=(const IIOModule_plainFile_result&);
+  IIOModule_plainFile_result() noexcept {
+  }
+
+  virtual ~IIOModule_plainFile_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_plainFile_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_plainFile_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_plainFile_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_plainFile_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_plainFile_presult__isset {
+  _IIOModule_plainFile_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_plainFile_presult__isset;
+
+class IIOModule_plainFile_presult {
+ public:
+
+
+  virtual ~IIOModule_plainFile_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_plainFile_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IIOModule_plainFile3_args__isset {
+  _IIOModule_plainFile3_args__isset() : path(false), minPartitions(false), delim(false) {}
+  bool path :1;
+  bool minPartitions :1;
+  bool delim :1;
+} _IIOModule_plainFile3_args__isset;
+
+class IIOModule_plainFile3_args {
+ public:
+
+  IIOModule_plainFile3_args(const IIOModule_plainFile3_args&);
+  IIOModule_plainFile3_args& operator=(const IIOModule_plainFile3_args&);
+  IIOModule_plainFile3_args() noexcept
+                            : path(),
+                              minPartitions(0),
+                              delim(0) {
+  }
+
+  virtual ~IIOModule_plainFile3_args() noexcept;
+  std::string path;
+  int64_t minPartitions;
+  int8_t delim;
+
+  _IIOModule_plainFile3_args__isset __isset;
+
+  void __set_path(const std::string& val);
+
+  void __set_minPartitions(const int64_t val);
+
+  void __set_delim(const int8_t val);
+
+  bool operator == (const IIOModule_plainFile3_args & rhs) const
+  {
+    if (!(path == rhs.path))
+      return false;
+    if (!(minPartitions == rhs.minPartitions))
+      return false;
+    if (!(delim == rhs.delim))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_plainFile3_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_plainFile3_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IIOModule_plainFile3_pargs {
+ public:
+
+
+  virtual ~IIOModule_plainFile3_pargs() noexcept;
+  const std::string* path;
+  const int64_t* minPartitions;
+  const int8_t* delim;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_plainFile3_result__isset {
+  _IIOModule_plainFile3_result__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_plainFile3_result__isset;
+
+class IIOModule_plainFile3_result {
+ public:
+
+  IIOModule_plainFile3_result(const IIOModule_plainFile3_result&);
+  IIOModule_plainFile3_result& operator=(const IIOModule_plainFile3_result&);
+  IIOModule_plainFile3_result() noexcept {
+  }
+
+  virtual ~IIOModule_plainFile3_result() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_plainFile3_result__isset __isset;
+
+  void __set_ex(const  ::ignis::rpc::IExecutorException& val);
+
+  bool operator == (const IIOModule_plainFile3_result & rhs) const
+  {
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IIOModule_plainFile3_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IIOModule_plainFile3_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IIOModule_plainFile3_presult__isset {
+  _IIOModule_plainFile3_presult__isset() : ex(false) {}
+  bool ex :1;
+} _IIOModule_plainFile3_presult__isset;
+
+class IIOModule_plainFile3_presult {
+ public:
+
+
+  virtual ~IIOModule_plainFile3_presult() noexcept;
+   ::ignis::rpc::IExecutorException ex;
+
+  _IIOModule_plainFile3_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -1866,6 +2108,12 @@ class IIOModuleClient : virtual public IIOModuleIf {
   int64_t partitionApproxSize() override;
   void send_partitionApproxSize();
   int64_t recv_partitionApproxSize();
+  void plainFile(const std::string& path, const int8_t delim) override;
+  void send_plainFile(const std::string& path, const int8_t delim);
+  void recv_plainFile();
+  void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) override;
+  void send_plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim);
+  void recv_plainFile3();
   void textFile(const std::string& path) override;
   void send_textFile(const std::string& path);
   void recv_textFile();
@@ -1916,6 +2164,8 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_partitionCount(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_countByPartition(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionApproxSize(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_plainFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_plainFile3(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_textFile2(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_partitionObjectFile(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -1934,6 +2184,8 @@ class IIOModuleProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["partitionCount"] = &IIOModuleProcessor::process_partitionCount;
     processMap_["countByPartition"] = &IIOModuleProcessor::process_countByPartition;
     processMap_["partitionApproxSize"] = &IIOModuleProcessor::process_partitionApproxSize;
+    processMap_["plainFile"] = &IIOModuleProcessor::process_plainFile;
+    processMap_["plainFile3"] = &IIOModuleProcessor::process_plainFile3;
     processMap_["textFile"] = &IIOModuleProcessor::process_textFile;
     processMap_["textFile2"] = &IIOModuleProcessor::process_textFile2;
     processMap_["partitionObjectFile"] = &IIOModuleProcessor::process_partitionObjectFile;
@@ -2016,6 +2268,24 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
       ifaces_[i]->partitionApproxSize();
     }
     return ifaces_[i]->partitionApproxSize();
+  }
+
+  void plainFile(const std::string& path, const int8_t delim) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->plainFile(path, delim);
+    }
+    ifaces_[i]->plainFile(path, delim);
+  }
+
+  void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->plainFile3(path, minPartitions, delim);
+    }
+    ifaces_[i]->plainFile3(path, minPartitions, delim);
   }
 
   void textFile(const std::string& path) override {
@@ -2155,6 +2425,12 @@ class IIOModuleConcurrentClient : virtual public IIOModuleIf {
   int64_t partitionApproxSize() override;
   int32_t send_partitionApproxSize();
   int64_t recv_partitionApproxSize(const int32_t seqid);
+  void plainFile(const std::string& path, const int8_t delim) override;
+  int32_t send_plainFile(const std::string& path, const int8_t delim);
+  void recv_plainFile(const int32_t seqid);
+  void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) override;
+  int32_t send_plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim);
+  void recv_plainFile3(const int32_t seqid);
   void textFile(const std::string& path) override;
   int32_t send_textFile(const std::string& path);
   void recv_textFile(const int32_t seqid);

@@ -24,6 +24,10 @@ namespace ignis {
 
                     int64_t partitionApproxSize() override;
 
+                    void plainFile(const std::string& path, const int8_t delim) override;
+
+                    void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) override;
+
                     void textFile(const std::string &path) override;
 
                     void textFile2(const std::string &path, const int64_t minPartitions) override;

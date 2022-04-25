@@ -44,6 +44,18 @@ int64_t IIOModule::partitionApproxSize() {
     IGNIS_RPC_CATCH()
 }
 
+void IIOModule::plainFile(const std::string& path, const int8_t delim) {
+    IGNIS_RPC_TRY()
+    impl.plainFile(path, 1, delim);
+    IGNIS_RPC_CATCH()
+}
+
+void IIOModule::plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) {
+    IGNIS_RPC_TRY()
+    impl.plainFile(path, minPartitions, delim);
+    IGNIS_RPC_CATCH()
+}
+
 void IIOModule::textFile(const std::string &path) {
     IGNIS_RPC_TRY()
     impl.textFile(path, 1);

@@ -51,6 +51,10 @@ namespace ignis {
                     return IDataFrame<Tp>(importDataFrameAbs(data.id, src));
                 }
 
+                IDataFrame<std::string> plainFile(const std::string &path, char delim);
+
+                IDataFrame<std::string> plainFile(const std::string &path, int64_t minPartitions, char delim);
+
                 IDataFrame<std::string> textFile(const std::string &path);
 
                 IDataFrame<std::string> textFile(const std::string &path, int64_t minPartitions);

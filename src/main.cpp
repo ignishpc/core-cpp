@@ -1,14 +1,14 @@
 #include "ignis/executor/core/ILog.h"
 
+#include "ignis/executor/core/ICoreTypes.h"
 #include "ignis/executor/core/IExecutorData.h"
-#include "ignis/executor/core/modules/IExecutorServerModule.h"
-#include "ignis/executor/core/modules/IGeneralModule.h"
-#include "ignis/executor/core/modules/IGeneralActionModule.h"
-#include "ignis/executor/core/modules/IMathModule.h"
-#include "ignis/executor/core/modules/IIOModule.h"
 #include "ignis/executor/core/modules/ICacheContextModule.h"
 #include "ignis/executor/core/modules/ICommModule.h"
-#include "ignis/executor/core/ICoreTypes.h"
+#include "ignis/executor/core/modules/IExecutorServerModule.h"
+#include "ignis/executor/core/modules/IGeneralActionModule.h"
+#include "ignis/executor/core/modules/IGeneralModule.h"
+#include "ignis/executor/core/modules/IIOModule.h"
+#include "ignis/executor/core/modules/IMathModule.h"
 
 
 using namespace ignis::executor::core;
@@ -17,15 +17,19 @@ using namespace ignis::rpc::executor;
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();
-    if (argc < 3) {
-        IGNIS_LOG(error) << "Executor need a server port and compression as argument";
+    if (argc < 4) {
+        IGNIS_LOG(error) << "Executor need a server port, compression and server mode as argument";
         return EXIT_FAILURE;
     }
 
-    int port = atoi(argv[1]);
-    int compression = atoi(argv[2]);
-    if (port == 0 || compression == 0) {
-        IGNIS_LOG(error) << "Executor need a valid server port and compression";
+    int port, compression;
+    bool local_mode;
+    try {
+        port = std::atoi(argv[1]);
+        compression = std::atoi(argv[2]);
+        local_mode = std::atoi(argv[3]) == 1;
+    } catch (...) {
+        IGNIS_LOG(error) << "Executor arguments are not valid";
         return EXIT_FAILURE;
     }
 
@@ -48,20 +52,15 @@ int main(int argc, char *argv[]) {
             auto comm = std::make_shared<ICommModule>(executor_data);
             processor.registerProcessor("IComm", std::make_shared<ICommModuleProcessor>(comm));
 
-            for(auto& dtype : ICoreTypes::defaultTypes()){
-                executor_data->registerType(dtype);
-            }
+            for (auto &dtype : ICoreTypes::defaultTypes()) { executor_data->registerType(dtype); }
 
-            for(auto& df : ICoreTypes::defaultFunctions()){
-                executor_data->registerFunction(df);
-            }
-
+            for (auto &df : ICoreTypes::defaultFunctions()) { executor_data->registerFunction(df); }
         }
     };
 
     auto executor_data = std::make_shared<IExecutorData>();
     IExecutorServerModuleImpl server(executor_data);
-    server.serve("IExecutorServer", port, compression);
+    server.serve("IExecutorServer", port, compression, local_mode);
 
     return EXIT_SUCCESS;
 }

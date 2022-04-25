@@ -28,7 +28,7 @@ class IGeneralModuleIf {
   virtual void flatmap(const  ::ignis::rpc::ISource& src) = 0;
   virtual void keyBy(const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapPartitions(const  ::ignis::rpc::ISource& src) = 0;
-  virtual void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) = 0;
+  virtual void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapExecutor(const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapExecutorTo(const  ::ignis::rpc::ISource& src) = 0;
   virtual void groupBy(const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
@@ -105,7 +105,7 @@ class IGeneralModuleNull : virtual public IGeneralModuleIf {
   void mapPartitions(const  ::ignis::rpc::ISource& /* src */) override {
     return;
   }
-  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& /* src */, const bool /* preservesPartitioning */) override {
+  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& /* src */) override {
     return;
   }
   void mapExecutor(const  ::ignis::rpc::ISource& /* src */) override {
@@ -822,9 +822,8 @@ class IGeneralModule_mapPartitions_presult {
 };
 
 typedef struct _IGeneralModule_mapPartitionsWithIndex_args__isset {
-  _IGeneralModule_mapPartitionsWithIndex_args__isset() : src(false), preservesPartitioning(false) {}
+  _IGeneralModule_mapPartitionsWithIndex_args__isset() : src(false) {}
   bool src :1;
-  bool preservesPartitioning :1;
 } _IGeneralModule_mapPartitionsWithIndex_args__isset;
 
 class IGeneralModule_mapPartitionsWithIndex_args {
@@ -832,25 +831,19 @@ class IGeneralModule_mapPartitionsWithIndex_args {
 
   IGeneralModule_mapPartitionsWithIndex_args(const IGeneralModule_mapPartitionsWithIndex_args&);
   IGeneralModule_mapPartitionsWithIndex_args& operator=(const IGeneralModule_mapPartitionsWithIndex_args&);
-  IGeneralModule_mapPartitionsWithIndex_args() noexcept
-                                             : preservesPartitioning(0) {
+  IGeneralModule_mapPartitionsWithIndex_args() noexcept {
   }
 
   virtual ~IGeneralModule_mapPartitionsWithIndex_args() noexcept;
    ::ignis::rpc::ISource src;
-  bool preservesPartitioning;
 
   _IGeneralModule_mapPartitionsWithIndex_args__isset __isset;
 
   void __set_src(const  ::ignis::rpc::ISource& val);
 
-  void __set_preservesPartitioning(const bool val);
-
   bool operator == (const IGeneralModule_mapPartitionsWithIndex_args & rhs) const
   {
     if (!(src == rhs.src))
-      return false;
-    if (!(preservesPartitioning == rhs.preservesPartitioning))
       return false;
     return true;
   }
@@ -872,7 +865,6 @@ class IGeneralModule_mapPartitionsWithIndex_pargs {
 
   virtual ~IGeneralModule_mapPartitionsWithIndex_pargs() noexcept;
   const  ::ignis::rpc::ISource* src;
-  const bool* preservesPartitioning;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -4239,8 +4231,8 @@ class IGeneralModuleClient : virtual public IGeneralModuleIf {
   void mapPartitions(const  ::ignis::rpc::ISource& src) override;
   void send_mapPartitions(const  ::ignis::rpc::ISource& src);
   void recv_mapPartitions();
-  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override;
-  void send_mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
+  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src) override;
+  void send_mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src);
   void recv_mapPartitionsWithIndex();
   void mapExecutor(const  ::ignis::rpc::ISource& src) override;
   void send_mapExecutor(const  ::ignis::rpc::ISource& src);
@@ -4501,13 +4493,13 @@ class IGeneralModuleMultiface : virtual public IGeneralModuleIf {
     ifaces_[i]->mapPartitions(src);
   }
 
-  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override {
+  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->mapPartitionsWithIndex(src, preservesPartitioning);
+      ifaces_[i]->mapPartitionsWithIndex(src);
     }
-    ifaces_[i]->mapPartitionsWithIndex(src, preservesPartitioning);
+    ifaces_[i]->mapPartitionsWithIndex(src);
   }
 
   void mapExecutor(const  ::ignis::rpc::ISource& src) override {
@@ -4821,8 +4813,8 @@ class IGeneralModuleConcurrentClient : virtual public IGeneralModuleIf {
   void mapPartitions(const  ::ignis::rpc::ISource& src) override;
   int32_t send_mapPartitions(const  ::ignis::rpc::ISource& src);
   void recv_mapPartitions(const int32_t seqid);
-  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning) override;
-  int32_t send_mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src, const bool preservesPartitioning);
+  void mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src) override;
+  int32_t send_mapPartitionsWithIndex(const  ::ignis::rpc::ISource& src);
   void recv_mapPartitionsWithIndex(const int32_t seqid);
   void mapExecutor(const  ::ignis::rpc::ISource& src) override;
   int32_t send_mapExecutor(const  ::ignis::rpc::ISource& src);

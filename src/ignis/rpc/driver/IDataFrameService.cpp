@@ -3697,14 +3697,6 @@ uint32_t IDataFrameService_mapPartitions_args::read(::apache::thrift::protocol::
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->preservesPartitioning);
-          this->__isset.preservesPartitioning = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -3730,10 +3722,6 @@ uint32_t IDataFrameService_mapPartitions_args::write(::apache::thrift::protocol:
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("preservesPartitioning", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool(this->preservesPartitioning);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -3755,10 +3743,6 @@ uint32_t IDataFrameService_mapPartitions_pargs::write(::apache::thrift::protocol
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->src)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("preservesPartitioning", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool((*(this->preservesPartitioning)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -3936,14 +3920,6 @@ uint32_t IDataFrameService_mapPartitionsWithIndex_args::read(::apache::thrift::p
           xfer += iprot->skip(ftype);
         }
         break;
-      case 3:
-        if (ftype == ::apache::thrift::protocol::T_BOOL) {
-          xfer += iprot->readBool(this->preservesPartitioning);
-          this->__isset.preservesPartitioning = true;
-        } else {
-          xfer += iprot->skip(ftype);
-        }
-        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -3969,10 +3945,6 @@ uint32_t IDataFrameService_mapPartitionsWithIndex_args::write(::apache::thrift::
   xfer += this->src.write(oprot);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("preservesPartitioning", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool(this->preservesPartitioning);
-  xfer += oprot->writeFieldEnd();
-
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -3994,10 +3966,6 @@ uint32_t IDataFrameService_mapPartitionsWithIndex_pargs::write(::apache::thrift:
 
   xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
   xfer += (*(this->src)).write(oprot);
-  xfer += oprot->writeFieldEnd();
-
-  xfer += oprot->writeFieldBegin("preservesPartitioning", ::apache::thrift::protocol::T_BOOL, 3);
-  xfer += oprot->writeBool((*(this->preservesPartitioning)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -20061,13 +20029,13 @@ void IDataFrameServiceClient::recv_keyBy(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "keyBy failed: unknown result");
 }
 
-void IDataFrameServiceClient::mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IDataFrameServiceClient::mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
-  send_mapPartitions(id, src, preservesPartitioning);
+  send_mapPartitions(id, src);
   recv_mapPartitions(_return);
 }
 
-void IDataFrameServiceClient::send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IDataFrameServiceClient::send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("mapPartitions", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -20075,7 +20043,6 @@ void IDataFrameServiceClient::send_mapPartitions(const IDataFrameId& id, const  
   IDataFrameService_mapPartitions_pargs args;
   args.id = &id;
   args.src = &src;
-  args.preservesPartitioning = &preservesPartitioning;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -20124,13 +20091,13 @@ void IDataFrameServiceClient::recv_mapPartitions(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "mapPartitions failed: unknown result");
 }
 
-void IDataFrameServiceClient::mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IDataFrameServiceClient::mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
-  send_mapPartitionsWithIndex(id, src, preservesPartitioning);
+  send_mapPartitionsWithIndex(id, src);
   recv_mapPartitionsWithIndex(_return);
 }
 
-void IDataFrameServiceClient::send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IDataFrameServiceClient::send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("mapPartitionsWithIndex", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -20138,7 +20105,6 @@ void IDataFrameServiceClient::send_mapPartitionsWithIndex(const IDataFrameId& id
   IDataFrameService_mapPartitionsWithIndex_pargs args;
   args.id = &id;
   args.src = &src;
-  args.preservesPartitioning = &preservesPartitioning;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -25137,7 +25103,7 @@ void IDataFrameServiceProcessor::process_mapPartitions(int32_t seqid, ::apache::
 
   IDataFrameService_mapPartitions_result result;
   try {
-    iface_->mapPartitions(result.success, args.id, args.src, args.preservesPartitioning);
+    iface_->mapPartitions(result.success, args.id, args.src);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = std::move(ex);
@@ -25194,7 +25160,7 @@ void IDataFrameServiceProcessor::process_mapPartitionsWithIndex(int32_t seqid, :
 
   IDataFrameService_mapPartitionsWithIndex_result result;
   try {
-    iface_->mapPartitionsWithIndex(result.success, args.id, args.src, args.preservesPartitioning);
+    iface_->mapPartitionsWithIndex(result.success, args.id, args.src);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = std::move(ex);
@@ -30286,13 +30252,13 @@ void IDataFrameServiceConcurrentClient::recv_keyBy(IDataFrameId& _return, const 
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IDataFrameServiceConcurrentClient::mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_mapPartitions(id, src, preservesPartitioning);
+  int32_t seqid = send_mapPartitions(id, src);
   recv_mapPartitions(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+int32_t IDataFrameServiceConcurrentClient::send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -30301,7 +30267,6 @@ int32_t IDataFrameServiceConcurrentClient::send_mapPartitions(const IDataFrameId
   IDataFrameService_mapPartitions_pargs args;
   args.id = &id;
   args.src = &src;
-  args.preservesPartitioning = &preservesPartitioning;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -30376,13 +30341,13 @@ void IDataFrameServiceConcurrentClient::recv_mapPartitions(IDataFrameId& _return
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+void IDataFrameServiceConcurrentClient::mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
-  int32_t seqid = send_mapPartitionsWithIndex(id, src, preservesPartitioning);
+  int32_t seqid = send_mapPartitionsWithIndex(id, src);
   recv_mapPartitionsWithIndex(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const bool preservesPartitioning)
+int32_t IDataFrameServiceConcurrentClient::send_mapPartitionsWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -30391,7 +30356,6 @@ int32_t IDataFrameServiceConcurrentClient::send_mapPartitionsWithIndex(const IDa
   IDataFrameService_mapPartitionsWithIndex_pargs args;
   args.id = &id;
   args.src = &src;
-  args.preservesPartitioning = &preservesPartitioning;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

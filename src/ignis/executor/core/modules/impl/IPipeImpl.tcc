@@ -279,7 +279,7 @@ void IPipeImplCLass::mapPartitions() {
 }
 
 template<typename Function>
-void IPipeImplCLass::mapPartitionsWithIndex(bool preservesPartitioning) {
+void IPipeImplCLass::mapPartitionsWithIndex() {
     IGNIS_TRY()
     auto input = executor_data->getAndDeletePartitions<typename Function::_T2_type::value_type>();
     auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type::value_type>(
