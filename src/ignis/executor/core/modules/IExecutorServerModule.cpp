@@ -61,7 +61,9 @@ void IExecutorServerModule::createServices(TMultiplexedProcessor &processor) {}
 
 void IExecutorServerModule::stop() {
     IGNIS_RPC_TRY()
-    MPI::Finalize();
+    if(MPI::Is_initialized()){
+        MPI::Finalize();
+    }
     if (server) { server->stop(); }
     IGNIS_RPC_CATCH()
 }
