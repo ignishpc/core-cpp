@@ -47,7 +47,7 @@ namespace ignis {
                 /*General*/
                 rpc::driver::IDataFrameId repartitionAbs(int64_t numPartitions, bool preserveOrdering, bool global);
 
-                rpc::driver::IDataFrameId partitionByRandomAbs(int64_t numPartitions);
+                rpc::driver::IDataFrameId partitionByRandomAbs(int64_t numPartitions, int seed);
 
                 rpc::driver::IDataFrameId partitionByHashAbs(int64_t numPartitions);
 
@@ -60,6 +60,8 @@ namespace ignis {
                 rpc::driver::IDataFrameId flatmapAbs(const ISource &src);
 
                 rpc::driver::IDataFrameId keyByAbs(const ISource &src);
+
+                rpc::driver::IDataFrameId mapWithIndexAbs(const ISource &src);
 
                 rpc::driver::IDataFrameId mapPartitionsAbs(const ISource &src);
 
@@ -245,8 +247,8 @@ namespace ignis {
                     return IDataFrame<Tp>(repartitionAbs(numPartitions,preserveOrdering,global));
                 }
 
-                IDataFrame<Tp> partitionByRandom(int64_t numPartitions){
-                    return IDataFrame<Tp>(partitionByRandomAbs(numPartitions));
+                IDataFrame<Tp> partitionByRandom(int64_t numPartitions, int seed){
+                    return IDataFrame<Tp>(partitionByRandomAbs(numPartitions, seed));
                 }
 
                 IDataFrame<Tp> partitionByHash(int64_t numPartitions){
@@ -275,6 +277,11 @@ namespace ignis {
 
                 template<typename Key>
                 IPairDataFrame<Key, Tp> keyBy(const ISource &src);
+
+                template<typename R>
+                IDataFrame<R> mapWithIndex(const ISource &src) {
+                    return IDataFrame<R>(mapWithIndexAbs(src));
+                }
 
                 template<typename R>
                 IDataFrame<R> mapPartitions(const ISource &src) {

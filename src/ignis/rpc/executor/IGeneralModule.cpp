@@ -944,6 +944,193 @@ uint32_t IGeneralModule_keyBy_presult::read(::apache::thrift::protocol::TProtoco
 }
 
 
+IGeneralModule_mapWithIndex_args::~IGeneralModule_mapWithIndex_args() noexcept {
+}
+
+
+uint32_t IGeneralModule_mapWithIndex_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralModule_mapWithIndex_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralModule_mapWithIndex_args");
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralModule_mapWithIndex_pargs::~IGeneralModule_mapWithIndex_pargs() noexcept {
+}
+
+
+uint32_t IGeneralModule_mapWithIndex_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IGeneralModule_mapWithIndex_pargs");
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralModule_mapWithIndex_result::~IGeneralModule_mapWithIndex_result() noexcept {
+}
+
+
+uint32_t IGeneralModule_mapWithIndex_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IGeneralModule_mapWithIndex_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IGeneralModule_mapWithIndex_result");
+
+  if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IGeneralModule_mapWithIndex_presult::~IGeneralModule_mapWithIndex_presult() noexcept {
+}
+
+
+uint32_t IGeneralModule_mapWithIndex_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
 IGeneralModule_mapPartitions_args::~IGeneralModule_mapPartitions_args() noexcept {
 }
 
@@ -4193,6 +4380,14 @@ uint32_t IGeneralModule_partitionByRandom_args::read(::apache::thrift::protocol:
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->seed);
+          this->__isset.seed = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -4214,6 +4409,10 @@ uint32_t IGeneralModule_partitionByRandom_args::write(::apache::thrift::protocol
   xfer += oprot->writeI64(this->numPartitions);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->seed);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -4231,6 +4430,10 @@ uint32_t IGeneralModule_partitionByRandom_pargs::write(::apache::thrift::protoco
 
   xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 1);
   xfer += oprot->writeI64((*(this->numPartitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->seed)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -7500,6 +7703,62 @@ void IGeneralModuleClient::recv_keyBy()
   return;
 }
 
+void IGeneralModuleClient::mapWithIndex(const  ::ignis::rpc::ISource& src)
+{
+  send_mapWithIndex(src);
+  recv_mapWithIndex();
+}
+
+void IGeneralModuleClient::send_mapWithIndex(const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralModule_mapWithIndex_pargs args;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IGeneralModuleClient::recv_mapWithIndex()
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("mapWithIndex") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IGeneralModule_mapWithIndex_presult result;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  return;
+}
+
 void IGeneralModuleClient::mapPartitions(const  ::ignis::rpc::ISource& src)
 {
   send_mapPartitions(src);
@@ -8410,19 +8669,20 @@ void IGeneralModuleClient::recv_repartition()
   return;
 }
 
-void IGeneralModuleClient::partitionByRandom(const int64_t numPartitions)
+void IGeneralModuleClient::partitionByRandom(const int64_t numPartitions, const int32_t seed)
 {
-  send_partitionByRandom(numPartitions);
+  send_partitionByRandom(numPartitions, seed);
   recv_partitionByRandom();
 }
 
-void IGeneralModuleClient::send_partitionByRandom(const int64_t numPartitions)
+void IGeneralModuleClient::send_partitionByRandom(const int64_t numPartitions, const int32_t seed)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
 
   IGeneralModule_partitionByRandom_pargs args;
   args.numPartitions = &numPartitions;
+  args.seed = &seed;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -9565,6 +9825,62 @@ void IGeneralModuleProcessor::process_keyBy(int32_t seqid, ::apache::thrift::pro
   }
 }
 
+void IGeneralModuleProcessor::process_mapWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("IGeneralModule.mapWithIndex", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IGeneralModule.mapWithIndex");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "IGeneralModule.mapWithIndex");
+  }
+
+  IGeneralModule_mapWithIndex_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "IGeneralModule.mapWithIndex", bytes);
+  }
+
+  IGeneralModule_mapWithIndex_result result;
+  try {
+    iface_->mapWithIndex(args.src);
+  } catch ( ::ignis::rpc::IExecutorException &ex) {
+    result.ex = std::move(ex);
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "IGeneralModule.mapWithIndex");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "IGeneralModule.mapWithIndex");
+  }
+
+  oprot->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "IGeneralModule.mapWithIndex", bytes);
+  }
+}
+
 void IGeneralModuleProcessor::process_mapPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
 {
   void* ctx = nullptr;
@@ -10484,7 +10800,7 @@ void IGeneralModuleProcessor::process_partitionByRandom(int32_t seqid, ::apache:
 
   IGeneralModule_partitionByRandom_result result;
   try {
-    iface_->partitionByRandom(args.numPartitions);
+    iface_->partitionByRandom(args.numPartitions, args.seed);
   } catch ( ::ignis::rpc::IExecutorException &ex) {
     result.ex = std::move(ex);
     result.__isset.ex = true;
@@ -11699,6 +12015,88 @@ void IGeneralModuleConcurrentClient::recv_keyBy(const int32_t seqid)
         throw TProtocolException(TProtocolException::INVALID_DATA);
       }
       IGeneralModule_keyBy_presult result;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      sentry.commit();
+      return;
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IGeneralModuleConcurrentClient::mapWithIndex(const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_mapWithIndex(src);
+  recv_mapWithIndex(seqid);
+}
+
+int32_t IGeneralModuleConcurrentClient::send_mapWithIndex(const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IGeneralModule_mapWithIndex_pargs args;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IGeneralModuleConcurrentClient::recv_mapWithIndex(const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("mapWithIndex") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IGeneralModule_mapWithIndex_presult result;
       result.read(iprot_);
       iprot_->readMessageEnd();
       iprot_->getTransport()->readEnd();
@@ -13044,13 +13442,13 @@ void IGeneralModuleConcurrentClient::recv_repartition(const int32_t seqid)
   } // end while(true)
 }
 
-void IGeneralModuleConcurrentClient::partitionByRandom(const int64_t numPartitions)
+void IGeneralModuleConcurrentClient::partitionByRandom(const int64_t numPartitions, const int32_t seed)
 {
-  int32_t seqid = send_partitionByRandom(numPartitions);
+  int32_t seqid = send_partitionByRandom(numPartitions, seed);
   recv_partitionByRandom(seqid);
 }
 
-int32_t IGeneralModuleConcurrentClient::send_partitionByRandom(const int64_t numPartitions)
+int32_t IGeneralModuleConcurrentClient::send_partitionByRandom(const int64_t numPartitions, const int32_t seed)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -13058,6 +13456,7 @@ int32_t IGeneralModuleConcurrentClient::send_partitionByRandom(const int64_t num
 
   IGeneralModule_partitionByRandom_pargs args;
   args.numPartitions = &numPartitions;
+  args.seed = &seed;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

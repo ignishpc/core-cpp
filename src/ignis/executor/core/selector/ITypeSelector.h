@@ -61,7 +61,7 @@ namespace ignis {
                     virtual void repartition(modules::impl::IRepartitionImpl &impl, int64_t numPartitions,
                                              bool preserveOrdering, bool global) = 0;
 
-                    virtual void partitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
+                    virtual void partitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions, int32_t seed) = 0;
 
                     virtual void partitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) = 0;
 
@@ -186,8 +186,8 @@ namespace ignis {
                         impl.repartition<Tp>(numPartitions, preserveOrdering, global);
                     }
 
-                    virtual void partitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {
-                        impl.partitionByRandom<Tp>(numPartitions);
+                    virtual void partitionByRandom(modules::impl::IRepartitionImpl &impl, int64_t numPartitions, int32_t seed) {
+                        impl.partitionByRandom<Tp>(numPartitions, seed);
                     }
 
                     virtual void partitionByHash(modules::impl::IRepartitionImpl &impl, int64_t numPartitions) {

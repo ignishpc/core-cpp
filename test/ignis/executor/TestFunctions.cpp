@@ -59,6 +59,13 @@ public:
 
 ignis_export(KeyByString, KeyByString)
 
+class MapWithIndexInt : public function::IFunction2<int64_t, int, int> {
+public:
+    int call(int64_t &v1,int &v2, IContext &context) override { return ((int)v1) + v2; }
+};
+
+ignis_export(MapWithIndexInt, MapWithIndexInt)
+
 class MapPartitionsInt : public function::IFunction<IReadIterator<int>, std::vector<std::string>> {
 public:
     std::vector<std::string> call(IReadIterator<int> &it, IContext &context) override {

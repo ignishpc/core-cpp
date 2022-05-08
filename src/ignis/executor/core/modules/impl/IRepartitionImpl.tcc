@@ -282,11 +282,11 @@ void IRepartitionImplClass::local_repartition(int64_t numPartitions) {
 }
 
 template<typename Tp>
-void IRepartitionImplClass::partitionByRandom(int64_t numPartitions) {
+void IRepartitionImplClass::partitionByRandom(int64_t numPartitions, int32_t seed) {
     IGNIS_TRY()
     partitionBy_impl<Tp>(
-            [](const Tp &obj) {
-                static thread_local std::mt19937 gen;
+            [seed](const Tp &obj) {
+                static thread_local std::mt19937 gen(seed);
                 static thread_local std::uniform_int_distribution<int> dist;
                 return dist(gen);
             },

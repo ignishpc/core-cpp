@@ -247,6 +247,61 @@ void IPipeImplCLass::keyBy() {
 }
 
 template<typename Function>
+void IPipeImplCLass::mapWithIndex() {
+    IGNIS_TRY()
+    auto input = executor_data->getAndDeletePartitions<typename Function::_T2_type>();
+    auto output = executor_data->getPartitionTools().newPartitionGroup<typename Function::_R_type>(input->partitions());
+    auto &context = executor_data->getContext();
+    bool isMemory =
+            executor_data->getPartitionTools().isMemory(*input) && executor_data->getPartitionTools().isMemory(*output);
+    Function function;
+
+    function.before(context);
+    IGNIS_LOG(info) << "General: mapWithIndex " << input->partitions() << " partitions";
+
+    std::vector<int64_t> indices(executor_data->mpi().executors(), 0);
+    int64_t elems = 0; 
+    for (int64_t p = 0; p < input->partitions(); p++) { elems += (*input)[p]->size(); }
+    this->executor_data->mpi().native().Allgather(&elems, 1, MPI::LONG_LONG, &indices[0], 1, MPI::LONG_LONG);
+    std::vector<int64_t> offsets(input->partitions(), 0);
+    for (int i = 0; i < executor_data->mpi().rank(); i++) { offsets[0] += indices[i]; }
+    for (int64_t p = 1; p < input->partitions(); p++) { offsets[p] = offsets[p - 1] + (*input)[p]->size(); }
+
+    IGNIS_OMP_EXCEPTION_INIT()
+#pragma omp parallel
+    {
+        IGNIS_OMP_TRY()
+#pragma omp for schedule(dynamic)
+        for (int64_t p = 0; p < input->partitions(); p++) {
+            auto writer = (*output)[p]->writeIterator();
+            auto sz = (*input)[p]->size();
+            int64_t id = offsets[p];
+            if (isMemory) {
+                auto &men_writer = executor_data->getPartitionTools().toMemory(*writer);
+                auto &men_part = executor_data->getPartitionTools().toMemory(*(*input)[p]);
+                for (size_t i = 0; i < sz; i++) {
+                    men_writer.write(function.call(id, men_part[i], context));
+                    id++;
+                }
+            } else {
+                auto reader = (*input)[p]->readIterator();
+                for (size_t i = 0; i < sz; i++) {
+                    writer->write(function.call(id, reader->next(), context));
+                    id++;
+                }
+            }
+            (*input)[p].reset();
+            (*output)[p]->fit();
+        }
+        IGNIS_OMP_CATCH()
+    }
+    IGNIS_OMP_EXCEPTION_END()
+    function.after(context);
+    executor_data->setPartitions(output);
+    IGNIS_CATCH()
+}
+
+template<typename Function>
 void IPipeImplCLass::mapPartitions() {
     IGNIS_TRY()
     auto input = executor_data->getAndDeletePartitions<typename Function::_T_type::value_type>();
@@ -289,6 +344,13 @@ void IPipeImplCLass::mapPartitionsWithIndex() {
 
     function.before(context);
     IGNIS_LOG(info) << "General: mapPartitionsWithIndex " << input->partitions() << " partitions";
+
+    std::vector<int64_t> indices(executor_data->mpi().executors(), 0);
+    int64_t parts = input->partitions();
+    this->executor_data->mpi().native().Allgather(&parts, 1, MPI::LONG_LONG, &indices[0], 1, MPI::LONG_LONG);
+    int64_t offset = 0;
+    for (int i = 0; i < executor_data->mpi().rank(); i++) { offset += indices[i]; }
+
     IGNIS_OMP_EXCEPTION_INIT()
 #pragma omp parallel
     {
@@ -297,7 +359,8 @@ void IPipeImplCLass::mapPartitionsWithIndex() {
         for (int64_t p = 0; p < input->partitions(); p++) {
             auto writer = (*output)[p]->writeIterator();
             auto reader = (*input)[p]->readIterator();
-            auto result = function.call(p, *reader, context);
+            int64_t i = offset + p;
+            auto result = function.call(i, *reader, context);
             for (auto it = result.begin(); it != result.end(); it++) { writer->write(std::move(*it)); }
             (*input)[p].reset();
             (*output)[p]->fit();

@@ -17,6 +17,7 @@ namespace ignis {
                     CPPUNIT_TEST(filterIntTest);
                     CPPUNIT_TEST(flatmapStringTest);
                     CPPUNIT_TEST(keyByStringIntTest);
+                    CPPUNIT_TEST(mapWithIndexIntTest);
                     CPPUNIT_TEST(mapPartitionsIntTest);
                     CPPUNIT_TEST(mapPartitionWithIndexIntTest);
                     CPPUNIT_TEST(mapExecutorIntTest);
@@ -58,6 +59,8 @@ namespace ignis {
                     void filterIntTest() { filterTest<int>("FilterInt", 2, "RawMemory"); }
 
                     void flatmapStringTest() { flatmapTest<std::string>("FlatmapString", 2, "Memory"); }
+
+                    void mapWithIndexIntTest() {mapWithIndexTest<int>("MapWithIndexInt", 2, "Memory");}
 
                     void keyByStringIntTest() { keyByTest("KeyByString", 2, "RawMemory"); }
 
@@ -130,6 +133,9 @@ namespace ignis {
                     void flatmapTest(const std::string &name, int cores, const std::string &partitionType);
 
                     void keyByTest(const std::string &name, int cores, const std::string &partitionType);
+
+                    template<typename Tp>
+                    void mapWithIndexTest(const std::string &name, int cores, const std::string &partitionType);
 
                     template<typename Tp>
                     void mapPartitionsTest(const std::string &name, int cores, const std::string &partitionType);

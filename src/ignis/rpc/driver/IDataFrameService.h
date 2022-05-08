@@ -32,13 +32,14 @@ class IDataFrameServiceIf {
   virtual void saveAsTextFile(const IDataFrameId& id, const std::string& path) = 0;
   virtual void saveAsJsonFile(const IDataFrameId& id, const std::string& path, const bool pretty) = 0;
   virtual void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_) = 0;
-  virtual void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
+  virtual void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const int32_t seed) = 0;
   virtual void partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) = 0;
   virtual void partitionBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src, const int64_t numPartitions) = 0;
   virtual void map_(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void filter(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void flatmap(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void keyBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
+  virtual void mapWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapPartitionsWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
   virtual void mapExecutor(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) = 0;
@@ -171,7 +172,7 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
   void repartition(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */, const bool /* preserveOrdering */, const bool /* global_ */) override {
     return;
   }
-  void partitionByRandom(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) override {
+  void partitionByRandom(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */, const int32_t /* seed */) override {
     return;
   }
   void partitionByHash(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const int64_t /* numPartitions */) override {
@@ -190,6 +191,9 @@ class IDataFrameServiceNull : virtual public IDataFrameServiceIf {
     return;
   }
   void keyBy(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) override {
+    return;
+  }
+  void mapWithIndex(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) override {
     return;
   }
   void mapPartitions(IDataFrameId& /* _return */, const IDataFrameId& /* id */, const  ::ignis::rpc::ISource& /* src */) override {
@@ -1549,9 +1553,10 @@ class IDataFrameService_repartition_presult {
 };
 
 typedef struct _IDataFrameService_partitionByRandom_args__isset {
-  _IDataFrameService_partitionByRandom_args__isset() : id(false), numPartitions(false) {}
+  _IDataFrameService_partitionByRandom_args__isset() : id(false), numPartitions(false), seed(false) {}
   bool id :1;
   bool numPartitions :1;
+  bool seed :1;
 } _IDataFrameService_partitionByRandom_args__isset;
 
 class IDataFrameService_partitionByRandom_args {
@@ -1560,12 +1565,14 @@ class IDataFrameService_partitionByRandom_args {
   IDataFrameService_partitionByRandom_args(const IDataFrameService_partitionByRandom_args&) noexcept;
   IDataFrameService_partitionByRandom_args& operator=(const IDataFrameService_partitionByRandom_args&) noexcept;
   IDataFrameService_partitionByRandom_args() noexcept
-                                           : numPartitions(0) {
+                                           : numPartitions(0),
+                                             seed(0) {
   }
 
   virtual ~IDataFrameService_partitionByRandom_args() noexcept;
   IDataFrameId id;
   int64_t numPartitions;
+  int32_t seed;
 
   _IDataFrameService_partitionByRandom_args__isset __isset;
 
@@ -1573,11 +1580,15 @@ class IDataFrameService_partitionByRandom_args {
 
   void __set_numPartitions(const int64_t val);
 
+  void __set_seed(const int32_t val);
+
   bool operator == (const IDataFrameService_partitionByRandom_args & rhs) const
   {
     if (!(id == rhs.id))
       return false;
     if (!(numPartitions == rhs.numPartitions))
+      return false;
+    if (!(seed == rhs.seed))
       return false;
     return true;
   }
@@ -1600,6 +1611,7 @@ class IDataFrameService_partitionByRandom_pargs {
   virtual ~IDataFrameService_partitionByRandom_pargs() noexcept;
   const IDataFrameId* id;
   const int64_t* numPartitions;
+  const int32_t* seed;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -2386,6 +2398,125 @@ class IDataFrameService_keyBy_presult {
    ::ignis::rpc::driver::IDriverException ex;
 
   _IDataFrameService_keyBy_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
+typedef struct _IDataFrameService_mapWithIndex_args__isset {
+  _IDataFrameService_mapWithIndex_args__isset() : id(false), src(false) {}
+  bool id :1;
+  bool src :1;
+} _IDataFrameService_mapWithIndex_args__isset;
+
+class IDataFrameService_mapWithIndex_args {
+ public:
+
+  IDataFrameService_mapWithIndex_args(const IDataFrameService_mapWithIndex_args&);
+  IDataFrameService_mapWithIndex_args& operator=(const IDataFrameService_mapWithIndex_args&);
+  IDataFrameService_mapWithIndex_args() noexcept {
+  }
+
+  virtual ~IDataFrameService_mapWithIndex_args() noexcept;
+  IDataFrameId id;
+   ::ignis::rpc::ISource src;
+
+  _IDataFrameService_mapWithIndex_args__isset __isset;
+
+  void __set_id(const IDataFrameId& val);
+
+  void __set_src(const  ::ignis::rpc::ISource& val);
+
+  bool operator == (const IDataFrameService_mapWithIndex_args & rhs) const
+  {
+    if (!(id == rhs.id))
+      return false;
+    if (!(src == rhs.src))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_mapWithIndex_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_mapWithIndex_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class IDataFrameService_mapWithIndex_pargs {
+ public:
+
+
+  virtual ~IDataFrameService_mapWithIndex_pargs() noexcept;
+  const IDataFrameId* id;
+  const  ::ignis::rpc::ISource* src;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_mapWithIndex_result__isset {
+  _IDataFrameService_mapWithIndex_result__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_mapWithIndex_result__isset;
+
+class IDataFrameService_mapWithIndex_result {
+ public:
+
+  IDataFrameService_mapWithIndex_result(const IDataFrameService_mapWithIndex_result&);
+  IDataFrameService_mapWithIndex_result& operator=(const IDataFrameService_mapWithIndex_result&);
+  IDataFrameService_mapWithIndex_result() noexcept {
+  }
+
+  virtual ~IDataFrameService_mapWithIndex_result() noexcept;
+  IDataFrameId success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_mapWithIndex_result__isset __isset;
+
+  void __set_success(const IDataFrameId& val);
+
+  void __set_ex(const  ::ignis::rpc::driver::IDriverException& val);
+
+  bool operator == (const IDataFrameService_mapWithIndex_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    if (!(ex == rhs.ex))
+      return false;
+    return true;
+  }
+  bool operator != (const IDataFrameService_mapWithIndex_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const IDataFrameService_mapWithIndex_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _IDataFrameService_mapWithIndex_presult__isset {
+  _IDataFrameService_mapWithIndex_presult__isset() : success(false), ex(false) {}
+  bool success :1;
+  bool ex :1;
+} _IDataFrameService_mapWithIndex_presult__isset;
+
+class IDataFrameService_mapWithIndex_presult {
+ public:
+
+
+  virtual ~IDataFrameService_mapWithIndex_presult() noexcept;
+  IDataFrameId* success;
+   ::ignis::rpc::driver::IDriverException ex;
+
+  _IDataFrameService_mapWithIndex_presult__isset __isset;
 
   uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
 
@@ -10626,8 +10757,8 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_) override;
   void send_repartition(const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
   void recv_repartition(IDataFrameId& _return);
-  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) override;
-  void send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
+  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const int32_t seed) override;
+  void send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions, const int32_t seed);
   void recv_partitionByRandom(IDataFrameId& _return);
   void partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) override;
   void send_partitionByHash(const IDataFrameId& id, const int64_t numPartitions);
@@ -10647,6 +10778,9 @@ class IDataFrameServiceClient : virtual public IDataFrameServiceIf {
   void keyBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   void send_keyBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_keyBy(IDataFrameId& _return);
+  void mapWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
+  void send_mapWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_mapWithIndex(IDataFrameId& _return);
   void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   void send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapPartitions(IDataFrameId& _return);
@@ -10880,6 +11014,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   void process_filter(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_flatmap(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_keyBy(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_mapWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapPartitions(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapPartitionsWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_mapExecutor(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
@@ -10965,6 +11100,7 @@ class IDataFrameServiceProcessor : public ::apache::thrift::TDispatchProcessor {
     processMap_["filter"] = &IDataFrameServiceProcessor::process_filter;
     processMap_["flatmap"] = &IDataFrameServiceProcessor::process_flatmap;
     processMap_["keyBy"] = &IDataFrameServiceProcessor::process_keyBy;
+    processMap_["mapWithIndex"] = &IDataFrameServiceProcessor::process_mapWithIndex;
     processMap_["mapPartitions"] = &IDataFrameServiceProcessor::process_mapPartitions;
     processMap_["mapPartitionsWithIndex"] = &IDataFrameServiceProcessor::process_mapPartitionsWithIndex;
     processMap_["mapExecutor"] = &IDataFrameServiceProcessor::process_mapExecutor;
@@ -11149,13 +11285,13 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
     return;
   }
 
-  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) override {
+  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const int32_t seed) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->partitionByRandom(_return, id, numPartitions);
+      ifaces_[i]->partitionByRandom(_return, id, numPartitions, seed);
     }
-    ifaces_[i]->partitionByRandom(_return, id, numPartitions);
+    ifaces_[i]->partitionByRandom(_return, id, numPartitions, seed);
     return;
   }
 
@@ -11216,6 +11352,16 @@ class IDataFrameServiceMultiface : virtual public IDataFrameServiceIf {
       ifaces_[i]->keyBy(_return, id, src);
     }
     ifaces_[i]->keyBy(_return, id, src);
+    return;
+  }
+
+  void mapWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->mapWithIndex(_return, id, src);
+    }
+    ifaces_[i]->mapWithIndex(_return, id, src);
     return;
   }
 
@@ -11912,8 +12058,8 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void repartition(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_) override;
   int32_t send_repartition(const IDataFrameId& id, const int64_t numPartitions, const bool preserveOrdering, const bool global_);
   void recv_repartition(IDataFrameId& _return, const int32_t seqid);
-  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) override;
-  int32_t send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions);
+  void partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const int32_t seed) override;
+  int32_t send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions, const int32_t seed);
   void recv_partitionByRandom(IDataFrameId& _return, const int32_t seqid);
   void partitionByHash(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions) override;
   int32_t send_partitionByHash(const IDataFrameId& id, const int64_t numPartitions);
@@ -11933,6 +12079,9 @@ class IDataFrameServiceConcurrentClient : virtual public IDataFrameServiceIf {
   void keyBy(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   int32_t send_keyBy(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_keyBy(IDataFrameId& _return, const int32_t seqid);
+  void mapWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
+  int32_t send_mapWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
+  void recv_mapWithIndex(IDataFrameId& _return, const int32_t seqid);
   void mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src) override;
   int32_t send_mapPartitions(const IDataFrameId& id, const  ::ignis::rpc::ISource& src);
   void recv_mapPartitions(IDataFrameId& _return, const int32_t seqid);

@@ -27,6 +27,8 @@ namespace ignis {
 
                     void keyBy(const rpc::ISource &src) override;
 
+                    void mapWithIndex(const rpc::ISource &function) override;
+
                     void mapPartitions(const rpc::ISource &function) override;
 
                     void mapPartitionsWithIndex(const rpc::ISource &function) override;
@@ -60,7 +62,7 @@ namespace ignis {
                     void repartition(const int64_t numPartitions, const bool preserveOrdering,
                                      const bool global_) override;
 
-                    void partitionByRandom(const int64_t numPartitions) override;
+                    void partitionByRandom(const int64_t numPartitions, const int32_t seed) override;
 
                     void partitionByHash(const int64_t numPartitions) override;
 

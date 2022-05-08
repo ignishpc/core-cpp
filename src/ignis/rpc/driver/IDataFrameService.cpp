@@ -2120,6 +2120,14 @@ uint32_t IDataFrameService_partitionByRandom_args::read(::apache::thrift::protoc
           xfer += iprot->skip(ftype);
         }
         break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->seed);
+          this->__isset.seed = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -2145,6 +2153,10 @@ uint32_t IDataFrameService_partitionByRandom_args::write(::apache::thrift::proto
   xfer += oprot->writeI64(this->numPartitions);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->seed);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -2166,6 +2178,10 @@ uint32_t IDataFrameService_partitionByRandom_pargs::write(::apache::thrift::prot
 
   xfer += oprot->writeFieldBegin("numPartitions", ::apache::thrift::protocol::T_I64, 2);
   xfer += oprot->writeI64((*(this->numPartitions)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("seed", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32((*(this->seed)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -3607,6 +3623,229 @@ IDataFrameService_keyBy_presult::~IDataFrameService_keyBy_presult() noexcept {
 
 
 uint32_t IDataFrameService_keyBy_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += (*(this->success)).read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+
+IDataFrameService_mapWithIndex_args::~IDataFrameService_mapWithIndex_args() noexcept {
+}
+
+
+uint32_t IDataFrameService_mapWithIndex_args::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->id.read(iprot);
+          this->__isset.id = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->src.read(iprot);
+          this->__isset.src = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataFrameService_mapWithIndex_args::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataFrameService_mapWithIndex_args");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += this->id.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += this->src.write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_mapWithIndex_pargs::~IDataFrameService_mapWithIndex_pargs() noexcept {
+}
+
+
+uint32_t IDataFrameService_mapWithIndex_pargs::write(::apache::thrift::protocol::TProtocol* oprot) const {
+  uint32_t xfer = 0;
+  ::apache::thrift::protocol::TOutputRecursionTracker tracker(*oprot);
+  xfer += oprot->writeStructBegin("IDataFrameService_mapWithIndex_pargs");
+
+  xfer += oprot->writeFieldBegin("id", ::apache::thrift::protocol::T_STRUCT, 1);
+  xfer += (*(this->id)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("src", ::apache::thrift::protocol::T_STRUCT, 2);
+  xfer += (*(this->src)).write(oprot);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_mapWithIndex_result::~IDataFrameService_mapWithIndex_result() noexcept {
+}
+
+
+uint32_t IDataFrameService_mapWithIndex_result::read(::apache::thrift::protocol::TProtocol* iprot) {
+
+  ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
+  uint32_t xfer = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TType ftype;
+  int16_t fid;
+
+  xfer += iprot->readStructBegin(fname);
+
+  using ::apache::thrift::protocol::TProtocolException;
+
+
+  while (true)
+  {
+    xfer += iprot->readFieldBegin(fname, ftype, fid);
+    if (ftype == ::apache::thrift::protocol::T_STOP) {
+      break;
+    }
+    switch (fid)
+    {
+      case 0:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->success.read(iprot);
+          this->__isset.success = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 1:
+        if (ftype == ::apache::thrift::protocol::T_STRUCT) {
+          xfer += this->ex.read(iprot);
+          this->__isset.ex = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      default:
+        xfer += iprot->skip(ftype);
+        break;
+    }
+    xfer += iprot->readFieldEnd();
+  }
+
+  xfer += iprot->readStructEnd();
+
+  return xfer;
+}
+
+uint32_t IDataFrameService_mapWithIndex_result::write(::apache::thrift::protocol::TProtocol* oprot) const {
+
+  uint32_t xfer = 0;
+
+  xfer += oprot->writeStructBegin("IDataFrameService_mapWithIndex_result");
+
+  if (this->__isset.success) {
+    xfer += oprot->writeFieldBegin("success", ::apache::thrift::protocol::T_STRUCT, 0);
+    xfer += this->success.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  } else if (this->__isset.ex) {
+    xfer += oprot->writeFieldBegin("ex", ::apache::thrift::protocol::T_STRUCT, 1);
+    xfer += this->ex.write(oprot);
+    xfer += oprot->writeFieldEnd();
+  }
+  xfer += oprot->writeFieldStop();
+  xfer += oprot->writeStructEnd();
+  return xfer;
+}
+
+
+IDataFrameService_mapWithIndex_presult::~IDataFrameService_mapWithIndex_presult() noexcept {
+}
+
+
+uint32_t IDataFrameService_mapWithIndex_presult::read(::apache::thrift::protocol::TProtocol* iprot) {
 
   ::apache::thrift::protocol::TInputRecursionTracker tracker(*iprot);
   uint32_t xfer = 0;
@@ -19594,13 +19833,13 @@ void IDataFrameServiceClient::recv_repartition(IDataFrameId& _return)
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "repartition failed: unknown result");
 }
 
-void IDataFrameServiceClient::partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const int32_t seed)
 {
-  send_partitionByRandom(id, numPartitions);
+  send_partitionByRandom(id, numPartitions, seed);
   recv_partitionByRandom(_return);
 }
 
-void IDataFrameServiceClient::send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceClient::send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions, const int32_t seed)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("partitionByRandom", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -19608,6 +19847,7 @@ void IDataFrameServiceClient::send_partitionByRandom(const IDataFrameId& id, con
   IDataFrameService_partitionByRandom_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
+  args.seed = &seed;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -20027,6 +20267,68 @@ void IDataFrameServiceClient::recv_keyBy(IDataFrameId& _return)
     throw result.ex;
   }
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "keyBy failed: unknown result");
+}
+
+void IDataFrameServiceClient::mapWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  send_mapWithIndex(id, src);
+  recv_mapWithIndex(_return);
+}
+
+void IDataFrameServiceClient::send_mapWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = 0;
+  oprot_->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataFrameService_mapWithIndex_pargs args;
+  args.id = &id;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+}
+
+void IDataFrameServiceClient::recv_mapWithIndex(IDataFrameId& _return)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  iprot_->readMessageBegin(fname, mtype, rseqid);
+  if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+    ::apache::thrift::TApplicationException x;
+    x.read(iprot_);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+    throw x;
+  }
+  if (mtype != ::apache::thrift::protocol::T_REPLY) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  if (fname.compare("mapWithIndex") != 0) {
+    iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+    iprot_->readMessageEnd();
+    iprot_->getTransport()->readEnd();
+  }
+  IDataFrameService_mapWithIndex_presult result;
+  result.success = &_return;
+  result.read(iprot_);
+  iprot_->readMessageEnd();
+  iprot_->getTransport()->readEnd();
+
+  if (result.__isset.success) {
+    // _return pointer has now been filled
+    return;
+  }
+  if (result.__isset.ex) {
+    throw result.ex;
+  }
+  throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "mapWithIndex failed: unknown result");
 }
 
 void IDataFrameServiceClient::mapPartitions(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
@@ -24704,7 +25006,7 @@ void IDataFrameServiceProcessor::process_partitionByRandom(int32_t seqid, ::apac
 
   IDataFrameService_partitionByRandom_result result;
   try {
-    iface_->partitionByRandom(result.success, args.id, args.numPartitions);
+    iface_->partitionByRandom(result.success, args.id, args.numPartitions, args.seed);
     result.__isset.success = true;
   } catch ( ::ignis::rpc::driver::IDriverException &ex) {
     result.ex = std::move(ex);
@@ -25077,6 +25379,63 @@ void IDataFrameServiceProcessor::process_keyBy(int32_t seqid, ::apache::thrift::
 
   if (this->eventHandler_.get() != nullptr) {
     this->eventHandler_->postWrite(ctx, "IDataFrameService.keyBy", bytes);
+  }
+}
+
+void IDataFrameServiceProcessor::process_mapWithIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext)
+{
+  void* ctx = nullptr;
+  if (this->eventHandler_.get() != nullptr) {
+    ctx = this->eventHandler_->getContext("IDataFrameService.mapWithIndex", callContext);
+  }
+  ::apache::thrift::TProcessorContextFreer freer(this->eventHandler_.get(), ctx, "IDataFrameService.mapWithIndex");
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preRead(ctx, "IDataFrameService.mapWithIndex");
+  }
+
+  IDataFrameService_mapWithIndex_args args;
+  args.read(iprot);
+  iprot->readMessageEnd();
+  uint32_t bytes = iprot->getTransport()->readEnd();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postRead(ctx, "IDataFrameService.mapWithIndex", bytes);
+  }
+
+  IDataFrameService_mapWithIndex_result result;
+  try {
+    iface_->mapWithIndex(result.success, args.id, args.src);
+    result.__isset.success = true;
+  } catch ( ::ignis::rpc::driver::IDriverException &ex) {
+    result.ex = std::move(ex);
+    result.__isset.ex = true;
+  } catch (const std::exception& e) {
+    if (this->eventHandler_.get() != nullptr) {
+      this->eventHandler_->handlerError(ctx, "IDataFrameService.mapWithIndex");
+    }
+
+    ::apache::thrift::TApplicationException x(e.what());
+    oprot->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_EXCEPTION, seqid);
+    x.write(oprot);
+    oprot->writeMessageEnd();
+    oprot->getTransport()->writeEnd();
+    oprot->getTransport()->flush();
+    return;
+  }
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->preWrite(ctx, "IDataFrameService.mapWithIndex");
+  }
+
+  oprot->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_REPLY, seqid);
+  result.write(oprot);
+  oprot->writeMessageEnd();
+  bytes = oprot->getTransport()->writeEnd();
+  oprot->getTransport()->flush();
+
+  if (this->eventHandler_.get() != nullptr) {
+    this->eventHandler_->postWrite(ctx, "IDataFrameService.mapWithIndex", bytes);
   }
 }
 
@@ -29628,13 +29987,13 @@ void IDataFrameServiceConcurrentClient::recv_repartition(IDataFrameId& _return, 
   } // end while(true)
 }
 
-void IDataFrameServiceConcurrentClient::partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions)
+void IDataFrameServiceConcurrentClient::partitionByRandom(IDataFrameId& _return, const IDataFrameId& id, const int64_t numPartitions, const int32_t seed)
 {
-  int32_t seqid = send_partitionByRandom(id, numPartitions);
+  int32_t seqid = send_partitionByRandom(id, numPartitions, seed);
   recv_partitionByRandom(_return, seqid);
 }
 
-int32_t IDataFrameServiceConcurrentClient::send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions)
+int32_t IDataFrameServiceConcurrentClient::send_partitionByRandom(const IDataFrameId& id, const int64_t numPartitions, const int32_t seed)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -29643,6 +30002,7 @@ int32_t IDataFrameServiceConcurrentClient::send_partitionByRandom(const IDataFra
   IDataFrameService_partitionByRandom_pargs args;
   args.id = &id;
   args.numPartitions = &numPartitions;
+  args.seed = &seed;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -30243,6 +30603,95 @@ void IDataFrameServiceConcurrentClient::recv_keyBy(IDataFrameId& _return, const 
       }
       // in a bad state, don't commit
       throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "keyBy failed: unknown result");
+    }
+    // seqid != rseqid
+    this->sync_->updatePending(fname, mtype, rseqid);
+
+    // this will temporarily unlock the readMutex, and let other clients get work done
+    this->sync_->waitForWork(seqid);
+  } // end while(true)
+}
+
+void IDataFrameServiceConcurrentClient::mapWithIndex(IDataFrameId& _return, const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  int32_t seqid = send_mapWithIndex(id, src);
+  recv_mapWithIndex(_return, seqid);
+}
+
+int32_t IDataFrameServiceConcurrentClient::send_mapWithIndex(const IDataFrameId& id, const  ::ignis::rpc::ISource& src)
+{
+  int32_t cseqid = this->sync_->generateSeqId();
+  ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
+  oprot_->writeMessageBegin("mapWithIndex", ::apache::thrift::protocol::T_CALL, cseqid);
+
+  IDataFrameService_mapWithIndex_pargs args;
+  args.id = &id;
+  args.src = &src;
+  args.write(oprot_);
+
+  oprot_->writeMessageEnd();
+  oprot_->getTransport()->writeEnd();
+  oprot_->getTransport()->flush();
+
+  sentry.commit();
+  return cseqid;
+}
+
+void IDataFrameServiceConcurrentClient::recv_mapWithIndex(IDataFrameId& _return, const int32_t seqid)
+{
+
+  int32_t rseqid = 0;
+  std::string fname;
+  ::apache::thrift::protocol::TMessageType mtype;
+
+  // the read mutex gets dropped and reacquired as part of waitForWork()
+  // The destructor of this sentry wakes up other clients
+  ::apache::thrift::async::TConcurrentRecvSentry sentry(this->sync_.get(), seqid);
+
+  while(true) {
+    if(!this->sync_->getPending(fname, mtype, rseqid)) {
+      iprot_->readMessageBegin(fname, mtype, rseqid);
+    }
+    if(seqid == rseqid) {
+      if (mtype == ::apache::thrift::protocol::T_EXCEPTION) {
+        ::apache::thrift::TApplicationException x;
+        x.read(iprot_);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+        sentry.commit();
+        throw x;
+      }
+      if (mtype != ::apache::thrift::protocol::T_REPLY) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+      }
+      if (fname.compare("mapWithIndex") != 0) {
+        iprot_->skip(::apache::thrift::protocol::T_STRUCT);
+        iprot_->readMessageEnd();
+        iprot_->getTransport()->readEnd();
+
+        // in a bad state, don't commit
+        using ::apache::thrift::protocol::TProtocolException;
+        throw TProtocolException(TProtocolException::INVALID_DATA);
+      }
+      IDataFrameService_mapWithIndex_presult result;
+      result.success = &_return;
+      result.read(iprot_);
+      iprot_->readMessageEnd();
+      iprot_->getTransport()->readEnd();
+
+      if (result.__isset.success) {
+        // _return pointer has now been filled
+        sentry.commit();
+        return;
+      }
+      if (result.__isset.ex) {
+        sentry.commit();
+        throw result.ex;
+      }
+      // in a bad state, don't commit
+      throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "mapWithIndex failed: unknown result");
     }
     // seqid != rseqid
     this->sync_->updatePending(fname, mtype, rseqid);

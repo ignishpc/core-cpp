@@ -40,6 +40,12 @@ void IGeneralModule::keyBy(const rpc::ISource &src) {
     IGNIS_RPC_CATCH()
 }
 
+void IGeneralModule::mapWithIndex(const rpc::ISource &src) {
+    IGNIS_RPC_TRY()
+    executor_data->loadLibrary(src)->general->mapWithIndex(pipe_impl);
+    IGNIS_RPC_CATCH()
+}
+
 void IGeneralModule::mapPartitions(const rpc::ISource &function) {
     IGNIS_RPC_TRY()
     executor_data->loadLibrary(function)->general->mapPartitions(pipe_impl);
@@ -137,9 +143,9 @@ void IGeneralModule::repartition(const int64_t numPartitions, const bool preserv
     IGNIS_RPC_CATCH()
 }
 
-void IGeneralModule::partitionByRandom(const int64_t numPartitions) {
+void IGeneralModule::partitionByRandom(const int64_t numPartitions, const int32_t seed) {
     IGNIS_RPC_TRY()
-    typeFromPartition()->partitionByRandom(repartition_impl, numPartitions);
+    typeFromPartition()->partitionByRandom(repartition_impl, numPartitions, seed);
     IGNIS_RPC_CATCH()
 }
 

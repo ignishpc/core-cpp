@@ -82,6 +82,20 @@ void IGeneralModuleTestClass::keyByTest(const std::string &name, int cores, cons
 }
 
 template<typename Tp>
+void IGeneralModuleTestClass::mapWithIndexTest(const std::string &name, int cores, const std::string &partitionType) {
+    executor_data->getContext().props()["ignis.partition.type"] = partitionType;
+    executor_data->setCores(cores);
+    auto elems = IElements<Tp>().create(100 * cores * 2, 0);
+    loadToPartitions(elems, cores * 2);
+    general->mapWithIndex(newSource(name));
+    auto result = getFromPartitions<int>();
+    int offset = executor_data->mpi().rank() * int(elems.size());
+
+    CPPUNIT_ASSERT_EQUAL(elems.size(), result.size());
+    for (int i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(elems[i] + i + offset, result[i]); }
+}
+
+template<typename Tp>
 void IGeneralModuleTestClass::mapPartitionsTest(const std::string &name, int cores, const std::string &partitionType) {
     executor_data->getContext().props()["ignis.partition.type"] = partitionType;
     executor_data->setCores(cores);
@@ -563,7 +577,7 @@ void IGeneralModuleTestClass::partitionByRandomTest(int cores, const std::string
     loadToPartitions(local_elems, cores * 2);
     registerType<Tp>();
 
-    general->partitionByRandom(2 * np - 1);
+    general->partitionByRandom(2 * np - 1, 0);
 
     auto result = getFromPartitions<Tp>();
 

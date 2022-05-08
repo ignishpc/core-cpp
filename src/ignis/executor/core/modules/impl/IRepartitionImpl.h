@@ -19,7 +19,7 @@ namespace ignis {
                         void repartition(int64_t numPartitions, bool preserveOrdering, bool global);
 
                         template<typename Tp>
-                        void partitionByRandom(int64_t numPartitions);
+                        void partitionByRandom(int64_t numPartitions, int32_t seed);
 
                         template<typename Tp>
                         void partitionByHash(int64_t numPartitions);
