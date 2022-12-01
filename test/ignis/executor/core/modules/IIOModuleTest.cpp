@@ -89,7 +89,7 @@ void IIOModuleTest::textFileTest(int n, int cores) {
     }
 }
 
-void IIOModuleTest::plainFileTest(int n, int cores) {
+void IIOModuleTest::plainFileTest(int n, int cores, const std::string &delim) {
     executor_data->setCores(cores);
     srand(0);
     const char alphanum[] = "0123456789"
@@ -105,12 +105,12 @@ void IIOModuleTest::plainFileTest(int n, int cores) {
     for (int l = 0; l < 10000; l++) {
         int lc = rand() % 100;
         for (int i = 0; i < lc; ++i) { line += alphanum[rand() % (sizeof(alphanum) - 1)]; }
-        file << line << '@';
+        file << line << delim;
         lines.push_back(std::move(line));
     }
     file.flush();
 
-    io->plainFile3(path, n, '@');
+    io->plainFile3(path, n, delim);
 
     CPPUNIT_ASSERT_GREATEREQUAL(n / executors, (int) executor_data->getPartitions<std::string>()->partitions());
 
@@ -208,9 +208,7 @@ void IIOModuleTest::partitionJsonFileTestImpl(bool objMap) {
         io->partitionJsonFile4a(path, rank * n, n, false);
         auto result = getFromPartitions<api::IJsonValue>();
         CPPUNIT_ASSERT_EQUAL(lines.size(), result.size());
-        for(int64_t i=0; i< result.size();i++){
-            CPPUNIT_ASSERT_EQUAL(lines[i], result[i].getString());
-        }
+        for (int64_t i = 0; i < result.size(); i++) { CPPUNIT_ASSERT_EQUAL(lines[i], result[i].getString()); }
     }
 }
 

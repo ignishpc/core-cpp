@@ -2510,8 +2510,8 @@ uint32_t IWorkerService_plainFile_args::read(::apache::thrift::protocol::TProtoc
         }
         break;
       case 3:
-        if (ftype == ::apache::thrift::protocol::T_BYTE) {
-          xfer += iprot->readByte(this->delim);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->delim);
           this->__isset.delim = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2542,8 +2542,8 @@ uint32_t IWorkerService_plainFile_args::write(::apache::thrift::protocol::TProto
   xfer += oprot->writeString(this->path);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte(this->delim);
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->delim);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -2569,8 +2569,8 @@ uint32_t IWorkerService_plainFile_pargs::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeString((*(this->path)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte((*(this->delim)));
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->delim)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -2757,8 +2757,8 @@ uint32_t IWorkerService_plainFile4_args::read(::apache::thrift::protocol::TProto
         }
         break;
       case 4:
-        if (ftype == ::apache::thrift::protocol::T_BYTE) {
-          xfer += iprot->readByte(this->delim);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->delim);
           this->__isset.delim = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -2793,8 +2793,8 @@ uint32_t IWorkerService_plainFile4_args::write(::apache::thrift::protocol::TProt
   xfer += oprot->writeI64(this->minPartitions);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 4);
-  xfer += oprot->writeByte(this->delim);
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString(this->delim);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -2824,8 +2824,8 @@ uint32_t IWorkerService_plainFile4_pargs::write(::apache::thrift::protocol::TPro
   xfer += oprot->writeI64((*(this->minPartitions)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 4);
-  xfer += oprot->writeByte((*(this->delim)));
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 4);
+  xfer += oprot->writeString((*(this->delim)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -6768,13 +6768,13 @@ void IWorkerServiceClient::recv_importDataFrame3( ::ignis::rpc::driver::IDataFra
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "importDataFrame3 failed: unknown result");
 }
 
-void IWorkerServiceClient::plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int8_t delim)
+void IWorkerServiceClient::plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const std::string& delim)
 {
   send_plainFile(id, path, delim);
   recv_plainFile(_return);
 }
 
-void IWorkerServiceClient::send_plainFile(const IWorkerId& id, const std::string& path, const int8_t delim)
+void IWorkerServiceClient::send_plainFile(const IWorkerId& id, const std::string& path, const std::string& delim)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("plainFile", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -6831,13 +6831,13 @@ void IWorkerServiceClient::recv_plainFile( ::ignis::rpc::driver::IDataFrameId& _
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "plainFile failed: unknown result");
 }
 
-void IWorkerServiceClient::plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim)
+void IWorkerServiceClient::plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   send_plainFile4(id, path, minPartitions, delim);
   recv_plainFile4(_return);
 }
 
-void IWorkerServiceClient::send_plainFile4(const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim)
+void IWorkerServiceClient::send_plainFile4(const IWorkerId& id, const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("plainFile4", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -10262,13 +10262,13 @@ void IWorkerServiceConcurrentClient::recv_importDataFrame3( ::ignis::rpc::driver
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int8_t delim)
+void IWorkerServiceConcurrentClient::plainFile( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const std::string& delim)
 {
   int32_t seqid = send_plainFile(id, path, delim);
   recv_plainFile(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_plainFile(const IWorkerId& id, const std::string& path, const int8_t delim)
+int32_t IWorkerServiceConcurrentClient::send_plainFile(const IWorkerId& id, const std::string& path, const std::string& delim)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -10352,13 +10352,13 @@ void IWorkerServiceConcurrentClient::recv_plainFile( ::ignis::rpc::driver::IData
   } // end while(true)
 }
 
-void IWorkerServiceConcurrentClient::plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim)
+void IWorkerServiceConcurrentClient::plainFile4( ::ignis::rpc::driver::IDataFrameId& _return, const IWorkerId& id, const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   int32_t seqid = send_plainFile4(id, path, minPartitions, delim);
   recv_plainFile4(_return, seqid);
 }
 
-int32_t IWorkerServiceConcurrentClient::send_plainFile4(const IWorkerId& id, const std::string& path, const int64_t minPartitions, const int8_t delim)
+int32_t IWorkerServiceConcurrentClient::send_plainFile4(const IWorkerId& id, const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());

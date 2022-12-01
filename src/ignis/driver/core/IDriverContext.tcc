@@ -13,7 +13,7 @@ ignis::rpc::ISource IDriverContextClass::registerType() {
     auto type = std::make_shared<ignis::executor::core::selector::ITypeSelectorImpl<Tp>>();
     executor_data->registerType(type);
     rpc::ISource src;
-    src.obj.__set_name(type->info().getStandardName());
+    src.obj.__set_name(":" + type->info().getStandardName());
     return src;
     IGNIS_RPC_CATCH()
 }
@@ -92,8 +92,6 @@ ignis::executor::api::IVector<Tp> IDriverContextClass::collect(int64_t id) {
 template<typename Tp>
 Tp IDriverContextClass::collect1(int64_t id) {
     executor::api::IVector<Tp> results = collect<executor::api::IVector<Tp>>(id);
-    if(results.empty()){
-        throw api::IDriverException("Empty collection");
-    }
+    if (results.empty()) { throw api::IDriverException("Empty collection"); }
     return results[0];
 }

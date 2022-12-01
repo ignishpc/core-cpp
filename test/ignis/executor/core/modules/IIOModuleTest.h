@@ -16,6 +16,8 @@ namespace ignis {
                     CPPUNIT_TEST(textFileNTest);
                     CPPUNIT_TEST(plainFile1Test);
                     CPPUNIT_TEST(plainFileNTest);
+                    CPPUNIT_TEST(plainFileS1Test);
+                    CPPUNIT_TEST(plainFileSNTest);
                     CPPUNIT_TEST(saveAsTextFileTest);
                     CPPUNIT_TEST(partitionTextFileTest);
                     CPPUNIT_TEST(partitionJsonFileTest);
@@ -36,9 +38,13 @@ namespace ignis {
 
                     void textFileNTest() { textFileTest(8, 2); }
 
-                    void plainFile1Test() { plainFileTest(1, 1); }
+                    void plainFile1Test() { plainFileTest(1, 1, "@"); }
 
-                    void plainFileNTest() { plainFileTest(8, 2); }
+                    void plainFileNTest() { plainFileTest(8, 2, "@"); }
+
+                    void plainFileS1Test() { plainFileTest(1, 1, "@@"); }
+
+                    void plainFileSNTest() { plainFileTest(8, 2, "@@"); }
 
                     void saveAsTextFileTest() { saveAsTextFileTest(8, 2); }
 
@@ -55,7 +61,7 @@ namespace ignis {
 
                     void textFileTest(int n, int cores);
 
-                    void plainFileTest(int n, int cores);
+                    void plainFileTest(int n, int cores, const std::string& delim);
 
                     void saveAsTextFileTest(int n, int cores);
 

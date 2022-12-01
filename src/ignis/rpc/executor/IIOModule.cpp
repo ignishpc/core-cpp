@@ -1007,8 +1007,8 @@ uint32_t IIOModule_plainFile_args::read(::apache::thrift::protocol::TProtocol* i
         }
         break;
       case 2:
-        if (ftype == ::apache::thrift::protocol::T_BYTE) {
-          xfer += iprot->readByte(this->delim);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->delim);
           this->__isset.delim = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1035,8 +1035,8 @@ uint32_t IIOModule_plainFile_args::write(::apache::thrift::protocol::TProtocol* 
   xfer += oprot->writeString(this->path);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 2);
-  xfer += oprot->writeByte(this->delim);
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString(this->delim);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1058,8 +1058,8 @@ uint32_t IIOModule_plainFile_pargs::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeString((*(this->path)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 2);
-  xfer += oprot->writeByte((*(this->delim)));
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 2);
+  xfer += oprot->writeString((*(this->delim)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1218,8 +1218,8 @@ uint32_t IIOModule_plainFile3_args::read(::apache::thrift::protocol::TProtocol* 
         }
         break;
       case 3:
-        if (ftype == ::apache::thrift::protocol::T_BYTE) {
-          xfer += iprot->readByte(this->delim);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->delim);
           this->__isset.delim = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1250,8 +1250,8 @@ uint32_t IIOModule_plainFile3_args::write(::apache::thrift::protocol::TProtocol*
   xfer += oprot->writeI64(this->minPartitions);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte(this->delim);
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->delim);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -1277,8 +1277,8 @@ uint32_t IIOModule_plainFile3_pargs::write(::apache::thrift::protocol::TProtocol
   xfer += oprot->writeI64((*(this->minPartitions)));
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_BYTE, 3);
-  xfer += oprot->writeByte((*(this->delim)));
+  xfer += oprot->writeFieldBegin("delim", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString((*(this->delim)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -3860,13 +3860,13 @@ int64_t IIOModuleClient::recv_partitionApproxSize()
   throw ::apache::thrift::TApplicationException(::apache::thrift::TApplicationException::MISSING_RESULT, "partitionApproxSize failed: unknown result");
 }
 
-void IIOModuleClient::plainFile(const std::string& path, const int8_t delim)
+void IIOModuleClient::plainFile(const std::string& path, const std::string& delim)
 {
   send_plainFile(path, delim);
   recv_plainFile();
 }
 
-void IIOModuleClient::send_plainFile(const std::string& path, const int8_t delim)
+void IIOModuleClient::send_plainFile(const std::string& path, const std::string& delim)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("plainFile", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -3917,13 +3917,13 @@ void IIOModuleClient::recv_plainFile()
   return;
 }
 
-void IIOModuleClient::plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim)
+void IIOModuleClient::plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   send_plainFile3(path, minPartitions, delim);
   recv_plainFile3();
 }
 
-void IIOModuleClient::send_plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim)
+void IIOModuleClient::send_plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("plainFile3", ::apache::thrift::protocol::T_CALL, cseqid);
@@ -5960,13 +5960,13 @@ int64_t IIOModuleConcurrentClient::recv_partitionApproxSize(const int32_t seqid)
   } // end while(true)
 }
 
-void IIOModuleConcurrentClient::plainFile(const std::string& path, const int8_t delim)
+void IIOModuleConcurrentClient::plainFile(const std::string& path, const std::string& delim)
 {
   int32_t seqid = send_plainFile(path, delim);
   recv_plainFile(seqid);
 }
 
-int32_t IIOModuleConcurrentClient::send_plainFile(const std::string& path, const int8_t delim)
+int32_t IIOModuleConcurrentClient::send_plainFile(const std::string& path, const std::string& delim)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -6043,13 +6043,13 @@ void IIOModuleConcurrentClient::recv_plainFile(const int32_t seqid)
   } // end while(true)
 }
 
-void IIOModuleConcurrentClient::plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim)
+void IIOModuleConcurrentClient::plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   int32_t seqid = send_plainFile3(path, minPartitions, delim);
   recv_plainFile3(seqid);
 }
 
-int32_t IIOModuleConcurrentClient::send_plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim)
+int32_t IIOModuleConcurrentClient::send_plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());

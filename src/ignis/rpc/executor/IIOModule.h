@@ -27,8 +27,8 @@ class IIOModuleIf {
   virtual int64_t partitionCount() = 0;
   virtual void countByPartition(std::vector<int64_t> & _return) = 0;
   virtual int64_t partitionApproxSize() = 0;
-  virtual void plainFile(const std::string& path, const int8_t delim) = 0;
-  virtual void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) = 0;
+  virtual void plainFile(const std::string& path, const std::string& delim) = 0;
+  virtual void plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim) = 0;
   virtual void textFile(const std::string& path) = 0;
   virtual void textFile2(const std::string& path, const int64_t minPartitions) = 0;
   virtual void partitionObjectFile(const std::string& path, const int64_t first, const int64_t partitions) = 0;
@@ -85,10 +85,10 @@ class IIOModuleNull : virtual public IIOModuleIf {
     int64_t _return = 0;
     return _return;
   }
-  void plainFile(const std::string& /* path */, const int8_t /* delim */) override {
+  void plainFile(const std::string& /* path */, const std::string& /* delim */) override {
     return;
   }
-  void plainFile3(const std::string& /* path */, const int64_t /* minPartitions */, const int8_t /* delim */) override {
+  void plainFile3(const std::string& /* path */, const int64_t /* minPartitions */, const std::string& /* delim */) override {
     return;
   }
   void textFile(const std::string& /* path */) override {
@@ -647,18 +647,18 @@ class IIOModule_plainFile_args {
   IIOModule_plainFile_args& operator=(const IIOModule_plainFile_args&);
   IIOModule_plainFile_args() noexcept
                            : path(),
-                             delim(0) {
+                             delim() {
   }
 
   virtual ~IIOModule_plainFile_args() noexcept;
   std::string path;
-  int8_t delim;
+  std::string delim;
 
   _IIOModule_plainFile_args__isset __isset;
 
   void __set_path(const std::string& val);
 
-  void __set_delim(const int8_t val);
+  void __set_delim(const std::string& val);
 
   bool operator == (const IIOModule_plainFile_args & rhs) const
   {
@@ -686,7 +686,7 @@ class IIOModule_plainFile_pargs {
 
   virtual ~IIOModule_plainFile_pargs() noexcept;
   const std::string* path;
-  const int8_t* delim;
+  const std::string* delim;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -762,13 +762,13 @@ class IIOModule_plainFile3_args {
   IIOModule_plainFile3_args() noexcept
                             : path(),
                               minPartitions(0),
-                              delim(0) {
+                              delim() {
   }
 
   virtual ~IIOModule_plainFile3_args() noexcept;
   std::string path;
   int64_t minPartitions;
-  int8_t delim;
+  std::string delim;
 
   _IIOModule_plainFile3_args__isset __isset;
 
@@ -776,7 +776,7 @@ class IIOModule_plainFile3_args {
 
   void __set_minPartitions(const int64_t val);
 
-  void __set_delim(const int8_t val);
+  void __set_delim(const std::string& val);
 
   bool operator == (const IIOModule_plainFile3_args & rhs) const
   {
@@ -807,7 +807,7 @@ class IIOModule_plainFile3_pargs {
   virtual ~IIOModule_plainFile3_pargs() noexcept;
   const std::string* path;
   const int64_t* minPartitions;
-  const int8_t* delim;
+  const std::string* delim;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -2108,11 +2108,11 @@ class IIOModuleClient : virtual public IIOModuleIf {
   int64_t partitionApproxSize() override;
   void send_partitionApproxSize();
   int64_t recv_partitionApproxSize();
-  void plainFile(const std::string& path, const int8_t delim) override;
-  void send_plainFile(const std::string& path, const int8_t delim);
+  void plainFile(const std::string& path, const std::string& delim) override;
+  void send_plainFile(const std::string& path, const std::string& delim);
   void recv_plainFile();
-  void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) override;
-  void send_plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim);
+  void plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim) override;
+  void send_plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim);
   void recv_plainFile3();
   void textFile(const std::string& path) override;
   void send_textFile(const std::string& path);
@@ -2270,7 +2270,7 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
     return ifaces_[i]->partitionApproxSize();
   }
 
-  void plainFile(const std::string& path, const int8_t delim) override {
+  void plainFile(const std::string& path, const std::string& delim) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -2279,7 +2279,7 @@ class IIOModuleMultiface : virtual public IIOModuleIf {
     ifaces_[i]->plainFile(path, delim);
   }
 
-  void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) override {
+  void plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim) override {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
@@ -2425,11 +2425,11 @@ class IIOModuleConcurrentClient : virtual public IIOModuleIf {
   int64_t partitionApproxSize() override;
   int32_t send_partitionApproxSize();
   int64_t recv_partitionApproxSize(const int32_t seqid);
-  void plainFile(const std::string& path, const int8_t delim) override;
-  int32_t send_plainFile(const std::string& path, const int8_t delim);
+  void plainFile(const std::string& path, const std::string& delim) override;
+  int32_t send_plainFile(const std::string& path, const std::string& delim);
   void recv_plainFile(const int32_t seqid);
-  void plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim) override;
-  int32_t send_plainFile3(const std::string& path, const int64_t minPartitions, const int8_t delim);
+  void plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim) override;
+  int32_t send_plainFile3(const std::string& path, const int64_t minPartitions, const std::string& delim);
   void recv_plainFile3(const int32_t seqid);
   void textFile(const std::string& path) override;
   int32_t send_textFile(const std::string& path);

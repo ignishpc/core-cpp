@@ -58,9 +58,26 @@ std::ofstream IIOImpl::openFileWrite(const std::string &path) {
     return file;
 }
 
-void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, char delim) {
+void getline(std::ifstream &file, std::string &str, std::string &buffer, const std::string &delim) {
+    if (delim.length() == 1) {
+        std::getline(file, str, delim[0]);
+        return;
+    }
+    int dsize = delim.size();
+    str.clear();
+    while(std::getline(file, buffer, delim.back())){
+        str.append(buffer);
+        str += delim.back();
+        if (str.find(delim) != std::string::npos) {
+            str.resize(str.size() - dsize);
+            return;
+        }
+    }
+}
+
+void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, const std::string &delim) {
     IGNIS_TRY()
-    IGNIS_LOG(info) << (delim == '\n' ? "IO: reading text file" : "IO: reading plain file");
+    IGNIS_LOG(info) << (delim == "\n" ? "IO: reading text file" : "IO: reading plain file");
     auto size = ghc::filesystem::file_size(path);
     IGNIS_LOG(info) << "IO: file has " << size << " Bytes";
     auto result = executor_data->getPartitionTools().newPartitionGroup<std::string>();
@@ -82,11 +99,17 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, char del
         size_t ex_chunk_end = ex_chunk_init + ex_chunk;
         size_t minPartitionSize = executor_data->getProperties().partitionMinimal();
         minPartitions = (int64_t) std::ceil(minPartitions / (float) threads);
+        int dsize = delim.size();
+        std::string str, buffer;
 
         if (globalThreadId > 0) {
-            file.seekg(ex_chunk_init > 0 ? ex_chunk_init - 1 : ex_chunk_init);
+            file.seekg(ex_chunk_init >= dsize ? ex_chunk_init - dsize : ex_chunk_init);
             int value;
-            while ((value = file.get()) != delim && value != EOF) {}
+            if (dsize == 1){
+                while ((value = file.get()) != delim[0] && value != EOF) {}
+            } else {
+                getline(file, str, buffer, delim);
+            }
             ex_chunk_init = file.tellg();
             if (globalThreadId == threads - 1) { ex_chunk_end = size; }
         }
@@ -99,7 +122,6 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, char del
         thread_groups[id]->add(partition);
         size_t partitionInit = ex_chunk_init;
         size_t filepos = ex_chunk_init;
-        std::string buffer;
 
         if (executor_data->getPartitionTools().isMemory(*partition)) {
             auto part_men = executor_data->getPartitionTools().toMemory(partition);
@@ -110,10 +132,10 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, char del
                     thread_groups[id]->add(part_men);
                     partitionInit = filepos;
                 }
-                std::getline(file, buffer, delim);
-                filepos += buffer.size() + 1;
+                getline(file, str, buffer, delim);
+                filepos += str.size() + dsize;
                 elements++;
-                part_men->inner().push_back(buffer);
+                part_men->inner().push_back(str);
             }
         } else {
             while (filepos < ex_chunk_end) {
@@ -124,10 +146,10 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, char del
                     thread_groups[id]->add(partition);
                     partitionInit = filepos;
                 }
-                std::getline(file, buffer, '\n');
-                filepos += buffer.size() + 1;
+                getline(file, str, buffer, delim);
+                filepos += str.size() + dsize;
                 elements++;
-                write_iterator->write(buffer);
+                write_iterator->write(str);
             }
         }
 
@@ -148,9 +170,7 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, char del
     IGNIS_CATCH()
 }
 
-void IIOImpl::textFile(const std::string &path, int64_t minPartitions) {
-    return plainFile(path, minPartitions, '\n');
-}
+void IIOImpl::textFile(const std::string &path, int64_t minPartitions) { return plainFile(path, minPartitions, "\n"); }
 
 void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t partitions) {
     IGNIS_TRY()
@@ -168,9 +188,7 @@ void IIOImpl::partitionTextFile(const std::string &path, int64_t first, int64_t 
             auto partition = (*group)[p];
             auto write_iterator = partition->writeIterator();
             std::string buffer;
-            while (std::getline(file, buffer, '\n')) {
-                write_iterator->write(buffer);
-            }
+            while (std::getline(file, buffer, '\n')) { write_iterator->write(buffer); }
             partition->fit();
         }
         IGNIS_OMP_CATCH()
