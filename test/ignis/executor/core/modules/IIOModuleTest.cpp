@@ -89,7 +89,7 @@ void IIOModuleTest::textFileTest(int n, int cores) {
     }
 }
 
-void IIOModuleTest::plainFileTest(int n, int cores, const std::string &delim) {
+void IIOModuleTest::plainFileTest(int n, int cores, const std::string &delim, const std::string& ex) {
     executor_data->setCores(cores);
     srand(0);
     const char alphanum[] = "0123456789"
@@ -101,16 +101,34 @@ void IIOModuleTest::plainFileTest(int n, int cores, const std::string &delim) {
     std::ofstream file(path, std::fstream::trunc);
     std::vector<std::string> lines;
     std::string line;
+    std::string delim2 = delim;
 
     for (int l = 0; l < 10000; l++) {
         int lc = rand() % 100;
         for (int i = 0; i < lc; ++i) { line += alphanum[rand() % (sizeof(alphanum) - 1)]; }
+        if(!ex.empty()){
+            line += ex + delim;
+        }
         file << line << delim;
         lines.push_back(std::move(line));
     }
     file.flush();
 
-    io->plainFile3(path, n, delim);
+    auto replaceAll = [](std::string &subject, const std::string &search, const std::string &replace) {
+        size_t pos = 0;
+        while ((pos = subject.find(search, pos)) != std::string::npos) {
+            subject.replace(pos, search.length(), replace);
+            pos += replace.length();
+        }
+    };
+
+    if(!ex.empty()){
+        std::string ex2 = ex;
+        replaceAll(ex2,"!", "\\!");
+        delim2 += "!" + ex2;
+    }
+
+    io->plainFile3(path, n, delim2);
 
     CPPUNIT_ASSERT_GREATEREQUAL(n / executors, (int) executor_data->getPartitions<std::string>()->partitions());
 

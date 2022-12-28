@@ -58,17 +58,31 @@ std::ofstream IIOImpl::openFileWrite(const std::string &path) {
     return file;
 }
 
-void getline(std::ifstream &file, std::string &str, std::string &buffer, const std::string &delim) {
+void getline(std::ifstream &file, std::string &str, std::string &buffer, const std::string &delim,
+             const std::vector<std::string> &exs = {}) {
     if (delim.length() == 1) {
         std::getline(file, str, delim[0]);
         return;
     }
     int dsize = delim.size();
+    int64_t overlap = 0;
     str.clear();
-    while(std::getline(file, buffer, delim.back())){
+    while (std::getline(file, buffer, delim.back())) {
         str.append(buffer);
         str += delim.back();
-        if (str.find(delim) != std::string::npos) {
+        if (str.size() >= dsize && str.rfind(delim) == (str.size() - dsize)) {
+            if (!exs.empty()) {
+                if (str.size() - overlap < dsize) { continue; }
+                bool f = false;
+                for (auto &ex : exs) {
+                    if (str.size() >= ex.size() && str.find(ex) == (str.size() - ex.size())) {
+                        overlap = str.size();
+                        f = true;
+                        break;
+                    }
+                }
+                if (f) { continue; }
+            }
             str.resize(str.size() - dsize);
             return;
         }
@@ -99,18 +113,51 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, const st
         size_t ex_chunk_end = ex_chunk_init + ex_chunk;
         size_t minPartitionSize = executor_data->getProperties().partitionMinimal();
         minPartitions = (int64_t) std::ceil(minPartitions / (float) threads);
-        int dsize = delim.size();
         std::string str, buffer;
+        std::vector<std::string> exs;
+        std::string ldelim = delim;
+        int esize = 0;
+        if (ldelim.find('!') != std::string::npos) {
+            std::string flag = "\1";
+            while (ldelim.find(flag) != std::string::npos) { flag += "\1"; }
+            auto replaceAll = [](std::string &subject, const std::string &search, const std::string &replace) {
+                size_t pos = 0;
+                while ((pos = subject.find(search, pos)) != std::string::npos) {
+                    subject.replace(pos, search.length(), replace);
+                    pos += replace.length();
+                }
+            };
+            replaceAll(ldelim, "\\!", flag);
+            std::stringstream fields(ldelim);
+            std::string field;
+            for (int i = 0; std::getline(fields, field, '!'); i++) {
+                replaceAll(field, flag, "!");
+                if (i == 0) {
+                    ldelim = field;
+                } else {
+                    exs.push_back(field + ldelim);
+                }
+            }
+        }
+        for (auto &ex : exs) {
+            if (ex.size() > esize) { esize = ex.size(); }
+        }
+        if (ldelim.empty()) { ldelim = "\n"; }
+        int dsize = ldelim.size();
 
         if (globalThreadId > 0) {
-            file.seekg(ex_chunk_init >= dsize ? ex_chunk_init - dsize : ex_chunk_init);
+            size_t padding = ex_chunk_init >= (dsize + esize) ? ex_chunk_init - (dsize + esize) : 0;
+            file.seekg(padding);
             int value;
-            if (dsize == 1){
-                while ((value = file.get()) != delim[0] && value != EOF) {}
+            if (dsize == 1 && esize == 0) {
+                do { padding++; } while ((value = file.get()) != ldelim[0] && value != EOF);
             } else {
-                getline(file, str, buffer, delim);
+                do {
+                    getline(file, str, buffer, ldelim, exs);
+                    padding += str.size() + dsize;
+                } while (ex_chunk_init > padding);
             }
-            ex_chunk_init = file.tellg();
+            ex_chunk_init = padding;
             if (globalThreadId == threads - 1) { ex_chunk_end = size; }
         }
 
@@ -132,7 +179,7 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, const st
                     thread_groups[id]->add(part_men);
                     partitionInit = filepos;
                 }
-                getline(file, str, buffer, delim);
+                getline(file, str, buffer, ldelim, exs);
                 filepos += str.size() + dsize;
                 elements++;
                 part_men->inner().push_back(str);
@@ -146,7 +193,7 @@ void IIOImpl::plainFile(const std::string &path, int64_t minPartitions, const st
                     thread_groups[id]->add(partition);
                     partitionInit = filepos;
                 }
-                getline(file, str, buffer, delim);
+                getline(file, str, buffer, ldelim, exs);
                 filepos += str.size() + dsize;
                 elements++;
                 write_iterator->write(str);

@@ -509,9 +509,11 @@ void IGeneralModuleTestClass::repartitionTest(int cores, const std::string &part
     loadToPartitions(local_elems, cores * 2);
     registerType<Tp>();
 
-    general->repartition(2 + np - 1, preserveOrdering, global);
+    general->repartition(2 * np - 1, preserveOrdering, global);
 
-    for (auto &part : *executor_data->getPartitions<Tp>()) { CPPUNIT_ASSERT_GREATER((size_t) 50, part->size()); }
+    for (auto &part : *executor_data->getPartitions<Tp>()) {
+        CPPUNIT_ASSERT_GREATER((size_t)50, part->size());
+    }
 
     auto result = getFromPartitions<Tp>();
 
