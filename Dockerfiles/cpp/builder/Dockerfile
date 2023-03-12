@@ -31,7 +31,7 @@ RUN mv ${IGNIS_DEVEL}/thrift /tmp/thrift && \
 	./bootstrap.sh && \
 	./configure --enable-tests=no --prefix /usr2 && \
 	cd lib/cpp && \
-	make -j && \
+	make -j4 && \
 	make install && \
 	rm -fR ${IGNIS_DEVEL}/thrift-src && \
 	rm -f /usr2/lib/*.a && \
