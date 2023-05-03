@@ -47,7 +47,6 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
     }
 
     group_cache = executor_data->getPartitions<Tp>();
-    bool same_level = true;
     int8_t level_sel = level;
 
     if (level == 1) {//PRESERVE
@@ -63,7 +62,6 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
     if (level_sel == 2) {//MEMORY
         IGNIS_LOG(info) << "CacheContext: saving partition in " << storage::IMemoryPartition<Tp>::TYPE << " cache";
         if (!executor_data->getPartitionTools().isMemory(*group_cache)) {
-            same_level = false;
             auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
             for (int64_t i = 0; i < group_cache->partitions(); i++) {
                 auto part = executor_data->getPartitionTools().newMemoryPartition<Tp>((*group)[i]->size());
@@ -75,7 +73,6 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
     } else if (level_sel == 3) {//RAW_MEMORY
         IGNIS_LOG(info) << "CacheContext: saving partition in " << storage::IRawMemoryPartition<Tp>::TYPE << " cache";
         if (!executor_data->getPartitionTools().isRawMemory(*group_cache)) {
-            same_level = false;
             auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
             for (int64_t i = 0; i < group_cache->partitions(); i++) {
                 auto part = executor_data->getPartitionTools().newRawMemoryPartition<Tp>((*group)[i]->bytes());
@@ -87,7 +84,6 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
     } else if (level_sel == 4) {//DISK
         IGNIS_LOG(info) << "CacheContext: saving partition in " << storage::IDiskPartition<Tp>::TYPE << " cache";
         if (!executor_data->getPartitionTools().isDisk(*group_cache)) {
-            same_level = false;
             for (auto &part : *group_cache) {
                 auto group = std::make_shared<storage::IPartitionGroup<Tp>>();
                 for (int64_t i = 0; i < group_cache->partitions(); i++) {
@@ -114,10 +110,7 @@ void ICacheImplClass::cache(const int64_t id, const int8_t level) {
         throw exception::IInvalidArgument("CacheContext: cache level " + std::to_string(level) + " is not valid");
     }
 
-    if (same_level) {
-        group_cache->cache() = true;
-    }
-
+    group_cache->cache() = true;
     _cache[id] = std::static_pointer_cast<void>(group_cache);
 
     IGNIS_CATCH()
