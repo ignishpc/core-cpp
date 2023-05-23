@@ -80,4 +80,5 @@ RUN cd /tmp/core-cpp && \
 	make install && \
 	rm -fr /tmp/core-cpp && \
 	cd ${IGNIS_HOME} && \
-	chmod +x core/cpp/bin/ignis-cpp 
+	chmod +x core/cpp/bin/ignis-cpp && \
+	mv core/cpp/bin/ignis-cpp ${IGNIS_HOME}/bin/
