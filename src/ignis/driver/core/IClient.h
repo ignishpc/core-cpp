@@ -16,7 +16,7 @@ namespace ignis {
         namespace core {
             class IClient {
             public:
-                IClient(int port, int compression);
+                IClient(const std::string& usock, int compression);
 
                 rpc::driver::IBackendServiceClient &getBackendService();
 

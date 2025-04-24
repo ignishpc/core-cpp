@@ -11,12 +11,12 @@ namespace ignis {
         namespace core {
             class IClientPool {
             public:
-                IClientPool(int port, int compression);
+                IClientPool(const std::string& usock, int compression);
 
                 std::shared_ptr<IClient> getClient();
 
             private:
-                int port;
+                std::string usock;
                 int compression;
                 std::mutex mutex;
                 std::list<std::shared_ptr<IClient>> clients;

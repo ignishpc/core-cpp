@@ -24,8 +24,8 @@ public:
     }
 };
 
-IClient::IClient(int port, int compression)
-    : transport(std::make_shared<transport::TZlibTransport>(std::make_shared<transport::TSocket>("localhost", port),
+IClient::IClient(const std::string& usock, int compression)
+    : transport(std::make_shared<transport::TZlibTransport>(std::make_shared<transport::TSocket>(usock),
                                                             128, 1024, 128, 1024, compression)),
       protocol(std::make_shared<protocol::TCompactProtocol>(transport)),
       backendService(std::make_shared<IBackendServiceClient>(

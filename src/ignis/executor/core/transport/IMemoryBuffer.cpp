@@ -1,6 +1,7 @@
 
 #include "IMemoryBuffer.h"
 #include <algorithm>
+#include <limits>
 
 using namespace ignis::executor::core::transport;
 using namespace apache::thrift::transport;

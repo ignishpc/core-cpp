@@ -46,15 +46,20 @@ namespace ignis {
                 void deallocate(Pointer p, SizeType n) {
                     throw executor::core::exception::ILogicError("A view cannot be resized");
                 }
+
+                template<class U>
+                struct rebind {
+                    using other = IViewAllocator<U>;
+                };
             };
 
             template<typename Tp>
-            struct is_view{
+            struct is_view {
                 const static bool value = false;
             };
 
             template<typename Tp>
-            struct is_view<IViewAllocator<Tp>>{
+            struct is_view<IViewAllocator<Tp>> {
                 const static bool value = true;
             };
 
@@ -75,12 +80,13 @@ namespace ignis {
             public:
                 using std::vector<typename IVectorType<Tp>::type, _Alloc>::vector;
 
-                IVector<Tp, IViewAllocator<Tp>> view(size_t begin, size_t end) {
-                    return IVector<Tp, IViewAllocator<Tp>>(this->_M_impl._M_start + begin, end - begin);
+                IVector<Tp, IViewAllocator<typename IVectorType<Tp>::type>> view(size_t begin, size_t end) {
+                    return IVector<Tp, IViewAllocator<typename IVectorType<Tp>::type>>(
+                            (Tp *) (this->_M_impl._M_start + begin), (Tp *) (end - begin));
                 }
 
-                inline static IVector<Tp, IViewAllocator<Tp>> view(Tp *init, size_t sz) {
-                    return IVector<Tp, IViewAllocator<Tp>>(init, sz);
+                inline static IVector<Tp, IViewAllocator<typename IVectorType<Tp>::type>> view(Tp *init, size_t sz) {
+                    return IVector<Tp, IViewAllocator<typename IVectorType<Tp>::type>>(init, sz);
                 }
 
                 ~IVector() {
@@ -288,8 +294,8 @@ namespace ignis {
                 };
 
             }// namespace io
-        }    // namespace core
-    }        // namespace executor
+        }// namespace core
+    }// namespace executor
 }// namespace ignis
 
 

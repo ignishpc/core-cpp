@@ -3,7 +3,7 @@
 
 using namespace ignis::driver::core;
 
-IClientPool::IClientPool(int port, int compression) : port(port), compression(compression) {}
+IClientPool::IClientPool(const std::string& usock, int compression) : usock(usock), compression(compression) {}
 
 std::shared_ptr<IClient> IClientPool::getClient() {
     std::shared_ptr<IClient> client;
@@ -14,7 +14,7 @@ std::shared_ptr<IClient> IClientPool::getClient() {
     }
     mutex.unlock();
     if (!client) {
-        client = std::make_shared<IClient>(port, compression);
+        client = std::make_shared<IClient>(usock, compression);
         mutex.lock();
         clients.push_back(client);
         mutex.unlock();

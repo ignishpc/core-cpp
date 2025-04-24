@@ -13,7 +13,7 @@ IExecutorServerModule::IExecutorServerModule(std::shared_ptr<IExecutorData> &exe
 
 IExecutorServerModule::~IExecutorServerModule() {}
 
-void IExecutorServerModule::serve(const std::string &name, int port, int compression, bool local_mode) {
+void IExecutorServerModule::serve(const std::string &name, const std::string& usock, int compression) {
     if (!server) {
         auto threadManager = concurrency::ThreadManager::newSimpleThreadManager(2);
 
@@ -22,7 +22,7 @@ void IExecutorServerModule::serve(const std::string &name, int port, int compres
 
         server = std::make_shared<apache::thrift::server::TThreadPoolServer>(
                 processor = std::make_shared<apache::thrift::TMultiplexedProcessor>(),
-                std::make_shared<apache::thrift::transport::TServerSocket>(local_mode ? "127.0.0.1" : "0.0.0.0", port),
+                std::make_shared<apache::thrift::transport::TServerSocket>(usock),
                 std::make_shared<transport::TZlibTransportFactoryExt>(compression),
                 std::make_shared<apache::thrift::protocol::TCompactProtocolFactory>(), threadManager);
         std::shared_ptr<IExecutorServerModule> this_shared(this, [](IExecutorServerModule *) {});

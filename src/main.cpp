@@ -17,17 +17,18 @@ using namespace ignis::rpc::executor;
 
 int main(int argc, char *argv[]) {
     IGNIS_LOG_INIT();
-    if (argc < 4) {
-        IGNIS_LOG(error) << "Executor need a server port, compression and server mode as argument";
+    if (argc < 2) {
+        IGNIS_LOG(error) << "Executor requires a socket address";
         return EXIT_FAILURE;
     }
 
-    int port, compression;
-    bool local_mode;
+    const char* usock =  argv[1];
+    int compression = 0;
     try {
-        port = std::atoi(argv[1]);
-        compression = std::atoi(argv[2]);
-        local_mode = std::atoi(argv[3]) == 1;
+        const char* value = std::getenv("IGNIS_TRANSPORT_COMPRESSION");
+        if (value){
+            compression = std::atoi(value);
+        }
     } catch (...) {
         IGNIS_LOG(error) << "Executor arguments are not valid";
         return EXIT_FAILURE;
@@ -60,7 +61,7 @@ int main(int argc, char *argv[]) {
 
     auto executor_data = std::make_shared<IExecutorData>();
     IExecutorServerModuleImpl server(executor_data);
-    server.serve("IExecutorServer", port, compression, local_mode);
+    server.serve("IExecutorServer", usock, compression);
 
     return EXIT_SUCCESS;
 }

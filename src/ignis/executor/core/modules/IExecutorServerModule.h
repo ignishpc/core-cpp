@@ -15,7 +15,7 @@ namespace ignis {
                 public:
                     IExecutorServerModule(std::shared_ptr<IExecutorData> &executor_data);
 
-                    void serve(const std::string &name, int port, int compression, bool local_mode);
+                    void serve(const std::string &name, const std::string& usock, int compression);
 
                     void start(const std::map<std::string, std::string> &properties,
                                const std::map<std::string, std::string> &env) override;

@@ -11,7 +11,7 @@ namespace ignis {
         namespace core {
             class ICallBack {
             public:
-                ICallBack(int port, int compression);
+                ICallBack(const std::string& usock, int compression);
 
                 core::IDriverContext &getDriverContext();
 

@@ -1,9 +1,9 @@
-
 ARG REGISTRY=""
 ARG NAMESPACE="ignishpc/"
 ARG TAG=""
-FROM ${REGISTRY}${NAMESPACE}common-builder${TAG}
-ARG RELPATH=""
+FROM ${REGISTRY}${NAMESPACE}builder${TAG}
+ARG DOCK_DIR=""
+ARG BUILD_CORES="4"
 
 RUN export DEBIAN_FRONTEND=noninteractive && \
 	apt update && \
@@ -18,7 +18,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 ENV BOOST_VERSION=1.75.0
 RUN mkdir /tmp/boost && \
 	cd /tmp/boost && \
-	wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION}/source/boost_$(echo ${BOOST_VERSION} | tr . _).tar.gz -O src.tar.gz && \
+	wget https://archives.boost.io/release/${BOOST_VERSION}/source/boost_$(echo ${BOOST_VERSION} | tr . _).tar.gz -O src.tar.gz && \
 	tar xvf src.tar.gz && \
 	cd boost_$(echo ${BOOST_VERSION} | tr . _) && \
 	./bootstrap.sh && \
@@ -31,7 +31,7 @@ RUN mv ${IGNIS_DEVEL}/thrift /tmp/thrift && \
 	./bootstrap.sh && \
 	./configure --enable-tests=no --prefix /usr2 && \
 	cd lib/cpp && \
-	make -j4 && \
+	make -j${BUILD_CORES}  && \
 	make install && \
 	rm -fR ${IGNIS_DEVEL}/thrift-src && \
 	rm -f /usr2/lib/*.a && \
@@ -43,7 +43,7 @@ RUN cd /tmp && \
 	git clone https://github.com/gabime/spdlog --branch v${SPDLOG_VERSION} --single-branch spdlog && \
 	cd spdlog && \
 	cmake -DSPDLOG_BUILD_EXAMPLE=FALSE . && \
-	make -j && \
+	make -j${BUILD_CORES}  && \
 	make install && \
 	cd .. && \
 	rm -fR spdlog
@@ -55,30 +55,30 @@ RUN cd /usr/include && \
 	wget https://github.com/gulrak/filesystem/releases/download/v${GHC_FILESYSTEM_VERSION}/filesystem.hpp
 
 RUN cd ${IGNIS_HOME} && \
-	mkdir -p core/cpp/include && \
-	cp -R ${IGNIS_DEVEL}/thrift/include/* core/cpp/include && \
-	cp -R /usr/include/rapidjson core/cpp/include/ && \
-	cp -R ${IGNIS_DEVEL}/mpi/include/* core/cpp/include/ && \
-	cp /usr/include/zlib.h core/cpp/include/ && \
-	cp /usr/include/zconf.h core/cpp/include/ && \
-	mkdir -p core/cpp/lib && \
-	find /usr/lib/ -name 'libgomp.so*' -exec cp "{}" core/cpp/lib/  \; && \
-	cp -R ${IGNIS_DEVEL}/thrift/lib/* core/cpp/lib && \
-	cp -R ${IGNIS_DEVEL}/mpi/lib/* core/cpp/lib
+	mkdir -p core/cpp/core/include && \
+	cp -R ${IGNIS_DEVEL}/thrift/include/* core/cpp/core/include && \
+	cp -R /usr/include/rapidjson core/cpp/core/include/ && \
+	cp -R ${IGNIS_DEVEL}/mpi/include/* core/cpp/core/include/ && \
+	cp /usr/include/zlib.h core/cpp/core/include/ && \
+	cp /usr/include/zconf.h core/cpp/core/include/ && \
+	mkdir -p core/cpp/core/lib && \
+	find /usr/lib/ -name 'libgomp.so*' -exec cp "{}" core/cpp/core/lib/  \; && \
+	cp -R ${IGNIS_DEVEL}/thrift/lib/* core/cpp/core/lib && \
+	cp -R ${IGNIS_DEVEL}/mpi/lib/* core/cpp/core/lib
 
-COPY ${RELPATH}ignis-cpp-install.sh ${IGNIS_HOME}/bin
-RUN chmod +x ${IGNIS_HOME}/bin/ignis-cpp-install.sh
+COPY ${DOCK_DIR}bin/* ${IGNIS_HOME}/bin/
+RUN chmod +x ${IGNIS_HOME}/bin/*
 
 COPY / /tmp/core-cpp
 RUN cd /tmp/core-cpp && \
 	export CC=${IGNIS_DEVEL}/mpi/bin/mpicc && \
 	export CXX=${IGNIS_DEVEL}/mpi/bin/mpic++ && \
-	export LIBRARY_PATH=${IGNIS_HOME}/core/cpp/lib && \
-	export CPATH=${IGNIS_HOME}/core/cpp/include && \
-	cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${IGNIS_HOME}/core/cpp/ . && \
-	make -j && \
+	export LIBRARY_PATH=${IGNIS_HOME}/core/cpp/core/lib && \
+	export CPATH=${IGNIS_HOME}/core/cpp/core/include && \
+	cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=${IGNIS_HOME}/core/cpp/core/ . && \
+	make -j${BUILD_CORES} && \
 	make install && \
 	rm -fr /tmp/core-cpp && \
 	cd ${IGNIS_HOME} && \
-	chmod +x core/cpp/bin/ignis-cpp && \
-	mv core/cpp/bin/ignis-cpp ${IGNIS_HOME}/bin/
+	chmod +x core/cpp/core/bin/ignis-cpp && \
+	mv core/cpp/core/bin/ignis-cpp ${IGNIS_HOME}/bin/

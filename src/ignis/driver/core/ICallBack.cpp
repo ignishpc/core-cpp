@@ -14,7 +14,7 @@ using namespace ignis::executor::core::modules;
 using namespace ignis::rpc::executor;
 using namespace ignis::driver::core;
 
-ICallBack::ICallBack(int port, int compression) {
+ICallBack::ICallBack(const std::string& usock, int compression) {
     IGNIS_LOG_INIT();
 
     class IExecutorServerModuleImpl : public IExecutorServerModule {
@@ -37,7 +37,7 @@ ICallBack::ICallBack(int port, int compression) {
     auto executor_data = std::make_shared<IExecutorData>();
     driverContext = std::make_shared<IDriverContext>(executor_data);
     auto server = std::make_shared<IExecutorServerModuleImpl>(executor_data, driverContext);
-    std::thread([=]() { server->serve("IExecutorServer", port, compression, true); }).detach();
+    std::thread([=]() { server->serve("IExecutorServer", usock, compression); }).detach();
     this->server = server;
 }
 
