@@ -56,6 +56,7 @@ RUN cd /usr/include && \
 
 RUN cd ${IGNIS_HOME} && \
 	mkdir -p core/cpp/core/include && \
+    cp -R /usr/include/ghc ${IGNIS_HOME}/core/cpp/core/include/ && \
 	cp -R ${IGNIS_DEVEL}/thrift/include/* core/cpp/core/include && \
 	cp -R /usr/include/rapidjson core/cpp/core/include/ && \
 	cp -R ${IGNIS_DEVEL}/mpi/include/* core/cpp/core/include/ && \

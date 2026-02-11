@@ -2,10 +2,10 @@
 #include "IClient.h"
 #include <chrono>
 #include <thread>
+#include <thrift/protocol/TCompactProtocol.h>
 #include <thrift/protocol/TMultiplexedProtocol.h>
 #include <thrift/transport/TSocket.h>
 #include <thrift/transport/TZlibTransport.h>
-#include <thrift/protocol/TCompactProtocol.h>
 
 using namespace ignis::driver::core;
 using namespace ignis::rpc::driver;
@@ -24,9 +24,9 @@ public:
     }
 };
 
-IClient::IClient(const std::string& usock, int compression)
-    : transport(std::make_shared<transport::TZlibTransport>(std::make_shared<transport::TSocket>(usock),
-                                                            128, 1024, 128, 1024, compression)),
+IClient::IClient(const std::string &usock, int compression)
+    : transport(std::make_shared<transport::TZlibTransport>(std::make_shared<transport::TSocket>(usock), 128, 1024, 128,
+                                                            1024, compression)),
       protocol(std::make_shared<protocol::TCompactProtocol>(transport)),
       backendService(std::make_shared<IBackendServiceClient>(
               std::make_shared<protocol::TMultiplexedProtocol>(protocol, "IBackend"))),
@@ -40,9 +40,16 @@ IClient::IClient(const std::string& usock, int compression)
               std::make_shared<protocol::TMultiplexedProtocol>(protocol, "IDataFrame"))) {
 
     DisableThriftLog disable;
+    auto socket = std::static_pointer_cast<transport::TSocket>(
+            std::static_pointer_cast<transport::TZlibTransport>(transport)->getUnderlyingTransport());
     for (int i = 0; i < 10; i++) {
         try {
             transport->open();
+            int code = send(socket->getSocketFD(), "", 0, 0);
+            if (code < 0) {
+                transport->close();
+                throw transport::TTransportException("TSocket::open() error");
+            }
             break;
         } catch (transport::TTransportException &ex) {
             if (i == 9) { throw ex; }

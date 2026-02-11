@@ -47,8 +47,8 @@ void Ignis::start() {
                 search_path("ignis-backend"), boost::process::std_out > stdout, boost::process::std_err > stderr,
                 boost::process::std_in < (*backend_in));
 
-        callback = std::make_shared<ignis::driver::core::ICallBack>(job_sockets + "driver.sock", transport_cmp);
-        client_pool = std::make_shared<core::IClientPool>(job_sockets + "backend.sock", transport_cmp);
+        callback = std::make_shared<ignis::driver::core::ICallBack>(job_sockets + "/driver.sock", transport_cmp);
+        client_pool = std::make_shared<core::IClientPool>(job_sockets + "/backend.sock", transport_cmp);
     } catch (executor::core::exception::IException &ex) { throw IDriverException(ex.what(), ex.toString()); }
 }
 
