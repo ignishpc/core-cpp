@@ -26,7 +26,7 @@ ICallBack::ICallBack(const std::string& usock, int compression) {
         void createServices(apache::thrift::TMultiplexedProcessor &processor) {
             auto io = std::make_shared<IIOModule>(executor_data);
             processor.registerProcessor("IIO", std::make_shared<IIOModuleProcessor>(io));
-            processor.registerProcessor("ICacheContex", std::make_shared<ICacheContextModuleProcessor>(driverContext));
+            processor.registerProcessor("ICacheContext", std::make_shared<ICacheContextModuleProcessor>(driverContext));
             auto comm = std::make_shared<ICommModule>(executor_data);
             processor.registerProcessor("IComm", std::make_shared<ICommModuleProcessor>(comm));
         }
